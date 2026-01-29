@@ -123,7 +123,8 @@ export default function EpisodeDetailPage() {
           </div>
           <p className="text-white/40 text-sm mb-4">Meditate with sacred art</p>
 
-          <div className="grid grid-cols-2 gap-3">
+          {/* Horizontal thumbnails - no rounded corners */}
+          <div className="space-y-3">
             {episode.artworks.map((artwork) => {
               const isFav = isFavorite(artwork.id, "artwork");
 
@@ -131,10 +132,10 @@ export default function EpisodeDetailPage() {
                 <button
                   key={artwork.id}
                   onClick={() => setSelectedArtwork(artwork)}
-                  className="text-left"
+                  className="w-full text-left"
                 >
-                  {/* Image Container */}
-                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden mb-2">
+                  {/* Image Container - horizontal rectangle, no rounded corners */}
+                  <div className="relative aspect-[16/9] overflow-hidden">
                     <img
                       src={artwork.imageUrl}
                       alt={artwork.title}
@@ -156,13 +157,13 @@ export default function EpisodeDetailPage() {
                     )}
                   </div>
 
-                  {/* Title & Location below image with reflect button */}
-                  <div className="flex items-start justify-between">
+                  {/* Title & Location - minimal padding */}
+                  <div className="flex items-center justify-between mt-1.5">
                     <div className="flex-1 min-w-0">
                       <h3 className="text-white font-medium text-sm line-clamp-1">
                         {artwork.title}
                       </h3>
-                      <p className="text-white/40 text-xs mt-0.5 line-clamp-1">
+                      <p className="text-white/40 text-xs line-clamp-1">
                         {artwork.locationName}
                       </p>
                     </div>
