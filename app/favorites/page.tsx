@@ -1,134 +1,64 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useFavorites } from "@/hooks/useFavorites";
 import { episodes, getEpisodeById } from "@/data/episodes";
-import EpisodeCard from "@/components/EpisodeCard";
-import ArtworkCard from "@/components/ArtworkCard";
-import ReflectionCard from "@/components/ReflectionCard";
 import ArtworkViewer from "@/components/ArtworkViewer";
-import { Artwork, Episode, Reflection } from "@/lib/types";
-
-type TabType = "all" | "episodes" | "artworks" | "reflections";
+import { Artwork, Episode } from "@/lib/types";
 
 export default function FavoritesPage() {
-  const { favorites, isLoaded, getByType } = useFavorites();
-  const [activeTab, setActiveTab] = useState<TabType>("all");
+  const { favorites, isLoaded, getByType, isFavorite } = useFavorites();
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
 
   // Get all favorited items with their full data
-  const favoritedEpisodes = useMemo(() => {
-    return getByType("episode")
-      .map((fav) => getEpisodeById(fav.itemId))
-      .filter((ep): ep is Episode => ep !== undefined && ep.isReleased);
-  }, [getByType]);
+  const favoritedEpisodes = getByType("episode")
+    .map((fav) => getEpisodeById(fav.itemId))
+    .filter((ep): ep is Episode => ep !== undefined && ep.isReleased);
 
-  const favoritedArtworks = useMemo(() => {
-    const artworks: Artwork[] = [];
-    getByType("artwork").forEach((fav) => {
-      episodes.forEach((ep) => {
-        const artwork = ep.artworks.find((a) => a.id === fav.itemId);
-        if (artwork) artworks.push(artwork);
-      });
+  const favoritedArtworks: Artwork[] = [];
+  getByType("artwork").forEach((fav) => {
+    episodes.forEach((ep) => {
+      const artwork = ep.artworks.find((a) => a.id === fav.itemId);
+      if (artwork) favoritedArtworks.push(artwork);
     });
-    return artworks;
-  }, [getByType]);
+  });
 
-  const favoritedReflections = useMemo(() => {
-    const reflections: (Reflection & { episodeTitle: string })[] = [];
-    getByType("reflection").forEach((fav) => {
-      episodes.forEach((ep) => {
-        const reflection = ep.reflections.find((r) => r.id === fav.itemId);
-        if (reflection) {
-          reflections.push({ ...reflection, episodeTitle: ep.shortTitle });
-        }
-      });
-    });
-    return reflections;
-  }, [getByType]);
-
-  const tabs: { id: TabType; label: string; count: number }[] = [
-    { id: "all", label: "All", count: favorites.length },
-    { id: "episodes", label: "Episodes", count: favoritedEpisodes.length },
-    { id: "artworks", label: "Artworks", count: favoritedArtworks.length },
-    { id: "reflections", label: "Reflections", count: favoritedReflections.length },
-  ];
-
-  const isEmpty =
-    favoritedEpisodes.length === 0 &&
-    favoritedArtworks.length === 0 &&
-    favoritedReflections.length === 0;
+  const isEmpty = favoritedEpisodes.length === 0 && favoritedArtworks.length === 0;
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-catskill-white flex items-center justify-center">
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block w-8 h-8 border-4 border-deep-navy border-t-transparent rounded-full animate-spin mb-2"></div>
-          <p className="text-gray-500">Loading favorites...</p>
+          <div className="inline-block w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin mb-2"></div>
+          <p className="text-white/50">Loading favorites...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-catskill-white">
+    <div className="min-h-screen bg-[#0a0a0a]">
       {/* Header */}
-      <div className="bg-deep-navy text-white p-6 pb-4">
-        <h1
-          className="text-2xl font-bold mb-1"
-          style={{ fontFamily: "Montserrat, sans-serif" }}
-        >
-          My Favorites
-        </h1>
-        <p className="text-white/80">
+      <div className="px-5 pt-12 pb-6">
+        <h1 className="text-3xl font-bold text-white mb-2">Favorites</h1>
+        <p className="text-white/50">
           {favorites.length} item{favorites.length !== 1 ? "s" : ""} saved
         </p>
       </div>
 
-      {/* Tabs */}
-      <div className="bg-white border-b border-gray-200 px-4 sticky top-0 z-10">
-        <div className="flex overflow-x-auto hide-scrollbar -mx-4 px-4">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex-shrink-0 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-                activeTab === tab.id
-                  ? "border-ewtn-red text-ewtn-red"
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              }`}
-              style={{ fontFamily: "Montserrat, sans-serif" }}
-            >
-              {tab.label}
-              {tab.count > 0 && (
-                <span
-                  className={`ml-1.5 px-1.5 py-0.5 text-xs rounded-full ${
-                    activeTab === tab.id
-                      ? "bg-ewtn-red/10 text-ewtn-red"
-                      : "bg-gray-100 text-gray-500"
-                  }`}
-                >
-                  {tab.count}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Content */}
-      <div className="p-4">
+      <div className="px-5 pb-28">
         {isEmpty ? (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+          <div className="text-center py-16">
+            <div className="w-16 h-16 mx-auto mb-4 bg-white/10 rounded-full flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-8 h-8 text-gray-400"
+                className="w-8 h-8 text-white/40"
               >
                 <path
                   strokeLinecap="round"
@@ -137,96 +67,107 @@ export default function FavoritesPage() {
                 />
               </svg>
             </div>
-            <h2
-              className="text-lg font-semibold text-deep-navy mb-2"
-              style={{ fontFamily: "Montserrat, sans-serif" }}
-            >
+            <h2 className="text-lg font-semibold text-white mb-2">
               No favorites yet
             </h2>
-            <p className="text-gray-500 mb-6">
-              Tap the heart icon on episodes, artworks, or reflections to save
-              them here.
+            <p className="text-white/50 mb-6">
+              Tap the heart icon on episodes or artworks to save them here.
             </p>
             <Link
-              href="/episodes"
-              className="inline-block btn-primary"
+              href="/"
+              className="inline-block px-6 py-3 bg-amber-500 text-black font-semibold rounded-full"
             >
               Explore Episodes
             </Link>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Episodes Section */}
-            {(activeTab === "all" || activeTab === "episodes") &&
-              favoritedEpisodes.length > 0 && (
-                <section>
-                  {activeTab === "all" && (
-                    <h2
-                      className="text-lg font-semibold text-deep-navy mb-3"
-                      style={{ fontFamily: "Montserrat, sans-serif" }}
+            {favoritedEpisodes.length > 0 && (
+              <section>
+                <h2 className="text-lg font-semibold text-white mb-4">
+                  Episodes
+                </h2>
+                <div className="space-y-3">
+                  {favoritedEpisodes.map((episode) => (
+                    <Link
+                      key={episode.id}
+                      href={`/episodes/${episode.id}`}
+                      className="flex gap-4 bg-white/5 rounded-xl p-3"
                     >
-                      Episodes
-                    </h2>
-                  )}
-                  <div className="space-y-4">
-                    {favoritedEpisodes.map((episode) => (
-                      <EpisodeCard key={episode.id} episode={episode} />
-                    ))}
-                  </div>
-                </section>
-              )}
+                      <div className="w-24 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                        <img
+                          src={episode.heroImageUrl}
+                          alt={episode.shortTitle}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-white font-medium line-clamp-1">
+                          {episode.shortTitle}
+                        </h3>
+                        <p className="text-white/40 text-sm mt-0.5">
+                          Episode {episode.episodeNumber}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* Artworks Section */}
-            {(activeTab === "all" || activeTab === "artworks") &&
-              favoritedArtworks.length > 0 && (
-                <section>
-                  {activeTab === "all" && (
-                    <h2
-                      className="text-lg font-semibold text-deep-navy mb-3"
-                      style={{ fontFamily: "Montserrat, sans-serif" }}
-                    >
-                      Artworks
-                    </h2>
-                  )}
-                  <div className="grid grid-cols-2 gap-3">
-                    {favoritedArtworks.map((artwork) => (
-                      <ArtworkCard
-                        key={artwork.id}
-                        artwork={artwork}
-                        onClick={() => setSelectedArtwork(artwork)}
-                      />
-                    ))}
-                  </div>
-                </section>
-              )}
+            {favoritedArtworks.length > 0 && (
+              <section>
+                <h2 className="text-lg font-semibold text-white mb-4">
+                  Sacred Art
+                </h2>
+                <div className="grid grid-cols-2 gap-3">
+                  {favoritedArtworks.map((artwork) => {
+                    const isFav = isFavorite(artwork.id, "artwork");
 
-            {/* Reflections Section */}
-            {(activeTab === "all" || activeTab === "reflections") &&
-              favoritedReflections.length > 0 && (
-                <section>
-                  {activeTab === "all" && (
-                    <h2
-                      className="text-lg font-semibold text-deep-navy mb-3"
-                      style={{ fontFamily: "Montserrat, sans-serif" }}
-                    >
-                      Reflections
-                    </h2>
-                  )}
-                  <div className="space-y-3">
-                    {favoritedReflections.map((reflection) => (
-                      <div key={reflection.id}>
-                        <p
-                          className="text-xs text-gray-500 mb-1 ml-1"
-                          style={{ fontFamily: "Montserrat, sans-serif" }}
-                        >
-                          From: {reflection.episodeTitle}
+                    return (
+                      <button
+                        key={artwork.id}
+                        onClick={() => setSelectedArtwork(artwork)}
+                        className="text-left"
+                      >
+                        {/* Image Container */}
+                        <div className="relative aspect-[3/4] rounded-xl overflow-hidden mb-2">
+                          <img
+                            src={artwork.imageUrl}
+                            alt={artwork.title}
+                            className="w-full h-full object-cover"
+                          />
+
+                          {/* Only show heart if favorited */}
+                          {isFav && (
+                            <div className="absolute top-2 right-2">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                                className="w-5 h-5 text-red-500 drop-shadow-lg"
+                              >
+                                <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Title & Location below image */}
+                        <h3 className="text-white font-medium text-sm line-clamp-1">
+                          {artwork.title}
+                        </h3>
+                        <p className="text-white/40 text-xs mt-0.5 line-clamp-1">
+                          {artwork.locationName}
                         </p>
-                        <ReflectionCard reflection={reflection} />
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
           </div>
         )}
       </div>

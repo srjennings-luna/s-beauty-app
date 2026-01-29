@@ -4,28 +4,28 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { getEpisodeById } from "@/data/episodes";
-import Button from "@/components/ui/Button";
 import FavoriteButton from "@/components/ui/FavoriteButton";
-import ArtworkCard from "@/components/ArtworkCard";
 import ArtworkViewer from "@/components/ArtworkViewer";
-import ReflectionCard from "@/components/ReflectionCard";
 import { Artwork } from "@/lib/types";
+import { useFavorites } from "@/hooks/useFavorites";
 
 export default function EpisodeDetailPage() {
   const params = useParams();
   const router = useRouter();
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const { isFavorite } = useFavorites();
 
   const episode = getEpisodeById(params.id as string);
 
   if (!episode) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-6">
         <div className="text-center">
-          <h1 className="text-xl font-semibold text-deep-navy mb-2">
+          <h1 className="text-xl font-semibold text-white mb-2">
             Episode not found
           </h1>
-          <Link href="/episodes" className="text-ewtn-red">
+          <Link href="/" className="text-amber-500">
             Back to episodes
           </Link>
         </div>
@@ -34,28 +34,35 @@ export default function EpisodeDetailPage() {
   }
 
   if (!episode.isReleased) {
-    router.push("/episodes");
+    router.push("/");
     return null;
   }
 
+  // Build description with experts included
+  const fullDescription = episode.summary + (
+    episode.featuredExperts && episode.featuredExperts.length > 0
+      ? ` Featuring ${episode.featuredExperts.map(e => `${e.name} (${e.role})`).join(', ')}.`
+      : ''
+  );
+  const truncatedDescription = fullDescription.slice(0, 150);
+  const needsTruncation = fullDescription.length > 150;
+
   return (
-    <div className="min-h-screen bg-catskill-white">
+    <div className="min-h-screen bg-[#0a0a0a]">
       {/* Hero Section */}
       <div className="relative h-[35vh] min-h-[250px]">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url('${episode.heroImageUrl}')`,
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" />
-        </div>
+        <img
+          src={episode.heroImageUrl}
+          alt={episode.title}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#0a0a0a]" />
 
         {/* Back button */}
         <div className="absolute top-4 left-4 z-10">
           <Link
-            href="/episodes"
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm"
+            href="/"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-sm text-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -78,154 +85,112 @@ export default function EpisodeDetailPage() {
         </div>
 
         {/* Episode info overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-          <p className="text-white/80 text-sm mb-1">
+        <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+          <p className="text-white/60 text-sm mb-1">
             Episode {episode.episodeNumber}
           </p>
-          <h1
-            className="text-2xl font-bold mb-2"
-            style={{ fontFamily: "Montserrat, sans-serif" }}
-          >
+          <h1 className="text-2xl font-bold">
             {episode.title}
           </h1>
-          <div className="flex items-center text-white/80 text-sm">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-4 h-4 mr-1"
-            >
-              <path
-                fillRule="evenodd"
-                d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
-                clipRule="evenodd"
-              />
-            </svg>
-            {episode.locationLabel}
-          </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-4">
-        {/* Summary */}
-        <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
-          <p className="text-gray-600 leading-relaxed">{episode.summary}</p>
-
-          {/* Episode metadata */}
-          <div className="mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-4 text-sm text-gray-500">
-            {episode.airDate && (
-              <div className="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 mr-1">
-                  <path fillRule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clipRule="evenodd" />
-                </svg>
-                {episode.airDate}
-              </div>
-            )}
-            {episode.durationMinutes && (
-              <div className="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 mr-1">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clipRule="evenodd" />
-                </svg>
-                {episode.durationMinutes} min
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Featured Experts */}
-        {episode.featuredExperts && episode.featuredExperts.length > 0 && (
-          <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
-            <h3 className="text-sm font-semibold text-deep-navy uppercase tracking-wide mb-3">
-              Featured Experts
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {episode.featuredExperts.map((expert, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-50 rounded-lg px-3 py-2 flex items-center"
-                >
-                  <div className="w-8 h-8 rounded-full bg-deep-navy/10 flex items-center justify-center mr-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-deep-navy">
-                      <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">{expert.name}</p>
-                    <p className="text-xs text-gray-500">{expert.role}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Action Buttons */}
-        <div className="flex gap-3 mb-6">
-          <Link href={`/episodes/${episode.id}/artwalk`} className="flex-1">
-            <Button fullWidth>Start Artwalk</Button>
-          </Link>
-          {episode.ewtnPlusUrl && (
-            <a
-              href={episode.ewtnPlusUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-shrink-0"
+      <div className="px-5 pt-4 pb-28">
+        {/* Description with read more */}
+        <div className="mb-6">
+          <p className="text-white/60 leading-relaxed">
+            {showFullDescription || !needsTruncation
+              ? fullDescription
+              : `${truncatedDescription}...`}
+          </p>
+          {needsTruncation && (
+            <button
+              onClick={() => setShowFullDescription(!showFullDescription)}
+              className="text-amber-500 text-sm mt-2"
             >
-              <Button variant="outline">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </Button>
-            </a>
+              {showFullDescription ? 'Show less' : 'Read more'}
+            </button>
           )}
         </div>
 
-        {/* Artworks Section */}
+        {/* Sacred Art Section */}
         <section className="mb-6">
-          <h2
-            className="text-lg font-semibold text-deep-navy mb-3"
-            style={{ fontFamily: "Montserrat, sans-serif" }}
-          >
-            Artworks & Locations ({episode.artworks.length})
-          </h2>
+          <div className="flex items-center justify-between mb-1">
+            <h2 className="text-xl font-bold text-white">
+              Sacred Art
+            </h2>
+          </div>
+          <p className="text-white/40 text-sm mb-4">Meditate with sacred art</p>
+
           <div className="grid grid-cols-2 gap-3">
-            {episode.artworks.map((artwork) => (
-              <ArtworkCard
-                key={artwork.id}
-                artwork={artwork}
-                showOrder
-                onClick={() => setSelectedArtwork(artwork)}
-              />
-            ))}
+            {episode.artworks.map((artwork) => {
+              const isFav = isFavorite(artwork.id, "artwork");
+
+              return (
+                <button
+                  key={artwork.id}
+                  onClick={() => setSelectedArtwork(artwork)}
+                  className="text-left"
+                >
+                  {/* Image Container */}
+                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden mb-2">
+                    <img
+                      src={artwork.imageUrl}
+                      alt={artwork.title}
+                      className="w-full h-full object-cover"
+                    />
+
+                    {/* Only show heart if favorited */}
+                    {isFav && (
+                      <div className="absolute top-2 right-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-5 h-5 text-red-500 drop-shadow-lg"
+                        >
+                          <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Title & Location below image with reflect button */}
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-white font-medium text-sm line-clamp-1">
+                        {artwork.title}
+                      </h3>
+                      <p className="text-white/40 text-xs mt-0.5 line-clamp-1">
+                        {artwork.locationName}
+                      </p>
+                    </div>
+                    {(artwork.reflectionQuestions.length > 0 || artwork.scripturePairing) && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedArtwork(artwork);
+                        }}
+                        className="ml-2 w-7 h-7 bg-white/10 rounded-full flex items-center justify-center text-white/60 flex-shrink-0"
+                        aria-label="Reflect"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          className="w-4 h-4"
+                        >
+                          <path d="M10.75 16.82A7.462 7.462 0 0115 15.5c.71 0 1.396.098 2.046.282A.75.75 0 0018 15.06v-11a.75.75 0 00-.546-.721A9.006 9.006 0 0015 3a8.963 8.963 0 00-4.25 1.065V16.82zM9.25 4.065A8.963 8.963 0 005 3c-.85 0-1.673.118-2.454.339A.75.75 0 002 4.06v11a.75.75 0 00.954.721A7.462 7.462 0 015 15.5c1.579 0 3.042.487 4.25 1.32V4.065z" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </section>
-
-        {/* Reflections Section */}
-        {episode.reflections.length > 0 && (
-          <section className="mb-6">
-            <h2
-              className="text-lg font-semibold text-deep-navy mb-3"
-              style={{ fontFamily: "Montserrat, sans-serif" }}
-            >
-              Episode Reflections
-            </h2>
-            <div className="space-y-3">
-              {episode.reflections.map((reflection) => (
-                <ReflectionCard key={reflection.id} reflection={reflection} />
-              ))}
-            </div>
-          </section>
-        )}
       </div>
 
       {/* Fullscreen Artwork Viewer */}

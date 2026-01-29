@@ -6,26 +6,6 @@ import { usePathname } from "next/navigation";
 const navItems = [
   {
     href: "/",
-    label: "Home",
-    icon: (active: boolean) => (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill={active ? "currentColor" : "none"}
-        stroke="currentColor"
-        strokeWidth={active ? 0 : 1.5}
-        className="w-6 h-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-        />
-      </svg>
-    ),
-  },
-  {
-    href: "/episodes",
     label: "Episodes",
     icon: (active: boolean) => (
       <svg
@@ -45,8 +25,8 @@ const navItems = [
     ),
   },
   {
-    href: "/map",
-    label: "Map",
+    href: "/art",
+    label: "Art",
     icon: (active: boolean) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -59,14 +39,14 @@ const navItems = [
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
-          d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z"
+          d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"
         />
       </svg>
     ),
   },
   {
     href: "/favorites",
-    label: "Saved",
+    label: "Favorites",
     icon: (active: boolean) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -89,15 +69,15 @@ const navItems = [
 export default function Navigation() {
   const pathname = usePathname();
 
-  // Hide navigation on artwalk pages for immersive experience
-  if (pathname.includes("/artwalk")) {
+  // Hide navigation on artwalk pages and splash for immersive experience
+  if (pathname.includes("/artwalk") || pathname === "/splash") {
     return null;
   }
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 safe-area-bottom">
-      {/* Glassmorphism background */}
-      <div className="absolute inset-0 bg-white/80 backdrop-blur-xl border-t border-white/20 shadow-[0_-4px_30px_rgba(0,0,0,0.1)]" />
+      {/* Dark background to match app */}
+      <div className="absolute inset-0 bg-[#111111] border-t border-white/10" />
 
       <div className="relative flex justify-around items-center h-16">
         {navItems.map((item) => {
@@ -110,24 +90,17 @@ export default function Navigation() {
               key={item.href}
               href={item.href}
               className={`flex flex-col items-center justify-center w-full h-full transition-all duration-200 ${
-                isActive ? "text-ewtn-red scale-105" : "text-gray-400 hover:text-gray-600"
+                isActive ? "text-white" : "text-white/40 hover:text-white/60"
               }`}
             >
               <div className={`transition-transform duration-200 ${isActive ? "transform -translate-y-0.5" : ""}`}>
                 {item.icon(isActive)}
               </div>
               <span
-                className={`text-[10px] mt-1 font-semibold tracking-wide transition-all duration-200 ${
-                  isActive ? "opacity-100" : "opacity-70"
-                }`}
-                style={{ fontFamily: "Montserrat, sans-serif" }}
+                className={`text-[10px] mt-1 font-medium tracking-wide transition-all duration-200`}
               >
                 {item.label}
               </span>
-              {/* Active indicator dot */}
-              {isActive && (
-                <div className="absolute bottom-1 w-1 h-1 rounded-full bg-ewtn-red" />
-              )}
             </Link>
           );
         })}
