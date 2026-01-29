@@ -93,9 +93,9 @@ export default function FavoritesPage() {
                     <Link
                       key={episode.id}
                       href={`/episodes/${episode.id}`}
-                      className="flex gap-4 bg-white/5 rounded-xl p-3"
+                      className="flex gap-4 bg-white/5 p-3"
                     >
-                      <div className="w-24 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                      <div className="w-24 h-16 overflow-hidden flex-shrink-0">
                         <img
                           src={episode.heroImageUrl}
                           alt={episode.shortTitle}
@@ -133,7 +133,7 @@ export default function FavoritesPage() {
                         className="text-left"
                       >
                         {/* Image Container */}
-                        <div className="relative aspect-[3/4] rounded-xl overflow-hidden mb-2">
+                        <div className="relative aspect-[16/9] overflow-hidden mb-1.5">
                           <img
                             src={artwork.imageUrl}
                             alt={artwork.title}

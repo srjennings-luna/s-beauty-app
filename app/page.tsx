@@ -65,8 +65,8 @@ export default function HomePage() {
               href={`/episodes/${episode.id}`}
               className="flex-shrink-0 w-[280px]"
             >
-              {/* Episode Image */}
-              <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-3">
+              {/* Episode Image - no rounded corners */}
+              <div className="relative aspect-[4/3] overflow-hidden mb-3">
                 <img
                   src={episode.heroImageUrl}
                   alt={episode.shortTitle}
