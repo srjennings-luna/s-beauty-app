@@ -1,26 +1,276 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Primary palette - meditative, contemplative tones */
+  --color-ewtn-red: #b8434a;
+  --color-ewtn-red-dark: #9a363c;
+  --color-deep-navy: #1a2742;
+  --color-deep-navy-light: #263654;
+  --color-catskill-white: #f8f9fc;
+
+  /* Accent colors */
+  --color-accent-gold: #c4a052;
+  --color-accent-gold-light: #d4b56a;
+  --color-warm-stone: #a69585;
+  --color-soft-sage: #8fa590;
+
+  /* Dark mode colors */
+  --color-dark-bg: #0f1419;
+  --color-dark-surface: #1a2230;
+  --color-dark-elevated: #242d3d;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-open-sans), "Open Sans", sans-serif;
+  background-color: var(--color-catskill-white);
+  color: #1a1a2e;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-montserrat), "Montserrat", sans-serif;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Elegant serif font for artwork titles and quotes */
+.font-serif-elegant {
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  font-weight: 500;
+}
+
+.font-serif-elegant-italic {
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* Color utilities */
+.bg-ewtn-red { background-color: var(--color-ewtn-red); }
+.bg-deep-navy { background-color: var(--color-deep-navy); }
+.bg-catskill-white { background-color: var(--color-catskill-white); }
+.bg-accent-gold { background-color: var(--color-accent-gold); }
+.text-ewtn-red { color: var(--color-ewtn-red); }
+.text-deep-navy { color: var(--color-deep-navy); }
+.text-accent-gold { color: var(--color-accent-gold); }
+
+/* Button styles */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 1.75rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  color: white;
+  transition: all 0.3s ease;
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--color-ewtn-red);
+  box-shadow: 0 2px 8px rgba(184, 67, 74, 0.25);
+}
+.btn-primary:hover {
+  background-color: var(--color-ewtn-red-dark);
+  box-shadow: 0 4px 12px rgba(184, 67, 74, 0.35);
+  transform: translateY(-1px);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 1.75rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--color-deep-navy);
+  color: white;
+  box-shadow: 0 2px 8px rgba(26, 39, 66, 0.25);
+}
+.btn-secondary:hover {
+  background-color: var(--color-deep-navy-light);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 1.75rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid;
+  font-family: "Montserrat", sans-serif;
+  border-color: var(--color-deep-navy);
+  color: var(--color-deep-navy);
+  background-color: transparent;
+}
+.btn-outline:hover {
+  background-color: var(--color-deep-navy);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Card styles */
+.card {
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  background-color: white;
+  transition: all 0.3s ease;
+}
+.card-hover { cursor: pointer; }
+.card-hover:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+/* Glassmorphism utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+  background: rgba(26, 39, 66, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Leaflet map styles */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+.leaflet-control-zoom a {
+  background-color: white !important;
+  color: var(--color-deep-navy) !important;
+  border: none !important;
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+}
+.leaflet-control-zoom a:first-child {
+  border-radius: 12px 12px 0 0 !important;
+}
+.leaflet-control-zoom a:last-child {
+  border-radius: 0 0 12px 12px !important;
+}
+
+/* Fullscreen viewer */
+.fullscreen-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background-color: rgba(15, 20, 25, 0.98);
+}
+
+/* Safe areas for mobile */
+.safe-area-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.safe-area-top { padding-top: env(safe-area-inset-top, 0px); }
+
+/* Hide scrollbar */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Coming soon overlay */
+.coming-soon-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+}
+
+/* Heart button */
+.heart-button {
+  transition: all 0.3s ease;
+}
+.heart-button:active { transform: scale(1.3); }
+.heart-button.favorited { color: var(--color-ewtn-red); }
+
+/* Line clamps */
+.line-clamp-1 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; }
+.line-clamp-2 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.line-clamp-3 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+
+/* Animations */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(184, 67, 74, 0.4); }
+  70% { box-shadow: 0 0 0 15px rgba(184, 67, 74, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(184, 67, 74, 0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease forwards;
+}
+
+/* Scripture/quote styling */
+.scripture-verse {
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  font-size: 1.125rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: #374151;
+}
+
+.scripture-reference {
+  font-family: var(--font-montserrat), "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-accent-gold);
+  letter-spacing: 0.025em;
+}
+
+/* Meditative card style */
+.meditation-card {
+  background: linear-gradient(135deg, rgba(248, 249, 252, 0.9) 0%, rgba(255, 255, 255, 0.95) 100%);
+  border-radius: 1.25rem;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 10px 15px -3px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }

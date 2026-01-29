@@ -1,0 +1,103 @@
+"use client";
+
+import { useEffect } from "react";
+import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { Artwork } from "@/lib/types";
+
+// Custom marker icon
+const createMarkerIcon = (isSelected: boolean) => {
+  return L.divIcon({
+    className: "custom-marker",
+    html: `
+      <div style="
+        width: ${isSelected ? "36px" : "28px"};
+        height: ${isSelected ? "36px" : "28px"};
+        background: ${isSelected ? "#EA002A" : "#002D62"};
+        border-radius: 50% 50% 50% 0;
+        transform: rotate(-45deg);
+        border: 3px solid white;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        transition: all 0.2s ease;
+      ">
+        <div style="
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transform: rotate(45deg);
+        ">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="white" style="width: ${isSelected ? "16px" : "12px"}; height: ${isSelected ? "16px" : "12px"};">
+            <path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
+    `,
+    iconSize: [isSelected ? 36 : 28, isSelected ? 36 : 28],
+    iconAnchor: [isSelected ? 18 : 14, isSelected ? 36 : 28],
+    popupAnchor: [0, -36],
+  });
+};
+
+// Component to fit map to all markers
+function MapBoundsController({ artworks }: { artworks: Artwork[] }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (artworks.length > 0) {
+      const bounds = L.latLngBounds(
+        artworks.map((a) => [a.coordinates.lat, a.coordinates.lng])
+      );
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }, [map, artworks]);
+
+  return null;
+}
+
+interface GlobalMapProps {
+  artworks: (Artwork & { episodeTitle?: string })[];
+  onMarkerClick: (artwork: Artwork) => void;
+  selectedArtwork: Artwork | null;
+}
+
+export default function GlobalMap({
+  artworks,
+  onMarkerClick,
+  selectedArtwork,
+}: GlobalMapProps) {
+  // Calculate center based on all artworks
+  const center = artworks.length > 0
+    ? {
+        lat: artworks.reduce((sum, a) => sum + a.coordinates.lat, 0) / artworks.length,
+        lng: artworks.reduce((sum, a) => sum + a.coordinates.lng, 0) / artworks.length,
+      }
+    : { lat: 42.5, lng: 12.5 }; // Default to center of Italy
+
+  return (
+    <MapContainer
+      center={[center.lat, center.lng]}
+      zoom={6}
+      style={{ width: "100%", height: "100%" }}
+      zoomControl={true}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <MapBoundsController artworks={artworks} />
+      {artworks.map((artwork) => (
+        <Marker
+          key={artwork.id}
+          position={[artwork.coordinates.lat, artwork.coordinates.lng]}
+          icon={createMarkerIcon(selectedArtwork?.id === artwork.id)}
+          eventHandlers={{
+            click: () => onMarkerClick(artwork),
+          }}
+        />
+      ))}
+    </MapContainer>
+  );
+}
