@@ -401,3 +401,17 @@ h1, h2, h3, h4, h5, h6 {
 .artwork-card:active img {
   filter: brightness(1.08);
 }
+
+/* 6. Subtle pulse animation for CTA buttons */
+@keyframes pulseSubtle {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(193, 155, 95, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(193, 155, 95, 0.6);
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulseSubtle 2s infinite ease-in-out;
+}

@@ -89,14 +89,14 @@ export default function SplashPage() {
             Seeking Beauty invites you on an unforgettable pilgrimage across Italy—where every landscape, masterpiece, and sacred space becomes a living encounter with the beauty of our Catholic faith.
           </p>
 
-          {/* Begin button - enhanced visibility with glow effect */}
+          {/* Begin button - prominent with animated glow */}
           <button
             onClick={goToHome}
-            className={`px-10 py-4 bg-white/20 text-white text-base font-medium tracking-wider border border-white/30
-              hover:bg-white/30 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]
+            className={`px-10 py-4 bg-[#C19B5F] text-white text-base font-semibold tracking-wider rounded-sm
               active:scale-95
               transition-all duration-300
-              shadow-[0_0_20px_rgba(255,255,255,0.15)]
+              shadow-[0_0_25px_rgba(193,155,95,0.5)]
+              animate-pulse-subtle
               ${currentPage === 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
           >
             Let's explore
