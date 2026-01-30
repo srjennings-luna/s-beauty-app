@@ -129,13 +129,13 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
                 </div>
               )}
 
-              {/* Scripture Pairing */}
+              {/* Scripture Pairing - soft white background for differentiation */}
               {artwork.scripturePairing && (
                 <div>
                   <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
                     Scripture
                   </h4>
-                  <div className="bg-white/5 p-3 border-l-2 border-amber-500/70">
+                  <div className="bg-white/10 p-3 border-l-2 border-amber-500/70">
                     <p className="text-white/80 italic text-sm leading-relaxed">
                       &ldquo;{artwork.scripturePairing.verse}&rdquo;
                     </p>
