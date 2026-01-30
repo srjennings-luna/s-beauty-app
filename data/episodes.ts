@@ -11,8 +11,7 @@ export const episodes: Episode[] = [
     summary:
       "David Henrie explores the artistic and spiritual heart of the Vatican, discovering how beauty serves as 'the language of the divine and a reflection of God' through architecture, sculpture, and everyday encounters with the sacred.",
     locationLabel: "Vatican City, Rome, Italy",
-    heroImageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg/1280px-St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg",
+    heroImageUrl: "/images/artworks/st-peters-square.jpg",
     durationMinutes: 30,
     airDate: "January 19, 2026",
     ewtnPlusUrl: "https://www.ewtn.com/tv/shows/seeking-beauty",
@@ -42,8 +41,7 @@ export const episodes: Episode[] = [
         country: "Italy",
         coordinates: { lat: 41.9022, lng: 12.4568 },
         locationName: "St. Peter's Square",
-        imageUrl:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg/1280px-St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg",
+        imageUrl: "/images/artworks/st-peters-square.jpg",
         order: 1,
         reflectionQuestions: [
           "When have you felt welcomed or embraced by a sacred place?",
@@ -68,8 +66,7 @@ export const episodes: Episode[] = [
         country: "Italy",
         coordinates: { lat: 41.9021, lng: 12.4536 },
         locationName: "St. Peter's Basilica - North Aisle",
-        imageUrl:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Michelangelo%27s_Pieta_5450_cropncleaned_edit.jpg/800px-Michelangelo%27s_Pieta_5450_cropncleaned_edit.jpg",
+        imageUrl: "/images/artworks/pieta.jpg",
         order: 2,
         reflectionQuestions: [
           "What emotions arise as you contemplate Mary holding her Son?",
@@ -95,8 +92,7 @@ export const episodes: Episode[] = [
         country: "Italy",
         coordinates: { lat: 41.9022, lng: 12.4534 },
         locationName: "St. Peter's Basilica - Papal Altar",
-        imageUrl:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Baldachino_San_Pietro.jpg/800px-Baldachino_San_Pietro.jpg",
+        imageUrl: "/images/artworks/baldacchino.jpg",
         order: 3,
         reflectionQuestions: [
           "How does this canopy draw your eyes upward toward heaven?",
@@ -121,8 +117,7 @@ export const episodes: Episode[] = [
         country: "Italy",
         coordinates: { lat: 41.9022, lng: 12.4539 },
         locationName: "St. Peter's Basilica",
-        imageUrl:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg/1280px-Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg",
+        imageUrl: "/images/artworks/st-peters-basilica.jpg",
         order: 4,
         reflectionQuestions: [
           "What does the grandeur of this building say about what lies within?",
@@ -156,8 +151,7 @@ export const episodes: Episode[] = [
     summary:
       "Explore the Eternal City's artistic treasures, including a moving look at Caravaggio restoration work that reveals how even the great masters were human—they made mistakes, painted over errors, and struggled with their craft.",
     locationLabel: "Rome, Italy",
-    heroImageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/The_Calling_of_Saint_Matthew-Caravaggo_%281599-1600%29.jpg/1280px-The_Calling_of_Saint_Matthew-Caravaggo_%281599-1600%29.jpg",
+    heroImageUrl: "/images/artworks/calling-of-st-matthew.jpg",
     durationMinutes: 33,
     airDate: "January 19, 2026",
     ewtnPlusUrl: "https://www.ewtn.com/tv/shows/seeking-beauty",
@@ -185,8 +179,7 @@ export const episodes: Episode[] = [
         country: "Italy",
         coordinates: { lat: 41.8992, lng: 12.4742 },
         locationName: "San Luigi dei Francesi",
-        imageUrl:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/The_Calling_of_Saint_Matthew-Caravaggo_%281599-1600%29.jpg/1280px-The_Calling_of_Saint_Matthew-Caravaggo_%281599-1600%29.jpg",
+        imageUrl: "/images/artworks/calling-of-st-matthew.jpg",
         order: 1,
         reflectionQuestions: [
           "Have you ever felt God calling you away from something comfortable into something unknown?",
@@ -212,8 +205,7 @@ export const episodes: Episode[] = [
         country: "Italy",
         coordinates: { lat: 41.8986, lng: 12.473 },
         locationName: "Rome Restoration Workshop",
-        imageUrl:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Caravaggio_-_La_conversione_di_San_Paolo.jpg/800px-Caravaggio_-_La_conversione_di_San_Paolo.jpg",
+        imageUrl: "/images/artworks/caravaggio-restoration.jpg",
         order: 2,
         reflectionQuestions: [
           "How does knowing artists made mistakes change how you view great art?",
@@ -239,8 +231,7 @@ export const episodes: Episode[] = [
         country: "Italy",
         coordinates: { lat: 41.9022, lng: 12.4534 },
         locationName: "St. Peter's Basilica - Interior",
-        imageUrl:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Petersdom_von_Engelsburg_gesehen.jpg/1280px-Petersdom_von_Engelsburg_gesehen.jpg",
+        imageUrl: "/images/artworks/st-peters-dome.jpg",
         order: 3,
         reflectionQuestions: [
           "How does looking upward at this dome change your perspective?",
@@ -274,8 +265,7 @@ export const episodes: Episode[] = [
     summary:
       "Journey through the birthplace of the Renaissance, where faith and art intertwined to create some of humanity's most enduring masterpieces. Explore Fra Angelico's sublime frescoes and meet sacred goldsmiths continuing ancient traditions.",
     locationLabel: "Florence, Tuscany, Italy",
-    heroImageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Florence_Duomo_from_Michelangelo_hill.jpg/1280px-Florence_Duomo_from_Michelangelo_hill.jpg",
+    heroImageUrl: "/images/artworks/brunelleschi-dome.jpg",
     durationMinutes: 37,
     airDate: "January 26, 2026",
     ewtnPlusUrl: "https://www.ewtn.com/tv/shows/seeking-beauty",
@@ -303,8 +293,7 @@ export const episodes: Episode[] = [
         country: "Italy",
         coordinates: { lat: 43.7779, lng: 11.259 },
         locationName: "San Marco Convent",
-        imageUrl:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/ANGELICO%2C_Fra_Annunciation%2C_1437-46_%282236990916%29.jpg/1280px-ANGELICO%2C_Fra_Annunciation%2C_1437-46_%282236990916%29.jpg",
+        imageUrl: "/images/artworks/fra-angelico-annunciation.jpg",
         order: 1,
         reflectionQuestions: [
           "How does Mary's posture in this painting speak to you about receiving God's will?",
@@ -329,8 +318,7 @@ export const episodes: Episode[] = [
         country: "Italy",
         coordinates: { lat: 43.7731, lng: 11.256 },
         locationName: "Cathedral of Santa Maria del Fiore",
-        imageUrl:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Florence_Duomo_from_Michelangelo_hill.jpg/1280px-Florence_Duomo_from_Michelangelo_hill.jpg",
+        imageUrl: "/images/artworks/brunelleschi-dome.jpg",
         order: 2,
         reflectionQuestions: [
           "What does it mean to build something that points toward heaven?",
@@ -356,8 +344,7 @@ export const episodes: Episode[] = [
         country: "Italy",
         coordinates: { lat: 43.7696, lng: 12.4797 },
         locationName: "Florence Goldsmith Workshops",
-        imageUrl:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Goldsmith_at_work_in_his_shop%2C_Firenze.jpg/800px-Goldsmith_at_work_in_his_shop%2C_Firenze.jpg",
+        imageUrl: "/images/artworks/florentine-goldsmith.jpg",
         order: 3,
         reflectionQuestions: [
           "What traditions or crafts connect you to previous generations?",
