@@ -1,23 +1,90 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { getEpisodeById } from "@/data/episodes";
+import { getEpisodeById } from "@/lib/sanity";
 import FavoriteButton from "@/components/ui/FavoriteButton";
 import ArtworkViewer from "@/components/ArtworkViewer";
-import { Artwork } from "@/lib/types";
 import { useFavorites } from "@/hooks/useFavorites";
 import PageTransition from "@/components/ui/PageTransition";
+
+interface Artwork {
+  _id: string;
+  title: string;
+  artist?: string;
+  year?: string;
+  imageUrl: string;
+  description?: string;
+  historicalSummary?: string;
+  scripturePairing?: {
+    verse: string;
+    reference: string;
+  };
+  reflectionQuestions: string[];
+  locationName: string;
+  city: string;
+  country: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  order: number;
+}
+
+interface Episode {
+  _id: string;
+  title: string;
+  shortTitle: string;
+  season: number;
+  episodeNumber: number;
+  summary: string;
+  heroImageUrl: string;
+  airDate: string;
+  isReleased: boolean;
+  featuredExperts?: { name: string; role: string }[];
+  artworks: Artwork[];
+}
 
 export default function EpisodeDetailPage() {
   const params = useParams();
   const router = useRouter();
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [episode, setEpisode] = useState<Episode | null>(null);
+  const [loading, setLoading] = useState(true);
   const { isFavorite } = useFavorites();
 
-  const episode = getEpisodeById(params.id as string);
+  useEffect(() => {
+    async function fetchEpisode() {
+      try {
+        const data = await getEpisodeById(params.id as string);
+        setEpisode(data);
+      } catch (error) {
+        console.error("Error fetching episode:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchEpisode();
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#203545]">
+        <div className="h-[35vh] min-h-[250px] bg-white/10 skeleton" />
+        <div className="px-5 pt-4">
+          <div className="h-4 bg-white/10 skeleton w-3/4 mb-4" />
+          <div className="h-20 bg-white/10 skeleton mb-6" />
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="aspect-[16/9] bg-white/10 skeleton" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!episode) {
     return (
@@ -47,6 +114,11 @@ export default function EpisodeDetailPage() {
   );
   const truncatedDescription = fullDescription.slice(0, 150);
   const needsTruncation = fullDescription.length > 150;
+
+  // Convert artwork for ArtworkViewer (map _id to id for compatibility)
+  const handleArtworkClick = (artwork: Artwork) => {
+    setSelectedArtwork(artwork);
+  };
 
   return (
     <PageTransition>
@@ -83,7 +155,7 @@ export default function EpisodeDetailPage() {
 
         {/* Favorite button */}
         <div className="absolute top-4 right-4 z-10">
-          <FavoriteButton itemId={episode.id} type="episode" />
+          <FavoriteButton itemId={episode._id} type="episode" />
         </div>
 
         {/* Episode info overlay */}
@@ -135,13 +207,13 @@ export default function EpisodeDetailPage() {
 
           {/* Horizontal thumbnails - no rounded corners */}
           <div className="space-y-3">
-            {episode.artworks.map((artwork) => {
-              const isFav = isFavorite(artwork.id, "artwork");
+            {episode.artworks?.map((artwork) => {
+              const isFav = isFavorite(artwork._id, "artwork");
 
               return (
                 <div
-                  key={artwork.id}
-                  onClick={() => setSelectedArtwork(artwork)}
+                  key={artwork._id}
+                  onClick={() => handleArtworkClick(artwork)}
                   className="w-full text-left artwork-card cursor-pointer"
                 >
                   {/* Image Container - horizontal rectangle, no rounded corners */}
@@ -177,7 +249,7 @@ export default function EpisodeDetailPage() {
                         {artwork.locationName}
                       </p>
                     </div>
-                    {(artwork.reflectionQuestions.length > 0 || artwork.scripturePairing) && (
+                    {(artwork.reflectionQuestions?.length > 0 || artwork.scripturePairing) && (
                       <div className="ml-2 w-7 h-7 bg-white/10 rounded-full flex items-center justify-center text-white/60 flex-shrink-0">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -200,7 +272,23 @@ export default function EpisodeDetailPage() {
         {/* Fullscreen Artwork Viewer */}
         {selectedArtwork && (
           <ArtworkViewer
-            artwork={selectedArtwork}
+            artwork={{
+              id: selectedArtwork._id,
+              title: selectedArtwork.title,
+              artist: selectedArtwork.artist,
+              year: selectedArtwork.year,
+              imageUrl: selectedArtwork.imageUrl,
+              description: selectedArtwork.description,
+              historicalSummary: selectedArtwork.historicalSummary,
+              scripturePairing: selectedArtwork.scripturePairing,
+              reflectionQuestions: selectedArtwork.reflectionQuestions || [],
+              locationName: selectedArtwork.locationName,
+              city: selectedArtwork.city,
+              country: selectedArtwork.country,
+              coordinates: selectedArtwork.coordinates,
+              order: selectedArtwork.order,
+              episodeId: episode._id,
+            }}
             onClose={() => setSelectedArtwork(null)}
           />
         )}

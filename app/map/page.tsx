@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { getReleasedEpisodes } from "@/data/episodes";
+import { getReleasedEpisodes } from "@/lib/sanity";
 import { Artwork } from "@/lib/types";
 import ArtworkViewer from "@/components/ArtworkViewer";
 
@@ -19,24 +19,85 @@ const GlobalMap = dynamic(() => import("@/components/GlobalMap"), {
   ),
 });
 
+interface SanityArtwork {
+  _id: string;
+  title: string;
+  artist?: string;
+  year?: string;
+  imageUrl: string;
+  description?: string;
+  historicalSummary?: string;
+  scripturePairing?: {
+    verse: string;
+    reference: string;
+  };
+  reflectionQuestions: string[];
+  locationName: string;
+  city: string;
+  country: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  order: number;
+}
+
+interface SanityEpisode {
+  _id: string;
+  title: string;
+  shortTitle: string;
+  artworks: SanityArtwork[];
+}
+
 export default function MapPage() {
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const [viewerArtwork, setViewerArtwork] = useState<Artwork | null>(null);
   const [selectedEpisodeFilter, setSelectedEpisodeFilter] = useState<string | null>(null);
   const [showListView, setShowListView] = useState(false);
+  const [episodes, setEpisodes] = useState<SanityEpisode[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const releasedEpisodes = getReleasedEpisodes();
+  useEffect(() => {
+    async function fetchEpisodes() {
+      try {
+        const data = await getReleasedEpisodes();
+        setEpisodes(data);
+      } catch (error) {
+        console.error("Error fetching episodes:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchEpisodes();
+  }, []);
 
   // Get all artworks from released episodes
   const allArtworks = useMemo(() => {
-    const artworks: (Artwork & { episodeTitle: string })[] = [];
-    releasedEpisodes.forEach((episode) => {
-      episode.artworks.forEach((artwork) => {
-        artworks.push({ ...artwork, episodeTitle: episode.shortTitle });
+    const artworks: (Artwork & { episodeTitle: string; episodeId: string })[] = [];
+    episodes.forEach((episode) => {
+      episode.artworks?.forEach((artwork) => {
+        artworks.push({
+          id: artwork._id,
+          title: artwork.title,
+          artist: artwork.artist,
+          year: artwork.year,
+          imageUrl: artwork.imageUrl,
+          description: artwork.description,
+          historicalSummary: artwork.historicalSummary,
+          scripturePairing: artwork.scripturePairing,
+          reflectionQuestions: artwork.reflectionQuestions || [],
+          locationName: artwork.locationName,
+          city: artwork.city,
+          country: artwork.country,
+          coordinates: artwork.coordinates,
+          order: artwork.order,
+          episodeId: episode._id,
+          episodeTitle: episode.shortTitle,
+        });
       });
     });
     return artworks;
-  }, [releasedEpisodes]);
+  }, [episodes]);
 
   // Filter artworks by episode if filter is set
   const filteredArtworks = useMemo(() => {
@@ -53,6 +114,17 @@ export default function MapPage() {
   const handleArtworkSelect = (artwork: Artwork) => {
     setViewerArtwork(artwork);
   };
+
+  if (loading) {
+    return (
+      <div className="h-screen bg-[#203545] flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin mb-2"></div>
+          <p className="text-white/50 text-sm">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen bg-[#203545] flex flex-col overflow-hidden">
@@ -119,12 +191,12 @@ export default function MapPage() {
           >
             All
           </button>
-          {releasedEpisodes.map((episode) => (
+          {episodes.map((episode) => (
             <button
-              key={episode.id}
-              onClick={() => setSelectedEpisodeFilter(episode.id)}
+              key={episode._id}
+              onClick={() => setSelectedEpisodeFilter(episode._id)}
               className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                selectedEpisodeFilter === episode.id
+                selectedEpisodeFilter === episode._id
                   ? "bg-white text-[#203545]"
                   : "bg-white/10 text-white/70 hover:bg-white/20"
               }`}

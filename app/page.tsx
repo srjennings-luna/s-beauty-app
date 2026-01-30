@@ -3,13 +3,26 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getReleasedEpisodes } from "@/data/episodes";
+import { getReleasedEpisodes } from "@/lib/sanity";
 import PageTransition from "@/components/ui/PageTransition";
+
+interface Episode {
+  _id: string;
+  title: string;
+  shortTitle: string;
+  season: number;
+  episodeNumber: number;
+  summary: string;
+  heroImageUrl: string;
+  airDate: string;
+  isReleased: boolean;
+}
 
 export default function HomePage() {
   const router = useRouter();
   const [hasOnboarded, setHasOnboarded] = useState<boolean | null>(null);
-  const releasedEpisodes = getReleasedEpisodes();
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const onboarded = localStorage.getItem("seeking-beauty-onboarded");
@@ -19,6 +32,20 @@ export default function HomePage() {
       setHasOnboarded(true);
     }
   }, [router]);
+
+  useEffect(() => {
+    async function fetchEpisodes() {
+      try {
+        const data = await getReleasedEpisodes();
+        setEpisodes(data);
+      } catch (error) {
+        console.error("Error fetching episodes:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchEpisodes();
+  }, []);
 
   // Show nothing while checking onboarding status
   if (hasOnboarded === null) {
@@ -60,35 +87,47 @@ export default function HomePage() {
         </p>
 
         {/* Episode Carousel */}
-        <div className="flex gap-4 overflow-x-auto hide-scrollbar -mx-5 px-5 pb-4">
-          {releasedEpisodes.map((episode) => (
-            <Link
-              key={episode.id}
-              href={`/episodes/${episode.id}`}
-              className="flex-shrink-0 w-[280px] artwork-card"
-            >
-              {/* Episode Image - no rounded corners */}
-              <div className="relative aspect-[4/3] overflow-hidden mb-3">
-                <img
-                  src={episode.heroImageUrl}
-                  alt={episode.shortTitle}
-                  className="w-full h-full object-cover"
-                />
+        {loading ? (
+          <div className="flex gap-4 overflow-x-auto hide-scrollbar -mx-5 px-5 pb-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex-shrink-0 w-[280px]">
+                <div className="aspect-[4/3] bg-white/10 skeleton mb-3" />
+                <div className="h-5 bg-white/10 skeleton w-3/4 mb-2" />
+                <div className="h-4 bg-white/10 skeleton w-1/2" />
               </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex gap-4 overflow-x-auto hide-scrollbar -mx-5 px-5 pb-4">
+            {episodes.map((episode) => (
+              <Link
+                key={episode._id}
+                href={`/episodes/${episode._id}`}
+                className="flex-shrink-0 w-[280px] artwork-card"
+              >
+                {/* Episode Image - no rounded corners */}
+                <div className="relative aspect-[4/3] overflow-hidden mb-3">
+                  <img
+                    src={episode.heroImageUrl}
+                    alt={episode.shortTitle}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
 
-              {/* Episode Info */}
-              <h3 className="text-white font-semibold text-lg mb-1">
-                {episode.shortTitle}
-              </h3>
-              <p className="text-white/50 text-sm mb-2">
-                {episode.airDate}
-              </p>
-              <p className="text-white/60 text-sm line-clamp-2">
-                {episode.summary.slice(0, 100)}...
-              </p>
-            </Link>
-          ))}
-        </div>
+                {/* Episode Info */}
+                <h3 className="text-white font-semibold text-lg mb-1">
+                  {episode.shortTitle}
+                </h3>
+                <p className="text-white/50 text-sm mb-2">
+                  {episode.airDate}
+                </p>
+                <p className="text-white/60 text-sm line-clamp-2">
+                  {episode.summary?.slice(0, 100)}...
+                </p>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
       </div>
     </PageTransition>

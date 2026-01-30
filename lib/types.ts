@@ -29,13 +29,13 @@ export type Artwork = {
   title: string;
   artist?: string;
   year?: string;
-  description: string;
+  description?: string;
   historicalSummary?: string; // Richer historical context
   scripturePairing?: {
     verse: string;
     reference: string; // e.g., "Lamentations 1:12"
   };
-  episodeId: string;
+  episodeId?: string;
   city: string;
   country: string;
   coordinates: {
