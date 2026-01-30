@@ -5,7 +5,7 @@ export const sanityClient = createClient({
   projectId: 'em44j9m8',
   dataset: 'production',
   apiVersion: '2024-01-01',
-  useCdn: true, // Enable CDN for faster reads
+  useCdn: false, // Disable CDN to ensure fresh data
 })
 
 // Image URL builder
