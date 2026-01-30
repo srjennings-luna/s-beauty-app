@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getReleasedEpisodes } from "@/data/episodes";
+import PageTransition from "@/components/ui/PageTransition";
 
 export default function HomePage() {
   const router = useRouter();
@@ -21,19 +22,20 @@ export default function HomePage() {
 
   // Show nothing while checking onboarding status
   if (hasOnboarded === null) {
-    return <div className="min-h-screen bg-[#0a0a0a]" />;
+    return <div className="min-h-screen bg-[#203545]" />;
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Hero Image */}
-      <div className="relative h-[280px]">
+    <PageTransition>
+      <div className="min-h-screen bg-[#203545]">
+        {/* Hero Image */}
+        <div className="relative h-[280px]">
         <img
           src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800"
           alt="David Henrie in Rome"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-[#0a0a0a]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-[#203545]" />
 
         {/* Logo overlay */}
         <div className="absolute bottom-6 left-5 right-5">
@@ -63,7 +65,7 @@ export default function HomePage() {
             <Link
               key={episode.id}
               href={`/episodes/${episode.id}`}
-              className="flex-shrink-0 w-[280px]"
+              className="flex-shrink-0 w-[280px] artwork-card"
             >
               {/* Episode Image - no rounded corners */}
               <div className="relative aspect-[4/3] overflow-hidden mb-3">
@@ -88,6 +90,7 @@ export default function HomePage() {
           ))}
         </div>
       </div>
-    </div>
+      </div>
+    </PageTransition>
   );
 }

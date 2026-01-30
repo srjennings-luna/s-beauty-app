@@ -6,6 +6,7 @@ import { useFavorites } from "@/hooks/useFavorites";
 import { episodes, getEpisodeById } from "@/data/episodes";
 import ArtworkViewer from "@/components/ArtworkViewer";
 import { Artwork, Episode } from "@/lib/types";
+import PageTransition from "@/components/ui/PageTransition";
 
 export default function FavoritesPage() {
   const { favorites, isLoaded, getByType, isFavorite } = useFavorites();
@@ -28,7 +29,7 @@ export default function FavoritesPage() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="min-h-screen bg-[#203545] flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin mb-2"></div>
           <p className="text-white/50">Loading favorites...</p>
@@ -38,17 +39,18 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Header */}
-      <div className="px-5 pt-12 pb-6">
-        <h1 className="text-3xl font-bold text-white mb-2">Favorites</h1>
-        <p className="text-white/50">
-          {favorites.length} item{favorites.length !== 1 ? "s" : ""} saved
-        </p>
-      </div>
+    <PageTransition>
+      <div className="min-h-screen bg-[#203545]">
+        {/* Header */}
+        <div className="px-5 pt-12 pb-6">
+          <h1 className="text-3xl font-bold text-white mb-2">Favorites</h1>
+          <p className="text-white/50">
+            {favorites.length} item{favorites.length !== 1 ? "s" : ""} saved
+          </p>
+        </div>
 
-      {/* Content */}
-      <div className="px-5 pb-28">
+        {/* Content */}
+        <div className="px-5 pb-28">
         {isEmpty ? (
           <div className="text-center py-16">
             <div className="w-16 h-16 mx-auto mb-4 bg-white/10 rounded-full flex items-center justify-center">
@@ -93,7 +95,7 @@ export default function FavoritesPage() {
                     <Link
                       key={episode.id}
                       href={`/episodes/${episode.id}`}
-                      className="flex gap-4 bg-white/5 p-3"
+                      className="flex gap-4 bg-white/5 p-3 artwork-card"
                     >
                       <div className="w-24 h-16 overflow-hidden flex-shrink-0">
                         <img
@@ -130,7 +132,7 @@ export default function FavoritesPage() {
                       <button
                         key={artwork.id}
                         onClick={() => setSelectedArtwork(artwork)}
-                        className="text-left"
+                        className="text-left artwork-card"
                       >
                         {/* Image Container */}
                         <div className="relative aspect-[16/9] overflow-hidden mb-1.5">
@@ -172,13 +174,14 @@ export default function FavoritesPage() {
         )}
       </div>
 
-      {/* Fullscreen Artwork Viewer */}
-      {selectedArtwork && (
-        <ArtworkViewer
-          artwork={selectedArtwork}
-          onClose={() => setSelectedArtwork(null)}
-        />
-      )}
-    </div>
+        {/* Fullscreen Artwork Viewer */}
+        {selectedArtwork && (
+          <ArtworkViewer
+            artwork={selectedArtwork}
+            onClose={() => setSelectedArtwork(null)}
+          />
+        )}
+      </div>
+    </PageTransition>
   );
 }

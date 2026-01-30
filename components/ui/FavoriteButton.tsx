@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useRef } from "react";
 import { FavoriteItemType } from "@/lib/types";
 import { useFavorites } from "@/hooks/useFavorites";
 
@@ -17,6 +18,8 @@ export default function FavoriteButton({
   className = "",
 }: FavoriteButtonProps) {
   const { isFavorite, toggleFavorite, isLoaded } = useFavorites();
+  const [isAnimating, setIsAnimating] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const favorited = isFavorite(itemId, type);
 
@@ -56,15 +59,23 @@ export default function FavoriteButton({
     );
   }
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    // Trigger pop animation
+    setIsAnimating(true);
+    setTimeout(() => setIsAnimating(false), 400);
+
+    toggleFavorite(type, itemId);
+  };
+
   return (
     <button
-      onClick={(e) => {
-        e.stopPropagation();
-        toggleFavorite(type, itemId);
-      }}
-      className={`heart-button ${sizeClasses[size]} flex items-center justify-center rounded-full bg-white/90 shadow-md ${
-        favorited ? "favorited" : "text-gray-400"
-      } ${className}`}
+      ref={buttonRef}
+      onClick={handleClick}
+      className={`heart-btn ${sizeClasses[size]} flex items-center justify-center rounded-full bg-white/90 shadow-md ${
+        favorited ? "text-red-500" : "text-gray-400"
+      } ${isAnimating ? "animate" : ""} ${className}`}
       aria-label={favorited ? "Remove from favorites" : "Add to favorites"}
     >
       {favorited ? (

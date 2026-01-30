@@ -5,6 +5,7 @@ import { episodes } from "@/data/episodes";
 import { Artwork } from "@/lib/types";
 import ArtworkViewer from "@/components/ArtworkViewer";
 import { useFavorites } from "@/hooks/useFavorites";
+import PageTransition from "@/components/ui/PageTransition";
 
 export default function ArtPage() {
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
@@ -16,24 +17,25 @@ export default function ArtPage() {
     .flatMap((ep) => ep.artworks);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Header */}
-      <div className="px-5 pt-12 pb-4">
-        <h1 className="text-3xl font-bold text-white mb-1">Sacred Art</h1>
-        <p className="text-white/50">Meditate with sacred art</p>
-      </div>
+    <PageTransition>
+      <div className="min-h-screen bg-[#203545]">
+        {/* Header */}
+        <div className="px-5 pt-12 pb-4">
+          <h1 className="text-3xl font-bold text-white mb-1">Sacred Art</h1>
+          <p className="text-white/50">Meditate with sacred art</p>
+        </div>
 
-      {/* Art List - horizontal thumbnails, no rounded corners */}
-      <div className="px-5 pb-28 space-y-3">
-        {allArtworks.map((artwork) => {
-          const isFav = isFavorite(artwork.id, "artwork");
+        {/* Art List - horizontal thumbnails, no rounded corners */}
+        <div className="px-5 pb-28 space-y-3">
+          {allArtworks.map((artwork) => {
+            const isFav = isFavorite(artwork.id, "artwork");
 
-          return (
-            <button
-              key={artwork.id}
-              onClick={() => setSelectedArtwork(artwork)}
-              className="w-full text-left"
-            >
+            return (
+              <button
+                key={artwork.id}
+                onClick={() => setSelectedArtwork(artwork)}
+                className="w-full text-left artwork-card"
+              >
               {/* Image Container - horizontal, no rounded corners */}
               <div className="relative aspect-[16/9] overflow-hidden">
                 <img
@@ -92,13 +94,14 @@ export default function ArtPage() {
         })}
       </div>
 
-      {/* Fullscreen Artwork Viewer */}
-      {selectedArtwork && (
-        <ArtworkViewer
-          artwork={selectedArtwork}
-          onClose={() => setSelectedArtwork(null)}
-        />
-      )}
-    </div>
+        {/* Fullscreen Artwork Viewer */}
+        {selectedArtwork && (
+          <ArtworkViewer
+            artwork={selectedArtwork}
+            onClose={() => setSelectedArtwork(null)}
+          />
+        )}
+      </div>
+    </PageTransition>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Artwork } from "@/lib/types";
@@ -38,6 +39,38 @@ const createMarkerIcon = (isSelected: boolean) => {
     iconSize: [isSelected ? 36 : 28, isSelected ? 36 : 28],
     iconAnchor: [isSelected ? 18 : 14, isSelected ? 36 : 28],
     popupAnchor: [0, -36],
+  });
+};
+
+// Custom cluster icon with animation
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const createClusterCustomIcon = (cluster: any) => {
+  const count = cluster.getChildCount();
+  const size = count < 5 ? 40 : count < 10 ? 48 : 56;
+
+  return L.divIcon({
+    html: `
+      <div class="cluster-marker" style="
+        width: ${size}px;
+        height: ${size}px;
+        background: linear-gradient(135deg, #002D62 0%, #1a4a7d 100%);
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 4px 15px rgba(0,45,98,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: ${count < 10 ? "14px" : "13px"};
+        font-family: system-ui, -apple-system, sans-serif;
+      ">
+        ${count}
+      </div>
+    `,
+    className: "custom-cluster-icon",
+    iconSize: L.point(size, size),
+    iconAnchor: L.point(size / 2, size / 2),
   });
 };
 
@@ -88,16 +121,27 @@ export default function GlobalMap({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <MapBoundsController artworks={artworks} />
-      {artworks.map((artwork) => (
-        <Marker
-          key={artwork.id}
-          position={[artwork.coordinates.lat, artwork.coordinates.lng]}
-          icon={createMarkerIcon(selectedArtwork?.id === artwork.id)}
-          eventHandlers={{
-            click: () => onMarkerClick(artwork),
-          }}
-        />
-      ))}
+      <MarkerClusterGroup
+        chunkedLoading
+        iconCreateFunction={createClusterCustomIcon}
+        maxClusterRadius={60}
+        spiderfyOnMaxZoom={true}
+        showCoverageOnHover={false}
+        zoomToBoundsOnClick={true}
+        animate={true}
+        animateAddingMarkers={true}
+      >
+        {artworks.map((artwork) => (
+          <Marker
+            key={artwork.id}
+            position={[artwork.coordinates.lat, artwork.coordinates.lng]}
+            icon={createMarkerIcon(selectedArtwork?.id === artwork.id)}
+            eventHandlers={{
+              click: () => onMarkerClick(artwork),
+            }}
+          />
+        ))}
+      </MarkerClusterGroup>
     </MapContainer>
   );
 }

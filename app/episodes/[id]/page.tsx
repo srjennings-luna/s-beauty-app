@@ -8,6 +8,7 @@ import FavoriteButton from "@/components/ui/FavoriteButton";
 import ArtworkViewer from "@/components/ArtworkViewer";
 import { Artwork } from "@/lib/types";
 import { useFavorites } from "@/hooks/useFavorites";
+import PageTransition from "@/components/ui/PageTransition";
 
 export default function EpisodeDetailPage() {
   const params = useParams();
@@ -20,7 +21,7 @@ export default function EpisodeDetailPage() {
 
   if (!episode) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#203545] flex items-center justify-center p-6">
         <div className="text-center">
           <h1 className="text-xl font-semibold text-white mb-2">
             Episode not found
@@ -48,15 +49,16 @@ export default function EpisodeDetailPage() {
   const needsTruncation = fullDescription.length > 150;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Hero Section */}
-      <div className="relative h-[35vh] min-h-[250px]">
+    <PageTransition>
+      <div className="min-h-screen bg-[#203545]">
+        {/* Hero Section */}
+        <div className="relative h-[35vh] min-h-[250px]">
         <img
           src={episode.heroImageUrl}
           alt={episode.title}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#0a0a0a]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#203545]" />
 
         {/* Back button */}
         <div className="absolute top-4 left-4 z-10">
@@ -97,21 +99,29 @@ export default function EpisodeDetailPage() {
 
       {/* Content */}
       <div className="px-5 pt-4 pb-28">
-        {/* Description with read more */}
+        {/* Description with inline read more */}
         <div className="mb-6">
           <p className="text-white/60 leading-relaxed">
             {showFullDescription || !needsTruncation
               ? fullDescription
-              : `${truncatedDescription}...`}
+              : truncatedDescription}
+            {needsTruncation && !showFullDescription && (
+              <button
+                onClick={() => setShowFullDescription(true)}
+                className="text-amber-500 ml-1"
+              >
+                ...more
+              </button>
+            )}
+            {showFullDescription && needsTruncation && (
+              <button
+                onClick={() => setShowFullDescription(false)}
+                className="text-amber-500 ml-1"
+              >
+                less
+              </button>
+            )}
           </p>
-          {needsTruncation && (
-            <button
-              onClick={() => setShowFullDescription(!showFullDescription)}
-              className="text-amber-500 text-sm mt-2"
-            >
-              {showFullDescription ? 'Show less' : 'Read more'}
-            </button>
-          )}
         </div>
 
         {/* Sacred Art Section */}
@@ -129,10 +139,10 @@ export default function EpisodeDetailPage() {
               const isFav = isFavorite(artwork.id, "artwork");
 
               return (
-                <button
+                <div
                   key={artwork.id}
                   onClick={() => setSelectedArtwork(artwork)}
-                  className="w-full text-left"
+                  className="w-full text-left artwork-card cursor-pointer"
                 >
                   {/* Image Container - horizontal rectangle, no rounded corners */}
                   <div className="relative aspect-[16/9] overflow-hidden">
@@ -168,14 +178,7 @@ export default function EpisodeDetailPage() {
                       </p>
                     </div>
                     {(artwork.reflectionQuestions.length > 0 || artwork.scripturePairing) && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedArtwork(artwork);
-                        }}
-                        className="ml-2 w-7 h-7 bg-white/10 rounded-full flex items-center justify-center text-white/60 flex-shrink-0"
-                        aria-label="Reflect"
-                      >
+                      <div className="ml-2 w-7 h-7 bg-white/10 rounded-full flex items-center justify-center text-white/60 flex-shrink-0">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 20 20"
@@ -184,23 +187,24 @@ export default function EpisodeDetailPage() {
                         >
                           <path d="M10.75 16.82A7.462 7.462 0 0115 15.5c.71 0 1.396.098 2.046.282A.75.75 0 0018 15.06v-11a.75.75 0 00-.546-.721A9.006 9.006 0 0015 3a8.963 8.963 0 00-4.25 1.065V16.82zM9.25 4.065A8.963 8.963 0 005 3c-.85 0-1.673.118-2.454.339A.75.75 0 002 4.06v11a.75.75 0 00.954.721A7.462 7.462 0 015 15.5c1.579 0 3.042.487 4.25 1.32V4.065z" />
                         </svg>
-                      </button>
+                      </div>
                     )}
                   </div>
-                </button>
+                </div>
               );
             })}
           </div>
         </section>
       </div>
 
-      {/* Fullscreen Artwork Viewer */}
-      {selectedArtwork && (
-        <ArtworkViewer
-          artwork={selectedArtwork}
-          onClose={() => setSelectedArtwork(null)}
-        />
-      )}
-    </div>
+        {/* Fullscreen Artwork Viewer */}
+        {selectedArtwork && (
+          <ArtworkViewer
+            artwork={selectedArtwork}
+            onClose={() => setSelectedArtwork(null)}
+          />
+        )}
+      </div>
+    </PageTransition>
   );
 }

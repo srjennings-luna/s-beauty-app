@@ -41,42 +41,37 @@ export default function SplashPage() {
         className="flex h-full transition-transform duration-500 ease-out"
         style={{ transform: `translateX(-${currentPage * 100}%)` }}
       >
-        {/* Page 1 - Deep blue/navy theme */}
-        <div className="min-w-full h-full flex flex-col items-center justify-center px-8 bg-[#1a1f3c]">
-          {/* Subtle glow effect */}
-          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
-
-          {/* Title - Script + Sans-serif style matching the show logo */}
-          <div className={`mb-8 text-center transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            <p className="text-white text-5xl" style={{ fontFamily: "Brush Script MT, Segoe Script, cursive", fontWeight: 400 }}>
-              seeking
-            </p>
-            <p className="text-white text-2xl font-light tracking-[0.35em] uppercase -mt-1">
-              BEAUTY
-            </p>
-          </div>
-
-          {/* Madonna del Granduca image - no rounded corners */}
-          <div className={`relative w-64 h-80 mb-10 overflow-hidden shadow-2xl shadow-black/50 transition-all duration-700 delay-400 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+        {/* Page 1 - Promo image top 2/3, #203545 bottom 1/3 */}
+        <div className="min-w-full h-full flex flex-col">
+          {/* Top 2/3 - Full bleed promo image */}
+          <div className="h-[66vh] relative">
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Raffaello%2C_Madonna_del_Granduca.jpg/800px-Raffaello%2C_Madonna_del_Granduca.jpg"
-              alt="Madonna del Granduca by Raphael"
+              src="/images/promo-splash.jpeg"
+              alt="Seeking Beauty with David Henrie"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.3)]" />
+            {/* Gradient fade to bottom color */}
+            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#203545] to-transparent" />
           </div>
 
-          {/* Quote */}
-          <p className={`text-white/70 text-lg text-center leading-relaxed max-w-xs italic transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            &ldquo;Beauty is the radiance of the good and the splendor of truth&rdquo;
-          </p>
+          {/* Bottom 1/3 - Deep teal with quote */}
+          <div className="flex-1 bg-[#203545] flex flex-col items-center justify-center px-8">
+            <p className={`text-white/70 text-lg text-center leading-relaxed max-w-xs italic transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              &ldquo;Beauty will save the world&rdquo;
+            </p>
+            <p className={`text-white/40 text-sm mt-3 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+              — Fyodor Dostoevsky
+            </p>
+          </div>
         </div>
 
-        {/* Page 2 - Earthy/warm purple theme */}
-        <div className="min-w-full h-full flex flex-col items-center justify-center px-8 bg-[#2d2438]">
-          {/* Subtle warm glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
-
+        {/* Page 2 - Purple to blue gradient */}
+        <div
+          className="min-w-full h-full flex flex-col items-center justify-center px-8"
+          style={{
+            background: "linear-gradient(135deg, #4C3759 0%, #203545 100%)"
+          }}
+        >
           {/* Icon */}
           <div className={`w-16 h-16 mb-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10 transition-all duration-500 ${currentPage === 1 ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white/60">
@@ -94,7 +89,7 @@ export default function SplashPage() {
             Seeking Beauty invites you on an unforgettable pilgrimage across Italy—where every landscape, masterpiece, and sacred space becomes a living encounter with the beauty of our Catholic faith.
           </p>
 
-          {/* Begin button - style from earthy inspiration */}
+          {/* Begin button */}
           <button
             onClick={goToHome}
             className={`px-8 py-3 bg-white/10 text-white/90 text-sm tracking-wider border border-white/20 hover:bg-white/20 transition-all duration-300 ${currentPage === 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}

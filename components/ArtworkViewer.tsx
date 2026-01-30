@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Artwork } from "@/lib/types";
 import FavoriteButton from "./ui/FavoriteButton";
-import { ReflectionQuestion } from "./ReflectionCard";
 
 interface ArtworkViewerProps {
   artwork: Artwork;
@@ -12,23 +11,16 @@ interface ArtworkViewerProps {
 }
 
 export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) {
-  const [showUI, setShowUI] = useState(true);
   const [showReflections, setShowReflections] = useState(false);
 
-  const toggleUI = useCallback(() => {
-    if (!showReflections) {
-      setShowUI((prev) => !prev);
-    }
-  }, [showReflections]);
+  const hasReflectionContent = artwork.reflectionQuestions.length > 0 ||
+    artwork.scripturePairing ||
+    artwork.historicalSummary;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black flex flex-col">
+    <div className="fixed inset-0 z-[60] bg-black flex flex-col">
       {/* Header - fixed at top */}
-      <div
-        className={`flex items-center justify-between p-4 transition-opacity duration-300 ${
-          showUI ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-      >
+      <div className="flex items-center justify-between p-4 flex-shrink-0">
         <button
           onClick={onClose}
           className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white"
@@ -49,13 +41,13 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
         <FavoriteButton itemId={artwork.id} type="artwork" />
       </div>
 
-      {/* Image - directly below header, takes remaining space */}
-      <div className="flex-1 flex items-center justify-center" onClick={toggleUI}>
+      {/* Image area - fills available space, image at top */}
+      <div className="flex-1 min-h-0 overflow-hidden">
         <TransformWrapper
           initialScale={1}
           minScale={0.5}
           maxScale={4}
-          centerOnInit
+          centerOnInit={false}
           doubleClick={{
             mode: "toggle",
             step: 2,
@@ -70,8 +62,9 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
               width: "100%",
               height: "100%",
               display: "flex",
-              alignItems: "center",
+              alignItems: "flex-start",
               justifyContent: "center",
+              paddingTop: "0",
             }}
           >
             <img
@@ -84,17 +77,13 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
         </TransformWrapper>
       </div>
 
-      {/* Bottom panel */}
-      <div
-        className={`transition-all duration-300 ${
-          showUI ? "translate-y-0" : "translate-y-full"
-        }`}
-      >
-        {/* Reflections panel */}
+      {/* Bottom panel - always visible */}
+      <div className="flex-shrink-0 safe-area-bottom">
+        {/* Reflections expanded panel */}
         {showReflections && (
-          <div className="bg-[#0a0a0a] max-h-[60vh] overflow-y-auto">
-            {/* Header - tight padding */}
-            <div className="px-4 py-3 border-b border-white/10 sticky top-0 bg-[#0a0a0a] z-10">
+          <div className="bg-[#203545] max-h-[60vh] overflow-y-auto border-t border-white/10">
+            {/* Header */}
+            <div className="px-4 py-3 border-b border-white/10 sticky top-0 bg-[#203545] z-10">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-base font-semibold text-white">
@@ -126,43 +115,48 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
               </div>
             </div>
 
-            {/* Content - tight padding */}
-            <div className="px-4 py-3">
-              {/* Scripture Pairing - no rounded corners */}
-              {artwork.scripturePairing && (
-                <div className="mb-4 bg-white/5 p-3 border-l-2 border-amber-500/70">
-                  <p className="text-white/80 italic text-sm leading-relaxed">
-                    &ldquo;{artwork.scripturePairing.verse}&rdquo;
-                  </p>
-                  <p className="text-amber-500/80 text-xs mt-2 font-medium">
-                    — {artwork.scripturePairing.reference}
-                  </p>
-                </div>
-              )}
-
-              {/* Historical Summary */}
+            {/* Content */}
+            <div className="px-4 py-3 space-y-4">
+              {/* Historical Context */}
               {artwork.historicalSummary && (
-                <div className="mb-4">
+                <div>
                   <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
-                    Historical Context
+                    History
                   </h4>
-                  <p className="text-white/60 text-sm leading-relaxed">
+                  <p className="text-white/70 text-sm leading-relaxed">
                     {artwork.historicalSummary}
                   </p>
                 </div>
               )}
 
-              {/* Reflection Questions - lighter text color */}
+              {/* Scripture Pairing */}
+              {artwork.scripturePairing && (
+                <div>
+                  <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
+                    Scripture
+                  </h4>
+                  <div className="bg-white/5 p-3 border-l-2 border-amber-500/70">
+                    <p className="text-white/80 italic text-sm leading-relaxed">
+                      &ldquo;{artwork.scripturePairing.verse}&rdquo;
+                    </p>
+                    <p className="text-amber-500/80 text-xs mt-2 font-medium">
+                      — {artwork.scripturePairing.reference}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Reflection Questions */}
               {artwork.reflectionQuestions.length > 0 && (
                 <div>
                   <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">
-                    Questions for Reflection
+                    Reflection Questions
                   </h4>
                   <div className="space-y-2">
                     {artwork.reflectionQuestions.map((question, index) => (
-                      <div key={index} className="text-white/70 text-sm leading-relaxed">
-                        {question}
-                      </div>
+                      <p key={index} className="text-white/70 text-sm leading-relaxed">
+                        • {question}
+                      </p>
                     ))}
                   </div>
                 </div>
@@ -171,23 +165,28 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
           </div>
         )}
 
-        {/* Info bar - minimal padding */}
+        {/* Info bar - always shown when reflections not expanded */}
         {!showReflections && (
-          <div className="px-4 py-3 bg-gradient-to-t from-black to-transparent">
+          <div className="px-4 pt-4 pb-20 bg-[#203545] border-t border-white/10">
             <div className="flex items-center justify-between">
               <div className="flex-1 min-w-0">
-                <h2 className="text-white font-medium text-base">
+                <h2 className="text-white font-semibold text-lg">
                   {artwork.title}
                 </h2>
-                <p className="text-white/50 text-sm">
+                {artwork.artist && (
+                  <p className="text-white/60 text-sm">
+                    {artwork.artist}{artwork.year && `, ${artwork.year}`}
+                  </p>
+                )}
+                <p className="text-white/40 text-sm mt-0.5">
                   {artwork.locationName}
                 </p>
               </div>
-              {(artwork.reflectionQuestions.length > 0 || artwork.scripturePairing) && (
+              {hasReflectionContent && (
                 <button
                   onClick={() => setShowReflections(true)}
-                  className="ml-3 w-9 h-9 bg-white/10 rounded-full flex items-center justify-center text-white"
-                  aria-label="Reflect"
+                  className="ml-3 w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-white"
+                  aria-label="View reflection content"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

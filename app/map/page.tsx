@@ -43,9 +43,9 @@ export default function MapPage() {
   }, [allArtworks, selectedEpisodeFilter]);
 
   return (
-    <div className="min-h-screen bg-catskill-white flex flex-col">
+    <div className="h-screen bg-catskill-white flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 py-3 safe-area-top">
+      <div className="bg-white/80 backdrop-blur-xl border-b border-gray-100 px-4 py-3 safe-area-top flex-shrink-0">
         <h1
           className="text-xl font-bold text-deep-navy"
           style={{ fontFamily: "Montserrat, sans-serif" }}
@@ -58,7 +58,7 @@ export default function MapPage() {
       </div>
 
       {/* Episode Filter Pills */}
-      <div className="bg-white border-b border-gray-100 px-4 py-3">
+      <div className="bg-white border-b border-gray-100 px-4 py-3 flex-shrink-0">
         <div className="flex gap-2 overflow-x-auto hide-scrollbar">
           <button
             onClick={() => setSelectedEpisodeFilter(null)}
@@ -89,7 +89,7 @@ export default function MapPage() {
       </div>
 
       {/* Map */}
-      <div className="flex-1 relative">
+      <div className="flex-1 relative min-h-0">
         <GlobalMap
           artworks={filteredArtworks}
           onMarkerClick={(artwork) => setSelectedArtwork(artwork)}
