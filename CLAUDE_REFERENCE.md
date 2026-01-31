@@ -260,12 +260,24 @@ If anything doesn't match this doc, the doc needs updating.
 
 ## Session Notes
 
-**Jan 31, 2025 (tonight):**
+**Jan 31, 2025 (evening):**
 - Fixed Home tab (was showing "Episodes")
 - Deployed Sanity schema with Location Types (had styled-components error, fixed by reinstalling node_modules)
 - Location Type field now visible in Sanity Studio at top of Artwork form
 - Created this reference doc
 - Colored markers code is deployed, just need to set locationType in Sanity to see different colors
+
+**Jan 31, 2025 (later):**
+- Added Splash Pages to Sanity CMS
+- Created splashPage schema with two page types: "Image with Quote" and "Text Content"
+- Added full styling controls (colors, fonts, sizes) in a separate "Styling" tab
+- Splash page content: Page 1 (quote + image), Page 2 (title + description + button)
+- App falls back to default content if Sanity has no splash pages
+
+**Sanity content types now:**
+1. Episode
+2. Artwork / Location (with Location Types)
+3. Splash Page (with Styling tab)
 
 **Start of next session:**
 1. Read this file first: `CLAUDE_REFERENCE.md`
