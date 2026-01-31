@@ -31,6 +31,7 @@ export async function getEpisodes() {
       durationMinutes,
       airDate,
       ewtnPlusUrl,
+      youtubeUrl,
       isReleased,
       featuredExperts,
       "artworks": artworks[]->{
@@ -71,6 +72,7 @@ export async function getEpisodeById(id: string) {
       durationMinutes,
       airDate,
       ewtnPlusUrl,
+      youtubeUrl,
       isReleased,
       featuredExperts,
       "artworks": artworks[]->{
@@ -133,6 +135,7 @@ export async function getReleasedEpisodes() {
       durationMinutes,
       airDate,
       ewtnPlusUrl,
+      youtubeUrl,
       isReleased,
       featuredExperts,
       "artworks": artworks[]->{

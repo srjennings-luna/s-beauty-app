@@ -73,6 +73,12 @@ export default defineType({
       description: 'Link to watch on EWTN+',
     }),
     defineField({
+      name: 'youtubeUrl',
+      title: 'YouTube URL',
+      type: 'url',
+      description: 'YouTube video link (e.g., https://youtu.be/y2eLdkXVQgg)',
+    }),
+    defineField({
       name: 'isReleased',
       title: 'Is Released?',
       type: 'boolean',

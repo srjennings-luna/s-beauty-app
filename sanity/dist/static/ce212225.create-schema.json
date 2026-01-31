@@ -500,6 +500,106 @@
         "hidden": "conditional",
         "name": "buttonText",
         "type": "string"
+      },
+      {
+        "description": "Hex color (e.g., #FFFFFF). Default: white at 70% opacity",
+        "hidden": "conditional",
+        "name": "quoteColor",
+        "type": "string",
+        "title": "Quote Text Color"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Italic (default)",
+              "value": "italic"
+            },
+            {
+              "title": "Normal",
+              "value": "normal"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "italic",
+        "hidden": "conditional",
+        "name": "quoteFont",
+        "type": "string",
+        "title": "Quote Font Style"
+      },
+      {
+        "description": "Hex color. Default: white at 40% opacity",
+        "hidden": "conditional",
+        "name": "attributionColor",
+        "type": "string",
+        "title": "Attribution Text Color"
+      },
+      {
+        "description": "Hex color. Default: #203545 (dark teal)",
+        "hidden": "conditional",
+        "name": "bottomBackgroundColor",
+        "type": "string",
+        "title": "Bottom Section Background"
+      },
+      {
+        "description": "Hex color. Default: white at 90% opacity",
+        "hidden": "conditional",
+        "name": "titleColor",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Small",
+              "value": "text-xl"
+            },
+            {
+              "title": "Medium (default)",
+              "value": "text-2xl"
+            },
+            {
+              "title": "Large",
+              "value": "text-3xl"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "text-2xl",
+        "hidden": "conditional",
+        "name": "titleSize",
+        "type": "string"
+      },
+      {
+        "description": "Hex color. Default: white at 50% opacity",
+        "hidden": "conditional",
+        "name": "descriptionColor",
+        "type": "string"
+      },
+      {
+        "description": "Hex color. Default: #C19B5F (gold)",
+        "hidden": "conditional",
+        "name": "buttonBackgroundColor",
+        "type": "string"
+      },
+      {
+        "description": "Hex color. Default: #FFFFFF (white)",
+        "hidden": "conditional",
+        "name": "buttonTextColor",
+        "type": "string"
+      },
+      {
+        "description": "Hex color for top-left. Default: #4C3759 (purple)",
+        "hidden": "conditional",
+        "name": "backgroundGradientStart",
+        "type": "string"
+      },
+      {
+        "description": "Hex color for bottom-right. Default: #203545 (dark teal)",
+        "hidden": "conditional",
+        "name": "backgroundGradientEnd",
+        "type": "string"
       }
     ],
     "name": "splashPage",

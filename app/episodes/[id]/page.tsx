@@ -47,8 +47,22 @@ interface Episode {
   heroImageUrl: string;
   airDate: string;
   isReleased: boolean;
+  youtubeUrl?: string;
   featuredExperts?: { name: string; role: string }[];
   artworks: Artwork[];
+}
+
+// Extract YouTube video ID from various URL formats
+function getYouTubeVideoId(url: string): string | null {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s?]+)/,
+    /^([a-zA-Z0-9_-]{11})$/
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match) return match[1];
+  }
+  return null;
 }
 
 export default function EpisodeDetailPage() {
@@ -200,6 +214,25 @@ export default function EpisodeDetailPage() {
             )}
           </p>
         </div>
+
+        {/* Watch Episode Section - YouTube */}
+        {episode.youtubeUrl && getYouTubeVideoId(episode.youtubeUrl) && (
+          <section className="mb-6">
+            <h2 className="text-xl font-bold text-white mb-1">
+              Watch Episode
+            </h2>
+            <p className="text-white/40 text-sm mb-4">Stream on YouTube</p>
+            <div className="relative w-full aspect-video">
+              <iframe
+                src={`https://www.youtube.com/embed/${getYouTubeVideoId(episode.youtubeUrl)}`}
+                title={episode.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+              />
+            </div>
+          </section>
+        )}
 
         {/* Sacred Art Section */}
         <section className="mb-6">
