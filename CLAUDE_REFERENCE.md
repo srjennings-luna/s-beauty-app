@@ -241,9 +241,18 @@ grep 'locationType' sanity/schemaTypes/artwork.ts
 # Check recent commits (what's actually deployed)
 git log --oneline -10
 
-# Check marker colors exist
+# Check marker colors exist in code
 grep -A 5 'locationTypeColors' components/GlobalMap.tsx
+
+# Verify colored markers are deployed (look for commit with "colored map markers")
+git log --oneline --grep="marker"
 ```
+
+**To see colored markers in the live app:**
+1. Go to https://seeking-beauty.sanity.studio
+2. Edit an artwork → set Location Type to something other than "Sacred Art"
+3. Save and publish
+4. Go to Artwalk in the app → marker should show the new color
 
 If anything doesn't match this doc, the doc needs updating.
 
