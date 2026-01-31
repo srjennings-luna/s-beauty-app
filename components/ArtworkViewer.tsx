@@ -49,7 +49,7 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
       <div className="flex-1 min-h-0 overflow-hidden">
         <TransformWrapper
           initialScale={1}
-          minScale={0.5}
+          minScale={1}
           maxScale={4}
           centerOnInit={false}
           doubleClick={{

@@ -273,11 +273,22 @@ If anything doesn't match this doc, the doc needs updating.
 - Added full styling controls (colors, fonts, sizes) in a separate "Styling" tab
 - Splash page content: Page 1 (quote + image), Page 2 (title + description + button)
 - App falls back to default content if Sanity has no splash pages
+- Fixed splash page 1 bottom padding (quote was getting cut off by home indicator)
+- Added YouTube video embedding to Episodes
+  - New `youtubeUrl` field in Episode schema
+  - Embedded player appears on episode detail page above Sacred Art section
+  - Supports youtu.be and youtube.com URL formats
+- Fixed zoom interaction in ArtworkViewer - minScale now 1 (can't zoom out smaller than original)
 
 **Sanity content types now:**
-1. Episode
+1. Episode (with YouTube URL field)
 2. Artwork / Location (with Location Types)
 3. Splash Page (with Styling tab)
+
+**Coordinate format for Sanity:**
+- Use decimal format (e.g., 41.893, 12.471)
+- NOT degrees/minutes/seconds
+- Tip: Right-click on Google Maps to copy decimal coordinates
 
 **Start of next session:**
 1. Read this file first: `CLAUDE_REFERENCE.md`

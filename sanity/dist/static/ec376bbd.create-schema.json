@@ -143,6 +143,33 @@
         "title": "EWTN+ URL"
       },
       {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "YouTube video link (e.g., https://youtu.be/y2eLdkXVQgg)",
+        "name": "youtubeUrl",
+        "type": "url",
+        "title": "YouTube URL"
+      },
+      {
         "initialValue": false,
         "description": "Toggle on when episode is available to watch",
         "name": "isReleased",
