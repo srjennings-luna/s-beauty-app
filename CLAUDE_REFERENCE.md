@@ -227,5 +227,27 @@ Companion mobile web app for the EWTN+ documentary series "Seeking Beauty" with 
 
 ---
 
+## How to Verify This Doc is Accurate
+
+Run these commands to check current state:
+
+```bash
+# Check nav tabs (should say "Home", "Artwalk", "Favorites")
+grep -A 2 'label:' components/ui/Navigation.tsx
+
+# Check location types are in schema
+grep 'locationType' sanity/schemaTypes/artwork.ts
+
+# Check recent commits (what's actually deployed)
+git log --oneline -10
+
+# Check marker colors exist
+grep -A 5 'locationTypeColors' components/GlobalMap.tsx
+```
+
+If anything doesn't match this doc, the doc needs updating.
+
+---
+
 ## Last Updated
 January 2025
