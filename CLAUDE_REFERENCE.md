@@ -1,5 +1,16 @@
 # Seeking Beauty App - Reference Document
 
+## User Context
+
+**Sheri is a Product Manager, not a developer.**
+- Always explain what you're doing and why
+- Provide step-by-step guidance for any manual tasks (like Sanity content entry)
+- Do the coding work - don't just provide code snippets and expect her to implement
+- When asking questions, keep them simple and non-technical
+- Test changes before pushing to make sure nothing breaks
+
+---
+
 ## Overview
 Companion mobile web app for the EWTN+ documentary series "Seeking Beauty" with David Henrie. Allows viewers to explore sacred art, locations, and spiritual themes from each episode.
 
