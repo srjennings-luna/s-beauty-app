@@ -15,7 +15,11 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
 
   const hasReflectionContent = artwork.reflectionQuestions.length > 0 ||
     artwork.scripturePairing ||
+    artwork.quote ||
     artwork.historicalSummary;
+
+  // Determine if this is Sacred Art (shows scripture) or other type (shows quote)
+  const isSacredArt = !artwork.locationType || artwork.locationType === 'sacred-art' || artwork.locationType === 'architecture';
 
   return (
     <div className="fixed inset-0 z-[60] bg-black flex flex-col">
@@ -129,8 +133,8 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
                 </div>
               )}
 
-              {/* Scripture Pairing - soft white background for differentiation */}
-              {artwork.scripturePairing && (
+              {/* Scripture Pairing - for Sacred Art and Architecture */}
+              {isSacredArt && artwork.scripturePairing && (
                 <div>
                   <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
                     Scripture
@@ -141,6 +145,23 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
                     </p>
                     <p className="text-amber-500/80 text-xs mt-2 font-medium">
                       — {artwork.scripturePairing.reference}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Quote - for Workshop, Cultural, Landscape types */}
+              {!isSacredArt && artwork.quote && (
+                <div>
+                  <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
+                    Quote
+                  </h4>
+                  <div className="bg-white/10 p-3 border-l-2 border-amber-500/70">
+                    <p className="text-white/80 italic text-sm leading-relaxed">
+                      &ldquo;{artwork.quote.text}&rdquo;
+                    </p>
+                    <p className="text-amber-500/80 text-xs mt-2 font-medium">
+                      — {artwork.quote.attribution}
                     </p>
                   </div>
                 </div>

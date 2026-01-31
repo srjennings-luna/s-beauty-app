@@ -5,17 +5,30 @@ import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { Artwork } from "@/lib/types";
+import { Artwork, LocationType } from "@/lib/types";
 
-// Custom marker icon
-const createMarkerIcon = (isSelected: boolean) => {
+// Color mapping for location types
+const locationTypeColors: Record<LocationType, string> = {
+  'sacred-art': '#002D62',    // Blue
+  'architecture': '#4C3759',  // Purple
+  'workshop': '#C19B5F',      // Gold
+  'cultural': '#93583E',      // Terracotta
+  'landscape': '#2D5A27',     // Green
+};
+
+// Custom marker icon with location type coloring
+const createMarkerIcon = (isSelected: boolean, locationType?: LocationType) => {
+  // Get color based on location type, default to sacred-art blue
+  const baseColor = locationType ? locationTypeColors[locationType] : locationTypeColors['sacred-art'];
+  const color = isSelected ? "#EA002A" : baseColor;
+
   return L.divIcon({
     className: "custom-marker",
     html: `
       <div style="
         width: ${isSelected ? "36px" : "28px"};
         height: ${isSelected ? "36px" : "28px"};
-        background: ${isSelected ? "#EA002A" : "#002D62"};
+        background: ${color};
         border-radius: 50% 50% 50% 0;
         transform: rotate(-45deg);
         border: 3px solid white;
@@ -135,7 +148,7 @@ export default function GlobalMap({
           <Marker
             key={artwork.id}
             position={[artwork.coordinates.lat, artwork.coordinates.lng]}
-            icon={createMarkerIcon(selectedArtwork?.id === artwork.id)}
+            icon={createMarkerIcon(selectedArtwork?.id === artwork.id, artwork.locationType)}
             eventHandlers={{
               click: () => onMarkerClick(artwork),
             }}

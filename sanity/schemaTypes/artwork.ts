@@ -2,21 +2,39 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'artwork',
-  title: 'Artwork',
+  title: 'Artwork / Location',
   type: 'document',
   fields: [
     defineField({
-      name: 'title',
-      title: 'Artwork Title',
+      name: 'locationType',
+      title: 'Location Type',
       type: 'string',
-      description: 'e.g., "Pietà" or "The Calling of St. Matthew"',
+      description: 'What type of location is this?',
+      options: {
+        list: [
+          {title: 'Sacred Art', value: 'sacred-art'},
+          {title: 'Architecture', value: 'architecture'},
+          {title: 'Workshop/Studio', value: 'workshop'},
+          {title: 'Cultural', value: 'cultural'},
+          {title: 'Landscape', value: 'landscape'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'sacred-art',
+    }),
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      description: 'e.g., "Pietà" or "Florence Art School"',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'artist',
-      title: 'Artist',
+      title: 'Artist / Creator',
       type: 'string',
-      description: 'e.g., "Michelangelo Buonarroti"',
+      description: 'e.g., "Michelangelo Buonarroti" (optional for non-art locations)',
+      hidden: ({document}) => document?.locationType !== 'sacred-art' && document?.locationType !== 'architecture',
     }),
     defineField({
       name: 'year',
@@ -26,7 +44,7 @@ export default defineType({
     }),
     defineField({
       name: 'image',
-      title: 'Artwork Image',
+      title: 'Image',
       type: 'image',
       description: 'High quality image (1200-1600px wide, JPEG, under 500KB)',
       options: {
@@ -39,19 +57,22 @@ export default defineType({
       title: 'Brief Description',
       type: 'text',
       rows: 3,
-      description: 'Short description shown in artwork cards',
+      description: 'Short description shown in cards',
     }),
     defineField({
       name: 'historicalSummary',
-      title: 'Historical Context',
+      title: 'Historical Context / About',
       type: 'text',
       rows: 5,
-      description: 'Detailed history shown in the Reflections panel',
+      description: 'Detailed history or background shown in the details panel',
     }),
+    // Scripture - shown for Sacred Art
     defineField({
       name: 'scripturePairing',
       title: 'Scripture Pairing',
       type: 'object',
+      description: 'For Sacred Art locations',
+      hidden: ({document}) => document?.locationType !== 'sacred-art' && document?.locationType !== undefined && document?.locationType !== 'architecture',
       fields: [
         {
           name: 'verse',
@@ -68,6 +89,29 @@ export default defineType({
         },
       ],
     }),
+    // Quote - shown for non-Sacred Art types
+    defineField({
+      name: 'quote',
+      title: 'Featured Quote',
+      type: 'object',
+      description: 'A meaningful quote about this location',
+      hidden: ({document}) => document?.locationType === 'sacred-art' || document?.locationType === undefined || document?.locationType === 'architecture',
+      fields: [
+        {
+          name: 'text',
+          title: 'Quote Text',
+          type: 'text',
+          rows: 3,
+          description: 'The quote (without quotes)',
+        },
+        {
+          name: 'attribution',
+          title: 'Attribution',
+          type: 'string',
+          description: 'e.g., "Dr. Elizabeth Lev" or "Local Artisan"',
+        },
+      ],
+    }),
     defineField({
       name: 'reflectionQuestions',
       title: 'Reflection Questions',
@@ -79,7 +123,7 @@ export default defineType({
       name: 'locationName',
       title: 'Location Name',
       type: 'string',
-      description: 'e.g., "St. Peter\'s Basilica - North Aisle"',
+      description: 'e.g., "St. Peter\'s Basilica" or "Via Margutta"',
     }),
     defineField({
       name: 'city',
@@ -97,7 +141,7 @@ export default defineType({
       name: 'coordinates',
       title: 'Map Coordinates',
       type: 'object',
-      description: 'For the Artwalk map',
+      description: 'For the Artwalk map. Tip: Right-click in Google Maps → "What\'s here?" to get coordinates',
       fields: [
         {
           name: 'lat',
@@ -132,17 +176,31 @@ export default defineType({
       name: 'titleAsc',
       by: [{field: 'title', direction: 'asc'}],
     },
+    {
+      title: 'Location Type',
+      name: 'locationType',
+      by: [{field: 'locationType', direction: 'asc'}],
+    },
   ],
   preview: {
     select: {
       title: 'title',
       artist: 'artist',
       location: 'locationName',
+      locationType: 'locationType',
       media: 'image',
     },
-    prepare({title, artist, location, media}) {
+    prepare({title, artist, location, locationType, media}) {
+      const typeLabels: Record<string, string> = {
+        'sacred-art': '🎨',
+        'architecture': '⛪',
+        'workshop': '🔨',
+        'cultural': '🍷',
+        'landscape': '🌿',
+      }
+      const icon = typeLabels[locationType] || '🎨'
       return {
-        title: title,
+        title: `${icon} ${title}`,
         subtitle: artist ? `${artist} • ${location || ''}` : location,
         media: media,
       }

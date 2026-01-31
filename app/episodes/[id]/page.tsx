@@ -21,6 +21,11 @@ interface Artwork {
     verse: string;
     reference: string;
   };
+  quote?: {
+    text: string;
+    attribution: string;
+  };
+  locationType?: 'sacred-art' | 'architecture' | 'workshop' | 'cultural' | 'landscape';
   reflectionQuestions: string[];
   locationName: string;
   city: string;
@@ -281,6 +286,8 @@ export default function EpisodeDetailPage() {
               description: selectedArtwork.description,
               historicalSummary: selectedArtwork.historicalSummary,
               scripturePairing: selectedArtwork.scripturePairing,
+              quote: selectedArtwork.quote,
+              locationType: selectedArtwork.locationType,
               reflectionQuestions: selectedArtwork.reflectionQuestions || [],
               locationName: selectedArtwork.locationName,
               city: selectedArtwork.city,

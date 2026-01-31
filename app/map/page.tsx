@@ -31,6 +31,11 @@ interface SanityArtwork {
     verse: string;
     reference: string;
   };
+  quote?: {
+    text: string;
+    attribution: string;
+  };
+  locationType?: 'sacred-art' | 'architecture' | 'workshop' | 'cultural' | 'landscape';
   reflectionQuestions: string[];
   locationName: string;
   city: string;
@@ -85,6 +90,8 @@ export default function MapPage() {
           description: artwork.description,
           historicalSummary: artwork.historicalSummary,
           scripturePairing: artwork.scripturePairing,
+          quote: artwork.quote,
+          locationType: artwork.locationType,
           reflectionQuestions: artwork.reflectionQuestions || [],
           locationName: artwork.locationName,
           city: artwork.city,
@@ -244,7 +251,7 @@ export default function MapPage() {
                         {artwork.artist && `${artwork.artist} • `}{artwork.locationName}
                       </p>
                     </div>
-                    {(artwork.reflectionQuestions.length > 0 || artwork.scripturePairing) && (
+                    {(artwork.reflectionQuestions.length > 0 || artwork.scripturePairing || artwork.quote) && (
                       <div className="ml-2 w-7 h-7 bg-white/10 rounded-full flex items-center justify-center text-white/60 flex-shrink-0">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

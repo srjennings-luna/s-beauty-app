@@ -23,6 +23,9 @@ export type Expert = {
   role: string; // e.g., "Art Historian", "Artist", "Local Artisan"
 };
 
+// Location type options
+export type LocationType = 'sacred-art' | 'architecture' | 'workshop' | 'cultural' | 'landscape';
+
 // Artwork / location type
 export type Artwork = {
   id: string;
@@ -35,6 +38,11 @@ export type Artwork = {
     verse: string;
     reference: string; // e.g., "Lamentations 1:12"
   };
+  quote?: {
+    text: string;
+    attribution: string; // e.g., "Dr. Elizabeth Lev"
+  };
+  locationType?: LocationType;
   episodeId?: string;
   city: string;
   country: string;
