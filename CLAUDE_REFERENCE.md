@@ -258,5 +258,21 @@ If anything doesn't match this doc, the doc needs updating.
 
 ---
 
+## Session Notes
+
+**Jan 31, 2025 (tonight):**
+- Fixed Home tab (was showing "Episodes")
+- Deployed Sanity schema with Location Types (had styled-components error, fixed by reinstalling node_modules)
+- Location Type field now visible in Sanity Studio at top of Artwork form
+- Created this reference doc
+- Colored markers code is deployed, just need to set locationType in Sanity to see different colors
+
+**Start of next session:**
+1. Read this file first: `CLAUDE_REFERENCE.md`
+2. Run verify commands to confirm state
+3. Ask what to work on
+
+---
+
 ## Last Updated
-January 2025
+January 31, 2025
