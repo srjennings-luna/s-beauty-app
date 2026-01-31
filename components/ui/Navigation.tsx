@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 const navItems = [
   {
     href: "/",
-    label: "Episodes",
+    label: "Home",
     icon: (active: boolean) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
