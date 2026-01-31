@@ -2,12 +2,13 @@
 
 ## User Context
 
-**Sheri is a Product Manager, not a developer.**
-- Always explain what you're doing and why
-- Provide step-by-step guidance for any manual tasks (like Sanity content entry)
-- Do the coding work - don't just provide code snippets and expect her to implement
-- When asking questions, keep them simple and non-technical
+**Sheri is a Product Manager with 20 years experience working with developers & stakeholders.**
+- She's creative and experienced - understands product, UX, and how to work with dev teams
+- She does not code - do the implementation, don't give code snippets to copy/paste
+- Explain what you're doing so she can learn and make informed decisions
+- Provide step-by-step guidance for manual tasks (like Sanity content entry)
 - Test changes before pushing to make sure nothing breaks
+- She can handle technical concepts - just don't expect her to write code
 
 ---
 
