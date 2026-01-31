@@ -14,6 +14,18 @@ interface SplashPageData {
   title?: string;
   description?: string;
   buttonText?: string;
+  // Styling fields
+  quoteColor?: string;
+  quoteFont?: "italic" | "normal";
+  attributionColor?: string;
+  bottomBackgroundColor?: string;
+  titleColor?: string;
+  titleSize?: string;
+  descriptionColor?: string;
+  buttonBackgroundColor?: string;
+  buttonTextColor?: string;
+  backgroundGradientStart?: string;
+  backgroundGradientEnd?: string;
 }
 
 // Default content (used if Sanity data not available)
@@ -77,8 +89,6 @@ export default function SplashPage() {
     }
   };
 
-  const isLastPage = currentPage === pages.length - 1;
-
   return (
     <div
       className={`fixed inset-0 overflow-hidden transition-opacity duration-700 ${isVisible ? "opacity-100" : "opacity-0"}`}
@@ -109,18 +119,31 @@ export default function SplashPage() {
                     className="w-full h-full object-cover"
                   />
                   {/* Gradient fade to bottom color */}
-                  <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#203545] to-transparent" />
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-32"
+                    style={{
+                      background: `linear-gradient(to top, ${page.bottomBackgroundColor || '#203545'}, transparent)`
+                    }}
+                  />
                 </div>
 
-                {/* Bottom 1/3 - Deep teal with quote */}
-                <div className="flex-1 bg-[#203545] flex flex-col items-center justify-center px-8">
+                {/* Bottom 1/3 - Quote section */}
+                <div
+                  className="flex-1 flex flex-col items-center justify-center px-8"
+                  style={{ backgroundColor: page.bottomBackgroundColor || '#203545' }}
+                >
                   <p
-                    className={`text-white/70 text-lg text-center leading-relaxed max-w-xs italic transition-all duration-700 delay-300 ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                    className={`text-lg text-center leading-relaxed max-w-xs transition-all duration-700 delay-300 ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                    style={{
+                      color: page.quoteColor || 'rgba(255,255,255,0.7)',
+                      fontStyle: page.quoteFont || 'italic'
+                    }}
                   >
                     &ldquo;{page.quote}&rdquo;
                   </p>
                   <p
-                    className={`text-white/40 text-sm mt-3 transition-all duration-700 delay-500 ${currentPage === index ? "opacity-100" : "opacity-0"}`}
+                    className={`text-sm mt-3 transition-all duration-700 delay-500 ${currentPage === index ? "opacity-100" : "opacity-0"}`}
+                    style={{ color: page.attributionColor || 'rgba(255,255,255,0.4)' }}
                   >
                     — {page.quoteAttribution}
                   </p>
@@ -131,7 +154,7 @@ export default function SplashPage() {
               <div
                 className="h-full flex flex-col items-center justify-center px-8"
                 style={{
-                  background: "linear-gradient(135deg, #4C3759 0%, #203545 100%)",
+                  background: `linear-gradient(135deg, ${page.backgroundGradientStart || '#4C3759'} 0%, ${page.backgroundGradientEnd || '#203545'} 100%)`
                 }}
               >
                 {/* Icon */}
@@ -150,14 +173,16 @@ export default function SplashPage() {
 
                 {/* Title */}
                 <h2
-                  className={`text-white/90 text-2xl mb-6 text-center font-light tracking-wide transition-all duration-500 delay-100 ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                  className={`mb-6 text-center font-light tracking-wide transition-all duration-500 delay-100 ${page.titleSize || 'text-2xl'} ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                  style={{ color: page.titleColor || 'rgba(255,255,255,0.9)' }}
                 >
                   {page.title}
                 </h2>
 
                 {/* Description */}
                 <p
-                  className={`text-white/50 text-center leading-relaxed max-w-sm mb-12 transition-all duration-500 delay-200 ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                  className={`text-center leading-relaxed max-w-sm mb-12 transition-all duration-500 delay-200 ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                  style={{ color: page.descriptionColor || 'rgba(255,255,255,0.5)' }}
                 >
                   {page.description}
                 </p>
@@ -165,12 +190,16 @@ export default function SplashPage() {
                 {/* Begin button - prominent with animated glow */}
                 <button
                   onClick={goToHome}
-                  className={`px-10 py-4 bg-[#C19B5F] text-white text-base font-semibold tracking-wider rounded-sm
+                  className={`px-10 py-4 text-base font-semibold tracking-wider rounded-sm
                     active:scale-95
                     transition-all duration-300
-                    shadow-[0_0_25px_rgba(193,155,95,0.5)]
                     animate-pulse-subtle
                     ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                  style={{
+                    backgroundColor: page.buttonBackgroundColor || '#C19B5F',
+                    color: page.buttonTextColor || '#FFFFFF',
+                    boxShadow: `0 0 25px ${page.buttonBackgroundColor || '#C19B5F'}80`
+                  }}
                 >
                   {page.buttonText || "Let's explore"}
                 </button>

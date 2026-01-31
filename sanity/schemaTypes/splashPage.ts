@@ -4,13 +4,19 @@ export default defineType({
   name: 'splashPage',
   title: 'Splash Page',
   type: 'document',
+  groups: [
+    {name: 'content', title: 'Content', default: true},
+    {name: 'styling', title: 'Styling'},
+  ],
   fields: [
+    // === CONTENT GROUP ===
     defineField({
       name: 'pageNumber',
       title: 'Page Number',
       type: 'number',
       description: 'Order of the splash page (1, 2, etc.)',
       validation: (Rule) => Rule.required().min(1),
+      group: 'content',
     }),
     defineField({
       name: 'pageType',
@@ -24,6 +30,7 @@ export default defineType({
         layout: 'radio',
       },
       initialValue: 'image-quote',
+      group: 'content',
     }),
     // For Image with Quote pages (Page 1 style)
     defineField({
@@ -35,6 +42,7 @@ export default defineType({
         hotspot: true,
       },
       hidden: ({document}) => document?.pageType !== 'image-quote',
+      group: 'content',
     }),
     defineField({
       name: 'quote',
@@ -43,6 +51,7 @@ export default defineType({
       rows: 2,
       description: 'e.g., "Beauty will save the world"',
       hidden: ({document}) => document?.pageType !== 'image-quote',
+      group: 'content',
     }),
     defineField({
       name: 'quoteAttribution',
@@ -50,6 +59,7 @@ export default defineType({
       type: 'string',
       description: 'e.g., "Fyodor Dostoevsky"',
       hidden: ({document}) => document?.pageType !== 'image-quote',
+      group: 'content',
     }),
     // For Text Content pages (Page 2 style)
     defineField({
@@ -58,6 +68,7 @@ export default defineType({
       type: 'string',
       description: 'e.g., "Your Companion for Contemplation"',
       hidden: ({document}) => document?.pageType !== 'text-content',
+      group: 'content',
     }),
     defineField({
       name: 'description',
@@ -66,6 +77,7 @@ export default defineType({
       rows: 4,
       description: 'Main description paragraph',
       hidden: ({document}) => document?.pageType !== 'text-content',
+      group: 'content',
     }),
     defineField({
       name: 'buttonText',
@@ -73,6 +85,115 @@ export default defineType({
       type: 'string',
       description: 'e.g., "Let\'s explore"',
       hidden: ({document}) => document?.pageType !== 'text-content',
+      group: 'content',
+    }),
+
+    // === STYLING GROUP ===
+    // Image with Quote styling
+    defineField({
+      name: 'quoteColor',
+      title: 'Quote Text Color',
+      type: 'string',
+      description: 'Hex color (e.g., #FFFFFF). Default: white at 70% opacity',
+      hidden: ({document}) => document?.pageType !== 'image-quote',
+      group: 'styling',
+    }),
+    defineField({
+      name: 'quoteFont',
+      title: 'Quote Font Style',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Italic (default)', value: 'italic'},
+          {title: 'Normal', value: 'normal'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'italic',
+      hidden: ({document}) => document?.pageType !== 'image-quote',
+      group: 'styling',
+    }),
+    defineField({
+      name: 'attributionColor',
+      title: 'Attribution Text Color',
+      type: 'string',
+      description: 'Hex color. Default: white at 40% opacity',
+      hidden: ({document}) => document?.pageType !== 'image-quote',
+      group: 'styling',
+    }),
+    defineField({
+      name: 'bottomBackgroundColor',
+      title: 'Bottom Section Background',
+      type: 'string',
+      description: 'Hex color. Default: #203545 (dark teal)',
+      hidden: ({document}) => document?.pageType !== 'image-quote',
+      group: 'styling',
+    }),
+
+    // Text Content styling
+    defineField({
+      name: 'titleColor',
+      title: 'Title Color',
+      type: 'string',
+      description: 'Hex color. Default: white at 90% opacity',
+      hidden: ({document}) => document?.pageType !== 'text-content',
+      group: 'styling',
+    }),
+    defineField({
+      name: 'titleSize',
+      title: 'Title Size',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Small', value: 'text-xl'},
+          {title: 'Medium (default)', value: 'text-2xl'},
+          {title: 'Large', value: 'text-3xl'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'text-2xl',
+      hidden: ({document}) => document?.pageType !== 'text-content',
+      group: 'styling',
+    }),
+    defineField({
+      name: 'descriptionColor',
+      title: 'Description Color',
+      type: 'string',
+      description: 'Hex color. Default: white at 50% opacity',
+      hidden: ({document}) => document?.pageType !== 'text-content',
+      group: 'styling',
+    }),
+    defineField({
+      name: 'buttonBackgroundColor',
+      title: 'Button Background Color',
+      type: 'string',
+      description: 'Hex color. Default: #C19B5F (gold)',
+      hidden: ({document}) => document?.pageType !== 'text-content',
+      group: 'styling',
+    }),
+    defineField({
+      name: 'buttonTextColor',
+      title: 'Button Text Color',
+      type: 'string',
+      description: 'Hex color. Default: #FFFFFF (white)',
+      hidden: ({document}) => document?.pageType !== 'text-content',
+      group: 'styling',
+    }),
+    defineField({
+      name: 'backgroundGradientStart',
+      title: 'Background Gradient Start',
+      type: 'string',
+      description: 'Hex color for top-left. Default: #4C3759 (purple)',
+      hidden: ({document}) => document?.pageType !== 'text-content',
+      group: 'styling',
+    }),
+    defineField({
+      name: 'backgroundGradientEnd',
+      title: 'Background Gradient End',
+      type: 'string',
+      description: 'Hex color for bottom-right. Default: #203545 (dark teal)',
+      hidden: ({document}) => document?.pageType !== 'text-content',
+      group: 'styling',
     }),
   ],
   preview: {

@@ -419,5 +419,90 @@
     "name": "artwork",
     "type": "document",
     "title": "Artwork / Location"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Order of the splash page (1, 2, etc.)",
+        "name": "pageNumber",
+        "type": "number"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Image with Quote",
+              "value": "image-quote"
+            },
+            {
+              "title": "Text Content",
+              "value": "text-content"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "image-quote",
+        "name": "pageType",
+        "type": "string"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Full-width promo image (top 2/3 of screen)",
+        "hidden": "conditional",
+        "name": "heroImage",
+        "type": "image"
+      },
+      {
+        "rows": 2,
+        "description": "e.g., \"Beauty will save the world\"",
+        "hidden": "conditional",
+        "name": "quote",
+        "type": "text"
+      },
+      {
+        "description": "e.g., \"Fyodor Dostoevsky\"",
+        "hidden": "conditional",
+        "name": "quoteAttribution",
+        "type": "string"
+      },
+      {
+        "description": "e.g., \"Your Companion for Contemplation\"",
+        "hidden": "conditional",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "rows": 4,
+        "description": "Main description paragraph",
+        "hidden": "conditional",
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "description": "e.g., \"Let's explore\"",
+        "hidden": "conditional",
+        "name": "buttonText",
+        "type": "string"
+      }
+    ],
+    "name": "splashPage",
+    "type": "document"
   }
 ]

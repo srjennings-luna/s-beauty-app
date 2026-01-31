@@ -188,7 +188,19 @@ export async function getSplashPages() {
       quoteAttribution,
       title,
       description,
-      buttonText
+      buttonText,
+      // Styling fields
+      quoteColor,
+      quoteFont,
+      attributionColor,
+      bottomBackgroundColor,
+      titleColor,
+      titleSize,
+      descriptionColor,
+      buttonBackgroundColor,
+      buttonTextColor,
+      backgroundGradientStart,
+      backgroundGradientEnd
     }
   `)
 }
