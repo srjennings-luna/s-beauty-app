@@ -175,3 +175,20 @@ export async function getComingSoonEpisodes() {
     }
   `)
 }
+
+// Fetch splash pages in order
+export async function getSplashPages() {
+  return sanityClient.fetch(`
+    *[_type == "splashPage"] | order(pageNumber asc) {
+      _id,
+      pageNumber,
+      pageType,
+      "heroImageUrl": heroImage.asset->url,
+      quote,
+      quoteAttribution,
+      title,
+      description,
+      buttonText
+    }
+  `)
+}

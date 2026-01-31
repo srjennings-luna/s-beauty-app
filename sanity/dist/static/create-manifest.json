@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "createdAt": "2026-01-31T06:05:12.235Z",
+  "workspaces": [
+    {
+      "name": "default",
+      "title": "Seeking Beauty CMS",
+      "basePath": "/",
+      "projectId": "em44j9m8",
+      "dataset": "production",
+      "icon": null,
+      "mediaLibrary": {
+        "enabled": false
+      },
+      "schema": "fc57ba78.create-schema.json",
+      "tools": "d8640c31.create-tools.json"
+    }
+  ],
+  "studioVersion": "4.22.0"
+}
