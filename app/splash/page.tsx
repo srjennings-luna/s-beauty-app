@@ -129,7 +129,7 @@ export default function SplashPage() {
 
                 {/* Bottom 1/3 - Quote section */}
                 <div
-                  className="flex-1 flex flex-col items-center justify-center px-8"
+                  className="flex-1 flex flex-col items-center justify-center px-8 pb-20"
                   style={{ backgroundColor: page.bottomBackgroundColor || '#203545' }}
                 >
                   <p
