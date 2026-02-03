@@ -211,10 +211,11 @@ Companion mobile web app for the EWTN+ documentary series "Seeking Beauty" with 
 
 ## Image Specs (for Sanity uploads)
 
-- **Size**: 1200-1600px on longest side
+- **Size**: 1200-1600px minimum, up to 4500px for detail-rich images (ceilings, frescoes)
 - **Format**: JPEG preferred
-- **File size**: Under 500KB
+- **File size**: Under 500KB for standard, larger OK for high-detail images
 - Sanity handles optimization/CDN delivery
+- **Zoom levels**: minScale=1 (no zoom out), maxScale=8 (8x zoom in)
 
 ---
 
@@ -279,6 +280,7 @@ If anything doesn't match this doc, the doc needs updating.
   - Embedded player appears on episode detail page above Sacred Art section
   - Supports youtu.be and youtube.com URL formats
 - Fixed zoom interaction in ArtworkViewer - minScale now 1 (can't zoom out smaller than original)
+- Increased maxScale to 8x for high-res images (supports 4500px+ images like St. Peter's dome)
 
 **Sanity content types now:**
 1. Episode (with YouTube URL field)
