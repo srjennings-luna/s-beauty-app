@@ -50,7 +50,7 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
         <TransformWrapper
           initialScale={1}
           minScale={1}
-          maxScale={4}
+          maxScale={8}
           centerOnInit={false}
           doubleClick={{
             mode: "toggle",
