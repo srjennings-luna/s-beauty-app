@@ -100,8 +100,9 @@ export default defineType({
   ],
   preview: {
     select: {title: 'title', source: 'source', authorType: 'authorType'},
-    prepare({title, source, authorType}) {
-      const typeLabel = { 'church-father': 'Church Father', 'saint': 'Saint', 'pope': 'Pope' }[authorType] || ''
+    prepare({title, source, authorType}: {title?: string; source?: string; authorType?: string}) {
+      const labels: Record<string, string> = { 'church-father': 'Church Father', 'saint': 'Saint', 'pope': 'Pope' }
+      const typeLabel = (authorType && labels[authorType]) || ''
       return {
         title: title || 'Untitled',
         subtitle: [typeLabel, source].filter(Boolean).join(' · '),
