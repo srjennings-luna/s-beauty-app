@@ -5,12 +5,6 @@ import { getTraditionReflections } from "@/lib/sanity";
 import { defaultTraditionReflections } from "@/data/traditionReflections";
 import type { TraditionReflection } from "@/lib/types";
 
-const AUTHOR_LABELS: Record<string, string> = {
-  "church-father": "Church Father",
-  saint: "Saint",
-  pope: "Pope",
-};
-
 export default function GoDeeperSection() {
   const [expanded, setExpanded] = useState(false);
   const [reflections, setReflections] = useState<TraditionReflection[]>([]);
@@ -79,9 +73,6 @@ export default function GoDeeperSection() {
                 key={r._id}
                 className="bg-white/5 border border-white/10 p-4"
               >
-                <p className="text-xs font-semibold text-amber-500/90 uppercase tracking-wider mb-1">
-                  {AUTHOR_LABELS[r.authorType] || r.authorType}
-                </p>
                 <h3 className="text-white font-semibold text-base mb-2">
                   {r.title}
                 </h3>

@@ -42,25 +42,26 @@ Companion mobile web app for the EWTN+ documentary series "Seeking Beauty" with 
 
 ## Design System
 
-### Color Palette
+### Color Palette (Sacred Art palette – sample_sacred_art_colors)
 
 | Color | Hex | Usage |
 |-------|-----|-------|
-| EWTN Navy | `#002D62` | Primary brand, nav active states |
-| Dark Teal | `#203545` | Main background |
-| Darker Teal | `#1a2a36` | Navigation bar, headers |
-| Gold/Amber | `#C19B5F` | Accent, CTA buttons, scripture refs |
+| Gold | `#C19B5F` | Accent, CTA buttons, scripture refs, highlights |
+| Dark Teal | `#203545` | Main background, primary surfaces |
+| Plum | `#4C3759` | Secondary surfaces, architecture markers |
+| Rust | `#93583E` | Cultural/terracotta accents |
+| Maroon | `#66293C` | Navigation bar, headers, Go deeper section |
 | White | Various opacities | Text hierarchy (100%, 80%, 50%, 40%) |
 
 ### Map Marker Colors (by Location Type)
 
 | Type | Color | Hex |
 |------|-------|-----|
-| Sacred Art | Blue | `#002D62` |
-| Architecture | Purple | `#4C3759` |
+| Sacred Art | Maroon / Navy | `#66293C` or `#203545` |
+| Architecture | Plum | `#4C3759` |
 | Workshop/Studio | Gold | `#C19B5F` |
-| Cultural | Terracotta | `#93583E` |
-| Landscape | Green | `#2D5A27` |
+| Cultural | Rust | `#93583E` |
+| Landscape | Green | `#2D5A27` (optional; or use Rust) |
 
 ### Typography
 
@@ -85,7 +86,7 @@ Companion mobile web app for the EWTN+ documentary series "Seeking Beauty" with 
 2. **Artwalk** (/map) - Map and list view of all art
 3. **Favorites** (/favorites) - Saved items
 
-**Hidden on:** `/splash`, `/episodes/[id]/artwalk`
+**Hidden on:** `/splash`, `/episodes/[id]/artwalk`, `/pray`
 
 ---
 
@@ -122,6 +123,12 @@ Companion mobile web app for the EWTN+ documentary series "Seeking Beauty" with 
 ### Favorites
 - Saved to localStorage
 - Persists across sessions
+
+### Pray / Visio Divina (`/pray/[artworkId]`)
+- Entry: "Pray with this image" from ArtworkViewer or episode detail
+- Steps: Gaze → Meditate → Pray → Contemplate → Action (Previous/Next above "Go deeper")
+- Go deeper: expandable tradition reflections (Church Fathers, Saints, Popes)
+- **Meditation music:** Optional background audio. Add a file at `public/music/meditation.mp3` (e.g. royalty-free ambient or instrumental) for the header music toggle to play it. If the file is missing, the toggle still appears but play will do nothing.
 
 ---
 

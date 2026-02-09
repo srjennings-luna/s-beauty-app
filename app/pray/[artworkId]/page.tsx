@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { getArtworkById } from "@/lib/sanity";
@@ -34,6 +34,11 @@ const STEPS = [
   { key: "action", title: "Action", label: "Operatio" },
 ];
 
+const MUSIC_AMBIENT = "/music/natureseye-piano-dreamcloud-meditation-179215.mp3";
+const MUSIC_CHANT = "/music/nickpanek-ave-maria-latin-catholic-gregorian-chant-218251.mp3";
+
+type MusicMode = "off" | "chant" | "ambient";
+
 export default function PrayPage() {
   const params = useParams();
   const router = useRouter();
@@ -41,6 +46,11 @@ export default function PrayPage() {
   const [loading, setLoading] = useState(true);
   const [step, setStep] = useState(0);
   const [actionNote, setActionNote] = useState("");
+  const [musicMode, setMusicMode] = useState<MusicMode>("off");
+  const [musicPaused, setMusicPaused] = useState(false);
+  const [musicMenuOpen, setMusicMenuOpen] = useState(false);
+  const chantAudioRef = useRef<HTMLAudioElement | null>(null);
+  const ambientAudioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const id = params.artworkId as string;
@@ -53,6 +63,38 @@ export default function PrayPage() {
       .catch(() => setArtwork(null))
       .finally(() => setLoading(false));
   }, [params.artworkId]);
+
+  const setMusic = (mode: MusicMode) => {
+    const chant = chantAudioRef.current;
+    const ambient = ambientAudioRef.current;
+    chant?.pause();
+    ambient?.pause();
+    if (mode === "chant" && chant) {
+      chant.play().catch(() => setMusicMode("off"));
+      setMusicPaused(false);
+    }
+    if (mode === "ambient" && ambient) {
+      ambient.play().catch(() => setMusicMode("off"));
+      setMusicPaused(false);
+    }
+    if (mode === "off") setMusicPaused(true);
+    setMusicMode(mode);
+    setMusicMenuOpen(false);
+  };
+
+  const pauseMusic = () => {
+    chantAudioRef.current?.pause();
+    ambientAudioRef.current?.pause();
+    setMusicPaused(true);
+    setMusicMenuOpen(false);
+  };
+
+  const resumeMusic = () => {
+    if (musicMode === "chant") setMusic("chant");
+    else if (musicMode === "ambient") setMusic("ambient");
+  };
+
+  const isPlaying = (musicMode === "chant" || musicMode === "ambient") && !musicPaused;
 
   if (loading) {
     return (
@@ -81,7 +123,6 @@ export default function PrayPage() {
     !artwork.locationType ||
     artwork.locationType === "sacred-art" ||
     artwork.locationType === "architecture";
-  const stepConfig = STEPS[step];
   const isLastStep = step === STEPS.length - 1;
 
   return (
@@ -113,16 +154,58 @@ export default function PrayPage() {
             </svg>
           </Link>
           <span className="text-white/60 text-sm">
-            {step + 1} of {STEPS.length}
+            {step + 1} of {STEPS.length} · {STEPS[step].title}
           </span>
-          <div className="w-10" />
+          {musicMode === "off" ? (
+            <button type="button" onClick={() => setMusicMenuOpen(true)} className="text-white/40 text-xs font-medium">
+              Music
+            </button>
+          ) : (
+            <div className="w-10" />
+          )}
         </div>
+        <audio ref={chantAudioRef} src={MUSIC_CHANT} loop playsInline />
+        <audio ref={ambientAudioRef} src={MUSIC_AMBIENT} loop playsInline />
+
+        {/* Music menu (shared: opened from floating button or inline link) */}
+        {musicMenuOpen && (
+          <>
+            <div className="fixed inset-0 z-40" aria-hidden onClick={() => setMusicMenuOpen(false)} />
+            <div className="fixed bottom-32 right-4 z-50 w-40 bg-[#66293C] border border-white/10 py-1" style={{ marginBottom: "env(safe-area-inset-bottom, 0)" }}>
+              {isPlaying ? (
+                <button type="button" onClick={pauseMusic} className="w-full px-4 py-2 text-left text-sm text-white/80">Pause</button>
+              ) : (musicMode === "chant" || musicMode === "ambient") ? (
+                <button type="button" onClick={resumeMusic} className="w-full px-4 py-2 text-left text-sm text-[#C19B5F]">Resume</button>
+              ) : null}
+              <button type="button" onClick={() => setMusic("off")} className={`w-full px-4 py-2 text-left text-sm ${musicMode === "off" ? "text-[#C19B5F]" : "text-white/80"}`}>Off</button>
+              <button type="button" onClick={() => setMusic("chant")} className={`w-full px-4 py-2 text-left text-sm ${musicMode === "chant" ? "text-[#C19B5F]" : "text-white/80"}`}>Chant</button>
+              <button type="button" onClick={() => setMusic("ambient")} className={`w-full px-4 py-2 text-left text-sm ${musicMode === "ambient" ? "text-[#C19B5F]" : "text-white/80"}`}>Ambient</button>
+            </div>
+          </>
+        )}
+
+        {/* Floating music button – only when chant or ambient is selected (playing or paused) */}
+        {(musicMode === "chant" || musicMode === "ambient") && (
+          <button
+            type="button"
+            onClick={() => setMusicMenuOpen(!musicMenuOpen)}
+            className="fixed bottom-24 right-4 z-30 w-12 h-12 flex items-center justify-center rounded-full bg-[#66293C] border border-white/20 text-[#C19B5F] shadow-lg safe-area-bottom"
+            style={{ marginBottom: "env(safe-area-inset-bottom, 0)" }}
+            aria-label="Music options"
+            aria-expanded={musicMenuOpen}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+              <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.14c-.938 0-1.64.703-1.64 1.64v6.72c0 .937.702 1.64 1.64 1.64h2.3l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06zM18.44 18.53c.266-.436.227-.905-.096-1.228A9.92 9.92 0 0119 12c0-2.233-.758-4.29-2.034-5.964a1.077 1.077 0 00-1.532.066 1.077 1.077 0 00.066 1.532A7.92 7.92 0 0117 12c0 1.61-.428 3.118-1.176 4.408a1.078 1.078 0 00.616 1.479c.44.161.92.023 1.24-.355z" />
+            </svg>
+          </button>
+        )}
 
         {/* Step content */}
         <div className="flex-1 overflow-y-auto">
           {/* Gaze */}
           {step === 0 && (
             <div className="flex flex-col items-center justify-center min-h-[50vh] px-6 py-8">
+              <h2 className="text-amber-500/90 text-sm font-semibold uppercase tracking-wider mb-4">Gaze</h2>
               <div className="relative w-full max-w-lg aspect-[4/3] overflow-hidden mb-6">
                 <img
                   src={artwork.imageUrl}
@@ -140,6 +223,7 @@ export default function PrayPage() {
           {/* Meditate */}
           {step === 1 && (
             <div className="px-6 py-8">
+              <h2 className="text-amber-500/90 text-sm font-semibold uppercase tracking-wider mb-4">Meditate</h2>
               <div className="relative w-full max-w-md mx-auto aspect-video overflow-hidden mb-6">
                 <img
                   src={artwork.imageUrl}
@@ -167,6 +251,7 @@ export default function PrayPage() {
           {/* Pray */}
           {step === 2 && (
             <div className="px-6 py-8">
+              <h2 className="text-amber-500/90 text-sm font-semibold uppercase tracking-wider mb-4">Pray</h2>
               {isSacredArt && artwork.scripturePairing && (
                 <div className="bg-white/5 border-l-2 border-amber-500/70 p-4 mb-6">
                   <p className="font-serif-elegant italic text-white/90 text-base leading-relaxed">
@@ -196,6 +281,7 @@ export default function PrayPage() {
           {/* Contemplate */}
           {step === 3 && (
             <div className="flex flex-col items-center justify-center min-h-[50vh] px-6 py-8">
+              <h2 className="text-amber-500/90 text-sm font-semibold uppercase tracking-wider mb-4">Contemplate</h2>
               <div className="relative w-full max-w-sm aspect-square overflow-hidden mb-6">
                 <img
                   src={artwork.imageUrl}
@@ -212,7 +298,8 @@ export default function PrayPage() {
           {/* Action */}
           {step === 4 && (
             <div className="px-6 py-8">
-              <h2 className="text-white font-semibold text-lg mb-2">How will you live this out?</h2>
+              <h2 className="text-amber-500/90 text-sm font-semibold uppercase tracking-wider mb-4">Action</h2>
+              <h3 className="text-white font-semibold text-lg mb-2">How will you live this out?</h3>
               <p className="text-white/70 text-sm mb-4">
                 Ask yourself and God: How will you apply what you’ve received in prayer to your life?
               </p>
@@ -230,20 +317,31 @@ export default function PrayPage() {
           )}
         </div>
 
-        {/* Go deeper – after the step flow */}
-        <div className="flex-shrink-0 bg-[#1a2a36]">
-          <GoDeeperSection />
-        </div>
-
-        {/* Next / Finish */}
-        <div className="flex-shrink-0 px-4 py-4 border-t border-white/10 bg-[#203545]">
+        {/* Step navigation – above Go deeper so it’s clearly tied to the content */}
+        <div className="flex-shrink-0 px-4 py-4 border-t border-white/10 bg-[#203545] flex gap-3 justify-center">
+          {step > 0 ? (
+            <button
+              type="button"
+              onClick={() => setStep(step - 1)}
+              className="px-6 py-3 border border-white/30 text-white/90 font-medium"
+            >
+              Previous
+            </button>
+          ) : (
+            <span className="w-[5.5rem]" aria-hidden />
+          )}
           <button
             type="button"
             onClick={() => (isLastStep ? router.back() : setStep(step + 1))}
-            className="w-full py-3 bg-amber-500/90 text-[#1a2a36] font-semibold text-center"
+            className="px-6 py-3 bg-[#C19B5F] text-[#203545] font-semibold"
           >
             {isLastStep ? "Finish" : "Next"}
           </button>
+        </div>
+
+        {/* Go deeper – optional, below step navigation */}
+        <div className="flex-shrink-0 bg-[#66293C]">
+          <GoDeeperSection />
         </div>
       </div>
     </PageTransition>

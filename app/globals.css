@@ -1,20 +1,21 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Primary palette - meditative, contemplative tones */
+  /* Sacred Art palette (sample_sacred_art_colors) */
+  --color-sacred-gold: #C19B5F;
+  --color-sacred-teal: #203545;
+  --color-sacred-plum: #4C3759;
+  --color-sacred-rust: #93583E;
+  --color-sacred-maroon: #66293C;
+
+  /* Legacy / alternate */
   --color-ewtn-red: #b8434a;
   --color-ewtn-red-dark: #9a363c;
   --color-deep-navy: #1a2742;
   --color-deep-navy-light: #263654;
   --color-catskill-white: #f8f9fc;
-
-  /* Accent colors */
-  --color-accent-gold: #c4a052;
+  --color-accent-gold: #C19B5F;
   --color-accent-gold-light: #d4b56a;
-  --color-warm-stone: #a69585;
-  --color-soft-sage: #8fa590;
-
-  /* Dark mode colors */
   --color-dark-bg: #0f1419;
   --color-dark-surface: #1a2230;
   --color-dark-elevated: #242d3d;

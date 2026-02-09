@@ -9,10 +9,10 @@ import { Artwork, LocationType } from "@/lib/types";
 
 // Color mapping for location types
 const locationTypeColors: Record<LocationType, string> = {
-  'sacred-art': '#002D62',    // Blue
-  'architecture': '#4C3759',  // Purple
+  'sacred-art': '#66293C',    // Maroon (Sacred Art palette)
+  'architecture': '#4C3759',  // Plum
   'workshop': '#C19B5F',      // Gold
-  'cultural': '#93583E',      // Terracotta
+  'cultural': '#93583E',      // Rust
   'landscape': '#2D5A27',     // Green
 };
 
@@ -66,7 +66,7 @@ const createClusterCustomIcon = (cluster: any) => {
       <div class="cluster-marker" style="
         width: ${size}px;
         height: ${size}px;
-        background: linear-gradient(135deg, #002D62 0%, #1a4a7d 100%);
+        background: linear-gradient(135deg, #66293C 0%, #4C3759 100%);
         border-radius: 50%;
         border: 3px solid white;
         box-shadow: 0 4px 15px rgba(0,45,98,0.4);

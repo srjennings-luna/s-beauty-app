@@ -17,7 +17,7 @@ import "leaflet/dist/leaflet.css";
 // Custom marker icon creator
 function createMarkerIcon(order: number, isActive: boolean) {
   const size = isActive ? 40 : 32;
-  const bgColor = isActive ? "#EA002A" : "#002D62";
+  const bgColor = isActive ? "#EA002A" : "#66293C";
 
   return L.divIcon({
     className: "custom-marker",
