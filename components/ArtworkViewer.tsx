@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Artwork } from "@/lib/types";
 import FavoriteButton from "./ui/FavoriteButton";
@@ -220,6 +221,12 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
                 </button>
               )}
             </div>
+            <Link
+              href={`/pray/${artwork.id}`}
+              className="mt-3 inline-block text-amber-500/90 text-sm font-medium"
+            >
+              Pray with this image →
+            </Link>
           </div>
         )}
       </div>

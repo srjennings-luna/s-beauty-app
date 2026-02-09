@@ -69,8 +69,8 @@ const navItems = [
 export default function Navigation() {
   const pathname = usePathname();
 
-  // Hide navigation on artwalk pages and splash for immersive experience
-  if (pathname.includes("/artwalk") || pathname === "/splash") {
+  // Hide navigation on artwalk, pray, and splash for immersive experience
+  if (pathname.includes("/artwalk") || pathname.includes("/pray") || pathname === "/splash") {
     return null;
   }
 

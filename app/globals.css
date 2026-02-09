@@ -31,8 +31,8 @@ html {
 
 body {
   font-family: var(--font-open-sans), "Open Sans", sans-serif;
-  background-color: var(--color-catskill-white);
-  color: #1a1a2e;
+  background-color: #203545; /* Dark teal - app default (design system) */
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -66,13 +66,13 @@ h1, h2, h3, h4, h5, h6 {
 .text-deep-navy { color: var(--color-deep-navy); }
 .text-accent-gold { color: var(--color-accent-gold); }
 
-/* Button styles */
+/* Button styles - square corners per design system */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0.875rem 1.75rem;
-  border-radius: 0.75rem;
+  border-radius: 0;
   font-weight: 600;
   color: white;
   transition: all 0.3s ease;
@@ -92,7 +92,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
   padding: 0.875rem 1.75rem;
-  border-radius: 0.75rem;
+  border-radius: 0;
   font-weight: 600;
   transition: all 0.3s ease;
   font-family: "Montserrat", sans-serif;
@@ -110,7 +110,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
   padding: 0.875rem 1.75rem;
-  border-radius: 0.75rem;
+  border-radius: 0;
   font-weight: 600;
   transition: all 0.3s ease;
   border: 2px solid;
@@ -125,9 +125,9 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(-1px);
 }
 
-/* Card styles */
+/* Card styles - square corners per design system */
 .card {
-  border-radius: 1rem;
+  border-radius: 0;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   background-color: white;
@@ -163,7 +163,7 @@ h1, h2, h3, h4, h5, h6 {
 .leaflet-control-zoom {
   border: none !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
-  border-radius: 12px !important;
+  border-radius: 0 !important;
   overflow: hidden;
 }
 .leaflet-control-zoom a {
@@ -175,10 +175,10 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 36px !important;
 }
 .leaflet-control-zoom a:first-child {
-  border-radius: 12px 12px 0 0 !important;
+  border-radius: 0 !important;
 }
 .leaflet-control-zoom a:last-child {
-  border-radius: 0 0 12px 12px !important;
+  border-radius: 0 !important;
 }
 
 /* Fullscreen viewer */
@@ -207,7 +207,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 1rem;
+  border-radius: 0;
 }
 
 /* Heart button */
@@ -267,7 +267,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Meditative card style */
 .meditation-card {
   background: linear-gradient(135deg, rgba(248, 249, 252, 0.9) 0%, rgba(255, 255, 255, 0.95) 100%);
-  border-radius: 1.25rem;
+  border-radius: 0;
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.05),
     0 10px 15px -3px rgba(0, 0, 0, 0.05),

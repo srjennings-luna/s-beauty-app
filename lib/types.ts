@@ -74,3 +74,16 @@ export type Favorite = {
   itemId: string;
   addedAt: string;
 };
+
+// Tradition reflection (Church Fathers, Saints, Popes) for "Go deeper" on prayer page
+export type TraditionReflection = {
+  _id: string;
+  authorType: "church-father" | "saint" | "pope";
+  title: string;
+  summary: string;
+  shortQuote?: string;
+  source: string;
+  theme: string;
+  order: number;
+  era?: string;
+};

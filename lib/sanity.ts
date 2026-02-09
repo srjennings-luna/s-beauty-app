@@ -207,3 +207,47 @@ export async function getSplashPages() {
     }
   `)
 }
+
+// Fetch a single artwork by ID (for pray/Visio Divina page)
+export async function getArtworkById(id: string) {
+  return sanityClient.fetch(
+    `*[_type == "artwork" && _id == $id][0] {
+      _id,
+      title,
+      artist,
+      year,
+      "imageUrl": image.asset->url,
+      description,
+      historicalSummary,
+      scripturePairing,
+      quote,
+      locationType,
+      reflectionQuestions,
+      locationName,
+      city,
+      country,
+      coordinates,
+      order
+    }`,
+    { id }
+  )
+}
+
+// Fetch tradition reflections (Church Fathers, Saints, Popes) for "Go deeper" on prayer page
+export async function getTraditionReflections(theme?: string) {
+  const themeFilter = theme ? ` && theme == $theme` : ''
+  return sanityClient.fetch(
+    `*[_type == "traditionReflection"${themeFilter}] | order(order asc) {
+      _id,
+      authorType,
+      title,
+      summary,
+      shortQuote,
+      source,
+      theme,
+      order,
+      era
+    }`,
+    theme ? { theme } : {}
+  )
+}

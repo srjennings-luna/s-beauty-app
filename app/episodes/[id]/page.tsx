@@ -300,6 +300,13 @@ export default function EpisodeDetailPage() {
                       </div>
                     )}
                   </div>
+                  <Link
+                    href={`/pray/${artwork._id}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="mt-1.5 inline-block text-amber-500/90 text-xs font-medium"
+                  >
+                    Pray with this image →
+                  </Link>
                 </div>
               );
             })}
