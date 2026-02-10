@@ -51,6 +51,7 @@ export default function PrayPage() {
   const [musicPaused, setMusicPaused] = useState(false);
   const [musicMenuOpen, setMusicMenuOpen] = useState(false);
   const [musicLoadError, setMusicLoadError] = useState(false);
+  const [reflectionExpanded, setReflectionExpanded] = useState(false);
   const chantAudioRef = useRef<HTMLAudioElement | null>(null);
   const ambientAudioRef = useRef<HTMLAudioElement | null>(null);
   const touchStartX = useRef(0);
@@ -185,7 +186,7 @@ export default function PrayPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen flex flex-col pb-24 safe-area-bottom" style={{ background: "linear-gradient(180deg, #2a4050 0%, #203545 30%, #203545 70%, #1a2a36 100%)" }}>
+      <div className="min-h-screen flex flex-col safe-area-bottom" style={{ background: "linear-gradient(180deg, #2a4050 0%, #203545 30%, #203545 70%, #1a2a36 100%)", paddingBottom: "calc(4rem + env(safe-area-inset-bottom, 0px))" }}>
         {/* Header – slightly lighter teal */}
         <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-white/10 safe-area-top bg-[#2a4050]">
           <Link
@@ -331,14 +332,26 @@ export default function PrayPage() {
                 Look deeper. What movement or relationships do you see? Where are you in this image?
               </p>
               {questions.length > 0 && (
-                <ul className="space-y-2">
-                  {questions.slice(0, 3).map((q, i) => (
-                    <li key={i} className="text-white/80 text-sm flex gap-2">
-                      <span className="text-[#C19B5F]">•</span>
-                      <span>{q}</span>
-                    </li>
-                  ))}
-                </ul>
+                <div>
+                  {!reflectionExpanded ? (
+                    <button
+                      type="button"
+                      onClick={() => setReflectionExpanded(true)}
+                      className="text-[#C19B5F] text-sm font-medium hover:underline focus:outline-none focus:underline"
+                    >
+                      Reflection questions ({Math.min(questions.length, 2)})
+                    </button>
+                  ) : (
+                    <ul className="space-y-2">
+                      {questions.slice(0, 2).map((q, i) => (
+                        <li key={i} className="text-white/80 text-sm flex gap-2">
+                          <span className="text-[#C19B5F]">•</span>
+                          <span>{q}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               )}
             </div>
           )}
@@ -426,9 +439,9 @@ export default function PrayPage() {
             </div>
           )}
 
-          {/* Pagination: centered under step content, same background as page */}
-          <div className="flex-shrink-0 px-4 py-5 flex flex-col items-center justify-center gap-2">
-            <div className="flex items-center justify-center gap-2" role="tablist" aria-label="Prayer steps">
+          {/* Pagination: dots centered, Next on right; same background as page */}
+          <div className="flex-shrink-0 px-4 py-5 flex items-center justify-between gap-3 w-full">
+            <div className="flex items-center justify-center gap-2 flex-1" role="tablist" aria-label="Prayer steps">
               {STEPS.map((_, i) => (
                 <button
                   key={i}
@@ -444,17 +457,16 @@ export default function PrayPage() {
             <button
               type="button"
               onClick={() => (isLastStep ? router.back() : setStep(step + 1))}
-              className="text-[#C19B5F] text-sm font-medium hover:underline focus:outline-none focus:underline"
+              className="flex-shrink-0 text-[#C19B5F] text-sm font-medium hover:underline focus:outline-none focus:underline"
             >
               {isLastStep ? "Finish" : "Next"}
             </button>
-            <p className="text-white/40 text-xs">Swipe or tap Next to move between steps</p>
           </div>
           </div>
         </div>
 
         {/* Go deeper – only bar with darker background so it’s clearly tied to the content */}
-        <div className="flex-shrink-0 bg-[#1a2a36]">
+        <div className="fixed bottom-0 left-0 right-0 z-20 bg-[#1a2a36] border-t border-white/10 safe-area-bottom">
           <GoDeeperSection />
         </div>
       </div>
