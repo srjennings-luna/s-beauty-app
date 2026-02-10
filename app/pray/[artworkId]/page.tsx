@@ -52,6 +52,10 @@ export default function PrayPage() {
   const [musicLoadError, setMusicLoadError] = useState(false);
   const chantAudioRef = useRef<HTMLAudioElement | null>(null);
   const ambientAudioRef = useRef<HTMLAudioElement | null>(null);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const stepRef = useRef(step);
+  stepRef.current = step;
 
   useEffect(() => {
     const id = params.artworkId as string;
@@ -64,6 +68,21 @@ export default function PrayPage() {
       .catch(() => setArtwork(null))
       .finally(() => setLoading(false));
   }, [params.artworkId]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        if (step > 0) setStep(step - 1);
+        return;
+      }
+      if (e.key === "ArrowRight") {
+        if (step < STEPS.length - 1) setStep(step + 1);
+        else router.back();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [step, router]);
 
   const setMusic = (mode: MusicMode) => {
     const chant = chantAudioRef.current;
@@ -115,6 +134,24 @@ export default function PrayPage() {
   };
 
   const isPlaying = (musicMode === "chant" || musicMode === "ambient") && !musicPaused;
+
+  const SWIPE_THRESHOLD = 50;
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const dx = endX - touchStartX.current;
+    const dy = endY - touchStartY.current;
+    if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dx) < Math.abs(dy)) return;
+    const s = stepRef.current;
+    if (dx < 0) {
+      if (s < STEPS.length - 1) setStep(s + 1);
+      else router.back();
+    } else if (dx > 0 && s > 0) setStep(s - 1);
+  };
 
   if (loading) {
     return (
@@ -224,8 +261,13 @@ export default function PrayPage() {
           </button>
         )}
 
-        {/* Step content */}
-        <div className="flex-1 overflow-y-auto">
+        {/* Step content – swipe left = next, swipe right = previous (wrapper captures touch so swipe works) */}
+        <div
+          className="flex-1 min-h-0 flex flex-col"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="flex-1 overflow-y-auto touch-pan-y">
           {/* Gaze */}
           {step === 0 && (
             <div className="flex flex-col items-center justify-center min-h-[50vh] px-6 py-8">
@@ -339,28 +381,34 @@ export default function PrayPage() {
               </p>
             </div>
           )}
+          </div>
         </div>
 
         {/* Step navigation – above Go deeper so it’s clearly tied to the content */}
-        <div className="flex-shrink-0 px-4 py-4 border-t border-white/10 bg-[#1a2a36] flex gap-3">
-          {step > 0 ? (
+        <div className="flex-shrink-0 min-h-[72px] px-4 py-3 border-t border-white/10 bg-[#1a2a36] flex flex-col items-center justify-center gap-2">
+          <div className="flex items-center justify-center gap-3 w-full">
+            <div className="flex items-center gap-2" role="tablist" aria-label="Prayer steps">
+              {STEPS.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  role="tab"
+                  aria-label={`${STEPS[i].title}${step === i ? ", current" : ""}`}
+                  aria-selected={step === i}
+                  onClick={() => setStep(i)}
+                  className={`w-2.5 h-2.5 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#C19B5F] focus:ring-offset-2 focus:ring-offset-[#1a2a36] ${step === i ? "bg-[#C19B5F] scale-125" : "bg-white/30 hover:bg-white/50"}`}
+                />
+              ))}
+            </div>
             <button
               type="button"
-              onClick={() => setStep(step - 1)}
-              className="flex-1 py-4 border border-white/30 text-white/90 font-medium text-sm"
+              onClick={() => (isLastStep ? router.back() : setStep(step + 1))}
+              className="ml-auto text-[#C19B5F] text-sm font-medium hover:underline focus:outline-none focus:underline"
             >
-              Previous
+              {isLastStep ? "Finish" : "Next"}
             </button>
-          ) : (
-            <span className="flex-1" aria-hidden />
-          )}
-          <button
-            type="button"
-            onClick={() => (isLastStep ? router.back() : setStep(step + 1))}
-            className="flex-1 py-4 bg-[#C19B5F] text-[#203545] font-semibold text-sm"
-          >
-            {isLastStep ? "Finish" : "Next"}
-          </button>
+          </div>
+          <p className="text-white/40 text-xs">Swipe or tap Next to move between steps</p>
         </div>
 
         {/* Go deeper – optional, below step navigation */}
