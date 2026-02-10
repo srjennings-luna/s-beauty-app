@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { getArtworkById } from "@/lib/sanity";
 import GoDeeperSection from "@/components/GoDeeperSection";
 import PageTransition from "@/components/ui/PageTransition";
@@ -268,34 +269,62 @@ export default function PrayPage() {
           onTouchEnd={handleTouchEnd}
         >
           <div className="flex-1 overflow-y-auto touch-pan-y">
-          {/* Gaze */}
+          {/* Gaze – image priority: full image visible, pinch to zoom / pan */}
           {step === 0 && (
-            <div className="flex flex-col items-center justify-center min-h-[50vh] px-6 py-8">
-              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4">Gaze</h2>
-              <div className="relative w-full max-w-lg aspect-[4/3] overflow-hidden mb-6">
-                <img
-                  src={artwork.imageUrl}
-                  alt={artwork.title}
-                  className="w-full h-full object-cover"
-                />
+            <div className="flex flex-col px-4 py-6">
+              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4 text-center">Gaze</h2>
+              <div className="w-full min-h-[55vh] flex-1 flex flex-col mb-6">
+                <TransformWrapper
+                  initialScale={1}
+                  minScale={1}
+                  maxScale={8}
+                  centerOnInit={false}
+                  doubleClick={{ mode: "toggle", step: 2 }}
+                >
+                  <TransformComponent
+                    wrapperStyle={{ width: "100%", height: "100%", minHeight: "55vh" }}
+                    contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                  >
+                    <img
+                      src={artwork.imageUrl}
+                      alt={artwork.title}
+                      className="max-w-full max-h-[70vh] object-contain select-none"
+                      draggable={false}
+                    />
+                  </TransformComponent>
+                </TransformWrapper>
               </div>
-              <p className="text-white/80 text-center text-sm leading-relaxed max-w-md">
+              <p className="text-white/80 text-center text-sm leading-relaxed max-w-md mx-auto">
                 Let your eyes rest on the image. Notice what draws you. Ask God to open the eyes of your heart.
               </p>
-              <p className="text-white/40 text-xs mt-4">Take 1–2 minutes if you like.</p>
+              <p className="text-white/40 text-xs mt-4 text-center">Take 1–2 minutes if you like. Pinch to zoom the image.</p>
             </div>
           )}
 
-          {/* Meditate */}
+          {/* Meditate – same image priority: full image, zoom/pan */}
           {step === 1 && (
-            <div className="px-6 py-8">
+            <div className="px-4 py-6">
               <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4">Meditate</h2>
-              <div className="relative w-full max-w-md mx-auto aspect-video overflow-hidden mb-6">
-                <img
-                  src={artwork.imageUrl}
-                  alt={artwork.title}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-full min-h-[50vh] mb-6">
+                <TransformWrapper
+                  initialScale={1}
+                  minScale={1}
+                  maxScale={8}
+                  centerOnInit={false}
+                  doubleClick={{ mode: "toggle", step: 2 }}
+                >
+                  <TransformComponent
+                    wrapperStyle={{ width: "100%", height: "100%", minHeight: "50vh" }}
+                    contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                  >
+                    <img
+                      src={artwork.imageUrl}
+                      alt={artwork.title}
+                      className="max-w-full max-h-[65vh] object-contain select-none"
+                      draggable={false}
+                    />
+                  </TransformComponent>
+                </TransformWrapper>
               </div>
               <h2 className="text-white font-semibold text-lg mb-2">Reflect</h2>
               <p className="text-white/70 text-sm mb-4">
@@ -344,20 +373,35 @@ export default function PrayPage() {
             </div>
           )}
 
-          {/* Contemplate */}
+          {/* Contemplate – same image priority: full image, zoom/pan */}
           {step === 3 && (
-            <div className="flex flex-col items-center justify-center min-h-[50vh] px-6 py-8">
-              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4">Contemplate</h2>
-              <div className="relative w-full max-w-sm aspect-square overflow-hidden mb-6">
-                <img
-                  src={artwork.imageUrl}
-                  alt={artwork.title}
-                  className="w-full h-full object-cover"
-                />
+            <div className="flex flex-col px-4 py-6">
+              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4 text-center">Contemplate</h2>
+              <div className="w-full min-h-[55vh] mb-6">
+                <TransformWrapper
+                  initialScale={1}
+                  minScale={1}
+                  maxScale={8}
+                  centerOnInit={false}
+                  doubleClick={{ mode: "toggle", step: 2 }}
+                >
+                  <TransformComponent
+                    wrapperStyle={{ width: "100%", height: "100%", minHeight: "55vh" }}
+                    contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                  >
+                    <img
+                      src={artwork.imageUrl}
+                      alt={artwork.title}
+                      className="max-w-full max-h-[70vh] object-contain select-none"
+                      draggable={false}
+                    />
+                  </TransformComponent>
+                </TransformWrapper>
               </div>
-              <p className="text-white/80 text-center text-sm leading-relaxed max-w-md">
+              <p className="text-white/80 text-center text-sm leading-relaxed max-w-md mx-auto">
                 Rest in God’s presence. No words are needed. Let the beauty you’ve seen lead you into silence and communion.
               </p>
+              <p className="text-white/40 text-xs mt-4 text-center">Pinch to zoom the image.</p>
             </div>
           )}
 
@@ -381,13 +425,10 @@ export default function PrayPage() {
               </p>
             </div>
           )}
-          </div>
-        </div>
 
-        {/* Step navigation – above Go deeper so it’s clearly tied to the content */}
-        <div className="flex-shrink-0 min-h-[72px] px-4 py-3 border-t border-white/10 bg-[#1a2a36] flex flex-col items-center justify-center gap-2">
-          <div className="flex items-center justify-center gap-3 w-full">
-            <div className="flex items-center gap-2" role="tablist" aria-label="Prayer steps">
+          {/* Pagination: centered under step content, same background as page */}
+          <div className="flex-shrink-0 px-4 py-5 flex flex-col items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-2" role="tablist" aria-label="Prayer steps">
               {STEPS.map((_, i) => (
                 <button
                   key={i}
@@ -396,22 +437,23 @@ export default function PrayPage() {
                   aria-label={`${STEPS[i].title}${step === i ? ", current" : ""}`}
                   aria-selected={step === i}
                   onClick={() => setStep(i)}
-                  className={`w-2.5 h-2.5 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#C19B5F] focus:ring-offset-2 focus:ring-offset-[#1a2a36] ${step === i ? "bg-[#C19B5F] scale-125" : "bg-white/30 hover:bg-white/50"}`}
+                  className={`w-2.5 h-2.5 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#C19B5F] focus:ring-offset-2 focus:ring-offset-transparent ${step === i ? "bg-[#C19B5F] scale-125" : "bg-white/30 hover:bg-white/50"}`}
                 />
               ))}
             </div>
             <button
               type="button"
               onClick={() => (isLastStep ? router.back() : setStep(step + 1))}
-              className="ml-auto text-[#C19B5F] text-sm font-medium hover:underline focus:outline-none focus:underline"
+              className="text-[#C19B5F] text-sm font-medium hover:underline focus:outline-none focus:underline"
             >
               {isLastStep ? "Finish" : "Next"}
             </button>
+            <p className="text-white/40 text-xs">Swipe or tap Next to move between steps</p>
           </div>
-          <p className="text-white/40 text-xs">Swipe or tap Next to move between steps</p>
+          </div>
         </div>
 
-        {/* Go deeper – optional, below step navigation */}
+        {/* Go deeper – only bar with darker background so it’s clearly tied to the content */}
         <div className="flex-shrink-0 bg-[#1a2a36]">
           <GoDeeperSection />
         </div>
