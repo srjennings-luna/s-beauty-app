@@ -333,16 +333,24 @@ export default function PrayPage() {
               </p>
               {questions.length > 0 && (
                 <div>
-                  {!reflectionExpanded ? (
-                    <button
-                      type="button"
-                      onClick={() => setReflectionExpanded(true)}
-                      className="text-[#C19B5F] text-sm font-medium hover:underline focus:outline-none focus:underline"
+                  <button
+                    type="button"
+                    onClick={() => setReflectionExpanded(!reflectionExpanded)}
+                    className="flex items-center gap-2 text-[#C19B5F] text-sm font-medium hover:underline focus:outline-none focus:underline"
+                    aria-expanded={reflectionExpanded}
+                  >
+                    Reflection questions ({Math.min(questions.length, 2)})
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className={`w-4 h-4 transition-transform ${reflectionExpanded ? "rotate-180" : ""}`}
                     >
-                      Reflection questions ({Math.min(questions.length, 2)})
-                    </button>
-                  ) : (
-                    <ul className="space-y-2">
+                      <path fillRule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                  {reflectionExpanded && (
+                    <ul className="space-y-2 mt-2">
                       {questions.slice(0, 2).map((q, i) => (
                         <li key={i} className="text-white/80 text-sm flex gap-2">
                           <span className="text-[#C19B5F]">•</span>
