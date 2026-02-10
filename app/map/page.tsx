@@ -136,7 +136,7 @@ export default function MapPage() {
   return (
     <div className="h-screen bg-[#203545] flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-[#66293C] border-b border-white/10 px-4 py-3 safe-area-top flex-shrink-0">
+      <div className="bg-[#2a4050] border-b border-white/10 px-4 py-3 safe-area-top flex-shrink-0">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-white">
@@ -186,7 +186,7 @@ export default function MapPage() {
       </div>
 
       {/* Episode Filter Pills */}
-      <div className="bg-[#66293C]/80 border-b border-white/10 px-4 py-3 flex-shrink-0">
+      <div className="bg-[#1a2a36] border-b border-white/10 px-4 py-3 flex-shrink-0">
         <div className="flex gap-2 overflow-x-auto hide-scrollbar">
           <button
             onClick={() => setSelectedEpisodeFilter(null)}

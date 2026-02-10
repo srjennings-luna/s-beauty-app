@@ -49,6 +49,7 @@ export default function PrayPage() {
   const [musicMode, setMusicMode] = useState<MusicMode>("off");
   const [musicPaused, setMusicPaused] = useState(false);
   const [musicMenuOpen, setMusicMenuOpen] = useState(false);
+  const [musicLoadError, setMusicLoadError] = useState(false);
   const chantAudioRef = useRef<HTMLAudioElement | null>(null);
   const ambientAudioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -69,17 +70,36 @@ export default function PrayPage() {
     const ambient = ambientAudioRef.current;
     chant?.pause();
     ambient?.pause();
+    setMusicMenuOpen(false);
+    if (mode === "off") {
+      setMusicPaused(true);
+      setMusicMode("off");
+      return;
+    }
+    // Show selection immediately so floating icon appears on iOS even if play() fails
     if (mode === "chant" && chant) {
-      chant.play().catch(() => setMusicMode("off"));
       setMusicPaused(false);
+      setMusicMode("chant");
+      chant.muted = false;
+      chant.volume = 1;
+      const p = chant.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => setMusicLoadError(false)).catch(() => setMusicLoadError(true));
+      }
+      return;
     }
     if (mode === "ambient" && ambient) {
-      ambient.play().catch(() => setMusicMode("off"));
       setMusicPaused(false);
+      setMusicMode("ambient");
+      ambient.muted = false;
+      ambient.volume = 1;
+      const p = ambient.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => setMusicLoadError(false)).catch(() => setMusicLoadError(true));
+      }
+      return;
     }
-    if (mode === "off") setMusicPaused(true);
     setMusicMode(mode);
-    setMusicMenuOpen(false);
   };
 
   const pauseMusic = () => {
@@ -112,7 +132,7 @@ export default function PrayPage() {
       <div className="min-h-screen bg-[#203545] flex items-center justify-center p-6">
         <div className="text-center">
           <h1 className="text-xl font-semibold text-white mb-2">Artwork not found</h1>
-          <Link href="/" className="text-amber-500">Back to home</Link>
+          <Link href="/" className="text-[#C19B5F]">Back to home</Link>
         </div>
       </div>
     );
@@ -127,9 +147,9 @@ export default function PrayPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#203545] flex flex-col pb-24 safe-area-bottom">
-        {/* Header */}
-        <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-white/10 safe-area-top">
+      <div className="min-h-screen flex flex-col pb-24 safe-area-bottom" style={{ background: "linear-gradient(180deg, #2a4050 0%, #203545 30%, #203545 70%, #1a2a36 100%)" }}>
+        {/* Header – slightly lighter teal */}
+        <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-white/10 safe-area-top bg-[#2a4050]">
           <Link
             href="#"
             onClick={(e) => {
@@ -157,21 +177,21 @@ export default function PrayPage() {
             {step + 1} of {STEPS.length} · {STEPS[step].title}
           </span>
           {musicMode === "off" ? (
-            <button type="button" onClick={() => setMusicMenuOpen(true)} className="text-white/40 text-xs font-medium">
+            <button type="button" onClick={() => { setMusicLoadError(false); setMusicMenuOpen(true); }} className="text-white/40 text-xs font-medium">
               Music
             </button>
           ) : (
             <div className="w-10" />
           )}
         </div>
-        <audio ref={chantAudioRef} src={MUSIC_CHANT} loop playsInline />
-        <audio ref={ambientAudioRef} src={MUSIC_AMBIENT} loop playsInline />
+        <audio ref={chantAudioRef} src={MUSIC_CHANT} loop playsInline preload="auto" muted={false} />
+        <audio ref={ambientAudioRef} src={MUSIC_AMBIENT} loop playsInline preload="auto" muted={false} />
 
-        {/* Music menu (shared: opened from floating button or inline link) */}
+        {/* Music menu – opens near Music text (below header, right-aligned) */}
         {musicMenuOpen && (
           <>
             <div className="fixed inset-0 z-40" aria-hidden onClick={() => setMusicMenuOpen(false)} />
-            <div className="fixed bottom-32 right-4 z-50 w-40 bg-[#66293C] border border-white/10 py-1" style={{ marginBottom: "env(safe-area-inset-bottom, 0)" }}>
+            <div className="fixed top-14 right-4 z-50 w-40 bg-[#1a2a36] border border-white/10 py-1 shadow-lg">
               {isPlaying ? (
                 <button type="button" onClick={pauseMusic} className="w-full px-4 py-2 text-left text-sm text-white/80">Pause</button>
               ) : (musicMode === "chant" || musicMode === "ambient") ? (
@@ -180,6 +200,10 @@ export default function PrayPage() {
               <button type="button" onClick={() => setMusic("off")} className={`w-full px-4 py-2 text-left text-sm ${musicMode === "off" ? "text-[#C19B5F]" : "text-white/80"}`}>Off</button>
               <button type="button" onClick={() => setMusic("chant")} className={`w-full px-4 py-2 text-left text-sm ${musicMode === "chant" ? "text-[#C19B5F]" : "text-white/80"}`}>Chant</button>
               <button type="button" onClick={() => setMusic("ambient")} className={`w-full px-4 py-2 text-left text-sm ${musicMode === "ambient" ? "text-[#C19B5F]" : "text-white/80"}`}>Ambient</button>
+              {musicLoadError && (
+                <p className="px-4 py-2 text-xs text-white/50 border-t border-white/10">Couldn’t load music. Try again or check the file.</p>
+              )}
+              <p className="px-4 py-2 text-xs text-white/40 border-t border-white/10">No sound? Check device volume and, on iPhone, the side mute switch.</p>
             </div>
           </>
         )}
@@ -189,7 +213,7 @@ export default function PrayPage() {
           <button
             type="button"
             onClick={() => setMusicMenuOpen(!musicMenuOpen)}
-            className="fixed bottom-24 right-4 z-30 w-12 h-12 flex items-center justify-center rounded-full bg-[#66293C] border border-white/20 text-[#C19B5F] shadow-lg safe-area-bottom"
+            className="fixed bottom-24 right-4 z-30 w-12 h-12 flex items-center justify-center rounded-full bg-[#1a2a36] border border-white/20 text-[#C19B5F] shadow-lg safe-area-bottom"
             style={{ marginBottom: "env(safe-area-inset-bottom, 0)" }}
             aria-label="Music options"
             aria-expanded={musicMenuOpen}
@@ -205,7 +229,7 @@ export default function PrayPage() {
           {/* Gaze */}
           {step === 0 && (
             <div className="flex flex-col items-center justify-center min-h-[50vh] px-6 py-8">
-              <h2 className="text-amber-500/90 text-sm font-semibold uppercase tracking-wider mb-4">Gaze</h2>
+              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4">Gaze</h2>
               <div className="relative w-full max-w-lg aspect-[4/3] overflow-hidden mb-6">
                 <img
                   src={artwork.imageUrl}
@@ -223,7 +247,7 @@ export default function PrayPage() {
           {/* Meditate */}
           {step === 1 && (
             <div className="px-6 py-8">
-              <h2 className="text-amber-500/90 text-sm font-semibold uppercase tracking-wider mb-4">Meditate</h2>
+              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4">Meditate</h2>
               <div className="relative w-full max-w-md mx-auto aspect-video overflow-hidden mb-6">
                 <img
                   src={artwork.imageUrl}
@@ -239,7 +263,7 @@ export default function PrayPage() {
                 <ul className="space-y-2">
                   {questions.slice(0, 3).map((q, i) => (
                     <li key={i} className="text-white/80 text-sm flex gap-2">
-                      <span className="text-amber-500/80">•</span>
+                      <span className="text-[#C19B5F]">•</span>
                       <span>{q}</span>
                     </li>
                   ))}
@@ -251,23 +275,23 @@ export default function PrayPage() {
           {/* Pray */}
           {step === 2 && (
             <div className="px-6 py-8">
-              <h2 className="text-amber-500/90 text-sm font-semibold uppercase tracking-wider mb-4">Pray</h2>
+              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4">Pray</h2>
               {isSacredArt && artwork.scripturePairing && (
-                <div className="bg-white/5 border-l-2 border-amber-500/70 p-4 mb-6">
+                <div className="bg-white/5 border-l-2 border-[#C19B5F] p-4 mb-6">
                   <p className="font-serif-elegant italic text-white/90 text-base leading-relaxed">
                     &ldquo;{artwork.scripturePairing.verse}&rdquo;
                   </p>
-                  <p className="text-amber-500/90 text-sm mt-2 font-medium">
+                  <p className="text-[#C19B5F] text-sm mt-2 font-medium">
                     — {artwork.scripturePairing.reference}
                   </p>
                 </div>
               )}
               {!isSacredArt && artwork.quote && (
-                <div className="bg-white/5 border-l-2 border-amber-500/70 p-4 mb-6">
+                <div className="bg-white/5 border-l-2 border-[#C19B5F] p-4 mb-6">
                   <p className="font-serif-elegant italic text-white/90 text-base leading-relaxed">
                     &ldquo;{artwork.quote.text}&rdquo;
                   </p>
-                  <p className="text-amber-500/90 text-sm mt-2 font-medium">
+                  <p className="text-[#C19B5F] text-sm mt-2 font-medium">
                     — {artwork.quote.attribution}
                   </p>
                 </div>
@@ -281,7 +305,7 @@ export default function PrayPage() {
           {/* Contemplate */}
           {step === 3 && (
             <div className="flex flex-col items-center justify-center min-h-[50vh] px-6 py-8">
-              <h2 className="text-amber-500/90 text-sm font-semibold uppercase tracking-wider mb-4">Contemplate</h2>
+              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4">Contemplate</h2>
               <div className="relative w-full max-w-sm aspect-square overflow-hidden mb-6">
                 <img
                   src={artwork.imageUrl}
@@ -298,7 +322,7 @@ export default function PrayPage() {
           {/* Action */}
           {step === 4 && (
             <div className="px-6 py-8">
-              <h2 className="text-amber-500/90 text-sm font-semibold uppercase tracking-wider mb-4">Action</h2>
+              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4">Action</h2>
               <h3 className="text-white font-semibold text-lg mb-2">How will you live this out?</h3>
               <p className="text-white/70 text-sm mb-4">
                 Ask yourself and God: How will you apply what you’ve received in prayer to your life?
@@ -318,29 +342,29 @@ export default function PrayPage() {
         </div>
 
         {/* Step navigation – above Go deeper so it’s clearly tied to the content */}
-        <div className="flex-shrink-0 px-4 py-4 border-t border-white/10 bg-[#203545] flex gap-3 justify-center">
+        <div className="flex-shrink-0 px-4 py-4 border-t border-white/10 bg-[#1a2a36] flex gap-3">
           {step > 0 ? (
             <button
               type="button"
               onClick={() => setStep(step - 1)}
-              className="px-6 py-3 border border-white/30 text-white/90 font-medium"
+              className="flex-1 py-4 border border-white/30 text-white/90 font-medium text-sm"
             >
               Previous
             </button>
           ) : (
-            <span className="w-[5.5rem]" aria-hidden />
+            <span className="flex-1" aria-hidden />
           )}
           <button
             type="button"
             onClick={() => (isLastStep ? router.back() : setStep(step + 1))}
-            className="px-6 py-3 bg-[#C19B5F] text-[#203545] font-semibold"
+            className="flex-1 py-4 bg-[#C19B5F] text-[#203545] font-semibold text-sm"
           >
             {isLastStep ? "Finish" : "Next"}
           </button>
         </div>
 
         {/* Go deeper – optional, below step navigation */}
-        <div className="flex-shrink-0 bg-[#66293C]">
+        <div className="flex-shrink-0 bg-[#1a2a36]">
           <GoDeeperSection />
         </div>
       </div>

@@ -10,4 +10,4 @@ Place these two MP3 files here for the Pray page music options (speaker icon →
 **Source folder:** Tracks can be prepared in `~/Documents/SB med music/`. Copy the files here with the exact names above so the app can find them.
 
 - Use royalty-free or properly licensed tracks (e.g. Pixabay, CC0).
-- The Pray page header has a speaker icon; tap it to choose **Off**, **Chant**, or **Ambient**.
+- The Pray page header has a **Music** link; tap it to choose **Off**, **Chant**, or **Ambient**. If nothing plays, the files are missing or the format isn’t supported—ensure both MP3s are in this folder with the exact names above.

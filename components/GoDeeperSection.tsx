@@ -37,7 +37,7 @@ export default function GoDeeperSection() {
         aria-expanded={expanded}
         aria-label={expanded ? "Collapse Go deeper" : "Go deeper – reflections from the tradition"}
       >
-        <span className="text-amber-500/90 font-semibold tracking-wide">
+        <span className="text-[#C19B5F] font-semibold tracking-wide">
           Go deeper
         </span>
         <span className="text-white/50 text-sm">
@@ -77,7 +77,7 @@ export default function GoDeeperSection() {
                   {r.title}
                 </h3>
                 {r.shortQuote && (
-                  <p className="font-serif-elegant italic text-white/80 text-sm border-l-2 border-amber-500/50 pl-3 mb-2">
+                  <p className="font-serif-elegant italic text-white/80 text-sm border-l-2 border-[#C19B5F] pl-3 mb-2">
                     &ldquo;{r.shortQuote}&rdquo;
                   </p>
                 )}

@@ -77,7 +77,7 @@ export default function FavoritesPage() {
             </p>
             <Link
               href="/"
-              className="inline-block px-6 py-3 bg-amber-500 text-black font-semibold"
+              className="inline-block px-6 py-3 bg-[#C19B5F] text-[#203545] font-semibold"
             >
               Explore Episodes
             </Link>

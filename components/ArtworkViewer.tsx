@@ -140,11 +140,11 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
                   <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
                     Scripture
                   </h4>
-                  <div className="bg-white/10 p-3 border-l-2 border-amber-500/70">
+                  <div className="bg-white/10 p-3 border-l-2 border-[#C19B5F]">
                     <p className="text-white/80 italic text-sm leading-relaxed">
                       &ldquo;{artwork.scripturePairing.verse}&rdquo;
                     </p>
-                    <p className="text-amber-500/80 text-xs mt-2 font-medium">
+                    <p className="text-[#C19B5F] text-xs mt-2 font-medium">
                       — {artwork.scripturePairing.reference}
                     </p>
                   </div>
@@ -157,11 +157,11 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
                   <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
                     Quote
                   </h4>
-                  <div className="bg-white/10 p-3 border-l-2 border-amber-500/70">
+                  <div className="bg-white/10 p-3 border-l-2 border-[#C19B5F]">
                     <p className="text-white/80 italic text-sm leading-relaxed">
                       &ldquo;{artwork.quote.text}&rdquo;
                     </p>
-                    <p className="text-amber-500/80 text-xs mt-2 font-medium">
+                    <p className="text-[#C19B5F] text-xs mt-2 font-medium">
                       — {artwork.quote.attribution}
                     </p>
                   </div>
@@ -223,7 +223,7 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
             </div>
             <Link
               href={`/pray/${artwork.id}`}
-              className="mt-3 inline-block text-amber-500/90 text-sm font-medium"
+              className="mt-3 inline-block text-[#C19B5F] text-sm font-medium"
             >
               Pray with this image →
             </Link>

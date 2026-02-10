@@ -112,7 +112,7 @@ export default function EpisodeDetailPage() {
           <h1 className="text-xl font-semibold text-white mb-2">
             Episode not found
           </h1>
-          <Link href="/" className="text-amber-500">
+          <Link href="/" className="text-[#C19B5F]">
             Back to episodes
           </Link>
         </div>
@@ -199,7 +199,7 @@ export default function EpisodeDetailPage() {
             {needsTruncation && !showFullDescription && (
               <button
                 onClick={() => setShowFullDescription(true)}
-                className="text-amber-500 ml-1"
+                className="text-[#C19B5F] ml-1"
               >
                 ...more
               </button>
@@ -207,7 +207,7 @@ export default function EpisodeDetailPage() {
             {showFullDescription && needsTruncation && (
               <button
                 onClick={() => setShowFullDescription(false)}
-                className="text-amber-500 ml-1"
+                className="text-[#C19B5F] ml-1"
               >
                 less
               </button>
@@ -303,7 +303,7 @@ export default function EpisodeDetailPage() {
                   <Link
                     href={`/pray/${artwork._id}`}
                     onClick={(e) => e.stopPropagation()}
-                    className="mt-1.5 inline-block text-amber-500/90 text-xs font-medium"
+                    className="mt-1.5 inline-block text-[#C19B5F] text-xs font-medium"
                   >
                     Pray with this image →
                   </Link>
