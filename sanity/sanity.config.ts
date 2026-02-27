@@ -5,12 +5,24 @@ import {schemaTypes} from './schemaTypes'
 
 export default defineConfig({
   name: 'default',
-  title: 'Seeking Beauty CMS',
+  title: 'KALLOS CMS',
 
   projectId: 'em44j9m8',
   dataset: 'production',
 
-  plugins: [structureTool(), visionTool()],
+  plugins: [
+    structureTool({
+      structure: (S) =>
+        S.list()
+          .title('Content')
+          .items(
+            S.documentTypeListItems().filter(
+              (listItem) => !['episode'].includes(listItem.getId() ?? ''),
+            ),
+          ),
+    }),
+    visionTool(),
+  ],
 
   schema: {
     types: schemaTypes,

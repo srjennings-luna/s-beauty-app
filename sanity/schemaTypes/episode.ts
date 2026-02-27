@@ -115,7 +115,7 @@ export default defineType({
       name: 'artworks',
       title: 'Artworks',
       type: 'array',
-      of: [{type: 'reference', to: [{type: 'artwork'}]}],
+      of: [{type: 'reference', to: [{type: 'contentItem'}]}],
       description: 'Add artworks featured in this episode',
     }),
     defineField({
