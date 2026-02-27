@@ -73,6 +73,8 @@ export default function ExplorePage() {
   const [content, setContent] = useState<ContentItem[]>([]);
   const [themes, setThemes] = useState<Theme[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   const [typeFilter, setTypeFilter] = useState<ContentType | null>(null);
   const [themeFilter, setThemeFilter] = useState<string | null>(null); // theme _id
@@ -90,12 +92,13 @@ export default function ExplorePage() {
         setThemes(allThemes ?? []);
       } catch (err) {
         console.error("Error fetching Explore data:", err);
+        setError(true);
       } finally {
         setLoading(false);
       }
     }
     fetchData();
-  }, []);
+  }, [retryCount]);
 
   // Apply filters
   const filtered = useMemo(() => {
@@ -202,7 +205,19 @@ export default function ExplorePage() {
 
       {/* ── Content Area ── */}
       <div className="flex-1 relative min-h-0">
-        {loading ? (
+        {error ? (
+          <div className="h-full flex items-center justify-center px-8">
+            <div className="text-center">
+              <p className="text-white/50 mb-4">Couldn't load content.</p>
+              <button
+                onClick={() => { setError(false); setLoading(true); setRetryCount((c) => c + 1); }}
+                className="px-6 py-3 bg-[#C19B5F] text-[#203545] font-semibold text-sm"
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        ) : loading ? (
           <div className="h-full flex items-center justify-center">
             <div className="text-center">
               <div className="inline-block w-8 h-8 border-4 border-white/30 border-t-[#C19B5F] rounded-full animate-spin mb-2" />

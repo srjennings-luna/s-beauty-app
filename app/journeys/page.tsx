@@ -21,6 +21,8 @@ function getProgress(slug: string): number {
 export default function JourneysPage() {
   const [journeys, setJourneys] = useState<Journey[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   const [progress, setProgress] = useState<Record<string, number>>({});
 
   useEffect(() => {
@@ -36,12 +38,13 @@ export default function JourneysPage() {
         setProgress(prog);
       } catch (err) {
         console.error("Error fetching journeys:", err);
+        setError(true);
       } finally {
         setLoading(false);
       }
     }
     fetchData();
-  }, []);
+  }, [retryCount]);
 
   return (
     <PageTransition>
@@ -55,7 +58,17 @@ export default function JourneysPage() {
           </p>
         </div>
 
-        {loading ? (
+        {error ? (
+          <div className="px-5 py-16 text-center">
+            <p className="text-white/50 mb-4">Couldn't load journeys.</p>
+            <button
+              onClick={() => { setError(false); setLoading(true); setRetryCount((c) => c + 1); }}
+              className="px-6 py-3 bg-[#C19B5F] text-[#203545] font-semibold text-sm"
+            >
+              Try Again
+            </button>
+          </div>
+        ) : loading ? (
           <div className="px-5 space-y-4">
             {[1, 2, 3].map((i) => (
               <div key={i}>

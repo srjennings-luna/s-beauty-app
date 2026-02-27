@@ -28,6 +28,7 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
       <div className="flex items-center justify-between p-4 flex-shrink-0">
         <button
           onClick={onClose}
+          aria-label="Close"
           className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white"
         >
           <svg
@@ -102,6 +103,7 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
                 </div>
                 <button
                   onClick={() => setShowReflections(false)}
+                  aria-label="Collapse reflection panel"
                   className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60"
                 >
                   <svg

@@ -14,6 +14,8 @@ export default function TodayPage() {
   const [journeys, setJourneys] = useState<Journey[]>([]);
   const [recentContent, setRecentContent] = useState<ContentItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     // Migrate old onboarding key
@@ -43,15 +45,32 @@ export default function TodayPage() {
         setRecentContent((content ?? []).slice(0, 6));
       } catch (err) {
         console.error("Error fetching Today data:", err);
+        setError(true);
       } finally {
         setLoading(false);
       }
     }
     fetchData();
-  }, []);
+  }, [retryCount]);
 
   if (hasOnboarded === null) {
     return <div className="min-h-screen bg-[#203545]" />;
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#203545] flex items-center justify-center p-6">
+        <div className="text-center">
+          <p className="text-white/50 mb-4">Couldn't load today's content.</p>
+          <button
+            onClick={() => { setError(false); setLoading(true); setRetryCount((c) => c + 1); }}
+            className="px-6 py-3 bg-[#C19B5F] text-[#203545] font-semibold text-sm"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
   }
 
   const today = new Date().toLocaleDateString("en-US", {
