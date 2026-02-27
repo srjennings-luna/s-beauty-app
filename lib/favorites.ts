@@ -1,9 +1,21 @@
 import { Favorite, FavoriteItemType } from "./types";
 
-const STORAGE_KEY = "seeking-beauty-favorites";
+const STORAGE_KEY = "kallos-favorites";
+const LEGACY_KEY = "seeking-beauty-favorites";
+
+// Migrate favorites from old key to new key (runs once per session)
+function migrate(): void {
+  if (typeof window === "undefined") return;
+  const legacy = localStorage.getItem(LEGACY_KEY);
+  if (legacy && !localStorage.getItem(STORAGE_KEY)) {
+    localStorage.setItem(STORAGE_KEY, legacy);
+    localStorage.removeItem(LEGACY_KEY);
+  }
+}
 
 export function getFavorites(): Favorite[] {
   if (typeof window === "undefined") return [];
+  migrate();
   const stored = localStorage.getItem(STORAGE_KEY);
   return stored ? JSON.parse(stored) : [];
 }

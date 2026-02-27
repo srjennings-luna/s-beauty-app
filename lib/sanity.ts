@@ -16,7 +16,276 @@ export function urlFor(source: any) {
   return builder.image(source)
 }
 
-// Fetch all episodes with their artworks
+// ─────────────────────────────────────────────────────────────────────────────
+// Reusable GROQ fragments
+// ─────────────────────────────────────────────────────────────────────────────
+
+const THEME_FIELDS = `
+  _id,
+  title,
+  slug,
+  question,
+  description,
+  color,
+  order,
+  "imageUrl": image.asset->url
+`
+
+const CONTENT_ITEM_FIELDS = `
+  _id,
+  contentType,
+  title,
+  "imageUrl": image.asset->url,
+  description,
+  context,
+  "themes": themes[]->{${THEME_FIELDS}},
+  reflectionQuestions,
+  curatorNote,
+  locationName,
+  city,
+  country,
+  coordinates,
+  artist,
+  year,
+  medium,
+  scripturePairing,
+  thinkerName,
+  quote,
+  era,
+  tradition,
+  author,
+  workTitle,
+  excerpt,
+  literaryForm,
+  composer,
+  performer,
+  durationMinutes,
+  musicUrl,
+  craftTradition,
+  pointsToward,
+  creationTheology,
+  mediaType,
+  mediaUrl,
+  series
+`
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Themes
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function getThemes() {
+  return sanityClient.fetch(`
+    *[_type == "theme"] | order(order asc) {
+      ${THEME_FIELDS}
+    }
+  `)
+}
+
+export async function getThemeBySlug(slug: string) {
+  return sanityClient.fetch(
+    `*[_type == "theme" && slug.current == $slug][0] {
+      ${THEME_FIELDS}
+    }`,
+    { slug }
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Content Items
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function getAllContentItems(contentType?: string) {
+  const typeFilter = contentType ? ` && contentType == $contentType` : ''
+  return sanityClient.fetch(
+    `*[_type == "contentItem"${typeFilter}] | order(title asc) {
+      ${CONTENT_ITEM_FIELDS}
+    }`,
+    contentType ? { contentType } : {}
+  )
+}
+
+export async function getContentByTheme(themeId: string) {
+  return sanityClient.fetch(
+    `*[_type == "contentItem" && $themeId in themes[]._ref] | order(title asc) {
+      ${CONTENT_ITEM_FIELDS}
+    }`,
+    { themeId }
+  )
+}
+
+export async function getContentItemById(id: string) {
+  return sanityClient.fetch(
+    `*[_id == $id && _type in ["contentItem", "artwork"]][0] {
+      ${CONTENT_ITEM_FIELDS}
+    }`,
+    { id }
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Journeys
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function getJourneys() {
+  return sanityClient.fetch(`
+    *[_type == "journey" && isPublished == true] | order(order asc) {
+      _id,
+      title,
+      slug,
+      "theme": theme->{${THEME_FIELDS}},
+      description,
+      "heroImageUrl": heroImage.asset->url,
+      estimatedMinutesPerDay,
+      isPublished,
+      order
+    }
+  `)
+}
+
+export async function getJourney(slug: string) {
+  return sanityClient.fetch(
+    `*[_type == "journey" && slug.current == $slug][0] {
+      _id,
+      title,
+      slug,
+      "theme": theme->{${THEME_FIELDS}},
+      description,
+      "heroImageUrl": heroImage.asset->url,
+      estimatedMinutesPerDay,
+      isPublished,
+      order,
+      "days": days[] {
+        dayNumber,
+        dayTitle,
+        "openImageUrl": openImage.asset->url,
+        openText,
+        "encounterContent": encounterContent->{${CONTENT_ITEM_FIELDS}},
+        encounterGuidance,
+        reflectQuestions,
+        connectThread,
+        "goDeeper": goDeeper[]->{
+          _id,
+          authorType,
+          title,
+          summary,
+          shortQuote,
+          source,
+          order,
+          era
+        }
+      } | order(dayNumber asc)
+    }`,
+    { slug }
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Daily Prompt
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function getDailyPrompt(date?: string) {
+  const targetDate = date ?? new Date().toISOString().slice(0, 10)
+  return sanityClient.fetch(
+    `*[_type == "dailyPrompt" && date == $targetDate][0] {
+      _id,
+      date,
+      "content": content->{${CONTENT_ITEM_FIELDS}},
+      promptQuestion,
+      curatorNote,
+      "theme": theme->{${THEME_FIELDS}}
+    }`,
+    { targetDate }
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tradition Reflections
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function getTraditionReflections(themeId?: string) {
+  const themeFilter = themeId ? ` && $themeId in themes[]._ref` : ''
+  return sanityClient.fetch(
+    `*[_type == "traditionReflection"${themeFilter}] | order(order asc) {
+      _id,
+      authorType,
+      title,
+      summary,
+      shortQuote,
+      source,
+      "themes": themes[]->{${THEME_FIELDS}},
+      theme,
+      order,
+      era
+    }`,
+    themeId ? { themeId } : {}
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Splash Pages
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function getSplashPages() {
+  return sanityClient.fetch(`
+    *[_type == "splashPage"] | order(pageNumber asc) {
+      _id,
+      pageNumber,
+      pageType,
+      "heroImageUrl": heroImage.asset->url,
+      quote,
+      quoteAttribution,
+      title,
+      description,
+      buttonText,
+      quoteColor,
+      quoteFont,
+      attributionColor,
+      bottomBackgroundColor,
+      titleColor,
+      titleSize,
+      descriptionColor,
+      buttonBackgroundColor,
+      buttonTextColor,
+      backgroundGradientStart,
+      backgroundGradientEnd
+    }
+  `)
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Visio Divina — prayer page (queries both artwork and contentItem)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function getArtworkById(id: string) {
+  return sanityClient.fetch(
+    `*[_id == $id && _type in ["contentItem", "artwork"]][0] {
+      _id,
+      title,
+      artist,
+      year,
+      "imageUrl": image.asset->url,
+      description,
+      context,
+      historicalSummary,
+      scripturePairing,
+      quote,
+      contentType,
+      locationType,
+      reflectionQuestions,
+      locationName,
+      city,
+      country,
+      coordinates
+    }`,
+    { id }
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// @deprecated — Episode queries kept until Steps 3/4 rebuild the pages that use them
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** @deprecated */
 export async function getEpisodes() {
   return sanityClient.fetch(`
     *[_type == "episode"] | order(season asc, episodeNumber asc) {
@@ -57,7 +326,7 @@ export async function getEpisodes() {
   `)
 }
 
-// Fetch a single episode by ID
+/** @deprecated */
 export async function getEpisodeById(id: string) {
   return sanityClient.fetch(`
     *[_type == "episode" && _id == $id][0] {
@@ -98,7 +367,7 @@ export async function getEpisodeById(id: string) {
   `, { id })
 }
 
-// Fetch all artworks (for the map/gallery)
+/** @deprecated */
 export async function getAllArtworks() {
   return sanityClient.fetch(`
     *[_type == "artwork"] | order(title asc) {
@@ -120,7 +389,7 @@ export async function getAllArtworks() {
   `)
 }
 
-// Fetch released episodes only
+/** @deprecated */
 export async function getReleasedEpisodes() {
   return sanityClient.fetch(`
     *[_type == "episode" && isReleased == true] | order(season asc, episodeNumber asc) {
@@ -161,7 +430,7 @@ export async function getReleasedEpisodes() {
   `)
 }
 
-// Fetch coming soon episodes
+/** @deprecated */
 export async function getComingSoonEpisodes() {
   return sanityClient.fetch(`
     *[_type == "episode" && isReleased == false] | order(season asc, episodeNumber asc) {
@@ -177,77 +446,4 @@ export async function getComingSoonEpisodes() {
       isReleased
     }
   `)
-}
-
-// Fetch splash pages in order
-export async function getSplashPages() {
-  return sanityClient.fetch(`
-    *[_type == "splashPage"] | order(pageNumber asc) {
-      _id,
-      pageNumber,
-      pageType,
-      "heroImageUrl": heroImage.asset->url,
-      quote,
-      quoteAttribution,
-      title,
-      description,
-      buttonText,
-      // Styling fields
-      quoteColor,
-      quoteFont,
-      attributionColor,
-      bottomBackgroundColor,
-      titleColor,
-      titleSize,
-      descriptionColor,
-      buttonBackgroundColor,
-      buttonTextColor,
-      backgroundGradientStart,
-      backgroundGradientEnd
-    }
-  `)
-}
-
-// Fetch a single artwork by ID (for pray/Visio Divina page)
-export async function getArtworkById(id: string) {
-  return sanityClient.fetch(
-    `*[_type == "artwork" && _id == $id][0] {
-      _id,
-      title,
-      artist,
-      year,
-      "imageUrl": image.asset->url,
-      description,
-      historicalSummary,
-      scripturePairing,
-      quote,
-      locationType,
-      reflectionQuestions,
-      locationName,
-      city,
-      country,
-      coordinates,
-      order
-    }`,
-    { id }
-  )
-}
-
-// Fetch tradition reflections (Church Fathers, Saints, Popes) for "Go deeper" on prayer page
-export async function getTraditionReflections(theme?: string) {
-  const themeFilter = theme ? ` && theme == $theme` : ''
-  return sanityClient.fetch(
-    `*[_type == "traditionReflection"${themeFilter}] | order(order asc) {
-      _id,
-      authorType,
-      title,
-      summary,
-      shortQuote,
-      source,
-      theme,
-      order,
-      era
-    }`,
-    theme ? { theme } : {}
-  )
 }

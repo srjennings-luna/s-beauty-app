@@ -42,10 +42,10 @@ const defaultPages: SplashPageData[] = [
     _id: "default-2",
     pageNumber: 2,
     pageType: "text-content",
-    title: "Your Companion for Contemplation",
+    title: "Love the beautiful and the good",
     description:
-      "Seeking Beauty invites you on an unforgettable pilgrimage across Italy—where every landscape, masterpiece, and sacred space becomes a living encounter with the beauty of our Catholic faith.",
-    buttonText: "Let's explore",
+      "KALLOS is a contemplative discovery app for seekers of beauty — sacred art, music, literature, landscape, and the wisdom of the great tradition.",
+    buttonText: "Begin",
   },
 ];
 
@@ -77,7 +77,7 @@ export default function SplashPage() {
   }, []);
 
   const goToHome = () => {
-    localStorage.setItem("seeking-beauty-onboarded", "true");
+    localStorage.setItem("kallos-onboarded", "true");
     router.push("/");
   };
 
@@ -115,7 +115,7 @@ export default function SplashPage() {
                 <div className="h-[66vh] relative">
                   <img
                     src={page.heroImageUrl || "/images/promo-splash.jpeg"}
-                    alt="Seeking Beauty with David Henrie"
+                    alt="KALLOS — Love the beautiful and the good"
                     className="w-full h-full object-cover"
                   />
                   {/* Gradient fade to bottom color */}

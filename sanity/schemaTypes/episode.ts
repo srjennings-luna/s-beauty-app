@@ -1,3 +1,9 @@
+/**
+ * @deprecated — Episode schema is retired as part of the KALLOS rebrand (Phase 1).
+ * This schema is kept to prevent data loss for existing Sanity documents with _type: 'episode'.
+ * Do NOT create new episodes. New content goes into `contentItem`.
+ * This schema will be removed from the Studio sidebar once `contentItem` is fully live.
+ */
 import {defineField, defineType} from 'sanity'
 
 export default defineType({

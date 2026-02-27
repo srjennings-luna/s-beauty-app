@@ -46,12 +46,16 @@ Companion mobile web app for the EWTN+ documentary series "Seeking Beauty" with 
 
 | Color | Hex | Usage |
 |-------|-----|-------|
-| Gold | `#C19B5F` | Accent, CTA buttons, scripture refs, highlights |
-| Dark Teal | `#203545` | Main background, primary surfaces |
-| Plum | `#4C3759` | Secondary surfaces, architecture markers |
-| Rust | `#93583E` | Cultural/terracotta accents |
-| Maroon | `#66293C` | Navigation bar, headers, Go deeper section |
+| Gold | `#C19B5F` | Accent app-wide: CTAs, step labels, scripture refs, “Go deeper”, dots, Next link |
+| Dark Teal | `#203545` | Main page background (middle of gradient) |
+| Lighter Teal | `#2a4050` | Header / top of page (subtle vertical gradient) |
+| Darker Teal | `#1a2a36` | Bottom nav bar, Go deeper bar (fixed), music menu, step nav area |
+| Plum | `#4C3759` | Architecture markers on map |
+| Rust | `#93583E` | Cultural markers |
+| Maroon | `#66293C` | **Map icons/markers only** (e.g. sacred-art pin); not used for nav, headers, or Go deeper |
 | White | Various opacities | Text hierarchy (100%, 80%, 50%, 40%) |
+
+**Gradient:** Page uses a subtle vertical gradient: lighter teal at top → main teal → darker teal at bottom. Only the **Go deeper** bar has the darker background; pagination (dots + Next) uses the same background as the page.
 
 ### Map Marker Colors (by Location Type)
 
@@ -125,10 +129,13 @@ Companion mobile web app for the EWTN+ documentary series "Seeking Beauty" with 
 - Persists across sessions
 
 ### Pray / Visio Divina (`/pray/[artworkId]`)
-- Entry: "Pray with this image" from ArtworkViewer or episode detail
-- Steps: Gaze → Meditate → Pray → Contemplate → Action (Previous/Next above "Go deeper")
-- Go deeper: expandable tradition reflections (Church Fathers, Saints, Popes)
-- **Meditation music:** Optional background audio. Add a file at `public/music/meditation.mp3` (e.g. royalty-free ambient or instrumental) for the header music toggle to play it. If the file is missing, the toggle still appears but play will do nothing.
+- **Entry:** “Pray with this image” from ArtworkViewer or episode detail
+- **Steps:** Gaze → Meditate → Pray → Contemplate → Action
+- **Navigation:** Swipe left/right to change steps; pagination dots (centered) + “Next” on the right, placed under the step content; same background as page (no darker bar). Arrow keys work on desktop.
+- **Image:** Full image visible (no crop), pinch-to-zoom and pan (same as ArtworkViewer) on Gaze, Meditate, and Contemplate. Double-tap toggles zoom.
+- **Reflection questions (Meditate step):** Collapsed by default with “Reflection questions (2)” and chevron; tap to expand/collapse; max 2 questions shown.
+- **Go deeper:** Fixed at bottom of viewport (position does not move between steps). Darker teal bar; expandable tradition reflections (Church Fathers, Saints, Popes).
+- **Music:** Header “Music” link opens menu near the link (top-right). Options: Off, Chant, Ambient. When Chant or Ambient is on, a floating speaker button appears (bottom-right). Audio files: `public/music/nickpanek-ave-maria-latin-catholic-gregorian-chant-218251.mp3` (Chant), `public/music/natureseye-piano-dreamcloud-meditation-179215.mp3` (Ambient). See `public/music/README.md`. If files are missing, selection still updates (floating icon on desktop) but playback may fail.
 
 ---
 
@@ -157,13 +164,15 @@ Companion mobile web app for the EWTN+ documentary series "Seeking Beauty" with 
   /map/page.tsx                # Artwalk (map + list)
   /episodes/[id]/page.tsx      # Episode detail
   /episodes/[id]/artwalk/      # Episode-specific artwalk
+  /pray/[artworkId]/page.tsx   # Visio Divina (Gaze → Action, swipe + dots, zoomable image)
   /favorites/page.tsx          # Favorites
   /splash/page.tsx             # Onboarding
 
 /components
-  /ArtworkViewer.tsx           # Full-screen artwork display
+  /ArtworkViewer.tsx           # Full-screen artwork display (pinch-zoom)
+  /GoDeeperSection.tsx         # Tradition reflections (used on Pray page)
   /GlobalMap.tsx               # Leaflet map with markers
-  /ui/Navigation.tsx           # Bottom nav (3 tabs)
+  /ui/Navigation.tsx           # Bottom nav (3 tabs; hidden on /pray, /splash, artwalk)
 
 /lib
   /sanity.ts                   # Sanity client + GROQ queries
@@ -307,4 +316,6 @@ If anything doesn't match this doc, the doc needs updating.
 ---
 
 ## Last Updated
-January 31, 2025
+February 2025
+
+**Recent (Feb 2025):** Pray page: teal gradient (no maroon except map icons); gold #C19B5F app-wide; swipe + centered dots + Next on right; zoomable image (Gaze/Meditate/Contemplate); reflection questions collapsed by default with chevron expand/collapse (max 2); Go deeper bar fixed at bottom; music menu near header; pagination under step content, same bg as page. Deployment steps in `DEPLOYMENT.md`.

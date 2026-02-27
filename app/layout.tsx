@@ -26,10 +26,10 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Seeking Beauty - EWTN+ Companion App",
+  title: "KALLOS — Love the beautiful and the good",
   description:
-    "Explore the art, locations, and spiritual themes from the EWTN+ series Seeking Beauty with David Henrie.",
-  keywords: ["EWTN", "Catholic", "art", "beauty", "David Henrie", "sacred art"],
+    "KALLOS is a contemplative discovery app for seekers of beauty, truth, and goodness — sacred art, music, literature, landscape, and the great tradition.",
+  keywords: ["beauty", "contemplation", "classical", "tradition", "sacred art", "philosophy", "music", "literature"],
 };
 
 export const viewport: Viewport = {

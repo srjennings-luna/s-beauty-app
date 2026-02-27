@@ -9,8 +9,6 @@
   --color-sacred-maroon: #66293C;
 
   /* Legacy / alternate */
-  --color-ewtn-red: #b8434a;
-  --color-ewtn-red-dark: #9a363c;
   --color-deep-navy: #1a2742;
   --color-deep-navy-light: #263654;
   --color-catskill-white: #f8f9fc;
@@ -59,11 +57,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Color utilities */
-.bg-ewtn-red { background-color: var(--color-ewtn-red); }
 .bg-deep-navy { background-color: var(--color-deep-navy); }
 .bg-catskill-white { background-color: var(--color-catskill-white); }
 .bg-accent-gold { background-color: var(--color-accent-gold); }
-.text-ewtn-red { color: var(--color-ewtn-red); }
 .text-deep-navy { color: var(--color-deep-navy); }
 .text-accent-gold { color: var(--color-accent-gold); }
 
@@ -78,12 +74,12 @@ h1, h2, h3, h4, h5, h6 {
   color: white;
   transition: all 0.3s ease;
   font-family: "Montserrat", sans-serif;
-  background-color: var(--color-ewtn-red);
-  box-shadow: 0 2px 8px rgba(184, 67, 74, 0.25);
+  background-color: var(--color-accent-gold);
+  box-shadow: 0 2px 8px rgba(193, 155, 95, 0.25);
 }
 .btn-primary:hover {
-  background-color: var(--color-ewtn-red-dark);
-  box-shadow: 0 4px 12px rgba(184, 67, 74, 0.35);
+  background-color: var(--color-accent-gold-light);
+  box-shadow: 0 4px 12px rgba(193, 155, 95, 0.35);
   transform: translateY(-1px);
 }
 .btn-primary:active { transform: translateY(0); }
@@ -216,7 +212,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: all 0.3s ease;
 }
 .heart-button:active { transform: scale(1.3); }
-.heart-button.favorited { color: var(--color-ewtn-red); }
+.heart-button.favorited { color: var(--color-accent-gold); }
 
 /* Line clamps */
 .line-clamp-1 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; }
@@ -225,9 +221,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Animations */
 @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(184, 67, 74, 0.4); }
-  70% { box-shadow: 0 0 0 15px rgba(184, 67, 74, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(184, 67, 74, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(193, 155, 95, 0.4); }
+  70% { box-shadow: 0 0 0 15px rgba(193, 155, 95, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(193, 155, 95, 0); }
 }
 
 @keyframes fadeIn {

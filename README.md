@@ -1,4 +1,7 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+**Seeking Beauty** – Companion mobile web app for the EWTN+ series with David Henrie. Explore episodes, sacred art, artwalk map, and Visio Divina prayer. Next.js 16, React 19, Tailwind, Sanity.
+
+- **Reference:** `CLAUDE_REFERENCE.md` – design system, features, Sanity, file structure
+- **Deploy:** `DEPLOYMENT.md` – commit, push, Vercel
 
 ## Getting Started
 

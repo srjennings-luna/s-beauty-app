@@ -54,10 +54,18 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'themes',
+      title: 'Themes',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'theme'}]}],
+      description: 'Which KALLOS themes this reflection connects to. Replaces the legacy theme dropdown.',
+    }),
+    defineField({
       name: 'theme',
-      title: 'Theme',
+      title: 'Theme (legacy — use Themes above)',
       type: 'string',
-      description: 'Used to filter which reflections appear together (e.g. beauty, truth, contemplation)',
+      description: 'Kept for migration. Use the Themes field above going forward.',
+      hidden: true,
       options: {
         list: [
           {title: 'Beauty', value: 'beauty'},
@@ -69,7 +77,6 @@ export default defineType({
         ],
         layout: 'dropdown',
       },
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'order',

@@ -9,13 +9,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "ewtn-red": "#EA002A",
-        "ewtn-red-dark": "#C70023",
         "deep-navy": "#002D62",
         "deep-navy-light": "#003D82",
         "catskill-white": "#EFF2F8",
-        "accent-gold": "#C9A227",
-        "accent-gold-light": "#E6B92E",
+        "accent-gold": "#C19B5F",
+        "accent-gold-light": "#D4B56A",
       },
       fontFamily: {
         montserrat: ["Montserrat", "sans-serif"],
