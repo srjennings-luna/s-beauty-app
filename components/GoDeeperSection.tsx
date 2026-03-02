@@ -58,7 +58,7 @@ export default function GoDeeperSection() {
       </button>
 
       {expanded && (
-        <div className="px-4 pb-6 space-y-4 animate-fade-in">
+        <div className="px-4 pb-6 space-y-4 animate-fade-in max-h-[60vh] overflow-y-auto">
           {loading ? (
             <div className="py-6 text-center text-white/50 text-sm">
               Loading…
