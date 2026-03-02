@@ -50,14 +50,17 @@ function DayCard({
   day,
   isComplete,
   isActive,
+  expanded,
+  onToggle,
   onToggleComplete,
 }: {
   day: JourneyDay;
   isComplete: boolean;
   isActive: boolean;
+  expanded: boolean;
+  onToggle: () => void;
   onToggleComplete: () => void;
 }) {
-  const [expanded, setExpanded] = useState(isActive);
   const content = day.encounterContent;
   const icon = content ? (TYPE_ICONS[content.contentType] ?? "✦") : "✦";
 
@@ -66,7 +69,7 @@ function DayCard({
       {/* Day header — tap to expand */}
       <button
         className="w-full flex items-center gap-4 px-5 py-4 text-left"
-        onClick={() => setExpanded((v) => !v)}
+        onClick={onToggle}
         aria-expanded={expanded}
       >
         {/* Day number circle */}
@@ -155,6 +158,28 @@ function DayCard({
                     Pray with this image →
                   </Link>
                 )}
+                {/* Music link */}
+                {content.contentType === "music" && content.musicUrl && (
+                  <a
+                    href={content.musicUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block mt-3 text-[#C19B5F] text-xs tracking-wide hover:underline"
+                  >
+                    Listen →
+                  </a>
+                )}
+                {/* Watch & Listen link */}
+                {content.contentType === "watch-listen" && content.mediaUrl && (
+                  <a
+                    href={content.mediaUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block mt-3 text-[#C19B5F] text-xs tracking-wide hover:underline"
+                  >
+                    {content.mediaType === "podcast" ? "Listen" : "Watch"} →
+                  </a>
+                )}
               </div>
             </div>
           )}
@@ -227,6 +252,7 @@ export default function JourneyDetailPage() {
   const [journey, setJourney] = useState<Journey | null>(null);
   const [loading, setLoading] = useState(true);
   const [completedDays, setCompletedDays] = useState<number[]>([]);
+  const [expandedDay, setExpandedDay] = useState<number | null>(null);
 
   useEffect(() => {
     if (!slug) return;
@@ -234,7 +260,11 @@ export default function JourneyDetailPage() {
       try {
         const data = await getJourney(slug);
         setJourney(data ?? null);
-        setCompletedDays(loadProgress(slug));
+        const progress = loadProgress(slug);
+        setCompletedDays(progress);
+        // Auto-expand the next incomplete day (or day 1)
+        const nextIncomplete = data?.days?.find((d: JourneyDay) => !progress.includes(d.dayNumber));
+        setExpandedDay(nextIncomplete?.dayNumber ?? 1);
       } catch (err) {
         console.error("Error fetching journey:", err);
       } finally {
@@ -365,6 +395,8 @@ export default function JourneyDetailPage() {
                 day={day}
                 isComplete={isComplete}
                 isActive={isActive || (completedCount === 0 && day.dayNumber === 1)}
+                expanded={expandedDay === day.dayNumber}
+                onToggle={() => setExpandedDay(expandedDay === day.dayNumber ? null : day.dayNumber)}
                 onToggleComplete={() => toggleDay(day.dayNumber)}
               />
             );
