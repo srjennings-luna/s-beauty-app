@@ -100,11 +100,12 @@ export default function ExplorePage() {
     fetchData();
   }, [retryCount]);
 
-  // Apply filters
+  // Apply filters and sort alphabetically by title
   const filtered = useMemo(() => {
-    let result = content;
+    let result = [...content];
     if (typeFilter) result = result.filter((i) => i.contentType === typeFilter);
     if (themeFilter) result = result.filter((i) => i.themes?.some((t) => t._id === themeFilter));
+    result.sort((a, b) => a.title.localeCompare(b.title));
     return result;
   }, [content, typeFilter, themeFilter]);
 
