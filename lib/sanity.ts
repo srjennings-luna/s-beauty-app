@@ -1,14 +1,11 @@
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 
-const token = process.env.NEXT_PUBLIC_SANITY_TOKEN
-
 export const sanityClient = createClient({
   projectId: 'em44j9m8',
   dataset: 'production',
   apiVersion: '2024-01-01',
   useCdn: false, // Disable CDN to ensure fresh data
-  ...(token ? { token, perspective: 'drafts' as const } : {}),
 })
 
 // Image URL builder
