@@ -416,9 +416,12 @@ export default function JourneyDaySteps({
   const isLastStep = step === totalSteps - 1;
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#203545] flex flex-col safe-area-top">
+    <div
+      className="fixed inset-0 z-[60] bg-[#203545] flex flex-col"
+      style={{ height: "100dvh" }}
+    >
       {/* Top bar */}
-      <div className="flex-shrink-0 flex items-center justify-between px-5 pt-12 pb-3">
+      <div className="flex-shrink-0 flex items-center justify-between px-5 pb-3" style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 48px)" }}>
         {/* Close / back */}
         <button
           onClick={step === 0 ? onClose : handlePrev}
@@ -500,7 +503,7 @@ export default function JourneyDaySteps({
       </div>
 
       {/* Bottom action bar */}
-      <div className="flex-shrink-0 px-5 pt-4 pb-8 safe-area-bottom">
+      <div className="flex-shrink-0 px-5 pt-4" style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 24px)" }}>
         {isLastStep ? (
           <button
             onClick={() => {
