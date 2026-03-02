@@ -415,81 +415,106 @@ export default function JourneyDaySteps({
 
   const isLastStep = step === totalSteps - 1;
 
+  // ── Shared chrome (header, progress, footer) ──────────────────────────────
+
+  const header = (
+    <div className="flex items-center justify-between px-5 pb-3" style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 48px)" }}>
+      <button
+        onClick={step === 0 ? onClose : handlePrev}
+        className="w-9 h-9 flex items-center justify-center text-white/70"
+        aria-label={step === 0 ? "Close" : "Previous step"}
+      >
+        {step === 0 ? (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+            <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
+          </svg>
+        )}
+      </button>
+
+      <span className="text-white/50 text-xs tracking-widest uppercase">
+        {STEP_LABELS[step]}
+      </span>
+
+      {step > 0 ? (
+        <button onClick={onClose} className="w-9 h-9 flex items-center justify-center text-white/40" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      ) : (
+        <div className="w-9" />
+      )}
+    </div>
+  );
+
+  const progress = (
+    <div className="px-5 pb-4">
+      <StepIndicator current={step} total={totalSteps} />
+    </div>
+  );
+
+  const footer = (
+    <div className="px-5 pt-4" style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 24px)" }}>
+      {isLastStep ? (
+        <button
+          onClick={() => {
+            if (!isComplete) onMarkComplete();
+            onClose();
+          }}
+          className={`w-full py-4 text-sm font-semibold tracking-wide transition-all ${
+            isComplete ? "bg-white/10 text-white/50" : "bg-[#C19B5F] text-[#111820]"
+          }`}
+        >
+          {isComplete ? "✓ Day Complete" : "Complete Day"}
+        </button>
+      ) : (
+        <button
+          onClick={handleNext}
+          className="w-full py-4 bg-[#C19B5F] text-[#111820] text-sm font-semibold tracking-wide"
+        >
+          Continue
+        </button>
+      )}
+    </div>
+  );
+
+  // ── Step 0 (Open): fully immersive — image fills screen, chrome overlaid ──
+
+  if (step === 0) {
+    return (
+      <div className="fixed inset-0 z-[60] bg-[#203545]" style={{ height: "100dvh" }}>
+        {/* Full-bleed image */}
+        <StepOpen day={day} />
+
+        {/* Overlaid header + progress */}
+        <div className="absolute inset-x-0 top-0 z-10">
+          {header}
+          {progress}
+        </div>
+
+        {/* Overlaid footer */}
+        <div className="absolute inset-x-0 bottom-0 z-10">
+          {footer}
+        </div>
+      </div>
+    );
+  }
+
+  // ── Steps 1-4: standard flex layout ───────────────────────────────────────
+
   return (
     <div
       className="fixed inset-0 z-[60] bg-[#203545] flex flex-col"
       style={{ height: "100dvh" }}
     >
-      {/* Top bar */}
-      <div className="flex-shrink-0 flex items-center justify-between px-5 pb-3" style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 48px)" }}>
-        {/* Close / back */}
-        <button
-          onClick={step === 0 ? onClose : handlePrev}
-          className="w-9 h-9 flex items-center justify-center text-white/70"
-          aria-label={step === 0 ? "Close" : "Previous step"}
-        >
-          {step === 0 ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              className="w-5 h-5"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-5 h-5"
-            >
-              <path
-                fillRule="evenodd"
-                d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z"
-                clipRule="evenodd"
-              />
-            </svg>
-          )}
-        </button>
+      <div className="flex-shrink-0">{header}</div>
+      <div className="flex-shrink-0">{progress}</div>
 
-        {/* Step label */}
-        <span className="text-white/50 text-xs tracking-widest uppercase">
-          {STEP_LABELS[step]}
-        </span>
-
-        {/* Close button (always visible on right for quick exit) */}
-        {step > 0 && (
-          <button
-            onClick={onClose}
-            className="w-9 h-9 flex items-center justify-center text-white/40"
-            aria-label="Close"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              className="w-4 h-4"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        )}
-        {step === 0 && <div className="w-9" />}
-      </div>
-
-      {/* Progress indicator */}
-      <div className="flex-shrink-0 px-5 pb-4">
-        <StepIndicator current={step} total={totalSteps} />
-      </div>
-
-      {/* Step content — fills remaining space */}
       <div className="flex-1 min-h-0 overflow-hidden">
-        {step === 0 && <StepOpen day={day} />}
         {step === 1 && <StepEncounter day={day} />}
         {step === 2 && (
           <StepReflect
@@ -502,31 +527,7 @@ export default function JourneyDaySteps({
         {step === 4 && <StepGoDeeper day={day} />}
       </div>
 
-      {/* Bottom action bar */}
-      <div className="flex-shrink-0 px-5 pt-4" style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 24px)" }}>
-        {isLastStep ? (
-          <button
-            onClick={() => {
-              if (!isComplete) onMarkComplete();
-              onClose();
-            }}
-            className={`w-full py-4 text-sm font-semibold tracking-wide transition-all ${
-              isComplete
-                ? "bg-white/10 text-white/50"
-                : "bg-[#C19B5F] text-[#111820]"
-            }`}
-          >
-            {isComplete ? "✓ Day Complete" : "Complete Day"}
-          </button>
-        ) : (
-          <button
-            onClick={handleNext}
-            className="w-full py-4 bg-[#C19B5F] text-[#111820] text-sm font-semibold tracking-wide"
-          >
-            Continue
-          </button>
-        )}
-      </div>
+      <div className="flex-shrink-0">{footer}</div>
     </div>
   );
 }
