@@ -154,7 +154,7 @@ export default function LibraryPage() {
                     <img
                       src={item.imageUrl}
                       alt={item.title}
-                      className="w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-2">
