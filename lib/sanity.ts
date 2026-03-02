@@ -8,7 +8,7 @@ export const sanityClient = createClient({
   dataset: 'production',
   apiVersion: '2024-01-01',
   useCdn: false, // Disable CDN to ensure fresh data
-  ...(token ? { token, perspective: 'previewDrafts' as const } : {}),
+  ...(token ? { token, perspective: 'drafts' as const } : {}),
 })
 
 // Image URL builder
