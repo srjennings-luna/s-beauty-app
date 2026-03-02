@@ -44,31 +44,37 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
 
 function StepOpen({ day }: { day: JourneyDay }) {
   return (
-    <div className="relative h-full w-full">
-      {/* Full-screen image */}
+    <div className="relative h-full w-full overflow-y-auto">
+      {/* Fixed background image */}
       {day.openImageUrl && (
-        <img
-          src={day.openImageUrl}
-          alt={day.dayTitle}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        <div className="sticky top-0 w-full h-full -mb-[100%]">
+          <img
+            src={day.openImageUrl}
+            alt={day.dayTitle}
+            className="w-full h-full object-cover"
+          />
+        </div>
       )}
-      {/* Gradient overlay for text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10" />
 
-      {/* Overlaid text */}
-      <div className="absolute bottom-0 left-0 right-0 px-6 pb-8">
-        <p className="text-[#C19B5F] text-xs tracking-widest uppercase mb-2">
-          Day {day.dayNumber}
-        </p>
-        <h2 className="font-serif-elegant text-3xl text-white mb-3">
-          {day.dayTitle}
-        </h2>
-        {day.openText && (
-          <p className="font-serif-elegant-italic text-white/80 text-lg leading-relaxed">
-            {day.openText}
+      {/* Scrollable content layer */}
+      <div className="relative min-h-full flex flex-col justify-end">
+        {/* Gradient overlay for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10 pointer-events-none" />
+
+        {/* Text content with footer clearance */}
+        <div className="relative px-6 pb-24">
+          <p className="text-[#C19B5F] text-xs tracking-widest uppercase mb-2">
+            Day {day.dayNumber}
           </p>
-        )}
+          <h2 className="font-serif-elegant text-3xl text-white mb-3">
+            {day.dayTitle}
+          </h2>
+          {day.openText && (
+            <p className="font-serif-elegant-italic text-white/80 text-lg leading-relaxed">
+              {day.openText}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );
