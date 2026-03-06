@@ -192,6 +192,15 @@ export async function getDailyPrompt(date?: string) {
       "content": content->{${CONTENT_ITEM_FIELDS}},
       promptQuestion,
       curatorNote,
+      lectio,
+      auditio,
+      actio,
+      "relatedJourney": relatedJourney->{
+        _id,
+        title,
+        slug,
+        "heroImageUrl": heroImage.asset->url
+      },
       "theme": theme->{${THEME_FIELDS}}
     }`,
     { targetDate }
@@ -275,7 +284,17 @@ export async function getArtworkById(id: string) {
       locationName,
       city,
       country,
-      coordinates
+      coordinates,
+      traditionalPrayer,
+      "traditionReflections": traditionReflections[]->{
+        _id,
+        title,
+        summary,
+        shortQuote,
+        source,
+        authorType,
+        order,
+      }
     }`,
     { id }
   )

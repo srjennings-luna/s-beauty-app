@@ -100,37 +100,44 @@ export default function TodayPage() {
           </div>
         ) : (
           <>
-            {/* ── Daily Prompt ── */}
+            {/* ── Daily Prompt hero card ── */}
             <FadeUp delay={60}>
               {dailyPrompt ? (
                 <section className="mb-8">
-                  <div className="relative">
-                    <div className="aspect-[4/3] overflow-hidden">
-                      <img
-                        src={dailyPrompt.content.imageUrl}
-                        alt={dailyPrompt.content.title}
-                        className="w-full h-full object-cover"
-                      />
-                      {/* Dark gradient overlay — image text always readable */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/20 to-transparent" />
-                    </div>
-                    <div className="absolute bottom-0 left-0 right-0 px-5 pb-6">
+                  {/* Image with gradient overlay */}
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img
+                      src={dailyPrompt.content.imageUrl}
+                      alt={dailyPrompt.content.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/20 to-transparent" />
+                    {/* Text in lower third */}
+                    <div className="absolute bottom-0 left-0 right-0 px-5 pb-5">
                       <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-2">
                         Today&apos;s Prompt
                       </p>
-                      <h2 className="font-serif-elegant text-2xl text-white mb-3 leading-snug">
+                      <h2 className="font-serif-elegant text-2xl text-white leading-snug mb-2">
                         {dailyPrompt.content.title}
                       </h2>
-                      <p className="text-white/80 text-sm italic leading-relaxed">
+                      <p className="text-white/75 text-sm italic leading-relaxed line-clamp-2">
                         &ldquo;{dailyPrompt.promptQuestion}&rdquo;
                       </p>
                     </div>
                   </div>
-                  {dailyPrompt.curatorNote && (
-                    <div className="mx-5 mt-3 px-4 py-3 border-l-2 border-[#4a7a62]/30">
-                      <p className="text-[#7a9a8a] text-sm italic">{dailyPrompt.curatorNote}</p>
-                    </div>
-                  )}
+                  {/* CTA below image */}
+                  <div className="px-5 pt-3 pb-1 flex items-center justify-between">
+                    {dailyPrompt.curatorNote ? (
+                      <p className="text-[#7a9a8a] text-xs italic line-clamp-1 flex-1 mr-4">
+                        {dailyPrompt.curatorNote}
+                      </p>
+                    ) : (
+                      <span />
+                    )}
+                    <Link href="/prompt" className="cta-inline flex-shrink-0">
+                      Enter practice →
+                    </Link>
+                  </div>
                 </section>
               ) : (
                 <section className="mx-5 mb-8 py-12 text-center border border-black/8">

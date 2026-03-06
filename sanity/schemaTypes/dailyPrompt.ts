@@ -39,6 +39,67 @@ export default defineType({
       description: 'Optional: why this was chosen for today. The human editorial voice.',
     }),
     defineField({
+      name: 'lectio',
+      title: 'Reading (Lectio)',
+      type: 'object',
+      description: 'Optional: a quote, scripture passage, or short text for the day.',
+      fields: [
+        defineField({
+          name: 'text',
+          title: 'Text',
+          type: 'text',
+          rows: 4,
+          validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+          name: 'attribution',
+          title: 'Attribution',
+          type: 'string',
+          description: 'e.g. "Matthew 5:8" or "Thomas Aquinas, Summa Theologica I.39.8"',
+        }),
+      ],
+    }),
+    defineField({
+      name: 'auditio',
+      title: 'Music (Auditio)',
+      type: 'object',
+      description: 'Optional: a piece of music to accompany the practice.',
+      fields: [
+        defineField({
+          name: 'title',
+          title: 'Title',
+          type: 'string',
+          description: 'Name of the piece, e.g. "Ave Maria — Gregorian Chant"',
+          validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+          name: 'artist',
+          title: 'Artist / Composer',
+          type: 'string',
+        }),
+        defineField({
+          name: 'url',
+          title: 'External Link',
+          type: 'url',
+          description: 'Optional: Spotify, YouTube, or Apple Music link. Opens externally.',
+        }),
+      ],
+    }),
+    defineField({
+      name: 'actio',
+      title: 'Action (Actio)',
+      type: 'text',
+      rows: 3,
+      description: 'An invitation to carry something into the day. One concrete, gentle action.',
+    }),
+    defineField({
+      name: 'relatedJourney',
+      title: 'Related Journey',
+      type: 'reference',
+      to: [{type: 'journey'}],
+      description: 'Optional: if a Journey deepens this prompt, link it here. Shown as a quiet CTA at the bottom of the prompt.',
+    }),
+    defineField({
       name: 'theme',
       title: 'Theme',
       type: 'reference',

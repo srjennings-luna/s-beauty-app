@@ -70,6 +70,17 @@ export type ContentItem = {
   mediaType?: 'video' | 'podcast' | 'documentary' | 'lecture';
   mediaUrl?: string;
   series?: string;
+  // Visio Divina
+  traditionalPrayer?: string;
+  traditionalPrayerSource?: string;
+  traditionReflections?: Array<{
+    _id: string;
+    title: string;
+    summary: string;
+    shortQuote?: string;
+    source: string;
+    authorType: string;
+  }>;
 };
 
 // ─── Journey ──────────────────────────────────────────────────────────────────
@@ -101,12 +112,27 @@ export type Journey = {
 
 // ─── Daily Prompt ─────────────────────────────────────────────────────────────
 
+export type DailyPromptLectio = {
+  text: string;
+  attribution?: string;
+};
+
+export type DailyPromptAuditio = {
+  title: string;
+  artist?: string;
+  url?: string;
+};
+
 export type DailyPrompt = {
   _id: string;
   date: string;
   content: ContentItem;
   promptQuestion: string;
   curatorNote?: string;
+  lectio?: DailyPromptLectio;
+  auditio?: DailyPromptAuditio;
+  actio?: string;
+  relatedJourney?: Pick<Journey, '_id' | 'title' | 'slug' | 'heroImageUrl'>;
   theme?: Theme;
 };
 
