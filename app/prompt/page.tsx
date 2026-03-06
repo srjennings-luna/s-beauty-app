@@ -312,7 +312,7 @@ export default function DailyPromptPage() {
             style={{ background: `linear-gradient(to top, ${C.bg} 0%, rgba(22,17,13,0.5) 40%, transparent 70%)` }}
           />
           {/* Date + title in lower third */}
-          <div className="absolute bottom-0 left-0 right-0 px-5 pb-7">
+          <div className="absolute bottom-0 left-0 right-0 px-6 pb-8">
             <p className="text-xs tracking-widest uppercase mb-3" style={{ color: C.sage }}>
               {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
             </p>
@@ -325,210 +325,206 @@ export default function DailyPromptPage() {
           </div>
         </div>
 
-        {/* ── Curator note — contained box ────────────────────────────────── */}
-        {prompt.curatorNote && (
-          <div className="px-5 pt-7 pb-2">
+        {/* ── Content body — space-y-12 matches espresso design ───────────── */}
+        <div className="px-6 mt-8 space-y-12">
+
+          {/* ── Curator note — dark box, p-8, subtle border ─────────────── */}
+          {prompt.curatorNote && (
             <div
-              className="px-5 py-4"
+              className="p-8"
               style={{
-                background: "rgba(253,246,232,0.04)",
-                borderLeft: `2px solid ${C.gold}`,
+                background: "#24201d",
+                border: `1px solid rgba(253,246,232,0.05)`,
               }}
             >
               <p
-                className="text-sm italic leading-relaxed"
-                style={{ color: C.creamDim, fontFamily: "var(--font-cormorant)", fontSize: "1.05rem" }}
+                className="italic leading-relaxed"
+                style={{ color: C.creamDim, fontFamily: "var(--font-cormorant)", fontSize: "1.15rem", lineHeight: "1.65" }}
               >
                 {prompt.curatorNote}
               </p>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* ── Lectio ───────────────────────────────────────────────────────── */}
-        {prompt.lectio && (
-          <section className="px-5 pt-10 pb-2">
-            <p
-              className="text-xs tracking-widest mb-5 pb-3"
-              style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
-            >
-              READING <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Lectio)</span>
-            </p>
-            <p
-              className="italic leading-relaxed mb-3"
-              style={{
-                color: C.cream,
-                fontFamily: "var(--font-cormorant)",
-                fontSize: "clamp(1.2rem, 4vw, 1.5rem)",
-                lineHeight: "1.5",
-              }}
-            >
-              &ldquo;{prompt.lectio.text}&rdquo;
-            </p>
-            {prompt.lectio.attribution && (
-              <p className="text-xs tracking-widest uppercase mt-4" style={{ color: C.creamFaint }}>
-                — {prompt.lectio.attribution}
+          {/* ── Lectio ────────────────────────────────────────────────────── */}
+          {prompt.lectio && (
+            <section>
+              <p
+                className="text-xs tracking-widest mb-6 pb-2"
+                style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
+              >
+                READING <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Lectio)</span>
               </p>
-            )}
-          </section>
-        )}
+              <div className="pl-4 space-y-6" style={{ borderLeft: `1px solid rgba(138,126,114,0.3)` }}>
+                <p
+                  className="italic leading-tight"
+                  style={{
+                    color: C.cream,
+                    fontFamily: "var(--font-cormorant)",
+                    fontSize: "clamp(1.3rem, 4.5vw, 1.55rem)",
+                    lineHeight: "1.4",
+                  }}
+                >
+                  &ldquo;{prompt.lectio.text}&rdquo;
+                </p>
+                {prompt.lectio.attribution && (
+                  <p className="text-xs tracking-widest uppercase" style={{ color: C.sageMuted }}>
+                    — {prompt.lectio.attribution}
+                  </p>
+                )}
+              </div>
+            </section>
+          )}
 
-        {/* ── Auditio — circular player ────────────────────────────────────── */}
-        {prompt.auditio && (
-          <section className="px-5 pt-10 pb-2">
-            <p
-              className="text-xs tracking-widest mb-5 pb-3"
-              style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
-            >
-              MUSIC <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Auditio)</span>
-            </p>
-            <div className="flex items-center gap-5">
-              {/* Large circular play button */}
-              {prompt.auditio.url ? (
-                <a
-                  href={prompt.auditio.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-shrink-0 flex items-center justify-center"
-                  style={{
-                    width: 64, height: 64,
-                    borderRadius: "50%",
-                    background: C.cream,
-                    color: C.bg,
-                  }}
-                  aria-label="Open in music app"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </a>
-              ) : (
-                <button
-                  onClick={() => { if (musicPlaying) stopMusic(); else playChant(); }}
-                  className="flex-shrink-0 flex items-center justify-center"
-                  style={{
-                    width: 64, height: 64,
-                    borderRadius: "50%",
-                    background: C.cream,
-                    color: C.bg,
-                  }}
-                  aria-label={musicPlaying ? "Pause" : "Play chant"}
-                >
-                  {musicPlaying ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                      <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
-                    </svg>
-                  ) : (
+          {/* ── Auditio — circular player ──────────────────────────────────── */}
+          {prompt.auditio && (
+            <section>
+              <p
+                className="text-xs tracking-widest mb-6 pb-2"
+                style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
+              >
+                MUSIC <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Auditio)</span>
+              </p>
+              <div className="flex items-center gap-6">
+                {/* Large circular play button */}
+                {prompt.auditio.url ? (
+                  <a
+                    href={prompt.auditio.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-shrink-0 flex items-center justify-center shadow-2xl"
+                    style={{ width: 64, height: 64, borderRadius: "50%", background: C.cream, color: C.bg }}
+                    aria-label="Open in music app"
+                  >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
                       <path d="M8 5v14l11-7z" />
                     </svg>
-                  )}
-                </button>
-              )}
-              {/* Track info */}
-              <div className="flex-1 min-w-0">
-                <p className="text-base font-medium truncate" style={{ color: C.cream }}>
-                  {prompt.auditio.title}
-                </p>
-                {prompt.auditio.artist && (
-                  <p className="text-sm mt-0.5 truncate" style={{ color: C.creamFaint }}>
-                    {prompt.auditio.artist}
-                  </p>
-                )}
-                {prompt.auditio.url && (
-                  <p className="text-xs mt-1" style={{ color: C.sageMuted }}>Opens externally →</p>
-                )}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ── Actio — checkboxes ───────────────────────────────────────────── */}
-        <section ref={actioRef} className="px-5 pt-10 pb-2">
-          <p
-            className="text-xs tracking-widest mb-5 pb-3"
-            style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
-          >
-            ACTION <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Actio)</span>
-          </p>
-
-          {actioLines.length > 0 ? (
-            <div className="flex flex-col gap-5">
-              {actioLines.map((line: string, i: number) => (
-                <button
-                  key={i}
-                  onClick={() => toggleCheck(i)}
-                  className="flex items-start gap-4 text-left w-full"
-                  aria-label={`Mark complete: ${line}`}
-                >
-                  {/* Square checkbox — KALLOS design system: no rounded corners */}
-                  <div
-                    className="flex-shrink-0 mt-1"
-                    style={{
-                      width: 20, height: 20,
-                      border: `1px solid ${checkedItems[i] ? C.gold : C.creamFaint}`,
-                      background: checkedItems[i] ? C.gold : "transparent",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
+                  </a>
+                ) : (
+                  <button
+                    onClick={() => { if (musicPlaying) stopMusic(); else playChant(); }}
+                    className="flex-shrink-0 flex items-center justify-center shadow-2xl"
+                    style={{ width: 64, height: 64, borderRadius: "50%", background: C.cream, color: C.bg }}
+                    aria-label={musicPlaying ? "Pause" : "Play"}
                   >
-                    {checkedItems[i] && (
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke={C.bg} strokeWidth={2.5} width="12" height="12">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    {musicPlaying ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                        <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+                        <path d="M8 5v14l11-7z" />
                       </svg>
                     )}
-                  </div>
+                  </button>
+                )}
+                {/* Track info */}
+                <div className="flex-grow min-w-0">
                   <p
-                    className="italic leading-relaxed flex-1"
-                    style={{
-                      color: checkedItems[i] ? C.creamFaint : C.cream,
-                      fontFamily: "var(--font-cormorant)",
-                      fontSize: "clamp(1.1rem, 3.5vw, 1.3rem)",
-                      textDecoration: checkedItems[i] ? "line-through" : "none",
-                      textDecorationColor: C.creamFaint,
-                      transition: "color 0.2s ease",
-                    }}
+                    className="italic truncate"
+                    style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.25rem" }}
                   >
-                    {line}
+                    {prompt.auditio.title}
                   </p>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <p
-              className="italic leading-relaxed"
-              style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "clamp(1.1rem, 3.5vw, 1.3rem)" }}
-            >
-              {defaultActio}
-            </p>
+                  {prompt.auditio.artist && (
+                    <p className="text-sm mt-1 truncate" style={{ color: C.creamFaint }}>
+                      {prompt.auditio.artist}
+                    </p>
+                  )}
+                  {prompt.auditio.url && (
+                    <p className="text-xs mt-1" style={{ color: C.sageMuted }}>Opens externally →</p>
+                  )}
+                </div>
+              </div>
+            </section>
           )}
+
+          {/* ── Actio — checkboxes ──────────────────────────────────────────── */}
+          <section ref={actioRef}>
+            <p
+              className="text-xs tracking-widest mb-6 pb-2"
+              style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
+            >
+              ACTION <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Actio)</span>
+            </p>
+
+            {actioLines.length > 0 ? (
+              <ul className="space-y-6">
+                {actioLines.map((line: string, i: number) => (
+                  <li key={i}>
+                    <button
+                      onClick={() => toggleCheck(i)}
+                      className="flex items-start gap-4 text-left w-full"
+                      aria-label={`Mark complete: ${line}`}
+                    >
+                      {/* Square checkbox — no rounded corners */}
+                      <div
+                        className="flex-shrink-0 mt-1"
+                        style={{
+                          width: 20, height: 20,
+                          border: `1px solid ${checkedItems[i] ? C.gold : C.creamFaint}`,
+                          background: checkedItems[i] ? C.gold : "transparent",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                        }}
+                      >
+                        {checkedItems[i] && (
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke={C.bg} strokeWidth={2.5} width="12" height="12">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                          </svg>
+                        )}
+                      </div>
+                      <span
+                        className="italic leading-relaxed flex-1"
+                        style={{
+                          color: checkedItems[i] ? C.creamFaint : C.creamDim,
+                          fontFamily: "var(--font-cormorant)",
+                          fontSize: "1.15rem",
+                          textDecoration: checkedItems[i] ? "line-through" : "none",
+                          textDecorationColor: C.creamFaint,
+                          transition: "color 0.2s ease",
+                        }}
+                      >
+                        {line}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p
+                className="italic leading-relaxed"
+                style={{ color: C.creamDim, fontFamily: "var(--font-cormorant)", fontSize: "1.15rem" }}
+              >
+                {defaultActio}
+              </p>
+            )}
 
           {completed && (
             <p className="text-xs mt-6 tracking-wide" style={{ color: C.sageMuted }}>
               You showed up today.
             </p>
           )}
-        </section>
-
-        {/* ── Related Journey CTA ──────────────────────────────────────────── */}
-        {prompt.relatedJourney && (
-          <section className="px-5 pt-10 pb-2">
-            <div className="py-4 px-5" style={{ border: `1px solid ${C.divider}` }}>
-              <p className="text-xs tracking-widest uppercase mb-2" style={{ color: C.creamFaint }}>Go deeper</p>
-              <Link
-                href={`/journeys/${prompt.relatedJourney.slug.current}`}
-                className="flex items-center justify-between group"
-              >
-                <p className="text-sm font-medium" style={{ color: C.cream }}>
-                  {prompt.relatedJourney.title}
-                </p>
-                <span className="text-sm cta-inline-dark">Begin →</span>
-              </Link>
-            </div>
           </section>
-        )}
 
+          {/* ── Related Journey CTA ─────────────────────────────────────────── */}
+          {prompt.relatedJourney && (
+            <section>
+              <div className="py-4 px-5" style={{ border: `1px solid ${C.divider}` }}>
+                <p className="text-xs tracking-widest uppercase mb-2" style={{ color: C.creamFaint }}>Go deeper</p>
+                <Link
+                  href={`/journeys/${prompt.relatedJourney.slug.current}`}
+                  className="flex items-center justify-between group"
+                >
+                  <p className="text-sm font-medium" style={{ color: C.cream }}>
+                    {prompt.relatedJourney.title}
+                  </p>
+                  <span className="text-sm cta-inline-dark">Begin →</span>
+                </Link>
+              </div>
+            </section>
+          )}
+
+        </div>{/* end space-y-12 */}
         <div className="h-16" />
       </div>
     </PageTransition>
