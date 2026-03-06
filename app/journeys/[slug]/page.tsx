@@ -200,9 +200,13 @@ export default function JourneyDetailPage() {
   // ── Full-screen day stepper (when a day is tapped) ─────────────────────────
 
   if (activeDay) {
+    const nextDay = journey.days?.find(
+      (d) => d.dayNumber === activeDay.dayNumber + 1,
+    );
     return (
       <JourneyDaySteps
         day={activeDay}
+        nextDay={nextDay}
         isComplete={completedDays.includes(activeDay.dayNumber)}
         onClose={() => setActiveDay(null)}
         onMarkComplete={() => toggleDayComplete(activeDay.dayNumber)}
