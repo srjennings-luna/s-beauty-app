@@ -7,6 +7,7 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { getArtworkById } from "@/lib/sanity";
 import GoDeeperSection from "@/components/GoDeeperSection";
 import PageTransition from "@/components/ui/PageTransition";
+import type { TraditionReflection } from "@/lib/types";
 
 type SanityArtwork = {
   _id: string;
@@ -27,15 +28,7 @@ type SanityArtwork = {
   order: number;
   traditionalPrayer?: string;
   traditionalPrayerSource?: string;
-  traditionReflections?: Array<{
-    _id: string;
-    title: string;
-    summary: string;
-    shortQuote?: string;
-    source: string;
-    authorType: 'church-father' | 'saint' | 'pope';
-    order: number;
-  }>;
+  traditionReflections?: TraditionReflection[];
 };
 
 // FIX 1: Swap pray and contemplate order
