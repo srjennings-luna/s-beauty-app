@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import Link from "next/link";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import type { JourneyDay } from "@/lib/types";
 
 const STEP_LABELS = ["Open", "Encounter", "Reflect", "Connect", "Go Deeper"];
@@ -112,15 +113,19 @@ function StepEncounter({ day }: { day: JourneyDay }) {
       {/* Spacer for overlaid header — nav row + progress dots row */}
       <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 96px)" }} />
 
-      {/* Content image */}
+      {/* Content image — pinch to zoom (8x) */}
       {content.imageUrl && (
-        <div className="relative w-full aspect-[16/10] flex-shrink-0">
-          <img
-            src={content.imageUrl}
-            alt={content.title}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent" style={{ background: `linear-gradient(to bottom, transparent, ${C.bg})` }} />
+        <div className="relative w-full aspect-[16/10] flex-shrink-0 overflow-hidden">
+          <TransformWrapper maxScale={8} minScale={1} centerOnInit>
+            <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
+              <img
+                src={content.imageUrl}
+                alt={content.title}
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              />
+            </TransformComponent>
+          </TransformWrapper>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent pointer-events-none" style={{ background: `linear-gradient(to bottom, transparent 60%, ${C.bg})` }} />
         </div>
       )}
 
@@ -128,7 +133,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
         {/* Type badge */}
         <div className="flex items-center gap-2 mb-3">
           <span className="text-lg">{icon}</span>
-          <span className="text-xs tracking-widest uppercase" style={{ color: C.sageMuted }}>
+          <span className="text-xs tracking-widest uppercase" style={{ color: C.creamDim }}>
             {typeLabel}
           </span>
         </div>
@@ -139,24 +144,24 @@ function StepEncounter({ day }: { day: JourneyDay }) {
 
         {/* Attribution */}
         {(content.artist || content.author || content.composer || content.thinkerName) && (
-          <p className="text-sm mb-4" style={{ color: C.creamFaint }}>
+          <p className="text-sm mb-4" style={{ color: C.creamDim }}>
             {content.artist || content.author || content.composer || content.thinkerName}
             {content.year && `, ${content.year}`}
           </p>
         )}
 
-        {/* Description */}
-        <p className="text-sm leading-relaxed mb-5" style={{ color: C.sageMuted }}>
+        {/* Description — main body text: cream */}
+        <p className="text-sm leading-relaxed mb-5" style={{ color: C.cream }}>
           {content.description}
         </p>
 
         {/* Context */}
         {content.context && (
           <div className="border-l-2 border-white/10 pl-4 mb-5">
-            <p className="text-xs tracking-widest uppercase mb-1" style={{ color: C.creamFaint }}>
+            <p className="text-xs tracking-widest uppercase mb-1" style={{ color: C.creamDim }}>
               Context
             </p>
-            <p className="text-sm leading-relaxed" style={{ color: C.sageMuted }}>
+            <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>
               {content.context}
             </p>
           </div>
@@ -165,11 +170,11 @@ function StepEncounter({ day }: { day: JourneyDay }) {
         {/* Quote (thinker type) */}
         {content.quote?.text && (
           <div className="bg-white/5 p-5 mb-5">
-            <p className="font-serif-elegant-italic text-lg leading-relaxed mb-2" style={{ color: "rgba(255,255,255,0.8)" }}>
+            <p className="font-serif-elegant-italic text-lg leading-relaxed mb-2" style={{ color: C.cream }}>
               &ldquo;{content.quote.text}&rdquo;
             </p>
             {content.quote.attribution && (
-              <p className="text-xs" style={{ color: C.sageMuted }}>
+              <p className="text-xs" style={{ color: C.creamDim }}>
                 — {content.quote.attribution}
               </p>
             )}
@@ -179,10 +184,10 @@ function StepEncounter({ day }: { day: JourneyDay }) {
         {/* Scripture (sacred art) */}
         {content.scripturePairing?.verse && (
           <div className="bg-white/5 p-5 mb-5">
-            <p className="font-serif-elegant-italic text-lg leading-relaxed mb-2" style={{ color: "rgba(255,255,255,0.8)" }}>
+            <p className="font-serif-elegant-italic text-lg leading-relaxed mb-2" style={{ color: C.cream }}>
               {content.scripturePairing.verse}
             </p>
-            <p className="text-xs" style={{ color: C.sageMuted }}>
+            <p className="text-xs" style={{ color: C.creamDim }}>
               — {content.scripturePairing.reference}
             </p>
           </div>
@@ -363,10 +368,10 @@ function StepGoDeeper({ day }: { day: JourneyDay }) {
                   aria-expanded={isOpen}
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.8)" }}>
+                    <p className="text-sm font-medium" style={{ color: C.cream }}>
                       {r.title}
                     </p>
-                    <p className="text-xs mt-0.5" style={{ color: C.creamFaint }}>{r.source}</p>
+                    <p className="text-xs mt-0.5" style={{ color: C.creamDim }}>{r.source}</p>
                   </div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -392,11 +397,11 @@ function StepGoDeeper({ day }: { day: JourneyDay }) {
                         &ldquo;{r.shortQuote}&rdquo;
                       </p>
                     )}
-                    <p className="text-sm leading-relaxed" style={{ color: C.sageMuted }}>
+                    <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>
                       {r.summary}
                     </p>
                     {r.era && (
-                      <p className="text-xs mt-2" style={{ color: C.creamFaint }}>{r.era}</p>
+                      <p className="text-xs mt-2" style={{ color: C.creamDim }}>{r.era}</p>
                     )}
                   </div>
                 )}

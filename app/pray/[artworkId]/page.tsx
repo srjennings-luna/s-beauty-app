@@ -315,7 +315,7 @@ export default function PrayPage() {
                     </TransformComponent>
                   </TransformWrapper>
                 </div>
-                <p className="text-sm text-center leading-relaxed max-w-md mx-auto" style={{ color: C.sageMuted }}>
+                <p className="text-sm text-center leading-relaxed max-w-md mx-auto" style={{ color: C.creamDim }}>
                   Let your eyes rest on the image. Notice what draws you. Ask God to open the eyes of your heart.
                 </p>
                 <p className="text-xs mt-4 text-center" style={{ color: C.creamFaint }}>Take 1–2 minutes if you like. Pinch to zoom the image.</p>
@@ -337,7 +337,7 @@ export default function PrayPage() {
                   </TransformWrapper>
                 </div>
                 <h2 className="font-semibold text-lg mb-2" style={{ color: C.cream }}>Reflect</h2>
-                <p className="text-sm mb-4" style={{ color: C.sageMuted }}>
+                <p className="text-sm mb-4" style={{ color: C.creamDim }}>
                   Look deeper. What movement or relationships do you see? Where are you in this image?
                 </p>
                 {questions.length > 0 && (
@@ -357,7 +357,7 @@ export default function PrayPage() {
                     {reflectionExpanded && (
                       <ul className="space-y-2 mt-2">
                         {questions.slice(0, 2).map((q, i) => (
-                          <li key={i} className="text-sm flex gap-2" style={{ color: C.sageMuted }}>
+                          <li key={i} className="text-sm flex gap-2" style={{ color: C.creamDim }}>
                             <span style={{ color: C.sage }}>•</span>
                             <span>{q}</span>
                           </li>
@@ -383,7 +383,7 @@ export default function PrayPage() {
                     </TransformComponent>
                   </TransformWrapper>
                 </div>
-                <p className="text-sm text-center leading-relaxed max-w-md mx-auto" style={{ color: C.sageMuted }}>
+                <p className="text-sm text-center leading-relaxed max-w-md mx-auto" style={{ color: C.creamDim }}>
                   Rest in God&apos;s presence. No words are needed. Let the beauty you&apos;ve seen lead you into silence and communion.
                 </p>
                 <p className="text-xs mt-4 text-center" style={{ color: C.creamFaint }}>Pinch to zoom the image.</p>
@@ -408,7 +408,7 @@ export default function PrayPage() {
                 {/* Sacred quote block — GOLD BORDER is the ONE gold moment on this screen */}
                 {isSacredArt && artwork.scripturePairing && (
                   <div className="bg-white/5 border-l-2 p-4 mb-6" style={{ borderColor: C.gold }}>
-                    <p className="font-serif-elegant italic text-base leading-relaxed" style={{ color: C.sageMuted }}>
+                    <p className="font-serif-elegant italic text-base leading-relaxed" style={{ color: C.cream }}>
                       &ldquo;{artwork.scripturePairing.verse}&rdquo;
                     </p>
                     <p className="text-sm mt-2 font-medium" style={{ color: C.creamDim }}>
@@ -418,7 +418,7 @@ export default function PrayPage() {
                 )}
                 {!isSacredArt && artwork.quote && (
                   <div className="bg-white/5 border-l-2 p-4 mb-6" style={{ borderColor: C.gold }}>
-                    <p className="font-serif-elegant italic text-base leading-relaxed" style={{ color: C.sageMuted }}>
+                    <p className="font-serif-elegant italic text-base leading-relaxed" style={{ color: C.cream }}>
                       &ldquo;{artwork.quote.text}&rdquo;
                     </p>
                     <p className="text-sm mt-2 font-medium" style={{ color: C.creamDim }}>
@@ -427,7 +427,7 @@ export default function PrayPage() {
                   </div>
                 )}
 
-                <p className="text-sm mb-4" style={{ color: C.sageMuted }}>
+                <p className="text-sm mb-4" style={{ color: C.creamDim }}>
                   Respond to God in prayer—thanksgiving, intercession, or simply conversation about what you notice.
                 </p>
 
@@ -448,7 +448,7 @@ export default function PrayPage() {
                   </button>
                   {prayerDrawerOpen && (
                     <div className="px-4 pb-6 animate-fade-in">
-                      <p className="font-serif-elegant italic text-center mb-3 whitespace-pre-line" style={{ color: C.sageMuted }}>
+                      <p className="font-serif-elegant italic text-center mb-3 whitespace-pre-line" style={{ color: C.cream }}>
                         {artwork.traditionalPrayer || FALLBACK_PRAYER}
                       </p>
                       {artwork.traditionalPrayer && artwork.traditionalPrayerSource && (
@@ -467,7 +467,7 @@ export default function PrayPage() {
               <div className="px-6 py-8">
                 <h2 className="text-sm font-medium uppercase tracking-wider mb-4" style={{ color: C.cream }}>Action</h2>
                 <h3 className="font-semibold text-lg mb-2" style={{ color: C.cream }}>How will you live this out?</h3>
-                <p className="text-sm mb-4" style={{ color: C.sageMuted }}>
+                <p className="text-sm mb-4" style={{ color: C.creamDim }}>
                   Ask yourself and God: How will you apply what you&apos;ve received in prayer to your life?
                 </p>
                 <textarea
