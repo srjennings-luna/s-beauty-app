@@ -368,7 +368,7 @@ export default function DailyPromptPage() {
               className="text-xs tracking-widest mb-5 pb-3"
               style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
             >
-              LECTIO
+              READING <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Lectio)</span>
             </p>
             <p
               className="italic leading-relaxed mb-3"
@@ -396,7 +396,7 @@ export default function DailyPromptPage() {
               className="text-xs tracking-widest mb-5 pb-3"
               style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
             >
-              AUDITIO
+              MUSIC <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Auditio)</span>
             </p>
             <div className="flex items-center gap-5">
               {/* Large circular play button */}
@@ -465,7 +465,7 @@ export default function DailyPromptPage() {
             className="text-xs tracking-widest mb-5 pb-3"
             style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
           >
-            ACTIO
+            ACTION <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Actio)</span>
           </p>
 
           {actioLines.length > 0 ? (
