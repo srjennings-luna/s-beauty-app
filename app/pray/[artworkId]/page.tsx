@@ -293,16 +293,25 @@ export default function PrayPage() {
           </button>
         )}
 
-        {/* Step content */}
-        <div
-          className="flex-1 min-h-0 flex flex-col"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          <div className="flex-1 overflow-y-auto touch-pan-y">
+        {/* Step content — lateral slide container */}
+        <div className="flex-1 min-h-0 flex flex-col">
+
+          {/* Slide viewport — all 5 steps rendered, translateX for navigation */}
+          <div
+            className="flex-1 min-h-0 relative overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
 
             {/* ── Gaze ── */}
-            {step === 0 && (
+            <div
+              className="absolute inset-0 overflow-y-auto touch-pan-y"
+              style={{
+                transform: `translateX(${(0 - step) * 100}%)`,
+                transition: "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)",
+                willChange: "transform",
+              }}
+            >
               <div className="flex flex-col px-4 py-6">
                 <h2 className="text-sm font-medium uppercase tracking-wider mb-4 text-center" style={{ color: C.cream }}>Gaze</h2>
                 <div className="w-full min-h-[55vh] flex-1 flex flex-col mb-6">
@@ -320,10 +329,17 @@ export default function PrayPage() {
                 </p>
                 <p className="text-xs mt-4 text-center" style={{ color: C.creamFaint }}>Take 1–2 minutes if you like. Pinch to zoom the image.</p>
               </div>
-            )}
+            </div>
 
             {/* ── Meditate ── */}
-            {step === 1 && (
+            <div
+              className="absolute inset-0 overflow-y-auto touch-pan-y"
+              style={{
+                transform: `translateX(${(1 - step) * 100}%)`,
+                transition: "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)",
+                willChange: "transform",
+              }}
+            >
               <div className="px-4 py-6">
                 <h2 className="text-sm font-medium uppercase tracking-wider mb-4" style={{ color: C.cream }}>Meditate</h2>
                 <div className="w-full min-h-[50vh] mb-6">
@@ -367,10 +383,17 @@ export default function PrayPage() {
                   </div>
                 )}
               </div>
-            )}
+            </div>
 
             {/* ── Contemplate ── */}
-            {step === 2 && (
+            <div
+              className="absolute inset-0 overflow-y-auto touch-pan-y"
+              style={{
+                transform: `translateX(${(2 - step) * 100}%)`,
+                transition: "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)",
+                willChange: "transform",
+              }}
+            >
               <div className="flex flex-col px-4 py-6">
                 <h2 className="text-sm font-medium uppercase tracking-wider mb-4 text-center" style={{ color: C.cream }}>Contemplate</h2>
                 <div className="w-full min-h-[55vh] mb-6">
@@ -388,10 +411,17 @@ export default function PrayPage() {
                 </p>
                 <p className="text-xs mt-4 text-center" style={{ color: C.creamFaint }}>Pinch to zoom the image.</p>
               </div>
-            )}
+            </div>
 
             {/* ── Pray ── */}
-            {step === 3 && (
+            <div
+              className="absolute inset-0 overflow-y-auto touch-pan-y"
+              style={{
+                transform: `translateX(${(3 - step) * 100}%)`,
+                transition: "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)",
+                willChange: "transform",
+              }}
+            >
               <div className="flex flex-col px-4 py-6">
                 <h2 className="text-sm font-medium uppercase tracking-wider mb-4" style={{ color: C.cream }}>Pray</h2>
                 <div className="w-full min-h-[40vh] mb-6">
@@ -460,10 +490,17 @@ export default function PrayPage() {
                   )}
                 </div>
               </div>
-            )}
+            </div>
 
             {/* ── Action ── */}
-            {step === 4 && (
+            <div
+              className="absolute inset-0 overflow-y-auto touch-pan-y"
+              style={{
+                transform: `translateX(${(4 - step) * 100}%)`,
+                transition: "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)",
+                willChange: "transform",
+              }}
+            >
               <div className="px-6 py-8">
                 <h2 className="text-sm font-medium uppercase tracking-wider mb-4" style={{ color: C.cream }}>Action</h2>
                 <h3 className="font-semibold text-lg mb-2" style={{ color: C.cream }}>How will you live this out?</h3>
@@ -482,35 +519,36 @@ export default function PrayPage() {
                   Your note is kept only on this device and is not saved to the cloud.
                 </p>
               </div>
-            )}
-
-            {/* Progress dots + Next/Finish */}
-            <div className="flex-shrink-0 px-4 py-5 flex items-center justify-between gap-3 w-full">
-              <div className="flex items-center justify-center gap-1.5 flex-1" role="tablist" aria-label="Prayer steps">
-                {STEPS.map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    role="tab"
-                    aria-label={`${STEPS[i].title}${step === i ? ", current" : ""}`}
-                    aria-selected={step === i}
-                    onClick={() => setStep(i)}
-                    className={`transition-all focus:outline-none ${step === i ? "w-5 h-1.5 rounded-full" : "w-1.5 h-1.5 rounded-full"}`}
-                    style={{ background: step === i ? C.sage : C.creamFaint }}
-                  />
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={() => (isLastStep ? handleFinish() : setStep(step + 1))}
-                className="flex-shrink-0 text-sm font-medium hover:underline focus:outline-none focus:underline"
-                style={{ color: C.cream }}
-              >
-                {isLastStep ? "Finish" : "Next →"}
-              </button>
             </div>
 
+          </div>{/* end slide viewport */}
+
+          {/* Progress dots + Next/Finish — pinned below slide, always visible */}
+          <div className="flex-shrink-0 px-4 py-5 flex items-center justify-between gap-3 w-full border-t border-white/8">
+            <div className="flex items-center justify-center gap-1.5 flex-1" role="tablist" aria-label="Prayer steps">
+              {STEPS.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  role="tab"
+                  aria-label={`${STEPS[i].title}${step === i ? ", current" : ""}`}
+                  aria-selected={step === i}
+                  onClick={() => setStep(i)}
+                  className={`transition-all focus:outline-none ${step === i ? "w-5 h-1.5 rounded-full" : "w-1.5 h-1.5 rounded-full"}`}
+                  style={{ background: step === i ? C.sage : C.creamFaint }}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => (isLastStep ? handleFinish() : setStep(step + 1))}
+              className="flex-shrink-0 text-sm font-medium hover:underline focus:outline-none focus:underline"
+              style={{ color: C.cream }}
+            >
+              {isLastStep ? "Finish" : "Next →"}
+            </button>
           </div>
+
         </div>
 
         {/* Go Deeper — fixed bottom, espresso bg */}

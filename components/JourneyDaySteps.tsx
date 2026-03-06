@@ -455,21 +455,33 @@ export default function JourneyDaySteps({
 
   const isLastStep = step === totalSteps - 1;
 
+  // All steps rendered simultaneously and positioned by translateX.
+  // When step changes, CSS transition slides them all together.
+  const stepComponents = [
+    <StepOpen key="open" day={day} />,
+    <StepEncounter key="encounter" day={day} />,
+    <StepReflect key="reflect" day={day} questionIndex={questionIndex} onNextQuestion={handleNextQuestion} />,
+    <StepConnect key="connect" day={day} />,
+    <StepGoDeeper key="deeper" day={day} />,
+  ];
+
   return (
     <div className="fixed inset-0 z-[60]" style={{ height: "100dvh", backgroundColor: C.bg }}>
-      {/* Content — fills entire screen */}
-      <div className="absolute inset-0">
-        {step === 0 && <StepOpen day={day} />}
-        {step === 1 && <StepEncounter day={day} />}
-        {step === 2 && (
-          <StepReflect
-            day={day}
-            questionIndex={questionIndex}
-            onNextQuestion={handleNextQuestion}
-          />
-        )}
-        {step === 3 && <StepConnect day={day} />}
-        {step === 4 && <StepGoDeeper day={day} />}
+      {/* Slide container — clips offscreen steps */}
+      <div className="absolute inset-0 overflow-hidden">
+        {stepComponents.map((component, index) => (
+          <div
+            key={index}
+            className="absolute inset-0"
+            style={{
+              transform: `translateX(${(index - step) * 100}%)`,
+              transition: "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)",
+              willChange: "transform",
+            }}
+          >
+            {component}
+          </div>
+        ))}
       </div>
 
       {/* Overlaid header */}
