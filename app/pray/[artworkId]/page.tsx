@@ -7,8 +7,6 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { getArtworkById } from "@/lib/sanity";
 import GoDeeperSection from "@/components/GoDeeperSection";
 import PageTransition from "@/components/ui/PageTransition";
-import type { TraditionReflection } from "@/lib/types";
-
 type SanityArtwork = {
   _id: string;
   title: string;
@@ -28,7 +26,6 @@ type SanityArtwork = {
   order: number;
   traditionalPrayer?: string;
   traditionalPrayerSource?: string;
-  traditionReflections?: TraditionReflection[];
 };
 
 // FIX 1: Swap pray and contemplate order
@@ -518,7 +515,7 @@ export default function PrayPage() {
 
         {/* Go Deeper — fixed bottom, espresso bg */}
         <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-white/8 safe-area-bottom" style={{ background: "rgba(13,10,7,0.97)" }}>
-          <GoDeeperSection reflections={artwork?.traditionReflections} />
+          <GoDeeperSection />
         </div>
       </div>
     </PageTransition>
