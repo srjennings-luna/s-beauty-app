@@ -213,7 +213,7 @@ export default function PrayPage() {
   const isLastStep = step === STEPS.length - 1;
 
   return (
-    <PageTransition>
+    <PageTransition variant="slide-up">
       <div
         className="min-h-screen flex flex-col safe-area-bottom"
         style={{ background: C.bg, paddingBottom: "calc(4rem + env(safe-area-inset-bottom, 0px))" }}

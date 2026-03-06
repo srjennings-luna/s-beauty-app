@@ -87,9 +87,10 @@ h1, h2, h3, h4, h5, h6 {
   background: none;
   padding: 0;
 }
-.cta-inline:hover {
+.cta-inline:hover,
+.cta-inline:active {
   color: var(--color-near-black);
-  letter-spacing: 0.24em;
+  letter-spacing: 0.28em;
 }
 /* Immersive (dark) version */
 .cta-inline-dark {
@@ -106,9 +107,10 @@ h1, h2, h3, h4, h5, h6 {
   background: none;
   padding: 0;
 }
-.cta-inline-dark:hover {
+.cta-inline-dark:hover,
+.cta-inline-dark:active {
   color: rgba(253, 246, 232, 1);
-  letter-spacing: 0.24em;
+  letter-spacing: 0.28em;
 }
 
 /* btn-primary kept as alias for error/retry states — now uses outline style */
