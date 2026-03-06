@@ -325,25 +325,9 @@ export default function DailyPromptPage() {
           </div>
         </div>
 
-        {/* ── Prompt question — full width below hero ──────────────────────── */}
-        <div className="px-5 pt-7 pb-4">
-          <p
-            className="leading-snug"
-            style={{
-              color: C.cream,
-              fontFamily: "var(--font-cormorant)",
-              fontSize: "clamp(1.35rem, 4.5vw, 1.7rem)",
-              fontStyle: "italic",
-              lineHeight: "1.35",
-            }}
-          >
-            &ldquo;{prompt.promptQuestion}&rdquo;
-          </p>
-        </div>
-
         {/* ── Curator note — contained box ────────────────────────────────── */}
         {prompt.curatorNote && (
-          <div className="px-5 pt-2 pb-2">
+          <div className="px-5 pt-7 pb-2">
             <div
               className="px-5 py-4"
               style={{
