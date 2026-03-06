@@ -120,7 +120,8 @@ export type DailyPromptLectio = {
 export type DailyPromptAuditio = {
   title: string;
   artist?: string;
-  url?: string;
+  audioUrl?: string; // Direct MP3 — plays in-app
+  url?: string;      // External link — fallback only
 };
 
 export type DailyPrompt = {

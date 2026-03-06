@@ -385,24 +385,22 @@ export default function DailyPromptPage() {
               >
                 MUSIC <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Auditio)</span>
               </p>
-              <div className="flex items-center gap-6">
-                {/* Large circular play button */}
-                {prompt.auditio.url ? (
-                  <a
-                    href={prompt.auditio.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-shrink-0 flex items-center justify-center shadow-2xl"
-                    style={{ width: 64, height: 64, borderRadius: "50%", background: C.cream, color: C.bg }}
-                    aria-label="Open in music app"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </a>
-                ) : (
+              {prompt.auditio.audioUrl ? (
+                /* ── In-app player — direct MP3 ── */
+                <div className="flex items-center gap-6">
                   <button
-                    onClick={() => { if (musicPlaying) stopMusic(); else playChant(); }}
+                    onClick={() => {
+                      if (musicPlaying) {
+                        stopMusic();
+                      } else {
+                        if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
+                        const a = new Audio(prompt.auditio!.audioUrl);
+                        a.loop = false; a.volume = 0.85;
+                        a.play().catch(() => {});
+                        audioRef.current = a;
+                        setMusicPlaying(true);
+                      }
+                    }}
                     className="flex-shrink-0 flex items-center justify-center shadow-2xl"
                     style={{ width: 64, height: 64, borderRadius: "50%", background: C.cream, color: C.bg }}
                     aria-label={musicPlaying ? "Pause" : "Play"}
@@ -417,25 +415,46 @@ export default function DailyPromptPage() {
                       </svg>
                     )}
                   </button>
-                )}
-                {/* Track info */}
-                <div className="flex-grow min-w-0">
-                  <p
-                    className="italic truncate"
-                    style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.25rem" }}
-                  >
+                  <div className="flex-grow min-w-0">
+                    <p className="italic truncate" style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.25rem" }}>
+                      {prompt.auditio.title}
+                    </p>
+                    {prompt.auditio.artist && (
+                      <p className="text-sm mt-1 truncate" style={{ color: C.creamFaint }}>{prompt.auditio.artist}</p>
+                    )}
+                  </div>
+                </div>
+              ) : prompt.auditio.url ? (
+                /* ── External reference — no play button ── */
+                <div className="flex items-start gap-4">
+                  <div className="flex-grow min-w-0">
+                    <p className="italic" style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.25rem" }}>
+                      {prompt.auditio.title}
+                    </p>
+                    {prompt.auditio.artist && (
+                      <p className="text-sm mt-1" style={{ color: C.creamFaint }}>{prompt.auditio.artist}</p>
+                    )}
+                    <a
+                      href={prompt.auditio.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs mt-2 inline-block cta-inline-dark"
+                    >
+                      Listen externally →
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                /* ── Title only — no playback ── */
+                <div>
+                  <p className="italic" style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.25rem" }}>
                     {prompt.auditio.title}
                   </p>
                   {prompt.auditio.artist && (
-                    <p className="text-sm mt-1 truncate" style={{ color: C.creamFaint }}>
-                      {prompt.auditio.artist}
-                    </p>
-                  )}
-                  {prompt.auditio.url && (
-                    <p className="text-xs mt-1" style={{ color: C.sageMuted }}>Opens externally →</p>
+                    <p className="text-sm mt-1" style={{ color: C.creamFaint }}>{prompt.auditio.artist}</p>
                   )}
                 </div>
-              </div>
+              )}
             </section>
           )}
 

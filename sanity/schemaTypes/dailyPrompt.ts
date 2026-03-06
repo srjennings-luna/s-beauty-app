@@ -68,7 +68,7 @@ export default defineType({
           name: 'title',
           title: 'Title',
           type: 'string',
-          description: 'Name of the piece, e.g. "Ave Maria — Gregorian Chant"',
+          description: 'Name of the piece, e.g. "Kommt, ihr Töchter, helft mir klagen"',
           validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -77,10 +77,16 @@ export default defineType({
           type: 'string',
         }),
         defineField({
-          name: 'url',
-          title: 'External Link',
+          name: 'audioUrl',
+          title: 'Audio File URL (in-app playback)',
           type: 'url',
-          description: 'Optional: Spotify, YouTube, or Apple Music link. Opens externally.',
+          description: 'Direct MP3 link for in-app playback — use archive.org or another hosted source. When present, plays inside KALLOS without leaving the app.',
+        }),
+        defineField({
+          name: 'url',
+          title: 'External Link (reference only)',
+          type: 'url',
+          description: 'Optional: YouTube, Spotify, or Apple Music. Only shown if no Audio File URL is provided. Opens externally.',
         }),
       ],
     }),
