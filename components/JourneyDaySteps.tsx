@@ -109,8 +109,8 @@ function StepEncounter({ day }: { day: JourneyDay }) {
 
   return (
     <div className="h-full overflow-y-auto">
-      {/* Spacer for overlaid header */}
-      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)" }} />
+      {/* Spacer for overlaid header — nav row + progress dots row */}
+      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 96px)" }} />
 
       {/* Content image */}
       {content.imageUrl && (
@@ -333,8 +333,8 @@ function StepGoDeeper({ day }: { day: JourneyDay }) {
 
   return (
     <div className="h-full overflow-y-auto px-6 pt-4 pb-8">
-      {/* Spacer for overlaid header */}
-      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)" }} />
+      {/* Spacer for overlaid header — nav row + progress dots row */}
+      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 96px)" }} />
       <p className="text-xs tracking-widest uppercase mb-2" style={{ color: C.creamDim }}>
         Go Deeper
       </p>
