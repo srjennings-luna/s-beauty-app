@@ -48,34 +48,23 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
 // ── Step 1: Open ──────────────────────────────────────────────────────────────
 function StepOpen({ day }: { day: JourneyDay }) {
   return (
-    <div className="h-full flex flex-col" style={{ background: C.bg }}>
-      {/* Spacer for overlaid header (nav row + progress dots row) */}
-      <div style={{ flexShrink: 0, height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 80px)" }} />
+    <div className="h-full overflow-y-auto">
+      {/* Spacer for overlaid header (nav row only — progress is now in footer) */}
+      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)" }} />
 
-      {/* Hero image — fills all available vertical space */}
-      {day.openImageUrl ? (
-        <div className="flex-1 relative overflow-hidden" style={{ minHeight: 0 }}>
+      {/* Hero image — full width, reliable 4:3 aspect ratio via padding trick */}
+      {day.openImageUrl && (
+        <div className="relative w-full" style={{ paddingBottom: "75%" }}>
           <img
             src={day.openImageUrl}
             alt={day.dayTitle}
-            className="w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover"
           />
         </div>
-      ) : (
-        <div className="flex-1" style={{ background: C.darkBox }} />
       )}
 
-      {/* Label + dark box — always visible below image, no scroll needed */}
-      <div
-        className="flex-shrink-0 overflow-y-auto px-6 pt-5"
-        style={{ paddingBottom: "calc(max(env(safe-area-inset-bottom, 0px), 16px) + 60px)", maxHeight: "45vh" }}
-      >
-        <p
-          className="text-xs tracking-widest uppercase mb-4 pb-2"
-          style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
-        >
-          Sit with this image
-        </p>
+      {/* Dark box — Day number, title, openText */}
+      <div className="px-6 pt-6 pb-4">
         <div className="p-6" style={{ background: C.darkBox, border: `1px solid rgba(253,246,232,0.05)` }}>
           <p className="text-xs tracking-widest uppercase mb-3" style={{ color: C.creamFaint }}>
             Day {day.dayNumber}
@@ -103,6 +92,9 @@ function StepOpen({ day }: { day: JourneyDay }) {
           )}
         </div>
       </div>
+
+      {/* Footer spacer */}
+      <div className="h-28" />
     </div>
   );
 }
@@ -134,7 +126,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
   return (
     <div className="h-full overflow-y-auto">
       {/* Spacer for overlaid header */}
-      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 80px)" }} />
+      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)" }} />
 
       {/* Content image — pinch to zoom (8x) */}
       {content.imageUrl && (
@@ -302,17 +294,15 @@ function StepReflect({
 
   return (
     <div className="relative h-full w-full overflow-hidden flex flex-col items-center justify-center px-8">
-      {/* Blurred background image with Ken Burns zoom */}
-      {day.openImageUrl && (
+      {/* Blurred background = encounter image (the painting just seen in Step 2) */}
+      {(day.encounterContent?.imageUrl ?? day.openImageUrl) && (
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 animate-ken-burns"
           style={{
-            backgroundImage: `url(${day.openImageUrl})`,
+            backgroundImage: `url(${day.encounterContent?.imageUrl ?? day.openImageUrl})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            filter: "blur(16px) brightness(0.25)",
-            transform: "scale(1.15)",
-            animation: "kenBurns 12s ease-in-out infinite alternate",
+            filter: "blur(10px) brightness(0.5)",
           }}
         />
       )}
@@ -354,8 +344,9 @@ function StepConnect({ day, nextDayImageUrl }: { day: JourneyDay; nextDayImageUr
       {/* Next day sneak peek — fills background, partially revealed */}
       {nextDayImageUrl && (
         <div className="absolute inset-0">
-          {/* The image — slow drift animation */}
+          {/* The image — slow drift animation — class defined in globals.css */}
           <div
+            className="animate-gentle-drift"
             style={{
               position: "absolute",
               inset: 0,
@@ -363,7 +354,6 @@ function StepConnect({ day, nextDayImageUrl }: { day: JourneyDay; nextDayImageUr
               backgroundSize: "cover",
               backgroundPosition: "center",
               filter: "brightness(0.35)",
-              animation: "gentleDrift 14s ease-in-out infinite alternate",
             }}
           />
           {/* Strong gradient top — keeps upper portion very dark */}
@@ -398,7 +388,7 @@ function StepConnect({ day, nextDayImageUrl }: { day: JourneyDay; nextDayImageUr
         )}
         {nextDayImageUrl && (
           <p className="text-xs mt-8 tracking-widest uppercase" style={{ color: C.creamFaint }}>
-            Something awaits ↓
+            A glimpse of what&apos;s next
           </p>
         )}
       </div>
@@ -415,7 +405,7 @@ function StepGoDeeper({ day }: { day: JourneyDay }) {
   return (
     <div className="h-full overflow-y-auto">
       {/* Spacer for overlaid header */}
-      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 80px)" }} />
+      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)" }} />
 
       <div className="px-6 pt-4 pb-8">
         <p className="text-xs tracking-widest uppercase mb-2" style={{ color: C.sageMuted }}>Go Deeper</p>
@@ -528,18 +518,6 @@ export default function JourneyDaySteps({
 
   return (
     <>
-      {/* Ken Burns + drift keyframes */}
-      <style>{`
-        @keyframes kenBurns {
-          0%   { transform: scale(1.15); }
-          100% { transform: scale(1.28); }
-        }
-        @keyframes gentleDrift {
-          0%   { transform: scale(1.05) translateX(0px); }
-          100% { transform: scale(1.12) translateX(-20px); }
-        }
-      `}</style>
-
       <div className="fixed inset-0 z-[60]" style={{ height: "100dvh", backgroundColor: C.bg }}>
         {/* Slide container */}
         <div className="absolute inset-0 overflow-hidden">
@@ -597,18 +575,19 @@ export default function JourneyDaySteps({
             )}
           </div>
 
-          {/* Progress dots — below nav */}
-          <div className="pointer-events-auto flex justify-center px-5 pt-2 pb-3">
-            <StepIndicator current={step} total={totalSteps} />
-          </div>
         </div>
 
-        {/* Overlaid footer */}
+        {/* Overlaid footer — progress squares + action button */}
         <div className="absolute inset-x-0 bottom-0 z-10 pointer-events-none">
           <div
-            className="pointer-events-auto px-5 pt-4"
+            className="pointer-events-auto px-5 pt-3"
             style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 24px)" }}
           >
+            {/* Progress squares — bottom, above button */}
+            <div className="flex justify-center mb-4">
+              <StepIndicator current={step} total={totalSteps} />
+            </div>
+
             {isLastStep ? (
               <button
                 onClick={() => { if (!isComplete) onMarkComplete(); onClose(); }}
