@@ -210,10 +210,28 @@ export default function DailyPromptPage() {
     <PageTransition variant="slide-up">
       <div className="min-h-screen pb-28" style={{ background: C.bgGradient }}>
 
-        {/* ── Sticky header ───────────────────────────────────────────────── */}
+        {/* Film grain — adds tactile depth, prevents flat digital feel */}
+        <div
+          aria-hidden
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 50,
+            pointerEvents: "none",
+            mixBlendMode: "overlay",
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
+          }}
+        />
+
+        {/* ── Sticky header — glass panel ─────────────────────────────────── */}
         <div
           className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-4 py-3 safe-area-top"
-          style={{ background: C.header, borderBottom: `1px solid ${C.divider}` }}
+          style={{
+            background: "rgba(22,17,13,0.82)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            borderBottom: `1px solid ${C.divider}`,
+          }}
         >
           <button
             onClick={() => router.back()}
@@ -279,22 +297,31 @@ export default function DailyPromptPage() {
         )}
 
         {/* ── Hero image with parallax ─────────────────────────────────────── */}
-        <div ref={heroRef} className="relative w-full overflow-hidden" style={{ height: "55vh", marginTop: "48px" }}>
+        {/* Black bg behind image so luminosity blend mode desaturates correctly */}
+        <div ref={heroRef} className="relative w-full overflow-hidden" style={{ height: "55vh", marginTop: "48px", backgroundColor: "#000" }}>
           <img
             src={prompt.content.imageUrl}
             alt={prompt.content.title}
             className="w-full h-full object-cover"
-            style={{ filter: "contrast(1.1) brightness(0.75) sepia(0.08)", willChange: "transform" }}
+            style={{
+              filter: "contrast(1.25) brightness(0.75)",
+              mixBlendMode: "luminosity",
+              opacity: 0.75,
+              willChange: "transform",
+            }}
           />
           {/* Gradient — lower third */}
           <div className="absolute inset-0" style={{ background: `linear-gradient(to top, ${C.bg} 0%, transparent 55%)` }} />
 
-          {/* Title in lower third */}
+          {/* Title in lower third — editorial scale */}
           <div className="absolute bottom-0 left-0 right-0 px-5 pb-6">
-            <p className="text-xs tracking-widest uppercase mb-2" style={{ color: C.sage }}>
+            <p className="text-xs tracking-widest uppercase mb-3" style={{ color: C.sage }}>
               {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
             </p>
-            <h1 className="font-serif-elegant text-3xl leading-tight mb-3" style={{ color: C.cream }}>
+            <h1
+              className="font-serif-elegant leading-[0.9] mb-4"
+              style={{ color: C.cream, fontSize: "clamp(2.4rem, 8vw, 3.8rem)", fontStyle: "italic" }}
+            >
               {prompt.content.title}
             </h1>
             <p className="text-base italic leading-relaxed" style={{ color: C.creamDim, fontFamily: "var(--font-cormorant)" }}>
