@@ -104,6 +104,13 @@ export default function TodayPage() {
             <FadeUp delay={60}>
               {dailyPrompt ? (
                 <section className="mb-8">
+                  {/* Section header — above the image */}
+                  <div className="px-5 mb-3 flex items-baseline justify-between">
+                    <p className="text-xs tracking-widest uppercase font-medium" style={{ color: "#4a7a62" }}>
+                      Pause &amp; Ponder
+                    </p>
+                    <p className="text-xs" style={{ color: "#7a9a8a" }}>A minute reflection</p>
+                  </div>
                   {/* Entire card is tappable */}
                   <Link href="/prompt" className="block relative aspect-[4/3] overflow-hidden">
                     <img
@@ -112,21 +119,12 @@ export default function TodayPage() {
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/20 to-transparent" />
-                    {/* Text in lower third */}
+                    {/* Title + CTA in lower third */}
                     <div className="absolute bottom-0 left-0 right-0 px-5 pb-5">
-                      <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-2">
-                        Today&apos;s Prompt
-                      </p>
-                      <h2 className="font-serif-elegant text-2xl text-white leading-snug mb-2">
+                      <h2 className="font-serif-elegant text-2xl text-white leading-snug mb-3">
                         {dailyPrompt.content.title}
                       </h2>
-                      {dailyPrompt.promptQuestion && (
-                        <p className="text-white/75 text-sm italic leading-relaxed line-clamp-2">
-                          &ldquo;{dailyPrompt.promptQuestion}&rdquo;
-                        </p>
-                      )}
-                      {/* Quiet CTA inside the card */}
-                      <p className="cta-inline-dark mt-3 inline-block">Begin →</p>
+                      <p className="cta-inline-dark inline-block">Begin →</p>
                     </div>
                   </Link>
                 </section>
