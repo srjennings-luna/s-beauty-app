@@ -73,10 +73,10 @@ export default function LibraryPage() {
 
   if (!isLoaded || loading) {
     return (
-      <div className="min-h-screen bg-[#203545] flex items-center justify-center">
+      <div className="min-h-screen bg-[#fdf6e8] flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin mb-2" />
-          <p className="text-white/50">Loading…</p>
+          <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-[#4a7a62] rounded-full animate-spin mb-2" />
+          <p className="text-[#7a9a8a]">Loading…</p>
         </div>
       </div>
     );
@@ -84,12 +84,12 @@ export default function LibraryPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#203545] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#fdf6e8] flex items-center justify-center p-6">
         <div className="text-center">
-          <p className="text-white/50 mb-4">Couldn't load your library.</p>
+          <p className="text-[#7a9a8a] mb-4">Couldn&apos;t load your library.</p>
           <button
             onClick={() => { setError(false); setLoading(true); }}
-            className="px-6 py-3 bg-[#C19B5F] text-[#203545] font-semibold text-sm"
+            className="btn-primary"
           >
             Try Again
           </button>
@@ -100,11 +100,11 @@ export default function LibraryPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#203545]">
+      <div className="min-h-screen bg-[#fdf6e8]">
         {/* Header */}
         <div className="px-5 pt-12 pb-6">
-          <h1 className="text-3xl font-bold text-white mb-1">Library</h1>
-          <p className="text-white/40 text-sm">
+          <h1 className="text-3xl font-bold text-[#1a1a1a] mb-1">Library</h1>
+          <p className="text-[#7a9a8a] text-sm">
             {items.length} saved item{items.length !== 1 ? "s" : ""}
           </p>
         </div>
@@ -112,14 +112,14 @@ export default function LibraryPage() {
         <div className="px-5 pb-28">
           {items.length === 0 ? (
             <div className="text-center py-16">
-              <div className="w-16 h-16 mx-auto mb-4 bg-white/10 flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto mb-4 bg-black/5 flex items-center justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-8 h-8 text-white/40"
+                  className="w-8 h-8 text-[#7a9a8a]"
                 >
                   <path
                     strokeLinecap="round"
@@ -128,17 +128,17 @@ export default function LibraryPage() {
                   />
                 </svg>
               </div>
-              <h2 className="text-lg font-semibold text-white mb-2">
+              <h2 className="text-lg font-semibold text-[#1a1a1a] mb-2">
                 Your library is empty
               </h2>
-              <p className="text-white/50 mb-6 text-sm">
+              <p className="text-[#7a9a8a] mb-6 text-sm">
                 Tap the heart icon on any content to save it here.
               </p>
               <Link
                 href="/explore"
-                className="inline-block px-6 py-3 bg-[#C19B5F] text-[#203545] font-semibold text-sm"
+                className="inline-block cta-inline"
               >
-                Explore Content
+                Explore Content →
               </Link>
             </div>
           ) : (
@@ -161,7 +161,7 @@ export default function LibraryPage() {
                       <h3 className="text-white text-xs font-medium line-clamp-1">
                         {item.title}
                       </h3>
-                      <p className="text-white/50 text-[10px] mt-0.5 line-clamp-1">
+                      <p className="text-white/60 text-[10px] mt-0.5 line-clamp-1">
                         {item.artist ?? item.author ?? item.composer ?? item.thinkerName ?? item.locationName ?? ""}
                       </p>
                     </div>

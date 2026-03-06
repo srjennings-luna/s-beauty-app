@@ -54,17 +54,17 @@ export default function TodayPage() {
   }, [retryCount]);
 
   if (hasOnboarded === null) {
-    return <div className="min-h-screen bg-[#203545]" />;
+    return <div className="min-h-screen bg-[#fdf6e8]" />;
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#203545] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#fdf6e8] flex items-center justify-center p-6">
         <div className="text-center">
-          <p className="text-white/50 mb-4">Couldn't load today's content.</p>
+          <p className="text-[#7a9a8a] mb-4">Couldn&apos;t load today&apos;s content.</p>
           <button
             onClick={() => { setError(false); setLoading(true); setRetryCount((c) => c + 1); }}
-            className="px-6 py-3 bg-[#C19B5F] text-[#203545] font-semibold text-sm"
+            className="btn-primary"
           >
             Try Again
           </button>
@@ -81,12 +81,12 @@ export default function TodayPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#203545] pb-28">
+      <div className="min-h-screen bg-[#fdf6e8] pb-28">
 
         {/* Header */}
         <div className="px-5 pt-12 pb-4">
-          <p className="text-white/40 text-xs tracking-widest uppercase mb-1">{today}</p>
-          <h1 className="font-serif-elegant text-3xl text-[#C19B5F] tracking-widest uppercase">
+          <p className="text-[#8aacb8] text-xs tracking-widest uppercase mb-1">{today}</p>
+          <h1 className="font-serif-elegant text-3xl text-[#1a1a1a] tracking-widest uppercase">
             KALLOS
           </h1>
         </div>
@@ -109,11 +109,12 @@ export default function TodayPage() {
                       alt={dailyPrompt.content.title}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#111820] via-[#111820]/20 to-transparent" />
+                    {/* Dark gradient overlay — image text always readable */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/20 to-transparent" />
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 px-5 pb-6">
-                    <p className="text-[#C19B5F] text-xs tracking-widest uppercase mb-2">
-                      Today's Prompt
+                    <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-2">
+                      Today&apos;s Prompt
                     </p>
                     <h2 className="font-serif-elegant text-2xl text-white mb-3 leading-snug">
                       {dailyPrompt.content.title}
@@ -124,19 +125,19 @@ export default function TodayPage() {
                   </div>
                 </div>
                 {dailyPrompt.curatorNote && (
-                  <div className="mx-5 mt-3 px-4 py-3 border-l-2 border-[#C19B5F]/40">
-                    <p className="text-white/50 text-sm italic">{dailyPrompt.curatorNote}</p>
+                  <div className="mx-5 mt-3 px-4 py-3 border-l-2 border-[#4a7a62]/30">
+                    <p className="text-[#7a9a8a] text-sm italic">{dailyPrompt.curatorNote}</p>
                   </div>
                 )}
               </section>
             ) : (
-              <section className="mx-5 mb-8 py-12 text-center border border-white/10">
-                <p className="text-[#C19B5F] text-xs tracking-widest uppercase mb-4">Today</p>
-                <p className="font-serif-elegant text-xl text-white/70 italic leading-relaxed">
+              <section className="mx-5 mb-8 py-12 text-center border border-black/8">
+                <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-4">Today</p>
+                <p className="font-serif-elegant text-xl text-[#1a1a1a]/70 italic leading-relaxed">
                   &ldquo;Beauty will save the world.&rdquo;
                 </p>
-                <p className="text-white/30 text-sm mt-3">— Dostoevsky</p>
-                <p className="text-white/30 text-xs mt-6">
+                <p className="text-[#7a9a8a] text-sm mt-3">— Dostoevsky</p>
+                <p className="text-[#7a9a8a] text-xs mt-6">
                   Add a Daily Prompt in Sanity Studio to appear here.
                 </p>
               </section>
@@ -146,11 +147,11 @@ export default function TodayPage() {
             {journeys.length > 0 && (
               <section className="px-5 mb-8">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-white font-semibold tracking-wide uppercase text-xs">
+                  <h2 className="text-[#4a7a62] font-medium tracking-widest uppercase text-xs">
                     Journeys
                   </h2>
-                  <Link href="/journeys" className="text-[#C19B5F] text-xs tracking-wide">
-                    See all
+                  <Link href="/journeys" className="text-[#7a9a8a] text-xs tracking-wide hover:text-[#1a1a1a] transition-colors">
+                    See all →
                   </Link>
                 </div>
                 <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-5 px-5 pb-2">
@@ -194,11 +195,11 @@ export default function TodayPage() {
             {recentContent.length > 0 && (
               <section className="px-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-white font-semibold tracking-wide uppercase text-xs">
+                  <h2 className="text-[#4a7a62] font-medium tracking-widest uppercase text-xs">
                     Explore
                   </h2>
-                  <Link href="/explore" className="text-[#C19B5F] text-xs tracking-wide">
-                    See all
+                  <Link href="/explore" className="text-[#7a9a8a] text-xs tracking-wide hover:text-[#1a1a1a] transition-colors">
+                    See all →
                   </Link>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -226,18 +227,18 @@ export default function TodayPage() {
             {/* ── Empty state ── */}
             {!dailyPrompt && journeys.length === 0 && recentContent.length === 0 && (
               <div className="px-5 py-16 text-center">
-                <p className="text-[#C19B5F] text-xs tracking-widest uppercase mb-4">Coming soon</p>
-                <h2 className="font-serif-elegant text-2xl text-white mb-3">
+                <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-4">Coming soon</p>
+                <h2 className="font-serif-elegant text-2xl text-[#1a1a1a] mb-3">
                   Content is being curated
                 </h2>
-                <p className="text-white/40 text-sm leading-relaxed max-w-xs mx-auto">
+                <p className="text-[#7a9a8a] text-sm leading-relaxed max-w-xs mx-auto">
                   Add Daily Prompts, Journeys, and Content Items in Sanity Studio to begin.
                 </p>
                 <Link
                   href="/explore"
-                  className="inline-block mt-8 px-6 py-3 bg-[#C19B5F] text-[#111820] text-sm font-semibold tracking-wide"
+                  className="inline-block mt-8 cta-inline"
                 >
-                  Explore Content
+                  Explore Content →
                 </Link>
               </div>
             )}

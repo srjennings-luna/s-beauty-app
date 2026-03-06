@@ -11,10 +11,10 @@ import ArtworkViewer from "@/components/ArtworkViewer";
 const GlobalMap = dynamic(() => import("@/components/GlobalMap"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-[#203545]">
+    <div className="w-full h-full flex items-center justify-center bg-[#fdf6e8]">
       <div className="text-center">
-        <div className="inline-block w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin mb-2" />
-        <p className="text-white/50 text-sm">Loading map…</p>
+        <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-[#4a7a62] rounded-full animate-spin mb-2" />
+        <p className="text-[#7a9a8a] text-sm">Loading map…</p>
       </div>
     </div>
   ),
@@ -119,16 +119,16 @@ export default function ExplorePage() {
   const mappableArtworks = useMemo(() => mappable.map(toArtwork), [mappable]);
 
   return (
-    <div className="h-screen bg-[#203545] flex flex-col overflow-hidden">
+    <div className="h-screen bg-[#fdf6e8] flex flex-col overflow-hidden">
 
       {/* ── Header ── */}
-      <div className="bg-[#1a2a36] border-b border-white/10 px-4 pt-12 pb-3 flex-shrink-0">
+      <div className="bg-[#fdf6e8] border-b border-black/8 px-4 pt-12 pb-3 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-white">
+            <h1 className="text-xl font-bold text-[#1a1a1a]">
               {showMap ? "Map" : "Explore"}
             </h1>
-            <p className="text-sm text-white/40 mt-0.5">
+            <p className="text-sm text-[#7a9a8a] mt-0.5">
               {loading ? "Loading…" : `${filtered.length} item${filtered.length !== 1 ? "s" : ""}`}
             </p>
           </div>
@@ -136,7 +136,7 @@ export default function ExplorePage() {
           <button
             onClick={() => setShowMap((v) => !v)}
             aria-label={showMap ? "Show list view" : "Show map view"}
-            className="w-10 h-10 flex items-center justify-center bg-white/10 text-white hover:bg-white/20 transition-colors"
+            className="w-10 h-10 flex items-center justify-center bg-black/5 text-[#1a1a1a]/60 hover:bg-black/10 transition-colors"
           >
             {showMap ? (
               // List icon
@@ -154,14 +154,14 @@ export default function ExplorePage() {
       </div>
 
       {/* ── Content Type Filter ── */}
-      <div className="bg-[#1a2a36] border-b border-white/10 px-4 py-2 flex-shrink-0">
+      <div className="bg-[#fdf6e8] border-b border-black/8 px-4 py-2 flex-shrink-0">
         <div className="flex gap-2 overflow-x-auto hide-scrollbar">
           <button
             onClick={() => setTypeFilter(null)}
-            className={`flex-shrink-0 px-3 py-1.5 text-xs font-medium tracking-wide transition-all ${
+            className={`flex-shrink-0 px-3 py-1.5 text-xs font-medium tracking-wide border transition-all ${
               typeFilter === null
-                ? "bg-[#C19B5F] text-[#111820]"
-                : "bg-white/10 text-white/60 hover:bg-white/20"
+                ? "border-[#4a7a62] text-[#4a7a62]"
+                : "border-black/10 text-[#7a9a8a] hover:border-[#4a7a62]/40 hover:text-[#4a7a62]"
             }`}
           >
             All
@@ -170,10 +170,10 @@ export default function ExplorePage() {
             <button
               key={type}
               onClick={() => setTypeFilter(typeFilter === type ? null : type)}
-              className={`flex-shrink-0 px-3 py-1.5 text-xs font-medium tracking-wide transition-all ${
+              className={`flex-shrink-0 px-3 py-1.5 text-xs font-medium tracking-wide border transition-all ${
                 typeFilter === type
-                  ? "bg-[#C19B5F] text-[#111820]"
-                  : "bg-white/10 text-white/60 hover:bg-white/20"
+                  ? "border-[#4a7a62] text-[#4a7a62]"
+                  : "border-black/10 text-[#7a9a8a] hover:border-[#4a7a62]/40 hover:text-[#4a7a62]"
               }`}
             >
               {label}
@@ -184,7 +184,7 @@ export default function ExplorePage() {
 
       {/* ── Theme Filter ── */}
       {themes.length > 0 && (
-        <div className="bg-[#111820]/60 border-b border-white/5 px-4 py-2 flex-shrink-0">
+        <div className="bg-[#fdf6e8] border-b border-black/5 px-4 py-2 flex-shrink-0">
           <div className="flex gap-2 overflow-x-auto hide-scrollbar">
             {themes.map((theme) => (
               <button
@@ -192,8 +192,8 @@ export default function ExplorePage() {
                 onClick={() => setThemeFilter(themeFilter === theme._id ? null : theme._id)}
                 className={`flex-shrink-0 px-3 py-1 text-xs font-medium transition-all border ${
                   themeFilter === theme._id
-                    ? "border-[#C19B5F] text-[#C19B5F]"
-                    : "border-white/10 text-white/40 hover:border-white/30 hover:text-white/60"
+                    ? "border-[#4a7a62] text-[#4a7a62]"
+                    : "border-black/10 text-[#7a9a8a] hover:border-[#4a7a62]/30 hover:text-[#4a7a62]"
                 }`}
                 style={themeFilter === theme._id && theme.color ? { borderColor: theme.color, color: theme.color } : {}}
               >
@@ -209,10 +209,10 @@ export default function ExplorePage() {
         {error ? (
           <div className="h-full flex items-center justify-center px-8">
             <div className="text-center">
-              <p className="text-white/50 mb-4">Couldn't load content.</p>
+              <p className="text-[#7a9a8a] mb-4">Couldn&apos;t load content.</p>
               <button
                 onClick={() => { setError(false); setLoading(true); setRetryCount((c) => c + 1); }}
-                className="px-6 py-3 bg-[#C19B5F] text-[#203545] font-semibold text-sm"
+                className="btn-primary"
               >
                 Try Again
               </button>
@@ -221,8 +221,8 @@ export default function ExplorePage() {
         ) : loading ? (
           <div className="h-full flex items-center justify-center">
             <div className="text-center">
-              <div className="inline-block w-8 h-8 border-4 border-white/30 border-t-[#C19B5F] rounded-full animate-spin mb-2" />
-              <p className="text-white/50 text-sm">Loading…</p>
+              <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-[#4a7a62] rounded-full animate-spin mb-2" />
+              <p className="text-[#7a9a8a] text-sm">Loading…</p>
             </div>
           </div>
         ) : showMap ? (
@@ -234,17 +234,17 @@ export default function ExplorePage() {
         ) : filtered.length === 0 ? (
           <div className="h-full flex items-center justify-center px-8">
             <div className="text-center">
-              <p className="text-[#C19B5F] text-xs tracking-widest uppercase mb-3">Nothing here yet</p>
-              <h2 className="font-serif-elegant text-xl text-white mb-2">
+              <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-3">Nothing here yet</p>
+              <h2 className="font-serif-elegant text-xl text-[#1a1a1a] mb-2">
                 {typeFilter ? CONTENT_TYPE_LABELS[typeFilter] : "Content"} is being curated
               </h2>
-              <p className="text-white/40 text-sm leading-relaxed">
+              <p className="text-[#7a9a8a] text-sm leading-relaxed">
                 Add Content Items in Sanity Studio to see them here.
               </p>
               {(typeFilter || themeFilter) && (
                 <button
                   onClick={() => { setTypeFilter(null); setThemeFilter(null); }}
-                  className="mt-6 px-5 py-2 border border-white/20 text-white/60 text-sm hover:border-white/40 transition-colors"
+                  className="mt-6 px-5 py-2 border border-black/15 text-[#7a9a8a] text-sm hover:border-[#4a7a62]/40 hover:text-[#4a7a62] transition-colors"
                 >
                   Clear filters
                 </button>
@@ -289,10 +289,10 @@ export default function ExplorePage() {
                     )}
                   </div>
                   <div className="mt-2 px-0.5">
-                    <h3 className="text-white font-medium text-sm line-clamp-1">
+                    <h3 className="text-[#1a1a1a] font-medium text-sm line-clamp-1">
                       {item.title}
                     </h3>
-                    <p className="text-white/40 text-xs mt-0.5 line-clamp-1">
+                    <p className="text-[#7a9a8a] text-xs mt-0.5 line-clamp-1">
                       {item.artist ?? item.composer ?? item.author ?? item.thinkerName ?? item.locationName ?? ""}
                     </p>
                   </div>

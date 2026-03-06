@@ -25,13 +25,25 @@ type SanityArtwork = {
   country: string;
   coordinates?: { lat: number; lng: number };
   order: number;
+  traditionalPrayer?: string;
+  traditionalPrayerSource?: string;
+  traditionReflections?: Array<{
+    _id: string;
+    title: string;
+    summary: string;
+    shortQuote?: string;
+    source: string;
+    authorType: 'church-father' | 'saint' | 'pope';
+    order: number;
+  }>;
 };
 
+// FIX 1: Swap pray and contemplate order
 const STEPS = [
   { key: "gaze", title: "Gaze", label: "Visio" },
   { key: "meditate", title: "Meditate", label: "Meditatio" },
-  { key: "pray", title: "Pray", label: "Oratio" },
   { key: "contemplate", title: "Contemplate", label: "Contemplatio" },
+  { key: "pray", title: "Pray", label: "Oratio" },
   { key: "action", title: "Action", label: "Operatio" },
 ];
 
@@ -39,6 +51,25 @@ const MUSIC_AMBIENT = "/music/natureseye-piano-dreamcloud-meditation-179215.mp3"
 const MUSIC_CHANT = "/music/nickpanek-ave-maria-latin-catholic-gregorian-chant-218251.mp3";
 
 type MusicMode = "off" | "chant" | "ambient";
+
+const FALLBACK_PRAYER = `Lord, as I look upon this image, I am reminded of your glory made visible.
+Open the eyes of my heart. Let what I see lead me beyond what I see.
+
+Glory be to the Father, and to the Son, and to the Holy Spirit.
+As it was in the beginning, is now, and ever shall be,
+world without end. Amen.`;
+
+// Espresso color palette — immersive mode
+const C = {
+  bg: "linear-gradient(180deg, #1e1410 0%, #16110d 30%, #16110d 70%, #0d0a07 100%)",
+  header: "rgba(22,17,13,0.97)",
+  cream: "rgba(253,246,232,0.88)",
+  creamDim: "rgba(253,246,232,0.5)",
+  creamFaint: "rgba(253,246,232,0.3)",
+  sage: "#4a7a62",
+  sageMuted: "#7a9a8a",
+  gold: "#C19B5F",           // ONE moment: sacred quote border only
+};
 
 export default function PrayPage() {
   const params = useParams();
@@ -52,6 +83,7 @@ export default function PrayPage() {
   const [musicMenuOpen, setMusicMenuOpen] = useState(false);
   const [musicLoadError, setMusicLoadError] = useState(false);
   const [reflectionExpanded, setReflectionExpanded] = useState(false);
+  const [prayerDrawerOpen, setPrayerDrawerOpen] = useState(false);
   const chantAudioRef = useRef<HTMLAudioElement | null>(null);
   const ambientAudioRef = useRef<HTMLAudioElement | null>(null);
   const touchStartX = useRef(0);
@@ -97,7 +129,6 @@ export default function PrayPage() {
       setMusicMode("off");
       return;
     }
-    // Show selection immediately so floating icon appears on iOS even if play() fails
     if (mode === "chant" && chant) {
       setMusicPaused(false);
       setMusicMode("chant");
@@ -155,12 +186,19 @@ export default function PrayPage() {
     } else if (dx > 0 && s > 0) setStep(s - 1);
   };
 
+  const handleFinish = () => {
+    if (actionNote.trim()) {
+      localStorage.setItem(`kallos-visio-note-${artwork?._id}`, actionNote);
+    }
+    router.back();
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#203545] flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: C.bg }}>
         <div className="text-center">
-          <div className="inline-block w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin mb-2" />
-          <p className="text-white/50">Loading…</p>
+          <div className="inline-block w-8 h-8 border-4 border-white/15 border-t-white/60 rounded-full animate-spin mb-2" />
+          <p style={{ color: C.creamDim }}>Loading…</p>
         </div>
       </div>
     );
@@ -168,10 +206,10 @@ export default function PrayPage() {
 
   if (!artwork) {
     return (
-      <div className="min-h-screen bg-[#203545] flex items-center justify-center p-6">
+      <div className="min-h-screen flex items-center justify-center p-6" style={{ background: C.bg }}>
         <div className="text-center">
-          <h1 className="text-xl font-semibold text-white mb-2">Artwork not found</h1>
-          <Link href="/" className="text-[#C19B5F]">Back to home</Link>
+          <h1 className="text-xl font-semibold mb-2" style={{ color: C.cream }}>Artwork not found</h1>
+          <Link href="/" style={{ color: C.creamDim }}>Back to home</Link>
         </div>
       </div>
     );
@@ -186,9 +224,15 @@ export default function PrayPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen flex flex-col safe-area-bottom" style={{ background: "linear-gradient(180deg, #2a4050 0%, #203545 30%, #203545 70%, #1a2a36 100%)", paddingBottom: "calc(4rem + env(safe-area-inset-bottom, 0px))" }}>
-        {/* Header – slightly lighter teal */}
-        <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-white/10 safe-area-top bg-[#2a4050]">
+      <div
+        className="min-h-screen flex flex-col safe-area-bottom"
+        style={{ background: C.bg, paddingBottom: "calc(4rem + env(safe-area-inset-bottom, 0px))" }}
+      >
+        {/* Header — espresso dark, sticky */}
+        <div
+          className="flex-shrink-0 sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-white/8 safe-area-top"
+          style={{ background: C.header }}
+        >
           <Link
             href="#"
             onClick={(e) => {
@@ -196,64 +240,60 @@ export default function PrayPage() {
               if (step > 0) setStep(step - 1);
               else router.back();
             }}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white"
+            className="w-10 h-10 flex items-center justify-center bg-white/8 transition-colors hover:bg-white/12"
+            style={{ color: C.creamDim }}
             aria-label={step > 0 ? "Previous step" : "Back"}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="w-5 h-5"
-            >
-              <path
-                fillRule="evenodd"
-                d="M7.72 12.53a.75.75 0 010-1.06l7.5-7.5a.75.75 0 111.06 1.06L9.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5z"
-                clipRule="evenodd"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+              <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 010-1.06l7.5-7.5a.75.75 0 111.06 1.06L9.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5z" clipRule="evenodd" />
             </svg>
           </Link>
-          <span className="text-white/60 text-sm">
+
+          <span className="text-sm" style={{ color: C.creamDim }}>
             {step + 1} of {STEPS.length} · {STEPS[step].title}
           </span>
-          {musicMode === "off" ? (
-            <button type="button" onClick={() => { setMusicLoadError(false); setMusicMenuOpen(true); }} className="text-white/40 text-xs font-medium">
-              Music
-            </button>
-          ) : (
-            <div className="w-10" />
-          )}
+
+          <button
+            type="button"
+            onClick={() => { setMusicLoadError(false); setMusicMenuOpen(true); }}
+            className="text-xs font-medium"
+            style={{ color: C.creamFaint }}
+          >
+            {musicMode === "off" ? "Music" : musicMode === "chant" ? "Chant ♪" : "Ambient ♪"}
+          </button>
         </div>
+
         <audio ref={chantAudioRef} src={MUSIC_CHANT} loop playsInline preload="auto" muted={false} />
         <audio ref={ambientAudioRef} src={MUSIC_AMBIENT} loop playsInline preload="auto" muted={false} />
 
-        {/* Music menu – opens near Music text (below header, right-aligned) */}
+        {/* Music menu */}
         {musicMenuOpen && (
           <>
             <div className="fixed inset-0 z-40" aria-hidden onClick={() => setMusicMenuOpen(false)} />
-            <div className="fixed top-14 right-4 z-50 w-40 bg-[#1a2a36] border border-white/10 py-1 shadow-lg">
+            <div className="fixed top-14 right-4 z-50 w-40 bg-[#1e1410] border border-white/10 py-1 shadow-lg">
               {isPlaying ? (
-                <button type="button" onClick={pauseMusic} className="w-full px-4 py-2 text-left text-sm text-white/80">Pause</button>
+                <button type="button" onClick={pauseMusic} className="w-full px-4 py-2 text-left text-sm" style={{ color: C.cream }}>Pause</button>
               ) : (musicMode === "chant" || musicMode === "ambient") ? (
-                <button type="button" onClick={resumeMusic} className="w-full px-4 py-2 text-left text-sm text-[#C19B5F]">Resume</button>
+                <button type="button" onClick={resumeMusic} className="w-full px-4 py-2 text-left text-sm" style={{ color: C.sage }}>Resume</button>
               ) : null}
-              <button type="button" onClick={() => setMusic("off")} className={`w-full px-4 py-2 text-left text-sm ${musicMode === "off" ? "text-[#C19B5F]" : "text-white/80"}`}>Off</button>
-              <button type="button" onClick={() => setMusic("chant")} className={`w-full px-4 py-2 text-left text-sm ${musicMode === "chant" ? "text-[#C19B5F]" : "text-white/80"}`}>Chant</button>
-              <button type="button" onClick={() => setMusic("ambient")} className={`w-full px-4 py-2 text-left text-sm ${musicMode === "ambient" ? "text-[#C19B5F]" : "text-white/80"}`}>Ambient</button>
+              <button type="button" onClick={() => setMusic("off")} className="w-full px-4 py-2 text-left text-sm" style={{ color: musicMode === "off" ? C.sage : C.creamDim }}>Off</button>
+              <button type="button" onClick={() => setMusic("chant")} className="w-full px-4 py-2 text-left text-sm" style={{ color: musicMode === "chant" ? C.sage : C.creamDim }}>Chant</button>
+              <button type="button" onClick={() => setMusic("ambient")} className="w-full px-4 py-2 text-left text-sm" style={{ color: musicMode === "ambient" ? C.sage : C.creamDim }}>Ambient</button>
               {musicLoadError && (
-                <p className="px-4 py-2 text-xs text-white/50 border-t border-white/10">Couldn’t load music. Try again or check the file.</p>
+                <p className="px-4 py-2 text-xs border-t border-white/10" style={{ color: C.creamFaint }}>Couldn&apos;t load music. Try again or check the file.</p>
               )}
-              <p className="px-4 py-2 text-xs text-white/40 border-t border-white/10">No sound? Check device volume and, on iPhone, the side mute switch.</p>
+              <p className="px-4 py-2 text-xs border-t border-white/10" style={{ color: C.creamFaint }}>No sound? Check device volume and, on iPhone, the side mute switch.</p>
             </div>
           </>
         )}
 
-        {/* Floating music button – only when chant or ambient is selected (playing or paused) */}
+        {/* Floating music button */}
         {(musicMode === "chant" || musicMode === "ambient") && (
           <button
             type="button"
             onClick={() => setMusicMenuOpen(!musicMenuOpen)}
-            className="fixed bottom-24 right-4 z-30 w-12 h-12 flex items-center justify-center rounded-full bg-[#1a2a36] border border-white/20 text-[#C19B5F] shadow-lg safe-area-bottom"
-            style={{ marginBottom: "env(safe-area-inset-bottom, 0)" }}
+            className="fixed bottom-24 right-4 z-30 w-12 h-12 flex items-center justify-center bg-[#1e1410] border border-white/15 shadow-lg safe-area-bottom"
+            style={{ marginBottom: "env(safe-area-inset-bottom, 0)", color: C.sage }}
             aria-label="Music options"
             aria-expanded={musicMenuOpen}
           >
@@ -263,219 +303,229 @@ export default function PrayPage() {
           </button>
         )}
 
-        {/* Step content – swipe left = next, swipe right = previous (wrapper captures touch so swipe works) */}
+        {/* Step content */}
         <div
           className="flex-1 min-h-0 flex flex-col"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
           <div className="flex-1 overflow-y-auto touch-pan-y">
-          {/* Gaze – image priority: full image visible, pinch to zoom / pan */}
-          {step === 0 && (
-            <div className="flex flex-col px-4 py-6">
-              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4 text-center">Gaze</h2>
-              <div className="w-full min-h-[55vh] flex-1 flex flex-col mb-6">
-                <TransformWrapper
-                  initialScale={1}
-                  minScale={1}
-                  maxScale={8}
-                  centerOnInit={false}
-                  doubleClick={{ mode: "toggle", step: 2 }}
-                >
-                  <TransformComponent
-                    wrapperStyle={{ width: "100%", height: "100%", minHeight: "55vh" }}
-                    contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
-                  >
-                    <img
-                      src={artwork.imageUrl}
-                      alt={artwork.title}
-                      className="max-w-full max-h-[70vh] object-contain select-none"
-                      draggable={false}
-                    />
-                  </TransformComponent>
-                </TransformWrapper>
-              </div>
-              <p className="text-white/80 text-center text-sm leading-relaxed max-w-md mx-auto">
-                Let your eyes rest on the image. Notice what draws you. Ask God to open the eyes of your heart.
-              </p>
-              <p className="text-white/40 text-xs mt-4 text-center">Take 1–2 minutes if you like. Pinch to zoom the image.</p>
-            </div>
-          )}
 
-          {/* Meditate – same image priority: full image, zoom/pan */}
-          {step === 1 && (
-            <div className="px-4 py-6">
-              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4">Meditate</h2>
-              <div className="w-full min-h-[50vh] mb-6">
-                <TransformWrapper
-                  initialScale={1}
-                  minScale={1}
-                  maxScale={8}
-                  centerOnInit={false}
-                  doubleClick={{ mode: "toggle", step: 2 }}
-                >
-                  <TransformComponent
-                    wrapperStyle={{ width: "100%", height: "100%", minHeight: "50vh" }}
-                    contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
-                  >
-                    <img
-                      src={artwork.imageUrl}
-                      alt={artwork.title}
-                      className="max-w-full max-h-[65vh] object-contain select-none"
-                      draggable={false}
-                    />
-                  </TransformComponent>
-                </TransformWrapper>
+            {/* ── Gaze ── */}
+            {step === 0 && (
+              <div className="flex flex-col px-4 py-6">
+                <h2 className="text-sm font-medium uppercase tracking-wider mb-4 text-center" style={{ color: C.cream }}>Gaze</h2>
+                <div className="w-full min-h-[55vh] flex-1 flex flex-col mb-6">
+                  <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
+                    <TransformComponent
+                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "55vh" }}
+                      contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                    >
+                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[70vh] object-contain select-none" draggable={false} />
+                    </TransformComponent>
+                  </TransformWrapper>
+                </div>
+                <p className="text-sm text-center leading-relaxed max-w-md mx-auto" style={{ color: C.sageMuted }}>
+                  Let your eyes rest on the image. Notice what draws you. Ask God to open the eyes of your heart.
+                </p>
+                <p className="text-xs mt-4 text-center" style={{ color: C.creamFaint }}>Take 1–2 minutes if you like. Pinch to zoom the image.</p>
               </div>
-              <h2 className="text-white font-semibold text-lg mb-2">Reflect</h2>
-              <p className="text-white/70 text-sm mb-4">
-                Look deeper. What movement or relationships do you see? Where are you in this image?
-              </p>
-              {questions.length > 0 && (
-                <div>
+            )}
+
+            {/* ── Meditate ── */}
+            {step === 1 && (
+              <div className="px-4 py-6">
+                <h2 className="text-sm font-medium uppercase tracking-wider mb-4" style={{ color: C.cream }}>Meditate</h2>
+                <div className="w-full min-h-[50vh] mb-6">
+                  <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
+                    <TransformComponent
+                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "50vh" }}
+                      contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                    >
+                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[65vh] object-contain select-none" draggable={false} />
+                    </TransformComponent>
+                  </TransformWrapper>
+                </div>
+                <h2 className="font-semibold text-lg mb-2" style={{ color: C.cream }}>Reflect</h2>
+                <p className="text-sm mb-4" style={{ color: C.sageMuted }}>
+                  Look deeper. What movement or relationships do you see? Where are you in this image?
+                </p>
+                {questions.length > 0 && (
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => setReflectionExpanded(!reflectionExpanded)}
+                      className="flex items-center gap-2 text-sm font-medium hover:underline focus:outline-none focus:underline"
+                      style={{ color: C.creamDim }}
+                      aria-expanded={reflectionExpanded}
+                    >
+                      Reflection questions ({Math.min(questions.length, 2)})
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={`w-4 h-4 transition-transform ${reflectionExpanded ? "rotate-180" : ""}`}>
+                        <path fillRule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clipRule="evenodd" />
+                      </svg>
+                    </button>
+                    {reflectionExpanded && (
+                      <ul className="space-y-2 mt-2">
+                        {questions.slice(0, 2).map((q, i) => (
+                          <li key={i} className="text-sm flex gap-2" style={{ color: C.sageMuted }}>
+                            <span style={{ color: C.sage }}>•</span>
+                            <span>{q}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── Contemplate ── */}
+            {step === 2 && (
+              <div className="flex flex-col px-4 py-6">
+                <h2 className="text-sm font-medium uppercase tracking-wider mb-4 text-center" style={{ color: C.cream }}>Contemplate</h2>
+                <div className="w-full min-h-[55vh] mb-6">
+                  <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
+                    <TransformComponent
+                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "55vh" }}
+                      contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                    >
+                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[70vh] object-contain select-none" draggable={false} />
+                    </TransformComponent>
+                  </TransformWrapper>
+                </div>
+                <p className="text-sm text-center leading-relaxed max-w-md mx-auto" style={{ color: C.sageMuted }}>
+                  Rest in God&apos;s presence. No words are needed. Let the beauty you&apos;ve seen lead you into silence and communion.
+                </p>
+                <p className="text-xs mt-4 text-center" style={{ color: C.creamFaint }}>Pinch to zoom the image.</p>
+              </div>
+            )}
+
+            {/* ── Pray ── */}
+            {step === 3 && (
+              <div className="flex flex-col px-4 py-6">
+                <h2 className="text-sm font-medium uppercase tracking-wider mb-4" style={{ color: C.cream }}>Pray</h2>
+                <div className="w-full min-h-[40vh] mb-6">
+                  <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
+                    <TransformComponent
+                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "40vh" }}
+                      contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                    >
+                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[55vh] object-contain select-none" draggable={false} />
+                    </TransformComponent>
+                  </TransformWrapper>
+                </div>
+
+                {/* Sacred quote block — GOLD BORDER is the ONE gold moment on this screen */}
+                {isSacredArt && artwork.scripturePairing && (
+                  <div className="bg-white/5 border-l-2 p-4 mb-6" style={{ borderColor: C.gold }}>
+                    <p className="font-serif-elegant italic text-base leading-relaxed" style={{ color: C.sageMuted }}>
+                      &ldquo;{artwork.scripturePairing.verse}&rdquo;
+                    </p>
+                    <p className="text-sm mt-2 font-medium" style={{ color: C.creamDim }}>
+                      — {artwork.scripturePairing.reference}
+                    </p>
+                  </div>
+                )}
+                {!isSacredArt && artwork.quote && (
+                  <div className="bg-white/5 border-l-2 p-4 mb-6" style={{ borderColor: C.gold }}>
+                    <p className="font-serif-elegant italic text-base leading-relaxed" style={{ color: C.sageMuted }}>
+                      &ldquo;{artwork.quote.text}&rdquo;
+                    </p>
+                    <p className="text-sm mt-2 font-medium" style={{ color: C.creamDim }}>
+                      — {artwork.quote.attribution}
+                    </p>
+                  </div>
+                )}
+
+                <p className="text-sm mb-4" style={{ color: C.sageMuted }}>
+                  Respond to God in prayer—thanksgiving, intercession, or simply conversation about what you notice.
+                </p>
+
+                {/* Traditional Prayer drawer */}
+                <div className="border-t border-white/10">
                   <button
                     type="button"
-                    onClick={() => setReflectionExpanded(!reflectionExpanded)}
-                    className="flex items-center gap-2 text-[#C19B5F] text-sm font-medium hover:underline focus:outline-none focus:underline"
-                    aria-expanded={reflectionExpanded}
+                    onClick={() => setPrayerDrawerOpen(!prayerDrawerOpen)}
+                    className="w-full px-4 py-4 flex items-center justify-between text-left"
+                    aria-expanded={prayerDrawerOpen}
                   >
-                    Reflection questions ({Math.min(questions.length, 2)})
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className={`w-4 h-4 transition-transform ${reflectionExpanded ? "rotate-180" : ""}`}
-                    >
+                    <span className="font-medium tracking-wide text-sm" style={{ color: C.cream }}>
+                      Traditional Prayer
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={`w-5 h-5 transition-transform ${prayerDrawerOpen ? "rotate-180" : ""}`} style={{ color: C.creamDim }}>
                       <path fillRule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clipRule="evenodd" />
                     </svg>
                   </button>
-                  {reflectionExpanded && (
-                    <ul className="space-y-2 mt-2">
-                      {questions.slice(0, 2).map((q, i) => (
-                        <li key={i} className="text-white/80 text-sm flex gap-2">
-                          <span className="text-[#C19B5F]">•</span>
-                          <span>{q}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  {prayerDrawerOpen && (
+                    <div className="px-4 pb-6 animate-fade-in">
+                      <p className="font-serif-elegant italic text-center mb-3 whitespace-pre-line" style={{ color: C.sageMuted }}>
+                        {artwork.traditionalPrayer || FALLBACK_PRAYER}
+                      </p>
+                      {artwork.traditionalPrayer && artwork.traditionalPrayerSource && (
+                        <p className="text-xs text-center" style={{ color: C.creamFaint }}>
+                          — {artwork.traditionalPrayerSource}
+                        </p>
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
-            </div>
-          )}
-
-          {/* Pray */}
-          {step === 2 && (
-            <div className="px-6 py-8">
-              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4">Pray</h2>
-              {isSacredArt && artwork.scripturePairing && (
-                <div className="bg-white/5 border-l-2 border-[#C19B5F] p-4 mb-6">
-                  <p className="font-serif-elegant italic text-white/90 text-base leading-relaxed">
-                    &ldquo;{artwork.scripturePairing.verse}&rdquo;
-                  </p>
-                  <p className="text-[#C19B5F] text-sm mt-2 font-medium">
-                    — {artwork.scripturePairing.reference}
-                  </p>
-                </div>
-              )}
-              {!isSacredArt && artwork.quote && (
-                <div className="bg-white/5 border-l-2 border-[#C19B5F] p-4 mb-6">
-                  <p className="font-serif-elegant italic text-white/90 text-base leading-relaxed">
-                    &ldquo;{artwork.quote.text}&rdquo;
-                  </p>
-                  <p className="text-[#C19B5F] text-sm mt-2 font-medium">
-                    — {artwork.quote.attribution}
-                  </p>
-                </div>
-              )}
-              <p className="text-white/70 text-sm">
-                Respond to God in prayer—thanksgiving, intercession, or simply conversation about what you notice.
-              </p>
-            </div>
-          )}
-
-          {/* Contemplate – same image priority: full image, zoom/pan */}
-          {step === 3 && (
-            <div className="flex flex-col px-4 py-6">
-              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4 text-center">Contemplate</h2>
-              <div className="w-full min-h-[55vh] mb-6">
-                <TransformWrapper
-                  initialScale={1}
-                  minScale={1}
-                  maxScale={8}
-                  centerOnInit={false}
-                  doubleClick={{ mode: "toggle", step: 2 }}
-                >
-                  <TransformComponent
-                    wrapperStyle={{ width: "100%", height: "100%", minHeight: "55vh" }}
-                    contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
-                  >
-                    <img
-                      src={artwork.imageUrl}
-                      alt={artwork.title}
-                      className="max-w-full max-h-[70vh] object-contain select-none"
-                      draggable={false}
-                    />
-                  </TransformComponent>
-                </TransformWrapper>
               </div>
-              <p className="text-white/80 text-center text-sm leading-relaxed max-w-md mx-auto">
-                Rest in God’s presence. No words are needed. Let the beauty you’ve seen lead you into silence and communion.
-              </p>
-              <p className="text-white/40 text-xs mt-4 text-center">Pinch to zoom the image.</p>
-            </div>
-          )}
+            )}
 
-          {/* Action */}
-          {step === 4 && (
-            <div className="px-6 py-8">
-              <h2 className="text-[#C19B5F] text-sm font-semibold uppercase tracking-wider mb-4">Action</h2>
-              <h3 className="text-white font-semibold text-lg mb-2">How will you live this out?</h3>
-              <p className="text-white/70 text-sm mb-4">
-                Ask yourself and God: How will you apply what you’ve received in prayer to your life?
-              </p>
-              <textarea
-                placeholder="Optional: a few words to remember..."
-                value={actionNote}
-                onChange={(e) => setActionNote(e.target.value)}
-                className="w-full min-h-[100px] bg-white/5 border border-white/10 text-white placeholder-white/30 text-sm p-3 resize-none"
-                rows={3}
-              />
-              <p className="text-white/40 text-xs mt-2">
-                Your note is kept only on this device and is not saved to the cloud.
-              </p>
-            </div>
-          )}
-
-          {/* Pagination: dots centered, Next on right; same background as page */}
-          <div className="flex-shrink-0 px-4 py-5 flex items-center justify-between gap-3 w-full">
-            <div className="flex items-center justify-center gap-2 flex-1" role="tablist" aria-label="Prayer steps">
-              {STEPS.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  role="tab"
-                  aria-label={`${STEPS[i].title}${step === i ? ", current" : ""}`}
-                  aria-selected={step === i}
-                  onClick={() => setStep(i)}
-                  className={`w-2.5 h-2.5 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#C19B5F] focus:ring-offset-2 focus:ring-offset-transparent ${step === i ? "bg-[#C19B5F] scale-125" : "bg-white/30 hover:bg-white/50"}`}
+            {/* ── Action ── */}
+            {step === 4 && (
+              <div className="px-6 py-8">
+                <h2 className="text-sm font-medium uppercase tracking-wider mb-4" style={{ color: C.cream }}>Action</h2>
+                <h3 className="font-semibold text-lg mb-2" style={{ color: C.cream }}>How will you live this out?</h3>
+                <p className="text-sm mb-4" style={{ color: C.sageMuted }}>
+                  Ask yourself and God: How will you apply what you&apos;ve received in prayer to your life?
+                </p>
+                <textarea
+                  placeholder="Optional: a few words to remember..."
+                  value={actionNote}
+                  onChange={(e) => setActionNote(e.target.value)}
+                  className="w-full min-h-[100px] bg-white/5 border border-white/10 text-sm p-3 resize-none"
+                  style={{ color: C.cream }}
+                  rows={3}
                 />
-              ))}
+                <p className="text-xs mt-2" style={{ color: C.creamFaint }}>
+                  Your note is kept only on this device and is not saved to the cloud.
+                </p>
+              </div>
+            )}
+
+            {/* Progress dots + Next/Finish */}
+            <div className="flex-shrink-0 px-4 py-5 flex items-center justify-between gap-3 w-full">
+              <div className="flex items-center justify-center gap-1.5 flex-1" role="tablist" aria-label="Prayer steps">
+                {STEPS.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    role="tab"
+                    aria-label={`${STEPS[i].title}${step === i ? ", current" : ""}`}
+                    aria-selected={step === i}
+                    onClick={() => setStep(i)}
+                    className={`transition-all focus:outline-none ${step === i ? "w-5 h-1.5 rounded-full" : "w-1.5 h-1.5 rounded-full"}`}
+                    style={{ background: step === i ? C.sage : C.creamFaint }}
+                  />
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => (isLastStep ? handleFinish() : setStep(step + 1))}
+                className="flex-shrink-0 text-sm font-medium hover:underline focus:outline-none focus:underline"
+                style={{ color: C.cream }}
+              >
+                {isLastStep ? "Finish" : "Next →"}
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => (isLastStep ? router.back() : setStep(step + 1))}
-              className="flex-shrink-0 text-[#C19B5F] text-sm font-medium hover:underline focus:outline-none focus:underline"
-            >
-              {isLastStep ? "Finish" : "Next"}
-            </button>
-          </div>
+
           </div>
         </div>
 
-        {/* Go deeper – only bar with darker background so it’s clearly tied to the content */}
-        <div className="fixed bottom-0 left-0 right-0 z-20 bg-[#1a2a36] border-t border-white/10 safe-area-bottom">
-          <GoDeeperSection />
+        {/* Go Deeper — fixed bottom, espresso bg */}
+        <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-white/8 safe-area-bottom" style={{ background: "rgba(13,10,7,0.97)" }}>
+          <GoDeeperSection reflections={artwork?.traditionReflections} />
         </div>
       </div>
     </PageTransition>

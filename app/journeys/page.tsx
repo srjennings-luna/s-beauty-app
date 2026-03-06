@@ -48,22 +48,22 @@ export default function JourneysPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#203545] pb-28">
+      <div className="min-h-screen bg-[#fdf6e8] pb-28">
 
         {/* Header */}
         <div className="px-5 pt-12 pb-6">
-          <h1 className="text-3xl font-bold text-white mb-1">Journeys</h1>
-          <p className="text-white/40 text-sm">
+          <h1 className="text-3xl font-bold text-[#1a1a1a] mb-1">Journeys</h1>
+          <p className="text-[#7a9a8a] text-sm">
             7-day curated explorations of beauty and truth
           </p>
         </div>
 
         {error ? (
           <div className="px-5 py-16 text-center">
-            <p className="text-white/50 mb-4">Couldn't load journeys.</p>
+            <p className="text-[#7a9a8a] mb-4">Couldn&apos;t load journeys.</p>
             <button
               onClick={() => { setError(false); setLoading(true); setRetryCount((c) => c + 1); }}
-              className="px-6 py-3 bg-[#C19B5F] text-[#203545] font-semibold text-sm"
+              className="btn-primary"
             >
               Try Again
             </button>
@@ -80,19 +80,19 @@ export default function JourneysPage() {
           </div>
         ) : journeys.length === 0 ? (
           <div className="px-5 py-16 text-center">
-            <p className="text-[#C19B5F] text-xs tracking-widest uppercase mb-4">Coming soon</p>
-            <h2 className="font-serif-elegant text-2xl text-white mb-3">
+            <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-4">Coming soon</p>
+            <h2 className="font-serif-elegant text-2xl text-[#1a1a1a] mb-3">
               Journeys are being prepared
             </h2>
-            <p className="text-white/40 text-sm leading-relaxed max-w-xs mx-auto">
+            <p className="text-[#7a9a8a] text-sm leading-relaxed max-w-xs mx-auto">
               Each Journey is a 7-day curated exploration of one theme — sacred art, music,
               literature, landscape, and the wisdom of the great tradition.
             </p>
             <Link
               href="/explore"
-              className="inline-block mt-8 px-6 py-3 bg-[#C19B5F] text-[#111820] text-sm font-semibold tracking-wide"
+              className="inline-block mt-8 cta-inline"
             >
-              Explore Content
+              Explore Content →
             </Link>
           </div>
         ) : (
@@ -115,13 +115,13 @@ export default function JourneysPage() {
                       alt={journey.title}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#111820] via-[#111820]/30 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/30 to-transparent" />
 
                     {/* Theme pill */}
                     {journey.theme && (
                       <span
                         className="absolute top-3 left-3 px-2 py-1 text-white text-xs font-medium tracking-wide"
-                        style={{ backgroundColor: journey.theme.color ?? "#C19B5F" }}
+                        style={{ backgroundColor: journey.theme.color ?? "#4a7a62" }}
                       >
                         {journey.theme.title}
                       </span>
@@ -145,22 +145,22 @@ export default function JourneysPage() {
                     </div>
                   </div>
 
-                  {/* Description + progress bar */}
-                  <div className="px-4 py-4 bg-[#1a2a36]">
-                    <p className="text-white/60 text-sm leading-relaxed line-clamp-2 mb-3">
+                  {/* Description + progress bar — white card on parchment */}
+                  <div className="px-4 py-4 bg-white border border-black/5">
+                    <p className="text-[#7a9a8a] text-sm leading-relaxed line-clamp-2 mb-3">
                       {journey.description}
                     </p>
 
                     {/* Progress bar */}
                     <div className="flex items-center gap-3">
-                      <div className="flex-1 h-1 bg-white/10">
+                      <div className="flex-1 h-1 bg-black/5">
                         <div
-                          className="h-full bg-[#C19B5F] transition-all duration-500"
+                          className="h-full bg-[#4a7a62] transition-all duration-500"
                           style={{ width: `${pct}%` }}
                         />
                       </div>
-                      <span className="text-white/30 text-xs flex-shrink-0">
-                        {isStarted ? `${pct}%` : "Begin"}
+                      <span className="text-[#7a9a8a] text-xs flex-shrink-0">
+                        {isStarted ? `${pct}%` : "Begin →"}
                       </span>
                     </div>
                   </div>

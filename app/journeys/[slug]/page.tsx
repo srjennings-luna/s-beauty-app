@@ -62,8 +62,8 @@ function DayRow({
 
   return (
     <button
-      className={`w-full flex items-center gap-4 px-5 py-4 text-left border-l-2 transition-colors ${
-        isComplete ? "border-[#C19B5F]" : "border-white/10"
+      className={`w-full flex items-center gap-4 px-5 py-4 text-left border-l-2 transition-colors bg-white border-b border-black/5 ${
+        isComplete ? "border-l-[#4a7a62]" : "border-l-black/8"
       }`}
       onClick={onOpen}
     >
@@ -71,22 +71,22 @@ function DayRow({
       <div
         className={`flex-shrink-0 w-9 h-9 flex items-center justify-center text-sm font-bold border transition-colors ${
           isComplete
-            ? "border-[#C19B5F] text-[#C19B5F] bg-[#C19B5F]/10"
+            ? "border-[#4a7a62] text-[#4a7a62] bg-[#4a7a62]/8"
             : isActive
-            ? "border-white/40 text-white"
-            : "border-white/15 text-white/30"
+            ? "border-[#1a1a1a]/40 text-[#1a1a1a]"
+            : "border-black/10 text-[#7a9a8a]"
         }`}
       >
         {isComplete ? "✓" : day.dayNumber}
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className="text-white/40 text-xs tracking-widest uppercase mb-0.5">
+        <p className="text-[#7a9a8a] text-xs tracking-widest uppercase mb-0.5">
           Day {day.dayNumber}
         </p>
         <h3
           className={`font-semibold text-sm line-clamp-1 transition-colors ${
-            isActive || isComplete ? "text-white" : "text-white/50"
+            isActive || isComplete ? "text-[#1a1a1a]" : "text-[#7a9a8a]"
           }`}
         >
           {day.dayTitle}
@@ -99,7 +99,7 @@ function DayRow({
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          className="w-4 h-4 text-white/30"
+          className="w-4 h-4 text-[#7a9a8a]"
         >
           <path
             fillRule="evenodd"
@@ -157,10 +157,10 @@ export default function JourneyDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#203545] flex items-center justify-center">
+      <div className="min-h-screen bg-[#fdf6e8] flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block w-8 h-8 border-4 border-white/30 border-t-[#C19B5F] rounded-full animate-spin mb-2" />
-          <p className="text-white/50 text-sm">Loading journey…</p>
+          <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-[#4a7a62] rounded-full animate-spin mb-2" />
+          <p className="text-[#7a9a8a] text-sm">Loading journey…</p>
         </div>
       </div>
     );
@@ -170,17 +170,17 @@ export default function JourneyDetailPage() {
 
   if (!journey) {
     return (
-      <div className="min-h-screen bg-[#203545] flex items-center justify-center px-5">
+      <div className="min-h-screen bg-[#fdf6e8] flex items-center justify-center px-5">
         <div className="text-center">
-          <p className="text-[#C19B5F] text-xs tracking-widest uppercase mb-3">
+          <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-3">
             Not found
           </p>
-          <h2 className="text-white text-xl font-bold mb-4">
+          <h2 className="text-[#1a1a1a] text-xl font-bold mb-4">
             Journey not found
           </h2>
           <button
             onClick={() => router.back()}
-            className="text-white/50 text-sm hover:text-white"
+            className="text-[#7a9a8a] text-sm hover:text-[#1a1a1a] transition-colors"
           >
             ← Go back
           </button>
@@ -214,7 +214,7 @@ export default function JourneyDetailPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#203545]">
+      <div className="min-h-screen bg-[#fdf6e8]">
         {/* Hero */}
         <div className="relative h-[280px]">
           <img
@@ -222,7 +222,8 @@ export default function JourneyDetailPage() {
             alt={journey.title}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#203545]" />
+          {/* Gradient fades to parchment at bottom */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#fdf6e8]" />
 
           {/* Back button */}
           <button
@@ -257,23 +258,23 @@ export default function JourneyDetailPage() {
 
         {/* Journey info */}
         <div className="px-5 pt-2 pb-6">
-          <h1 className="font-serif-elegant text-3xl text-white mb-2">
+          <h1 className="font-serif-elegant text-3xl text-[#1a1a1a] mb-2">
             {journey.title}
           </h1>
-          <p className="text-white/50 text-sm leading-relaxed mb-4">
+          <p className="text-[#7a9a8a] text-sm leading-relaxed mb-4">
             {journey.description}
           </p>
 
           <div className="flex items-center gap-4 mb-4">
-            <span className="text-white/40 text-xs">
+            <span className="text-[#7a9a8a] text-xs">
               {journey.estimatedMinutesPerDay ?? 10} min/day
             </span>
-            <span className="text-white/20">·</span>
-            <span className="text-white/40 text-xs">7 days</span>
+            <span className="text-[#7a9a8a]/40">·</span>
+            <span className="text-[#7a9a8a] text-xs">7 days</span>
             {completedCount > 0 && (
               <>
-                <span className="text-white/20">·</span>
-                <span className="text-[#C19B5F] text-xs">
+                <span className="text-[#7a9a8a]/40">·</span>
+                <span className="text-[#4a7a62] text-xs">
                   {completedCount}/7 complete
                 </span>
               </>
@@ -281,9 +282,9 @@ export default function JourneyDetailPage() {
           </div>
 
           {/* Progress bar */}
-          <div className="h-1 bg-white/10 mb-2">
+          <div className="h-1 bg-black/5 mb-2">
             <div
-              className="h-full bg-[#C19B5F] transition-all duration-500"
+              className="h-full bg-[#4a7a62] transition-all duration-500"
               style={{ width: `${progressPct}%` }}
             />
           </div>
@@ -292,7 +293,7 @@ export default function JourneyDetailPage() {
           {nextDay && completedCount > 0 && (
             <button
               onClick={() => setActiveDay(nextDay)}
-              className="text-[#C19B5F] text-xs mt-2 hover:underline"
+              className="cta-inline mt-2"
             >
               Continue with Day {nextDay.dayNumber}: {nextDay.dayTitle} →
             </button>

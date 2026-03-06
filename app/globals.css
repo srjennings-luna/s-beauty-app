@@ -1,22 +1,24 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Sacred Art palette (sample_sacred_art_colors) */
-  --color-sacred-gold: #C19B5F;
-  --color-sacred-teal: #203545;
-  --color-sacred-plum: #4C3759;
-  --color-sacred-rust: #93583E;
-  --color-sacred-maroon: #66293C;
+  /* KALLOS design system */
+  --color-parchment: #fdf6e8;       /* browse screen background */
+  --color-espresso: #16110d;        /* immersive screen background */
+  --color-near-black: #1a1a1a;      /* primary text on parchment */
+  --color-cream: rgba(253,246,232,0.88); /* primary text on espresso */
 
-  /* Legacy / alternate */
+  --color-sage: #4a7a62;            /* active states, nav, labels, progress */
+  --color-sage-muted: #7a9a8a;      /* secondary text — replaces all gray/white-opacity */
+  --color-blue-mist: #8aacb8;       /* dates + music tags only */
+
+  --color-sacred-gold: #C19B5F;     /* ONE use per screen — quote border on immersive */
+  --color-accent-gold: #C19B5F;     /* alias */
+  --color-accent-gold-light: #d4b56a;
+
+  /* Kept for backward compat where still needed */
+  --color-sacred-teal: #203545;
   --color-deep-navy: #1a2742;
   --color-deep-navy-light: #263654;
-  --color-catskill-white: #f8f9fc;
-  --color-accent-gold: #C19B5F;
-  --color-accent-gold-light: #d4b56a;
-  --color-dark-bg: #0f1419;
-  --color-dark-surface: #1a2230;
-  --color-dark-elevated: #242d3d;
 }
 
 * {
@@ -30,8 +32,8 @@ html {
 
 body {
   font-family: var(--font-open-sans), "Open Sans", sans-serif;
-  background-color: #203545; /* Dark teal - app default (design system) */
-  color: rgba(255, 255, 255, 0.9);
+  background-color: var(--color-parchment); /* Parchment — browse mode default */
+  color: var(--color-near-black);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -57,32 +59,79 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Color utilities */
+.bg-parchment   { background-color: var(--color-parchment); }
+.bg-espresso    { background-color: var(--color-espresso); }
+.text-sage      { color: var(--color-sage); }
+.text-sage-muted{ color: var(--color-sage-muted); }
+.text-blue-mist { color: var(--color-blue-mist); }
+.text-gold      { color: var(--color-sacred-gold); }
+/* Legacy */
 .bg-deep-navy { background-color: var(--color-deep-navy); }
-.bg-catskill-white { background-color: var(--color-catskill-white); }
 .bg-accent-gold { background-color: var(--color-accent-gold); }
 .text-deep-navy { color: var(--color-deep-navy); }
 .text-accent-gold { color: var(--color-accent-gold); }
 
-/* Button styles - square corners per design system */
+/* CTA styles — inline text + arrow, no button backgrounds */
+/* Browse (light) version */
+.cta-inline {
+  display: inline-block;
+  font-family: var(--font-montserrat), "Montserrat", sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(26, 26, 26, 0.75);
+  cursor: pointer;
+  transition: color 0.25s ease, letter-spacing 0.25s ease;
+  border: none;
+  background: none;
+  padding: 0;
+}
+.cta-inline:hover {
+  color: var(--color-near-black);
+  letter-spacing: 0.24em;
+}
+/* Immersive (dark) version */
+.cta-inline-dark {
+  display: inline-block;
+  font-family: var(--font-montserrat), "Montserrat", sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(253, 246, 232, 0.82);
+  cursor: pointer;
+  transition: color 0.25s ease, letter-spacing 0.25s ease;
+  border: none;
+  background: none;
+  padding: 0;
+}
+.cta-inline-dark:hover {
+  color: rgba(253, 246, 232, 1);
+  letter-spacing: 0.24em;
+}
+
+/* btn-primary kept as alias for error/retry states — now uses outline style */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.875rem 1.75rem;
+  padding: 0.625rem 1.25rem;
   border-radius: 0;
-  font-weight: 600;
-  color: white;
-  transition: all 0.3s ease;
-  font-family: "Montserrat", sans-serif;
-  background-color: var(--color-accent-gold);
-  box-shadow: 0 2px 8px rgba(193, 155, 95, 0.25);
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-family: var(--font-montserrat), "Montserrat", sans-serif;
+  border: 1px solid rgba(26, 26, 26, 0.25);
+  color: var(--color-near-black);
+  background: transparent;
+  transition: all 0.2s ease;
 }
 .btn-primary:hover {
-  background-color: var(--color-accent-gold-light);
-  box-shadow: 0 4px 12px rgba(193, 155, 95, 0.35);
-  transform: translateY(-1px);
+  border-color: var(--color-sage);
+  color: var(--color-sage);
 }
-.btn-primary:active { transform: translateY(0); }
 
 .btn-secondary {
   display: inline-flex;
@@ -301,9 +350,9 @@ h1, h2, h3, h4, h5, h6 {
 .skeleton {
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.05) 25%,
-    rgba(255, 255, 255, 0.15) 50%,
-    rgba(255, 255, 255, 0.05) 75%
+    rgba(0, 0, 0, 0.04) 25%,
+    rgba(0, 0, 0, 0.08) 50%,
+    rgba(0, 0, 0, 0.04) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite ease-in-out;

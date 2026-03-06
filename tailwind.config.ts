@@ -9,11 +9,20 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "deep-navy": "#002D62",
-        "deep-navy-light": "#003D82",
-        "catskill-white": "#EFF2F8",
+        /* KALLOS design system */
+        "parchment":   "#fdf6e8",
+        "espresso":    "#16110d",
+        "near-black":  "#1a1a1a",
+        "sage":        "#4a7a62",
+        "sage-muted":  "#7a9a8a",
+        "blue-mist":   "#8aacb8",
+        "sacred-gold": "#C19B5F",
+        /* aliases */
         "accent-gold": "#C19B5F",
         "accent-gold-light": "#D4B56A",
+        /* kept for any remaining legacy references */
+        "deep-navy": "#1a2742",
+        "deep-navy-light": "#263654",
       },
       fontFamily: {
         montserrat: ["Montserrat", "sans-serif"],

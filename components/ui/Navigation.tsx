@@ -72,7 +72,7 @@ export default function Navigation() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 safe-area-bottom">
-      <div className="absolute inset-0 bg-[#1a2a36] border-t border-white/10" />
+      <div className="absolute inset-0 bg-[#fdf6e8]/97 backdrop-blur-md border-t border-black/8" />
       <div className="relative flex justify-around items-center h-16">
         {navItems.map((item) => {
           const isActive =
@@ -84,7 +84,7 @@ export default function Navigation() {
               key={item.href}
               href={item.href}
               className={`flex flex-col items-center justify-center w-full h-full transition-all duration-200 ${
-                isActive ? "text-[#C19B5F]" : "text-white/40 hover:text-white/60"
+                isActive ? "text-[#4a7a62]" : "text-[#1a1a1a]/35 hover:text-[#1a1a1a]/60"
               }`}
             >
               <div className={`transition-transform duration-200 ${isActive ? "-translate-y-0.5" : ""}`}>
