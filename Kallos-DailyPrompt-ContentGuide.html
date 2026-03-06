@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KALLOS — Daily Prompt Content Guide</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #111820;
+      color: #e8e0d4;
+      font-family: Georgia, serif;
+      line-height: 1.7;
+    }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 60px 32px 120px; }
+
+    /* Cover */
+    .cover {
+      text-align: center;
+      padding: 80px 0 60px;
+      border-bottom: 1px solid #2E5F78;
+      margin-bottom: 72px;
+    }
+    .cover .label {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #7a9a8a;
+      margin-bottom: 20px;
+    }
+    .cover h1 {
+      font-size: 52px;
+      font-weight: 300;
+      letter-spacing: 4px;
+      color: #C19B5F;
+      margin-bottom: 16px;
+    }
+    .cover .sub {
+      font-size: 20px;
+      font-style: italic;
+      color: #bfb8aa;
+      margin-bottom: 32px;
+    }
+    .cover .desc {
+      font-size: 16px;
+      color: #9a9488;
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* Section headings */
+    h2 {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #7a9a8a;
+      margin-bottom: 24px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #1e3545;
+    }
+
+    h3 {
+      font-size: 22px;
+      font-weight: 400;
+      color: #C19B5F;
+      margin-bottom: 12px;
+    }
+
+    p { font-size: 16px; color: #ccc5b8; margin-bottom: 16px; line-height: 1.8; }
+
+    .section { margin-bottom: 72px; }
+
+    /* Field blocks */
+    .field {
+      background: #1a2d3d;
+      border-left: 2px solid #C19B5F;
+      padding: 24px 28px;
+      margin-bottom: 28px;
+    }
+    .field .field-name {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #7a9a8a;
+      margin-bottom: 8px;
+    }
+    .field .field-latin {
+      font-size: 11px;
+      font-style: italic;
+      color: #C19B5F;
+      margin-bottom: 12px;
+      font-family: Arial, sans-serif;
+    }
+    .field .field-def {
+      font-size: 15px;
+      color: #e8e0d4;
+      margin-bottom: 12px;
+      line-height: 1.7;
+    }
+    .field .field-rule {
+      font-size: 14px;
+      color: #9a9488;
+      font-style: italic;
+      border-top: 1px solid #2a4055;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    .field .required { color: #c08080; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-family: Arial, sans-serif; }
+    .field .optional { color: #7a9a8a; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-family: Arial, sans-serif; }
+
+    /* Do / Don't */
+    .do-dont {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .do, .dont {
+      padding: 20px;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .do { background: #132a1a; border-top: 2px solid #4a7a62; color: #bfd4c4; }
+    .dont { background: #2a1515; border-top: 2px solid #7a4040; color: #d4bfbf; }
+    .do .label-tag, .dont .label-tag {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .do .label-tag { color: #4a7a62; }
+    .dont .label-tag { color: #7a4040; }
+
+    /* Sample prompt */
+    .sample {
+      background: #16110d;
+      border: 1px solid #2a2218;
+      padding: 40px;
+      margin-bottom: 40px;
+    }
+    .sample .sample-label {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #7a9a8a;
+      margin-bottom: 6px;
+    }
+    .sample .sample-title {
+      font-size: 28px;
+      font-style: italic;
+      font-weight: 300;
+      color: #e8e0d4;
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+    .sample-field {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #2a2218;
+    }
+    .sample-field:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .sample-field .sf-label {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #C19B5F;
+      margin-bottom: 6px;
+    }
+    .sample-field .sf-content {
+      font-size: 15px;
+      color: #bfb8aa;
+      line-height: 1.7;
+      font-style: italic;
+    }
+    .sample-field .sf-attr {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      color: #6a6058;
+      margin-top: 6px;
+      font-style: normal;
+    }
+
+    /* Content type grid */
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .type-card {
+      background: #1a2d3d;
+      padding: 16px 20px;
+      font-size: 14px;
+    }
+    .type-card .type-name {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #C19B5F;
+      margin-bottom: 6px;
+    }
+    .type-card p { font-size: 13px; color: #9a9488; margin: 0; line-height: 1.5; }
+
+    /* Theme list */
+    .theme-list { margin-bottom: 32px; }
+    .theme-item {
+      padding: 16px 0;
+      border-bottom: 1px solid #1e3545;
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 20px;
+      align-items: baseline;
+    }
+    .theme-name {
+      font-size: 15px;
+      color: #e8e0d4;
+      font-weight: 400;
+    }
+    .theme-q {
+      font-size: 14px;
+      font-style: italic;
+      color: #9a9488;
+    }
+
+    /* Checklist */
+    .checklist { list-style: none; margin-bottom: 24px; }
+    .checklist li {
+      padding: 8px 0 8px 24px;
+      position: relative;
+      font-size: 15px;
+      color: #ccc5b8;
+      border-bottom: 1px solid #1a2a38;
+    }
+    .checklist li:before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: #C19B5F;
+    }
+
+    /* Callout */
+    .callout {
+      background: #1a2218;
+      border-left: 2px solid #4a7a62;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      font-size: 15px;
+      color: #c8d8c8;
+      font-style: italic;
+      line-height: 1.7;
+    }
+
+    /* Frequency table */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 32px; font-size: 14px; }
+    th {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #7a9a8a;
+      text-align: left;
+      padding: 10px 16px;
+      border-bottom: 1px solid #2E5F78;
+    }
+    td { padding: 12px 16px; color: #bfb8aa; border-bottom: 1px solid #1e3545; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Cover -->
+  <div class="cover">
+    <div class="label">Editorial Reference</div>
+    <h1>KALLOS</h1>
+    <div class="sub">Daily Prompt Content Guide</div>
+    <div class="desc">
+      What a Daily Prompt is, what belongs in each field, how to write each section,
+      and fully worked examples. Read this before creating prompts in Sanity Studio.
+    </div>
+  </div>
+
+  <!-- What is a Daily Prompt -->
+  <div class="section">
+    <h2>What is a Daily Prompt</h2>
+    <p>
+      A Daily Prompt is a standalone daily practice — not a lesson, not a chapter in a Journey.
+      It is a single encounter with something beautiful, paired with a question that opens a door.
+      The user may spend 3 minutes with it or 30. They set the pace.
+    </p>
+    <p>
+      It is delivered as a scrollable immersive page. The content piece (artwork, landscape, music, literature)
+      is the anchor. Everything else — the question, the reading, the music, the action — serves the encounter
+      with that single thing.
+    </p>
+    <div class="callout">
+      The Daily Prompt is an invitation, not a curriculum. It should feel like someone leaving a beautiful
+      thing on your doorstep with a note — not a teacher waiting for your answer.
+    </div>
+    <p>
+      The audience is the non-Catholic curious seeker. They are moved by beauty and asking deeper questions.
+      They may not know who Aquinas is. They may have never been inside a basilica. Write for someone
+      intelligent and open, not someone already fluent in Catholic tradition.
+    </p>
+  </div>
+
+  <!-- The 5 Founding Themes -->
+  <div class="section">
+    <h2>The 5 Founding Themes</h2>
+    <p>Daily prompts do not have to follow a theme, but grounding them in one of the five founding
+    themes gives editorial coherence over time and creates a natural connection to the Journeys.</p>
+    <div class="theme-list">
+      <div class="theme-item">
+        <div class="theme-name">Light</div>
+        <div class="theme-q">"What does light reveal that darkness hides?"</div>
+      </div>
+      <div class="theme-item">
+        <div class="theme-name">Silence</div>
+        <div class="theme-q">"What do we hear when we stop talking?"</div>
+      </div>
+      <div class="theme-item">
+        <div class="theme-name">Suffering & Beauty</div>
+        <div class="theme-q">"How does beauty survive darkness?"</div>
+      </div>
+      <div class="theme-item">
+        <div class="theme-name">Creation</div>
+        <div class="theme-q">"What is the world trying to tell us?"</div>
+      </div>
+      <div class="theme-item">
+        <div class="theme-name">Home / The Restless Heart</div>
+        <div class="theme-q">"Why do we long for something we've never seen?"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Types -->
+  <div class="section">
+    <h2>Content Types You Can Feature</h2>
+    <p>Any of the 7 content types can anchor a Daily Prompt. Vary them across the week —
+    not every prompt needs to be a painting.</p>
+    <div class="type-grid">
+      <div class="type-card">
+        <div class="type-name">Sacred Art</div>
+        <p>Paintings, sculptures, icons, frescoes, churches. Caravaggio, Rublev, Fra Angelico, Bernini.</p>
+      </div>
+      <div class="type-card">
+        <div class="type-name">Thinker</div>
+        <p>Plato, Augustine, Aquinas, C.S. Lewis, von Balthasar, Roger Scruton. One idea, not a lecture.</p>
+      </div>
+      <div class="type-card">
+        <div class="type-name">Literature</div>
+        <p>Hopkins, Rilke, Dante, Dostoevsky, Tolkien. A poem, a passage, a single image from a novel.</p>
+      </div>
+      <div class="type-card">
+        <div class="type-name">Music</div>
+        <p>Gregorian chant, Arvo Pärt, Bach, Palestrina, Tavener. Let the music be the object of attention.</p>
+      </div>
+      <div class="type-card">
+        <div class="type-name">Food & Wine</div>
+        <p>Cistercian monasteries, 3-generation bakeries, natural wine, the sacred in the everyday.</p>
+      </div>
+      <div class="type-card">
+        <div class="type-name">Landscape</div>
+        <p>Creation theology, places where the world speaks. Mountains, light over water, ancient forests.</p>
+      </div>
+      <div class="type-card">
+        <div class="type-name">Watch / Listen</div>
+        <p>YouTube, documentary, lecture, podcast. Something to encounter rather than just read.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Field by Field -->
+  <div class="section">
+    <h2>Fields — What Goes Where</h2>
+
+    <div class="field">
+      <div class="field-name">Date <span class="required">Required</span></div>
+      <div class="field-def">The date this prompt appears. One prompt per day. Format: YYYY-MM-DD.</div>
+      <div class="field-rule">Build a bank of prompts in advance — aim for at least 2 weeks ahead. Do not leave today's date empty the morning of.</div>
+    </div>
+
+    <div class="field">
+      <div class="field-name">Featured Content <span class="required">Required</span></div>
+      <div class="field-def">The content item this prompt is built around. Must already exist in Sanity as a Content Item. The item's image becomes the hero image for the full-screen prompt experience.</div>
+      <div class="field-rule">The content item needs a high-resolution image (min 1200px). The image is the first thing the user sees — it carries significant weight. Choose images with enough tonal depth for the dark espresso treatment.</div>
+    </div>
+
+    <div class="field">
+      <div class="field-name">Prompt Question <span class="required">Required</span></div>
+      <div class="field-def">The single reflection question for the day. This is the heart of the prompt — the door the image opens.</div>
+      <div class="field-rule">One question only. Under 20 words ideally. A question that has no obvious answer. It should create space, not direct traffic. Never start with "How do you..." — start with "What..." or "Where..." or "When..."</div>
+    </div>
+
+    <div class="field">
+      <div class="field-name">Curator Note <span class="optional">Optional</span></div>
+      <div class="field-def">The human editorial voice. Why you chose this today. What you notice in it. Not an explanation of the content — a personal aside.</div>
+      <div class="field-rule">Write in first person. Keep it to 2–3 sentences. This is the note slipped under the door, not the lecture notes. If you have nothing genuine to say, leave it blank — forced notes read as forced.</div>
+    </div>
+
+    <div class="field">
+      <div class="field-name">Reading (Lectio) <span class="optional">Optional</span></div>
+      <div class="field-latin">Lectio — "reading" or "word"</div>
+      <div class="field-def">A short quote, scripture passage, or text that deepens the encounter with the content. Not an explanation — a resonance. The text should be able to stand alone as beautiful.</div>
+      <div class="field-rule">
+        Keep it short — 2 to 5 sentences maximum. If it needs context to make sense, it is the wrong text.
+        Include attribution: author name, work title, and where relevant, chapter/verse.
+        Scripture is appropriate but not required — poetry, philosophy, and literature belong here equally.
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-name">Music (Auditio) <span class="optional">Optional</span></div>
+      <div class="field-latin">Auditio — "hearing" or "listening"</div>
+      <div class="field-def">A piece of music to accompany the practice. If no external link is provided, the app defaults to the built-in chant or ambient player. If a specific piece is curated, provide a Spotify or YouTube link.</div>
+      <div class="field-rule">
+        The music should be non-verbal or in a language the user doesn't need to understand — chant, classical, ambient, sacred polyphony.
+        Music with lyrics in English will compete with the reading and the actio.
+        Not every prompt needs a specific piece — the built-in chant is always available and always appropriate.
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-name">Action (Actio) <span class="optional">Optional — but strongly encouraged</span></div>
+      <div class="field-latin">Actio — "action" or "doing"</div>
+      <div class="field-def">An invitation to carry one thing from the practice into the day. One concrete, gentle action. Not a homework assignment — a small opening.</div>
+      <div class="field-rule">
+        One sentence. Concrete but not prescriptive — "Notice one place where light falls differently today" not "Go outside and look at the sky for ten minutes."
+        Should feel possible for a person in any circumstance — at a desk, on a train, in a meeting.
+        This is also the section that triggers the daily streak — the user is considered to have completed the practice when they scroll to this section.
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-name">Related Journey <span class="optional">Optional</span></div>
+      <div class="field-def">If one of the 5 Journeys deepens what this prompt opens, link it here. A quiet CTA appears at the bottom of the prompt page: "Go deeper · [Journey name]"</div>
+      <div class="field-rule">Only link a Journey if the connection is genuine and obvious to the user, not just thematically adjacent. A Light prompt that directly introduces themes from the Light Journey is a good link. A vague thematic similarity is not.</div>
+    </div>
+
+    <div class="field">
+      <div class="field-name">Theme <span class="optional">Optional</span></div>
+      <div class="field-def">Tags this prompt to one of the 5 founding themes. Helps users see the connection between a Daily Prompt and a Journey. Not visible to users directly — used for filtering and future features.</div>
+      <div class="field-rule">Tag it if the connection is clear. Leave it blank if the prompt is more general.</div>
+    </div>
+  </div>
+
+  <!-- Writing the Prompt Question -->
+  <div class="section">
+    <h2>Writing the Prompt Question</h2>
+    <p>The prompt question is the hardest thing to write well. Here is what separates a good one from a weak one.</p>
+
+    <div class="do-dont">
+      <div class="do">
+        <span class="label-tag">Do</span>
+        Questions that open space and have no single answer.<br><br>
+        "What do you notice first — what the light touches, or what it doesn't?"<br><br>
+        "Where in this does something familiar become strange?"<br><br>
+        "What is the painter asking you to feel before you understand?"<br><br>
+        "What would it mean to belong to a place like this?"
+      </div>
+      <div class="dont">
+        <span class="label-tag">Don't</span>
+        Questions that direct the user toward a predetermined answer.<br><br>
+        "How does this painting show God's love for us?"<br><br>
+        "What does this remind you of from your childhood?"<br><br>
+        "Can you see the Holy Spirit in this image?"<br><br>
+        "How does this make you feel about beauty?"
+      </div>
+    </div>
+
+    <p>The question should be answerable by a person who has never been to church and equally rich for someone who has. If it requires theological background to feel the weight of it, rewrite it.</p>
+
+    <ul class="checklist">
+      <li>Does the question arise genuinely from the content piece, or could it be attached to anything?</li>
+      <li>Is there a real answer you don't know? Or are you guiding the user toward your answer?</li>
+      <li>Can someone who is not religious engage with it fully?</li>
+      <li>Is it under 20 words?</li>
+      <li>Would you want to sit with this question yourself?</li>
+    </ul>
+  </div>
+
+  <!-- Writing the Actio -->
+  <div class="section">
+    <h2>Writing the Actio</h2>
+    <p>The Actio is a single small act — something the user can do today, in ordinary life, that keeps the encounter alive. It is not a spiritual exercise. It is not a task. It is a direction of attention.</p>
+
+    <div class="do-dont">
+      <div class="do">
+        <span class="label-tag">Do</span>
+        "Notice one place today where you find yourself drawn toward silence."<br><br>
+        "Carry one image from this painting with you — let it surface when you least expect it."<br><br>
+        "Find one moment before tonight when you stop and look at the sky for thirty seconds."<br><br>
+        "Let one meal today be eaten slowly, without your phone."
+      </div>
+      <div class="dont">
+        <span class="label-tag">Don't</span>
+        "Pray a rosary in thanksgiving for the beauty of this artwork."<br><br>
+        "Read the full passage from which this quote is taken."<br><br>
+        "Share this with someone you love today."<br><br>
+        "Journal for 10 minutes about what you noticed in this practice."
+      </div>
+    </div>
+
+    <p>The action should be completable without any preparation, materials, or religious knowledge. The test: could a non-practicing person in a busy office building do this today? If yes, it's right.</p>
+  </div>
+
+  <!-- Editorial rhythm -->
+  <div class="section">
+    <h2>Editorial Rhythm — Planning Across the Week</h2>
+    <p>Vary the content types across the week so the experience doesn't become predictable. A suggested rhythm — not a rule:</p>
+
+    <table>
+      <tr>
+        <th>Day</th>
+        <th>Content Type</th>
+        <th>Notes</th>
+      </tr>
+      <tr>
+        <td>Monday</td>
+        <td>Sacred Art or Landscape</td>
+        <td>Visual anchor to start the week. Something to hold in the mind.</td>
+      </tr>
+      <tr>
+        <td>Tuesday</td>
+        <td>Literature or Thinker</td>
+        <td>A single idea or image from text. Shorter is better mid-week.</td>
+      </tr>
+      <tr>
+        <td>Wednesday</td>
+        <td>Music</td>
+        <td>Music as the primary content — let it be the object of attention, not background.</td>
+      </tr>
+      <tr>
+        <td>Thursday</td>
+        <td>Sacred Art or Thinker</td>
+        <td>Depth — something that rewards more than a quick glance.</td>
+      </tr>
+      <tr>
+        <td>Friday</td>
+        <td>Landscape or Watch/Listen</td>
+        <td>Outward gaze toward the weekend. Creation, place, the world.</td>
+      </tr>
+      <tr>
+        <td>Saturday</td>
+        <td>Food & Wine or Literature</td>
+        <td>Slower pace. The sacred in the everyday. Something domestic.</td>
+      </tr>
+      <tr>
+        <td>Sunday</td>
+        <td>Sacred Art or Landscape</td>
+        <td>The quietest, most contemplative day. An image to sit inside.</td>
+      </tr>
+    </table>
+
+    <p>Aim to connect 1–2 prompts per week to an active Journey, giving users who are mid-Journey a natural touchpoint.</p>
+  </div>
+
+  <!-- Fully Worked Examples -->
+  <div class="section">
+    <h2>Fully Worked Examples</h2>
+    <p>Three complete prompts written to the standard. Use these as templates for tone, scale, and proportion.</p>
+
+    <!-- Example 1 -->
+    <div class="sample">
+      <div class="sample-label">Example 1 — Sacred Art / Light Theme</div>
+      <div class="sample-title">Caravaggio: The Calling of Saint Matthew</div>
+
+      <div class="sample-field">
+        <div class="sf-label">Content Item</div>
+        <div class="sf-content" style="font-style:normal;">Caravaggio, The Calling of Saint Matthew, 1599–1600. Contarelli Chapel, Rome.</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Prompt Question</div>
+        <div class="sf-content">Where does the light fall — and who in this painting has not yet looked up?</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Curator Note</div>
+        <div class="sf-content">I keep returning to the hand. It could be pointing at Matthew — or deflecting. Caravaggio never makes it easy to know if the person being called wants to be found.</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Reading (Lectio)</div>
+        <div class="sf-content">"The light shines in the darkness, and the darkness has not overcome it."</div>
+        <div class="sf-attr">— John 1:5</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Music (Auditio)</div>
+        <div class="sf-content" style="font-style:normal;">Allegri, Miserere — Tenebrae Choir</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Action (Actio)</div>
+        <div class="sf-content">Notice one moment today when light enters a room and changes it. Don't move toward it — just notice it from where you are.</div>
+      </div>
+    </div>
+
+    <!-- Example 2 -->
+    <div class="sample">
+      <div class="sample-label">Example 2 — Landscape / Creation Theme</div>
+      <div class="sample-title">The Stubble Fields of the Camargue at Dawn</div>
+
+      <div class="sample-field">
+        <div class="sf-label">Content Item</div>
+        <div class="sf-content" style="font-style:normal;">Landscape content item — Camargue wetlands, southern France, early morning.</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Prompt Question</div>
+        <div class="sf-content">What is the world doing when no one is watching it?</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Curator Note</div>
+        <div class="sf-content">This photograph was taken 40 minutes before sunrise. The colour exists for perhaps four minutes each morning, regardless of whether anyone is there to see it. That seems important.</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Reading (Lectio)</div>
+        <div class="sf-content">"The world is charged with the grandeur of God. It will flame out, like shining from shook foil."</div>
+        <div class="sf-attr">— Gerard Manley Hopkins, God's Grandeur, 1877</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Music (Auditio)</div>
+        <div class="sf-content" style="font-style:normal;">Built-in ambient — no specific piece required</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Action (Actio)</div>
+        <div class="sf-content">Before you go inside today, stop outside for thirty seconds. Don't take a photo. Let the light land on your face.</div>
+      </div>
+    </div>
+
+    <!-- Example 3 -->
+    <div class="sample">
+      <div class="sample-label">Example 3 — Literature / Silence Theme</div>
+      <div class="sample-title">Rilke: You Must Change Your Life</div>
+
+      <div class="sample-field">
+        <div class="sf-label">Content Item</div>
+        <div class="sf-content" style="font-style:normal;">Literature content item — Rainer Maria Rilke, Archaic Torso of Apollo, 1908.</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Prompt Question</div>
+        <div class="sf-content">When has something beautiful ever made a demand on you?</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Curator Note</div>
+        <div class="sf-content">The last line of this poem is one of the most astonishing endings in the Western canon. It comes out of nowhere and lands like a verdict. I think Rilke was right that beauty doesn't just invite — it requires.</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Reading (Lectio)</div>
+        <div class="sf-content">"We cannot know his legendary head with eyes like ripening fruit. And yet his torso is still suffused with brilliance from inside... for here there is no place that does not see you. You must change your life."</div>
+        <div class="sf-attr">— Rainer Maria Rilke, Archaic Torso of Apollo, trans. Stephen Mitchell, 1908</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Music (Auditio)</div>
+        <div class="sf-content" style="font-style:normal;">Arvo Pärt, Spiegel im Spiegel — Vladimir Spivakov</div>
+      </div>
+      <div class="sample-field">
+        <div class="sf-label">Action (Actio)</div>
+        <div class="sf-content">Carry Rilke's last line with you today: "You must change your life." Let it be a question, not a command. What does it point at?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pre-publish checklist -->
+  <div class="section">
+    <h2>Pre-Publish Checklist</h2>
+    <ul class="checklist">
+      <li>Is the date correct and does the content item exist in Sanity?</li>
+      <li>Is the prompt question under 20 words and genuinely open?</li>
+      <li>Does the question work for someone with no religious background?</li>
+      <li>Is the Lectio short enough to read in one breath?</li>
+      <li>Is the Actio one sentence, concrete, and doable anywhere?</li>
+      <li>Does the curator note sound like a person, not a caption?</li>
+      <li>Is the content item image high-resolution (min 1200px)?</li>
+      <li>If a Journey is linked, is the connection obvious to a first-time user?</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
