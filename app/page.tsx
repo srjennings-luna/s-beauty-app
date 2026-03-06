@@ -104,8 +104,8 @@ export default function TodayPage() {
             <FadeUp delay={60}>
               {dailyPrompt ? (
                 <section className="mb-8">
-                  {/* Image with gradient overlay */}
-                  <div className="relative aspect-[4/3] overflow-hidden">
+                  {/* Entire card is tappable */}
+                  <Link href="/prompt" className="block relative aspect-[4/3] overflow-hidden">
                     <img
                       src={dailyPrompt.content.imageUrl}
                       alt={dailyPrompt.content.title}
@@ -120,24 +120,15 @@ export default function TodayPage() {
                       <h2 className="font-serif-elegant text-2xl text-white leading-snug mb-2">
                         {dailyPrompt.content.title}
                       </h2>
-                      <p className="text-white/75 text-sm italic leading-relaxed line-clamp-2">
-                        &ldquo;{dailyPrompt.promptQuestion}&rdquo;
-                      </p>
+                      {dailyPrompt.promptQuestion && (
+                        <p className="text-white/75 text-sm italic leading-relaxed line-clamp-2">
+                          &ldquo;{dailyPrompt.promptQuestion}&rdquo;
+                        </p>
+                      )}
+                      {/* Quiet CTA inside the card */}
+                      <p className="cta-inline-dark mt-3 inline-block">Begin →</p>
                     </div>
-                  </div>
-                  {/* CTA below image */}
-                  <div className="px-5 pt-3 pb-1 flex items-center justify-between">
-                    {dailyPrompt.curatorNote ? (
-                      <p className="text-[#7a9a8a] text-xs italic line-clamp-1 flex-1 mr-4">
-                        {dailyPrompt.curatorNote}
-                      </p>
-                    ) : (
-                      <span />
-                    )}
-                    <Link href="/prompt" className="cta-inline flex-shrink-0">
-                      Enter practice →
-                    </Link>
-                  </div>
+                  </Link>
                 </section>
               ) : (
                 <section className="mx-5 mb-8 py-12 text-center border border-black/8">
