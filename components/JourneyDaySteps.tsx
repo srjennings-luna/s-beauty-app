@@ -16,23 +16,35 @@ const TYPE_ICONS: Record<string, string> = {
   "watch-listen": "🎬",
 };
 
-// ── Progress dots ────────────────────────────────────────────────────────────
+// ── KALLOS espresso palette (immersive overlay) ───────────────────────────────
+const C = {
+  bg: "#16110d",
+  cream: "rgba(253,246,232,0.88)",
+  creamDim: "rgba(253,246,232,0.5)",
+  creamFaint: "rgba(253,246,232,0.25)",
+  sage: "#4a7a62",
+  sageMuted: "#7a9a8a",
+  gold: "#C19B5F",  // ONE moment: Tradition quote border in Go Deeper
+};
+
+// ── Progress dots ─────────────────────────────────────────────────────────────
 
 function StepIndicator({ current, total }: { current: number; total: number }) {
   return (
     <div className="flex items-center gap-3">
-      {Array.from({ length: total }, (_, i) => (
-        <div
-          key={i}
-          className={`h-1.5 transition-all duration-300 ${
-            i === current
-              ? "w-6 bg-[#C19B5F]"
-              : i < current
-              ? "w-1.5 bg-[#C19B5F]/60"
-              : "w-1.5 bg-white/20"
-          }`}
-        />
-      ))}
+      <div className="flex items-center gap-1.5">
+        {Array.from({ length: total }, (_, i) => (
+          <div
+            key={i}
+            style={i === current ? { background: C.sage } : undefined}
+            className={`transition-all ${
+              i === current
+                ? "w-5 h-1.5 rounded-full"
+                : "w-1.5 h-1.5 rounded-full bg-white/25"
+            }`}
+          />
+        ))}
+      </div>
       <span className="text-white/30 text-xs ml-2">
         {current + 1} of {total}
       </span>
@@ -58,19 +70,19 @@ function StepOpen({ day }: { day: JourneyDay }) {
 
       {/* Scrollable content layer */}
       <div className="relative min-h-full flex flex-col justify-end">
-        {/* Gradient overlay for text legibility */}
+        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10 pointer-events-none" />
 
-        {/* Text content with footer clearance */}
+        {/* Text content */}
         <div className="relative px-6 pb-24">
-          <p className="text-[#C19B5F] text-xs tracking-widest uppercase mb-2">
+          <p className="text-xs tracking-widest uppercase mb-2" style={{ color: C.creamDim }}>
             Day {day.dayNumber}
           </p>
           <h2 className="font-serif-elegant text-3xl text-white mb-3">
             {day.dayTitle}
           </h2>
           {day.openText && (
-            <p className="font-serif-elegant-italic text-white/80 text-lg leading-relaxed">
+            <p className="font-serif-elegant-italic text-lg leading-relaxed" style={{ color: "rgba(255,255,255,0.8)" }}>
               {day.openText}
             </p>
           )}
@@ -87,7 +99,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
   if (!content) {
     return (
       <div className="flex items-center justify-center h-full px-6">
-        <p className="text-white/50 text-sm">No encounter content available.</p>
+        <p className="text-sm" style={{ color: C.creamFaint }}>No encounter content available.</p>
       </div>
     );
   }
@@ -108,7 +120,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
             alt={content.title}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#203545]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent" style={{ background: `linear-gradient(to bottom, transparent, ${C.bg})` }} />
         </div>
       )}
 
@@ -116,7 +128,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
         {/* Type badge */}
         <div className="flex items-center gap-2 mb-3">
           <span className="text-lg">{icon}</span>
-          <span className="text-[#C19B5F] text-xs tracking-widest uppercase">
+          <span className="text-xs tracking-widest uppercase" style={{ color: C.sageMuted }}>
             {typeLabel}
           </span>
         </div>
@@ -125,26 +137,26 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           {content.title}
         </h2>
 
-        {/* Artist / author / composer / thinker attribution */}
+        {/* Attribution */}
         {(content.artist || content.author || content.composer || content.thinkerName) && (
-          <p className="text-white/50 text-sm mb-4">
+          <p className="text-sm mb-4" style={{ color: C.creamFaint }}>
             {content.artist || content.author || content.composer || content.thinkerName}
             {content.year && `, ${content.year}`}
           </p>
         )}
 
         {/* Description */}
-        <p className="text-white/70 text-sm leading-relaxed mb-5">
+        <p className="text-sm leading-relaxed mb-5" style={{ color: C.sageMuted }}>
           {content.description}
         </p>
 
         {/* Context */}
         {content.context && (
-          <div className="border-l-2 border-white/15 pl-4 mb-5">
-            <p className="text-white/50 text-xs tracking-widest uppercase mb-1">
+          <div className="border-l-2 border-white/10 pl-4 mb-5">
+            <p className="text-xs tracking-widest uppercase mb-1" style={{ color: C.creamFaint }}>
               Context
             </p>
-            <p className="text-white/60 text-sm leading-relaxed">
+            <p className="text-sm leading-relaxed" style={{ color: C.sageMuted }}>
               {content.context}
             </p>
           </div>
@@ -153,11 +165,11 @@ function StepEncounter({ day }: { day: JourneyDay }) {
         {/* Quote (thinker type) */}
         {content.quote?.text && (
           <div className="bg-white/5 p-5 mb-5">
-            <p className="font-serif-elegant-italic text-white/80 text-lg leading-relaxed mb-2">
+            <p className="font-serif-elegant-italic text-lg leading-relaxed mb-2" style={{ color: "rgba(255,255,255,0.8)" }}>
               &ldquo;{content.quote.text}&rdquo;
             </p>
             {content.quote.attribution && (
-              <p className="text-[#C19B5F] text-xs">
+              <p className="text-xs" style={{ color: C.sageMuted }}>
                 — {content.quote.attribution}
               </p>
             )}
@@ -167,10 +179,10 @@ function StepEncounter({ day }: { day: JourneyDay }) {
         {/* Scripture (sacred art) */}
         {content.scripturePairing?.verse && (
           <div className="bg-white/5 p-5 mb-5">
-            <p className="font-serif-elegant-italic text-white/80 text-lg leading-relaxed mb-2">
+            <p className="font-serif-elegant-italic text-lg leading-relaxed mb-2" style={{ color: "rgba(255,255,255,0.8)" }}>
               {content.scripturePairing.verse}
             </p>
-            <p className="text-[#C19B5F] text-xs">
+            <p className="text-xs" style={{ color: C.sageMuted }}>
               — {content.scripturePairing.reference}
             </p>
           </div>
@@ -179,11 +191,11 @@ function StepEncounter({ day }: { day: JourneyDay }) {
         {/* Excerpt (literature) */}
         {content.excerpt && (
           <div className="bg-white/5 p-5 mb-5">
-            <p className="font-serif-elegant-italic text-white/80 text-base leading-relaxed">
+            <p className="font-serif-elegant-italic text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.8)" }}>
               {content.excerpt}
             </p>
             {content.workTitle && (
-              <p className="text-white/40 text-xs mt-2">
+              <p className="text-xs mt-2" style={{ color: C.creamFaint }}>
                 from <em>{content.workTitle}</em>
               </p>
             )}
@@ -192,7 +204,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
 
         {/* Encounter guidance */}
         {day.encounterGuidance && (
-          <p className="text-white/40 text-xs italic border-t border-white/10 pt-4">
+          <p className="text-xs italic border-t border-white/8 pt-4" style={{ color: C.creamFaint }}>
             {day.encounterGuidance}
           </p>
         )}
@@ -202,7 +214,8 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           {(content.contentType === "sacred-art" || content.contentType === "landscape") && (
             <Link
               href={`/pray/${content._id}`}
-              className="text-[#C19B5F] text-sm tracking-wide hover:underline"
+              className="text-sm tracking-wide hover:underline"
+              style={{ color: C.sageMuted }}
             >
               Pray with this image →
             </Link>
@@ -212,7 +225,8 @@ function StepEncounter({ day }: { day: JourneyDay }) {
               href={content.musicUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#C19B5F] text-sm tracking-wide hover:underline"
+              className="text-sm tracking-wide hover:underline"
+              style={{ color: C.sageMuted }}
             >
               Listen →
             </a>
@@ -222,7 +236,8 @@ function StepEncounter({ day }: { day: JourneyDay }) {
               href={content.mediaUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#C19B5F] text-sm tracking-wide hover:underline"
+              className="text-sm tracking-wide hover:underline"
+              style={{ color: C.sageMuted }}
             >
               {content.mediaType === "podcast" ? "Listen" : "Watch"} →
             </a>
@@ -253,7 +268,7 @@ function StepReflect({
   if (total === 0) {
     return (
       <div className="flex items-center justify-center h-full px-6">
-        <p className="text-white/50 text-sm">No reflection questions for this day.</p>
+        <p className="text-sm" style={{ color: C.creamFaint }}>No reflection questions for this day.</p>
       </div>
     );
   }
@@ -265,7 +280,7 @@ function StepReflect({
     <div className="flex flex-col items-center justify-center h-full px-8">
       {/* Question counter */}
       {total > 1 && (
-        <p className="text-white/30 text-xs tracking-widest uppercase mb-8">
+        <p className="text-xs tracking-widest uppercase mb-8" style={{ color: C.creamFaint }}>
           Question {current + 1} of {total}
         </p>
       )}
@@ -275,11 +290,12 @@ function StepReflect({
         {questions[current]}
       </p>
 
-      {/* Next question button (if more) */}
+      {/* Next question */}
       {!isLast && (
         <button
           onClick={onNextQuestion}
-          className="mt-10 text-[#C19B5F] text-sm tracking-wide hover:underline"
+          className="mt-10 text-sm tracking-wide hover:underline"
+          style={{ color: C.cream }}
         >
           Next question →
         </button>
@@ -293,15 +309,15 @@ function StepReflect({
 function StepConnect({ day }: { day: JourneyDay }) {
   return (
     <div className="flex flex-col items-center justify-center h-full px-8">
-      <p className="text-[#C19B5F] text-xs tracking-widest uppercase mb-6">
+      <p className="text-xs tracking-widest uppercase mb-6" style={{ color: C.creamDim }}>
         Tomorrow
       </p>
       {day.connectThread ? (
-        <p className="font-serif-elegant text-white/80 text-xl leading-relaxed text-center max-w-md">
+        <p className="font-serif-elegant text-xl leading-relaxed text-center max-w-md" style={{ color: "rgba(255,255,255,0.8)" }}>
           {day.connectThread}
         </p>
       ) : (
-        <p className="text-white/50 text-sm text-center">
+        <p className="text-sm text-center" style={{ color: C.creamFaint }}>
           You&apos;ve completed today&apos;s journey.
         </p>
       )}
@@ -319,19 +335,19 @@ function StepGoDeeper({ day }: { day: JourneyDay }) {
     <div className="h-full overflow-y-auto px-6 pt-4 pb-8">
       {/* Spacer for overlaid header */}
       <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)" }} />
-      <p className="text-[#C19B5F] text-xs tracking-widest uppercase mb-2">
+      <p className="text-xs tracking-widest uppercase mb-2" style={{ color: C.creamDim }}>
         Go Deeper
       </p>
       <h2 className="font-serif-elegant text-2xl text-white mb-2">
         Reflections from the Tradition
       </h2>
-      <p className="text-white/40 text-sm mb-6">
+      <p className="text-sm mb-6" style={{ color: C.creamFaint }}>
         Optional readings from the Church Fathers, Saints, and Popes
       </p>
 
       {reflections.length === 0 ? (
         <div className="py-20 flex items-center justify-center">
-          <p className="text-white/30 text-sm">
+          <p className="text-sm" style={{ color: C.creamFaint }}>
             No tradition reflections for this day.
           </p>
         </div>
@@ -340,25 +356,26 @@ function StepGoDeeper({ day }: { day: JourneyDay }) {
           {reflections.map((r) => {
             const isOpen = expandedId === r._id;
             return (
-              <div key={r._id} className="bg-white/5 border border-white/10">
+              <div key={r._id} className="bg-white/5 border border-white/8">
                 <button
                   onClick={() => setExpandedId(isOpen ? null : r._id)}
                   className="w-full flex items-center justify-between px-4 py-4 text-left"
                   aria-expanded={isOpen}
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="text-white/80 text-sm font-medium">
+                    <p className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.8)" }}>
                       {r.title}
                     </p>
-                    <p className="text-white/30 text-xs mt-0.5">{r.source}</p>
+                    <p className="text-xs mt-0.5" style={{ color: C.creamFaint }}>{r.source}</p>
                   </div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                     fill="currentColor"
-                    className={`w-4 h-4 text-white/30 flex-shrink-0 ml-3 transition-transform duration-200 ${
+                    className={`w-4 h-4 flex-shrink-0 ml-3 transition-transform duration-200 ${
                       isOpen ? "rotate-180" : ""
                     }`}
+                    style={{ color: C.creamFaint }}
                   >
                     <path
                       fillRule="evenodd"
@@ -370,15 +387,16 @@ function StepGoDeeper({ day }: { day: JourneyDay }) {
                 {isOpen && (
                   <div className="px-4 pb-4 animate-fade-in">
                     {r.shortQuote && (
-                      <p className="font-serif-elegant-italic text-white/80 text-sm border-l-2 border-[#C19B5F] pl-3 mb-3">
+                      // ── Gold: ONE sacred moment in the Journey immersive ──
+                      <p className="font-serif-elegant-italic text-sm border-l-2 pl-3 mb-3" style={{ color: "rgba(255,255,255,0.8)", borderColor: C.gold }}>
                         &ldquo;{r.shortQuote}&rdquo;
                       </p>
                     )}
-                    <p className="text-white/60 text-sm leading-relaxed">
+                    <p className="text-sm leading-relaxed" style={{ color: C.sageMuted }}>
                       {r.summary}
                     </p>
                     {r.era && (
-                      <p className="text-white/30 text-xs mt-2">{r.era}</p>
+                      <p className="text-xs mt-2" style={{ color: C.creamFaint }}>{r.era}</p>
                     )}
                   </div>
                 )}
@@ -432,11 +450,8 @@ export default function JourneyDaySteps({
 
   const isLastStep = step === totalSteps - 1;
 
-  // All steps use absolute overlay for header/progress/footer so content
-  // always fills the entire screen edge-to-edge.
-
   return (
-    <div className="fixed inset-0 z-[60] bg-[#203545]" style={{ height: "100dvh" }}>
+    <div className="fixed inset-0 z-[60]" style={{ height: "100dvh", backgroundColor: C.bg }}>
       {/* Content — fills entire screen */}
       <div className="absolute inset-0">
         {step === 0 && <StepOpen day={day} />}
@@ -452,12 +467,13 @@ export default function JourneyDaySteps({
         {step === 4 && <StepGoDeeper day={day} />}
       </div>
 
-      {/* Overlaid header — back/close, progress centered below */}
+      {/* Overlaid header */}
       <div className="absolute inset-x-0 top-0 z-10 pointer-events-none">
         <div className="pointer-events-auto flex items-center justify-between px-5 pb-2" style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 48px)" }}>
           <button
             onClick={step === 0 ? onClose : handlePrev}
-            className="w-9 h-9 flex items-center justify-center text-white/70"
+            className="w-9 h-9 flex items-center justify-center"
+            style={{ color: "rgba(255,255,255,0.6)" }}
             aria-label={step === 0 ? "Close" : "Previous step"}
           >
             {step === 0 ? (
@@ -471,12 +487,12 @@ export default function JourneyDaySteps({
             )}
           </button>
 
-          <span className="text-white/50 text-xs tracking-widest uppercase">
+          <span className="text-xs tracking-widest uppercase" style={{ color: C.creamDim }}>
             {STEP_LABELS[step]}
           </span>
 
           {step > 0 ? (
-            <button onClick={onClose} className="w-9 h-9 flex items-center justify-center text-white/40" aria-label="Close">
+            <button onClick={onClose} className="w-9 h-9 flex items-center justify-center" style={{ color: C.creamFaint }} aria-label="Close">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -486,13 +502,13 @@ export default function JourneyDaySteps({
           )}
         </div>
 
-        {/* Progress — centered below nav row */}
-        <div className="pointer-events-auto flex justify-center px-5 pb-4">
+        {/* Progress dots */}
+        <div className="pointer-events-auto flex justify-center px-5 pt-3 pb-4">
           <StepIndicator current={step} total={totalSteps} />
         </div>
       </div>
 
-      {/* Overlaid footer — action button only */}
+      {/* Overlaid footer — Continue / Complete */}
       <div className="absolute inset-x-0 bottom-0 z-10 pointer-events-none">
         <div className="pointer-events-auto px-5 pt-4" style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 24px)" }}>
           {isLastStep ? (
@@ -501,18 +517,24 @@ export default function JourneyDaySteps({
                 if (!isComplete) onMarkComplete();
                 onClose();
               }}
-              className={`w-full py-4 text-sm font-semibold tracking-wide transition-all ${
-                isComplete ? "bg-white/10 text-white/50" : "bg-[#C19B5F] text-[#111820]"
-              }`}
+              className="w-full py-4 text-sm font-semibold tracking-widest uppercase transition-all"
+              style={{
+                color: isComplete ? C.creamFaint : C.cream,
+                borderTop: `1px solid ${isComplete ? "rgba(253,246,232,0.1)" : "rgba(253,246,232,0.25)"}`,
+              }}
             >
-              {isComplete ? "✓ Day Complete" : "Complete Day"}
+              {isComplete ? "✓ Day Complete" : "Complete Day →"}
             </button>
           ) : (
             <button
               onClick={handleNext}
-              className="w-full py-4 bg-[#C19B5F] text-[#111820] text-sm font-semibold tracking-wide"
+              className="w-full py-4 text-sm font-semibold tracking-widest uppercase"
+              style={{
+                color: C.cream,
+                borderTop: `1px solid rgba(253,246,232,0.2)`,
+              }}
             >
-              Continue
+              Continue →
             </button>
           )}
         </div>
