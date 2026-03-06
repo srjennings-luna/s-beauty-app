@@ -463,3 +463,22 @@ h1, h2, h3, h4, h5, h6 {
 .animate-pulse-subtle {
   animation: pulseSubtle 2s infinite ease-in-out;
 }
+
+/* Journey Day Steps animations */
+@keyframes kenBurns {
+  0%   { transform: scale(1.0); }
+  100% { transform: scale(1.2); }
+}
+
+@keyframes gentleDrift {
+  0%   { transform: scale(1.05) translateX(0px); }
+  100% { transform: scale(1.12) translateX(-20px); }
+}
+
+.animate-ken-burns {
+  animation: kenBurns 14s ease-in-out infinite alternate;
+}
+
+.animate-gentle-drift {
+  animation: gentleDrift 16s ease-in-out infinite alternate;
+}

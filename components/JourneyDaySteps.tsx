@@ -297,12 +297,13 @@ function StepReflect({
       {/* Blurred background = encounter image (the painting just seen in Step 2) */}
       {(day.encounterContent?.imageUrl ?? day.openImageUrl) && (
         <div
-          className="absolute inset-0 animate-ken-burns"
+          className="absolute inset-0"
           style={{
             backgroundImage: `url(${day.encounterContent?.imageUrl ?? day.openImageUrl})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             filter: "blur(10px) brightness(0.5)",
+            animation: "kenBurns 8s ease-in-out infinite alternate",
           }}
         />
       )}
@@ -336,41 +337,16 @@ function StepReflect({
   );
 }
 
-// ── Step 4: Connect — sneak peek of next day ──────────────────────────────────
+// ── Step 4: Connect — text above, sneak peek strip at bottom ──────────────────
 function StepConnect({ day, nextDayImageUrl }: { day: JourneyDay; nextDayImageUrl?: string }) {
   return (
-    <div className="relative h-full w-full overflow-hidden flex flex-col">
+    <div className="h-full flex flex-col" style={{ background: C.bg }}>
 
-      {/* Next day sneak peek — fills background, partially revealed */}
-      {nextDayImageUrl && (
-        <div className="absolute inset-0">
-          {/* The image — slow drift animation — class defined in globals.css */}
-          <div
-            className="animate-gentle-drift"
-            style={{
-              position: "absolute",
-              inset: 0,
-              backgroundImage: `url(${nextDayImageUrl})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              filter: "brightness(0.35)",
-            }}
-          />
-          {/* Strong gradient top — keeps upper portion very dark */}
-          <div
-            className="absolute inset-0"
-            style={{ background: "linear-gradient(to bottom, rgba(22,17,13,0.92) 0%, rgba(22,17,13,0.5) 50%, rgba(22,17,13,0.15) 100%)" }}
-          />
-        </div>
-      )}
+      {/* Spacer for header */}
+      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)", flexShrink: 0 }} />
 
-      {/* Dark fallback if no next day image */}
-      {!nextDayImageUrl && (
-        <div className="absolute inset-0" style={{ background: C.bg }} />
-      )}
-
-      {/* Content — centered in upper portion */}
-      <div className="relative z-10 flex flex-col items-center justify-center flex-1 px-8 pb-16">
+      {/* Text — centered in the dark upper portion */}
+      <div className="flex-1 flex flex-col items-center justify-center px-8">
         <p className="text-xs tracking-widest uppercase mb-6" style={{ color: C.sageMuted, letterSpacing: "0.2em" }}>
           Tomorrow
         </p>
@@ -386,12 +362,37 @@ function StepConnect({ day, nextDayImageUrl }: { day: JourneyDay; nextDayImageUr
             You&apos;ve completed today&apos;s journey.
           </p>
         )}
-        {nextDayImageUrl && (
-          <p className="text-xs mt-8 tracking-widest uppercase" style={{ color: C.creamFaint }}>
-            A glimpse of what&apos;s next
-          </p>
-        )}
       </div>
+
+      {/* Sneak peek strip — partial image at bottom edge */}
+      {nextDayImageUrl ? (
+        <div
+          className="flex-shrink-0 relative overflow-hidden"
+          style={{
+            height: "32vh",
+            marginBottom: "calc(max(env(safe-area-inset-bottom, 0px), 24px) + 88px)",
+          }}
+        >
+          {/* Gradient: fades from dark background into the image */}
+          <div
+            className="absolute inset-x-0 top-0 z-10"
+            style={{ height: "55%", background: `linear-gradient(to bottom, ${C.bg}, transparent)` }}
+          />
+          {/* Next day image with slow drift */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `url(${nextDayImageUrl})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center top",
+              filter: "brightness(0.7)",
+              animation: "gentleDrift 16s ease-in-out infinite alternate",
+            }}
+          />
+        </div>
+      ) : (
+        <div style={{ height: "calc(max(env(safe-area-inset-bottom, 0px), 24px) + 88px)", flexShrink: 0 }} />
+      )}
 
     </div>
   );
