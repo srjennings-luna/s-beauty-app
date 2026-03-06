@@ -28,8 +28,7 @@ export default defineType({
       title: 'Prompt Question',
       type: 'text',
       rows: 2,
-      description: 'The single reflection question for the day. Curated specifically for this pairing.',
-      validation: (Rule) => Rule.required(),
+      description: 'Optional: shown on the Today page card as the teaser. Not shown inside the prompt practice.',
     }),
     defineField({
       name: 'curatorNote',
