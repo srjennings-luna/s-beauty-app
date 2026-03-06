@@ -48,23 +48,28 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
 // ── Step 1: Open ──────────────────────────────────────────────────────────────
 function StepOpen({ day }: { day: JourneyDay }) {
   return (
-    <div className="h-full overflow-y-auto">
-      {/* Spacer for overlaid header */}
-      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)" }} />
+    <div className="h-full flex flex-col" style={{ background: C.bg }}>
+      {/* Spacer for overlaid header (nav row + progress dots row) */}
+      <div style={{ flexShrink: 0, height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 80px)" }} />
 
-      {/* Hero image — clean, no text overlaid */}
-      {day.openImageUrl && (
-        <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4/3" }}>
+      {/* Hero image — fills all available vertical space */}
+      {day.openImageUrl ? (
+        <div className="flex-1 relative overflow-hidden" style={{ minHeight: 0 }}>
           <img
             src={day.openImageUrl}
             alt={day.dayTitle}
             className="w-full h-full object-cover"
           />
         </div>
+      ) : (
+        <div className="flex-1" style={{ background: C.darkBox }} />
       )}
 
-      {/* Label + dark instruction box */}
-      <div className="px-6 pt-6 pb-4">
+      {/* Label + dark box — always visible below image, no scroll needed */}
+      <div
+        className="flex-shrink-0 overflow-y-auto px-6 pt-5"
+        style={{ paddingBottom: "calc(max(env(safe-area-inset-bottom, 0px), 16px) + 60px)", maxHeight: "45vh" }}
+      >
         <p
           className="text-xs tracking-widest uppercase mb-4 pb-2"
           style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
@@ -98,9 +103,6 @@ function StepOpen({ day }: { day: JourneyDay }) {
           )}
         </div>
       </div>
-
-      {/* Spacer for overlaid footer */}
-      <div className="h-28" />
     </div>
   );
 }
@@ -132,7 +134,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
   return (
     <div className="h-full overflow-y-auto">
       {/* Spacer for overlaid header */}
-      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)" }} />
+      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 80px)" }} />
 
       {/* Content image — pinch to zoom (8x) */}
       {content.imageUrl && (
@@ -413,7 +415,7 @@ function StepGoDeeper({ day }: { day: JourneyDay }) {
   return (
     <div className="h-full overflow-y-auto">
       {/* Spacer for overlaid header */}
-      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)" }} />
+      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 80px)" }} />
 
       <div className="px-6 pt-4 pb-8">
         <p className="text-xs tracking-widest uppercase mb-2" style={{ color: C.sageMuted }}>Go Deeper</p>
@@ -549,6 +551,7 @@ export default function JourneyDaySteps({
                 transform: `translateX(${(index - step) * 100}%)`,
                 transition: "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)",
                 willChange: "transform",
+                overflow: "hidden",
               }}
             >
               {component}

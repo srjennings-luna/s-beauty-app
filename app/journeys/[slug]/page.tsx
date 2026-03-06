@@ -32,18 +32,6 @@ function saveProgress(slug: string, completedDays: number[]) {
   }
 }
 
-// ── Content type icon map ────────────────────────────────────────────────────
-
-const TYPE_ICONS: Record<string, string> = {
-  "sacred-art": "🎨",
-  thinker: "📖",
-  literature: "✍️",
-  music: "🎵",
-  "food-wine": "🍷",
-  landscape: "🌿",
-  "watch-listen": "🎬",
-};
-
 // ── Day row (overview list item — taps to open stepper) ──────────────────────
 
 function DayRow({
@@ -57,8 +45,6 @@ function DayRow({
   isActive: boolean;
   onOpen: () => void;
 }) {
-  const content = day.encounterContent;
-  const icon = content ? (TYPE_ICONS[content.contentType] ?? "✦") : "✦";
 
   return (
     <button
@@ -94,7 +80,6 @@ function DayRow({
       </div>
 
       <div className="flex-shrink-0 flex items-center gap-2">
-        <span className="text-base">{icon}</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
