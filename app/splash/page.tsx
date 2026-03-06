@@ -122,7 +122,7 @@ export default function SplashPage() {
                   <div
                     className="absolute bottom-0 left-0 right-0 h-32"
                     style={{
-                      background: `linear-gradient(to top, ${page.bottomBackgroundColor || '#203545'}, transparent)`
+                      background: `linear-gradient(to top, ${page.bottomBackgroundColor || '#16110d'}, transparent)`
                     }}
                   />
                 </div>
@@ -130,7 +130,7 @@ export default function SplashPage() {
                 {/* Bottom 1/3 - Quote section */}
                 <div
                   className="flex-1 flex flex-col items-center justify-center px-8 pb-20"
-                  style={{ backgroundColor: page.bottomBackgroundColor || '#203545' }}
+                  style={{ backgroundColor: page.bottomBackgroundColor || '#16110d' }}
                 >
                   <p
                     className={`text-lg text-center leading-relaxed max-w-xs transition-all duration-700 delay-300 ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
@@ -154,7 +154,7 @@ export default function SplashPage() {
               <div
                 className="h-full flex flex-col items-center justify-center px-8"
                 style={{
-                  background: `linear-gradient(135deg, ${page.backgroundGradientStart || '#4C3759'} 0%, ${page.backgroundGradientEnd || '#203545'} 100%)`
+                  background: `linear-gradient(135deg, ${page.backgroundGradientStart || '#1e1a2e'} 0%, ${page.backgroundGradientEnd || '#16110d'} 100%)`
                 }}
               >
                 {/* Icon */}
