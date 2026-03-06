@@ -167,6 +167,41 @@ export default function JourneysPage() {
                 </Link>
               );
             })}
+
+            {/* Coming soon — fills space when < 5 journeys seeded */}
+            {journeys.length < 5 && (
+              <div className="pt-6 pb-4">
+                <div className="border-t border-black/6 pt-6">
+                  <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-5">
+                    Coming soon
+                  </p>
+                  <div className="space-y-3">
+                    {[
+                      { title: "Silence", question: "What do we hear when we stop talking?", color: "#6b7c93" },
+                      { title: "Suffering & Beauty", question: "How does beauty survive darkness?", color: "#8b6f5e" },
+                      { title: "Creation", question: "What is the world trying to tell us?", color: "#5a7a52" },
+                      { title: "Home", question: "Why do we long for something we've never seen?", color: "#7a6a8a" },
+                    ]
+                      .filter((t) => !journeys.some((j) => j.title === t.title))
+                      .map((theme) => (
+                        <div
+                          key={theme.title}
+                          className="flex items-start gap-3 px-4 py-3 bg-white border border-black/5 opacity-60"
+                        >
+                          <span
+                            className="w-1 self-stretch flex-shrink-0 mt-0.5"
+                            style={{ backgroundColor: theme.color }}
+                          />
+                          <div>
+                            <p className="text-[#1a1a1a] text-sm font-medium">{theme.title}</p>
+                            <p className="text-[#7a9a8a] text-xs mt-0.5 italic">{theme.question}</p>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
