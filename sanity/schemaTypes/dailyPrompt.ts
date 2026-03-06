@@ -2,7 +2,7 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'dailyPrompt',
-  title: 'Daily Prompt',
+  title: 'Pause & Ponder',
   type: 'document',
   fields: [
     defineField({

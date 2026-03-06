@@ -140,7 +140,7 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 | `theme` | ✅ New — 5 founding themes |
 | `contentItem` | ✅ New — replaces artwork |
 | `journey` | ✅ New — 7-day structure |
-| `dailyPrompt` | ✅ New — Today tab content |
+| `dailyPrompt` | ✅ New — "Pause & Ponder" daily feature on Today tab |
 | `splashPage` | ✅ Kept unchanged |
 | `traditionReflection` | ✅ Updated — themes ref array added |
 | `episode` | ⚠️ Deprecated — kept to preserve data, hidden from sidebar |
