@@ -7,7 +7,7 @@ import { getDailyPrompt } from "@/lib/sanity";
 import type { DailyPrompt } from "@/lib/types";
 import PageTransition from "@/components/ui/PageTransition";
 
-// ── Espresso palette (same as Visio Divina) ──────────────────────────────────
+// ── Espresso palette ──────────────────────────────────────────────────────────
 const C = {
   bg: "#16110d",
   bgGradient: "linear-gradient(180deg, #1e1410 0%, #16110d 30%, #16110d 70%, #0d0a07 100%)",
@@ -21,7 +21,7 @@ const C = {
   divider: "rgba(253,246,232,0.1)",
 };
 
-// ── Streak helpers (localStorage) ────────────────────────────────────────────
+// ── Streak helpers ────────────────────────────────────────────────────────────
 const STREAK_KEY = "kallos-prompt-streak";
 const LAST_KEY   = "kallos-prompt-last";
 
@@ -37,7 +37,7 @@ function getStreak(): number {
 function markCompleted() {
   const today = getTodayStr();
   const last  = localStorage.getItem(LAST_KEY);
-  if (last === today) return; // already counted today
+  if (last === today) return;
 
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
@@ -74,11 +74,7 @@ function isFavorited(id: string): boolean {
 function toggleFavorite(id: string): boolean {
   const favs: string[] = JSON.parse(localStorage.getItem(FAV_KEY) ?? "[]");
   const idx = favs.indexOf(id);
-  if (idx > -1) {
-    favs.splice(idx, 1);
-  } else {
-    favs.unshift(id);
-  }
+  if (idx > -1) { favs.splice(idx, 1); } else { favs.unshift(id); }
   localStorage.setItem(FAV_KEY, JSON.stringify(favs));
   return favs.includes(id);
 }
@@ -89,16 +85,17 @@ const MUSIC_AMBIENT = "/music/natureseye-piano-dreamcloud-meditation-179215.mp3"
 
 export default function DailyPromptPage() {
   const router = useRouter();
-  const [prompt, setPrompt]           = useState<DailyPrompt | null>(null);
-  const [loading, setLoading]         = useState(true);
-  const [favorited, setFavorited]     = useState(false);
-  const [completed, setCompleted]     = useState(false);
-  const [musicPlaying, setMusicPlaying] = useState(false);
+  const [prompt, setPrompt]               = useState<DailyPrompt | null>(null);
+  const [loading, setLoading]             = useState(true);
+  const [favorited, setFavorited]         = useState(false);
+  const [completed, setCompleted]         = useState(false);
+  const [musicPlaying, setMusicPlaying]   = useState(false);
   const [musicMenuOpen, setMusicMenuOpen] = useState(false);
+  const [checkedItems, setCheckedItems]   = useState<boolean[]>([]);
 
-  const heroRef    = useRef<HTMLDivElement>(null);
-  const actioRef   = useRef<HTMLDivElement>(null);
-  const audioRef   = useRef<HTMLAudioElement | null>(null);
+  const heroRef     = useRef<HTMLDivElement>(null);
+  const actioRef    = useRef<HTMLDivElement>(null);
+  const audioRef    = useRef<HTMLAudioElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   // ── Load today's prompt ────────────────────────────────────────────────────
@@ -106,7 +103,15 @@ export default function DailyPromptPage() {
     getDailyPrompt()
       .then((data) => {
         setPrompt(data ?? null);
-        if (data) setFavorited(isFavorited(data._id));
+        if (data) {
+          setFavorited(isFavorited(data._id));
+          // Parse actio into lines for checkboxes
+          const lines = (data.actio ?? "")
+            .split("\n")
+            .map((l: string) => l.trim())
+            .filter(Boolean);
+          setCheckedItems(new Array(lines.length).fill(false));
+        }
       })
       .catch(() => setPrompt(null))
       .finally(() => setLoading(false));
@@ -118,10 +123,8 @@ export default function DailyPromptPage() {
     if (!hero) return;
     const img = hero.querySelector("img") as HTMLImageElement | null;
     if (!img) return;
-
     const onScroll = () => {
-      const scrolled = window.scrollY;
-      img.style.transform = `translateY(${scrolled * 0.2}px)`;
+      img.style.transform = `translateY(${window.scrollY * 0.2}px)`;
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -131,7 +134,6 @@ export default function DailyPromptPage() {
   useEffect(() => {
     const actio = actioRef.current;
     if (!actio || completed) return;
-
     observerRef.current = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !completed) {
@@ -147,43 +149,36 @@ export default function DailyPromptPage() {
 
   // ── Music ──────────────────────────────────────────────────────────────────
   const playChant = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = "";
-    }
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
     const a = new Audio(MUSIC_CHANT);
-    a.loop = true;
-    a.volume = 0.7;
+    a.loop = true; a.volume = 0.7;
     a.play().catch(() => {});
     audioRef.current = a;
-    setMusicPlaying(true);
-    setMusicMenuOpen(false);
+    setMusicPlaying(true); setMusicMenuOpen(false);
   };
 
   const playAmbient = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = "";
-    }
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
     const a = new Audio(MUSIC_AMBIENT);
-    a.loop = true;
-    a.volume = 0.7;
+    a.loop = true; a.volume = 0.7;
     a.play().catch(() => {});
     audioRef.current = a;
-    setMusicPlaying(true);
-    setMusicMenuOpen(false);
+    setMusicPlaying(true); setMusicMenuOpen(false);
   };
 
   const stopMusic = () => {
     audioRef.current?.pause();
-    setMusicPlaying(false);
-    setMusicMenuOpen(false);
+    setMusicPlaying(false); setMusicMenuOpen(false);
   };
 
-  // cleanup on unmount
   useEffect(() => () => audioRef.current?.pause(), []);
 
-  // ── Loading ────────────────────────────────────────────────────────────────
+  // ── Toggle actio checkbox ──────────────────────────────────────────────────
+  const toggleCheck = (i: number) => {
+    setCheckedItems((prev) => prev.map((v, idx) => idx === i ? !v : v));
+  };
+
+  // ── Loading / error states ─────────────────────────────────────────────────
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: C.bgGradient }}>
@@ -206,24 +201,30 @@ export default function DailyPromptPage() {
     );
   }
 
+  // Parse actio text into lines
+  const actioLines = (prompt.actio ?? "")
+    .split("\n")
+    .map((l: string) => l.trim())
+    .filter(Boolean);
+
+  const defaultActio = "Carry one image of beauty with you today. Let it be a question, not an answer.";
+
   return (
     <PageTransition variant="slide-up">
       <div className="min-h-screen pb-28" style={{ background: C.bgGradient }}>
 
-        {/* Film grain — adds tactile depth, prevents flat digital feel */}
+        {/* Film grain */}
         <div
           aria-hidden
           style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 50,
+            position: "fixed", inset: 0, zIndex: 50,
             pointerEvents: "none",
             mixBlendMode: "overlay",
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
           }}
         />
 
-        {/* ── Sticky header — glass panel ─────────────────────────────────── */}
+        {/* ── Sticky glass header ──────────────────────────────────────────── */}
         <div
           className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-4 py-3 safe-area-top"
           style={{
@@ -249,7 +250,6 @@ export default function DailyPromptPage() {
           </span>
 
           <div className="flex items-center gap-3">
-            {/* Favorite */}
             <button
               onClick={() => setFavorited(toggleFavorite(prompt._id))}
               className="w-10 h-10 flex items-center justify-center"
@@ -260,7 +260,6 @@ export default function DailyPromptPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
               </svg>
             </button>
-            {/* Share */}
             <button
               onClick={() => sharePrompt(prompt)}
               className="w-10 h-10 flex items-center justify-center"
@@ -271,7 +270,6 @@ export default function DailyPromptPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
               </svg>
             </button>
-            {/* Music */}
             <button
               onClick={() => setMusicMenuOpen(!musicMenuOpen)}
               className="text-xs font-medium"
@@ -296,129 +294,234 @@ export default function DailyPromptPage() {
           </>
         )}
 
-        {/* ── Hero image with parallax ─────────────────────────────────────── */}
-        {/* Black bg behind image so luminosity blend mode desaturates correctly */}
-        <div ref={heroRef} className="relative w-full overflow-hidden" style={{ height: "55vh", marginTop: "48px", backgroundColor: "#000" }}>
+        {/* ── Hero — full color, tall, parallax ───────────────────────────── */}
+        <div
+          ref={heroRef}
+          className="relative w-full overflow-hidden"
+          style={{ height: "72vh", marginTop: "48px" }}
+        >
           <img
             src={prompt.content.imageUrl}
             alt={prompt.content.title}
             className="w-full h-full object-cover"
-            style={{
-              filter: "contrast(1.25) brightness(0.75)",
-              mixBlendMode: "luminosity",
-              opacity: 0.75,
-              willChange: "transform",
-            }}
+            style={{ willChange: "transform" }}
           />
-          {/* Gradient — lower third */}
-          <div className="absolute inset-0" style={{ background: `linear-gradient(to top, ${C.bg} 0%, transparent 55%)` }} />
-
-          {/* Title in lower third — editorial scale */}
-          <div className="absolute bottom-0 left-0 right-0 px-5 pb-6">
+          {/* Gradient — bottom fade only, preserves color in upper portion */}
+          <div
+            className="absolute inset-0"
+            style={{ background: `linear-gradient(to top, ${C.bg} 0%, rgba(22,17,13,0.5) 40%, transparent 70%)` }}
+          />
+          {/* Date + title in lower third */}
+          <div className="absolute bottom-0 left-0 right-0 px-5 pb-7">
             <p className="text-xs tracking-widest uppercase mb-3" style={{ color: C.sage }}>
               {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
             </p>
             <h1
-              className="font-serif-elegant leading-[0.9] mb-4"
-              style={{ color: C.cream, fontSize: "clamp(2.4rem, 8vw, 3.8rem)", fontStyle: "italic" }}
+              className="font-serif-elegant leading-[0.92]"
+              style={{ color: C.cream, fontSize: "clamp(2.6rem, 8vw, 4rem)", fontStyle: "italic" }}
             >
               {prompt.content.title}
             </h1>
-            <p className="text-base italic leading-relaxed" style={{ color: C.creamDim, fontFamily: "var(--font-cormorant)" }}>
-              &ldquo;{prompt.promptQuestion}&rdquo;
-            </p>
           </div>
         </div>
 
-        {/* ── Curator note ─────────────────────────────────────────────────── */}
+        {/* ── Prompt question — full width below hero ──────────────────────── */}
+        <div className="px-5 pt-7 pb-4">
+          <p
+            className="leading-snug"
+            style={{
+              color: C.cream,
+              fontFamily: "var(--font-cormorant)",
+              fontSize: "clamp(1.35rem, 4.5vw, 1.7rem)",
+              fontStyle: "italic",
+              lineHeight: "1.35",
+            }}
+          >
+            &ldquo;{prompt.promptQuestion}&rdquo;
+          </p>
+        </div>
+
+        {/* ── Curator note — contained box ────────────────────────────────── */}
         {prompt.curatorNote && (
-          <div className="px-5 pt-6 pb-2">
-            <p className="text-sm italic leading-relaxed" style={{ color: C.creamDim, fontFamily: "var(--font-cormorant)" }}>
-              {prompt.curatorNote}
-            </p>
+          <div className="px-5 pt-2 pb-2">
+            <div
+              className="px-5 py-4"
+              style={{
+                background: "rgba(253,246,232,0.04)",
+                borderLeft: `2px solid ${C.gold}`,
+              }}
+            >
+              <p
+                className="text-sm italic leading-relaxed"
+                style={{ color: C.creamDim, fontFamily: "var(--font-cormorant)", fontSize: "1.05rem" }}
+              >
+                {prompt.curatorNote}
+              </p>
+            </div>
           </div>
         )}
 
         {/* ── Lectio ───────────────────────────────────────────────────────── */}
         {prompt.lectio && (
-          <section className="px-5 pt-8 pb-2">
-            <p className="text-xs tracking-widest uppercase mb-4 pb-2" style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}` }}>
-              Reading <span style={{ color: C.creamFaint }}>(Lectio)</span>
+          <section className="px-5 pt-10 pb-2">
+            <p
+              className="text-xs tracking-widest mb-5 pb-3"
+              style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
+            >
+              LECTIO
             </p>
-            <div className="pl-4" style={{ borderLeft: `1px solid ${C.gold}` }}>
-              <p className="text-lg italic leading-relaxed" style={{ color: C.cream, fontFamily: "var(--font-cormorant)" }}>
-                &ldquo;{prompt.lectio.text}&rdquo;
+            <p
+              className="italic leading-relaxed mb-3"
+              style={{
+                color: C.cream,
+                fontFamily: "var(--font-cormorant)",
+                fontSize: "clamp(1.2rem, 4vw, 1.5rem)",
+                lineHeight: "1.5",
+              }}
+            >
+              &ldquo;{prompt.lectio.text}&rdquo;
+            </p>
+            {prompt.lectio.attribution && (
+              <p className="text-xs tracking-widest uppercase mt-4" style={{ color: C.creamFaint }}>
+                — {prompt.lectio.attribution}
               </p>
-              {prompt.lectio.attribution && (
-                <p className="text-xs mt-3 tracking-wide" style={{ color: C.creamFaint }}>
-                  — {prompt.lectio.attribution}
-                </p>
-              )}
-            </div>
+            )}
           </section>
         )}
 
-        {/* ── Auditio ──────────────────────────────────────────────────────── */}
+        {/* ── Auditio — circular player ────────────────────────────────────── */}
         {prompt.auditio && (
-          <section className="px-5 pt-8 pb-2">
-            <p className="text-xs tracking-widest uppercase mb-4 pb-2" style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}` }}>
-              Music <span style={{ color: C.creamFaint }}>(Auditio)</span>
+          <section className="px-5 pt-10 pb-2">
+            <p
+              className="text-xs tracking-widest mb-5 pb-3"
+              style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
+            >
+              AUDITIO
             </p>
-            <div className="flex items-center gap-4 py-3 px-4" style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${C.divider}` }}>
+            <div className="flex items-center gap-5">
+              {/* Large circular play button */}
               {prompt.auditio.url ? (
                 <a
                   href={prompt.auditio.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 flex-shrink-0 flex items-center justify-center border"
-                  style={{ borderColor: C.gold, color: C.gold }}
+                  className="flex-shrink-0 flex items-center justify-center"
+                  style={{
+                    width: 64, height: 64,
+                    borderRadius: "50%",
+                    background: C.cream,
+                    color: C.bg,
+                  }}
                   aria-label="Open in music app"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                    <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.14c-.938 0-1.64.703-1.64 1.64v6.72c0 .937.702 1.64 1.64 1.64h2.3l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06z" />
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+                    <path d="M8 5v14l11-7z" />
                   </svg>
                 </a>
               ) : (
                 <button
                   onClick={() => { if (musicPlaying) stopMusic(); else playChant(); }}
-                  className="w-10 h-10 flex-shrink-0 flex items-center justify-center border"
-                  style={{ borderColor: C.gold, color: C.gold }}
-                  aria-label="Play chant"
+                  className="flex-shrink-0 flex items-center justify-center"
+                  style={{
+                    width: 64, height: 64,
+                    borderRadius: "50%",
+                    background: C.cream,
+                    color: C.bg,
+                  }}
+                  aria-label={musicPlaying ? "Pause" : "Play chant"}
                 >
                   {musicPlaying ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                       <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
                     </svg>
                   ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   )}
                 </button>
               )}
-              <div>
-                <p className="text-sm" style={{ color: C.cream }}>{prompt.auditio.title}</p>
+              {/* Track info */}
+              <div className="flex-1 min-w-0">
+                <p className="text-base font-medium truncate" style={{ color: C.cream }}>
+                  {prompt.auditio.title}
+                </p>
                 {prompt.auditio.artist && (
-                  <p className="text-xs mt-0.5" style={{ color: C.creamFaint }}>{prompt.auditio.artist}</p>
+                  <p className="text-sm mt-0.5 truncate" style={{ color: C.creamFaint }}>
+                    {prompt.auditio.artist}
+                  </p>
                 )}
                 {prompt.auditio.url && (
-                  <p className="text-xs mt-0.5" style={{ color: C.sageMuted }}>Opens externally →</p>
+                  <p className="text-xs mt-1" style={{ color: C.sageMuted }}>Opens externally →</p>
                 )}
               </div>
             </div>
           </section>
         )}
 
-        {/* ── Actio ────────────────────────────────────────────────────────── */}
-        <section ref={actioRef} className="px-5 pt-8 pb-2">
-          <p className="text-xs tracking-widest uppercase mb-4 pb-2" style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}` }}>
-            Action <span style={{ color: C.creamFaint }}>(Actio)</span>
+        {/* ── Actio — checkboxes ───────────────────────────────────────────── */}
+        <section ref={actioRef} className="px-5 pt-10 pb-2">
+          <p
+            className="text-xs tracking-widest mb-5 pb-3"
+            style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
+          >
+            ACTIO
           </p>
-          <p className="text-base italic leading-relaxed" style={{ color: C.cream, fontFamily: "var(--font-cormorant)" }}>
-            {prompt.actio ?? "Carry one image of beauty with you today. Let it be a question, not an answer."}
-          </p>
+
+          {actioLines.length > 0 ? (
+            <div className="flex flex-col gap-5">
+              {actioLines.map((line: string, i: number) => (
+                <button
+                  key={i}
+                  onClick={() => toggleCheck(i)}
+                  className="flex items-start gap-4 text-left w-full"
+                  aria-label={`Mark complete: ${line}`}
+                >
+                  {/* Square checkbox — KALLOS design system: no rounded corners */}
+                  <div
+                    className="flex-shrink-0 mt-1"
+                    style={{
+                      width: 20, height: 20,
+                      border: `1px solid ${checkedItems[i] ? C.gold : C.creamFaint}`,
+                      background: checkedItems[i] ? C.gold : "transparent",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {checkedItems[i] && (
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke={C.bg} strokeWidth={2.5} width="12" height="12">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    )}
+                  </div>
+                  <p
+                    className="italic leading-relaxed flex-1"
+                    style={{
+                      color: checkedItems[i] ? C.creamFaint : C.cream,
+                      fontFamily: "var(--font-cormorant)",
+                      fontSize: "clamp(1.1rem, 3.5vw, 1.3rem)",
+                      textDecoration: checkedItems[i] ? "line-through" : "none",
+                      textDecorationColor: C.creamFaint,
+                      transition: "color 0.2s ease",
+                    }}
+                  >
+                    {line}
+                  </p>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p
+              className="italic leading-relaxed"
+              style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "clamp(1.1rem, 3.5vw, 1.3rem)" }}
+            >
+              {defaultActio}
+            </p>
+          )}
+
           {completed && (
-            <p className="text-xs mt-4 tracking-wide" style={{ color: C.sageMuted }}>
+            <p className="text-xs mt-6 tracking-wide" style={{ color: C.sageMuted }}>
               You showed up today.
             </p>
           )}
@@ -442,9 +545,7 @@ export default function DailyPromptPage() {
           </section>
         )}
 
-        {/* ── Bottom padding ───────────────────────────────────────────────── */}
         <div className="h-16" />
-
       </div>
     </PageTransition>
   );
