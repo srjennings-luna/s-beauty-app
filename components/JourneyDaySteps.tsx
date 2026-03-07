@@ -113,7 +113,6 @@ function StepOpen({ day }: { day: JourneyDay }) {
 // ── Step 2: Encounter ─────────────────────────────────────────────────────────
 function StepEncounter({ day }: { day: JourneyDay }) {
   const content = day.encounterContent;
-  const [descExpanded, setDescExpanded] = useState(false);
   const [ctxExpanded, setCtxExpanded] = useState(false);
 
   if (!content) {
@@ -137,8 +136,6 @@ function StepEncounter({ day }: { day: JourneyDay }) {
   const showWatchLink =
     content.contentType === "watch-listen" && content.mediaUrl;
 
-  const descTruncated = truncateToSentences(content.description ?? "");
-  const descNeedsExpand = (content.description?.length ?? 0) > descTruncated.length;
   const ctxTruncated = truncateToSentences(content.context ?? "");
   const ctxNeedsExpand = (content.context?.length ?? 0) > ctxTruncated.length;
 
@@ -184,21 +181,10 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           )}
         </div>
 
-        {/* Description — collapsed to ~2 sentences, expandable */}
-        <div>
-          <p className="text-sm leading-relaxed" style={{ color: C.cream }}>
-            {descExpanded ? content.description : descTruncated}
-          </p>
-          {descNeedsExpand && !descExpanded && (
-            <button
-              onClick={() => setDescExpanded(true)}
-              className="mt-2 text-xs tracking-widest uppercase"
-              style={{ color: C.sageMuted }}
-            >
-              Read more ↓
-            </button>
-          )}
-        </div>
+        {/* Description — always fully visible */}
+        <p className="text-sm leading-relaxed" style={{ color: C.cream }}>
+          {content.description}
+        </p>
 
         {/* Context — collapsed by default, expandable */}
         {content.context && (
