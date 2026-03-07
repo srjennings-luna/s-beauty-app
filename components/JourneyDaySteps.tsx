@@ -6,9 +6,9 @@ import type { JourneyDay } from "@/lib/types";
 
 const STEP_LABELS = ["Open", "Encounter", "Breathe", "Reflect", "Connect", "Go Deeper"];
 
-// ── Breathe overlay — contemplative pause before reading ─────────────────────
-// Renders a pulsing circle over the artwork image on the Encounter step.
-// Auto-fades after one full breath cycle (8s). Pure CSS, no state needed.
+// ── Breathe overlay — continuous breathing pulse ─────────────────────────────
+// Loops infinitely while the Breathe page is visible. pointer-events: none
+// so it never interferes with pinch-to-zoom on the image beneath.
 function BreatheOverlay() {
   return (
     <>
@@ -17,20 +17,12 @@ function BreatheOverlay() {
           0%, 100% { transform: scale(1); opacity: 0.3; }
           50%       { transform: scale(4); opacity: 0.8; }
         }
-        @keyframes kallosBreatheContainerFade {
-          0%   { opacity: 1; }
-          80%  { opacity: 1; }
-          100% { opacity: 0; pointer-events: none; }
-        }
-        .kallos-breathe-container {
-          animation: kallosBreatheContainerFade 10s ease-in-out 1 forwards;
-        }
         .kallos-breathe-dot {
-          animation: kallosBreathe 8s ease-in-out 1 forwards;
+          animation: kallosBreathe 8s ease-in-out infinite;
         }
       `}</style>
       <div
-        className="kallos-breathe-container absolute inset-0 flex items-end justify-center pointer-events-none"
+        className="absolute inset-0 flex items-end justify-center pointer-events-none"
         style={{ paddingBottom: "28px", zIndex: 10 }}
       >
         <div
@@ -84,27 +76,39 @@ const C = {
   darkBox: "#24201d",
 };
 
-// ── Progress dots — square, KALLOS design system ──────────────────────────────
-function StepIndicator({ current, total }: { current: number; total: number }) {
+// ── Stories-style progress bar — thin segments at top ─────────────────────────
+function StoriesProgressBar({ current, total }: { current: number; total: number }) {
   return (
-    <div className="flex items-center gap-3">
-      <div className="flex items-center gap-1.5">
-        {Array.from({ length: total }, (_, i) => (
+    <div
+      className="absolute z-20 flex"
+      style={{
+        top: "calc(max(env(safe-area-inset-top, 0px), 48px) - 8px)",
+        left: 12,
+        right: 12,
+        gap: 3,
+        height: 2,
+      }}
+    >
+      {Array.from({ length: total }, (_, i) => (
+        <div
+          key={i}
+          style={{
+            flex: 1,
+            background: "rgba(253,246,232,0.12)",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
           <div
-            key={i}
             style={{
-              width: i === current ? 20 : 6,
-              height: 6,
-              background: i === current ? C.sage : "rgba(255,255,255,0.25)",
-              borderRadius: 0,
-              transition: "width 300ms ease, background 300ms ease",
+              position: "absolute",
+              inset: 0,
+              background: i <= current ? "rgba(253,246,232,0.55)" : "transparent",
+              transition: "background 0.4s ease",
             }}
           />
-        ))}
-      </div>
-      <span className="text-xs ml-2" style={{ color: "rgba(255,255,255,0.3)" }}>
-        {current + 1} of {total}
-      </span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -158,7 +162,7 @@ function StepOpen({ day }: { day: JourneyDay }) {
       </div>
 
       {/* Footer spacer */}
-      <div className="h-28" />
+      <div className="h-12" />
     </div>
   );
 }
@@ -360,7 +364,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
       </div>
 
       {/* Spacer for footer */}
-      <div className="h-28" />
+      <div className="h-12" />
     </div>
   );
 }
@@ -635,7 +639,7 @@ function StepGoDeeper({ day }: { day: JourneyDay }) {
         )}
       </div>
 
-      <div className="h-28" />
+      <div className="h-12" />
     </div>
   );
 }
@@ -672,6 +676,32 @@ export default function JourneyDaySteps({
   const handleNextQuestion = useCallback(() => setQuestionIndex((i) => i + 1), []);
   const isLastStep = step === totalSteps - 1;
 
+  // Swipe detection
+  const touchRef = useRef<{ x: number; y: number; t: number } | null>(null);
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    touchRef.current = { x: touch.clientX, y: touch.clientY, t: Date.now() };
+  }, []);
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!touchRef.current) return;
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchRef.current.x;
+    const dy = touch.clientY - touchRef.current.y;
+    const dt = Date.now() - touchRef.current.t;
+    touchRef.current = null;
+    // Must be a horizontal swipe: >60px horizontal, not too vertical, within 500ms
+    if (Math.abs(dx) > 60 && Math.abs(dy) < Math.abs(dx) * 0.7 && dt < 500) {
+      if (dx < 0) {
+        // Swipe left → next
+        if (isLastStep) { if (!isComplete) onMarkComplete(); onClose(); }
+        else handleNext();
+      } else {
+        // Swipe right → previous
+        handlePrev();
+      }
+    }
+  }, [handleNext, handlePrev, isLastStep, isComplete, onMarkComplete, onClose]);
+
   const nextDayImageUrl = nextDay?.openImageUrl;
 
   const stepComponents = [
@@ -686,8 +716,12 @@ export default function JourneyDaySteps({
   return (
     <>
       <div className="fixed inset-0 z-[60]" style={{ height: "100dvh", backgroundColor: C.bg }}>
-        {/* Slide container */}
-        <div className="absolute inset-0 overflow-hidden">
+        {/* Slide container — swipe left/right to navigate */}
+        <div
+          className="absolute inset-0 overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           {stepComponents.map((component, index) => (
             <div
               key={index}
@@ -747,39 +781,10 @@ export default function JourneyDaySteps({
 
         </div>
 
-        {/* Overlaid footer — progress squares + action button */}
-        <div className="absolute inset-x-0 bottom-0 z-10 pointer-events-none">
-          <div
-            className="pointer-events-auto px-5 pt-3"
-            style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 24px)" }}
-          >
-            {/* Progress squares — bottom, above button */}
-            <div className="flex justify-center mb-4">
-              <StepIndicator current={step} total={totalSteps} />
-            </div>
+        {/* Stories progress bar — thin segments at top */}
+        <StoriesProgressBar current={step} total={totalSteps} />
 
-            {isLastStep ? (
-              <button
-                onClick={() => { if (!isComplete) onMarkComplete(); onClose(); }}
-                className="w-full py-4 text-sm font-semibold tracking-widest uppercase transition-all"
-                style={{
-                  color: isComplete ? C.creamFaint : C.cream,
-                  borderTop: `1px solid ${isComplete ? "rgba(253,246,232,0.1)" : "rgba(253,246,232,0.25)"}`,
-                }}
-              >
-                {isComplete ? "✓ Day Complete" : "Complete Day →"}
-              </button>
-            ) : (
-              <button
-                onClick={handleNext}
-                className="w-full py-4 text-sm font-semibold tracking-widest uppercase"
-                style={{ color: C.cream, borderTop: `1px solid rgba(253,246,232,0.2)` }}
-              >
-                Continue →
-              </button>
-            )}
-          </div>
-        </div>
+        {/* Navigation: swipe left/right detected on the slide container above */}
       </div>
     </>
   );
