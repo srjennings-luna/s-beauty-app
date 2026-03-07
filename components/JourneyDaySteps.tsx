@@ -6,6 +6,18 @@ import type { JourneyDay } from "@/lib/types";
 
 const STEP_LABELS = ["Open", "Encounter", "Reflect", "Connect", "Go Deeper"];
 
+// ── Text truncation — snap to last sentence boundary before maxChars ──────────
+function truncateToSentences(text: string, maxChars = 220): string {
+  if (!text || text.length <= maxChars) return text;
+  const slice = text.slice(0, maxChars);
+  const lastEnd = Math.max(
+    slice.lastIndexOf(". "),
+    slice.lastIndexOf("! "),
+    slice.lastIndexOf("? ")
+  );
+  return lastEnd > 60 ? text.slice(0, lastEnd + 1) : slice.trimEnd() + "…";
+}
+
 // ── KALLOS espresso palette ───────────────────────────────────────────────────
 const C = {
   bg: "#16110d",
@@ -101,6 +113,9 @@ function StepOpen({ day }: { day: JourneyDay }) {
 // ── Step 2: Encounter ─────────────────────────────────────────────────────────
 function StepEncounter({ day }: { day: JourneyDay }) {
   const content = day.encounterContent;
+  const [descExpanded, setDescExpanded] = useState(false);
+  const [ctxExpanded, setCtxExpanded] = useState(false);
+
   if (!content) {
     return (
       <div className="flex items-center justify-center h-full px-6">
@@ -121,6 +136,11 @@ function StepEncounter({ day }: { day: JourneyDay }) {
     content.contentType === "music" && content.musicUrl;
   const showWatchLink =
     content.contentType === "watch-listen" && content.mediaUrl;
+
+  const descTruncated = truncateToSentences(content.description ?? "");
+  const descNeedsExpand = (content.description?.length ?? 0) > descTruncated.length;
+  const ctxTruncated = truncateToSentences(content.context ?? "");
+  const ctxNeedsExpand = (content.context?.length ?? 0) > ctxTruncated.length;
 
   return (
     <div className="h-full overflow-y-auto">
@@ -164,16 +184,47 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           )}
         </div>
 
-        {/* Description */}
-        <p className="text-sm leading-relaxed" style={{ color: C.cream }}>
-          {content.description}
-        </p>
+        {/* Description — collapsed to ~2 sentences, expandable */}
+        <div>
+          <p className="text-sm leading-relaxed" style={{ color: C.cream }}>
+            {descExpanded ? content.description : descTruncated}
+          </p>
+          {descNeedsExpand && !descExpanded && (
+            <button
+              onClick={() => setDescExpanded(true)}
+              className="mt-2 text-xs tracking-widest uppercase"
+              style={{ color: C.sageMuted }}
+            >
+              Read more ↓
+            </button>
+          )}
+        </div>
 
-        {/* Context */}
+        {/* Context — collapsed by default, expandable */}
         {content.context && (
           <div className="pl-4" style={{ borderLeft: `1px solid ${C.divider}` }}>
-            <p className="text-xs tracking-widest uppercase mb-2" style={{ color: C.creamFaint }}>Context</p>
-            <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>{content.context}</p>
+            <button
+              onClick={() => setCtxExpanded(!ctxExpanded)}
+              className="flex items-center gap-2 w-full text-left mb-2"
+            >
+              <p className="text-xs tracking-widest uppercase" style={{ color: C.creamFaint }}>Context</p>
+              <span className="text-xs" style={{ color: C.creamFaint, transition: "transform 0.2s", display: "inline-block", transform: ctxExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
+            </button>
+            {ctxExpanded && (
+              <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>{content.context}</p>
+            )}
+            {!ctxExpanded && (
+              <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>{ctxTruncated}</p>
+            )}
+            {ctxNeedsExpand && !ctxExpanded && (
+              <button
+                onClick={() => setCtxExpanded(true)}
+                className="mt-1 text-xs tracking-widest uppercase"
+                style={{ color: C.sageMuted }}
+              >
+                Read more ↓
+              </button>
+            )}
           </div>
         )}
 
