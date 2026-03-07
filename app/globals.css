@@ -475,6 +475,12 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: scale(1.12) translateX(-20px); }
 }
 
+/* Step 4 Connect — pans across oversized image inside constrained window frame */
+@keyframes windowDrift {
+  0%   { background-position: 20% center; }
+  100% { background-position: 80% center; }
+}
+
 .animate-ken-burns {
   animation: kenBurns 14s ease-in-out infinite alternate;
 }

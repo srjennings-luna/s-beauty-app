@@ -302,7 +302,7 @@ function StepReflect({
             backgroundImage: `url(${day.encounterContent?.imageUrl ?? day.openImageUrl})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            filter: "blur(10px) brightness(0.5)",
+            filter: "blur(7px) brightness(0.5)",
             animation: "kenBurns 8s ease-in-out infinite alternate",
           }}
         />
@@ -337,7 +337,7 @@ function StepReflect({
   );
 }
 
-// ── Step 4: Connect — text above, sneak peek strip at bottom ──────────────────
+// ── Step 4: Connect — text above, constrained image window below ──────────────
 function StepConnect({ day, nextDayImageUrl }: { day: JourneyDay; nextDayImageUrl?: string }) {
   return (
     <div className="h-full flex flex-col" style={{ background: C.bg }}>
@@ -345,15 +345,15 @@ function StepConnect({ day, nextDayImageUrl }: { day: JourneyDay; nextDayImageUr
       {/* Spacer for header */}
       <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)", flexShrink: 0 }} />
 
-      {/* Text — centered in the dark upper portion */}
+      {/* Text — centered above the window */}
       <div className="flex-1 flex flex-col items-center justify-center px-8">
-        <p className="text-xs tracking-widest uppercase mb-6" style={{ color: C.sageMuted, letterSpacing: "0.2em" }}>
+        <p className="text-xs tracking-widest uppercase mb-5" style={{ color: C.sageMuted, letterSpacing: "0.2em" }}>
           Tomorrow
         </p>
         {day.connectThread ? (
           <p
             className="font-serif-elegant italic text-center"
-            style={{ color: C.cream, fontSize: "clamp(1.2rem, 4.5vw, 1.6rem)", lineHeight: "1.45", maxWidth: "320px" }}
+            style={{ color: C.cream, fontSize: "clamp(1.1rem, 4vw, 1.5rem)", lineHeight: "1.5", maxWidth: "300px" }}
           >
             {day.connectThread}
           </p>
@@ -364,35 +364,44 @@ function StepConnect({ day, nextDayImageUrl }: { day: JourneyDay; nextDayImageUr
         )}
       </div>
 
-      {/* Sneak peek strip — partial image at bottom edge */}
-      {nextDayImageUrl ? (
-        <div
-          className="flex-shrink-0 relative overflow-hidden"
-          style={{
-            height: "32vh",
-            marginBottom: "calc(max(env(safe-area-inset-bottom, 0px), 24px) + 88px)",
-          }}
-        >
-          {/* Gradient: fades from dark background into the image */}
-          <div
-            className="absolute inset-x-0 top-0 z-10"
-            style={{ height: "55%", background: `linear-gradient(to bottom, ${C.bg}, transparent)` }}
-          />
-          {/* Next day image with slow drift */}
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `url(${nextDayImageUrl})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center top",
-              filter: "brightness(0.7)",
-              animation: "gentleDrift 16s ease-in-out infinite alternate",
-            }}
-          />
-        </div>
-      ) : (
-        <div style={{ height: "calc(max(env(safe-area-inset-bottom, 0px), 24px) + 88px)", flexShrink: 0 }} />
-      )}
+      {/* Image window — constrained frame, image drifts inside */}
+      <div
+        className="flex-shrink-0 flex flex-col items-center"
+        style={{ paddingBottom: "calc(max(env(safe-area-inset-bottom, 0px), 24px) + 96px)", paddingTop: "16px" }}
+      >
+        {nextDayImageUrl ? (
+          <>
+            <p className="text-xs tracking-widest uppercase mb-3" style={{ color: C.creamFaint, letterSpacing: "0.18em" }}>
+              A glimpse of what&apos;s next
+            </p>
+            {/* The frame — 2/3 screen width, panoramic ratio, hard clip edges */}
+            <div
+              style={{
+                width: "66%",
+                aspectRatio: "16 / 7",
+                overflow: "hidden",
+                position: "relative",
+                border: `1px solid rgba(253,246,232,0.15)`,
+              }}
+            >
+              {/* Image scaled up so no edge shows during drift — pans continuously */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  backgroundImage: `url(${nextDayImageUrl})`,
+                  backgroundSize: "160%",
+                  backgroundPosition: "center",
+                  filter: "brightness(0.72)",
+                  animation: "windowDrift 18s ease-in-out infinite alternate",
+                }}
+              />
+            </div>
+          </>
+        ) : (
+          <div style={{ height: "8vh" }} />
+        )}
+      </div>
 
     </div>
   );
