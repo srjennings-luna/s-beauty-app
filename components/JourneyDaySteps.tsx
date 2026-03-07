@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import type { JourneyDay } from "@/lib/types";
 
@@ -116,8 +115,8 @@ function StepEncounter({ day }: { day: JourneyDay }) {
     .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
 
-  const showPrayLink =
-    content.contentType === "sacred-art" || content.contentType === "landscape";
+  // Visio Divina ("Pray with this image") is intentionally excluded from Journey steps.
+  // It is only accessible via Explore and Library entry points.
   const showListenLink =
     content.contentType === "music" && content.musicUrl;
   const showWatchLink =
@@ -217,23 +216,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           </p>
         )}
 
-        {/* Pray / Listen / Watch — promoted CTA block */}
-        {showPrayLink && (
-          <div style={{ border: `1px solid ${C.divider}` }}>
-            <Link
-              href={`/pray/${content._id}`}
-              className="flex items-center justify-between px-5 py-4 w-full"
-            >
-              <div>
-                <p className="text-xs tracking-widest uppercase mb-1" style={{ color: C.creamFaint }}>
-                  Visio Divina
-                </p>
-                <p className="text-sm" style={{ color: C.cream }}>Pray with this image →</p>
-              </div>
-            </Link>
-          </div>
-        )}
-
+        {/* Listen / Watch — promoted CTA block */}
         {showListenLink && (
           <div style={{ border: `1px solid ${C.divider}` }}>
             <a

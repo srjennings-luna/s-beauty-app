@@ -81,6 +81,7 @@ All live in the `contentItem` Sanity schema with `contentType` field:
 - 5-step daily structure: **Open → Encounter → Reflect → Connect → Go Deeper**
 - Step 1 (Open): Image always present — the visual anchor for the day
 - Integrated curriculum model: all content types answer the same central question
+- **Visio Divina ("Pray with this image") is NOT available inside Journey steps.** It is only accessible via Explore and Library entry points. This is a deliberate product decision — the Journey is a complete 5-step experience and doesn't need a 6th prayer mode mid-flow.
 
 ### 5 Founding Themes
 1. **Light** — "What does light reveal that darkness hides?"
@@ -166,6 +167,41 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 - **8x pinch-to-zoom** on images
 - **Music player** — Chant / Ambient options on Pray page
 - **Map** with colored markers by content type
+
+---
+
+## Parking Lot — Future Design Work
+
+These are deferred decisions to revisit with more content and real user testing:
+
+### Journey Day Steps — Progress Indicator
+Current: Square indicators in the footer (below the Continue button). Simple and functional.
+Open questions for a future pass:
+- Should the progress indicator match Visio Divina exactly (centered, with step name inline)?
+- Visio Divina shows `"1 of 5 · Gaze"` in the header and dots at the bottom — a clean model worth adopting
+- Consider unifying both experiences under one shared navigation component
+- When Journey has variable-length days (not always 5 steps), indicator needs to adapt dynamically
+
+### Journey Day Steps — Connect Step (Step 4)
+Current: Dark background with next-day image drift animation. Simple.
+Open question: What's the right visual treatment for the "sneak peek" of the next day's image?
+Sheri to brainstorm. Options: letterbox strip, partial reveal from bottom, full-bleed dark with a peek edge.
+
+### Explore — Content Item Card UI Cleanup
+Flagged from screenshot (March 2026). Issues to address:
+- Portrait images letterbox with black bars — consider `object-position` or allowing full portrait crop instead of forced aspect ratio
+- Empty space below "Pray with this image →" link
+- Book icon (top-right of info panel) — purpose unclear, may need label or removal
+Revisit once more content is seeded and real images are in place.
+
+### Breath Interaction
+Discussed: A breathing/contemplative interaction — likely an animated visual prompt tied to breath rhythm (inhale/exhale) to deepen the meditative quality of the app.
+Open questions for a future pass:
+- Where does it live? Candidates: Step 1 Open (as an invitation to settle in), Step 3 Reflect (before the questions appear), standalone Pause mode, or a global floating "breathe" button
+- What triggers it? Automatic after X seconds of stillness, user-initiated tap, or built into a specific step flow
+- Visual treatment: Expanding/contracting circle, radial blur, subtle pulsing on the image itself, or text prompt ("Breathe in… breathe out…")
+- Duration: Single breath cycle (4-7-8 pattern?), or a full 1–2 minute guided sequence
+- How does it connect to content? Does the breath prompt appear over the day's image, or is it separate from the artwork?
 
 ---
 
