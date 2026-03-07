@@ -183,27 +183,39 @@ export async function getJourney(slug: string) {
 // Daily Prompt
 // ─────────────────────────────────────────────────────────────────────────────
 
+const DAILY_PROMPT_FIELDS = `
+  _id,
+  date,
+  "content": content->{${CONTENT_ITEM_FIELDS}},
+  promptQuestion,
+  curatorNote,
+  lectio,
+  auditio,
+  actio,
+  "relatedJourney": relatedJourney->{
+    _id,
+    title,
+    slug,
+    "heroImageUrl": heroImage.asset->url
+  },
+  "theme": theme->{${THEME_FIELDS}}
+`
+
 export async function getDailyPrompt(date?: string) {
   const targetDate = date ?? new Date().toISOString().slice(0, 10)
-  return sanityClient.fetch(
-    `*[_type == "dailyPrompt" && date == $targetDate][0] {
-      _id,
-      date,
-      "content": content->{${CONTENT_ITEM_FIELDS}},
-      promptQuestion,
-      curatorNote,
-      lectio,
-      auditio,
-      actio,
-      "relatedJourney": relatedJourney->{
-        _id,
-        title,
-        slug,
-        "heroImageUrl": heroImage.asset->url
-      },
-      "theme": theme->{${THEME_FIELDS}}
-    }`,
+
+  // Try exact date match first
+  const exact = await sanityClient.fetch(
+    `*[_type == "dailyPrompt" && date == $targetDate][0] {${DAILY_PROMPT_FIELDS}}`,
     { targetDate }
+  )
+
+  // If we got a valid result with content linked, use it
+  if (exact?.content?.imageUrl) return exact
+
+  // Fallback: most recently published prompt (handles editorial gaps)
+  return sanityClient.fetch(
+    `*[_type == "dailyPrompt"] | order(date desc)[0] {${DAILY_PROMPT_FIELDS}}`
   )
 }
 
