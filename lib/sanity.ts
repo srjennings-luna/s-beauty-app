@@ -61,6 +61,7 @@ const CONTENT_ITEM_FIELDS = `
   performer,
   durationMinutes,
   musicUrl,
+  "audioFileUrl": audioFile.asset->url,
   craftTradition,
   pointsToward,
   creationTheology,

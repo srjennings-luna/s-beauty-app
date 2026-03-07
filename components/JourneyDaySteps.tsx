@@ -4,7 +4,60 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import type { JourneyDay } from "@/lib/types";
 
-const STEP_LABELS = ["Open", "Encounter", "Reflect", "Connect", "Go Deeper"];
+const STEP_LABELS = ["Open", "Encounter", "Breathe", "Reflect", "Connect", "Go Deeper"];
+
+// ── Breathe overlay — contemplative pause before reading ─────────────────────
+// Renders a pulsing circle over the artwork image on the Encounter step.
+// Auto-fades after one full breath cycle (8s). Pure CSS, no state needed.
+function BreatheOverlay() {
+  return (
+    <>
+      <style>{`
+        @keyframes kallosBreathe {
+          0%, 100% { transform: scale(1); opacity: 0.3; }
+          50%       { transform: scale(4); opacity: 0.8; }
+        }
+        @keyframes kallosBreatheContainerFade {
+          0%   { opacity: 1; }
+          80%  { opacity: 1; }
+          100% { opacity: 0; pointer-events: none; }
+        }
+        .kallos-breathe-container {
+          animation: kallosBreatheContainerFade 10s ease-in-out 1 forwards;
+        }
+        .kallos-breathe-dot {
+          animation: kallosBreathe 8s ease-in-out 1 forwards;
+        }
+      `}</style>
+      <div
+        className="kallos-breathe-container absolute inset-0 flex items-end justify-center pointer-events-none"
+        style={{ paddingBottom: "28px", zIndex: 10 }}
+      >
+        <div
+          style={{
+            width: 72,
+            height: 72,
+            borderRadius: "50%",
+            border: "1px solid rgba(253,246,232,0.18)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            className="kallos-breathe-dot"
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: "50%",
+              background: "rgba(253,246,232,0.9)",
+            }}
+          />
+        </div>
+      </div>
+    </>
+  );
+}
 
 // ── Text truncation — snap to last sentence boundary before maxChars ──────────
 function truncateToSentences(text: string, maxChars = 220): string {
@@ -131,8 +184,9 @@ function StepEncounter({ day }: { day: JourneyDay }) {
 
   // Visio Divina ("Pray with this image") is intentionally excluded from Journey steps.
   // It is only accessible via Explore and Library entry points.
+  const hasInlineAudio = content.contentType === "music" && content.audioFileUrl;
   const showListenLink =
-    content.contentType === "music" && content.musicUrl;
+    content.contentType === "music" && content.musicUrl && !content.audioFileUrl;
   const showWatchLink =
     content.contentType === "watch-listen" && content.mediaUrl;
 
@@ -144,18 +198,14 @@ function StepEncounter({ day }: { day: JourneyDay }) {
       {/* Spacer for overlaid header */}
       <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)" }} />
 
-      {/* Content image — pinch to zoom (8x) */}
+      {/* Content image — no zoom (zoom lives on the Breathe page) */}
       {content.imageUrl && (
         <div className="relative w-full overflow-hidden" style={{ aspectRatio: "16/10" }}>
-          <TransformWrapper maxScale={8} minScale={1} centerOnInit>
-            <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
-              <img
-                src={content.imageUrl}
-                alt={content.title}
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-              />
-            </TransformComponent>
-          </TransformWrapper>
+          <img
+            src={content.imageUrl}
+            alt={content.title}
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          />
           <div
             className="absolute inset-0 pointer-events-none"
             style={{ background: `linear-gradient(to bottom, transparent 60%, ${C.bg})` }}
@@ -246,14 +296,40 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           </div>
         )}
 
-        {/* Encounter guidance */}
-        {day.encounterGuidance && (
-          <p className="text-xs italic pt-2" style={{ color: C.creamFaint, borderTop: `1px solid ${C.divider}` }}>
-            {day.encounterGuidance}
-          </p>
+        {/* Encounter guidance moved to StepBreathe */}
+
+        {/* Inline audio player — for Sanity-hosted audio files */}
+        {hasInlineAudio && (
+          <div className="space-y-2">
+            <p className="text-xs tracking-widest uppercase" style={{ color: C.creamFaint }}>Listen</p>
+            <audio
+              controls
+              preload="metadata"
+              src={content.audioFileUrl}
+              style={{
+                width: "100%",
+                height: 44,
+                borderRadius: 0,
+                filter: "invert(1) hue-rotate(180deg) brightness(0.85)",
+              }}
+            >
+              Your browser does not support audio playback.
+            </audio>
+            {content.musicUrl && (
+              <a
+                href={content.musicUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs"
+                style={{ color: C.sageMuted }}
+              >
+                Also on Spotify / YouTube →
+              </a>
+            )}
+          </div>
         )}
 
-        {/* Listen / Watch — promoted CTA block */}
+        {/* Listen / Watch — external link (fallback when no audio file) */}
         {showListenLink && (
           <div style={{ border: `1px solid ${C.divider}` }}>
             <a
@@ -285,6 +361,66 @@ function StepEncounter({ day }: { day: JourneyDay }) {
 
       {/* Spacer for footer */}
       <div className="h-28" />
+    </div>
+  );
+}
+
+// ── Step 2b: Breathe — full-bleed image + contemplative pause ────────────────
+function StepBreathe({ day }: { day: JourneyDay }) {
+  const content = day.encounterContent;
+  const imageUrl = content?.imageUrl;
+
+  return (
+    <div className="h-full overflow-hidden" style={{ backgroundColor: C.bg }}>
+      {/* Full-screen image with 8x zoom */}
+      {imageUrl && (
+        <div className="absolute inset-0">
+          <TransformWrapper maxScale={8} minScale={1} centerOnInit>
+            <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
+              <img
+                src={imageUrl}
+                alt={content?.title ?? "Artwork"}
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              />
+            </TransformComponent>
+          </TransformWrapper>
+
+          {/* Gradient overlay — heavier at bottom for text legibility */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: `linear-gradient(to bottom, rgba(22,17,13,0.1) 0%, rgba(22,17,13,0.3) 50%, rgba(22,17,13,0.75) 80%, ${C.bg} 100%)`,
+            }}
+          />
+
+          {/* Breathe animation — centered in lower third */}
+          <BreatheOverlay />
+
+          {/* Helper text — anchored at bottom */}
+          <div
+            className="absolute inset-x-0 bottom-0 pointer-events-none flex flex-col items-center"
+            style={{ paddingBottom: "calc(max(env(safe-area-inset-bottom, 0px), 24px) + 72px)" }}
+          >
+            <p
+              className="italic text-center px-10 leading-relaxed"
+              style={{
+                color: "rgba(253,246,232,0.55)",
+                fontFamily: "var(--font-cormorant)",
+                fontSize: "1rem",
+              }}
+            >
+              Sit with this image and let your eyes explore
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Fallback when no image */}
+      {!imageUrl && (
+        <div className="flex items-center justify-center h-full">
+          <p className="text-sm" style={{ color: C.creamFaint }}>No image available for this day.</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -525,7 +661,7 @@ export default function JourneyDaySteps({
   const handleNext = useCallback(() => {
     if (step < totalSteps - 1) {
       setStep((s) => s + 1);
-      if (step + 1 !== 2) setQuestionIndex(0);
+      if (step + 1 !== 3) setQuestionIndex(0); // Reflect is now step 3
     }
   }, [step, totalSteps]);
 
@@ -541,6 +677,7 @@ export default function JourneyDaySteps({
   const stepComponents = [
     <StepOpen key="open" day={day} />,
     <StepEncounter key="encounter" day={day} />,
+    <StepBreathe key="breathe" day={day} />,
     <StepReflect key="reflect" day={day} questionIndex={questionIndex} onNextQuestion={handleNextQuestion} />,
     <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} />,
     <StepGoDeeper key="deeper" day={day} />,
@@ -590,9 +727,12 @@ export default function JourneyDaySteps({
               )}
             </button>
 
-            <span className="text-xs tracking-widest uppercase" style={{ color: C.creamDim }}>
-              {STEP_LABELS[step]}
-            </span>
+            {step > 0 && (
+              <span className="text-xs tracking-widest uppercase" style={{ color: C.creamDim }}>
+                {STEP_LABELS[step]}
+              </span>
+            )}
+            {step === 0 && <span className="w-9" />}
 
             {step > 0 ? (
               <button onClick={onClose} className="w-9 h-9 flex items-center justify-center" style={{ color: C.creamFaint }} aria-label="Close">

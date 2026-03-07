@@ -61,6 +61,7 @@ export type ContentItem = {
   performer?: string;
   durationMinutes?: number;
   musicUrl?: string;
+  audioFileUrl?: string; // Direct MP3 hosted in Sanity
   // Food & Wine
   craftTradition?: string;
   pointsToward?: string;
