@@ -16,6 +16,7 @@ const CONTENT_TYPE_TO_LOCATION: Record<ContentType, LocationType> = {
   "food-wine": "workshop",
   "landscape": "landscape",
   "watch-listen": "cultural",
+  "math-science": "architecture",
 };
 
 function toArtwork(item: ContentItem): Artwork {

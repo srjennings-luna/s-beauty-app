@@ -30,6 +30,7 @@ const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
   "food-wine": "Food & Wine",
   "landscape": "Landscape",
   "watch-listen": "Watch & Listen",
+  "math-science": "Pattern & Proof",
 };
 
 // Map ContentType → legacy LocationType for GlobalMap marker colours
@@ -41,6 +42,7 @@ const CONTENT_TYPE_TO_LOCATION: Record<ContentType, LocationType> = {
   "food-wine": "workshop",
   "landscape": "landscape",
   "watch-listen": "cultural",
+  "math-science": "architecture",
 };
 
 // Adapt ContentItem → Artwork shape expected by GlobalMap / ArtworkViewer

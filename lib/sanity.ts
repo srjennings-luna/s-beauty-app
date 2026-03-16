@@ -67,7 +67,10 @@ const CONTENT_ITEM_FIELDS = `
   creationTheology,
   mediaType,
   mediaUrl,
-  series
+  series,
+  discipline,
+  principle,
+  beautyConnection
 `
 
 // ─────────────────────────────────────────────────────────────────────────────

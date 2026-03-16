@@ -24,7 +24,8 @@ export type ContentType =
   | 'music'
   | 'food-wine'
   | 'landscape'
-  | 'watch-listen';
+  | 'watch-listen'
+  | 'math-science';
 
 export type ContentItem = {
   _id: string;
@@ -71,6 +72,10 @@ export type ContentItem = {
   mediaType?: 'video' | 'podcast' | 'documentary' | 'lecture';
   mediaUrl?: string;
   series?: string;
+  // Math & Science
+  discipline?: string;
+  principle?: string;
+  beautyConnection?: string;
   // Visio Divina
   traditionalPrayer?: string;
   traditionalPrayerSource?: string;

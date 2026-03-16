@@ -82,7 +82,7 @@ Read this at the start of every session. It contains all key product decisions, 
 
 ---
 
-## 7 Content Types
+## 8 Content Types
 
 All live in the `contentItem` Sanity schema with `contentType` field:
 
@@ -93,6 +93,7 @@ All live in the `contentItem` Sanity schema with `contentType` field:
 5. `food-wine` — Cistercian monasteries, 3-generation bakeries, natural wine
 6. `landscape` — Creation theology, places where creation speaks
 7. `watch-listen` — YouTube, podcasts, documentary series, lectures
+8. `math-science` — Golden ratio, Fibonacci, fractals, Webb telescope, sacred geometry, the divine in pattern and proof
 
 **Every content item requires a minimum of one high-res image (1200px min, up to 4500px). Always. No exceptions.**
 

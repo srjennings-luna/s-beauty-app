@@ -32,6 +32,7 @@ export default defineType({
           {title: 'Food & Wine', value: 'food-wine'},
           {title: 'Natural Landscape', value: 'landscape'},
           {title: 'Watch & Listen', value: 'watch-listen'},
+          {title: 'Pattern & Proof', value: 'math-science'},
         ],
         layout: 'radio',
       },
@@ -321,6 +322,30 @@ export default defineType({
       hidden: ({document}) => document?.contentType !== 'watch-listen',
     }),
 
+    // Math & Science
+    defineField({
+      name: 'discipline',
+      title: 'Discipline',
+      type: 'string',
+      description: 'e.g., Mathematics, Physics, Biology, Astronomy, Geometry',
+      hidden: ({document}) => document?.contentType !== 'math-science',
+    }),
+    defineField({
+      name: 'principle',
+      title: 'Principle or Discovery',
+      type: 'string',
+      description: 'The key concept, e.g., "Golden Ratio", "Fibonacci Sequence", "Double Helix"',
+      hidden: ({document}) => document?.contentType !== 'math-science',
+    }),
+    defineField({
+      name: 'beautyConnection',
+      title: 'Beauty Connection',
+      type: 'text',
+      rows: 3,
+      description: 'How does this reveal beauty, truth, or the divine? The contemplative thread.',
+      hidden: ({document}) => document?.contentType !== 'math-science',
+    }),
+
     // ─── Shared Fields (bottom) ─────────────────────────────────────────────
     defineField({
       name: 'reflectionQuestions',
@@ -337,6 +362,27 @@ export default defineType({
       description: 'Why this was chosen. The human voice behind the curation.',
     }),
 
+    defineField({
+      name: 'traditionalPrayer',
+      title: 'Traditional Prayer (Pray step)',
+      type: 'text',
+      rows: 6,
+      description: 'Optional. A traditional Catholic prayer shown in the expandable "Traditional Prayer" drawer on the Pray step of Visio Divina. Leave blank to use the built-in fallback prayer.',
+    }),
+    defineField({
+      name: 'traditionalPrayerSource',
+      title: 'Traditional Prayer — Source',
+      type: 'string',
+      description: 'Attribution for the prayer above, e.g. "Act of Adoration, Traditional" or "St. Francis of Assisi". Shown below the prayer text.',
+      hidden: ({ document }) => !document?.traditionalPrayer,
+    }),
+    defineField({
+      name: 'traditionReflections',
+      title: 'Go Deeper: Tradition Reflections',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'traditionReflection' }] }],
+      description: 'Link specific tradition reflections to this content item for the Visio Divina "Go Deeper" carousel. Order here = carousel order. If empty, the carousel shows reflections matching this item\'s themes.',
+    }),
     // ─── Location Fields (optional for non-place content) ─────────────────────
     defineField({
       name: 'locationName',
@@ -438,6 +484,7 @@ export default defineType({
         'food-wine': '🍷',
         'landscape': '🌿',
         'watch-listen': '🎬',
+        'math-science': '🔬',
       }
       const icon = (contentType && typeIcons[contentType]) || '📌'
       const byline = artist || composer || author || thinkerName || ''
