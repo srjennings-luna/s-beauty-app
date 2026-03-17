@@ -125,7 +125,7 @@ export default defineType({
       name: 'bottomBackgroundColor',
       title: 'Bottom Section Background',
       type: 'string',
-      description: 'Hex color. Default: #203545 (dark teal)',
+      description: 'Hex color. Default: #16110d (espresso)',
       hidden: ({document}) => document?.pageType !== 'image-quote',
       group: 'styling',
     }),
