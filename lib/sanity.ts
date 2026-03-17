@@ -194,7 +194,13 @@ const DAILY_PROMPT_FIELDS = `
   promptQuestion,
   curatorNote,
   lectio,
-  auditio,
+  "auditio": auditio {
+    title,
+    artist,
+    url,
+    "audioFileUrl": audioUrl.audioFile.asset->url,
+    "audioUrl": audioUrl.audioUrl
+  },
   actio,
   "relatedJourney": relatedJourney->{
     _id,

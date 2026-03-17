@@ -126,8 +126,9 @@ export type DailyPromptLectio = {
 export type DailyPromptAuditio = {
   title: string;
   artist?: string;
-  audioUrl?: string; // Direct MP3 — plays in-app
-  url?: string;      // External link — fallback only
+  audioFileUrl?: string; // Sanity-hosted file — resolved asset URL, plays in-app
+  audioUrl?: string;     // External URL string — plays in-app
+  url?: string;          // External link (YouTube, Spotify, etc.) — fallback only
 };
 
 export type DailyPrompt = {

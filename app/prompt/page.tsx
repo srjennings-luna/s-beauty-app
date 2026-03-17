@@ -385,7 +385,8 @@ export default function DailyPromptPage() {
               >
                 MUSIC <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Auditio)</span>
               </p>
-              {prompt.auditio.audioUrl ? (
+              {/* Resolve playable URL: Sanity-hosted file takes priority over external URL */}
+              {(prompt.auditio.audioFileUrl ?? prompt.auditio.audioUrl) ? (
                 /* ── In-app player — direct MP3 ── */
                 <div className="flex items-center gap-6">
                   <button
@@ -394,7 +395,7 @@ export default function DailyPromptPage() {
                         stopMusic();
                       } else {
                         if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
-                        const a = new Audio(prompt.auditio!.audioUrl);
+                        const a = new Audio(prompt.auditio!.audioFileUrl ?? prompt.auditio!.audioUrl);
                         a.loop = false; a.volume = 0.85;
                         a.play().catch(() => {});
                         audioRef.current = a;

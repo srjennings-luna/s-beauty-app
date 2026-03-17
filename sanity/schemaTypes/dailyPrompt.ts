@@ -78,9 +78,23 @@ export default defineType({
         }),
         defineField({
           name: 'audioUrl',
-          title: 'Audio File URL (in-app playback)',
-          type: 'url',
-          description: 'Direct MP3 link for in-app playback — use archive.org or another hosted source. When present, plays inside KALLOS without leaving the app.',
+          title: 'Audio Source (in-app playback)',
+          type: 'object',
+          description: 'Use either the file upload or the URL — not both.',
+          fields: [
+            defineField({
+              name: 'audioFile',
+              title: 'Audio File Upload',
+              type: 'file',
+              options: { accept: 'audio/*' },
+            }),
+            defineField({
+              name: 'audioUrl',
+              title: 'Audio URL',
+              type: 'string',
+              description: 'Direct MP3 link for in-app playback — use archive.org or another hosted source.',
+            }),
+          ],
         }),
         defineField({
           name: 'url',
