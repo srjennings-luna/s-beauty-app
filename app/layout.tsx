@@ -26,7 +26,7 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "KALLOS — Love the beautiful and the good",
+  title: "KALLOS — Daily Vibes: Beauty • Truth • Goodness",
   description:
     "KALLOS is a contemplative discovery app for seekers of beauty, truth, and goodness — sacred art, music, literature, landscape, and the great tradition.",
   keywords: ["beauty", "contemplation", "classical", "tradition", "sacred art", "philosophy", "music", "literature"],
