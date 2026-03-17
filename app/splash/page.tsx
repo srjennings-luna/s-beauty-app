@@ -42,9 +42,9 @@ const defaultPages: SplashPageData[] = [
     _id: "default-2",
     pageNumber: 2,
     pageType: "text-content",
-    title: "Love the beautiful and the good",
+    title: "There's a question beauty keeps asking.",
     description:
-      "KALLOS is a contemplative discovery app for seekers of beauty — sacred art, music, literature, landscape, and the wisdom of the great tradition.",
+      "Sacred art. Music. Poetry. Storied places. A daily encounter with what's beautiful and true — and what it might be saying to you.",
     buttonText: "Begin",
   },
 ];
@@ -96,7 +96,8 @@ export default function SplashPage() {
       {/* Skip button - always visible */}
       <button
         onClick={goToHome}
-        className="absolute top-6 right-6 z-50 text-white/50 text-sm tracking-wide hover:text-white transition-colors duration-200"
+        className="absolute top-6 right-6 z-50 text-white/40 text-xs tracking-widest uppercase hover:text-white/70 transition-colors duration-200"
+        style={{ fontFamily: 'Montserrat, sans-serif' }}
       >
         Skip
       </button>
@@ -109,122 +110,150 @@ export default function SplashPage() {
         {pages.map((page, index) => (
           <div key={page._id} className="min-w-full h-full">
             {page.pageType === "image-quote" ? (
-              // Image with Quote layout
-              <div className="h-full flex flex-col">
-                {/* Top 2/3 - Full bleed promo image */}
-                <div className="h-[66vh] relative">
+              // Page 1 — Full bleed image + quote
+              <div className="h-full flex flex-col" style={{ backgroundColor: page.bottomBackgroundColor || '#16110d' }}>
+                {/* Full bleed image - top 65% */}
+                <div className="h-[65vh] relative flex-shrink-0">
                   <img
                     src={page.heroImageUrl || "/images/promo-splash.jpeg"}
                     alt="KALLOS — Love the beautiful and the good"
                     className="w-full h-full object-cover"
                   />
-                  {/* Gradient fade to bottom color */}
+                  {/* Gradient fade into espresso */}
                   <div
-                    className="absolute bottom-0 left-0 right-0 h-32"
+                    className="absolute bottom-0 left-0 right-0 h-40"
                     style={{
                       background: `linear-gradient(to top, ${page.bottomBackgroundColor || '#16110d'}, transparent)`
                     }}
                   />
                 </div>
 
-                {/* Bottom 1/3 - Quote section */}
+                {/* Quote section */}
                 <div
-                  className="flex-1 flex flex-col items-center justify-center px-8 pb-20"
+                  className="flex-1 flex flex-col items-center justify-center px-10 pb-16"
                   style={{ backgroundColor: page.bottomBackgroundColor || '#16110d' }}
                 >
+                  {/* Gold divider */}
+                  <div
+                    className={`w-8 mb-6 transition-all duration-700 delay-200 ${currentPage === index ? "opacity-100" : "opacity-0"}`}
+                    style={{ height: '1px', backgroundColor: '#C19B5F' }}
+                  />
                   <p
-                    className={`text-lg text-center leading-relaxed max-w-xs transition-all duration-700 delay-300 ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                    className={`text-xl text-center leading-relaxed max-w-xs transition-all duration-700 delay-300 ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                     style={{
-                      color: page.quoteColor || 'rgba(255,255,255,0.7)',
-                      fontStyle: page.quoteFont || 'italic'
+                      color: page.quoteColor || 'rgba(255,255,255,0.85)',
+                      fontStyle: page.quoteFont || 'italic',
+                      fontFamily: 'Cormorant Garamond, Georgia, serif',
                     }}
                   >
                     &ldquo;{page.quote}&rdquo;
                   </p>
                   <p
-                    className={`text-sm mt-3 transition-all duration-700 delay-500 ${currentPage === index ? "opacity-100" : "opacity-0"}`}
-                    style={{ color: page.attributionColor || 'rgba(255,255,255,0.4)' }}
+                    className={`text-xs mt-4 tracking-widest uppercase transition-all duration-700 delay-500 ${currentPage === index ? "opacity-100" : "opacity-0"}`}
+                    style={{
+                      color: page.attributionColor || '#C19B5F',
+                      fontFamily: 'Montserrat, sans-serif',
+                    }}
                   >
-                    — {page.quoteAttribution}
+                    {page.quoteAttribution}
                   </p>
                 </div>
               </div>
             ) : (
-              // Text Content layout
+              // Page 2 — The showstopper
               <div
-                className="h-full flex flex-col items-center justify-center px-8"
-                style={{
-                  background: `linear-gradient(135deg, ${page.backgroundGradientStart || '#1e1a2e'} 0%, ${page.backgroundGradientEnd || '#16110d'} 100%)`
-                }}
+                className="h-full flex flex-col items-center justify-center px-8 pb-safe"
+                style={{ backgroundColor: '#16110d' }}
               >
-                {/* Icon */}
-                <div
-                  className={`w-16 h-16 mb-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10 transition-all duration-500 ${currentPage === index ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}
+                {/* KALLOS wordmark */}
+                <p
+                  className={`text-xs tracking-[0.35em] uppercase mb-12 transition-all duration-700 ${currentPage === index ? "opacity-100" : "opacity-0"}`}
+                  style={{
+                    color: '#C19B5F',
+                    fontFamily: 'Montserrat, sans-serif',
+                  }}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-8 h-8 text-white/60"
-                  >
-                    <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-                  </svg>
-                </div>
+                  KALLOS
+                </p>
 
-                {/* Title */}
+                {/* Headline */}
                 <h2
-                  className={`mb-6 text-center font-light tracking-wide transition-all duration-500 delay-100 ${page.titleSize || 'text-2xl'} ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-                  style={{ color: page.titleColor || 'rgba(255,255,255,0.9)' }}
+                  className={`text-3xl text-center leading-snug mb-6 transition-all duration-700 delay-100 ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                  style={{
+                    color: 'rgba(255,255,255,0.92)',
+                    fontFamily: 'Cormorant Garamond, Georgia, serif',
+                    fontStyle: 'italic',
+                    fontWeight: 400,
+                  }}
                 >
-                  {page.title}
+                  {page.title || "There's a question beauty keeps asking."}
                 </h2>
+
+                {/* Gold divider */}
+                <div
+                  className={`w-8 mb-6 transition-all duration-700 delay-150 ${currentPage === index ? "opacity-100" : "opacity-0"}`}
+                  style={{ height: '1px', backgroundColor: '#C19B5F' }}
+                />
 
                 {/* Description */}
                 <p
-                  className={`text-center leading-relaxed max-w-sm mb-12 transition-all duration-500 delay-200 ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-                  style={{ color: page.descriptionColor || 'rgba(255,255,255,0.5)' }}
-                >
-                  {page.description}
-                </p>
-
-                {/* Begin button - prominent with animated glow */}
-                <button
-                  onClick={goToHome}
-                  className={`px-10 py-4 text-base font-semibold tracking-wider rounded-sm
-                    active:scale-95
-                    transition-all duration-300
-                    animate-pulse-subtle
-                    ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                  className={`text-center leading-loose max-w-xs mb-14 transition-all duration-700 delay-200 ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                   style={{
-                    backgroundColor: page.buttonBackgroundColor || '#C19B5F',
-                    color: page.buttonTextColor || '#FFFFFF',
-                    boxShadow: `0 0 25px ${page.buttonBackgroundColor || '#C19B5F'}80`
+                    color: 'rgba(255,255,255,0.55)',
+                    fontFamily: 'Open Sans, sans-serif',
+                    fontSize: '0.9rem',
                   }}
                 >
-                  {page.buttonText || "Let's explore"}
+                  {page.description || "Sacred art. Music. Poetry. Storied places. A daily encounter with what's beautiful and true — and what it might be saying to you."}
+                </p>
+
+                {/* Begin button — full width, sharp corners, gold */}
+                <button
+                  onClick={goToHome}
+                  className={`w-full max-w-xs py-4 text-sm font-semibold tracking-widest uppercase active:scale-95 transition-all duration-300 delay-300 ${currentPage === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                  style={{
+                    backgroundColor: page.buttonBackgroundColor || '#C19B5F',
+                    color: page.buttonTextColor || '#16110d',
+                    fontFamily: 'Montserrat, sans-serif',
+                    boxShadow: `0 0 30px ${page.buttonBackgroundColor || '#C19B5F'}50`,
+                  }}
+                >
+                  {page.buttonText || "Begin"}
                 </button>
+
+                {/* Tagline beneath button */}
+                <p
+                  className={`mt-5 text-xs tracking-wider transition-all duration-700 delay-500 ${currentPage === index ? "opacity-100" : "opacity-0"}`}
+                  style={{
+                    color: 'rgba(255,255,255,0.2)',
+                    fontFamily: 'Montserrat, sans-serif',
+                  }}
+                >
+                  Love the beautiful and the good
+                </p>
               </div>
             )}
           </div>
         ))}
       </div>
 
-      {/* Page indicators */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+      {/* Page indicators — thin sharp bars, not dots */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
         {pages.map((page, index) => (
           <button
             key={page._id}
             onClick={() => setCurrentPage(index)}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              currentPage === index
-                ? "bg-white/80 w-6"
-                : "bg-white/30 hover:bg-white/50 w-2"
-            }`}
+            className="transition-all duration-300"
+            style={{
+              width: currentPage === index ? '24px' : '8px',
+              height: '2px',
+              backgroundColor: currentPage === index ? 'rgba(193,155,95,0.9)' : 'rgba(255,255,255,0.25)',
+            }}
           />
         ))}
       </div>
 
-      {/* Touch swipe area */}
+      {/* Touch / click to advance */}
       <div
         className="absolute inset-0 z-10"
         onClick={nextPage}
