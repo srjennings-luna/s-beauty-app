@@ -98,9 +98,9 @@ export default defineType({
         }),
         defineField({
           name: 'url',
-          title: 'External Link (reference only)',
+          title: 'External Link (reference only — opens outside app)',
           type: 'url',
-          description: 'Optional: YouTube, Spotify, or Apple Music. Only shown if no Audio File URL is provided. Opens externally.',
+          description: 'YouTube, Spotify, or Apple Music. Only use if no Audio File or Audio URL is provided above. This opens outside KALLOS and breaks the in-app experience.',
         }),
       ],
     }),

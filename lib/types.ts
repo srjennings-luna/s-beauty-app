@@ -57,12 +57,16 @@ export type ContentItem = {
   workTitle?: string;
   excerpt?: string;
   literaryForm?: string;
-  // Music
+  // Music — consolidated audioSource field
   composer?: string;
   performer?: string;
   durationMinutes?: number;
+  audioFileUrl?: string;     // Sanity-hosted MP3 (audioSource.audioFile)
+  audioUrl?: string;         // Direct MP3 URL (audioSource.audioUrl)
+  externalMusicUrl?: string; // External link only — YouTube/Spotify (audioSource.externalUrl)
+  // Legacy fields — backward compat for existing documents
   musicUrl?: string;
-  audioFileUrl?: string; // Direct MP3 hosted in Sanity
+  legacyAudioFileUrl?: string;
   // Food & Wine
   craftTradition?: string;
   pointsToward?: string;

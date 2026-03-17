@@ -41,8 +41,14 @@ Read this at the start of every session. It contains all key product decisions, 
 | File | What it is |
 |------|-----------|
 | `KALLOS-Intro-Journey-Beauty-Truth-Goodness.html` | Intro journey — 7 days, all fields, ready for Sanity |
-| `KALLOS-Pause-Ponder-14-Days.html` | 14 days of daily prompts (March 9–22), ready for Sanity |
+| `KALLOS-Pause-Ponder-14-Days.html` | 18 days of daily prompts (March 17 – April 3), ready for Sanity. Includes St. Patrick Day 1 + Yeats replacing Oriah |
+| `KALLOS-StPatrick-Day1-Draft.html` | St. Patrick feast day content — Day 1 standalone draft for review |
 | `KALLOS-Sanity-Entry-Guide-Themes-2-5.docx` | Entry guide for seeding Themes 2–5 into Sanity |
+| `KALLOS-Light-Journey-GoDeeper.html` | 16 tradition reflections for Light journey Step 6 |
+| `KALLOS-Feast-Day-Content-Guide.html` | Editorial guide for feast day content — what it is, what it isn't, pre-publish checklist |
+| `KALLOS-Content-Guide-Pause-Ponder.html` | Agent content instructions for Pause & Ponder daily prompts |
+| `KALLOS-Content-Guide-7Day-Journey.html` | Agent content instructions for 7-day Journey content |
+| `KALLOS-Pause-Ponder-18-Day-Checklist.html` | 18-day content checklist (March 17 – April 3) with per-day needs |
 
 ---
 
@@ -70,7 +76,7 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ Daily Prompt fallback query — shows most recent prompt if exact date match fails
 - ✅ CLAUDE_REFERENCE.md rewritten for espresso/parchment two-mode design system
 - ✅ Intro to Beauty, Truth & Goodness journey drafted (7 days) — content doc ready for Sanity entry
-- ✅ Pause & Ponder daily prompts drafted (14 days, March 9–22) — content doc ready for Sanity entry
+- ✅ Pause & Ponder daily prompts drafted (18 days, March 17 – April 3) — content doc ready for Sanity entry. Includes St. Patrick feast day (Day 1) and Yeats "Lake Isle of Innisfree" replacing copyrighted Oriah poem
 - ✅ Sanity entry guide for Themes 2–5 created
 
 ### Up Next: Phase 2 Remaining
@@ -180,7 +186,7 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 | `journey` | ✅ New — 7-day structure |
 | `dailyPrompt` | ✅ New — "Pause & Ponder" daily feature on Today tab |
 | `splashPage` | ✅ Kept unchanged |
-| `traditionReflection` | ✅ Updated — themes ref array added |
+| `traditionReflection` | ✅ Updated — themes ref array added. ⚠️ **Schema change needed:** `authorType` currently only allows `church-father`, `saint`, `pope`. Need to add 3 new values: `theologian`, `mystic`, `church-doctor`. Also change field to allow **multiple selections** (some figures are both saint + doctor, etc.). **Known mismatches:** Jean-Pierre de Caussade (Jesuit priest, not a saint — currently tagged as `saint` as placeholder until new categories exist). |
 | `episode` | ⚠️ Deprecated — kept to preserve data, hidden from sidebar |
 
 ---
@@ -194,6 +200,18 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 - React-Leaflet + react-leaflet-cluster (map)
 - react-zoom-pan-pinch (8x image zoom)
 - Vercel (auto-deploy from GitHub push)
+
+---
+
+## ⚠️ Design Consistency Rule
+
+**When a design decision is made (new component, interaction pattern, visual treatment, player style, etc.), it MUST be applied to ALL screens where it's relevant — not just the screen being discussed.** Before pushing code, audit every screen for consistency. Known areas that need parity:
+
+- **Audio player:** The custom circular play button (64px cream circle, play/pause SVG) is the chosen design. Pause & Ponder has it. Journey Encounter step still uses the native `<audio>` element — **must be replaced** with the circular player to match.
+- **Navigation patterns:** Stories-style thin progress bar + swipe is on Journey. Ensure other multi-step flows (Visio Divina, onboarding) follow the same pattern when built.
+- **Typography & spacing:** Espresso mode screens should all use the same heading sizes, label styles, and padding.
+
+**Checklist before every push:** Does this design change appear on more than one screen? If yes, update all of them.
 
 ---
 
@@ -237,6 +255,12 @@ Revisit once more content is seeded and real images are in place.
 
 ### Visio Divina Entry Points
 Visio Divina removed from Journey steps. Currently accessible from Explore content detail and Library. Open question: should there be a more prominent entry point on the Today tab or Explore landing?
+
+### Background Music Player — Journey Steps (Needs Restore) ⚠️
+The chant/ambient background music player (Gregorian chant + piano options) was removed when the Stories-style navigation replaced the old footer nav. It still works on Visio Divina (`/pray/[artworkId]`) and the P&P prompt page (`/prompt`). **It needs to be restored for Journey steps.** The music player needs a new home — footer is gone, so options are: small floating button (top-right or bottom-right), integrate into the step header, or add to a slide-up controls panel. Discuss with Sheri before implementing. Music files are already in `/public/music/`.
+
+### Background Music for Visio Divina — Preserve
+The chant/ambient player on Visio Divina is working and intentional. Do not remove it. Consider whether it should also be available on the Breathe step of Journey (currently no music on Breathe).
 
 ### Encounter Page — Two-Page Split (Future)
 Sheri proposed splitting Encounter into two sub-pages: Page 1 = content info (no zoom), Page 2 = full image + zoom + breathe. Currently implemented as separate steps (Encounter + Breathe). Revisit if user testing shows friction with the 6-step count.

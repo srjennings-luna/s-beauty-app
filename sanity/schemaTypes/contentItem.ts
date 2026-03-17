@@ -242,18 +242,32 @@ export default defineType({
       hidden: ({document}) => document?.contentType !== 'music' && document?.contentType !== 'watch-listen',
     }),
     defineField({
-      name: 'musicUrl',
-      title: 'Music URL',
-      type: 'url',
-      description: 'YouTube, Spotify, or Apple Music link',
+      name: 'audioSource',
+      title: 'Audio Source',
+      type: 'object',
+      description: 'Use the file upload for in-app playback (preferred). Use the URL for external links only (YouTube, Spotify) — these open outside the app.',
       hidden: ({document}) => document?.contentType !== 'music',
-    }),
-    defineField({
-      name: 'audioFile',
-      title: 'Audio File',
-      type: 'file',
-      description: 'Direct audio file (for public domain / licensed tracks hosted in Sanity)',
-      hidden: ({document}) => document?.contentType !== 'music',
+      fields: [
+        defineField({
+          name: 'audioFile',
+          title: 'Audio File Upload (in-app playback)',
+          type: 'file',
+          description: 'Upload an MP3 — plays directly in KALLOS. Preferred over URL.',
+          options: { accept: 'audio/*' },
+        }),
+        defineField({
+          name: 'audioUrl',
+          title: 'Audio URL (in-app playback)',
+          type: 'string',
+          description: 'Direct MP3 link (e.g. archive.org) — plays in-app. Use if file upload is not possible.',
+        }),
+        defineField({
+          name: 'externalUrl',
+          title: 'External Link (reference only)',
+          type: 'url',
+          description: 'YouTube, Spotify, or Apple Music. Only used if no file or audio URL is provided. Opens outside the app.',
+        }),
+      ],
     }),
 
     // Food & Wine

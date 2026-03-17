@@ -60,8 +60,13 @@ const CONTENT_ITEM_FIELDS = `
   composer,
   performer,
   durationMinutes,
+  // Audio source — consolidated object (replaces old musicUrl + audioFile fields)
+  "audioFileUrl": audioSource.audioFile.asset->url,
+  "audioUrl": audioSource.audioUrl,
+  "externalMusicUrl": audioSource.externalUrl,
+  // Legacy fields — kept for backward compat with any existing documents
   musicUrl,
-  "audioFileUrl": audioFile.asset->url,
+  "legacyAudioFileUrl": audioFile.asset->url,
   craftTradition,
   pointsToward,
   creationTheology,
