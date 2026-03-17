@@ -229,7 +229,7 @@ export default function SplashPage() {
                     fontFamily: 'Montserrat, sans-serif',
                   }}
                 >
-                  Love the beautiful and the good
+                  Daily Vibes: Beauty • Truth • Goodness
                 </p>
               </div>
             )}
