@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getDailyPrompt } from "@/lib/sanity";
 import type { DailyPrompt } from "@/lib/types";
+import { addFavorite, removeFavorite, isFavorite } from "@/lib/favorites";
 import PageTransition from "@/components/ui/PageTransition";
 
 // ── Espresso palette ──────────────────────────────────────────────────────────
@@ -62,21 +63,20 @@ async function sharePrompt(prompt: DailyPrompt) {
   }
 }
 
-// ── Favorite ──────────────────────────────────────────────────────────────────
-const FAV_KEY = "kallos-fav-prompts";
-
+// ── Favorite — uses unified lib/favorites system (type: 'dailyPrompt') ────────
 function isFavorited(id: string): boolean {
   if (typeof window === "undefined") return false;
-  const favs: string[] = JSON.parse(localStorage.getItem(FAV_KEY) ?? "[]");
-  return favs.includes(id);
+  return isFavorite(id, "dailyPrompt");
 }
 
 function toggleFavorite(id: string): boolean {
-  const favs: string[] = JSON.parse(localStorage.getItem(FAV_KEY) ?? "[]");
-  const idx = favs.indexOf(id);
-  if (idx > -1) { favs.splice(idx, 1); } else { favs.unshift(id); }
-  localStorage.setItem(FAV_KEY, JSON.stringify(favs));
-  return favs.includes(id);
+  if (isFavorite(id, "dailyPrompt")) {
+    removeFavorite(id, "dailyPrompt");
+    return false;
+  } else {
+    addFavorite("dailyPrompt", id);
+    return true;
+  }
 }
 
 // ── Music ─────────────────────────────────────────────────────────────────────

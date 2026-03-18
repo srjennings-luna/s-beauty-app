@@ -166,7 +166,7 @@ export type TraditionReflection = {
 
 // ─── Favorites (localStorage) ─────────────────────────────────────────────────
 
-export type FavoriteItemType = 'contentItem' | 'episode' | 'artwork' | 'reflection';
+export type FavoriteItemType = 'contentItem' | 'episode' | 'artwork' | 'reflection' | 'dailyPrompt';
 
 export type Favorite = {
   id: string;

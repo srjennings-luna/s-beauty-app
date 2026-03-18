@@ -52,29 +52,33 @@ const defaultPages: SplashPageData[] = [
 export default function SplashPage() {
   const [currentPage, setCurrentPage] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const [pages, setPages] = useState<SplashPageData[]>(defaultPages);
+  const [pages, setPages] = useState<SplashPageData[]>([]);
+  const [pagesReady, setPagesReady] = useState(false);
   const router = useRouter();
 
-  // Fetch splash pages from Sanity
+  // Fetch splash pages from Sanity — don't render until resolved
   useEffect(() => {
     async function fetchPages() {
       try {
         const data = await getSplashPages();
-        if (data && data.length > 0) {
-          setPages(data);
-        }
+        setPages(data && data.length > 0 ? data : defaultPages);
       } catch (error) {
         console.error("Error fetching splash pages:", error);
-        // Keep default pages on error
+        setPages(defaultPages);
+      } finally {
+        setPagesReady(true);
       }
     }
     fetchPages();
   }, []);
 
-  // Fade in on mount
+  // Fade in once data is ready
   useEffect(() => {
-    setIsVisible(true);
-  }, []);
+    if (pagesReady) {
+      // Small rAF delay so the opacity transition fires after paint
+      requestAnimationFrame(() => setIsVisible(true));
+    }
+  }, [pagesReady]);
 
   const goToHome = () => {
     localStorage.setItem("kallos-onboarded", "true");
@@ -88,6 +92,11 @@ export default function SplashPage() {
       goToHome();
     }
   };
+
+  // Hold a blank espresso screen while Sanity resolves — prevents flash of old default image
+  if (!pagesReady) {
+    return <div className="fixed inset-0" style={{ backgroundColor: "#16110d" }} />;
+  }
 
   return (
     <div

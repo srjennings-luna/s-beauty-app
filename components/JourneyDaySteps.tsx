@@ -171,6 +171,8 @@ function StepOpen({ day }: { day: JourneyDay }) {
 function StepEncounter({ day }: { day: JourneyDay }) {
   const content = day.encounterContent;
   const [ctxExpanded, setCtxExpanded] = useState(false);
+  const [audioPlaying, setAudioPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   if (!content) {
     return (
@@ -302,34 +304,59 @@ function StepEncounter({ day }: { day: JourneyDay }) {
 
         {/* Encounter guidance moved to StepBreathe */}
 
-        {/* Inline audio player — for Sanity-hosted audio files */}
+        {/* Circular audio player — for Sanity-hosted audio files */}
         {hasInlineAudio && (
-          <div className="space-y-2">
-            <p className="text-xs tracking-widest uppercase" style={{ color: C.creamFaint }}>Listen</p>
-            <audio
-              controls
-              preload="metadata"
-              src={content.audioFileUrl}
-              style={{
-                width: "100%",
-                height: 44,
-                borderRadius: 0,
-                filter: "invert(1) hue-rotate(180deg) brightness(0.85)",
+          <div className="flex items-center gap-6">
+            <button
+              onClick={() => {
+                if (audioPlaying) {
+                  audioRef.current?.pause();
+                  setAudioPlaying(false);
+                } else {
+                  if (!audioRef.current) {
+                    audioRef.current = new Audio(content.audioFileUrl!);
+                    audioRef.current.volume = 0.85;
+                    audioRef.current.onended = () => setAudioPlaying(false);
+                  }
+                  audioRef.current.play().catch(() => {});
+                  setAudioPlaying(true);
+                }
               }}
+              className="flex-shrink-0 flex items-center justify-center shadow-2xl"
+              style={{ width: 64, height: 64, borderRadius: "50%", background: C.cream, color: C.bg }}
+              aria-label={audioPlaying ? "Pause" : "Play"}
             >
-              Your browser does not support audio playback.
-            </audio>
-            {content.musicUrl && (
-              <a
-                href={content.musicUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs"
-                style={{ color: C.sageMuted }}
-              >
-                Also on Spotify / YouTube →
-              </a>
-            )}
+              {audioPlaying ? (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                  <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              )}
+            </button>
+            <div className="flex-grow min-w-0">
+              <p className="italic truncate" style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.15rem" }}>
+                {content.title}
+              </p>
+              {(content.artist || content.composer) && (
+                <p className="text-sm mt-1 truncate" style={{ color: C.creamFaint }}>
+                  {content.artist || content.composer}
+                </p>
+              )}
+              {content.musicUrl && (
+                <a
+                  href={content.musicUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs mt-1 inline-block"
+                  style={{ color: C.sageMuted }}
+                >
+                  Also on Spotify / YouTube →
+                </a>
+              )}
+            </div>
           </div>
         )}
 

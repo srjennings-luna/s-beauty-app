@@ -234,6 +234,13 @@ export async function getDailyPrompt(date?: string) {
   )
 }
 
+export async function getDailyPromptById(id: string) {
+  return sanityClient.fetch(
+    `*[_type == "dailyPrompt" && _id == $id][0] {${DAILY_PROMPT_FIELDS}}`,
+    { id }
+  )
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Tradition Reflections
 // ─────────────────────────────────────────────────────────────────────────────

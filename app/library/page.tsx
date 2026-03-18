@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useFavorites } from "@/hooks/useFavorites";
-import { getContentItemById } from "@/lib/sanity";
-import type { ContentItem, Artwork, ContentType, LocationType } from "@/lib/types";
+import { getContentItemById, getDailyPromptById } from "@/lib/sanity";
+import type { ContentItem, Artwork, ContentType, DailyPrompt, LocationType } from "@/lib/types";
 import ArtworkViewer from "@/components/ArtworkViewer";
 import PageTransition from "@/components/ui/PageTransition";
 
@@ -45,6 +45,7 @@ function toArtwork(item: ContentItem): Artwork {
 export default function LibraryPage() {
   const { favorites, isLoaded } = useFavorites();
   const [items, setItems] = useState<ContentItem[]>([]);
+  const [prompts, setPrompts] = useState<DailyPrompt[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Artwork | null>(null);
@@ -52,18 +53,26 @@ export default function LibraryPage() {
   useEffect(() => {
     if (!isLoaded) return;
 
-    const ids = favorites
+    const contentIds = favorites
       .filter((f) => f.type === "contentItem" || f.type === "artwork")
       .map((f) => f.itemId);
 
-    if (ids.length === 0) {
+    const promptIds = favorites
+      .filter((f) => f.type === "dailyPrompt")
+      .map((f) => f.itemId);
+
+    if (contentIds.length === 0 && promptIds.length === 0) {
       setLoading(false);
       return;
     }
 
-    Promise.all(ids.map((id) => getContentItemById(id)))
-      .then((results) => {
-        setItems(results.filter((item): item is ContentItem => item != null));
+    Promise.all([
+      Promise.all(contentIds.map((id) => getContentItemById(id))),
+      Promise.all(promptIds.map((id) => getDailyPromptById(id))),
+    ])
+      .then(([contentResults, promptResults]) => {
+        setItems(contentResults.filter((item): item is ContentItem => item != null));
+        setPrompts(promptResults.filter((p): p is DailyPrompt => p != null));
       })
       .catch((err) => {
         console.error("Error fetching library items:", err);
@@ -106,12 +115,12 @@ export default function LibraryPage() {
         <div className="px-5 pt-12 pb-6">
           <h1 className="text-3xl font-bold text-[#1a1a1a] mb-1">Library</h1>
           <p className="text-[#7a9a8a] text-sm">
-            {items.length} saved item{items.length !== 1 ? "s" : ""}
+            {items.length + prompts.length} saved item{items.length + prompts.length !== 1 ? "s" : ""}
           </p>
         </div>
 
         <div className="px-5 pb-28">
-          {items.length === 0 ? (
+          {items.length === 0 && prompts.length === 0 ? (
             <div className="text-center py-16">
               <div className="w-16 h-16 mx-auto mb-4 bg-black/5 flex items-center justify-center">
                 <svg
@@ -133,7 +142,7 @@ export default function LibraryPage() {
                 Your library is empty
               </h2>
               <p className="text-[#7a9a8a] mb-6 text-sm">
-                Tap the heart icon on any content to save it here.
+                Tap the heart icon on any content or daily prompt to save it here.
               </p>
               <Link
                 href="/explore"
@@ -143,32 +152,81 @@ export default function LibraryPage() {
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3">
-              {items.map((item) => (
-                <button
-                  key={item._id}
-                  onClick={() => setSelectedItem(toArtwork(item))}
-                  className="text-left artwork-card"
-                  aria-label={`View ${item.title}`}
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <img
-                      src={item.imageUrl}
-                      alt={item.title}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-2">
-                      <h3 className="text-white text-xs font-medium line-clamp-1">
-                        {item.title}
-                      </h3>
-                      <p className="text-white/60 text-[10px] mt-0.5 line-clamp-1">
-                        {item.artist ?? item.author ?? item.composer ?? item.thinkerName ?? item.locationName ?? ""}
-                      </p>
-                    </div>
+            <div className="space-y-8">
+              {/* Saved daily prompts */}
+              {prompts.length > 0 && (
+                <div>
+                  <p className="text-xs tracking-widest uppercase text-[#4a7a62] mb-3">Daily Prompts</p>
+                  <div className="space-y-3">
+                    {prompts.map((prompt) => (
+                      <Link
+                        key={prompt._id}
+                        href="/prompt"
+                        className="flex items-start gap-3 bg-white p-4 border-l-2 border-l-[#4a7a62]"
+                      >
+                        {prompt.content?.imageUrl && (
+                          <div className="flex-shrink-0 w-14 h-14 overflow-hidden">
+                            <img
+                              src={prompt.content.imageUrl}
+                              alt={prompt.content.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs text-[#4a7a62] tracking-widest uppercase mb-0.5">
+                            {prompt.date ? new Date(prompt.date + "T00:00:00").toLocaleDateString("en-US", { month: "long", day: "numeric" }) : "Daily Prompt"}
+                          </p>
+                          <p className="text-sm font-medium text-[#1a1a1a] line-clamp-2">
+                            {prompt.content?.title ?? prompt.promptQuestion}
+                          </p>
+                          {prompt.promptQuestion && (
+                            <p className="text-xs text-[#7a9a8a] mt-1 line-clamp-1 italic">
+                              {prompt.promptQuestion}
+                            </p>
+                          )}
+                        </div>
+                      </Link>
+                    ))}
                   </div>
-                </button>
-              ))}
+                </div>
+              )}
+
+              {/* Saved content items */}
+              {items.length > 0 && (
+                <div>
+                  {prompts.length > 0 && (
+                    <p className="text-xs tracking-widest uppercase text-[#4a7a62] mb-3">Saved Content</p>
+                  )}
+                  <div className="grid grid-cols-2 gap-3">
+                    {items.map((item) => (
+                      <button
+                        key={item._id}
+                        onClick={() => setSelectedItem(toArtwork(item))}
+                        className="text-left artwork-card"
+                        aria-label={`View ${item.title}`}
+                      >
+                        <div className="relative aspect-[4/3] overflow-hidden">
+                          <img
+                            src={item.imageUrl}
+                            alt={item.title}
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent" />
+                          <div className="absolute bottom-0 left-0 right-0 p-2">
+                            <h3 className="text-white text-xs font-medium line-clamp-1">
+                              {item.title}
+                            </h3>
+                            <p className="text-white/60 text-[10px] mt-0.5 line-clamp-1">
+                              {item.artist ?? item.author ?? item.composer ?? item.thinkerName ?? item.locationName ?? ""}
+                            </p>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
