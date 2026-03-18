@@ -165,7 +165,7 @@ const DAYS: PausePonderDay[] = [
       verse: 'The heavens declare the glory of God; the skies proclaim the work of his hands.',
       reference: 'Psalm 19:1',
     },
-    localImagePath: path.join(IMAGES_DIR, 'Hieronymus_Bosch_-_Triptych_of_the_Adoration_of_the_Magi_-_WGA2606.jpg'),
+    localImagePath: path.join(DOWNLOADS_DIR, 'sacred art', 'Bosch - Triptych Adoration of the Magi', 'Triptych of the Adoration of the Magi.jpg'),
   },
 
   // ─── Day 4: Music — Palestrina ──────────────────────────────────────────
@@ -498,7 +498,7 @@ const DAYS: PausePonderDay[] = [
       attribution: 'Psalm 8:3–4',
     },
     actio: 'Look at the sky tonight — or even now, through a window. Remember that the light you\'re seeing has traveled an almost incomprehensible distance just to reach your eyes.',
-    // ⚠️ localImagePath not set — Webb Deep Field image still needed. Upload manually in Sanity Studio.
+    localImagePath: path.join(DOWNLOADS_DIR, 'webb first imageSTScI-01G8H1K2BCNATEZSKVRN9Z69SR.png'),
   },
 
   // ─── Day 18: Sacred Art — Prodigal Son ──────────────────────────────────
