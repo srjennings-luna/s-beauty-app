@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KALLOS — Product Brief</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.8;
+            color: #2C2C2C;
+            background: #FFFFFF;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: Arial, sans-serif;
+            font-weight: 600;
+            color: #111820;
+            margin-top: 1.5em;
+            margin-bottom: 0.75em;
+            letter-spacing: -0.5px;
+        }
+
+        h1 {
+            font-size: 3.2em;
+            margin-top: 0;
+            margin-bottom: 0.5em;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            margin-top: 2em;
+            padding-top: 1.5em;
+            border-top: 2px solid #C19B5F;
+            padding-bottom: 0.5em;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            margin-top: 1.5em;
+            color: #1A3D52;
+        }
+
+        h4 {
+            font-size: 1.2em;
+            color: #2E5F78;
+            margin-top: 1.25em;
+        }
+
+        p {
+            margin-bottom: 1em;
+            font-size: 1.05em;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* COVER SECTION */
+        .cover {
+            background: linear-gradient(135deg, #111820 0%, #1A3D52 100%);
+            color: #F0F4F6;
+            padding: 120px 40px;
+            text-align: center;
+            margin-bottom: 60px;
+            border-bottom: 4px solid #C19B5F;
+        }
+
+        .cover h1 {
+            color: #C19B5F;
+            font-size: 4.5em;
+            letter-spacing: 2px;
+            margin-bottom: 0.3em;
+            font-weight: 700;
+        }
+
+        .cover .tagline {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.8em;
+            font-style: italic;
+            color: #F0F4F6;
+            margin-bottom: 1.5em;
+            font-weight: 300;
+        }
+
+        .cover .founding-statement {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.4em;
+            font-style: italic;
+            color: #C19B5F;
+            margin-bottom: 1.5em;
+            line-height: 1.6;
+        }
+
+        .cover .meta {
+            font-size: 0.95em;
+            color: #2E5F78;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cover .date {
+            display: block;
+            margin-top: 1em;
+        }
+
+        /* PULL QUOTE */
+        .pull-quote {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.4em;
+            font-style: italic;
+            color: #1A3D52;
+            line-height: 1.8;
+            padding: 2em;
+            padding-left: 2.5em;
+            margin: 2.5em 0;
+            border-left: 5px solid #C19B5F;
+            background: #F0F4F6;
+            page-break-inside: avoid;
+        }
+
+        .pull-quote-attribution {
+            font-size: 0.85em;
+            font-style: normal;
+            color: #2E5F78;
+            margin-top: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* DIVIDER */
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #C19B5F, transparent);
+            margin: 3em 0;
+            border: none;
+        }
+
+        /* SECTION CONTENT */
+        section {
+            margin-bottom: 3em;
+        }
+
+        .section-intro {
+            font-size: 1.15em;
+            color: #2E5F78;
+            font-style: italic;
+            margin-bottom: 1.5em;
+            line-height: 1.9;
+        }
+
+        /* LISTS */
+        ul, ol {
+            margin-left: 2em;
+            margin-bottom: 1.5em;
+        }
+
+        li {
+            margin-bottom: 0.8em;
+            line-height: 1.8;
+        }
+
+        strong {
+            color: #1A3D52;
+            font-weight: 600;
+        }
+
+        em {
+            color: #2E5F78;
+        }
+
+        /* CONTENT TYPE GRID */
+        .content-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2em;
+            margin: 2em 0;
+        }
+
+        .content-type {
+            background: #F0F4F6;
+            padding: 1.5em;
+            border-left: 4px solid #C19B5F;
+        }
+
+        .content-type h4 {
+            margin-top: 0;
+            color: #1A3D52;
+        }
+
+        .content-type p {
+            font-size: 0.95em;
+            margin-bottom: 0.5em;
+        }
+
+        /* FEATURES */
+        .features {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5em;
+            margin: 2em 0;
+        }
+
+        .feature {
+            background: #F0F4F6;
+            padding: 1.5em;
+            border-left: 4px solid #2E5F78;
+        }
+
+        .feature h4 {
+            margin-top: 0;
+            color: #1A3D52;
+        }
+
+        .feature p {
+            font-size: 0.95em;
+        }
+
+        /* THEMES */
+        .themes {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2em;
+            margin: 2em 0;
+        }
+
+        .theme {
+            background: #F0F4F6;
+            padding: 2em;
+            border-left: 5px solid #C19B5F;
+        }
+
+        .theme h4 {
+            margin-top: 0;
+            color: #1A3D52;
+            font-size: 1.35em;
+        }
+
+        .theme-question {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-style: italic;
+            color: #2E5F78;
+            margin-bottom: 1em;
+            font-size: 1.1em;
+        }
+
+        .theme p {
+            font-size: 0.95em;
+            margin-bottom: 0.5em;
+        }
+
+        /* COMPARISON TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2em 0;
+            font-size: 0.95em;
+            background: #FFFFFF;
+            border: 1px solid #C19B5F;
+        }
+
+        th {
+            background: #111820;
+            color: #C19B5F;
+            padding: 1em;
+            text-align: left;
+            font-family: Arial, sans-serif;
+            font-weight: 600;
+            border-bottom: 2px solid #C19B5F;
+        }
+
+        td {
+            padding: 1em;
+            border-bottom: 1px solid #E5DDD0;
+        }
+
+        tr:hover {
+            background: #F0F4F6;
+        }
+
+        /* USE CASES */
+        .use-case {
+            background: #F0F4F6;
+            padding: 1.5em;
+            margin-bottom: 1.5em;
+            border-left: 4px solid #2E5F78;
+        }
+
+        .use-case h4 {
+            margin-top: 0;
+            color: #1A3D52;
+        }
+
+        .use-case-description {
+            font-size: 0.95em;
+        }
+
+        /* JOURNEY STRUCTURE */
+        .journey-day {
+            background: #F0F4F6;
+            padding: 1.5em;
+            margin-bottom: 1em;
+            border-left: 4px solid #2E5F78;
+        }
+
+        .journey-day-step {
+            margin-bottom: 0.75em;
+        }
+
+        .journey-day-number {
+            color: #C19B5F;
+            font-weight: 600;
+        }
+
+        /* ROADMAP */
+        .roadmap-phase {
+            background: #F0F4F6;
+            padding: 1.5em;
+            margin-bottom: 1.5em;
+            border-left: 4px solid #2E5F78;
+        }
+
+        .roadmap-phase h4 {
+            margin-top: 0;
+            color: #1A3D52;
+        }
+
+        /* FINAL SECTION */
+        .closing {
+            text-align: center;
+            margin-top: 4em;
+            padding-top: 2em;
+            border-top: 2px solid #C19B5F;
+        }
+
+        .closing h2 {
+            border: none;
+            padding: 0;
+            margin-top: 0;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            color: #2E5F78;
+            font-size: 0.9em;
+            margin-top: 3em;
+            padding: 2em 0;
+            border-top: 1px solid #C19B5F;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            .cover {
+                padding: 80px 20px;
+            }
+
+            .cover h1 {
+                font-size: 3em;
+            }
+
+            .cover .tagline {
+                font-size: 1.4em;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+
+            h3 {
+                font-size: 1.4em;
+            }
+
+            .content-types {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.85em;
+            }
+
+            td, th {
+                padding: 0.75em;
+            }
+        }
+
+        @media print {
+            body {
+                background: #FFFFFF;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+    <h1>KALLOS</h1>
+    <div class="tagline">Love the beautiful and the good</div>
+    <div class="founding-statement">Beauty is the splendor of truth</div>
+    <div class="meta">
+        <span>Product Brief</span>
+        <span class="date">February 2026</span>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+    <!-- VISION -->
+    <section>
+        <h2>Vision</h2>
+        <p class="section-intro">A contemplative discovery app rooted in the classical and Christian philosophical tradition. Led by beauty, not belief.</p>
+
+        <div class="pull-quote">
+            Beauty is the entry point.<br>
+            Beauty points toward Truth.<br>
+            Truth points toward God.<br>
+            The app is a guide for that journey.
+            <div class="pull-quote-attribution">The KALLOS Thesis</div>
+        </div>
+
+        <h3>The Founding</h3>
+        <p>KALLOS takes its name from the Greek word <em>kalos</em>, meaning both "beautiful" and "good"—capturing the classical understanding that beauty and goodness are inseparable. Originally developed as a companion to the EWTN series <em>Seeking Beauty</em>, KALLOS has evolved into an independent app grounded in the philosophical tradition that has shaped Western civilization.</p>
+
+        <p>The app is not rooted in dogma but in wonder. Its thesis is simple: beauty is the most universal entry point to deeper truth. A visitor moved by a Caravaggio in the Uffizi Gallery. A student encountering Hopkins for the first time. Someone who felt something they couldn't name in a cathedral. KALLOS gives them language—and a tradition—they didn't know they belonged to.</p>
+
+        <div class="divider"></div>
+    </section>
+
+    <!-- PRIMARY AUDIENCE -->
+    <section>
+        <h2>Audience</h2>
+
+        <h3>Primary: The Curious Seeker</h3>
+        <p>Someone <strong>not necessarily Catholic</strong>, possibly not religious at all, but moved by beauty and asking deeper questions. The person who:</p>
+        <ul>
+            <li>Felt something in a museum they couldn't explain</li>
+            <li>Reads poetry or philosophy without formal training</li>
+            <li>Senses there's a tradition deeper than contemporary culture</li>
+            <li>Is ready to discover it—but only if led by beauty, not belief</li>
+        </ul>
+
+        <p>KALLOS is a human app that takes beauty seriously. It invites the seeker into a tradition that has always been there, waiting for them.</p>
+
+        <h3>Secondary Audiences</h3>
+        <ul>
+            <li><strong>The Daily Contemplative</strong> — opens the app every morning, craves depth over distraction, wants substance to sit with</li>
+            <li><strong>The Weekend Traveler</strong> — arrives in Florence or Santiago for three days, wants more than TripAdvisor, seeks connection to place and tradition</li>
+            <li><strong>The Student/Teacher</strong> — philosophy, theology, art history, literature classes; Curated Journeys work as integrated curriculum</li>
+            <li><strong>The Armchair Pilgrim</strong> — cannot travel, seeks virtual pilgrimage through Visio Divina and location-based content</li>
+        </ul>
+
+        <div class="divider"></div>
+    </section>
+
+    <!-- PHILOSOPHICAL SPINE -->
+    <section>
+        <h2>The Philosophical Spine: The Transcendentals</h2>
+        <p class="section-intro">Classical philosophy teaches that Being has three transcendental properties: Beauty, Truth, and Goodness. KALLOS is built on this framework.</p>
+
+        <ul>
+            <li><strong>Beauty:</strong> Sacred art, architecture, music, food, wine, landscape, poetry—the entry point. What awakens wonder?</li>
+            <li><strong>Truth:</strong> Thinkers, quotes, literature, philosophy, theology—what beauty points toward. What does it mean?</li>
+            <li><strong>Goodness/God:</strong> Contemplative practice (Visio Divina), tradition reflections, action prompts—the destination. How do we live it?</li>
+        </ul>
+
+        <p>Every piece of content in KALLOS—whether art, music, food, or thought—moves along this journey. You don't have to follow it. But the structure is always there, inviting you deeper.</p>
+
+        <div class="divider"></div>
+    </section>
+
+    <!-- CONTENT TYPES -->
+    <section>
+        <h2>Content Types: Seven Forms of Beauty</h2>
+        <p class="section-intro">KALLOS encompasses seven distinct content types, each paired with reflection and context. All seven work together in Curated Journeys, creating a complete learning experience.</p>
+
+        <div class="content-types">
+            <div class="content-type">
+                <h4>1. Sacred Art & Architecture</h4>
+                <p>Paintings, sculptures, frescoes, icons, churches. Each entry includes high-resolution zoomable image (8x zoom), scripture/quote pairing, reflection questions, and Visio Divina practice.</p>
+            </div>
+            <div class="content-type">
+                <h4>2. Thinkers & Quotes</h4>
+                <p>First-class philosophical content. Plato, Augustine, Aquinas, C.S. Lewis, Chesterton, von Balthasar, Scruton, Benedict XVI. Context on why they matter. How their thought connects to beauty.</p>
+            </div>
+            <div class="content-type">
+                <h4>3. Literature & Poetry</h4>
+                <p>Hopkins, Rilke, Dante, Dostoevsky, Tolkien. Paired with reflection prompts and tied to place where relevant. Poetry as contemplative form, not just aesthetic object.</p>
+            </div>
+            <div class="content-type">
+                <h4>4. Music</h4>
+                <p>Sacred and classical music as contemplative form. Gregorian chant, Arvo Pärt, Bach, Palestrina. Context on why certain music endures. Often accompanies Visio Divina practice.</p>
+            </div>
+            <div class="content-type">
+                <h4>5. Food & Wine</h4>
+                <p>Places where craft and tradition honor beauty. Cistercian monasteries, 3-generation bakeries, natural wine. Always answers: what does this point toward?</p>
+            </div>
+            <div class="content-type">
+                <h4>6. Natural Landscape</h4>
+                <p>Creation theology and places where creation speaks. Paired with Hopkins, Basil the Great, Tolkien on sub-creation. What does the world tell us about its Creator?</p>
+            </div>
+            <div class="content-type">
+                <h4>7. Watch & Listen</h4>
+                <p>Curated YouTube embeds and podcast links. Documentary series, art/philosophy lectures, classical studies, theology podcasts. Curator's context note mandatory—why this matters.</p>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+    </section>
+
+    <!-- CORE FEATURES -->
+    <section>
+        <h2>Core Features</h2>
+
+        <div class="features">
+            <div class="feature">
+                <h4>1. Daily Beauty Prompt</h4>
+                <p>Home screen centerpiece. One curated piece of content daily, one reflection question. Not algorithmic—<strong>editorially curated</strong> by humans who care. Rotates across all seven content types. Designed to be opened every morning.</p>
+            </div>
+            <div class="feature">
+                <h4>2. Curated Journeys</h4>
+                <p>Multi-day thematic sequences (~10 minutes per day, 7 days). Built around a THEME using integrated curriculum model. All seven content types answer the same question from different angles. Like a classical school where subjects explore themes together.</p>
+            </div>
+            <div class="feature">
+                <h4>3. Explore</h4>
+                <p>Browse all content with content-type filters + map view. Location as a lens—not the structure. Find sacred art in your city, discover food traditions, locate pilgrimage sites.</p>
+            </div>
+            <div class="feature">
+                <h4>4. Visio Divina</h4>
+                <p>Contemplative practice already built: Gaze → Meditate → Pray → Contemplate → Action. High-res images (up to 4500px) with 8x zoom. Turn looking into praying.</p>
+            </div>
+            <div class="feature">
+                <h4>5. Go Deeper</h4>
+                <p>Reflections from Church Fathers, Saints, and Popes on how beauty, truth, and goodness connect. Already built. Always available as optional depth.</p>
+            </div>
+            <div class="feature">
+                <h4>6. Library</h4>
+                <p>Personal collection. Your favorites + completed journeys + Visio Divina history. Builds a record of your contemplative practice over time.</p>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+    </section>
+
+    <!-- JOURNEY FRAMEWORK -->
+    <section>
+        <h2>Journey Framework: Integrated Curriculum Model</h2>
+        <p class="section-intro">Each Curated Journey is built around a THEME—a big, enduring human question. Every content type answers that question from a different angle.</p>
+
+        <h3>Why This Matters</h3>
+        <p>In classical education, subjects don't stand alone. History, art, theology, literature all explore the same theme together. A student studying the Reformation doesn't just read Luther's writings—they listen to Gabrieli's sacred music from that period, examine Northern Renaissance paintings, read Erasmus, trace the theological argument. Everything speaks to the same question.</p>
+
+        <p>KALLOS works the same way. In a 7-day Journey about Light, you encounter Caravaggio's paintings, read Aquinas on <em>claritas</em>, listen to Arvo Pärt, visit Chartres at sunrise through video, taste Cistercian honey, explore the philosophy of Pseudo-Dionysius, and practice Visio Divina on a Gothic window. By day 7, you understand Light—not as concept, but as living knowledge.</p>
+
+        <h3>Journey Day Structure</h3>
+        <p class="section-intro">~10 minutes per day. Consistent across all Journeys:</p>
+
+        <div class="journey-day">
+            <div class="journey-day-step">
+                <span class="journey-day-number">1. Open (1 min)</span> — Image always present, visual anchor for the entire day
+            </div>
+            <div class="journey-day-step">
+                <span class="journey-day-number">2. Encounter (3–5 min)</span> — Primary content for that day (art, text, music, food, etc.)
+            </div>
+            <div class="journey-day-step">
+                <span class="journey-day-number">3. Reflect (2 min)</span> — 1–2 reflection questions to sit with
+            </div>
+            <div class="journey-day-step">
+                <span class="journey-day-number">4. Connect (30 sec)</span> — One sentence threading to tomorrow's content
+            </div>
+            <div class="journey-day-step">
+                <span class="journey-day-number">5. Go Deeper (optional)</span> — Tradition reflections always available, user's choice
+            </div>
+        </div>
+
+        <div class="pull-quote" style="font-size: 0.95rem; margin-top: 1.5rem;">
+            <strong>Image Standard:</strong> Every Journey day requires a minimum of one high-resolution image (1200–1600px min, up to 4500px for detail-rich works), regardless of that day's primary content type. The image is the constant visual anchor of the day's theme—music days, poetry days, food days all open and return to an image. The app's 8x pinch-to-zoom is always available. Content agents must confirm public domain or Creative Commons rights before formatting for CMS.
+        </div>
+
+        <div class="divider"></div>
+    </section>
+
+    <!-- FOUNDING THEMES -->
+    <section>
+        <h2>The Five Founding Themes</h2>
+        <p class="section-intro">The first Curated Journeys, each exploring one transcendent human question:</p>
+
+        <div class="themes">
+            <div class="theme">
+                <h4>1. LIGHT</h4>
+                <div class="theme-question">"What does light reveal that darkness hides?"</div>
+                <p><strong>Art:</strong> Caravaggio, Fra Angelico, Gothic stained glass. <strong>Thinkers:</strong> Pseudo-Dionysius, Aquinas on <em>claritas</em>. <strong>Poetry:</strong> Hopkins "God's Grandeur". <strong>Music:</strong> Arvo Pärt. <strong>Food:</strong> Cistercian honey and bread. <strong>Landscape:</strong> Chartres at sunrise.</p>
+            </div>
+
+            <div class="theme">
+                <h4>2. SILENCE</h4>
+                <div class="theme-question">"What do we hear when we stop talking?"</div>
+                <p><strong>Art:</strong> Icons, Zurbarán. <strong>Thinkers:</strong> Pascal, Merton, John of the Cross. <strong>Poetry:</strong> Rilke, T.S. Eliot. <strong>Music:</strong> Pärt, Gregorian chant. <strong>Food:</strong> Trappist meal eaten in silence. <strong>Video:</strong> <em>Into Great Silence</em> documentary.</p>
+            </div>
+
+            <div class="theme">
+                <h4>3. SUFFERING & BEAUTY</h4>
+                <div class="theme-question">"How does beauty survive darkness—and what does it mean when it does?"</div>
+                <p><strong>Art:</strong> Grünewald's Isenheim Altarpiece, Rembrandt's late self-portraits, Michelangelo's unfinished Prisoners. <strong>Thinkers:</strong> Dostoevsky, Simone Weil, C.S. Lewis <em>A Grief Observed</em>. <strong>Music:</strong> Bach St. Matthew Passion, Górecki Symphony No. 3.</p>
+            </div>
+
+            <div class="theme">
+                <h4>4. CREATION</h4>
+                <div class="theme-question">"What is the world trying to tell us?"</div>
+                <p><strong>Art:</strong> Sistine creation panels, Friedrich's <em>Monk by the Sea</em>. <strong>Thinkers:</strong> Bonaventure on <em>vestigia Dei</em>, Tolkien on sub-creation, Hopkins. <strong>Poetry:</strong> "Pied Beauty", Psalm 19, Mary Oliver. <strong>Music:</strong> Haydn's <em>Creation</em>. <strong>Food:</strong> Biodynamic farming, harvest traditions.</p>
+            </div>
+
+            <div class="theme">
+                <h4>5. HOME / THE RESTLESS HEART</h4>
+                <div class="theme-question">"Why does beauty sometimes feel like homesickness for a place we've never been?"</div>
+                <p><strong>Art:</strong> Rembrandt's <em>Return of the Prodigal Son</em>, Rublev's Trinity icon. <strong>Thinkers:</strong> Augustine "our heart is restless", C.S. Lewis on <em>Sehnsucht</em>. <strong>Poetry:</strong> T.S. Eliot "we shall not cease from exploration". <strong>Music:</strong> Dvořák New World Symphony, Irish exile songs. <strong>Food:</strong> Benedictine hospitality, communal meal as homecoming.</p>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+    </section>
+
+    <!-- COMPETITIVE POSITION -->
+    <section>
+        <h2>Competitive Position: What Makes KALLOS Different</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Platform</th>
+                    <th>Strengths</th>
+                    <th>Gap</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Google Arts & Culture</strong></td>
+                    <td>Vast, accessible, museum partnerships</td>
+                    <td>No philosophical depth. No contemplative practice. No food, music, or poetry.</td>
+                </tr>
+                <tr>
+                    <td><strong>Hallow / Laudate</strong></td>
+                    <td>Contemplative prayer, Catholic framing</td>
+                    <td>No art discovery. No location. No food or poetry. Explicitly religious.</td>
+                </tr>
+                <tr>
+                    <td><strong>Camino / Pilgrimage Apps</strong></td>
+                    <td>Location-based, route planning</td>
+                    <td>Route-specific only. Not for everyday life. No discovery across content types.</td>
+                </tr>
+                <tr>
+                    <td><strong>Museum Apps</strong></td>
+                    <td>Deep art content, high-res images</td>
+                    <td>Secular framing. No philosophical spine. No contemplative practice.</td>
+                </tr>
+                <tr>
+                    <td><strong>KALLOS</strong></td>
+                    <td>Philosophically deep + location discovery + contemplative practice + all seven content types in conversation</td>
+                    <td>—</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="pull-quote">
+            KALLOS is built for the person who hasn't discovered tradition yet—but is led there by beauty.
+        </div>
+
+        <div class="divider"></div>
+    </section>
+
+    <!-- USE CASES -->
+    <section>
+        <h2>Five Core Use Cases</h2>
+
+        <div class="use-case">
+            <h4>1. The Curious Seeker (Primary)</h4>
+            <p class="use-case-description">Not religious, felt something in a museum, needs language for experiences they've had. KALLOS gives them that language and a tradition to belong to. The app is their entry point.</p>
+        </div>
+
+        <div class="use-case">
+            <h4>2. The Daily Contemplative</h4>
+            <p class="use-case-description">Opens the app every morning. Wants depth, not distraction. The Daily Beauty Prompt is their ritual—something substantial to sit with for 10 minutes before the day begins.</p>
+        </div>
+
+        <div class="use-case">
+            <h4>3. The Weekend Traveler</h4>
+            <p class="use-case-description">In Florence for 3 days, or visiting Santiago de Compostela. KALLOS provides more than TripAdvisor—connection to the tradition behind the places they're visiting. Context that deepens experience.</p>
+        </div>
+
+        <div class="use-case">
+            <h4>4. The Student/Teacher</h4>
+            <p class="use-case-description">Philosophy, theology, art history, literature classes. Curated Journeys function as integrated curriculum. All subjects exploring the same theme—classical education in digital form.</p>
+        </div>
+
+        <div class="use-case">
+            <h4>5. The Armchair Pilgrim</h4>
+            <p class="use-case-description">Cannot travel, but seeks pilgrimage. KALLOS enables virtual pilgrimage through Visio Divina practice and location-based content. Contemplative journey without leaving home.</p>
+        </div>
+
+        <div class="divider"></div>
+    </section>
+
+    <!-- TECHNOLOGY -->
+    <section>
+        <h2>Technology Stack</h2>
+        <ul>
+            <li><strong>Framework:</strong> Next.js + React</li>
+            <li><strong>CMS:</strong> Sanity — flexible content modeling for seven content types</li>
+            <li><strong>Hosting:</strong> Vercel — optimized for Next.js, global edge network</li>
+            <li><strong>Maps:</strong> React-Leaflet — location-based discovery and pilgrimage routing</li>
+            <li><strong>Images:</strong> High-res public domain and Creative Commons (minimum 1200–1600px, up to 4500px for detail-rich works)</li>
+        </ul>
+
+        <div class="divider"></div>
+    </section>
+
+    <!-- CONTENT AGENT PLAN -->
+    <section>
+        <h2>Content Agent: Scaling with Intelligence</h2>
+        <p class="section-intro">A Claude-powered research tool run through Cowork. Given a research brief, it finds, evaluates, and formats content for Sanity CMS.</p>
+
+        <h3>Key Use Cases</h3>
+        <ul>
+            <li>Finding sacred art for a new city (with high-res public domain images, min 2000px)</li>
+            <li>Building a Curated Journey around a theme</li>
+            <li>Finding Food & Wine entries that connect to the tradition</li>
+            <li>Sourcing Daily Beauty Prompts for a season (e.g., Advent, Lent)</li>
+            <li>Populating Go Deeper tradition reflections</li>
+        </ul>
+
+        <h3>Content Sources</h3>
+        <ul>
+            <li>Met Museum Open Access API</li>
+            <li>Art Institute of Chicago API</li>
+            <li>Europeana</li>
+            <li>Project Gutenberg (texts and poetry)</li>
+            <li>Vatican News and official resources</li>
+            <li>Wikipedia / Wikidata</li>
+        </ul>
+
+        <h3>Image Standards</h3>
+        <p>Minimum 1200–1600px for general content. Up to 4500px for detail-rich works. 8x zoom built into app. Agent must confirm public domain or Creative Commons rights before formatting for CMS.</p>
+
+        <div class="divider"></div>
+    </section>
+
+    <!-- ROADMAP -->
+    <section>
+        <h2>Development Roadmap</h2>
+
+        <div class="roadmap-phase">
+            <h4>Phase 1: Foundation & Seeding</h4>
+            <ul>
+                <li>Remove EWTN structure and reframe for independent audience</li>
+                <li>Extend Sanity schema to include all seven content types with consistency</li>
+                <li>Build Daily Beauty Prompt feature and editorial backend</li>
+                <li>Seed three cities (Rome, Florence, Santiago) with high-quality content using Content Agent</li>
+                <li>Fix known bugs and optimize performance</li>
+            </ul>
+        </div>
+
+        <div class="roadmap-phase">
+            <h4>Phase 2: Journeys & Scale</h4>
+            <ul>
+                <li>Launch Curated Journeys feature (all 5 Founding Themes)</li>
+                <li>Extend Go Deeper with full Tradition reflection library</li>
+                <li>Expand to 5–7 cities with localized content</li>
+                <li>Build onboarding experience for the curious seeker</li>
+                <li>Implement library and progress tracking</li>
+            </ul>
+        </div>
+
+        <div class="roadmap-phase">
+            <h4>Phase 3: Community & Partnerships</h4>
+            <ul>
+                <li>Monastery and artisan partnerships (food, music, retreat experiences)</li>
+                <li>Contributing curators program (expert-led content)</li>
+                <li>Group Journey feature (for classes, pilgrimages, communities)</li>
+                <li>Expanded theme library based on user feedback</li>
+                <li>Mobile app with push notifications for Daily Prompt</li>
+            </ul>
+        </div>
+
+        <div class="divider"></div>
+    </section>
+
+    <!-- OPEN QUESTIONS -->
+    <section>
+        <h2>Open Questions</h2>
+        <ul>
+            <li><strong>Food & Wine Curation:</strong> Who are the trusted collaborators per city? How do we scale authentic sourcing?</li>
+            <li><strong>Monetization:</strong> Free + premium Journeys? Subscription model? One-time purchase?</li>
+            <li><strong>Image Rights Strategy:</strong> Museum open access first policy? Commission works from artists?</li>
+            <li><strong>Native App vs Mobile Web:</strong> Push notifications are key for Daily Prompt. Does native app drive engagement or web suffice?</li>
+            <li><strong>Positioning:</strong> Explicit Catholic positioning or broad classical tradition framing? How do we welcome the non-religious seeker without diluting the tradition?</li>
+        </ul>
+
+        <div class="divider"></div>
+    </section>
+
+    <!-- CLOSING -->
+    <section class="closing">
+        <h2>Summary</h2>
+        <p>KALLOS is not a pilgrimage app, or an art app, or a meditation app. It is a <strong>beauty app rooted in truth</strong>—designed for the person who senses there is something deeper, something older, something more beautiful than the contemporary world offers them. The person who doesn't yet have a tradition, but is ready to find one.</p>
+
+        <p>Beauty, in KALLOS, is the grammar through which wisdom speaks. The app is the translation service.</p>
+
+        <div class="pull-quote">
+            Beauty is the splendor of truth.<br>
+            <span style="display: block; margin-top: 1em; font-style: normal; font-size: 0.8em;">— Plato, via Maritain and John Paul II</span>
+        </div>
+    </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <p>KALLOS Product Brief — February 2026</p>
+    <p>A project rooted in the classical and Christian philosophical tradition, led by beauty.</p>
+</footer>
+
+</body>
+</html>

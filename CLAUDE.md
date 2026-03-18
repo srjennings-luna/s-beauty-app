@@ -10,7 +10,7 @@ Read this at the start of every session. It contains all key product decisions, 
 **Tagline:** Love the beautiful and the good
 **Founding statement:** Beauty is the splendor of truth
 **Type:** Independent contemplative discovery app (not an EWTN companion — no relationship or rights)
-**Primary audience:** The non-Catholic curious seeker — moved by beauty, asking deeper questions, not necessarily religious
+**Primary audience:** The curious seeker — moved by beauty, asking deeper questions, regardless of faith background
 
 ---
 
@@ -82,7 +82,7 @@ Read this at the start of every session. It contains all key product decisions, 
 ### Up Next: Phase 2 Remaining
 - Seed content into Sanity: Intro journey, Themes 2–5, Pause & Ponder prompts
 - Source high-res images for all new content (search terms provided in docs)
-- Build onboarding flow for non-Catholic curious seeker
+- Build onboarding flow for the curious seeker
 - Sanity Studio manual tasks (Sheri): rename Studio URL, update splash content
 - User testing with Stories navigation and Breathe page
 
