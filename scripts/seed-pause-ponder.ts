@@ -64,11 +64,15 @@ async function getThemeIds(): Promise<Record<string, string>> {
   const map: Record<string, string> = {};
   for (const t of themes) {
     // Normalize: "Light" → "light", "Suffering & Beauty" → "suffering-beauty"
-    const key = t.title.toLowerCase().replace(/[&\s]+/g, '-').replace(/-+/g, '-');
+    // Strip all non-alphanumeric chars (including /), collapse multiple dashes, trim ends
+    const key = t.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     map[key] = t._id;
     // Also store the raw lowercase
     map[t.title.toLowerCase()] = t._id;
   }
+  // Alias: "Home / The Restless Heart" normalizes to "home-the-restless-heart"
+  // but DAYS entries use the shorthand "home-restless-heart"
+  if (map['home-the-restless-heart']) map['home-restless-heart'] = map['home-the-restless-heart'];
   return map;
 }
 
