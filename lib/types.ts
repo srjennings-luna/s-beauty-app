@@ -125,6 +125,8 @@ export type Journey = {
 export type DailyPromptLectio = {
   text: string;
   attribution?: string;
+  philosophyText?: string;
+  philosophyAttribution?: string;
 };
 
 export type DailyPromptAuditio = {

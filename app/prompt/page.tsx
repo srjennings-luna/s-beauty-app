@@ -356,22 +356,49 @@ export default function DailyPromptPage() {
                 READING <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Lectio)</span>
               </p>
               <div className="pl-4 space-y-6" style={{ borderLeft: `1px solid rgba(138,126,114,0.3)` }}>
-                <p
-                  className="italic leading-tight"
-                  style={{
-                    color: C.cream,
-                    fontFamily: "var(--font-cormorant)",
-                    fontSize: "clamp(1.3rem, 4.5vw, 1.55rem)",
-                    lineHeight: "1.4",
-                  }}
-                >
-                  &ldquo;{prompt.lectio.text}&rdquo;
-                </p>
-                {prompt.lectio.attribution && (
-                  <p className="text-xs tracking-widest uppercase" style={{ color: C.sageMuted }}>
-                    — {prompt.lectio.attribution}
-                  </p>
+
+                {/* Philosophy quote — shown first when present */}
+                {prompt.lectio.philosophyText && (
+                  <div className="space-y-2">
+                    <p
+                      className="italic leading-tight"
+                      style={{
+                        color: C.cream,
+                        fontFamily: "var(--font-cormorant)",
+                        fontSize: "clamp(1.3rem, 4.5vw, 1.55rem)",
+                        lineHeight: "1.4",
+                      }}
+                    >
+                      &ldquo;{prompt.lectio.philosophyText}&rdquo;
+                    </p>
+                    {prompt.lectio.philosophyAttribution && (
+                      <p className="text-xs tracking-widest uppercase" style={{ color: C.sageMuted }}>
+                        — {prompt.lectio.philosophyAttribution}
+                      </p>
+                    )}
+                  </div>
                 )}
+
+                {/* Scripture — shown second (or alone if no philosophy quote) */}
+                <div className="space-y-2">
+                  <p
+                    className="italic leading-tight"
+                    style={{
+                      color: C.cream,
+                      fontFamily: "var(--font-cormorant)",
+                      fontSize: "clamp(1.3rem, 4.5vw, 1.55rem)",
+                      lineHeight: "1.4",
+                    }}
+                  >
+                    &ldquo;{prompt.lectio.text}&rdquo;
+                  </p>
+                  {prompt.lectio.attribution && (
+                    <p className="text-xs tracking-widest uppercase" style={{ color: C.sageMuted }}>
+                      — {prompt.lectio.attribution}
+                    </p>
+                  )}
+                </div>
+
               </div>
             </section>
           )}

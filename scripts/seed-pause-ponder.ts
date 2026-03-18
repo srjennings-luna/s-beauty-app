@@ -97,7 +97,7 @@ interface PausePonderDay {
   // Daily prompt fields
   promptQuestion: string;
   curatorNote: string;
-  lectio?: { text: string; attribution: string };
+  lectio?: { text: string; attribution: string; philosophyText?: string; philosophyAttribution?: string };
   auditio?: { title: string; artist: string; audioUrl?: string; url?: string };
   actio: string;
   // Content type specific
@@ -146,25 +146,19 @@ const DAYS: PausePonderDay[] = [
     title: 'The Adoration of the Magi (Triptych)',
     artist: 'Hieronymus Bosch',
     year: 'c. 1500',
-    description: 'A three-paneled altarpiece depicting the three wise men journeying to Bethlehem. Each side reveals intricate scenes—servants, animals, a distant landscape—drawn with Bosch\'s characteristic precision and hidden symbolism. The central panel shows the moment of offering, surrounded by a world in miniature.',
-    context: 'Bosch lived in the southern Netherlands during the late medieval period, a time when religious art was shifting from pure devotion to a more complex visual language. The Adoration was one of the most painted subjects of the era—a story of pilgrimage, recognition, and surrender. Bosch transforms it into a meditation on the human condition itself. Every face, every object has been placed with intention. The crowded margins are not decoration but theology: the sacred surrounded by the sacred.',
-    imageSearchTerm: 'Bosch Adoration Magi triptych high-resolution',
+    description: 'A three-paneled altarpiece showing the three wise men presenting gifts to the Christ child. At the center, the sacred moment. At the margins, a world alive with detail — servants, soldiers, a crumbling stable, a figure lurking in a darkened doorway. Bosch painted what every other artist left out.',
+    context: 'Bosch lived in the southern Netherlands in the late 1400s, when religious art was the primary visual language people had for thinking about life and death. The Adoration of the Magi was a subject every painter attempted. Bosch made it strange on purpose — filling the margins with tension, the background with a world that does not yet know what it is witnessing. His was not a comfortable faith. It was a searching one.',
+    imageSearchTerm: 'Bosch Adoration Magi triptych Prado high-resolution',
     themes: ['light'],
-    promptQuestion: 'What is Bosch asking you to notice first—the sacred moment at the center, or the world at the margins?',
-    curatorNote: 'This painting asks for slowness. You can\'t take it in at a glance—Bosch refused to let anyone skip ahead. Look for the servants. They\'re not the main story, but they carry the whole thing forward. That\'s where it gets interesting.',
+    promptQuestion: 'Is there something you had to move through darkness to reach — and what you found on the other side was good, even if it wasn\'t what you imagined?',
+    curatorNote: 'What you\'re looking at is only half the painting. When this triptych is closed, Bosch painted seven scenes from the Passion of Christ on the outside panels — in grisaille, the gray monochrome used to imitate carved stone. The seven stations: the Agony in the Garden, the Arrest, the Mocking of Christ, the Crowning with Thorns, the Way of the Cross, the Crucifixion, the Pietà. You open the doors through suffering to reach the Adoration. Bosch designed it so the arrival of joy cannot be separated from the path through darkness.',
     lectio: {
-      text: 'The heavens declare the glory of God; the skies proclaim the work of his hands. Day after day they pour forth speech; night after night they reveal knowledge.',
-      attribution: 'Psalm 19:1–2',
+      philosophyText: 'The prisoners in the cave see only shadows on the wall. When one is freed and turned toward the light, at first he cannot see — the brightness is too much. But he persists. Eventually he sees things as they really are.',
+      philosophyAttribution: 'Plato, Republic — Allegory of the Cave',
+      text: 'For now we see through a glass, darkly; but then face to face: now I know in part; but then shall I know even as also I am known.',
+      attribution: '1 Corinthians 13:12',
     },
-    auditio: {
-      title: 'Lagrime di San Pietro',
-      artist: 'Orlando di Lasso — performed by The Hilliard Ensemble',
-    },
-    actio: 'Find one small detail today that you\'d normally walk past. A face in a crowd, a shadow on the wall, an object on someone\'s desk. Let it stop you for ten seconds.',
-    scripturePairing: {
-      verse: 'The heavens declare the glory of God; the skies proclaim the work of his hands.',
-      reference: 'Psalm 19:1',
-    },
+    actio: 'Spend two minutes with the open triptych and find the figure lurking in the doorway of the stable. He is not a wise man. He is not a servant. Bosch placed him there with intention. When you find him, ask yourself: which figure in this painting are you today?',
     localImagePath: path.join(DOWNLOADS_DIR, 'sacred art', 'Bosch - Triptych Adoration of the Magi', 'Triptych of the Adoration of the Magi.jpg'),
   },
 
