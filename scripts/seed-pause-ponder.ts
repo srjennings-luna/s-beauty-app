@@ -151,7 +151,7 @@ const DAYS: PausePonderDay[] = [
     artist: 'Hieronymus Bosch',
     year: 'c. 1500',
     description: 'A three-paneled altarpiece showing the three wise men presenting gifts to the Christ child. At the center, the sacred moment. At the margins, a world alive with detail — servants, soldiers, a crumbling stable, a figure lurking in a darkened doorway. Bosch painted what every other artist left out.',
-    context: 'Bosch lived in the southern Netherlands in the late 1400s, when religious art was the primary visual language people had for thinking about life and death. The Adoration of the Magi was a subject every painter attempted. Bosch made it strange on purpose — filling the margins with tension, the background with a world that does not yet know what it is witnessing. His was not a comfortable faith. It was a searching one.',
+    context: 'Bosch lived in the southern Netherlands in the late 1400s, when religious art was the primary visual language people had for thinking about life and death. The Adoration of the Magi was a subject every painter attempted. Bosch made it strange on purpose — filling the margins with tension, the background with a world that does not yet know what it is witnessing.',
     imageSearchTerm: 'Bosch Adoration Magi triptych Prado high-resolution',
     themes: ['light'],
     promptQuestion: 'Is there something you had to move through darkness to reach — and what you found on the other side was good, even if it wasn\'t what you imagined?',
