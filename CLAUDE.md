@@ -230,6 +230,8 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 
 **Checklist before every push:** Does this design change appear on more than one screen? If yes, update all of them.
 
+**Entry point rule:** Every page must work correctly from ALL entry points — direct navigation, Today tab, Library favorites, deep links, back button. Never test only the happy path. Ask: how else can a user arrive here, and does it still work?
+
 ---
 
 ## What's Already Built & Working (Don't Break)
