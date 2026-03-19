@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -84,7 +84,7 @@ function toggleFavorite(id: string): boolean {
 const MUSIC_CHANT   = "/music/nickpanek-ave-maria-latin-catholic-gregorian-chant-218251.mp3";
 const MUSIC_AMBIENT = "/music/natureseye-piano-dreamcloud-meditation-179215.mp3";
 
-export default function DailyPromptPage() {
+function DailyPromptPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dateParam = searchParams.get("date") ?? undefined; // e.g. "2026-03-17" from Library favorites
@@ -656,5 +656,14 @@ export default function DailyPromptPage() {
         <div className="h-16" />
       </div>
     </PageTransition>
+  );
+}
+
+// useSearchParams() requires a Suspense boundary in Next.js App Router
+export default function DailyPromptPage() {
+  return (
+    <Suspense>
+      <DailyPromptPageInner />
+    </Suspense>
   );
 }
