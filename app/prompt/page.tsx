@@ -92,7 +92,6 @@ export default function DailyPromptPage() {
   const [musicPlaying, setMusicPlaying]   = useState(false);
   const [musicMenuOpen, setMusicMenuOpen] = useState(false);
   const [checkedItems, setCheckedItems]   = useState<boolean[]>([]);
-  const [started, setStarted]             = useState(false);
   const [contextExpanded, setContextExpanded] = useState(false);
 
   const heroRef     = useRef<HTMLDivElement>(null);
@@ -296,11 +295,11 @@ export default function DailyPromptPage() {
           </>
         )}
 
-        {/* ── Hero — full image, Begin state before tap ────────────────────── */}
+        {/* ── Hero — full image, no Begin state ───────────────────────────── */}
         <div
           ref={heroRef}
           className="relative w-full overflow-hidden"
-          style={{ height: started ? "55vh" : "82vh", marginTop: "48px", transition: "height 0.6s ease" }}
+          style={{ height: "62vh", marginTop: "48px" }}
         >
           <img
             src={prompt.content.imageUrl}
@@ -308,71 +307,32 @@ export default function DailyPromptPage() {
             className="w-full h-full object-cover"
             style={{ willChange: "transform" }}
           />
-          {/* Gradient — stronger before Begin, lighter after */}
+          {/* Light fade at bottom — just enough to separate from content below */}
           <div
             className="absolute inset-0"
-            style={{
-              background: started
-                ? `linear-gradient(to top, ${C.bg} 0%, rgba(22,17,13,0.2) 50%, transparent 80%)`
-                : `linear-gradient(to top, rgba(22,17,13,0.85) 0%, rgba(22,17,13,0.3) 45%, transparent 70%)`,
-              transition: "background 0.6s ease",
-            }}
+            style={{ background: `linear-gradient(to top, rgba(22,17,13,0.35) 0%, transparent 50%)` }}
           />
-
-          {/* Before Begin: centered label + Begin CTA */}
-          {!started && (
-            <div
-              className="absolute inset-0 flex flex-col items-center justify-end pb-12 px-6"
-              style={{ opacity: started ? 0 : 1, transition: "opacity 0.4s ease" }}
-            >
-              <p className="text-xs tracking-widest uppercase mb-6" style={{ color: C.sageMuted, letterSpacing: "0.2em" }}>
-                Pause &amp; Ponder
-              </p>
-              <button
-                onClick={() => setStarted(true)}
-                className="px-10 py-3 text-sm tracking-widest uppercase"
-                style={{
-                  background: "transparent",
-                  border: `1px solid rgba(193,155,95,0.6)`,
-                  color: C.gold,
-                  letterSpacing: "0.15em",
-                }}
-              >
-                Begin
-              </button>
-            </div>
-          )}
         </div>
 
-        {/* ── Title + date — below image, small print, revealed after Begin ── */}
-        {started && (
-          <div className="px-6 pt-5 pb-2">
-            <p className="text-xs tracking-widest uppercase mb-1" style={{ color: C.sageMuted, letterSpacing: "0.15em" }}>
-              {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
-            </p>
-            <p
-              className="italic"
-              style={{
-                color: C.creamDim,
-                fontFamily: "var(--font-cormorant)",
-                fontSize: "clamp(1rem, 3.5vw, 1.2rem)",
-              }}
-            >
-              {prompt.content.title}
-            </p>
-          </div>
-        )}
+        {/* ── Title + date — always below image, small print ───────────────── */}
+        <div className="px-6 pt-5 pb-2" style={{ background: C.bgGradient }}>
+          <p className="text-xs tracking-widest uppercase mb-1" style={{ color: C.sageMuted, letterSpacing: "0.15em" }}>
+            {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+          </p>
+          <p
+            className="italic"
+            style={{
+              color: C.creamDim,
+              fontFamily: "var(--font-cormorant)",
+              fontSize: "clamp(1rem, 3.5vw, 1.2rem)",
+            }}
+          >
+            {prompt.content.title}
+          </p>
+        </div>
 
-        {/* ── Content body — only visible after Begin ──────────────────────── */}
-        <div
-          className="px-6 mt-4 space-y-12"
-          style={{
-            opacity: started ? 1 : 0,
-            transform: started ? "translateY(0)" : "translateY(16px)",
-            transition: "opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s",
-            pointerEvents: started ? "auto" : "none",
-          }}
-        >
+        {/* ── Content body ─────────────────────────────────────────────────── */}
+        <div className="px-6 mt-4 space-y-12">
 
           {/* ── Curator note — dark box, p-8, subtle border ─────────────── */}
           {prompt.curatorNote && (
