@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { getDailyPrompt } from "@/lib/sanity";
@@ -86,6 +86,8 @@ const MUSIC_AMBIENT = "/music/natureseye-piano-dreamcloud-meditation-179215.mp3"
 
 export default function DailyPromptPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const dateParam = searchParams.get("date") ?? undefined; // e.g. "2026-03-17" from Library favorites
   const [prompt, setPrompt]               = useState<DailyPrompt | null>(null);
   const [loading, setLoading]             = useState(true);
   const [favorited, setFavorited]         = useState(false);
@@ -100,9 +102,9 @@ export default function DailyPromptPage() {
   const audioRef    = useRef<HTMLAudioElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  // ── Load today's prompt ────────────────────────────────────────────────────
+  // ── Load prompt — uses ?date= param if present (e.g. from Library favorites) ─
   useEffect(() => {
-    getDailyPrompt()
+    getDailyPrompt(dateParam)
       .then((data) => {
         setPrompt(data ?? null);
         if (data) {
@@ -117,7 +119,7 @@ export default function DailyPromptPage() {
       })
       .catch(() => setPrompt(null))
       .finally(() => setLoading(false));
-  }, []);
+  }, [dateParam]);
 
   // Parallax removed — hero uses pinch-to-zoom (TransformWrapper handles transforms)
 

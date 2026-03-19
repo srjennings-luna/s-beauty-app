@@ -161,7 +161,7 @@ export default function LibraryPage() {
                     {prompts.map((prompt) => (
                       <Link
                         key={prompt._id}
-                        href="/prompt"
+                        href={prompt.date ? `/prompt?date=${prompt.date}` : "/prompt"}
                         className="flex items-start gap-3 bg-white p-4 border-l-2 border-l-[#4a7a62]"
                       >
                         {prompt.content?.imageUrl && (
