@@ -93,6 +93,7 @@ export default function DailyPromptPage() {
   const [musicMenuOpen, setMusicMenuOpen] = useState(false);
   const [checkedItems, setCheckedItems]   = useState<boolean[]>([]);
   const [started, setStarted]             = useState(false);
+  const [contextExpanded, setContextExpanded] = useState(false);
 
   const heroRef     = useRef<HTMLDivElement>(null);
   const actioRef    = useRef<HTMLDivElement>(null);
@@ -388,6 +389,57 @@ export default function DailyPromptPage() {
               >
                 {prompt.curatorNote}
               </p>
+            </div>
+          )}
+
+          {/* ── Prompt Question ─────────────────────────────────────────── */}
+          {prompt.promptQuestion && (
+            <div>
+              <p
+                className="leading-snug"
+                style={{
+                  color: C.cream,
+                  fontFamily: "var(--font-cormorant)",
+                  fontSize: "clamp(1.55rem, 5.5vw, 2rem)",
+                  fontStyle: "italic",
+                  lineHeight: "1.35",
+                }}
+              >
+                {prompt.promptQuestion}
+              </p>
+            </div>
+          )}
+
+          {/* ── Context — collapsible ────────────────────────────────────── */}
+          {prompt.content.context && (
+            <div>
+              <button
+                onClick={() => setContextExpanded(!contextExpanded)}
+                className="flex items-center gap-2 text-xs tracking-widest uppercase mb-4"
+                style={{ color: C.sageMuted, letterSpacing: "0.18em" }}
+              >
+                <span>{contextExpanded ? "Less" : "Read more"}</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                  width={14}
+                  height={14}
+                  style={{ transform: contextExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.3s ease" }}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>
+              {contextExpanded && (
+                <p
+                  className="leading-relaxed"
+                  style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.7" }}
+                >
+                  {prompt.content.context}
+                </p>
+              )}
             </div>
           )}
 
