@@ -320,11 +320,10 @@ export default function DailyPromptPage() {
             {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
           </p>
           <p
-            className="italic"
             style={{
               color: C.creamDim,
-              fontFamily: "var(--font-cormorant)",
-              fontSize: "clamp(1rem, 3.5vw, 1.2rem)",
+              fontSize: "clamp(0.9rem, 3vw, 1.05rem)",
+              fontWeight: 400,
             }}
           >
             {prompt.content.title}
@@ -344,8 +343,8 @@ export default function DailyPromptPage() {
               }}
             >
               <p
-                className="italic leading-relaxed"
-                style={{ color: C.creamDim, fontFamily: "var(--font-cormorant)", fontSize: "1.15rem", lineHeight: "1.65" }}
+                className="leading-relaxed"
+                style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.75" }}
               >
                 {prompt.curatorNote}
               </p>
@@ -370,38 +369,54 @@ export default function DailyPromptPage() {
             </div>
           )}
 
-          {/* ── Context — collapsible ────────────────────────────────────── */}
-          {prompt.content.context && (
-            <div>
-              <button
-                onClick={() => setContextExpanded(!contextExpanded)}
-                className="flex items-center gap-2 text-xs tracking-widest uppercase mb-4"
-                style={{ color: C.sageMuted, letterSpacing: "0.18em" }}
-              >
-                <span>{contextExpanded ? "Less" : "Read more"}</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                  width={14}
-                  height={14}
-                  style={{ transform: contextExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.3s ease" }}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                </svg>
-              </button>
-              {contextExpanded && (
+          {/* ── Context — teaser + collapsible ──────────────────────────── */}
+          {prompt.content.context && (() => {
+            // Split into sentences; show first 2 as teaser, rest behind toggle
+            const sentences = prompt.content.context.match(/[^.!?]+[.!?]+/g) ?? [prompt.content.context];
+            const teaser = sentences.slice(0, 2).join(" ").trim();
+            const remainder = sentences.slice(2).join(" ").trim();
+            return (
+              <div>
                 <p
-                  className="leading-relaxed"
+                  className="leading-relaxed mb-3"
                   style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.7" }}
                 >
-                  {prompt.content.context}
+                  {teaser}
                 </p>
-              )}
-            </div>
-          )}
+                {remainder && (
+                  <>
+                    {contextExpanded && (
+                      <p
+                        className="leading-relaxed mb-3"
+                        style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.7" }}
+                      >
+                        {remainder}
+                      </p>
+                    )}
+                    <button
+                      onClick={() => setContextExpanded(!contextExpanded)}
+                      className="flex items-center gap-2 text-xs tracking-widest uppercase"
+                      style={{ color: C.sageMuted, letterSpacing: "0.18em" }}
+                    >
+                      <span>{contextExpanded ? "Less" : "Read more"}</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={1.5}
+                        width={14}
+                        height={14}
+                        style={{ transform: contextExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.3s ease" }}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                      </svg>
+                    </button>
+                  </>
+                )}
+              </div>
+            );
+          })()}
 
           {/* ── Lectio ────────────────────────────────────────────────────── */}
           {prompt.lectio && (
@@ -578,11 +593,11 @@ export default function DailyPromptPage() {
                         )}
                       </div>
                       <span
-                        className="italic leading-relaxed flex-1"
+                        className="leading-relaxed flex-1"
                         style={{
                           color: checkedItems[i] ? C.creamFaint : C.creamDim,
-                          fontFamily: "var(--font-cormorant)",
-                          fontSize: "1.15rem",
+                          fontSize: "0.95rem",
+                          lineHeight: "1.65",
                           textDecoration: checkedItems[i] ? "line-through" : "none",
                           textDecorationColor: C.creamFaint,
                           transition: "color 0.2s ease",
@@ -596,8 +611,8 @@ export default function DailyPromptPage() {
               </ul>
             ) : (
               <p
-                className="italic leading-relaxed"
-                style={{ color: C.creamDim, fontFamily: "var(--font-cormorant)", fontSize: "1.15rem" }}
+                className="leading-relaxed"
+                style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.65" }}
               >
                 {defaultActio}
               </p>
