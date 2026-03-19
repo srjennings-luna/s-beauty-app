@@ -282,6 +282,34 @@ The Lectio is a philosophy + scripture pairing — two voices arriving at the sa
 ### Language Rule
 **Never say "non-Catholic" as a user category.** Sheri IS Catholic. Users may or may not be. The audience is always "the curious seeker." This applies to all docs, code comments, and content.
 
+### Auditio (Audio) Selection Criteria
+The Auditio is a music pairing for P&P and Journey days. Apply these rules when selecting or suggesting audio:
+
+**1. Licensing first — free, downloadable, no copyright**
+- Must be free to download and use with no copyright restrictions. No Spotify, no Apple Music, no YouTube-only, no copyrighted recordings.
+- Acceptable sources:
+  - [Pixabay Music — Catholic](https://pixabay.com/music/search/catholic/) — free, no copyright, direct download
+  - [Musopen.org](https://musopen.org) — public domain classical performances
+  - [Free Music Archive](https://freemusicarchive.org) — Creative Commons
+  - [Internet Archive](https://archive.org) — public domain recordings
+  - [gregorian-chant-hymns.com](https://gregorian-chant-hymns.com) — free for personal/institutional use, attribution required (note source abbey/schola in Sanity artist field)
+  - Bandcamp free downloads, artist sites offering direct downloads with explicit free-use license
+- Format: MP3 preferred. If only MP4/AAC is available, convert to MP3 before uploading to Sanity.
+
+**2. Connection can be thematic, mood-based, or emotional**
+- Doesn't have to match the subject literally. A piece can match the feeling of a day, the emotional arc, or the theological undercurrent.
+- Example: Victoria "O Vos Omnes" for Bosch's Adoration — matches the grief-to-joy arc of the triptych.
+- Example: The Porter's Gate "Breastplate of Saint Patrick" for Day 1 — matches theme, mood, and subject directly.
+
+**3. Genre is open — but non-sacred/classical must earn its place**
+- Sacred/classical is the natural default territory (Gregorian chant, polyphony, Bach, Pärt, etc.).
+- Contemporary folk, ambient, world music, or other genres are welcome *if*: the piece is likely new to the user, genuinely surprising in context, and strongly meets criteria 1 & 2.
+- Do not use well-known mainstream music the user would already associate with other contexts.
+
+**4. Attribution**
+- Note the source/performer in the Sanity `artist` field.
+- For gregorian-chant-hymns.com material: add source abbey/schola to the artist field (e.g., "St. Cecilia's Abbey, UK").
+
 ---
 
 ## Parking Lot — Future Design Work
