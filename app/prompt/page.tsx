@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { getDailyPrompt } from "@/lib/sanity";
 import type { DailyPrompt } from "@/lib/types";
 import { addFavorite, removeFavorite, isFavorite } from "@/lib/favorites";
@@ -118,18 +119,7 @@ export default function DailyPromptPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  // ── Parallax on hero image ─────────────────────────────────────────────────
-  useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-    const img = hero.querySelector("img") as HTMLImageElement | null;
-    if (!img) return;
-    const onScroll = () => {
-      img.style.transform = `translateY(${window.scrollY * 0.2}px)`;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [loading]);
+  // Parallax removed — hero uses pinch-to-zoom (TransformWrapper handles transforms)
 
   // ── Streak: mark complete when Actio scrolls into view ────────────────────
   useEffect(() => {
@@ -295,23 +285,40 @@ export default function DailyPromptPage() {
           </>
         )}
 
-        {/* ── Hero — full image, no Begin state ───────────────────────────── */}
+        {/* ── Hero — pinch-to-zoom + pan ───────────────────────────────────── */}
         <div
           ref={heroRef}
           className="relative w-full overflow-hidden"
           style={{ height: "62vh", marginTop: "48px" }}
         >
-          <img
-            src={prompt.content.imageUrl}
-            alt={prompt.content.title}
-            className="w-full h-full object-cover"
-            style={{ willChange: "transform" }}
-          />
-          {/* Light fade at bottom — just enough to separate from content below */}
+          <TransformWrapper
+            maxScale={3}
+            minScale={1}
+            centerOnInit
+            wheel={{ disabled: true }}
+          >
+            <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
+              <img
+                src={prompt.content.imageUrl}
+                alt={prompt.content.title}
+                className="w-full h-full object-cover"
+              />
+            </TransformComponent>
+          </TransformWrapper>
+
+          {/* Light fade at bottom */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 pointer-events-none"
             style={{ background: `linear-gradient(to top, rgba(22,17,13,0.35) 0%, transparent 50%)` }}
           />
+
+          {/* Pinch hint — fades after first interaction */}
+          <p
+            className="absolute bottom-3 right-4 text-xs tracking-wide pointer-events-none"
+            style={{ color: "rgba(253,246,232,0.4)" }}
+          >
+            pinch to explore
+          </p>
         </div>
 
         {/* ── Title + date — always below image, small print ───────────────── */}
