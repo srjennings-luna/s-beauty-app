@@ -624,6 +624,8 @@ async function main() {
         _type: 'object',
         text: day.lectio.text,
         attribution: day.lectio.attribution,
+        ...(day.lectio.philosophyText ? { philosophyText: day.lectio.philosophyText } : {}),
+        ...(day.lectio.philosophyAttribution ? { philosophyAttribution: day.lectio.philosophyAttribution } : {}),
       };
     }
 
