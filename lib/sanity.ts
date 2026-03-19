@@ -217,7 +217,8 @@ const DAILY_PROMPT_FIELDS = `
 `
 
 export async function getDailyPrompt(date?: string) {
-  const targetDate = date ?? new Date().toISOString().slice(0, 10)
+  // Use local date (not UTC) so the prompt matches the user's actual calendar day
+  const targetDate = date ?? new Date().toLocaleDateString('en-CA') // en-CA gives YYYY-MM-DD in local timezone
 
   // Try exact date match first
   const exact = await sanityClient.fetch(
