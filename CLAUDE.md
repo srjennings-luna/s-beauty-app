@@ -41,14 +41,14 @@ Read this at the start of every session. It contains all key product decisions, 
 | File | What it is |
 |------|-----------|
 | `KALLOS-Intro-Journey-Beauty-Truth-Goodness.html` | Intro journey — 7 days, all fields, ready for Sanity |
-| `KALLOS-Pause-Ponder-14-Days.html` | 18 days of daily prompts (March 17 – April 3), ready for Sanity. Includes St. Patrick Day 1 + Yeats replacing Oriah |
 | `KALLOS-StPatrick-Day1-Draft.html` | St. Patrick feast day content — Day 1 standalone draft for review |
 | `KALLOS-Sanity-Entry-Guide-Themes-2-5.docx` | Entry guide for seeding Themes 2–5 into Sanity |
 | `KALLOS-Light-Journey-GoDeeper.html` | 16 tradition reflections for Light journey Step 6 |
 | `KALLOS-Feast-Day-Content-Guide.html` | Editorial guide for feast day content — what it is, what it isn't, pre-publish checklist |
-| `KALLOS-Content-Guide-Pause-Ponder.html` | Agent content instructions for Pause & Ponder daily prompts |
+| `KALLOS-Content-Guide-Pause-Ponder.html` | Agent content instructions for Pause & Ponder daily prompts (updated March 2026 — hook + Lectio pairing revision) |
 | `KALLOS-Content-Guide-7Day-Journey.html` | Agent content instructions for 7-day Journey content |
 | `KALLOS-Pause-Ponder-18-Day-Checklist.html` | 18-day content checklist (March 17 – April 3) with per-day needs |
+| `KALLOS-PP-Audit-Days4-8.html` | **NEW** — Content audit of Days 4–8 with specific rewrites + Lectio pairings. Use this for Sanity manual updates. |
 
 ---
 
@@ -78,6 +78,18 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ Intro to Beauty, Truth & Goodness journey drafted (7 days) — content doc ready for Sanity entry
 - ✅ Pause & Ponder daily prompts drafted (18 days, March 17 – April 3) — content doc ready for Sanity entry. Includes St. Patrick feast day (Day 1) and Yeats "Lake Isle of Innisfree" replacing copyrighted Oriah poem
 - ✅ Sanity entry guide for Themes 2–5 created
+
+### Phase 2 Work Done (March 19, 2026)
+- ✅ Lectio pairing schema deployed — `dailyPrompt` schema now includes `philosophyText` + `philosophyAttribution` fields inside the `lectio` object. `lib/types.ts` updated to match.
+- ✅ 18 days of P&P content seeded into Sanity via script (Days 2–18; Day 1 St. Patrick manually entered). Day 2 Bosch philosophy/Lectio fields still need manual entry — see Manual Tasks.
+- ✅ UTC timezone bug fixed — `getDailyPrompt()` now uses local timezone (`toLocaleDateString('en-CA')`) instead of UTC `.toISOString()`. Fixes "wrong day showing after 7pm ET" bug.
+- ✅ P&P page — Begin state removed. Today card BEGIN → is the only entry trigger. No second gate on the P&P page itself.
+- ✅ P&P page layout locked: Image (62vh) → Title + date below image → Curator Note → Prompt Question → Context (teaser + expand) → Lectio → Auditio → Actio
+- ✅ P&P typography rule applied: Cormorant Garamond ONLY for prompt question, lectio quotes, auditio title. Open Sans for all other text (curator note, title, context, actio items).
+- ✅ P&P context teaser: first 2 sentences always visible; "Read more / Less" toggle reveals remainder.
+- ✅ P&P hero: 8x pinch-to-zoom + pan (react-zoom-pan-pinch). "pinch to explore" hint bottom-right. Parallax removed (conflicts with zoom).
+- ✅ P&P Days 4–8 content audited against editorial guide — findings + rewrites saved to `KALLOS-PP-Audit-Days4-8.html` in Documents folder.
+- ✅ "Non-Catholic" language removed from all docs and code — audience is always "the curious seeker."
 
 ### Up Next: Phase 2 Remaining
 - Seed content into Sanity: Intro journey, Themes 2–5, Pause & Ponder prompts
@@ -157,7 +169,7 @@ All live in the `contentItem` Sanity schema with `contentType` field:
 - **Gold accent:** `#C19B5F` — CTAs, active states, labels. NOT `#C9A227`.
 - **Sage:** `#4a7a62` — active step indicator, interactive elements
 - **Typography:** Montserrat (headlines), Open Sans (body), Cormorant Garamond (scripture/quotes)
-- **Images:** Min 1200px, up to 4500px. 8x zoom on Breathe page (react-zoom-pan-pinch).
+- **Images:** Min 1200px, up to 4500px. 8x zoom on Breathe page and P&P hero (react-zoom-pan-pinch).
 - **Safe areas:** Always pad for phone notches and home indicators.
 - **DEPRECATED:** `#203545` (old dark teal) — do NOT use anywhere. Espresso `#16110d` replaced it.
 
@@ -230,9 +242,43 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 - **Daily Prompt fallback** — Shows most recent prompt if exact date match fails
 - **Visio Divina** (`/pray/[artworkId]`) — 5-step prayer: Gaze → Meditate → Pray → Contemplate → Action
 - **Go Deeper** — Tradition reflections (Church Fathers, Saints, Popes) expandable bar
-- **8x pinch-to-zoom** — On Breathe page (Journey) and content detail (Explore)
+- **8x pinch-to-zoom** — On Breathe page (Journey), content detail (Explore), and P&P hero image
+- **P&P page** — No Begin state. Layout: Image → Title/date → Curator Note → Prompt Question → Context teaser → Lectio → Auditio → Actio. Typography: Cormorant for prompt question, lectio quotes, auditio title only.
 - **Music player** — Chant / Ambient options on Pray page
 - **Map** with colored markers by content type
+
+---
+
+## Editorial Principles (P&P and Journey Content)
+
+These govern all content written for KALLOS — daily prompts, journey days, curator notes, questions. Read `KALLOS-Content-Guide-Pause-Ponder.html` for full detail.
+
+### The Hook Rule
+Every P&P day must open with one **surprising, specific, shareable fact** — something the user genuinely didn't know and would repeat at dinner. The hook lives in the **Curator Note** and must come first.
+
+- ✅ Hook: "When this triptych is closed, Bosch painted seven scenes of Christ's suffering on the outside panels in grisaille. You move through darkness to reach the Adoration."
+- ❌ Not a hook: "This painting rewards slowness." (atmosphere, not information)
+- ❌ Not a hook: "This is one of the most influential works of the Renaissance." (significance claim, not a fact)
+
+**Test:** Would someone say "wait, I didn't know that" and repeat it at dinner? If yes: hook. If not: keep looking.
+
+### The Lectio Pairing
+The Lectio is a philosophy + scripture pairing — two voices arriving at the same truth from different directions. Philosophy goes first (familiar entry for the curious seeker), scripture second (the discovery). Format:
+
+- `philosophyText` + `philosophyAttribution` — e.g., Plato, Aristotle, Marcus Aurelius, Seneca, Heraclitus
+- `lectio.text` + `lectio.attribution` — scripture passage
+
+**The editorial thesis:** The great philosophers were asking questions that scripture had already answered. The Lectio is the room where that conversation happens. Do not force it — a strong scripture alone is better than a strained pairing.
+
+### Voice Rules
+- Write for the curious seeker — someone moved by beauty, regardless of faith background. Assume curiosity, not faith.
+- Never use: "journey," "sacred," "profound," "transformative," "spiritual practice," "invitation to…"
+- Curator note max length: 3–5 sentences. Short enough to read in one breath.
+- Questions must connect to the user's real life — not hypothetical ("what would it feel like") but personal ("what was the last time you…")
+- No explaining the art. The hook reveals what isn't obvious; the image speaks for itself.
+
+### Language Rule
+**Never say "non-Catholic" as a user category.** Sheri IS Catholic. Users may or may not be. The audience is always "the curious seeker." This applies to all docs, code comments, and content.
 
 ---
 
@@ -281,6 +327,10 @@ These can't be done in code — Sheri does them in dashboards:
 4. ~~Rename local folder in Finder → `kallos-app`~~ ✅ Done
 5. Update splash page content in Sanity Studio with KALLOS copy
 6. Seed Intro to Beauty, Truth & Goodness journey into Sanity (content doc ready)
-7. Seed Pause & Ponder daily prompts into Sanity (14 days drafted, content doc ready)
-8. Seed Themes 2–5 content into Sanity (entry guide doc ready)
-9. Source high-res images for all new content (search terms in docs)
+7. ~~Seed Pause & Ponder daily prompts into Sanity~~ ✅ Done via script (Days 2–18). Day 1 manually entered. **Pending: Days 4–8 rewrites + Lectio additions — see `KALLOS-PP-Audit-Days4-8.html`**
+8. **Day 2 Bosch — manual Sanity updates needed:**
+   - Add `philosophyText` + `philosophyAttribution` to Lectio fields (seeded before schema existed)
+   - Add Victoria "O Vos Omnes" YouTube URL to Auditio field
+9. **Days 4–8 — P&P rewrites in Sanity Studio:** Open each daily prompt and apply the edits from `KALLOS-PP-Audit-Days4-8.html`. Includes question rewrites and Lectio pairings for all 5 days.
+10. Seed Themes 2–5 content into Sanity (entry guide doc ready)
+11. Source high-res images for all new content (search terms in docs)
