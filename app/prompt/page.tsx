@@ -292,7 +292,7 @@ export default function DailyPromptPage() {
           style={{ height: "62vh", marginTop: "48px" }}
         >
           <TransformWrapper
-            maxScale={3}
+            maxScale={8}
             minScale={1}
             centerOnInit
             wheel={{ disabled: true }}

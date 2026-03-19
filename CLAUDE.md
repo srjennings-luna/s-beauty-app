@@ -89,7 +89,7 @@ Read this at the start of every session. It contains all key product decisions, 
 ### P&P Page — Known UI Fixes Needed
 - **Typography**: ✅ Fixed — Cormorant reserved for prompt question, lectio quotes, auditio title. Open Sans everywhere else.
 - **Context teaser**: ✅ Fixed — First 2 sentences always visible, "Read more" reveals rest.
-- **Hero image zoom**: ✅ Implemented pinch-to-zoom (3x max) + pan using react-zoom-pan-pinch. "pinch to explore" hint shown bottom-right. **Revisit after living with it** — if pinch feels awkward in the scroll context, switch to Option 2: tap hero → full-screen lightbox with zoom + pan.
+- **Hero image zoom**: ✅ Implemented pinch-to-zoom (8x max) + pan using react-zoom-pan-pinch. "pinch to explore" hint shown bottom-right. **Revisit after living with it** — if pinch feels awkward in the scroll context, switch to Option 2: tap hero → full-screen lightbox with zoom + pan.
 
 ---
 
