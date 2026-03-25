@@ -144,10 +144,16 @@ export default function LibraryPage() {
       .finally(() => setFavoritesLoading(false));
   }, [isLoaded, favorites]);
 
-  // IDs of favorited prompts — used to show the heart indicator in the archive
+  // IDs of favorited prompts
   const savedPromptIds = new Set(
     favorites.filter((f) => f.type === "dailyPrompt").map((f) => f.itemId)
   );
+
+  const savedPrompts = allPrompts.filter((p) => savedPromptIds.has(p._id));
+
+  // Filter state for P&P section
+  const [promptFilter, setPromptFilter] = useState<"all" | "saved">("all");
+  const visiblePrompts = promptFilter === "saved" ? savedPrompts : allPrompts;
 
   const isLoading = promptsLoading || !isLoaded || favoritesLoading;
 
@@ -198,18 +204,52 @@ export default function LibraryPage() {
           {/* ── Pause & Ponder archive ─────────────────────────────────────── */}
           {allPrompts.length > 0 && (
             <section>
-              <p className="text-xs tracking-widest uppercase text-[#C19B5F] mb-3">
-                Pause &amp; Ponder
-              </p>
-              <div className="space-y-3">
-                {allPrompts.map((prompt) => (
-                  <PromptCard
-                    key={prompt._id}
-                    prompt={prompt}
-                    isSaved={savedPromptIds.has(prompt._id)}
-                  />
-                ))}
+              {/* Section header + All / Saved filter */}
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs tracking-widest uppercase text-[#C19B5F]">
+                  Pause &amp; Ponder
+                </p>
+                {savedPrompts.length > 0 && (
+                  <div className="flex" style={{ border: "1px solid #e8dfc8" }}>
+                    <button
+                      onClick={() => setPromptFilter("all")}
+                      className="px-3 py-1 text-xs tracking-widest uppercase transition-colors"
+                      style={{
+                        background: promptFilter === "all" ? "#C19B5F" : "transparent",
+                        color: promptFilter === "all" ? "#fdf6e8" : "#9a9488",
+                      }}
+                    >
+                      All
+                    </button>
+                    <button
+                      onClick={() => setPromptFilter("saved")}
+                      className="px-3 py-1 text-xs tracking-widest uppercase transition-colors"
+                      style={{
+                        background: promptFilter === "saved" ? "#C19B5F" : "transparent",
+                        color: promptFilter === "saved" ? "#fdf6e8" : "#9a9488",
+                      }}
+                    >
+                      Saved
+                    </button>
+                  </div>
+                )}
               </div>
+
+              {visiblePrompts.length > 0 ? (
+                <div className="space-y-3">
+                  {visiblePrompts.map((prompt) => (
+                    <PromptCard
+                      key={prompt._id}
+                      prompt={prompt}
+                      isSaved={savedPromptIds.has(prompt._id)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-[#7a9a8a] py-6 text-center">
+                  No saved prompts yet — tap the heart on any prompt to save it.
+                </p>
+              )}
             </section>
           )}
 
