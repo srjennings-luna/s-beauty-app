@@ -260,10 +260,10 @@ export async function getDailyPromptById(id: string) {
 
 export async function getAllPrompts(): Promise<import('./types').DailyPrompt[]> {
   // Lean projection — just enough to render archive cards in Library.
-  // Only shows prompts up to and including today (no future dates).
+  // Archive shows yesterday and earlier — today lives on the Today tab.
   const today = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD in local timezone
   return sanityClient.fetch(
-    `*[_type == "dailyPrompt" && date <= $today] | order(date desc) {
+    `*[_type == "dailyPrompt" && date < $today] | order(date desc) {
       _id,
       date,
       promptQuestion,
