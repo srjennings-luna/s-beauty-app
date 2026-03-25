@@ -2,6 +2,8 @@
 
 Read this at the start of every session. It contains all key product decisions, the current state of the project, and how to work with Sheri.
 
+**Also read before any content, editorial, or product work:** `KALLOS-PM-Brief.html` (in Sheri's Documents folder). It contains the product's purpose, the seven real people this is built for, what "earns its place" means, the Lectio quality standard, settled decisions not to relitigate, and how Sheri works as a PM. A session that skips this brief will produce generic output.
+
 ---
 
 ## The App
@@ -49,6 +51,13 @@ Read this at the start of every session. It contains all key product decisions, 
 | `KALLOS-Content-Guide-7Day-Journey.html` | Agent content instructions for 7-day Journey content |
 | `KALLOS-Pause-Ponder-18-Day-Checklist.html` | 18-day content checklist (March 17 – April 3) with per-day needs |
 | `KALLOS-PP-Audit-Days4-8.html` | **NEW** — Content audit of Days 4–8 with specific rewrites + Lectio pairings. Use this for Sanity manual updates. |
+| `KALLOS-Bosch-7Day-Journey.html` | Full 7-day Bosch journey content (narrative/editorial doc) |
+| `KALLOS-Bosch-Sanity-Entry-Guide.html` | 8-day Bosch journey Sanity entry guide — all fields for all 8 days, including medium, themes, location. Ready for manual Sanity entry. |
+| `KALLOS-HolyWeek-2026-Pipeline.html` | Holy Week P&P pipeline — 8 days (Palm Sunday–Easter), hooks, Surprising History notes, audio table. Needs Lectio + Actio before Sanity entry. |
+| `KALLOS-Content-Guide-HolyWeek.html` | Agent content instructions for Holy Week P&P — arc table, hook guidance, Surprising History layer, Lectio territory by day, Actio rules, audio table, voice rules, pre-publish checklist. |
+| `KALLOS-HolyWeek-Sanity-Entry-Guide.html` | Holy Week P&P Sanity entry guide — all 8 days (Palm Sunday–Easter), all fields pre-filled except Lectio + Actio (placeholders with territory guidance). Deadline March 27. |
+| `KALLOS-PM-Brief.html` | Product brief for cold sessions — product purpose, the seven real users, what "earns its place," Lectio quality standard, Sheri's working style, settled decisions. Read this before any content or editorial work. |
+| `KALLOS-Onboarding-Copy.html` | Onboarding screen copy — 4 screens, voice-reviewed March 2026. Reference doc for onboarding build. |
 
 ---
 
@@ -90,6 +99,17 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ P&P hero: 8x pinch-to-zoom + pan (react-zoom-pan-pinch). "pinch to explore" hint bottom-right. Parallax removed (conflicts with zoom).
 - ✅ P&P Days 4–8 content audited against editorial guide — findings + rewrites saved to `KALLOS-PP-Audit-Days4-8.html` in Documents folder.
 - ✅ "Non-Catholic" language removed from all docs and code — audience is always "the curious seeker."
+
+### Phase 2 Work Done (March 25, 2026)
+- ✅ Em dash ban enforced universally — all content docs and pipeline docs cleaned (87–88 em dashes removed per doc)
+- ✅ Audio sourcing rules synced across all docs — both content guides now match the full 5-rule framework in CLAUDE.md (Pixabay, Musopen, FMA, Internet Archive, gregorian-chant-hymns.com, Bandcamp; genre guidance; worked examples)
+- ✅ "Surprising History" editorial framework defined — discovery framing rule, where it lives in Sanity fields, when to use vs. skip. Added to CLAUDE.md Editorial Principles.
+- ✅ Onboarding copy audited and fixed — parallel triplets removed (Screen 2), content types corrected to all 8 (Screen 3), "Step into a Journey" → "Start a Journey" (Screen 4)
+- ✅ Holy Week pipeline doc audited — em dashes removed, "Not Pagan Angle" → "Surprising History" sections renamed, audio pipeline note corrected (Miserere not pre-uploaded)
+- ✅ Holy Week Content Guide written — full agent instructions: arc table, hook guidance, Surprising History layer, Lectio territory by day, Actio rules, audio table, voice rules, pre-publish checklist
+- ✅ session-close skill created — approval-gated session documentation tool. Available in Documents folder.
+- ✅ skills-tracker skill created — PM resume/skills evidence tracker. Available in Documents folder.
+- ✅ Bosch journey + Bosch Sanity entry guide added to CLAUDE.md content docs table
 
 ### Up Next: Phase 2 Remaining
 - Seed content into Sanity: Intro journey, Themes 2–5, Pause & Ponder prompts
@@ -272,15 +292,28 @@ The Lectio is a philosophy + scripture pairing — two voices arriving at the sa
 
 **The editorial thesis:** The great philosophers were asking questions that scripture had already answered. The Lectio is the room where that conversation happens. Do not force it — a strong scripture alone is better than a strained pairing.
 
+**The quality standard:** Both texts must be chosen because they connect specifically to what the user just encountered in that day's content — not because they relate to the general theme. A quote that could appear in any KALLOS day is the wrong quote for this day. The test: does this pairing make this specific content unlock in a new way? If it's interchangeable with another day, keep looking. The obvious Plato quote, the verse everyone already knows — those are first-search-result choices. The Lectio should feel like a thread the user didn't see coming.
+
 ### Voice Rules
 - Write for the curious seeker — someone moved by beauty, regardless of faith background. Assume curiosity, not faith.
 - Never use: "journey," "sacred," "profound," "transformative," "spiritual practice," "invitation to…"
+- **No em dashes.** Em dashes are a telltale sign of AI-generated text and are banned in all KALLOS content. Use a comma, a period, or a short hyphen instead.
 - Curator note max length: 3–5 sentences. Short enough to read in one breath.
 - Questions must connect to the user's real life — not hypothetical ("what would it feel like") but personal ("what was the last time you…")
 - No explaining the art. The hook reveals what isn't obvious; the image speaks for itself.
 
+### Surprising History
+Some content — especially feast days and Holy Week — has historical facts with genuine "I didn't know that" power. When a fact clears the dinner-table test, use it. When it doesn't, skip it.
+
+- **Where it lives:** Curator note if it's hook-level. Context field if it's background enrichment.
+- **Framing:** Always discovery framing ("here's something that happened"), never apologetics ("here's why Christianity isn't what you think").
+- **Frequency:** Not every day. Only when the material genuinely earns it.
+- **Not a Sanity field.** This is an editorial decision about where to place content you already have — not a new structural element.
+
 ### Language Rule
 **Never say "non-Catholic" as a user category.** Sheri IS Catholic. Users may or may not be. The audience is always "the curious seeker." This applies to all docs, code comments, and content.
+
+**Never frame KALLOS as "not a Catholic app."** That framing is unnecessary and inaccurate. The tradition KALLOS recovers is rooted in the Church — do not apologize for that or distance from it. The content points toward beauty, truth, and goodness. Beauty, truth, and goodness point toward God. KALLOS does not make that argument explicitly — it makes the encounter possible. The tradition belongs to everyone. These two things are not in tension.
 
 ### Auditio (Audio) Selection Criteria
 The Auditio is a music pairing for P&P and Journey days. Apply these rules when selecting or suggesting audio:
@@ -362,5 +395,9 @@ These can't be done in code — Sheri does them in dashboards:
    - Add `philosophyText` + `philosophyAttribution` to Lectio fields (seeded before schema existed)
    - Add Victoria "O Vos Omnes" YouTube URL to Auditio field
 9. **Days 4–8 — P&P rewrites in Sanity Studio:** Open each daily prompt and apply the edits from `KALLOS-PP-Audit-Days4-8.html`. Includes question rewrites and Lectio pairings for all 5 days.
-10. Seed Themes 2–5 content into Sanity (entry guide doc ready)
-11. Source high-res images for all new content (search terms in docs)
+10. **Seed Bosch 7-Day Journey into Sanity:** 8 content items + 8 journey day records. Use `KALLOS-Bosch-Sanity-Entry-Guide.html` — all fields ready including medium, themes, location.
+11. **Holy Week P&P — write Lectio pairings (all 8 days):** philosophyText + philosophyAttribution for each day. See `KALLOS-Content-Guide-HolyWeek.html` for territory table (suggested philosophers + scripture direction per day). Needs a dedicated content session before March 27.
+12. **Holy Week P&P — write Actio (all 8 days):** One specific, experiential action per day. See content guide for rules. Note: Holy Saturday actio = "practice waiting" — that is the only correct actio for that day.
+13. **Holy Week P&P — Sanity entry:** All 8 days (Palm Sunday–Easter). Deadline: March 27. Use `KALLOS-HolyWeek-2026-Pipeline.html` — complete all fields including Lectio and Actio (tasks 11–12 above) before entry.
+14. Seed Themes 2–5 content into Sanity (entry guide doc ready)
+15. Source high-res images for all new content (search terms in docs)

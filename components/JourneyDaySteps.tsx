@@ -167,12 +167,112 @@ function StepOpen({ day }: { day: JourneyDay }) {
   );
 }
 
+// ── Circular audio player — shared between content-level and day-level audio ──
+function CircularAudioPlayer({
+  audioSrc,
+  title,
+  subtitle,
+  externalUrl,
+}: {
+  audioSrc?: string;
+  title?: string;
+  subtitle?: string;
+  externalUrl?: string;
+}) {
+  const [audioPlaying, setAudioPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  if (!audioSrc && !externalUrl) return null;
+
+  if (!audioSrc && externalUrl) {
+    // External link only — no in-app playback
+    return (
+      <div style={{ border: `1px solid ${C.divider}` }}>
+        <a
+          href={externalUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between px-5 py-4 w-full"
+        >
+          <div className="flex-1 min-w-0 mr-3">
+            {title && (
+              <p className="italic truncate" style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.05rem" }}>
+                {title}
+              </p>
+            )}
+            {subtitle && (
+              <p className="text-xs mt-0.5 truncate" style={{ color: C.creamFaint }}>{subtitle}</p>
+            )}
+          </div>
+          <p className="text-sm flex-shrink-0" style={{ color: C.sageMuted }}>Listen →</p>
+        </a>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-5">
+      <button
+        onClick={() => {
+          if (audioPlaying) {
+            audioRef.current?.pause();
+            setAudioPlaying(false);
+          } else {
+            if (!audioRef.current) {
+              audioRef.current = new Audio(audioSrc!);
+              audioRef.current.volume = 0.85;
+              audioRef.current.onended = () => setAudioPlaying(false);
+            }
+            audioRef.current.play().catch(() => {});
+            setAudioPlaying(true);
+          }
+        }}
+        className="flex-shrink-0 flex items-center justify-center shadow-2xl"
+        style={{ width: 64, height: 64, borderRadius: "50%", background: C.cream, color: C.bg }}
+        aria-label={audioPlaying ? "Pause" : "Play"}
+      >
+        {audioPlaying ? (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+            <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
+          </svg>
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        )}
+      </button>
+      <div className="flex-grow min-w-0">
+        {title && (
+          <p className="italic truncate" style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.15rem" }}>
+            {title}
+          </p>
+        )}
+        {subtitle && (
+          <p className="text-sm mt-1 truncate" style={{ color: C.creamFaint }}>
+            {subtitle}
+          </p>
+        )}
+        {externalUrl && (
+          <a
+            href={externalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs mt-1 inline-block"
+            style={{ color: C.sageMuted }}
+          >
+            Also on YouTube / Spotify →
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── Step 2: Encounter ─────────────────────────────────────────────────────────
 function StepEncounter({ day }: { day: JourneyDay }) {
   const content = day.encounterContent;
   const [ctxExpanded, setCtxExpanded] = useState(false);
-  const [audioPlaying, setAudioPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [noteExpanded, setNoteExpanded] = useState(false);
 
   if (!content) {
     return (
@@ -190,14 +290,30 @@ function StepEncounter({ day }: { day: JourneyDay }) {
 
   // Visio Divina ("Pray with this image") is intentionally excluded from Journey steps.
   // It is only accessible via Explore and Library entry points.
-  const hasInlineAudio = content.contentType === "music" && content.audioFileUrl;
-  const showListenLink =
-    content.contentType === "music" && content.musicUrl && !content.audioFileUrl;
-  const showWatchLink =
-    content.contentType === "watch-listen" && content.mediaUrl;
+
+  // Audio priority: journey day auditio > content-level music audio
+  const journeyAuditioSrc = day.auditio?.audioFileUrl || day.auditio?.audioUrl;
+  const contentAudioSrc =
+    content.contentType === "music"
+      ? (content.audioFileUrl || content.audioUrl)
+      : undefined;
+  const inAppAudioSrc = journeyAuditioSrc || contentAudioSrc;
+
+  // For the player display: prefer journey auditio metadata; fall back to content metadata
+  const audioTitle = day.auditio?.title || (content.contentType === "music" ? content.title : undefined);
+  const audioSubtitle = day.auditio?.composer || content.composer || content.artist || undefined;
+  const audioExternalUrl =
+    day.auditio?.externalUrl ||
+    (content.contentType === "music" ? (content.externalMusicUrl || content.musicUrl) : undefined);
+
+  // Watch/Listen for watch-listen content type (content level only)
+  const showWatchLink = content.contentType === "watch-listen" && content.mediaUrl;
 
   const ctxTruncated = truncateToSentences(content.context ?? "");
   const ctxNeedsExpand = (content.context?.length ?? 0) > ctxTruncated.length;
+
+  const noteTruncated = truncateToSentences(day.encounterNote ?? "", 200);
+  const noteNeedsExpand = (day.encounterNote?.length ?? 0) > noteTruncated.length;
 
   return (
     <div className="h-full overflow-y-auto">
@@ -302,78 +418,45 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           </div>
         )}
 
-        {/* Encounter guidance moved to StepBreathe */}
-
-        {/* Circular audio player — for Sanity-hosted audio files */}
-        {hasInlineAudio && (
-          <div className="flex items-center gap-6">
+        {/* Encounter Note — interpretive layer (iconography, listening guide, etc.) */}
+        {day.encounterNote && (
+          <div className="pl-4" style={{ borderLeft: `1px solid ${C.divider}` }}>
             <button
-              onClick={() => {
-                if (audioPlaying) {
-                  audioRef.current?.pause();
-                  setAudioPlaying(false);
-                } else {
-                  if (!audioRef.current) {
-                    audioRef.current = new Audio(content.audioFileUrl!);
-                    audioRef.current.volume = 0.85;
-                    audioRef.current.onended = () => setAudioPlaying(false);
-                  }
-                  audioRef.current.play().catch(() => {});
-                  setAudioPlaying(true);
-                }
-              }}
-              className="flex-shrink-0 flex items-center justify-center shadow-2xl"
-              style={{ width: 64, height: 64, borderRadius: "50%", background: C.cream, color: C.bg }}
-              aria-label={audioPlaying ? "Pause" : "Play"}
+              onClick={() => setNoteExpanded(!noteExpanded)}
+              className="flex items-center gap-2 w-full text-left mb-2"
             >
-              {audioPlaying ? (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                  <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              )}
+              <p className="text-xs tracking-widest uppercase" style={{ color: C.creamFaint }}>Look Closer</p>
+              <span className="text-xs" style={{ color: C.creamFaint, transition: "transform 0.2s", display: "inline-block", transform: noteExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
             </button>
-            <div className="flex-grow min-w-0">
-              <p className="italic truncate" style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.15rem" }}>
-                {content.title}
-              </p>
-              {(content.artist || content.composer) && (
-                <p className="text-sm mt-1 truncate" style={{ color: C.creamFaint }}>
-                  {content.artist || content.composer}
-                </p>
-              )}
-              {content.musicUrl && (
-                <a
-                  href={content.musicUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs mt-1 inline-block"
-                  style={{ color: C.sageMuted }}
-                >
-                  Also on Spotify / YouTube →
-                </a>
-              )}
-            </div>
+            {noteExpanded && (
+              <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>{day.encounterNote}</p>
+            )}
+            {!noteExpanded && (
+              <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>{noteTruncated}</p>
+            )}
+            {noteNeedsExpand && !noteExpanded && (
+              <button
+                onClick={() => setNoteExpanded(true)}
+                className="mt-1 text-xs tracking-widest uppercase"
+                style={{ color: C.sageMuted }}
+              >
+                Read more ↓
+              </button>
+            )}
           </div>
         )}
 
-        {/* Listen / Watch — external link (fallback when no audio file) */}
-        {showListenLink && (
-          <div style={{ border: `1px solid ${C.divider}` }}>
-            <a
-              href={content.musicUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between px-5 py-4 w-full"
-            >
-              <p className="text-sm" style={{ color: C.cream }}>Listen →</p>
-            </a>
-          </div>
+        {/* Auditio — circular player or external link */}
+        {(inAppAudioSrc || audioExternalUrl) && (
+          <CircularAudioPlayer
+            audioSrc={inAppAudioSrc}
+            title={audioTitle}
+            subtitle={audioSubtitle}
+            externalUrl={inAppAudioSrc ? audioExternalUrl : undefined}
+          />
         )}
 
+        {/* Watch/Listen — for watch-listen content type */}
         {showWatchLink && (
           <div style={{ border: `1px solid ${C.divider}` }}>
             <a
@@ -386,6 +469,47 @@ function StepEncounter({ day }: { day: JourneyDay }) {
                 {content.mediaType === "podcast" ? "Listen" : "Watch"} →
               </p>
             </a>
+          </div>
+        )}
+
+        {/* Lectio — philosophy + scripture pairing */}
+        {(day.lectio?.philosophyQuote || day.lectio?.scriptureVerse) && (
+          <div style={{ borderTop: `1px solid ${C.divider}`, paddingTop: "24px" }}>
+            <p className="text-xs tracking-widest uppercase mb-5" style={{ color: C.sageMuted, letterSpacing: "0.2em" }}>
+              Lectio
+            </p>
+
+            {day.lectio?.philosophyQuote && (
+              <div className="mb-4" style={{ borderLeft: `2px solid ${C.sageMuted}`, paddingLeft: "16px" }}>
+                <p
+                  className="italic leading-relaxed"
+                  style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.1rem", lineHeight: "1.6" }}
+                >
+                  &ldquo;{day.lectio.philosophyQuote}&rdquo;
+                </p>
+                {day.lectio?.philosophySource && (
+                  <p className="text-xs mt-2 tracking-wide" style={{ color: C.creamFaint }}>
+                    {day.lectio.philosophySource}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {day.lectio?.scriptureVerse && (
+              <div style={{ borderLeft: `2px solid ${C.gold}`, paddingLeft: "16px" }}>
+                <p
+                  className="italic leading-relaxed"
+                  style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.1rem", lineHeight: "1.6" }}
+                >
+                  {day.lectio.scriptureVerse}
+                </p>
+                {day.lectio?.scriptureReference && (
+                  <p className="text-xs mt-2 tracking-wide" style={{ color: C.creamFaint }}>
+                    {day.lectio.scriptureReference}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>

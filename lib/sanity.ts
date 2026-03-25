@@ -170,6 +170,22 @@ export async function getJourney(slug: string) {
         openText,
         "encounterContent": encounterContent->{${CONTENT_ITEM_FIELDS}},
         encounterGuidance,
+        encounterNote,
+        "lectio": lectio {
+          philosophyQuote,
+          philosophySource,
+          scriptureVerse,
+          scriptureReference,
+          connectionNote
+        },
+        "auditio": auditio {
+          title,
+          composer,
+          licensingNote,
+          "audioFileUrl": audioFile.asset->url,
+          audioUrl,
+          externalUrl
+        },
         reflectQuestions,
         connectThread,
         "goDeeper": goDeeper[]->{

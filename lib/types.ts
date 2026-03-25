@@ -95,6 +95,23 @@ export type ContentItem = {
 
 // ─── Journey ──────────────────────────────────────────────────────────────────
 
+export type JourneyDayLectio = {
+  philosophyQuote?: string;
+  philosophySource?: string;
+  scriptureVerse?: string;
+  scriptureReference?: string;
+  connectionNote?: string;
+};
+
+export type JourneyDayAuditio = {
+  title?: string;
+  composer?: string;
+  licensingNote?: string;
+  audioFileUrl?: string; // Resolved from audioFile.asset->url — plays in-app
+  audioUrl?: string;     // Direct MP3 URL — plays in-app
+  externalUrl?: string;  // YouTube/Spotify — opens outside app
+};
+
 export type JourneyDay = {
   dayNumber: number;
   dayTitle: string;
@@ -102,6 +119,9 @@ export type JourneyDay = {
   openText?: string;
   encounterContent: ContentItem;
   encounterGuidance?: string;
+  encounterNote?: string;
+  lectio?: JourneyDayLectio;
+  auditio?: JourneyDayAuditio;
   reflectQuestions: string[];
   connectThread?: string;
   goDeeper?: TraditionReflection[];

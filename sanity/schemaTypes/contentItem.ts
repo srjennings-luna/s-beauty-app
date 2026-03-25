@@ -245,8 +245,7 @@ export default defineType({
       name: 'audioSource',
       title: 'Audio Source',
       type: 'object',
-      description: 'Use the file upload for in-app playback (preferred). Use the URL for external links only (YouTube, Spotify) — these open outside the app.',
-      hidden: ({document}) => document?.contentType !== 'music',
+      description: 'Optional audio pairing for any content type. Use the file upload for in-app playback (preferred). Use the URL for direct MP3 links. External link (YouTube, Spotify) opens outside the app.',
       fields: [
         defineField({
           name: 'audioFile',
