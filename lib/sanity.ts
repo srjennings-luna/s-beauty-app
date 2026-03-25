@@ -258,6 +258,23 @@ export async function getDailyPromptById(id: string) {
   )
 }
 
+export async function getAllPrompts(): Promise<import('./types').DailyPrompt[]> {
+  // Lean projection — just enough to render archive cards in Library
+  return sanityClient.fetch(
+    `*[_type == "dailyPrompt"] | order(date desc) {
+      _id,
+      date,
+      promptQuestion,
+      curatorNote,
+      "content": content->{
+        _id,
+        title,
+        "imageUrl": image.asset->url
+      }
+    }`
+  )
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Tradition Reflections
 // ─────────────────────────────────────────────────────────────────────────────
