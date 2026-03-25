@@ -353,10 +353,19 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           )}
         </div>
 
-        {/* Description — always fully visible */}
-        <p className="text-sm leading-relaxed" style={{ color: C.cream }}>
-          {content.description}
-        </p>
+        {/* Curator Note — the hook. First thing the user reads. */}
+        {content.curatorNote && (
+          <p className="text-sm leading-relaxed" style={{ color: C.cream, lineHeight: "1.75" }}>
+            {content.curatorNote}
+          </p>
+        )}
+
+        {/* Description — brief card text, shown only if no curator note, or as fallback */}
+        {!content.curatorNote && (
+          <p className="text-sm leading-relaxed" style={{ color: C.cream }}>
+            {content.description}
+          </p>
+        )}
 
         {/* Context — collapsed by default, expandable */}
         {content.context && (
@@ -554,7 +563,7 @@ function StepBreathe({ day }: { day: JourneyDay }) {
           {/* Helper text — anchored at bottom */}
           <div
             className="absolute inset-x-0 bottom-0 pointer-events-none flex flex-col items-center"
-            style={{ paddingBottom: "calc(max(env(safe-area-inset-bottom, 0px), 24px) + 72px)" }}
+            style={{ paddingBottom: "calc(max(env(safe-area-inset-bottom, 0px), 24px) + 72px)", gap: "10px" }}
           >
             <p
               className="italic text-center px-10 leading-relaxed"
@@ -566,6 +575,20 @@ function StepBreathe({ day }: { day: JourneyDay }) {
             >
               Sit with this image and let your eyes explore
             </p>
+            {day.encounterGuidance && (
+              <p
+                className="text-center px-10 leading-relaxed"
+                style={{
+                  color: "rgba(253,246,232,0.42)",
+                  fontFamily: "var(--font-cormorant)",
+                  fontSize: "0.9rem",
+                  fontStyle: "italic",
+                  marginTop: "6px",
+                }}
+              >
+                {day.encounterGuidance}
+              </p>
+            )}
           </div>
         </div>
       )}
