@@ -66,7 +66,7 @@ const createClusterCustomIcon = (cluster: any) => {
       <div class="cluster-marker" style="
         width: ${size}px;
         height: ${size}px;
-        background: linear-gradient(135deg, #1a2a36 0%, #203545 100%);
+        background: linear-gradient(135deg, #0e0b08 0%, #16110d 100%);
         border-radius: 50%;
         border: 3px solid white;
         box-shadow: 0 4px 15px rgba(0,45,98,0.4);

@@ -191,7 +191,7 @@ export default defineType({
       name: 'backgroundGradientEnd',
       title: 'Background Gradient End',
       type: 'string',
-      description: 'Hex color for bottom-right. Default: #203545 (dark teal)',
+      description: 'Hex color for bottom-right. Default: #16110d (espresso)',
       hidden: ({document}) => document?.pageType !== 'text-content',
       group: 'styling',
     }),

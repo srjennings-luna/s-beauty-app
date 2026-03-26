@@ -1,22 +1,40 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getTraditionReflections } from "@/lib/sanity";
 import { defaultTraditionReflections } from "@/data/traditionReflections";
 import type { TraditionReflection } from "@/lib/types";
 
-export default function GoDeeperSection() {
+interface GoDeeperSectionProps {
+  reflections?: TraditionReflection[];
+}
+
+export default function GoDeeperSection({ reflections: propReflections }: GoDeeperSectionProps) {
   const [expanded, setExpanded] = useState(false);
   const [reflections, setReflections] = useState<TraditionReflection[]>([]);
   const [loading, setLoading] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+
+  // When collapsed, reset carousel index
+  useEffect(() => {
+    if (!expanded) {
+      setCurrentIndex(0);
+    }
+  }, [expanded]);
 
   useEffect(() => {
+    if (propReflections) {
+      setReflections(propReflections);
+      return;
+    }
+
     if (expanded && reflections.length === 0) {
       setLoading(true);
       getTraditionReflections()
         .then((data) => {
           const fromSanity = Array.isArray(data) ? data.slice(0, 3) : [];
-          // Use Sanity content if any; otherwise show built-in tradition reflections
           setReflections(
             fromSanity.length > 0
               ? fromSanity
@@ -26,7 +44,38 @@ export default function GoDeeperSection() {
         .catch(() => setReflections(defaultTraditionReflections.slice(0, 3)))
         .finally(() => setLoading(false));
     }
-  }, [expanded, reflections.length]);
+  }, [expanded, reflections.length, propReflections]);
+
+  const SWIPE_THRESHOLD = 50;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const dx = endX - touchStartX.current;
+    const dy = endY - touchStartY.current;
+
+    // Ignore if swipe is too small or vertical
+    if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dx) < Math.abs(dy)) return;
+
+    if (dx < 0) {
+      // Swipe left = next
+      if (currentIndex < reflections.length - 1) {
+        setCurrentIndex(currentIndex + 1);
+      }
+    } else if (dx > 0) {
+      // Swipe right = previous
+      if (currentIndex > 0) {
+        setCurrentIndex(currentIndex - 1);
+      }
+    }
+  };
+
+  const currentReflection = reflections[currentIndex];
 
   return (
     <div className="border-t border-white/10">
@@ -58,7 +107,7 @@ export default function GoDeeperSection() {
       </button>
 
       {expanded && (
-        <div className="px-4 pb-6 space-y-4 animate-fade-in max-h-[60vh] overflow-y-auto">
+        <div className="px-4 pb-6 animate-fade-in">
           {loading ? (
             <div className="py-6 text-center text-white/50 text-sm">
               Loading…
@@ -68,27 +117,48 @@ export default function GoDeeperSection() {
               No reflections available yet. Check back later.
             </p>
           ) : (
-            reflections.map((r) => (
-              <article
-                key={r._id}
+            <>
+              {/* Carousel card - swipeable */}
+              <div
                 className="bg-white/5 border border-white/10 p-4"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
               >
                 <h3 className="text-white font-semibold text-base mb-2">
-                  {r.title}
+                  {currentReflection.title}
                 </h3>
-                {r.shortQuote && (
+                {currentReflection.shortQuote && (
                   <p className="font-serif-elegant italic text-white/80 text-sm border-l-2 border-[#C19B5F] pl-3 mb-2">
-                    &ldquo;{r.shortQuote}&rdquo;
+                    &ldquo;{currentReflection.shortQuote}&rdquo;
                   </p>
                 )}
                 <p className="text-white/70 text-sm leading-relaxed mb-2">
-                  {r.summary}
+                  {currentReflection.summary}
                 </p>
                 <p className="text-white/40 text-xs">
-                  — {r.source}
+                  — {currentReflection.source}
                 </p>
-              </article>
-            ))
+              </div>
+
+              {/* Dot indicators - unified design */}
+              {reflections.length > 1 && (
+                <div className="flex items-center justify-center gap-1.5 mt-4">
+                  {reflections.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setCurrentIndex(i)}
+                      aria-label={`Reflection ${i + 1}`}
+                      className={`transition-all ${
+                        i === currentIndex
+                          ? "w-5 h-1.5 rounded-full bg-[#C19B5F]"
+                          : "w-1.5 h-1.5 rounded-full bg-white/35"
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
       )}

@@ -15,8 +15,8 @@
   --color-accent-gold: #C19B5F;     /* alias */
   --color-accent-gold-light: #d4b56a;
 
-  /* Kept for backward compat where still needed */
-  --color-sacred-teal: #203545;
+  /* Kept for backward compat — mapped to espresso (deprecated #203545 removed) */
+  --color-sacred-teal: #16110d;
   --color-deep-navy: #1a2742;
   --color-deep-navy-light: #263654;
 }
@@ -65,7 +65,8 @@ h1, h2, h3, h4, h5, h6 {
 .text-sage-muted{ color: var(--color-sage-muted); }
 .text-blue-mist { color: var(--color-blue-mist); }
 .text-gold      { color: var(--color-sacred-gold); }
-/* Legacy */
+/* Legacy — bg-sacred-teal now maps to espresso */
+.bg-sacred-teal { background-color: var(--color-espresso); }
 .bg-deep-navy { background-color: var(--color-deep-navy); }
 .bg-accent-gold { background-color: var(--color-accent-gold); }
 .text-deep-navy { color: var(--color-deep-navy); }

@@ -23,13 +23,14 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
   const isSacredArt = !artwork.locationType || artwork.locationType === 'sacred-art' || artwork.locationType === 'architecture';
 
   return (
-    <div className="fixed inset-0 z-[60] bg-black flex flex-col">
+    <div className="fixed inset-0 z-[60] flex flex-col" style={{ background: "#16110d" }}>
       {/* Header - fixed at top */}
       <div className="flex items-center justify-between p-4 flex-shrink-0">
         <button
           onClick={onClose}
           aria-label="Close"
-          className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white"
+          className="w-10 h-10 flex items-center justify-center"
+          style={{ background: "rgba(253,246,232,0.1)", color: "rgba(253,246,232,0.88)" }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -87,16 +88,16 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
       <div className="flex-shrink-0 safe-area-bottom">
         {/* Reflections expanded panel */}
         {showReflections && (
-          <div className="bg-[#203545] max-h-[60vh] overflow-y-auto border-t border-white/10">
+          <div className="max-h-[60vh] overflow-y-auto" style={{ background: "#16110d", borderTop: "1px solid rgba(253,246,232,0.1)" }}>
             {/* Header */}
-            <div className="px-4 py-3 border-b border-white/10 sticky top-0 bg-[#203545] z-10">
+            <div className="px-4 py-3 sticky top-0 z-10" style={{ background: "#16110d", borderBottom: "1px solid rgba(253,246,232,0.1)" }}>
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-semibold text-white">
+                  <h3 className="text-base font-semibold" style={{ color: "rgba(253,246,232,0.88)" }}>
                     {artwork.title}
                   </h3>
                   {artwork.artist && (
-                    <p className="text-sm text-white/50">
+                    <p className="text-sm" style={{ color: "rgba(253,246,232,0.5)" }}>
                       {artwork.artist}{artwork.year && `, ${artwork.year}`}
                     </p>
                   )}
@@ -104,7 +105,8 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
                 <button
                   onClick={() => setShowReflections(false)}
                   aria-label="Collapse reflection panel"
-                  className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60"
+                  className="w-8 h-8 flex items-center justify-center"
+                  style={{ background: "rgba(253,246,232,0.1)", color: "rgba(253,246,232,0.6)" }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -127,43 +129,43 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
               {/* Historical Context */}
               {artwork.historicalSummary && (
                 <div>
-                  <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
-                    History
+                  <h4 className="text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "rgba(253,246,232,0.4)" }}>
+                    Context
                   </h4>
-                  <p className="text-white/70 text-sm leading-relaxed">
+                  <p className="text-sm leading-relaxed" style={{ color: "rgba(253,246,232,0.7)" }}>
                     {artwork.historicalSummary}
                   </p>
                 </div>
               )}
 
-              {/* Scripture Pairing - for Sacred Art and Architecture */}
+              {/* Scripture Pairing */}
               {isSacredArt && artwork.scripturePairing && (
                 <div>
-                  <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "rgba(253,246,232,0.4)" }}>
                     Scripture
                   </h4>
-                  <div className="bg-white/10 p-3 border-l-2 border-[#C19B5F]">
-                    <p className="text-white/80 italic text-sm leading-relaxed">
+                  <div className="p-3" style={{ background: "rgba(253,246,232,0.06)", borderLeft: "2px solid #C19B5F" }}>
+                    <p className="italic text-sm leading-relaxed" style={{ color: "rgba(253,246,232,0.8)", fontFamily: "var(--font-cormorant)" }}>
                       &ldquo;{artwork.scripturePairing.verse}&rdquo;
                     </p>
-                    <p className="text-[#C19B5F] text-xs mt-2 font-medium">
+                    <p className="text-xs mt-2" style={{ color: "#C19B5F" }}>
                       — {artwork.scripturePairing.reference}
                     </p>
                   </div>
                 </div>
               )}
 
-              {/* Quote - for Workshop, Cultural, Landscape types */}
+              {/* Quote */}
               {!isSacredArt && artwork.quote && (
                 <div>
-                  <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "rgba(253,246,232,0.4)" }}>
                     Quote
                   </h4>
-                  <div className="bg-white/10 p-3 border-l-2 border-[#C19B5F]">
-                    <p className="text-white/80 italic text-sm leading-relaxed">
+                  <div className="p-3" style={{ background: "rgba(253,246,232,0.06)", borderLeft: "2px solid #C19B5F" }}>
+                    <p className="italic text-sm leading-relaxed" style={{ color: "rgba(253,246,232,0.8)", fontFamily: "var(--font-cormorant)" }}>
                       &ldquo;{artwork.quote.text}&rdquo;
                     </p>
-                    <p className="text-[#C19B5F] text-xs mt-2 font-medium">
+                    <p className="text-xs mt-2" style={{ color: "#C19B5F" }}>
                       — {artwork.quote.attribution}
                     </p>
                   </div>
@@ -173,13 +175,13 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
               {/* Reflection Questions */}
               {artwork.reflectionQuestions.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">
-                    Reflection Questions
+                  <h4 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "rgba(253,246,232,0.4)" }}>
+                    Reflect
                   </h4>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {artwork.reflectionQuestions.map((question, index) => (
-                      <p key={index} className="text-white/70 text-sm leading-relaxed">
-                        • {question}
+                      <p key={index} className="text-sm leading-relaxed" style={{ color: "rgba(253,246,232,0.7)" }}>
+                        {question}
                       </p>
                     ))}
                   </div>
@@ -191,41 +193,43 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
 
         {/* Info bar - always shown when reflections not expanded */}
         {!showReflections && (
-          <div className="px-4 pt-4 pb-20 bg-[#203545] border-t border-white/10">
+          <div className="px-4 pt-4 pb-20" style={{ background: "#16110d", borderTop: "1px solid rgba(253,246,232,0.1)" }}>
             <div className="flex items-center justify-between">
               <div className="flex-1 min-w-0">
-                <h2 className="text-white font-semibold text-lg">
+                <h2 className="font-semibold text-lg" style={{ color: "rgba(253,246,232,0.88)" }}>
                   {artwork.title}
                 </h2>
                 {artwork.artist && (
-                  <p className="text-white/60 text-sm">
+                  <p className="text-sm" style={{ color: "rgba(253,246,232,0.5)" }}>
                     {artwork.artist}{artwork.year && `, ${artwork.year}`}
                   </p>
                 )}
-                <p className="text-white/40 text-sm mt-0.5">
+                <p className="text-sm mt-0.5" style={{ color: "rgba(253,246,232,0.35)" }}>
                   {artwork.locationName}
                 </p>
               </div>
               {hasReflectionContent && (
                 <button
                   onClick={() => setShowReflections(true)}
-                  className="ml-3 w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-white"
+                  className="ml-3 flex items-center gap-1.5 px-3 py-1.5 text-xs tracking-widest uppercase"
+                  style={{ background: "rgba(253,246,232,0.08)", color: "rgba(253,246,232,0.6)" }}
                   aria-label="View reflection content"
                 >
+                  Reflect
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                     fill="currentColor"
-                    className="w-5 h-5"
+                    className="w-3.5 h-3.5"
                   >
-                    <path d="M10.75 16.82A7.462 7.462 0 0115 15.5c.71 0 1.396.098 2.046.282A.75.75 0 0018 15.06v-11a.75.75 0 00-.546-.721A9.006 9.006 0 0015 3a8.963 8.963 0 00-4.25 1.065V16.82zM9.25 4.065A8.963 8.963 0 005 3c-.85 0-1.673.118-2.454.339A.75.75 0 002 4.06v11a.75.75 0 00.954.721A7.462 7.462 0 015 15.5c1.579 0 3.042.487 4.25 1.32V4.065z" />
+                    <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 011.06 0L10 11.94l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.22 9.28a.75.75 0 010-1.06z" clipRule="evenodd" />
                   </svg>
                 </button>
               )}
             </div>
             <Link
               href={`/pray/${artwork.id}`}
-              className="mt-3 inline-block text-[#C19B5F] text-sm font-medium"
+              className="cta-inline-dark mt-3 inline-block"
             >
               Pray with this image →
             </Link>
