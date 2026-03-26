@@ -24,8 +24,8 @@ export default function FavoriteButton({
   const favorited = isFavorite(itemId, type);
 
   const sizeClasses = {
-    sm: "w-8 h-8",
-    md: "w-10 h-10",
+    sm: "w-11 h-11",   // 44px — minimum accessible tap target
+    md: "w-11 h-11",
     lg: "w-12 h-12",
   };
 

@@ -492,7 +492,13 @@ function StepEncounter({ day }: { day: JourneyDay }) {
               <div className="mb-4" style={{ borderLeft: `2px solid ${C.sageMuted}`, paddingLeft: "16px" }}>
                 <p
                   className="italic leading-relaxed"
-                  style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.1rem", lineHeight: "1.6" }}
+                  style={{
+                    color: C.cream,
+                    // Cormorant only for short quotes — Open Sans for accessibility on longer text
+                    fontFamily: day.lectio.philosophyQuote.length <= 150 ? "var(--font-cormorant)" : "var(--font-open-sans)",
+                    fontSize: day.lectio.philosophyQuote.length <= 150 ? "1.1rem" : "0.95rem",
+                    lineHeight: "1.6",
+                  }}
                 >
                   &ldquo;{day.lectio.philosophyQuote}&rdquo;
                 </p>
@@ -508,7 +514,12 @@ function StepEncounter({ day }: { day: JourneyDay }) {
               <div style={{ borderLeft: `2px solid ${C.gold}`, paddingLeft: "16px" }}>
                 <p
                   className="italic leading-relaxed"
-                  style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.1rem", lineHeight: "1.6" }}
+                  style={{
+                    color: C.cream,
+                    fontFamily: day.lectio.scriptureVerse.length <= 150 ? "var(--font-cormorant)" : "var(--font-open-sans)",
+                    fontSize: day.lectio.scriptureVerse.length <= 150 ? "1.1rem" : "0.95rem",
+                    lineHeight: "1.6",
+                  }}
                 >
                   {day.lectio.scriptureVerse}
                 </p>
@@ -834,7 +845,9 @@ export default function JourneyDaySteps({
 }) {
   const [step, setStep] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
-  const totalSteps = STEP_LABELS.length;
+  // Go Deeper only included if there is actual content to show
+  const hasGoDeeper = (day.goDeeper ?? []).length > 0;
+  const totalSteps = hasGoDeeper ? STEP_LABELS.length : STEP_LABELS.length - 1;
 
   const handleNext = useCallback(() => {
     if (step < totalSteps - 1) {
@@ -884,7 +897,7 @@ export default function JourneyDaySteps({
     <StepBreathe key="breathe" day={day} />,
     <StepReflect key="reflect" day={day} questionIndex={questionIndex} onNextQuestion={handleNextQuestion} />,
     <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} />,
-    <StepGoDeeper key="deeper" day={day} />,
+    ...(hasGoDeeper ? [<StepGoDeeper key="deeper" day={day} />] : []),
   ];
 
   return (
