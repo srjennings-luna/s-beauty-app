@@ -118,78 +118,88 @@ export default function SplashPage() {
 
         {/* ════════════════════════════════ SCREEN 1 — Brand Identity ════════════════════════════════ */}
         <div
-          className="min-w-full h-full flex flex-col justify-center px-10"
-          style={{ backgroundColor: E, paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
+          className="min-w-full h-full flex flex-col px-10"
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 72px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 36px)" }}
         >
-          <div className={anim(0)}>
-            {/* Wordmark + pronunciation */}
-            <p style={{ fontFamily: montserrat, fontSize: "1.35rem", letterSpacing: "0.32em", textTransform: "uppercase", color: CREAM, fontWeight: 600 }}>
-              KALLOS
+          {/* Content */}
+          <div>
+            <div className={anim(0)}>
+              <p style={{ fontFamily: montserrat, fontSize: "1.35rem", letterSpacing: "0.32em", textTransform: "uppercase", color: CREAM, fontWeight: 600 }}>
+                KALLOS
+              </p>
+              <p style={{ fontFamily: cormorant, fontSize: "0.85rem", fontStyle: "italic", color: "rgba(253,246,232,0.38)", letterSpacing: "0.06em", marginTop: "4px" }}>
+                kal · os
+              </p>
+            </div>
+
+            <GoldRule />
+
+            <p className={anim(0, 100)} style={{ fontFamily: cormorant, fontSize: "1.75rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.4 }}>
+              &ldquo;Beauty will save the world.&rdquo;
             </p>
-            <p style={{ fontFamily: cormorant, fontSize: "0.85rem", fontStyle: "italic", color: "rgba(253,246,232,0.38)", letterSpacing: "0.06em", marginTop: "4px" }}>
-              kal · os
+
+            <p className={anim(0, 200)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, marginTop: "16px" }}>
+              Rediscover beauty, truth and goodness through tradition. The Greeks called it KALLOS, and they believed the three were inseparable.
+            </p>
+
+            <p className={anim(0, 300)} style={{ fontFamily: montserrat, fontSize: "0.72rem", color: G, letterSpacing: "0.06em", marginTop: "18px" }}>
+              Your daily dose of what is beautiful. true. good.
             </p>
           </div>
 
-          <GoldRule />
-
-          {/* Headline */}
-          <p className={anim(0, 100)} style={{ fontFamily: cormorant, fontSize: "1.75rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.4 }}>
-            &ldquo;Beauty will save the world.&rdquo;
-          </p>
-
-          {/* Body */}
-          <p className={anim(0, 200)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, marginTop: "16px" }}>
-            Rediscover beauty, truth and goodness through tradition. The Greeks called it KALLOS, and they believed the three were inseparable.
-          </p>
-
-          {/* Daily dose — gold */}
-          <p className={anim(0, 300)} style={{ fontFamily: montserrat, fontSize: "0.72rem", color: G, letterSpacing: "0.06em", marginTop: "18px" }}>
-            Your daily dose of what is beautiful. true. good.
-          </p>
+          {/* Spacer pushes button to bottom */}
+          <div className="flex-1" />
 
           <button
             onClick={next}
             className={anim(0, 400)}
-            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "left", marginTop: "48px" }}
+            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "left" }}
           >
             Keep going →
           </button>
         </div>
 
         {/* ════════════════════════════════ SCREEN 2 — The Three ════════════════════════════════ */}
-        <div className="min-w-full h-full flex flex-col items-center justify-center px-10" style={{ backgroundColor: E }}>
+        <div
+          className="min-w-full h-full flex flex-col px-10"
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 72px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 36px)" }}
+        >
           <div className={`w-full transition-all duration-700 ${current === 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-            <p style={{ fontFamily: cormorant, fontSize: "2rem", fontStyle: "italic", fontWeight: 400, color: CREAM, textAlign: "center", lineHeight: 1.3 }}>
+            <p style={{ fontFamily: cormorant, fontSize: "2rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.3 }}>
               Beauty. Truth. Goodness.
             </p>
 
-            <div style={{ height: "1px", width: "32px", backgroundColor: G, margin: "20px auto" }} />
+            <div style={{ height: "1px", width: "32px", backgroundColor: G, margin: "20px 0" }} />
 
-            <p className={anim(1, 150)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, textAlign: "center" }}>
+            <p className={anim(1, 150)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8 }}>
               Ancient philosophers called them the transcendentals: beauty, truth, goodness. Three things woven together that finding one means brushing against the divine.
             </p>
 
-            <p className={anim(1, 250)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, textAlign: "center", marginTop: "16px" }}>
+            <p className={anim(1, 250)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, marginTop: "16px" }}>
               The tradition that produced the greatest art in the Western world kept all three in the same room.
             </p>
 
-            <p className={anim(1, 350)} style={{ fontFamily: montserrat, fontSize: "0.7rem", letterSpacing: "0.1em", color: G, textAlign: "center", marginTop: "18px" }}>
+            <p className={anim(1, 350)} style={{ fontFamily: montserrat, fontSize: "0.7rem", letterSpacing: "0.1em", color: G, marginTop: "18px" }}>
               KALLOS is built on that.
             </p>
           </div>
 
+          <div className="flex-1" />
+
           <button
             onClick={next}
-            className={`mt-14 ${anim(1, 400)}`}
-            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)" }}
+            className={anim(1, 400)}
+            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "left" }}
           >
             Keep going →
           </button>
         </div>
 
         {/* ════════════════════════════════ SCREEN 3 — Feature Tour ════════════════════════════════ */}
-        <div className="min-w-full h-full flex flex-col justify-center px-6" style={{ backgroundColor: E }}>
+        <div
+          className="min-w-full h-full flex flex-col px-6"
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 72px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 36px)" }}
+        >
           <p
             className={anim(2)}
             style={{ fontFamily: cormorant, fontSize: "1.5rem", fontStyle: "italic", fontWeight: 400, color: CREAM, marginBottom: "28px" }}
@@ -197,7 +207,6 @@ export default function SplashPage() {
             Two ways to explore.
           </p>
 
-          {/* P&P card */}
           <div
             className={`mb-4 ${anim(2, 100)}`}
             style={{ border: `1px solid rgba(193,155,95,0.25)`, padding: "22px 20px" }}
@@ -210,7 +219,6 @@ export default function SplashPage() {
             </p>
           </div>
 
-          {/* Journeys card */}
           <div
             className={anim(2, 200)}
             style={{ border: `1px solid rgba(193,155,95,0.25)`, padding: "22px 20px" }}
@@ -223,37 +231,44 @@ export default function SplashPage() {
             </p>
           </div>
 
+          <div className="flex-1" />
+
           <button
             onClick={next}
-            className={`mt-8 ${anim(2, 300)}`}
+            className={anim(2, 300)}
             style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "left" }}
           >
             Keep going →
           </button>
         </div>
 
-        {/* ════════════════════════════════ SCREEN 4 — Hook (copy TBD — Sheri to confirm) ════════════════════════════════ */}
-        <div className="min-w-full h-full flex flex-col items-center justify-center px-10" style={{ backgroundColor: E }}>
+        {/* ════════════════════════════════ SCREEN 4 — Hook ════════════════════════════════ */}
+        <div
+          className="min-w-full h-full flex flex-col px-10"
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 72px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 36px)" }}
+        >
           <div className={`w-full transition-all duration-700 ${current === 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-            <p style={{ fontFamily: cormorant, fontSize: "1.8rem", fontStyle: "italic", fontWeight: 400, color: CREAM, textAlign: "center", lineHeight: 1.35 }}>
+            <p style={{ fontFamily: cormorant, fontSize: "1.8rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.35 }}>
               You already know this feeling.
             </p>
 
-            <div style={{ height: "1px", width: "32px", backgroundColor: G, margin: "20px auto" }} />
+            <div style={{ height: "1px", width: "32px", backgroundColor: G, margin: "20px 0" }} />
 
-            <p className={anim(3, 150)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, textAlign: "center" }}>
+            <p className={anim(3, 150)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8 }}>
               The painting you can&apos;t look away from. The piece of music that opens something in you. The line from a book you&apos;ve carried for years.
             </p>
 
-            <p className={anim(3, 250)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, textAlign: "center", marginTop: "16px" }}>
+            <p className={anim(3, 250)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, marginTop: "16px" }}>
               KALLOS is built for exactly that.
             </p>
           </div>
 
+          <div className="flex-1" />
+
           <button
             onClick={next}
-            className={`mt-14 ${anim(3, 350)}`}
-            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)" }}
+            className={anim(3, 350)}
+            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "left" }}
           >
             Keep going →
           </button>
@@ -261,8 +276,8 @@ export default function SplashPage() {
 
         {/* ════════════════════════════════ SCREEN 5 — Invitation ════════════════════════════════ */}
         <div
-          className="min-w-full h-full flex flex-col justify-center px-8"
-          style={{ backgroundColor: E, paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 40px)" }}
+          className="min-w-full h-full flex flex-col px-8"
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 72px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 36px)" }}
         >
           <div className={`w-full transition-all duration-700 ${current === 4 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             <div style={{ height: "1px", width: "32px", backgroundColor: G, marginBottom: "22px" }} />
@@ -271,14 +286,17 @@ export default function SplashPage() {
               Start where you are.
             </p>
 
-            <p className={anim(4, 100)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, marginBottom: "44px" }}>
+            <p className={anim(4, 100)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8 }}>
               No preparation needed. No right way to begin. Start a 3-day journey into beauty, truth and goodness. Something new every day.
             </p>
+          </div>
 
-            {/* Primary CTA */}
+          <div className="flex-1" />
+
+          <div className={anim(4, 200)}>
             <button
               onClick={startJourney}
-              className={`w-full py-4 mb-4 active:scale-95 transition-all duration-200 ${anim(4, 200)}`}
+              className="w-full py-4 mb-4 active:scale-95 transition-all duration-200"
               style={{
                 backgroundColor: G,
                 color: E,
@@ -292,10 +310,9 @@ export default function SplashPage() {
               Start with Beauty, Truth &amp; Goodness
             </button>
 
-            {/* Secondary CTA */}
             <button
               onClick={seeToday}
-              className={`w-full py-2 ${anim(4, 300)}`}
+              className="w-full py-2"
               style={{
                 fontFamily: montserrat,
                 fontSize: "0.65rem",
