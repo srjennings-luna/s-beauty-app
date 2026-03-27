@@ -312,7 +312,7 @@ export default function SplashPage() {
                 justifyContent: "space-between",
               }}
             >
-              <span>Start with Beauty, Truth &amp; Goodness</span>
+              <span>Start here</span>
               <span style={{ fontSize: "1rem", fontWeight: 400, marginLeft: "12px" }}>→</span>
             </button>
 
