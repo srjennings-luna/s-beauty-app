@@ -296,27 +296,33 @@ export default function SplashPage() {
           <div className={anim(4, 200)}>
             <button
               onClick={startJourney}
-              className="w-full py-4 mb-4 active:scale-95 transition-all duration-200"
+              className="w-full active:scale-95 transition-all duration-200"
               style={{
                 backgroundColor: G,
                 color: E,
                 fontFamily: montserrat,
                 fontSize: "0.72rem",
                 fontWeight: 700,
-                letterSpacing: "0.1em",
+                letterSpacing: "0.08em",
                 textTransform: "uppercase",
+                padding: "15px 20px",
+                marginBottom: "12px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
-              Start with Beauty, Truth &amp; Goodness
+              <span>Start with Beauty, Truth &amp; Goodness</span>
+              <span style={{ fontSize: "1rem", fontWeight: 400, marginLeft: "12px" }}>→</span>
             </button>
 
             <button
               onClick={seeToday}
-              className="w-full py-2"
+              className="w-full py-3"
               style={{
                 fontFamily: montserrat,
                 fontSize: "0.65rem",
-                color: "rgba(193,155,95,0.55)",
+                color: "rgba(193,155,95,0.45)",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
               }}
