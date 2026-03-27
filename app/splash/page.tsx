@@ -121,9 +121,10 @@ export default function SplashPage() {
           {/* Image */}
           <div className="relative flex-shrink-0" style={{ height: "55vh" }}>
             <img
-              src="/images/promo-splash.jpeg"
+              src="/images/artworks/fra-angelico-annunciation.jpg"
               alt="KALLOS"
               className="w-full h-full object-cover"
+              style={{ objectPosition: "center 20%" }}
             />
             <div
               className="absolute inset-0"
@@ -220,7 +221,7 @@ export default function SplashPage() {
             className={`relative overflow-hidden mb-4 ${anim(2, 100)}`}
             style={{ height: "152px" }}
           >
-            <img src="/images/promo-splash.jpeg" alt="Pause and Ponder" className="w-full h-full object-cover" />
+            <img src="/images/artworks/calling-of-st-matthew.jpg" alt="Pause and Ponder" className="w-full h-full object-cover" style={{ objectPosition: "center 30%" }} />
             <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(22,17,13,0.94) 0%, rgba(22,17,13,0.55) 55%, rgba(22,17,13,0.15) 100%)" }} />
             <div className="absolute inset-0 flex flex-col justify-center px-5">
               <p style={{ fontFamily: montserrat, fontSize: "0.58rem", letterSpacing: "0.18em", textTransform: "uppercase", color: G, marginBottom: "8px" }}>
@@ -237,7 +238,7 @@ export default function SplashPage() {
             className={`relative overflow-hidden ${anim(2, 200)}`}
             style={{ height: "152px" }}
           >
-            <img src="/images/promo-splash.jpeg" alt="Journeys" className="w-full h-full object-cover" style={{ objectPosition: "center 30%" }} />
+            <img src="/images/artworks/brunelleschi-dome.jpg" alt="Journeys" className="w-full h-full object-cover" style={{ objectPosition: "center 40%" }} />
             <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(22,17,13,0.94) 0%, rgba(22,17,13,0.55) 55%, rgba(22,17,13,0.15) 100%)" }} />
             <div className="absolute inset-0 flex flex-col justify-center px-5">
               <p style={{ fontFamily: montserrat, fontSize: "0.58rem", letterSpacing: "0.18em", textTransform: "uppercase", color: G, marginBottom: "8px" }}>
