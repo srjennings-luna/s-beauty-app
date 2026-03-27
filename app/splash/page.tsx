@@ -69,6 +69,55 @@ export default function SplashPage() {
     <div style={{ height: "1px", width: "32px", backgroundColor: G, margin: "18px 0" }} />
   );
 
+  // Breathing nav button — matches the Breathe page pulse style
+  const NavButton = ({ onClick, animClass }: { onClick: () => void; animClass: string }) => (
+    <>
+      <style>{`
+        @keyframes kallosNavBreathe {
+          0%, 100% { transform: scale(1); opacity: 0.45; }
+          50%       { transform: scale(1.55); opacity: 0; }
+        }
+        .kallos-nav-ring {
+          animation: kallosNavBreathe 3.5s ease-in-out infinite;
+        }
+      `}</style>
+      <div className={`flex justify-end ${animClass}`}>
+        <button
+          onClick={onClick}
+          style={{ position: "relative", width: 52, height: 52, display: "flex", alignItems: "center", justifyContent: "center" }}
+          aria-label="Next screen"
+        >
+          {/* Breathing outer ring */}
+          <div
+            className="kallos-nav-ring"
+            style={{
+              position: "absolute",
+              inset: -6,
+              borderRadius: "50%",
+              border: `1px solid rgba(193,155,95,0.5)`,
+              pointerEvents: "none",
+            }}
+          />
+          {/* Static circle */}
+          <div style={{
+            width: 52,
+            height: 52,
+            borderRadius: "50%",
+            border: `1px solid rgba(193,155,95,0.55)`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+            {/* Arrow */}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(193,155,95,0.85)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </div>
+        </button>
+      </div>
+    </>
+  );
+
   return (
     <div
       className={`fixed inset-0 overflow-hidden transition-opacity duration-700 ${visible ? "opacity-100" : "opacity-0"}`}
@@ -148,13 +197,7 @@ export default function SplashPage() {
 
           <div className="flex-1" />
 
-          <button
-            onClick={next}
-            className={anim(0, 400)}
-            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "right" }}
-          >
-            Keep going →
-          </button>
+          <NavButton onClick={next} animClass={anim(0, 400)} />
         </div>
 
         {/* ════════════════════════════════ SCREEN 2 — The Three ════════════════════════════════ */}
@@ -184,13 +227,7 @@ export default function SplashPage() {
 
           <div className="flex-1" />
 
-          <button
-            onClick={next}
-            className={anim(1, 400)}
-            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "right" }}
-          >
-            Keep going →
-          </button>
+          <NavButton onClick={next} animClass={anim(1, 400)} />
         </div>
 
         {/* ════════════════════════════════ SCREEN 3 — Feature Tour ════════════════════════════════ */}
@@ -231,13 +268,7 @@ export default function SplashPage() {
 
           <div className="flex-1" />
 
-          <button
-            onClick={next}
-            className={anim(2, 300)}
-            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "right" }}
-          >
-            Keep going →
-          </button>
+          <NavButton onClick={next} animClass={anim(2, 300)} />
         </div>
 
         {/* ════════════════════════════════ SCREEN 4 — Hook ════════════════════════════════ */}
@@ -263,13 +294,7 @@ export default function SplashPage() {
 
           <div className="flex-1" />
 
-          <button
-            onClick={next}
-            className={anim(3, 350)}
-            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "right" }}
-          >
-            Keep going →
-          </button>
+          <NavButton onClick={next} animClass={anim(3, 350)} />
         </div>
 
         {/* ════════════════════════════════ SCREEN 5 — Invitation ════════════════════════════════ */}
