@@ -119,15 +119,14 @@ export default function SplashPage() {
         {/* ════════════════════════════════ SCREEN 1 — Brand Identity ════════════════════════════════ */}
         <div
           className="min-w-full h-full flex flex-col px-10"
-          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 72px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 36px)" }}
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
         >
-          {/* Content */}
           <div>
             <div className={anim(0)}>
-              <p style={{ fontFamily: montserrat, fontSize: "1.35rem", letterSpacing: "0.32em", textTransform: "uppercase", color: CREAM, fontWeight: 600 }}>
+              <p style={{ fontFamily: montserrat, fontSize: "2rem", letterSpacing: "0.32em", textTransform: "uppercase", color: CREAM, fontWeight: 600 }}>
                 KALLOS
               </p>
-              <p style={{ fontFamily: cormorant, fontSize: "0.85rem", fontStyle: "italic", color: "rgba(253,246,232,0.38)", letterSpacing: "0.06em", marginTop: "4px" }}>
+              <p style={{ fontFamily: cormorant, fontSize: "1.05rem", fontStyle: "italic", color: "rgba(253,246,232,0.55)", letterSpacing: "0.1em", marginTop: "6px" }}>
                 kal · os
               </p>
             </div>
@@ -138,22 +137,21 @@ export default function SplashPage() {
               &ldquo;Beauty will save the world.&rdquo;
             </p>
 
-            <p className={anim(0, 200)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, marginTop: "16px" }}>
+            <p className={anim(0, 200)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, marginTop: "20px" }}>
               Rediscover beauty, truth and goodness through tradition. The Greeks called it KALLOS, and they believed the three were inseparable.
             </p>
 
-            <p className={anim(0, 300)} style={{ fontFamily: montserrat, fontSize: "0.72rem", color: G, letterSpacing: "0.06em", marginTop: "18px" }}>
+            <p className={anim(0, 300)} style={{ fontFamily: montserrat, fontSize: "0.72rem", color: G, letterSpacing: "0.06em", marginTop: "22px" }}>
               Your daily dose of what is beautiful. true. good.
             </p>
           </div>
 
-          {/* Spacer pushes button to bottom */}
           <div className="flex-1" />
 
           <button
             onClick={next}
             className={anim(0, 400)}
-            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "left" }}
+            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "right" }}
           >
             Keep going →
           </button>
@@ -162,7 +160,7 @@ export default function SplashPage() {
         {/* ════════════════════════════════ SCREEN 2 — The Three ════════════════════════════════ */}
         <div
           className="min-w-full h-full flex flex-col px-10"
-          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 72px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 36px)" }}
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
         >
           <div className={`w-full transition-all duration-700 ${current === 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             <p style={{ fontFamily: cormorant, fontSize: "2rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.3 }}>
@@ -189,7 +187,7 @@ export default function SplashPage() {
           <button
             onClick={next}
             className={anim(1, 400)}
-            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "left" }}
+            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "right" }}
           >
             Keep going →
           </button>
@@ -198,7 +196,7 @@ export default function SplashPage() {
         {/* ════════════════════════════════ SCREEN 3 — Feature Tour ════════════════════════════════ */}
         <div
           className="min-w-full h-full flex flex-col px-6"
-          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 72px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 36px)" }}
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
         >
           <p
             className={anim(2)}
@@ -236,7 +234,7 @@ export default function SplashPage() {
           <button
             onClick={next}
             className={anim(2, 300)}
-            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "left" }}
+            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "right" }}
           >
             Keep going →
           </button>
@@ -245,7 +243,7 @@ export default function SplashPage() {
         {/* ════════════════════════════════ SCREEN 4 — Hook ════════════════════════════════ */}
         <div
           className="min-w-full h-full flex flex-col px-10"
-          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 72px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 36px)" }}
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
         >
           <div className={`w-full transition-all duration-700 ${current === 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             <p style={{ fontFamily: cormorant, fontSize: "1.8rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.35 }}>
@@ -268,7 +266,7 @@ export default function SplashPage() {
           <button
             onClick={next}
             className={anim(3, 350)}
-            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "left" }}
+            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "right" }}
           >
             Keep going →
           </button>
@@ -277,7 +275,7 @@ export default function SplashPage() {
         {/* ════════════════════════════════ SCREEN 5 — Invitation ════════════════════════════════ */}
         <div
           className="min-w-full h-full flex flex-col px-8"
-          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 72px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 36px)" }}
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
         >
           <div className={`w-full transition-all duration-700 ${current === 4 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             <div style={{ height: "1px", width: "32px", backgroundColor: G, marginBottom: "22px" }} />
