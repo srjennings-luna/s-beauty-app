@@ -117,63 +117,44 @@ export default function SplashPage() {
       >
 
         {/* ════════════════════════════════ SCREEN 1 — Brand Identity ════════════════════════════════ */}
-        <div className="min-w-full h-full flex flex-col" style={{ backgroundColor: E }}>
-          {/* Image */}
-          <div className="relative flex-shrink-0" style={{ height: "55vh" }}>
-            <img
-              src="/images/artworks/fra-angelico-annunciation.jpg"
-              alt="KALLOS"
-              className="w-full h-full object-cover"
-              style={{ objectPosition: "center 20%" }}
-            />
-            <div
-              className="absolute inset-0"
-              style={{ background: `linear-gradient(to top, ${E} 0%, rgba(22,17,13,0.25) 55%, transparent 100%)` }}
-            />
+        <div
+          className="min-w-full h-full flex flex-col justify-center px-10"
+          style={{ backgroundColor: E, paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
+        >
+          <div className={anim(0)}>
+            {/* Wordmark + pronunciation */}
+            <p style={{ fontFamily: montserrat, fontSize: "1.35rem", letterSpacing: "0.32em", textTransform: "uppercase", color: CREAM, fontWeight: 600 }}>
+              KALLOS
+            </p>
+            <p style={{ fontFamily: cormorant, fontSize: "0.85rem", fontStyle: "italic", color: "rgba(253,246,232,0.38)", letterSpacing: "0.06em", marginTop: "4px" }}>
+              kal · os
+            </p>
           </div>
 
-          {/* Copy */}
-          <div
-            className="flex-1 flex flex-col justify-between px-8"
-            style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)", paddingTop: "4px" }}
+          <GoldRule />
+
+          {/* Headline */}
+          <p className={anim(0, 100)} style={{ fontFamily: cormorant, fontSize: "1.75rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.4 }}>
+            &ldquo;Beauty will save the world.&rdquo;
+          </p>
+
+          {/* Body */}
+          <p className={anim(0, 200)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, marginTop: "16px" }}>
+            Rediscover beauty, truth and goodness through tradition. The Greeks called it KALLOS, and they believed the three were inseparable.
+          </p>
+
+          {/* Daily dose — gold */}
+          <p className={anim(0, 300)} style={{ fontFamily: montserrat, fontSize: "0.72rem", color: G, letterSpacing: "0.06em", marginTop: "18px" }}>
+            Your daily dose of what is beautiful. true. good.
+          </p>
+
+          <button
+            onClick={next}
+            className={anim(0, 400)}
+            style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "left", marginTop: "48px" }}
           >
-            <div>
-              {/* Wordmark + pronunciation */}
-              <div className={anim(0)}>
-                <p style={{ fontFamily: montserrat, fontSize: "1.1rem", letterSpacing: "0.28em", textTransform: "uppercase", color: CREAM, fontWeight: 600 }}>
-                  KALLOS
-                </p>
-                <p style={{ fontFamily: cormorant, fontSize: "0.78rem", fontStyle: "italic", color: "rgba(253,246,232,0.38)", letterSpacing: "0.06em", marginTop: "2px" }}>
-                  kal · os
-                </p>
-              </div>
-
-              <GoldRule />
-
-              {/* Headline */}
-              <p className={anim(0, 100)} style={{ fontFamily: cormorant, fontSize: "1.6rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.35 }}>
-                &ldquo;Beauty will save the world.&rdquo;
-              </p>
-
-              {/* Body */}
-              <p className={anim(0, 200)} style={{ fontFamily: openSans, fontSize: "0.855rem", color: CREAM_DIM, lineHeight: 1.78, marginTop: "14px" }}>
-                Rediscover beauty, truth and goodness through tradition. The Greeks called it KALLOS, and they believed the three were inseparable.
-              </p>
-
-              {/* Daily dose — gold */}
-              <p className={anim(0, 300)} style={{ fontFamily: montserrat, fontSize: "0.72rem", color: G, letterSpacing: "0.06em", marginTop: "14px" }}>
-                Your daily dose of what is beautiful. true. good.
-              </p>
-            </div>
-
-            <button
-              onClick={next}
-              className={anim(0, 400)}
-              style={{ fontFamily: montserrat, fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(193,155,95,0.65)", textAlign: "left" }}
-            >
-              Keep going →
-            </button>
-          </div>
+            Keep going →
+          </button>
         </div>
 
         {/* ════════════════════════════════ SCREEN 2 — The Three ════════════════════════════════ */}
@@ -218,36 +199,28 @@ export default function SplashPage() {
 
           {/* P&P card */}
           <div
-            className={`relative overflow-hidden mb-4 ${anim(2, 100)}`}
-            style={{ height: "152px" }}
+            className={`mb-4 ${anim(2, 100)}`}
+            style={{ border: `1px solid rgba(193,155,95,0.25)`, padding: "22px 20px" }}
           >
-            <img src="/images/artworks/calling-of-st-matthew.jpg" alt="Pause and Ponder" className="w-full h-full object-cover" style={{ objectPosition: "center 30%" }} />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(22,17,13,0.94) 0%, rgba(22,17,13,0.55) 55%, rgba(22,17,13,0.15) 100%)" }} />
-            <div className="absolute inset-0 flex flex-col justify-center px-5">
-              <p style={{ fontFamily: montserrat, fontSize: "0.58rem", letterSpacing: "0.18em", textTransform: "uppercase", color: G, marginBottom: "8px" }}>
-                Pause &amp; Ponder
-              </p>
-              <p style={{ fontFamily: cormorant, fontSize: "1.05rem", fontStyle: "italic", color: CREAM, lineHeight: 1.4, maxWidth: "210px" }}>
-                Every day, a piece of art and a question to sit with.
-              </p>
-            </div>
+            <p style={{ fontFamily: montserrat, fontSize: "0.58rem", letterSpacing: "0.18em", textTransform: "uppercase", color: G, marginBottom: "10px" }}>
+              Pause &amp; Ponder
+            </p>
+            <p style={{ fontFamily: cormorant, fontSize: "1.15rem", fontStyle: "italic", color: CREAM, lineHeight: 1.5 }}>
+              Every day, a piece of art and a question to sit with.
+            </p>
           </div>
 
           {/* Journeys card */}
           <div
-            className={`relative overflow-hidden ${anim(2, 200)}`}
-            style={{ height: "152px" }}
+            className={anim(2, 200)}
+            style={{ border: `1px solid rgba(193,155,95,0.25)`, padding: "22px 20px" }}
           >
-            <img src="/images/artworks/brunelleschi-dome.jpg" alt="Journeys" className="w-full h-full object-cover" style={{ objectPosition: "center 40%" }} />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(22,17,13,0.94) 0%, rgba(22,17,13,0.55) 55%, rgba(22,17,13,0.15) 100%)" }} />
-            <div className="absolute inset-0 flex flex-col justify-center px-5">
-              <p style={{ fontFamily: montserrat, fontSize: "0.58rem", letterSpacing: "0.18em", textTransform: "uppercase", color: G, marginBottom: "8px" }}>
-                Journeys
-              </p>
-              <p style={{ fontFamily: cormorant, fontSize: "1.05rem", fontStyle: "italic", color: CREAM, lineHeight: 1.4, maxWidth: "210px" }}>
-                Or go deeper. A theme, an artist, a question. One day at a time.
-              </p>
-            </div>
+            <p style={{ fontFamily: montserrat, fontSize: "0.58rem", letterSpacing: "0.18em", textTransform: "uppercase", color: G, marginBottom: "10px" }}>
+              Journeys
+            </p>
+            <p style={{ fontFamily: cormorant, fontSize: "1.15rem", fontStyle: "italic", color: CREAM, lineHeight: 1.5 }}>
+              Or go deeper. A theme, an artist, a question. One day at a time.
+            </p>
           </div>
 
           <button
