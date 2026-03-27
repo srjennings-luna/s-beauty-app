@@ -299,19 +299,15 @@ export default function SplashPage() {
                 backgroundColor: G,
                 color: E,
                 fontFamily: montserrat,
-                fontSize: "0.72rem",
+                fontSize: "0.75rem",
                 fontWeight: 700,
-                letterSpacing: "0.08em",
+                letterSpacing: "0.12em",
                 textTransform: "uppercase",
-                padding: "15px 20px",
+                padding: "18px 24px",
                 marginBottom: "12px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
               }}
             >
-              <span>Start here</span>
-              <span style={{ fontSize: "1rem", fontWeight: 400, marginLeft: "12px" }}>→</span>
+              Start here →
             </button>
 
             <button
