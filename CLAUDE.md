@@ -100,6 +100,20 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ P&P Days 4–8 content audited against editorial guide — findings + rewrites saved to `KALLOS-PP-Audit-Days4-8.html` in Documents folder.
 - ✅ "Non-Catholic" language removed from all docs and code — audience is always "the curious seeker."
 
+### Phase 2 Work Done (March 26, 2026)
+- ✅ Deprecated `#203545` teal fully purged — ArtworkViewer info bar, GlobalMap cluster gradient, globals.css variable all updated to espresso `#16110d`
+- ✅ ArtworkViewer info bar redesigned — cream text palette, ambiguous book icon replaced with labeled "Reflect" button (square corners)
+- ✅ Nav icons — all icons use stroke-only active state (strokeWidth 2 vs 1.5 inactive). Fixes Today tab showing only a green dot (fill has no effect on open line paths like sun rays). Inactive opacity bumped 35% → 55%.
+- ✅ Tap targets fixed — FavoriteButton sm/md increased to 44px (w-11 h-11). Explore pray icon increased from 28px to 44px.
+- ✅ Go Deeper step hidden when day has zero tradition reflections. Progress bar auto-adjusts from 6 to 5 segments.
+- ✅ Cormorant accessibility — Lectio quotes >150 chars fall back to Open Sans 0.95rem. Cormorant preserved for short quotes only.
+- ✅ P&P archive built in Library — all past prompts browseable without notifications. All/Saved filter toggle. Gold heart indicator on saved prompts.
+- ✅ Journey day Encounter + Breathe layers fixed — curatorNote displays on Encounter, encounterNote collapsible ("Look Closer"), Lectio and Auditio layers render, CircularAudioPlayer shared component added.
+- ✅ Onboarding Screen 1 headline revised to: "Beauty calls deep to the soul" — replaces "Beauty has always been trying to tell you something"
+- ✅ Onboarding Screen 1 pronunciation added: *kal · os* in small Cormorant italic below wordmark
+- ✅ Onboarding Screen 4 secondary CTA revised: "Browse Journeys" → "Start with Beauty, Truth & Goodness →"
+- ✅ Intro Journey restructured: 3-day entry-point version (Beauty / Truth / Goodness) + 7-day deeper dive — see Journey Framework below
+
 ### Phase 2 Work Done (March 25, 2026)
 - ✅ Em dash ban enforced universally — all content docs and pipeline docs cleaned (87–88 em dashes removed per doc)
 - ✅ Audio sourcing rules synced across all docs — both content guides now match the full 5-rule framework in CLAUDE.md (Pixabay, Musopen, FMA, Internet Archive, gregorian-chant-hymns.com, Bandcamp; genre guidance; worked examples)
@@ -114,9 +128,48 @@ Read this at the start of every session. It contains all key product decisions, 
 ### Up Next: Phase 2 Remaining
 - Seed content into Sanity: Intro journey, Themes 2–5, Pause & Ponder prompts
 - Source high-res images for all new content (search terms provided in docs)
-- Build onboarding flow for the curious seeker
+- Build onboarding flow — structure defined (see Onboarding Framework below). Copy still being wordsmithed by Sheri. Do not build until copy is confirmed.
 - Sanity Studio manual tasks (Sheri): rename Studio URL, update splash content
 - User testing with Stories navigation and Breathe page
+
+### Onboarding Framework — Settled Decisions (March 27, 2026)
+
+**Copy status:** Sheri is wordsmithing. Do not build until copy is confirmed. These are structural/behavior decisions, not copy decisions.
+
+**Screen count:** Target 5 screens. 4 feels tight; up to 6 is acceptable. Each screen does one thing.
+
+**Proposed 5-screen structure:**
+1. Brand identity — KALLOS wordmark, pronunciation (*kal · os*), brief "what this is" framing. Not the hook — grounding first.
+2. App purpose — high-level explanation of why KALLOS exists. The idea of beauty, truth, goodness as a way of seeing. Copy being wordsmithed by Sheri.
+3. Feature tour — two things only: daily P&P and Journeys. Format: two stacked cards (mobile), each with a small visual + one sentence. Card 1: cropped artwork thumbnail + "Every day — a piece of art and a question to sit with." Card 2: journey card visual + "Or go deeper — 7 days into Beauty, Truth, and Goodness." No icons, no bullet lists, no feature names. Show what they'll encounter, not what the product is.
+4. Hook — the emotional culmination. This is the last thing before the CTA. Copy being wordsmithed by Sheri.
+5. CTA — primary: start the 3-day BTG journey. Secondary: skip to Today (P&P). Label TBD.
+
+**Note:** Screen order above is indicative. The hook (4) is the only locked position — always the culmination before the CTA. Screens 2 and 3 can be reordered. If the hook copy is strong enough to carry purpose + emotion in one screen, Screens 2 and 4 could merge — but keep them separate until copy is confirmed.
+
+**Primary CTA (non-negotiable):** Start the 3-day Beauty, Truth & Goodness journey directly. Label TBD. Frame: "3 days or 30 minutes — you decide." Do NOT route to P&P as primary.
+
+**Day-gating:** Not implemented and will not be added for testing. All journey days are accessible in one sitting. A user can complete all 3 days of the intro journey immediately after onboarding. No code changes needed for this behavior.
+
+**Secondary option:** Skip to Today (P&P) or Browse Journeys — always available.
+
+**Beta behavior — always show onboarding:**
+- Do NOT suppress onboarding after first view. Every time the app opens, onboarding shows.
+- "Skip" = skip for now. Not a permanent dismissal.
+- Rationale: beta testers may return days later and need the context. A user who skips on first open and comes back should still see the intro.
+- Code implication: Remove the `localStorage.getItem("kallos-onboarded")` suppress check on the Today page. OR replace "set and never show again" with a session-only flag (show once per browser session, not once ever).
+- ⚠️ **Revisit after beta.** When the app goes live, onboarding should show once per install/account, not every session. This is a deliberate beta-only choice.
+
+**Skip behavior:**
+- Skip button visible at all times on all screens.
+- Skip routes to Today page (P&P / current daily prompt).
+- On return: onboarding shows again (beta behavior above).
+
+**Navigation:** Same Stories-style thin progress bar + swipe as Journey steps. No back button needed. Skip always visible top-right.
+
+**Reference doc:** `KALLOS-Onboarding-Copy.html` (copy in progress — structural decisions above supersede the 4-screen version in that doc).
+
+---
 
 ### P&P Page — Known UI Fixes Needed
 - **Typography**: ✅ Fixed — Cormorant reserved for prompt question, lectio quotes, auditio title. Open Sans everywhere else.
@@ -156,9 +209,15 @@ All live in the `contentItem` Sanity schema with `contentType` field:
 - Integrated curriculum model: all content types answer the same central question
 - **Visio Divina ("Pray with this image") is NOT available inside Journey steps.** Only accessible via Explore and Library entry points.
 
-### 6 Founding Journeys
-**NEW — Intro Journey:**
-0. **Beauty, Truth & Goodness** — Introductory journey for new users. Days 1–2 Beauty, Days 3–4 Truth, Days 5–6 Goodness, Day 7 Integration. Content doc ready.
+### 7 Founding Journeys
+
+**Intro — two tiers, both on Journeys tab:**
+- **0a. Beauty, Truth & Goodness (3-day)** — Entry-point intro. Day 1 Beauty, Day 2 Truth, Day 3 Goodness. Can be done in one sitting (~30 min) or across 3 days. Same 6-step format as full Journeys. Sits in its own "Begin here" section above the 5 themed journeys. Surfaced directly from onboarding Screen 4. Content: reshape Days 1, 3, 5 from existing 7-day doc. Sanity entry guide needed. **Pending build.**
+- **0b. Beauty, Truth & Goodness (7-day)** — Deeper dive into classical thought. Days 1–2 Beauty, Days 3–4 Truth, Days 5–6 Goodness, Day 7 Integration. For users who want to go further after the 3-day. Content doc ready (`KALLOS-Intro-Journey-Beauty-Truth-Goodness.html`). Lives below "Begin here" section on Journeys tab.
+
+**Journeys tab structure:**
+- "Begin here" section: 3-day intro (prominent, badged "3 days")
+- "Journeys" section: 7-day deeper dive + 5 founding themes
 
 **5 Founding Themes:**
 1. **Light** — "What does light reveal that darkness hides?"
@@ -284,11 +343,16 @@ Every P&P day must open with one **surprising, specific, shareable fact** — so
 
 **Test:** Would someone say "wait, I didn't know that" and repeat it at dinner? If yes: hook. If not: keep looking.
 
+### Scripture Translation Standard
+**All scripture quotes in KALLOS use the RSV-2CE (Revised Standard Version, Second Catholic Edition).** This is the Ignatius Press translation — literary, faithful to original languages, used by Catholic scholars and serious readers. Do not quote from NIV, ESV, NABRE, or other translations.
+
+⚠️ **Audit needed:** The Lectio scripture pairings written for Holy Week (all 8 days) and P&P Days 9–18 were drafted in NIV before this standard was set. Every scripture quote in those documents should be verified against RSV-2CE before Sanity entry. Most will be close; some will differ noticeably, especially Psalms.
+
 ### The Lectio Pairing
 The Lectio is a philosophy + scripture pairing — two voices arriving at the same truth from different directions. Philosophy goes first (familiar entry for the curious seeker), scripture second (the discovery). Format:
 
 - `philosophyText` + `philosophyAttribution` — e.g., Plato, Aristotle, Marcus Aurelius, Seneca, Heraclitus
-- `lectio.text` + `lectio.attribution` — scripture passage
+- `lectio.text` + `lectio.attribution` — scripture passage (RSV-2CE)
 
 **The editorial thesis:** The great philosophers were asking questions that scripture had already answered. The Lectio is the room where that conversation happens. Do not force it — a strong scripture alone is better than a strained pairing.
 
@@ -297,6 +361,7 @@ The Lectio is a philosophy + scripture pairing — two voices arriving at the sa
 ### Voice Rules
 - Write for the curious seeker — someone moved by beauty, regardless of faith background. Assume curiosity, not faith.
 - Never use: "journey," "sacred," "profound," "transformative," "spiritual practice," "invitation to…"
+- Never use **"shaft"** when describing light. Use "ray" or "stream" instead. (e.g., "a ray of light," not "a shaft of light")
 - **No em dashes.** Em dashes are a telltale sign of AI-generated text and are banned in all KALLOS content. Use a comma, a period, or a short hyphen instead.
 - Curator note max length: 3–5 sentences. Short enough to read in one breath.
 - Questions must connect to the user's real life — not hypothetical ("what would it feel like") but personal ("what was the last time you…")
@@ -318,6 +383,8 @@ Some content — especially feast days and Holy Week — has historical facts wi
 ### Auditio (Audio) Selection Criteria
 The Auditio is a music pairing for P&P and Journey days. Apply these rules when selecting or suggesting audio:
 
+**Context:** Sheri is also learning the sacred traditions — KALLOS is part of her own discovery alongside the user's. The music selections are not just functional; they are part of an ongoing conversation with the tradition. This means audio suggestions should be genuinely illuminating, not just safe or genre-matched.
+
 **1. Licensing first — free, downloadable, no copyright**
 - Must be free to download and use with no copyright restrictions. No Spotify, no Apple Music, no YouTube-only, no copyrighted recordings.
 - Acceptable sources:
@@ -333,11 +400,15 @@ The Auditio is a music pairing for P&P and Journey days. Apply these rules when 
 - Doesn't have to match the subject literally. A piece can match the feeling of a day, the emotional arc, or the theological undercurrent.
 - Example: Victoria "O Vos Omnes" for Bosch's Adoration — matches the grief-to-joy arc of the triptych.
 - Example: The Porter's Gate "Breastplate of Saint Patrick" for Day 1 — matches theme, mood, and subject directly.
+- Example: Taizé "Stay With Me" for Agony in the Garden (Holy Wednesday) — not a traditional hymn, but holds the emotional weight of that night (the disciples falling asleep, the loneliness) better than almost anything from the classical canon.
+- Example: A piece like "The Sound of Silence" — secular, well-known — can work for meditation on something profound if the meditative quality is strong and the context earns it.
 
-**3. Genre is open — but non-sacred/classical must earn its place**
-- Sacred/classical is the natural default territory (Gregorian chant, polyphony, Bach, Pärt, etc.).
-- Contemporary folk, ambient, world music, or other genres are welcome *if*: the piece is likely new to the user, genuinely surprising in context, and strongly meets criteria 1 & 2.
-- Do not use well-known mainstream music the user would already associate with other contexts.
+**3. Sacred/classical is the safe anchor — always offer an alternative**
+- Sacred/classical (Gregorian chant, polyphony, Bach, Pärt, Taizé, etc.) is the trusted starting point. It grounds content in the tradition and is always appropriate.
+- **But:** Too much of anything beautiful loses its light. Do not default to 15th-16th century sacred music for every day — that register becomes invisible through repetition.
+- **Rule:** For every Auditio suggestion, provide a primary sacred/classical option AND at least one alternative from a different register (folk, ambient, meditation, contemporary, world music, or even a well-chosen secular track). Sheri chooses.
+- The alternative must still meet the emotional and licensing tests. It doesn't need to be obscure — it needs to be right for that day.
+- Well-known secular music is acceptable if it creates genuine contemplative space rather than distraction or irony. The test: does hearing this song here open something, or does it close it?
 
 **4. Attribution**
 - Note the source/performer in the Sanity `artist` field.
@@ -359,6 +430,9 @@ Built as dedicated Breathe page (Step 3). Full-bleed image with 8x zoom, pulsing
 Current: Dark background with next-day image drift animation. Simple.
 Open question: What's the right visual treatment for the "sneak peek" of the next day's image?
 Sheri to brainstorm. Options: letterbox strip, partial reveal from bottom, full-bleed dark with a peek edge.
+
+### Explore Page — Needs Product Design (Deferred to March 27)
+Current Explore page is a filterable content grid with no editorial voice or direction. It has no reason to arrive there except to browse — feels like a database, not a KALLOS experience. Three directions under consideration: (1) editorial landing with rotating featured question + curated picks, (2) organized by the 5 founding themes rather than content type, (3) "What are you drawn to?" serendipity prompt routing to content. Also: content voice audit needed — card copy may not reflect KALLOS voice. Discuss with Sheri before touching any code.
 
 ### Explore — Content Item Card UI Cleanup
 Flagged from screenshot (March 2026). Issues to address:
@@ -401,3 +475,4 @@ These can't be done in code — Sheri does them in dashboards:
 13. **Holy Week P&P — Sanity entry:** All 8 days (Palm Sunday–Easter). Deadline: March 27. Use `KALLOS-HolyWeek-2026-Pipeline.html` — complete all fields including Lectio and Actio (tasks 11–12 above) before entry.
 14. Seed Themes 2–5 content into Sanity (entry guide doc ready)
 15. Source high-res images for all new content (search terms in docs)
+16. Add lat/long coordinates to Bosch Sanity entry guide and Intro Journey content doc — map is empty without them

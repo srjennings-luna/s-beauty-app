@@ -19,14 +19,14 @@ export default function TodayPage() {
   const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
-    // Migrate old onboarding key
-    const legacy = localStorage.getItem("seeking-beauty-onboarded");
-    if (legacy) {
-      localStorage.setItem("kallos-onboarded", legacy);
-      localStorage.removeItem("seeking-beauty-onboarded");
-    }
-    const onboarded = localStorage.getItem("kallos-onboarded");
-    if (!onboarded) {
+    // Beta: show onboarding every new browser session.
+    // sessionStorage clears when the browser/tab is closed, so users see
+    // onboarding again on each fresh launch — but not mid-session when
+    // navigating back to the Today tab.
+    // TODO: After beta, restore localStorage check:
+    //   if (!localStorage.getItem("kallos-onboarded")) router.push("/splash");
+    const sessionSeen = sessionStorage.getItem("kallos-session");
+    if (!sessionSeen) {
       router.push("/splash");
     } else {
       setHasOnboarded(true);
