@@ -99,7 +99,8 @@ export default function JourneysPage() {
           <div className="px-5 space-y-6">
             {journeys.map((journey) => {
               const completedDays = progress[journey.slug.current] ?? 0;
-              const pct = Math.round((completedDays / 7) * 100);
+              const totalDays = journey.days?.length ?? 7;
+              const pct = Math.round((completedDays / totalDays) * 100);
               const isStarted = completedDays > 0;
 
               return (
@@ -130,7 +131,7 @@ export default function JourneysPage() {
                     {/* Progress badge */}
                     {isStarted && (
                       <span className="absolute top-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-xs font-medium">
-                        Day {completedDays}/7
+                        Day {completedDays}/{totalDays}
                       </span>
                     )}
 
@@ -140,7 +141,7 @@ export default function JourneysPage() {
                         {journey.title}
                       </h2>
                       <p className="text-white/60 text-xs">
-                        {journey.estimatedMinutesPerDay ?? 10} min/day · 7 days
+                        {journey.estimatedMinutesPerDay ?? 10} min/day · {totalDays} days
                       </p>
                     </div>
                   </div>

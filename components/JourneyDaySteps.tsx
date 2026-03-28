@@ -952,7 +952,7 @@ export default function JourneyDaySteps({
     <StepBreathe key="breathe" day={day} />,
     <StepReflect key="reflect" day={day} questionIndex={questionIndex} onNextQuestion={handleNextQuestion} />,
     ...(hasGoDeeper ? [<StepGoDeeper key="deeper" day={day} />] : []),
-    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} onClose={onClose} />,
+    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} onClose={() => { if (!isComplete) onMarkComplete(); onClose(); }} />,
   ];
 
   return (

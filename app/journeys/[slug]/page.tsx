@@ -177,7 +177,8 @@ export default function JourneyDetailPage() {
   // ── Derived values ─────────────────────────────────────────────────────────
 
   const completedCount = completedDays.length;
-  const progressPct = Math.round((completedCount / 7) * 100);
+  const totalDays = journey.days?.length ?? 7;
+  const progressPct = Math.round((completedCount / totalDays) * 100);
   const nextDay = journey.days?.find(
     (d) => !completedDays.includes(d.dayNumber),
   );
