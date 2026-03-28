@@ -21,7 +21,7 @@ Read this at the start of every session. It contains all key product decisions, 
 - Product Manager, 20 years experience. Does not write code.
 - Makes product decisions here in Cowork (Claude desktop), implementation happens in Claude Code (here).
 - Always read the spec docs before starting work — they are the source of truth.
-- Test with `npm run build` after every step. Commit after every step so there's a clean rollback.
+- Build verification: run `npm run build` from the repo root after every code change. If the SWC binary error appears (Cowork VM limitation — ARM64 architecture), fall back to `npx tsc --noEmit` instead. If the environment ever changes so that `npm run build` succeeds, use it. Commit after every step so there's a clean rollback.
 - Prefer the Claude Code app tab over the terminal.
 - All future documents: HTML, not Word/docx. Sheri is not a Microsoft user.
 - Design direction reference: **Variant.com** — use for layout, spacing, and typography inspiration.

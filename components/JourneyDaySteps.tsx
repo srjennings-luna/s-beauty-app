@@ -877,20 +877,32 @@ export default function JourneyDaySteps({
   const isLastStep = step === totalSteps - 1;
 
   // Swipe detection
+  // touch-action: pan-y on the container (see JSX below) tells the browser to handle
+  // vertical scrolling natively and pass horizontal gestures to JS — prevents off-center artifacts.
+  // Transitioning lock prevents double-swipe before slide animation completes.
   const touchRef = useRef<{ x: number; y: number; t: number } | null>(null);
+  const transitioningRef = useRef(false);
+
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (transitioningRef.current) return;
+    // Multi-touch (pinch/zoom) — cancel swipe detection entirely
+    if (e.touches.length > 1) { touchRef.current = null; return; }
     const touch = e.touches[0];
     touchRef.current = { x: touch.clientX, y: touch.clientY, t: Date.now() };
   }, []);
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    if (!touchRef.current) return;
+    if (!touchRef.current || transitioningRef.current) return;
+    // If a second finger appeared (pinch), cancel
+    if (e.touches.length > 0) { touchRef.current = null; return; }
     const touch = e.changedTouches[0];
     const dx = touch.clientX - touchRef.current.x;
     const dy = touch.clientY - touchRef.current.y;
     const dt = Date.now() - touchRef.current.t;
     touchRef.current = null;
-    // Must be a horizontal swipe: >60px horizontal, not too vertical, within 500ms
-    if (Math.abs(dx) > 60 && Math.abs(dy) < Math.abs(dx) * 0.7 && dt < 500) {
+    // Stricter thresholds: >90px horizontal, clearly horizontal (not diagonal), within 350ms
+    if (Math.abs(dx) > 90 && Math.abs(dy) < Math.abs(dx) * 0.4 && dt < 350) {
+      transitioningRef.current = true;
+      setTimeout(() => { transitioningRef.current = false; }, 520);
       if (dx < 0) {
         // Swipe left → next
         if (isLastStep) { if (!isComplete) onMarkComplete(); onClose(); }
@@ -917,8 +929,11 @@ export default function JourneyDaySteps({
     <>
       <div className="fixed inset-0 z-[60]" style={{ height: "100dvh", backgroundColor: C.bg }}>
         {/* Slide container — swipe left/right to navigate */}
+        {/* touch-action: pan-y tells the browser to handle vertical scroll natively
+            and pass horizontal gestures to JS — prevents off-center artifacts on iOS */}
         <div
           className="absolute inset-0 overflow-hidden"
+          style={{ touchAction: "pan-y" }}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
