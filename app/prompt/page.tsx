@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { getDailyPrompt } from "@/lib/sanity";
+import { getDailyPrompt, getDailyPromptPreview } from "@/lib/sanity";
 import type { DailyPrompt } from "@/lib/types";
 import { addFavorite, removeFavorite, isFavorite } from "@/lib/favorites";
 import PageTransition from "@/components/ui/PageTransition";
@@ -88,6 +88,7 @@ function DailyPromptPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dateParam = searchParams.get("date") ?? undefined; // e.g. "2026-03-17" from Library favorites
+  const isPreview = searchParams.get("preview") === "1"; // opened from Sanity Studio preview button
   const [prompt, setPrompt]               = useState<DailyPrompt | null>(null);
   const [loading, setLoading]             = useState(true);
   const [favorited, setFavorited]         = useState(false);
@@ -102,9 +103,12 @@ function DailyPromptPageInner() {
   const audioRef    = useRef<HTMLAudioElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  // ── Load prompt — uses ?date= param if present (e.g. from Library favorites) ─
+  // ── Load prompt — preview mode fetches drafts; normal mode fetches published ─
   useEffect(() => {
-    getDailyPrompt(dateParam)
+    const fetchFn = isPreview && dateParam
+      ? getDailyPromptPreview(dateParam)
+      : getDailyPrompt(dateParam);
+    fetchFn
       .then((data) => {
         setPrompt(data ?? null);
         if (data) {
@@ -119,7 +123,7 @@ function DailyPromptPageInner() {
       })
       .catch(() => setPrompt(null))
       .finally(() => setLoading(false));
-  }, [dateParam]);
+  }, [dateParam, isPreview]);
 
   // Parallax removed — hero uses pinch-to-zoom (TransformWrapper handles transforms)
 
@@ -205,6 +209,19 @@ function DailyPromptPageInner() {
   return (
     <PageTransition variant="slide-up">
       <div className="min-h-screen pb-28" style={{ background: C.bgGradient }}>
+
+        {/* Preview mode banner */}
+        {isPreview && (
+          <div style={{
+            position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
+            background: "#C19B5F", color: "#16110d",
+            textAlign: "center", padding: "8px 16px",
+            fontFamily: "Open Sans, sans-serif", fontSize: "0.8rem",
+            fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
+          }}>
+            Preview mode — draft content
+          </div>
+        )}
 
         {/* Film grain */}
         <div

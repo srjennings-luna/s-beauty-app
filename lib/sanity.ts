@@ -8,6 +8,17 @@ export const sanityClient = createClient({
   useCdn: false, // Disable CDN to ensure fresh data
 })
 
+// Preview client: fetches draft (unpublished) content for Studio preview
+// Uses NEXT_PUBLIC_SANITY_TOKEN + previewDrafts perspective
+export const previewClient = createClient({
+  projectId: 'em44j9m8',
+  dataset: 'production',
+  apiVersion: '2024-01-01',
+  useCdn: false,
+  token: process.env.NEXT_PUBLIC_SANITY_TOKEN,
+  perspective: 'previewDrafts',
+})
+
 // Image URL builder
 const builder = imageUrlBuilder(sanityClient)
 
@@ -256,6 +267,21 @@ export async function getDailyPromptById(id: string) {
   return sanityClient.fetch(
     `*[_type == "dailyPrompt" && _id == $id][0] {${DAILY_PROMPT_FIELDS}}`,
     { id }
+  )
+}
+
+// Preview version: fetches draft content for a given date.
+// Called when ?preview=1 is present in the URL (opened from Sanity Studio).
+export async function getDailyPromptPreview(date: string) {
+  const exact = await previewClient.fetch(
+    `*[_type == "dailyPrompt" && date == $date][0] {${DAILY_PROMPT_FIELDS}}`,
+    { date }
+  )
+  if (exact) return exact
+
+  // Fallback: most recent draft/published prompt
+  return previewClient.fetch(
+    `*[_type == "dailyPrompt"] | order(date desc)[0] {${DAILY_PROMPT_FIELDS}}`
   )
 }
 
