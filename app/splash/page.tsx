@@ -280,11 +280,11 @@ export default function SplashPage() {
           style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 88px)" }}
         >
           <div className={`w-full transition-all duration-700 ${current === 4 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-            <div style={{ height: "1px", width: "48px", backgroundColor: G, marginBottom: "48px" }} />
-
-            <p style={{ fontFamily: cormorant, fontSize: "2.125rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.25, marginBottom: "32px" }}>
+            <p style={{ fontFamily: cormorant, fontSize: "2.125rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.25 }}>
               Start where you are.
             </p>
+
+            <div style={{ height: "1px", width: "48px", backgroundColor: G, margin: "48px 0 32px" }} />
 
             <p className={anim(4, 100)} style={{ fontFamily: openSans, fontSize: "0.9375rem", color: CREAM_DIM, lineHeight: 1.8, fontWeight: 300 }}>
               No preparation needed. No right way to begin. Start a 3-day journey into beauty, truth and goodness. Something new every day.
