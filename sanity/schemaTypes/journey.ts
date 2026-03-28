@@ -73,7 +73,7 @@ export default defineType({
       name: 'days',
       title: 'Days',
       type: 'array',
-      description: 'Exactly 7 days. Each follows: Open → Encounter → Reflect → Connect → Go Deeper.',
+      description: 'Up to 9 days. Each follows: Open → Encounter → Reflect → Connect → Go Deeper.',
       of: [
         {
           type: 'object',
@@ -85,7 +85,7 @@ export default defineType({
               title: 'Day Number',
               type: 'number',
               description: '1–7',
-              validation: (Rule) => Rule.required().min(1).max(7),
+              validation: (Rule) => Rule.required().min(1).max(9),
             },
             {
               name: 'dayTitle',
@@ -125,6 +125,99 @@ export default defineType({
               description: 'Optional editorial guidance. e.g., "Listen with your eyes closed for the first minute."',
             },
             {
+              name: 'encounterNote',
+              title: 'Encounter Note',
+              type: 'text',
+              rows: 5,
+              description: 'Interpretive layer specific to this day\'s content type. Sacred art → symbolism/iconography. Literature → close reading. Music → listening guide. Landscape → ecological/geological insight. Thinkers → intellectual context. Pattern & Proof → plain-language explanation. Watch & Listen → viewing guide. Food & Wine → craft tradition.',
+            },
+            {
+              name: 'auditio',
+              title: 'Auditio (Audio Suggestion)',
+              type: 'object',
+              description: 'Optional audio pairing for this day. Use file upload for in-app playback; URL for direct MP3 links; external link for YouTube/Spotify (opens outside app).',
+              fields: [
+                {
+                  name: 'title',
+                  title: 'Title',
+                  type: 'string',
+                  description: 'e.g., "Allegri — Miserere Mei, Deus"',
+                },
+                {
+                  name: 'composer',
+                  title: 'Composer / Artist',
+                  type: 'string',
+                  description: 'e.g., "Gregorio Allegri"',
+                },
+                {
+                  name: 'licensingNote',
+                  title: 'Licensing Note',
+                  type: 'string',
+                  description: 'e.g., "Public domain — multiple recordings on Musopen and Internet Archive"',
+                },
+                {
+                  name: 'audioFile',
+                  title: 'Audio File (in-app playback)',
+                  type: 'file',
+                  description: 'Upload an MP3 — plays directly in KALLOS.',
+                  options: {accept: 'audio/*'},
+                },
+                {
+                  name: 'audioUrl',
+                  title: 'Audio URL (in-app playback)',
+                  type: 'string',
+                  description: 'Direct MP3 link (e.g. archive.org) — plays in-app.',
+                },
+                {
+                  name: 'externalUrl',
+                  title: 'External Link (reference only)',
+                  type: 'url',
+                  description: 'YouTube, Spotify, or Apple Music. Opens outside the app.',
+                },
+              ],
+            },
+            {
+              name: 'lectio',
+              title: 'Lectio',
+              type: 'object',
+              description: 'Optional philosophy + scripture pairing for this day. Connects the encounter to broader intellectual and spiritual tradition.',
+              fields: [
+                {
+                  name: 'philosophyQuote',
+                  title: 'Philosophy Quote',
+                  type: 'text',
+                  rows: 3,
+                  description: 'A quote from a philosopher, thinker, or writer (may be secular). e.g., Plato, Bergson, Socrates.',
+                },
+                {
+                  name: 'philosophySource',
+                  title: 'Philosophy Source',
+                  type: 'string',
+                  description: 'Full attribution. e.g., "Plato, Republic (Allegory of the Cave)"',
+                },
+                {
+                  name: 'scriptureVerse',
+                  title: 'Scripture Verse',
+                  type: 'text',
+                  rows: 3,
+                  description: 'Scripture pairing for this day.',
+                },
+                {
+                  name: 'scriptureReference',
+                  title: 'Scripture Reference',
+                  type: 'string',
+                  description: 'e.g., "1 Corinthians 13:12"',
+                },
+                {
+                  name: 'connectionNote',
+                  title: 'Connection Note',
+                  type: 'text',
+                  rows: 3,
+                  description: 'Why this pairing works. How the philosophy and scripture echo each other and connect to the day\'s encounter.',
+                },
+              ],
+            },
+            {
               name: 'reflectQuestions',
               title: 'Reflection Questions',
               type: 'array',
@@ -162,7 +255,7 @@ export default defineType({
           },
         },
       ],
-      validation: (Rule) => Rule.required().min(7).max(7),
+      validation: (Rule) => Rule.required().min(1).max(9),
     }),
   ],
   orderings: [

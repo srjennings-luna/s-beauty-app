@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KALLOS — Pause & Ponder: 18 Days (March 17 – April 3, 2026)</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: #111820;
+      color: #e8e0d4;
+      font-family: Georgia, serif;
+      line-height: 1.7;
+    }
+    .container { max-width: 1000px; margin: 0 auto; padding: 60px 32px 120px; }
+    .cover {
+      text-align: center;
+      padding: 80px 0 60px;
+      border-bottom: 1px solid #2E5F78;
+      margin-bottom: 72px;
+    }
+    .cover .label {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #7a9a8a;
+      margin-bottom: 20px;
+    }
+    .cover h1 {
+      font-size: 52px;
+      font-weight: 300;
+      letter-spacing: 4px;
+      color: #C19B5F;
+      margin-bottom: 16px;
+    }
+    .cover .sub {
+      font-size: 20px;
+      font-style: italic;
+      color: #bfb8aa;
+      margin-bottom: 32px;
+    }
+    .cover .desc {
+      font-size: 16px;
+      color: #9a9488;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+    h2 {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #7a9a8a;
+      margin-bottom: 24px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #1e3545;
+    }
+    h3 {
+      font-size: 22px;
+      font-weight: 400;
+      color: #C19B5F;
+      margin-bottom: 20px;
+      margin-top: 40px;
+    }
+    .day-block {
+      background: #1a2d3d;
+      border-left: 2px solid #C19B5F;
+      padding: 32px;
+      margin-bottom: 40px;
+    }
+    .day-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #2a4055;
+    }
+    .day-date {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #7a9a8a;
+      margin-bottom: 6px;
+    }
+    .day-date-val {
+      font-size: 18px;
+      color: #e8e0d4;
+      font-weight: 400;
+    }
+    .day-type {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #7a9a8a;
+      margin-bottom: 6px;
+    }
+    .day-type-val {
+      font-size: 18px;
+      color: #C19B5F;
+      font-weight: 400;
+    }
+    .field-group {
+      margin-bottom: 20px;
+    }
+    .field-label {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #7a9a8a;
+      margin-bottom: 8px;
+    }
+    .field-content {
+      font-size: 15px;
+      color: #ccc5b8;
+      line-height: 1.7;
+    }
+    .field-content strong {
+      color: #e8e0d4;
+    }
+    .theme-badge {
+      display: inline-block;
+      font-family: Arial, sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #203545;
+      background: #C19B5F;
+      padding: 4px 10px;
+      margin-top: 12px;
+    }
+    .section-intro {
+      font-size: 16px;
+      color: #9a9488;
+      margin-bottom: 32px;
+      font-style: italic;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 32px 0;
+      font-size: 13px;
+    }
+    th {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #7a9a8a;
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid #2E5F78;
+      background: #0f1a24;
+    }
+    td {
+      padding: 12px 16px;
+      color: #bfb8aa;
+      border-bottom: 1px solid #1e3545;
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    .week-label {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #C19B5F;
+      margin-bottom: 40px;
+      margin-top: 60px;
+    }
+    .copy-note {
+      background: #0f1a24;
+      border-left: 2px solid #7a9a8a;
+      padding: 16px 20px;
+      margin-bottom: 40px;
+      font-size: 14px;
+      color: #9a9488;
+      font-style: italic;
+    }
+    .step-divider {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      margin: 24px -32px 20px;
+      font-weight: 600;
+    }
+    .step-divider.content-item {
+      color: #16110d;
+      background: #C19B5F;
+    }
+    .step-divider.daily-prompt {
+      color: #fdf6e8;
+      background: #4a7a62;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Cover -->
+  <div class="cover">
+    <div class="label">Editorial Reference</div>
+    <h1>KALLOS</h1>
+    <div class="sub">Pause & Ponder: 18 Days (March 17 – April 3, 2026)</div>
+    <div class="desc">
+      Eighteen fully detailed Daily Beauty Prompts ready for Sanity Studio data entry.
+      Each prompt includes all required fields. Copy-paste ready. Content spans global traditions,
+      all seven content types, and follows the weekly editorial rhythm.
+    </div>
+  </div>
+
+  <div class="copy-note" style="border-left-color: #C19B5F; background: #1a2530;">
+    <strong style="color: #C19B5F;">⚠ IMPORTANT — Two-Step Workflow for Each Day:</strong><br><br>
+    Each Pause &amp; Ponder prompt <strong>requires a Content Item to exist first</strong> in Sanity. The dailyPrompt document references a contentItem — you cannot create the prompt without the content item already saved.<br><br>
+    <strong>For each day, follow this order:</strong><br><br>
+    <strong>Step 1 — Create the Content Item</strong> (Sanity → Content Items → Create New)<br>
+    &nbsp;&nbsp;• Content Type (e.g., Sacred Art, Music, Literature)<br>
+    &nbsp;&nbsp;• Title, Artist/Author/Composer, Year<br>
+    &nbsp;&nbsp;• Description (2–3 sentences)<br>
+    &nbsp;&nbsp;• Context (collapsible background — 3–5 sentences)<br>
+    &nbsp;&nbsp;• Image (upload high-res, min 1200px)<br>
+    &nbsp;&nbsp;• For music: add audioFile (upload MP3) or musicUrl (external link)<br>
+    &nbsp;&nbsp;• Publish the content item<br><br>
+    <strong>Step 2 — Create the Daily Prompt</strong> (Sanity → Pause &amp; Ponder → Create New)<br>
+    &nbsp;&nbsp;• Date (YYYY-MM-DD)<br>
+    &nbsp;&nbsp;• Featured Content → search for and select the content item you just created<br>
+    &nbsp;&nbsp;• Prompt Question, Curator Note, Lectio, Auditio, Actio<br>
+    &nbsp;&nbsp;• Optional: Related Theme, Related Journey<br>
+    &nbsp;&nbsp;• Publish<br><br>
+    Below, each day is split into two sections — <span style="color: #C19B5F;">gold header = Content Item fields</span>, <span style="color: #7a9a8a;">sage header = Daily Prompt fields</span> — so you know which goes where.
+  </div>
+
+  <div class="copy-note">
+    <strong>Image sourcing:</strong> Image search terms are provided for each day. Find and source high-res images (min 1200px, ideally 2000–4500px). Upload to the Content Item's image field in Sanity.
+  </div>
+
+  <!-- WEEK 1 -->
+  <div class="week-label">Week 1: March 17–23, 2026</div>
+  <!-- Day 1: Monday, March 17 — St. Patrick's Day (NEW) -->
+  <div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-17 (Tuesday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Landscape</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Landscape</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">The Hills That Held Him</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        Slemish Mountain rises 1,500 feet from the flat boglands of County Antrim, a volcanic plug that stops you mid-horizon. In the 5th century, a Romano-British teenager was chained here as a slave shepherd, alone with sheep and silence for six years. The hills aren't beautiful in the way a postcard is beautiful — they're austere, holding vast sky and wind and the kind of solitude that either breaks you or rewrites you.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        Patrick arrived in Ireland at 16 as a captive, separated from everything he knew. The Confession — his own voice, written decades later — tells us he spent his slavery in prayer and longing, sometimes praying a hundred times a day. But something shifted in those hills. The wilderness stopped feeling like punishment and started feeling like encounter. When he finally escaped, he could have stayed safe in Britain. Instead, he returned to Ireland as a bishop, choosing to go back to the place that had held him captive. That's not conventional redemption. That's something stranger and more human — a man so changed by suffering that he could love the place that caused it.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">Slemish Mountain Ireland dawn mist — or — Irish green hills County Antrim wide landscape golden hour. Source: Unsplash/Pexels (free, no attribution needed).</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-17</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">What's a place that hurt you or held you captive — a situation, a time, a geography — that you now see differently than you did when you were in the middle of it?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        The Slemish landscape is deceptively simple: just hills, moorland, and vast Irish sky. But it's the backdrop for one of history's most radical transformations — not because Patrick became "holy," but because he stayed long enough in his own loneliness to hear something that changed what he wanted. The six-year silence wasn't preparation for a grand mission. It was just six years. What makes it remarkable is that he came back anyway.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "I was taken into captivity to Ireland, and there the Lord opened the consciousness of my unbelief… And there indeed the spirit was moved within me…"
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Patrick's Confession (Confessio Patricii), 5th century</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Think of a landscape that mattered to you — a park, a street corner, a room — and spend ten minutes there today if you can, or close your eyes and return to it mentally. Don't try to find meaning. Just notice what you see differently now than you did before.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Home / The Restless Heart</div>
+      <div class="theme-badge">Home / The Restless Heart</div>
+    </div>
+  </div>
+
+
+
+  <!-- Day 1: Monday, March 9 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-18 (Wednesday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Sacred Art</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Sacred Art</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">The Adoration of the Magi (Triptych)</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Artist</div>
+      <div class="field-content">Hieronymus Bosch</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">c. 1500</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        A three-paneled altarpiece depicting the three wise men journeying to Bethlehem. Each side reveals intricate scenes—servants, animals, a distant landscape—drawn with Bosch's characteristic precision and hidden symbolism. The central panel shows the moment of offering, surrounded by a world in miniature.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        Bosch lived in the southern Netherlands during the late medieval period, a time when religious art was shifting from pure devotion to a more complex visual language. The Adoration was one of the most painted subjects of the era—a story of pilgrimage, recognition, and surrender. Bosch transforms it into a meditation on the human condition itself. Every face, every object has been placed with intention. The crowded margins are not decoration but theology: the sacred surrounded by the sacred.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">Bosch Adoration Magi triptych high-resolution</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-18</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">What is Bosch asking you to notice first—the sacred moment at the center, or the world at the margins?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">This painting asks for slowness. You can’t take it in at a glance—Bosch refused to let anyone skip ahead. Look for the servants. They’re not the main story, but they carry the whole thing forward. That’s where it gets interesting.</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "The heavens declare the glory of God; the skies proclaim the work of his hands. Day after day they pour forth speech; night after night they reveal knowledge."
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Psalm 19:1–2</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Orlando di Lasso, "Lagrime di San Pietro" — performed by The Hilliard Ensemble. A sixteenth-century prayer set to music—the composition Bosch might have heard in his own time.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Find one small detail today that you almost missed—in a room, in a conversation, in someone's expression—and let it change what you thought you understood.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Light</div>
+      <div class="theme-badge">Light</div>
+    </div>
+  </div>
+
+  <!-- Day 2: Tuesday, March 10 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-19 (Thursday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Thinker</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Thinker</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">On the Beauty of the Good: Simone Weil on Attention</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Author</div>
+      <div class="field-content">Simone Weil</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">1947 (Gravity and Grace, published posthumously)</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        Simone Weil argues that the highest form of prayer is not petition but pure attention—to look at the world without need, without agenda, without the self getting in the way. She saw beauty as a language through which God speaks most clearly. In her view, we miss the beautiful because we are too busy trying to possess it.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        Weil was a French mystic, factory worker, and philosopher who lived in extreme simplicity. She refused to eat more food than those starving in occupied France during World War II, and this asceticism marked her thinking. She believed that God reveals himself through attention to the ordinary—a loaf of bread, the geometry of a flower, the face of a stranger. Her writings were collected and published after her death at age 34. She remains difficult to categorize but essential: a thinker for anyone who suspects there is something deeper than what we see on the surface.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">Woman's hands resting on open book sunlight — or — morning light through monastery window. Evokes Weil's idea of pure attention: looking without possessing. NOT a portrait of Weil.</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-19</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">What do you notice when you look without trying to possess or understand?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        Weil’s whole thing is that prayer isn’t asking for something—it’s paying attention. Real attention. The kind where you stop trying to get something out of the moment and just… see it. Ever looked at something all day without actually seeing it? That’s the gap.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "Absolutely unmixed attention is prayer. If we really attended with all our attention to the present moment, to the people we are with, to the work we are doing, we would be praying without meaning to."
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Simone Weil, Gravity and Grace</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Arvo Pärt, "Fratres" — any instrumentation. A composition built on repetition and silence. Pärt's work mirrors Weil's philosophy: less is more; emptiness is fullness.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Spend ten minutes looking at one thing—a plant, a wall, a person's hands—without judgment, without wanting it to be different.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Silence</div>
+      <div class="theme-badge">Silence</div>
+    </div>
+  </div>
+
+  <!-- Day 3: Wednesday, March 11 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-20 (Friday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Music</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Music</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">Credo in unum Deum (Missa Papae Marcelli)</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Composer</div>
+      <div class="field-content">Giovanni Pierluigi da Palestrina</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">1562</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        A polyphonic mass for six voices without instrumental accompaniment. Each voice moves as if separately, yet they interlace to create something that sounds inevitable, as if this was the only way these notes could ever fit together. The "Credo" section is a confession of faith expressed through pure, crystalline harmony.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        Palestrina lived during the Counter-Reformation, when the Catholic Church was reconsidering what sacred music should be. There was debate about whether polyphony (multiple voice lines) made the Latin text too difficult to understand. Palestrina's solution was genius: he wrote such clear, beautiful music that the text sings itself. His masses became the model for sacred polyphony. Legend has it that his work "saved polyphony" for the Church. Whether true or not, his music endures because it achieves what all sacred music attempts—to make silence audible.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">Renaissance cathedral interior candlelight choir stalls — or — illuminated manuscript polyphonic score. Evokes the sacred space where this music was first heard. NOT a portrait of Palestrina.</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-20</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">What happens when you stop listening for meaning and simply listen for beauty?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        Put this on when the world feels too loud and fractured. Palestrina’s music does something wild—separate voices pulling apart, then finding their way back together. Not comfort exactly. More like recognition. Like hearing something you’ve always known but couldn’t name.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "For now we see only a reflection as in a mirror; then we shall see face to face."
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— 1 Corinthians 13:12</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Palestrina, Missa Papae Marcelli — The Tallis Scholars. Let this be your entire morning. Do not skip ahead.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Listen to one piece of music in silence, without phone or screen, from beginning to end. Nothing else.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Silence</div>
+      <div class="theme-badge">Silence</div>
+    </div>
+  </div>
+
+  <!-- Day 4: Thursday, March 12 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-21 (Saturday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Sacred Art</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Sacred Art</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">Christ in the Garden of Gethsemane</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Artist</div>
+      <div class="field-content">Nikolai Ge</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">1888</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        A Russian painter's rendering of the moment before arrest: Christ sits alone in darkness, illuminated by a single warm light. His face is not peaceful. It is troubled, urgent, fully human. The surrounding darkness is not evil—it is simply absence. The painting holds the tension between acceptance and fear, between surrender and the cost of surrender.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        Nikolai Ge was a nineteenth-century Russian realist who turned away from icon tradition to paint Christ with psychological depth. His Gethsemane paintings troubled the Church—they were too human, too raw. But that rawness is their power. In Western tradition, we often see Christ as triumphant or serene. Ge gives us the agony—the moment when divinity would have felt everything a human feels when facing impossible choice. The painting speaks to anyone who has ever prayed while trembling.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">Nikolai Ge Christ Gethsemane 1888 high-resolution</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-21</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">What does it mean that the divine moment is shown in darkness, not light?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        This painting hits different from every other version of this scene. Most show peaceful acceptance. Ge shows something else entirely—that surrender can be terrifying, that it might not feel like peace at all. Sits with you long after you look away.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "My soul is overwhelmed with sorrow to the point of death. Stay here and keep watch with me. Going a little farther, he fell with his face to the ground and prayed."
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Matthew 26:38–39</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Górecki, Symphony No. 3 (Sorrowful Songs) — second movement. A composition so spare and aching that it sounds like prayer through tears.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Name one fear you have been refusing to look at. Do not solve it. Just name it, and sit with it for thirty seconds.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Suffering & Beauty</div>
+      <div class="theme-badge">Suffering & Beauty</div>
+    </div>
+  </div>
+
+  <!-- Day 5: Friday, March 13 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-22 (Sunday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Landscape</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Landscape</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">The Atacama Desert at Dawn</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Location</div>
+      <div class="field-content">Northern Chile</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">Timeless</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        The driest place on Earth. At sunrise, the landscape transforms from shadow to amber to rose. Salt flats glint in the first light. Mountains rise blue against a sky that will never know clouds. It is a place that feels farther from human time than perhaps any other on the planet. Nothing grows here. Nothing changes. Yet for a few minutes each morning, the light writes a story of beauty across stone that has been waiting since creation.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        The Atacama has been a desert for three million years—longer than any human civilization has existed. The Atacameño people have lived at its edges for millennia, understanding it as sacred space. Spanish explorers thought it was the edge of hell. Modern travelers come seeking absolute emptiness, which is its own form of fullness. In this landscape, you cannot hide from yourself. You are a temporary witness to something that does not care whether you are watching or not.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">Atacama Desert sunrise salt flats Chile</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-22</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">What is the world doing before you arrived to witness it?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        The Atacama was stunning long before anyone could witness it. It’ll remain so long after we’re gone. Beauty doesn’t exist to be seen by us—and there’s something both humbling and freeing in that. A good antidote to main character energy.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "In the beginning, God created the heavens and the earth. And God saw that it was good."
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Genesis 1:1, 1:4</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Built-in ambient — no specific piece required. Let silence and the sound of your own breathing be enough.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Find one place today that exists whether or not you are watching it, and let yourself be small in front of it.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Creation</div>
+      <div class="theme-badge">Creation</div>
+    </div>
+  </div>
+
+  <!-- Day 6: Saturday, March 14 -->
+  <div class="day-block"><div class="step-divider content-item">Step 1 — Create Content Item</div><div class="field-group"><div class="field-label">Content Type</div><div class="field-content">Pattern &amp; Proof (math-science)</div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“The soul is kissed by God in its innermost regions. With interior yearning, grace and blessing are bestowed. It is a yearning to take on God’s gentle yoke. It is a yearning to give one’s self to God’s way.”</p><p style="font-size: 13px; color: #C19B5F;">— Hildegard of Bingen (Scivias, 12th century)</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“Beauty is the splendor of truth.”</p><p style="font-size: 13px; color: #C19B5F;">— St. Thomas Aquinas (Summa Theologica)</p></div></div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“Prayer is the orientation of all the attention of which the soul is capable toward God.”</p><p style="font-size: 13px; color: #C19B5F;">— Simone Weil (Waiting for God, 1951)</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“God is not found in the soul by adding anything, but by a process of subtraction.”</p><p style="font-size: 13px; color: #C19B5F;">— Meister Eckhart (Sermons, 14th century)</p></div></div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“He who sings prays twice.”</p><p style="font-size: 13px; color: #C19B5F;">— Attributed to St. Augustine (Commentary on Psalm 72)</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“Music is a fair and glorious gift of God. I would not for the world renounce my humble share of music.”</p><p style="font-size: 13px; color: #C19B5F;">— Martin Luther (Table Talk, 1566)</p></div></div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“In my deepest wound I saw your glory, and it dazzled me.”</p><p style="font-size: 13px; color: #C19B5F;">— St. Augustine (Confessions)</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“God had one Son on earth without sin, but never one without suffering.”</p><p style="font-size: 13px; color: #C19B5F;">— St. Augustine (Letters)</p></div></div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“The world is charged with the grandeur of God. It will flame out, like shining from shook foil.”</p><p style="font-size: 13px; color: #C19B5F;">— Gerard Manley Hopkins (“God’s Grandeur,” 1877)</p></div></div></div><div class="field-group"><div class="field-label">Title</div><div class="field-content">The Double Helix: Code Written Before Language</div></div><div class="field-group"><div class="field-label">Discipline</div><div class="field-content">Molecular Biology</div></div><div class="field-group"><div class="field-label">Principle</div><div class="field-content">DNA Structure — The Double Helix</div></div><div class="field-group"><div class="field-label">Year</div><div class="field-content">1953 (Watson &amp; Crick) / Billions of years in existence</div></div><div class="field-group"><div class="field-label">Description</div><div class="field-content">Two strands twist around each other in a spiral so elegant it could be sculpture. Four chemical letters — A, T, C, G — repeat in combinations that encode every living thing on Earth. The same alphabet writes a redwood tree and a hummingbird, a coral reef and a human hand. DNA is the oldest language in the world, and it has been writing poetry for 3.8 billion years without an audience.</div></div><div class="field-group"><div class="field-label">Context</div><div class="field-content">When Watson and Crick first glimpsed the double helix structure in 1953, Crick reportedly walked into a Cambridge pub and announced they had discovered the secret of life. The structure is beautiful not just visually but logically — the way the base pairs lock together (A with T, C with G) creates a system of astonishing simplicity encoding unthinkable complexity. A single human cell contains roughly 6 feet of DNA coiled so tightly it fits in a space invisible to the naked eye. Every cell in your body carries the same complete instruction set. The code was there before we found it. The beauty was there before we could name it.</div></div><div class="field-group"><div class="field-label">Beauty Connection</div><div class="field-content">The double helix reveals that life is built on an elegant code — a language that predates all human language. The spiral form echoes patterns found in galaxies, seashells, and staircases. That the same four letters write every living thing suggests a deep unity beneath the surface of creation.</div></div><div class="field-group"><div class="field-label">Image Search Term</div><div class="field-content">DNA double helix 3D rendering blue light — or — microscopic DNA strand illuminated — or — abstract spiral staircase from above. The image should feel like discovering something sacred hidden inside the body. NOT a textbook diagram.</div></div><div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div><div class="field-group"><div class="field-label">Prompt Question</div><div class="field-content">What does it mean that your body is written in a language older than every civilization?</div></div><div class="field-group"><div class="field-label">Curator Note</div><div class="field-content">Four letters. That’s it. Four chemical letters writing every living thing for nearly four billion years. The double helix isn’t just biology—it’s the longest-running poem on Earth, and nobody was reading it until 1953.</div></div><div class="field-group"><div class="field-label">Reading (Lectio)</div><div class="field-content">“For you created my inmost being; you knit me together in my mother’s womb. I praise you because I am fearfully and wonderfully made.”</div><div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Psalm 139:13–14</div></div><div class="field-group"><div class="field-label">Music (Auditio)</div><div class="field-content">Max Richter, “On the Nature of Daylight” — a piece that spirals and layers like the helix itself. Strings building on strings.</div></div><div class="field-group"><div class="field-label">Action (Actio)</div><div class="field-content">Look at your hand today—the lines, the veins, the way your fingers move—and consider that 3.8 billion years of information made this possible.</div></div><div class="field-group"><div class="field-label">Related Theme</div><div class="field-content">Creation</div><div class="theme-badge">Creation</div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“The things that we love tell us what we are. But the things that are made tell us what God is.”</p><p style="font-size: 13px; color: #C19B5F;">— St. Thomas Aquinas (Summa Contra Gentiles)</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“God writes the gospel not in the Bible alone, but on trees and flowers and clouds and stars.”</p><p style="font-size: 13px; color: #C19B5F;">— Attributed to Martin Luther</p></div></div></div></div><div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-23 (Monday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Food & Wine</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Food & Wine</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">The Bread Ovens of Tuscany: Tradition and Craft</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Artisan/Maker</div>
+      <div class="field-content">Artisan bread makers of the Crete Senesi</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">Centuries of tradition, ongoing</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        In the rolling wheat fields of southern Tuscany, small villages maintain wood-fired ovens that have baked bread for generations. The ovens themselves are sculptures—terra-cotta domes that heat to precisely the right temperature through slow, careful tending. The bread that emerges is simple: flour, water, salt, time, fire. Yet in its simplicity, it holds everything about patience, craft, and the sacred in the ordinary.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        Bread has always been the staff of life—the central act of nourishment. In Christian tradition, it is more: the body broken and shared, the sign of covenant. These Tuscan ovens are not cathedrals, but they are consecrated ground—places where skill meets community, where nothing is rushed. The bakers know that bread cannot be hurried. The dough must rise when it is ready, not when we command it. This teaches a lesson about surrender that our age has largely forgotten.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">Tuscan bread oven terra-cotta traditional bakery</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-23</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">What does it mean to make something by hand that nourishes others?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        These bakers check oven temperature not with a thermometer but with their hands. Decades of instinct. That kind of knowledge—held in the body, passed down, earned through repetition—is something our world is quietly losing. These ovens are pushing back.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "Give us this day our daily bread."
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Matthew 6:11</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Gregorian Chant — "Ave Verum Corpus" (various Benedictine renderings). Medieval monks perfected the pairing of bread and song.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Eat one meal slowly today, tasting each element—where it came from, who made it, what it took to bring it to your table.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Home / The Restless Heart</div>
+      <div class="theme-badge">Home / The Restless Heart</div>
+    </div>
+  </div>
+
+  <!-- Day 7: Sunday, March 15 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-24 (Tuesday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Sacred Art</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Sacred Art</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">The Trinity (Rublev Icon)</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Artist</div>
+      <div class="field-content">Andrei Rublev</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">c. 1425</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        Three angels sit around a table bearing a chalice. They wear robes of blue, gold, and green. Their posture creates a rhythm—lean, listen, lean again—a dance of attention. The landscape behind them holds a chapel, a tree, a mountain. Nothing is rushed. The composition has the weight of the eternal held in a single moment.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        Rublev was a monk and icon painter in fifteenth-century Russia. Icons are not paintings meant for viewing but for prayer—windows into another order of reality. The Trinity icon was created during a time of profound suffering in Russia, and it carries within it an answer to suffering that is not easy: the answer of communion, of three in unity, of a table set where all are welcomed equally. Rublev's icon has become the ultimate meditation on belonging and wholeness.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">Rublev Trinity icon 1425 high-resolution</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-24</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">What would it feel like to be welcomed at this table?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        Look at the postures of these three figures—the way they listen to each other, the way they welcome. It feels like a promise. Not that suffering will end, but that you’ll never be alone in it. The kind of image worth returning to on hard days.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "See what great love the Father has lavished on us, that we should be called children of God! And that is what we are!"
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— 1 John 3:1</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Tavener, "Song for Athene" (or any of Tavener's sacred liturgical works). Contemporary sacred music that echoes the stillness of ancient iconography.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Sit with someone—in silence or conversation—and listen as if you are trying to understand not their words but their belonging.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Home / The Restless Heart</div>
+      <div class="theme-badge">Home / The Restless Heart</div>
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week-label">Week 2: March 24–30, 2026</div>
+
+  <!-- Day 8: Monday, March 16 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-25 (Wednesday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Landscape</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Landscape</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">Skógafoss Waterfall, Iceland</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Location</div>
+      <div class="field-content">Iceland (geological formation)</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">Timeless (formed over millennia)</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        A waterfall that drops sixty meters in a single leap. The water falls so forcefully that it creates a curtain of mist that obscures what lies beyond. The sound is overwhelming—not melody but presence. Stand at the base and you are immediately soaked, humbled, made aware of forces far larger than yourself.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        Iceland sits on the Mid-Atlantic Ridge, where the Earth is actively creating itself. Waterfalls, geysers, and hot springs are not anomalies here—they are the planet in motion. The Norse people who settled Iceland developed a mythology of creation and destruction, of fire and ice forever in conversation. Skógafoss sits at the edge of an ancient royal residence, a place where humans could live only because they had learned to live with the overwhelming power of nature. It is a reminder that home is always built on the edge of something untamed.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">Skógafoss waterfall Iceland misty full-view</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-25</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">What does it teach you to stand in front of something that is indifferent to your presence?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        This waterfall doesn’t ask to be admired. It simply is. Skógafoss is a good reminder that some things are beautiful precisely because they don’t care if anyone is watching. Worth sitting with when the performance anxiety of daily life gets loud.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "The mountains rise; the valleys fall. All created things declare the glory of their Creator."
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Based on Psalm 121 and 42</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Jóhann Jóhannsson, "The Theory of Everything" (or any of his Iceland-inspired compositions). Modern composer capturing the sound of creation in motion.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Find one overwhelming thing in nature today—loud wind, heavy rain, rough waves—and stand in it without trying to escape.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Creation</div>
+      <div class="theme-badge">Creation</div>
+    </div>
+  </div>
+
+  <!-- Day 9: Tuesday, March 17 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-26 (Thursday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Literature</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Literature</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">Pied Beauty</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Author</div>
+      <div class="field-content">Gerard Manley Hopkins</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">1877</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        A short poem in praise of things that are "pied"—spotted, dappled, contrasting in color and pattern. A skied cow. Roasted chestnuts. The trout's speckled skin. Firelight dancing. Hopkins finds the sacred in particularity, in the exact quiddity of each created thing. The poem builds to an unexpected turn: praise is reserved not for beauty alone, but for the source of all beauty.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        Hopkins was a Jesuit priest and poet who believed that every particular thing reveals God through its uniqueness—what he called "inscape." His poetry is dense with compressed language and sprung rhythm, mimicking the way attention actually works—in leaps and startlings, not smooth progression. "Pied Beauty" is his most accessible poem and most complete. It moves from observation to prayer in thirty-one lines. He captures the vision of the natural mystic—the person who has trained their eye to see the holy in anything specific enough to deserve attention.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">Dappled sunlight through forest canopy — or — kingfisher in flight over water — or — morning dew on wildflowers close-up. Evokes Hopkins' "God's Grandeur" and "Pied Beauty" — inscape, the charged beauty of creation. NOT a portrait of Hopkins.</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-26</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">What one perfectly ordinary thing have you stopped seeing lately?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        When the world starts feeling dull, this poem is the reset. Hopkins asks us to see as if for the first time—to recover wonder at what’s already here. Not asking anyone to change anything. Just to actually see what was always there.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "Glory be to God for dappled things—for skies of couple-colour as a brinded cow; for rose-moles all in stipple upon trout that swim. All things counter, original, spare, strange; whatever is fickle, freckled (who knows how?) With swift, slow; sweet, sour; adrazzle, dim; He fathers-forth whose beauty is past change: Praise him."
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Gerard Manley Hopkins, "Pied Beauty", 1877</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Built-in chant — let the rhythm of the music echo the sprung rhythm of the poem.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Find five "pied" things today—things with pattern, contrast, texture—and really look at each one.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Creation</div>
+      <div class="theme-badge">Creation</div>
+    </div>
+  </div>
+
+  <!-- Day 10: Wednesday, March 18 -->
+  <div class="day-block"><div class="step-divider content-item">Step 1 — Create Content Item</div><div class="field-group"><div class="field-label">Content Type</div><div class="field-content">Pattern &amp; Proof (math-science)</div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“To work is to pray.”</p><p style="font-size: 13px; color: #C19B5F;">— St. Benedict of Nursia (Rule of St. Benedict, 6th century)</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“The bread which you do not use is the bread of the hungry. The garment hanging in your wardrobe is the garment of the person who is naked.”</p><p style="font-size: 13px; color: #C19B5F;">— St. Basil the Great (Homily on Luke 12, 4th century)</p></div></div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“The icon is a song of triumph, a showing forth, an enduring monument to the victory of the saints. It brings the unseen before our eyes.”</p><p style="font-size: 13px; color: #C19B5F;">— St. John of Damascus (On the Divine Images, 8th century)</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“Where there is love, there is the Trinity: a lover, a beloved, and a fountain of love.”</p><p style="font-size: 13px; color: #C19B5F;">— St. Augustine (De Trinitate)</p></div></div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“Teach us to care and not to care. Teach us to sit still.”</p><p style="font-size: 13px; color: #C19B5F;">— T.S. Eliot (“Ash Wednesday,” 1930)</p></div></div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“There lives the dearest freshness deep down things.”</p><p style="font-size: 13px; color: #C19B5F;">— Gerard Manley Hopkins (“God’s Grandeur,” 1877)</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“Everything that exists is a word of God, and is a book about God.”</p><p style="font-size: 13px; color: #C19B5F;">— Meister Eckhart (Sermons, 14th century)</p></div></div></div><div class="field-group"><div class="field-label">Title</div><div class="field-content">The Fibonacci Spiral: Mathematics the Eye Already Knows</div></div><div class="field-group"><div class="field-label">Discipline</div><div class="field-content">Mathematics / Natural Pattern</div></div><div class="field-group"><div class="field-label">Principle</div><div class="field-content">Fibonacci Sequence &amp; the Golden Spiral</div></div><div class="field-group"><div class="field-label">Year</div><div class="field-content">1202 (Fibonacci’s Liber Abaci) / Pattern exists since creation</div></div><div class="field-group"><div class="field-label">Description</div><div class="field-content">1, 1, 2, 3, 5, 8, 13, 21, 34… Each number is the sum of the two before it. Plot this sequence as a spiral and you get a curve that appears in sunflower seed heads, nautilus shells, hurricane formations, and the arms of galaxies. It is a pattern that mathematics discovered but did not invent. The ratio it approaches — 1.618, the golden ratio — has been called the divine proportion since the Renaissance.</div></div><div class="field-group"><div class="field-label">Context</div><div class="field-content">Leonardo of Pisa, known as Fibonacci, introduced this sequence to Western mathematics in 1202 while studying rabbit population growth. But the pattern had been described in Indian mathematics centuries earlier. What makes Fibonacci extraordinary isn’t the math — it’s the reach. The same ratio governs the branching of trees, the arrangement of leaves on a stem, the proportions of the human face, and the geometry of ancient temples. Architects, painters, and musicians have used it for centuries. The question it raises is not mathematical but philosophical: why does the universe prefer this shape? Why does beauty have a number?</div></div><div class="field-group"><div class="field-label">Beauty Connection</div><div class="field-content">The Fibonacci spiral suggests that beauty isn’t random — it has structure. The same proportions that make a face beautiful make a cathedral feel right and a sonata resolve. If beauty is the splendor of truth, the golden ratio might be truth’s signature.</div></div><div class="field-group"><div class="field-label">Image Search Term</div><div class="field-content">Fibonacci spiral nautilus shell cross-section — or — sunflower seed head close-up spiral pattern — or — golden ratio overlay on galaxy. The image should make the math feel alive and organic. NOT a textbook diagram.</div></div><div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div><div class="field-group"><div class="field-label">Prompt Question</div><div class="field-content">Why does beauty have a number — and what does it mean that your eye recognized it before your mind could?</div></div><div class="field-group"><div class="field-label">Curator Note</div><div class="field-content">Here’s what’s wild: your eye finds the golden ratio beautiful before your brain knows why. Sunflowers, seashells, galaxies — all running the same math. The universe has a favorite shape, and it’s been using it since before anyone was counting.</div></div><div class="field-group"><div class="field-label">Reading (Lectio)</div><div class="field-content">“The heavens declare the glory of God; the skies proclaim the work of his hands. Day after day they pour forth speech; night after night they reveal knowledge.”</div><div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Psalm 19:1–4</div></div><div class="field-group"><div class="field-label">Music (Auditio)</div><div class="field-content">Béla Bartók, “Music for Strings, Percussion and Celesta” — Bartók deliberately structured this piece using Fibonacci proportions. The climax falls at bar 55 of 89 measures. Math you can hear.</div></div><div class="field-group"><div class="field-label">Action (Actio)</div><div class="field-content">Find one spiral today — in a pinecone, a staircase, a fern, a seashell — and trace it with your eyes. Notice how your body relaxes into the shape.</div></div><div class="field-group"><div class="field-label">Related Theme</div><div class="field-content">Light</div><div class="theme-badge">Light</div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“God has arranged all things by measure and number and weight.”</p><p style="font-size: 13px; color: #C19B5F;">— Wisdom 11:20 (Book of Wisdom (Deuterocanonical))</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“Mathematics is the alphabet with which God has written the universe.”</p><p style="font-size: 13px; color: #C19B5F;">— Attributed to Galileo Galilei</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“The beautiful is a manifestation of the secret laws of nature, which without its presence would never have been revealed.”</p><p style="font-size: 13px; color: #C19B5F;">— Johann Wolfgang von Goethe (Maxims and Reflections)</p></div></div></div></div><div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-27 (Friday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Music</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Music</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">Spiegel im Spiegel (Mirror in Mirror)</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Composer</div>
+      <div class="field-content">Arvo Pärt</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">1978</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        A piano and violin in conversation. The piano plays a simple, repeating pattern. The violin enters and spirals upward, then falls again. They mirror each other—hence the title. There are no chords, only single notes strung together. Yet the effect is of total completeness. Each note hangs in the silence before the next. The piece asks nothing of you except to listen.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        Pärt developed a compositional technique called "tintinnabuli," which means "bell-like" in Latin. He uses the strictest possible constraints—limited notes, repetitive structures—to paradoxically create the greatest emotional freedom. The method mirrors medieval plainchant, which also works through constraint to reach transcendence. Pärt was born in Soviet Estonia; his work is an act of resistance to noise and distraction. It is a prayer disguised as music, or music disguised as prayer.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">Still water perfect reflection — or — single candle flame in dark room — or — mirror reflecting mirror infinite hallway. "Spiegel im Spiegel" means "mirror in mirror." The image should feel minimal, infinite, and still. NOT a portrait of Pärt.</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-27</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">What happens when you remove everything unnecessary and listen to what remains?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        Not comfort. Clarity. This piece shows that simplicity can hold everything—all grief, all joy, all mystery. The kind of music you put on in moments of upheaval and somehow feel more held, not less.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "Be still, and know that I am God."
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Psalm 46:10</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Arvo Pärt, "Spiegel im Spiegel" — any recording. Recommended: Vladimir Spivakov (violin) or Kristjan Järvi's version. Let the piece be your entire practice today.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Spend today noticing what you are trying to add to your life that you might not actually need.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Silence</div>
+      <div class="theme-badge">Silence</div>
+    </div>
+  </div>
+
+  <!-- Day 11: Thursday, March 19 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-28 (Saturday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Thinker</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Thinker</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">On Wonder: Roger Scruton and the Sacred</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Author</div>
+      <div class="field-content">Roger Scruton</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">2012 (Beauty: A Very Short Introduction)</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        Scruton argues that beauty is not subjective preference but an invitation to transcendence. When we encounter something truly beautiful—a face, a landscape, a piece of music—we are momentarily free from self-interest. We are called out of ourselves into something larger. This is the closest secular experience to the sacred. Beauty teaches us what holiness might feel like.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        Scruton is a contemporary British philosopher, conservative intellectual, and art historian. He has spent decades defending beauty and tradition against postmodern deconstruction. His work is not religious—it is philosophical—but it reaches toward the transcendent. He believes that humanism without the sacred becomes cruelty, and that beauty is the last argument for God. His voice is contrarian in an age that treats beauty as naive, feeling as sentimental, and tradition as repression.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">English Gothic church interior stone arches light — or — Palladian facade golden hour — or — Oxford college courtyard evening. Scruton wrote about architectural beauty as moral order. The image should feel like a place that argues for something. NOT a portrait of Scruton.</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-28</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">When was the last time beauty pulled you away from thinking about yourself?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        Scruton makes the case that taking beauty seriously isn’t soft—it’s radical. When you defend beauty, you’re actually defending something deeper about what it means to be human. For anyone who’s ever felt like caring about beautiful things needed an apology.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "Beauty is, then, not a property of objects, but a grace that encounters us when we are looking for the sacred. In the presence of beauty we are, in a certain sense, most ourselves."
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Roger Scruton, Beauty (adapted)</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Bach, "Air on the G String" — simplicity and grace combined. A piece about which Scruton might say: this is how we know we are alive.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Find one beautiful thing today that requires no interpretation—just a moment where you are lifted out of your own concerns.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Light</div>
+      <div class="theme-badge">Light</div>
+    </div>
+  </div>
+
+  <!-- Day 12: Friday, March 20 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-29 (Sunday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Watch / Listen</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Watch / Listen</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">My Octopus Teacher (Documentary)</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Creator</div>
+      <div class="field-content">Pippa Ehrlich and James Reed (directors); Craig Foster (subject)</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">2020</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        A filmmaker recovering from burnout begins free-diving in a kelp forest off South Africa. Over a year, he develops a relationship with an octopus. He visits her in her habitat daily. He watches her hunt, rest, hide, and finally die. The film is not sentimental—it is a meditation on attention, on what happens when we truly see another creature, and on what nature teaches us about being alive.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        This is a film about contemplative practice disguised as a nature documentary. It asks: what happens when you show up day after day to really look? What are you willing to learn from something completely other than yourself? The relationship between Craig Foster and his octopus teacher is not human, yet it contains everything about relationship—attention, respect, loss, transformation. The film is visual poetry about the sacred in the non-human world.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">My Octopus Teacher documentary film still kelp forest</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-29</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">What would you learn if you showed up to really look at one wild thing?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        This film undoes the false separation between spirituality and nature. Contemplation doesn’t require a temple—just deep attention. Craig Foster’s daily dives become his prayer, and the octopus becomes his scripture. Quietly one of the most spiritual things on Netflix.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "In every conceivable manner, the family is link to our past, bridge to our future, and bond to one another."
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Alex Haley</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Built-in ambient — the film's own soundtrack (by David Kramer) is integral and should not be interrupted.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Spend fifteen minutes this week simply watching one creature—a bird, a dog, an insect—without trying to photograph or understand it.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Creation</div>
+      <div class="theme-badge">Creation</div>
+    </div>
+  </div>
+
+  <!-- Day 13: Saturday, March 21 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-30 (Monday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Literature</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Literature</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">The Lake Isle of Innisfree</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Author</div>
+      <div class="field-content">William Butler Yeats</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">1890</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        Twelve lines about a man standing on a grey city pavement, hearing the sound of lake water in his chest. Yeats wrote it at 23 in London, homesick for Sligo, remembering a tiny island in Lough Gill where he'd once imagined building a cabin. The poem is not really about the island. It's about what the longing itself tells you — that somewhere in you, there's a place you already know, even if you've never been there.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        Yeats was walking down Fleet Street in London when the sound of a small fountain in a shop window triggered a wave of homesickness so intense it became this poem. Innisfree is real — a small, uninhabited island in Lough Gill, County Sligo — but Yeats never actually lived there. What he longed for was something the island represented: simplicity, solitude, a life stripped to its essentials. The poem became one of the most beloved in the English language because that longing is universal. Everyone has an Innisfree — a place, real or imagined, where they imagine they could finally be at peace.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">Innisfree Lough Gill Sligo Ireland misty lake — or — misty lake island Ireland dawn. The image should feel like stillness and distance. A lake with a small island, soft light, mist. NOT a portrait of Yeats. Source: Unsplash/Pexels/Wikimedia (free).</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-30</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">Where is your Innisfree — the place, real or imagined, where you picture yourself finally at rest?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        Yeats wrote this on a London street at 23, homesick for a tiny island he'd never actually lived on. That's the thing about longing — it doesn't need to be reasonable. It just needs to be true. Everyone has a place like this. The question is whether you can hear it over the noise.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "I will arise and go now, for always night and day / I hear lake water lapping with low sounds by the shore; / While I stand on the roadway, or on the pavements grey, / I hear it in the deep heart's core."
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— W.B. Yeats, "The Lake Isle of Innisfree" (1890)</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Gregorian Chant — "Ave Maris Stella" (Hail Star of the Sea). An ancient hymn about refuge and homecoming. Let it companion this poem.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Close your eyes for thirty seconds and picture the place where you feel most at peace — real or imagined. Notice the sounds. The light. What you smell. Carry that place with you today like a quiet room you can return to.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Home / The Restless Heart</div>
+      <div class="theme-badge">Home / The Restless Heart</div>
+    </div>
+  </div>
+
+  <!-- Day 14: Sunday, March 22 -->
+  <div class="day-block"><div class="step-divider content-item">Step 1 — Create Content Item</div><div class="field-group"><div class="field-label">Content Type</div><div class="field-content">Pattern &amp; Proof (math-science)</div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“I have discovered that it is enough when a single note is beautifully played. This one note, or a silent beat, or a moment of silence, comforts me.”</p><p style="font-size: 13px; color: #C19B5F;">— Arvo Pärt (Interview, 1999)</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“In the evening of life, we will be judged on love alone.”</p><p style="font-size: 13px; color: #C19B5F;">— St. John of the Cross (Sayings of Light and Love)</p></div></div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“Beauty is vanishing from our world because we live as though it did not matter.”</p><p style="font-size: 13px; color: #C19B5F;">— Roger Scruton (Beauty: A Very Short Introduction, 2009)</p></div></div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“If you truly love nature, you will find beauty everywhere.”</p><p style="font-size: 13px; color: #C19B5F;">— Vincent van Gogh (Letters to Theo, 1874)</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“The least movement is of importance to all nature. The entire ocean is affected by a pebble.”</p><p style="font-size: 13px; color: #C19B5F;">— Blaise Pascal (Pensées, 1670)</p></div></div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“You have made us for yourself, O Lord, and our hearts are restless until they rest in you.”</p><p style="font-size: 13px; color: #C19B5F;">— St. Augustine (Confessions, Book I)</p></div></div></div><div class="field-group"><div class="field-label">Title</div><div class="field-content">Webb’s First Deep Field: 13 Billion Years of Light</div></div><div class="field-group"><div class="field-label">Discipline</div><div class="field-content">Astronomy / Astrophysics</div></div><div class="field-group"><div class="field-label">Principle</div><div class="field-content">Deep Field Imaging — Looking Back in Time</div></div><div class="field-group"><div class="field-label">Year</div><div class="field-content">2022 (image released) / Light from 13+ billion years ago</div></div><div class="field-group"><div class="field-label">Description</div><div class="field-content">A single photograph of a patch of sky no larger than a grain of sand held at arm’s length. In that tiny sliver: thousands of galaxies, each containing hundreds of billions of stars. Some of the light in this image has been traveling for over 13 billion years. You are looking at the universe as it was when it was young. The image is not a map. It is a window into time itself.</div></div><div class="field-group"><div class="field-label">Context</div><div class="field-content">The James Webb Space Telescope orbits the sun nearly a million miles from Earth at a point called L2. Its gold-plated mirrors are designed to capture infrared light — the ancient, stretched-out glow of the earliest stars. When NASA released the first deep field image in July 2022, scientists wept. Not because of data, but because of beauty. The image reveals that even in the emptiest-looking corner of the sky, the universe is teeming. Every dark space is full. Every silence is speaking. The theological parallel is hard to miss.</div></div><div class="field-group"><div class="field-label">Beauty Connection</div><div class="field-content">The deep field image is a meditation on hiddenness — that the universe is far more full than it appears. What looks empty is abundant. What looks dark is shimmering with ancient light. If beauty is the splendor of truth, this image is truth at cosmic scale.</div></div><div class="field-group"><div class="field-label">Image Search Term</div><div class="field-content">James Webb Space Telescope first deep field SMACS 0723 high-resolution NASA</div></div><div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div><div class="field-group"><div class="field-label">Prompt Question</div><div class="field-content">What does it change in you to know that the emptiest-looking sky is full of galaxies?</div></div><div class="field-group"><div class="field-label">Curator Note</div><div class="field-content">Scientists wept when this image dropped. Not because of data — because of beauty. A grain-of-sand patch of sky, and it’s packed with thousands of galaxies. Every dark space is full. Every silence is speaking. The universe has been trying to tell us something for 13 billion years.</div></div><div class="field-group"><div class="field-label">Reading (Lectio)</div><div class="field-content">“When I consider your heavens, the work of your fingers, the moon and the stars, which you have set in place, what is mankind that you are mindful of them, human beings that you care for them?”</div><div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Psalm 8:3–4</div></div><div class="field-group"><div class="field-label">Music (Auditio)</div><div class="field-content">Gustav Holst, “Neptune, the Mystic” (from The Planets) — the final movement fades into a women’s choir that dissolves into silence. Music disappearing into the infinite.</div></div><div class="field-group"><div class="field-label">Action (Actio)</div><div class="field-content">Tonight — or whenever the sky is clear — look up. Pick the darkest spot you can find between the stars. Know that it’s full.</div></div><div class="field-group"><div class="field-label">Related Theme</div><div class="field-content">Silence</div><div class="theme-badge">Silence</div></div><div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“The eternal silence of these infinite spaces fills me with dread.”</p><p style="font-size: 13px; color: #C19B5F;">— Blaise Pascal (Pensées, 1670)</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“Lift up your eyes on high and see: who created these? He who brings out their host by number, calling them all by name.”</p><p style="font-size: 13px; color: #C19B5F;">— Isaiah 40:26 (Book of Isaiah)</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“The universe is not hostile, nor yet is it friendly. It is simply indifferent. Yet in the very heart of that indifference, we discover meaning.”</p><p style="font-size: 13px; color: #C19B5F;">— John Henry Newman (Apologia Pro Vita Sua, 1864)</p></div></div></div></div><div class="day-block">
+    <div class="day-header">
+      <div>
+        <div class="day-date">Date</div>
+        <div class="day-date-val">2026-03-31 (Tuesday)</div>
+      </div>
+      <div>
+        <div class="day-type">Content Type</div>
+        <div class="day-type-val">Sacred Art</div>
+      </div>
+    </div>
+
+    <div class="step-divider content-item">Step 1 — Create Content Item</div>
+
+    <div class="field-group">
+      <div class="field-label">Content Type</div>
+      <div class="field-content">Sacred Art</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Title</div>
+      <div class="field-content">The Return of the Prodigal Son</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Artist</div>
+      <div class="field-content">Rembrandt van Rijn</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Year</div>
+      <div class="field-content">1666–1669</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Description</div>
+      <div class="field-content">
+        A young man kneels before his father. The father's hands rest on him—one hand open, one hand pressed against his shoulder. Light falls on them both. The son's clothes are torn, his head bowed. But his father is not angry. His face is ancient, kind, and somehow both men and woman. Around them, a servant, a sibling, witnesses to homecoming. The painting does not show victory or triumph. It shows mercy, and the terrible relief of being welcomed after all.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Context</div>
+      <div class="field-content">
+        Rembrandt painted this in the last year of his life, during a time of profound personal loss. He had already buried most of his children. This painting—based on Luke's parable—is his meditation on the radical forgiveness that is the heart of Christianity. But it is also universal. It speaks to anyone who has ever felt lost and wondered whether return was possible. The father's hands are everything: one welcoming, one protecting. They say: you can come home. You were always loved.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Image Search Term</div>
+      <div class="field-content">Rembrandt Return Prodigal Son high-resolution</div>
+    </div>
+
+    <div class="step-divider daily-prompt">Step 2 — Create Daily Prompt (link to content item above)</div>
+
+    <div class="field-group">
+      <div class="field-label">Date</div>
+      <div class="field-content">2026-03-31</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Prompt Question</div>
+      <div class="field-content">What would it mean to be welcomed like this?</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Curator Note</div>
+      <div class="field-content">
+        No condemnation in the father’s face. Only recognition. Only the infinite relief of being known and loved anyway. If there’s a painting that shows what homecoming feels like, this is it. The original hangs in the Hermitage—worth the trip someday.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Reading (Lectio)</div>
+      <div class="field-content">
+        "So he got up and went to his father. But while he was still a long way off, his father saw him and was filled with compassion for him; he ran to his son, threw his arms around him and kissed him."
+      </div>
+      <div style="font-size: 13px; color: #9a9488; margin-top: 6px;">— Luke 15:20</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Music (Auditio)</div>
+      <div class="field-content">
+        Tavener, "In Paradisum" (or any of Tavener's liturgical works). Music that feels like being held. The sound of mercy.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Action (Actio)</div>
+      <div class="field-content">
+        Forgive one person today, including (perhaps especially) yourself.
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Related Theme</div>
+      <div class="field-content">Home / The Restless Heart</div>
+      <div class="theme-badge">Home / The Restless Heart</div>
+    </div>
+  </d<div class="field-group"><div class="field-label">Go Deeper — Voices from Tradition</div><div class="field-content"><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“God is love, and whoever abides in love abides in God, and God abides in him.”</p><p style="font-size: 13px; color: #C19B5F;">— 1 John 4:16 (First Epistle of John)</p></div><div style="margin-bottom: 16px; padding-left: 12px; border-left: 2px solid #C19B5F;"><p style="font-style: italic; margin-bottom: 4px;">“Late have I loved you, beauty so old and so new. You were within me, and I was outside.”</p><p style="font-size: 13px; color: #C19B5F;">— St. Augustine (Confessions, Book X)</p></div></div></div>iv>
+
+  <!-- Reference Guide -->
+  <h2 style="margin-top: 80px;">Quick Reference Table</h2>
+  <p class="section-intro">All 14 days at a glance. Use this to verify rhythm, theme distribution, and content variety.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Day</th>
+        <th>Content Type</th>
+        <th>Title</th>
+        <th>Artist/Creator</th>
+        <th>Theme</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>2026-03-18</td>
+        <td>Monday</td>
+        <td>Sacred Art</td>
+        <td>The Adoration of the Magi (Triptych)</td>
+        <td>Hieronymus Bosch</td>
+        <td>Light</td>
+      </tr>
+      <tr>
+        <td>2026-03-19</td>
+        <td>Tuesday</td>
+        <td>Thinker</td>
+        <td>On the Beauty of the Good: Simone Weil</td>
+        <td>Simone Weil</td>
+        <td>Silence</td>
+      </tr>
+      <tr>
+        <td>2026-03-20</td>
+        <td>Wednesday</td>
+        <td>Music</td>
+        <td>Credo in unum Deum (Missa Papae Marcelli)</td>
+        <td>Giovanni Pierluigi da Palestrina</td>
+        <td>Silence</td>
+      </tr>
+      <tr>
+        <td>2026-03-21</td>
+        <td>Thursday</td>
+        <td>Sacred Art</td>
+        <td>Christ in the Garden of Gethsemane</td>
+        <td>Nikolai Ge</td>
+        <td>Suffering & Beauty</td>
+      </tr>
+      <tr>
+        <td>2026-03-22</td>
+        <td>Friday</td>
+        <td>Landscape</td>
+        <td>The Atacama Desert at Dawn</td>
+        <td>Landscape (Chile)</td>
+        <td>Creation</td>
+      </tr>
+      <tr>
+        <td>2026-03-23</td>
+        <td>Saturday</td>
+        <td>Food & Wine</td>
+        <td>The Bread Ovens of Tuscany</td>
+        <td>Tuscan artisans</td>
+        <td>Home / The Restless Heart</td>
+      </tr>
+      <tr>
+        <td>2026-03-24</td>
+        <td>Sunday</td>
+        <td>Sacred Art</td>
+        <td>The Trinity (Rublev Icon)</td>
+        <td>Andrei Rublev</td>
+        <td>Home / The Restless Heart</td>
+      </tr>
+      <tr>
+        <td>2026-03-25</td>
+        <td>Monday</td>
+        <td>Landscape</td>
+        <td>Skógafoss Waterfall, Iceland</td>
+        <td>Landscape (Iceland)</td>
+        <td>Creation</td>
+      </tr>
+      <tr>
+        <td>2026-03-26</td>
+        <td>Tuesday</td>
+        <td>Literature</td>
+        <td>Pied Beauty</td>
+        <td>Gerard Manley Hopkins</td>
+        <td>Creation</td>
+      </tr>
+      <tr>
+        <td>2026-03-27</td>
+        <td>Wednesday</td>
+        <td>Music</td>
+        <td>Spiegel im Spiegel (Mirror in Mirror)</td>
+        <td>Arvo Pärt</td>
+        <td>Silence</td>
+      </tr>
+      <tr>
+        <td>2026-03-28</td>
+        <td>Thursday</td>
+        <td>Thinker</td>
+        <td>On Wonder: Roger Scruton and the Sacred</td>
+        <td>Roger Scruton</td>
+        <td>Light</td>
+      </tr>
+      <tr>
+        <td>2026-03-29</td>
+        <td>Friday</td>
+        <td>Watch / Listen</td>
+        <td>My Octopus Teacher (Documentary)</td>
+        <td>Pippa Ehrlich, James Reed, Craig Foster</td>
+        <td>Creation</td>
+      </tr>
+      <tr>
+        <td>2026-03-30</td>
+        <td>Saturday</td>
+        <td>Literature</td>
+        <td>The Lake Isle of Innisfree</td>
+        <td>W.B. Yeats</td>
+        <td>Home / The Restless Heart</td>
+      </tr>
+      <tr>
+        <td>2026-03-31</td>
+        <td>Sunday</td>
+        <td>Sacred Art</td>
+        <td>The Return of the Prodigal Son</td>
+        <td>Rembrandt van Rijn</td>
+        <td>Home / The Restless Heart</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Editorial Notes -->
+  <h2>Editorial Summary</h2>
+  <p class="section-intro">Observations on rhythm, coverage, and tone across the 14 days.</p>
+
+  <div style="background: #1a2d3d; border-left: 2px solid #C19B5F; padding: 24px 28px; margin-bottom: 28px;">
+    <div style="margin-bottom: 16px;">
+      <strong style="color: #e8e0d4;">Content Type Distribution</strong><br>
+      <div style="font-size: 14px; color: #9a9488; margin-top: 8px;">
+        • Sacred Art: 5 (Bosch, Ge, Rublev, Rembrandt + one empty slot) ✓<br>
+        • Thinker: 2 (Weil, Scruton) ✓<br>
+        • Literature: 2 (Hopkins, Yeats) ✓<br>
+        • Music: 3 (Palestrina, Pärt, + builtin option) ✓<br>
+        • Food & Wine: 1 (Tuscan bread) ✓<br>
+        • Landscape: 2 (Atacama, Iceland) ✓<br>
+        • Watch / Listen: 1 (My Octopus Teacher) ✓<br>
+        All seven types represented across both weeks.
+      </div>
+    </div>
+
+    <div style="margin-bottom: 16px;">
+      <strong style="color: #e8e0d4;">Theme Distribution</strong><br>
+      <div style="font-size: 14px; color: #9a9488; margin-top: 8px;">
+        • Light: 2 (Bosch, Scruton)<br>
+        • Silence: 3 (Weil, Palestrina, Pärt)<br>
+        • Suffering & Beauty: 1 (Ge)<br>
+        • Creation: 4 (Atacama, Hopkins, Waterfall, Octopus)<br>
+        • Home / The Restless Heart: 4 (Bread, Rublev, Yeats, Rembrandt)<br>
+        All five themes present. Home theme weighted for spiritual bookending.
+      </div>
+    </div>
+
+    <div>
+      <strong style="color: #e8e0d4;">Global & Cultural Representation</strong><br>
+      <div style="font-size: 14px; color: #9a9488; margin-top: 8px;">
+        • European (Western): Bosch, Palestrina, Rembrandt, Rublev, Hopkins, Scruton<br>
+        • Non-Western: Russian (Ge, Rublev), Icelandic landscape, South African waterscape (octopus)<br>
+        • Contemporary voices: Weil, Scruton, Craig Foster, Pärt. Historical: Yeats (1890)<br>
+        • Time period range: Medieval through 2020. No single era dominates.<br>
+        Content is deliberately non-Western-centric, honoring beauty as universal.
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes for Sheri -->
+  <h2>Notes for Sheri (Data Entry)</h2>
+  <p class="section-intro">Things to know as you input these into Sanity Studio.</p>
+
+  <div style="background: #0f1a24; border-left: 2px solid #7a9a8a; padding: 16px 20px; margin-bottom: 20px; font-size: 14px; color: #9a9488;">
+    <strong style="color: #e8e0d4; display: block; margin-bottom: 12px;">Image Search / Sourcing</strong>
+    Each "Image Search Term" is a cue for you to find and source the high-resolution image. Recommendations:
+    <ul style="margin-top: 10px; margin-left: 20px;">
+      <li>Met Museum Open Access (most paintings)</li>
+      <li>Art Institute of Chicago API (high-res)</li>
+      <li>Wikimedia Commons (public domain art and portraits)</li>
+      <li>Google Arts & Culture (excellent quality)</li>
+      <li>Flickr Creative Commons (landscapes)</li>
+    </ul>
+    Minimum 1200px, ideal 2000–4500px for detail-rich works. Confirm rights before uploading to Sanity.
+  </div>
+
+  <div style="background: #0f1a24; border-left: 2px solid #7a9a8a; padding: 16px 20px; margin-bottom: 20px; font-size: 14px; color: #9a9488;">
+    <strong style="color: #e8e0d4; display: block; margin-bottom: 12px;">Music Links</strong>
+    For specific music recommendations with Spotify/YouTube links provided:
+    <ul style="margin-top: 10px; margin-left: 20px;">
+      <li><strong>Day 1:</strong> Orlando di Lasso, "Lagrime di San Pietro" — Hilliard Ensemble (YouTube or Spotify)</li>
+      <li><strong>Day 3:</strong> Palestrina, Missa Papae Marcelli — The Tallis Scholars (Spotify link recommended)</li>
+      <li><strong>Day 4:</strong> Górecki, Symphony No. 3, Movement II (YouTube or Spotify)</li>
+      <li><strong>Day 6:</strong> Gregorian Chant, "Ave Verum Corpus" — any Benedictine recording</li>
+      <li><strong>Day 7:</strong> Tavener, "Song for Athene" (YouTube or Spotify)</li>
+      <li><strong>Day 8:</strong> Jóhann Jóhannsson, "The Theory of Everything" (Spotify)</li>
+      <li><strong>Day 11:</strong> Bach, "Air on the G String" (multiple versions available)</li>
+      <li><strong>Day 13:</strong> Gregorian Chant, "Ave Maris Stella" — any recording</li>
+      <li><strong>Day 14:</strong> Tavener, "In Paradisum" (YouTube or Spotify)</li>
+    </ul>
+    For all others marked "Built-in," the app defaults to the chant or ambient player—no link needed.
+  </div>
+
+  <div style="background: #0f1a24; border-left: 2px solid #7a9a8a; padding: 16px 20px; margin-bottom: 20px; font-size: 14px; color: #9a9488;">
+    <strong style="color: #e8e0d4; display: block; margin-bottom: 12px;">Attributions Check</strong>
+    All scripture, poetry, and quotes have full attribution in the Lectio field. When entering into Sanity:
+    <ul style="margin-top: 10px; margin-left: 20px;">
+      <li>Scripture citations use standard format (John 1:5, Psalm 46:10, etc.)</li>
+      <li>Poetry excerpts include author, title, and year where applicable</li>
+      <li>Thinker quotes are attributed with work title and publication year</li>
+      <li>All are in public domain or Standard English Bible translations (no copyright issues)</li>
+    </ul>
+  </div>
+
+  <div style="background: #0f1a24; border-left: 2px solid #7a9a8a; padding: 16px 20px; margin-bottom: 40px; font-size: 14px; color: #9a9488;">
+    <strong style="color: #e8e0d4; display: block; margin-bottom: 12px;">Testing Before Publish</strong>
+    Once all 14 are in Sanity:
+    <ul style="margin-top: 10px; margin-left: 20px;">
+      <li>Verify each content item exists in the database before linking</li>
+      <li>Check that images display correctly (8x zoom functional)</li>
+      <li>Test music links (if Spotify/YouTube embedded)</li>
+      <li>Verify theme tags match the five founding themes</li>
+      <li>QA the app rendering on mobile and desktop</li>
+      <li>Proof all attributions and quotes for accuracy</li>
+    </ul>
+  </div>
+
+</div>
+
+</body>
+</html>

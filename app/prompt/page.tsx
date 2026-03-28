@@ -525,7 +525,7 @@ function DailyPromptPageInner() {
                     )}
                   </button>
                   <div className="flex-grow min-w-0">
-                    <p className="italic truncate" style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.25rem" }}>
+                    <p className="italic truncate" style={{ color: C.cream, fontSize: "0.95rem" }}>
                       {prompt.auditio.title}
                     </p>
                     {prompt.auditio.artist && (
@@ -537,7 +537,7 @@ function DailyPromptPageInner() {
                 /* ── External reference — no play button ── */
                 <div className="flex items-start gap-4">
                   <div className="flex-grow min-w-0">
-                    <p className="italic" style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.25rem" }}>
+                    <p className="italic" style={{ color: C.cream, fontSize: "0.95rem" }}>
                       {prompt.auditio.title}
                     </p>
                     {prompt.auditio.artist && (
@@ -556,7 +556,7 @@ function DailyPromptPageInner() {
               ) : (
                 /* ── Title only — no playback ── */
                 <div>
-                  <p className="italic" style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.25rem" }}>
+                  <p className="italic" style={{ color: C.cream, fontSize: "0.95rem" }}>
                     {prompt.auditio.title}
                   </p>
                   {prompt.auditio.artist && (

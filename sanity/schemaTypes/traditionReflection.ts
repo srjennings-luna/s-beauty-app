@@ -19,6 +19,10 @@ export default defineType({
           {title: 'Church Father', value: 'church-father'},
           {title: 'Saint', value: 'saint'},
           {title: 'Pope', value: 'pope'},
+          {title: 'Doctor of the Church', value: 'doctor'},
+          {title: 'Theologian', value: 'theologian'},
+          {title: 'Mystic', value: 'mystic'},
+          {title: 'Philosopher', value: 'philosopher'},
         ],
         layout: 'radio',
       },
@@ -108,7 +112,7 @@ export default defineType({
   preview: {
     select: {title: 'title', source: 'source', authorType: 'authorType'},
     prepare({title, source, authorType}: {title?: string; source?: string; authorType?: string}) {
-      const labels: Record<string, string> = { 'church-father': 'Church Father', 'saint': 'Saint', 'pope': 'Pope' }
+      const labels: Record<string, string> = { 'church-father': 'Church Father', 'saint': 'Saint', 'pope': 'Pope', 'doctor': 'Doctor of the Church', 'theologian': 'Theologian', 'mystic': 'Mystic', 'philosopher': 'Philosopher' }
       const typeLabel = (authorType && labels[authorType]) || ''
       return {
         title: title || 'Untitled',

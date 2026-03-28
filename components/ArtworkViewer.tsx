@@ -145,7 +145,7 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
                     Scripture
                   </h4>
                   <div className="p-3" style={{ background: "rgba(253,246,232,0.06)", borderLeft: "2px solid #C19B5F" }}>
-                    <p className="italic text-sm leading-relaxed" style={{ color: "rgba(253,246,232,0.8)", fontFamily: "var(--font-cormorant)" }}>
+                    <p className="italic text-sm leading-relaxed" style={{ color: "rgba(253,246,232,0.8)" }}>
                       &ldquo;{artwork.scripturePairing.verse}&rdquo;
                     </p>
                     <p className="text-xs mt-2" style={{ color: "#C19B5F" }}>
@@ -162,7 +162,7 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
                     Quote
                   </h4>
                   <div className="p-3" style={{ background: "rgba(253,246,232,0.06)", borderLeft: "2px solid #C19B5F" }}>
-                    <p className="italic text-sm leading-relaxed" style={{ color: "rgba(253,246,232,0.8)", fontFamily: "var(--font-cormorant)" }}>
+                    <p className="italic text-sm leading-relaxed" style={{ color: "rgba(253,246,232,0.8)" }}>
                       &ldquo;{artwork.quote.text}&rdquo;
                     </p>
                     <p className="text-xs mt-2" style={{ color: "#C19B5F" }}>

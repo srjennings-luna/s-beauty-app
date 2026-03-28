@@ -146,14 +146,14 @@ function StepOpen({ day }: { day: JourneyDay }) {
           {day.openText ? (
             <p
               className="italic leading-relaxed"
-              style={{ color: C.creamDim, fontFamily: "var(--font-cormorant)", fontSize: "1.05rem", lineHeight: "1.65" }}
+              style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.75" }}
             >
               {day.openText}
             </p>
           ) : (
             <p
               className="italic leading-relaxed"
-              style={{ color: C.creamDim, fontFamily: "var(--font-cormorant)", fontSize: "1.05rem", lineHeight: "1.65" }}
+              style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.75" }}
             >
               Sit with this image. Let your eyes explore without reaching for meaning. What do you notice first?
             </p>
@@ -207,7 +207,7 @@ function CircularAudioPlayer({
         >
           <div className="flex-1 min-w-0 mr-3">
             {title && (
-              <p className="italic truncate" style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.05rem" }}>
+              <p className="italic truncate" style={{ color: C.cream, fontSize: "0.95rem" }}>
                 {title}
               </p>
             )}
@@ -258,7 +258,7 @@ function CircularAudioPlayer({
       </button>
       <div className="flex-grow min-w-0">
         {title && (
-          <p className="italic truncate" style={{ color: C.cream, fontFamily: "var(--font-cormorant)", fontSize: "1.15rem" }}>
+          <p className="italic truncate" style={{ color: C.cream, fontSize: "0.95rem" }}>
             {title}
           </p>
         )}
@@ -506,13 +506,12 @@ function StepEncounter({ day }: { day: JourneyDay }) {
             {day.lectio?.philosophyQuote && (
               <div className="mb-4" style={{ borderLeft: `2px solid ${C.sageMuted}`, paddingLeft: "16px" }}>
                 <p
-                  className="italic leading-relaxed"
+                  className="italic"
                   style={{
                     color: C.cream,
-                    // Cormorant only for short quotes — Open Sans for accessibility on longer text
-                    fontFamily: day.lectio.philosophyQuote.length <= 150 ? "var(--font-cormorant)" : "var(--font-open-sans)",
-                    fontSize: day.lectio.philosophyQuote.length <= 150 ? "1.1rem" : "0.95rem",
-                    lineHeight: "1.6",
+                    fontFamily: "var(--font-cormorant)",
+                    fontSize: "clamp(1.3rem, 4.5vw, 1.55rem)",
+                    lineHeight: "1.4",
                   }}
                 >
                   &ldquo;{day.lectio.philosophyQuote}&rdquo;
@@ -528,12 +527,12 @@ function StepEncounter({ day }: { day: JourneyDay }) {
             {day.lectio?.scriptureVerse && (
               <div style={{ borderLeft: `2px solid ${C.gold}`, paddingLeft: "16px" }}>
                 <p
-                  className="italic leading-relaxed"
+                  className="italic"
                   style={{
                     color: C.cream,
-                    fontFamily: day.lectio.scriptureVerse.length <= 150 ? "var(--font-cormorant)" : "var(--font-open-sans)",
-                    fontSize: day.lectio.scriptureVerse.length <= 150 ? "1.1rem" : "0.95rem",
-                    lineHeight: "1.6",
+                    fontFamily: "var(--font-cormorant)",
+                    fontSize: "clamp(1.3rem, 4.5vw, 1.55rem)",
+                    lineHeight: "1.4",
                   }}
                 >
                   {day.lectio.scriptureVerse}
@@ -595,8 +594,8 @@ function StepBreathe({ day }: { day: JourneyDay }) {
               className="italic text-center px-10 leading-relaxed"
               style={{
                 color: "rgba(253,246,232,0.55)",
-                fontFamily: "var(--font-cormorant)",
-                fontSize: "1rem",
+                fontSize: "0.875rem",
+                letterSpacing: "0.02em",
               }}
             >
               Sit with this image and let your eyes explore
@@ -606,8 +605,7 @@ function StepBreathe({ day }: { day: JourneyDay }) {
                 className="text-center px-10 leading-relaxed"
                 style={{
                   color: "rgba(253,246,232,0.42)",
-                  fontFamily: "var(--font-cormorant)",
-                  fontSize: "0.9rem",
+                  fontSize: "0.875rem",
                   fontStyle: "italic",
                   marginTop: "6px",
                 }}

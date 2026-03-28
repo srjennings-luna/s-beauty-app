@@ -1,0 +1,2009 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "e.g., \"Light\"",
+        "name": "title",
+        "type": "string",
+        "title": "Theme Name"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "URL-safe version. e.g., \"light\"",
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "e.g., \"What does light reveal that darkness hides?\"",
+        "name": "question",
+        "type": "string",
+        "title": "Central Question"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "2–3 sentence description of the theme for the Explore/Journey UI",
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "description": "Hex color for UI pills and theme cards. e.g., \"#C19B5F\"",
+        "name": "color",
+        "type": "string"
+      },
+      {
+        "description": "Display order in theme lists. Initial: 1–5.",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Optional hero image for theme cards in Explore UI",
+        "name": "image",
+        "type": "image",
+        "title": "Hero Image"
+      }
+    ],
+    "name": "theme",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Sacred Art & Architecture",
+              "value": "sacred-art"
+            },
+            {
+              "title": "Thinkers & Quotes",
+              "value": "thinker"
+            },
+            {
+              "title": "Literature & Poetry",
+              "value": "literature"
+            },
+            {
+              "title": "Music",
+              "value": "music"
+            },
+            {
+              "title": "Food & Wine",
+              "value": "food-wine"
+            },
+            {
+              "title": "Natural Landscape",
+              "value": "landscape"
+            },
+            {
+              "title": "Watch & Listen",
+              "value": "watch-listen"
+            },
+            {
+              "title": "Pattern & Proof",
+              "value": "math-science"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "sacred-art",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "sacred-art",
+                  "thinker",
+                  "literature",
+                  "music",
+                  "food-wine",
+                  "landscape",
+                  "watch-listen",
+                  "math-science"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "What kind of content is this?",
+        "name": "contentType",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "e.g., \"Pietà\" or \"Into Great Silence\"",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "description": "e.g., \"Michelangelo Buonarroti\"",
+        "hidden": "conditional",
+        "name": "artist",
+        "type": "string",
+        "title": "Artist / Creator"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "e.g., \"St. Augustine\", \"Roger Scruton\"",
+        "hidden": "conditional",
+        "name": "thinkerName",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "e.g., \"Gerard Manley Hopkins\"",
+        "hidden": "conditional",
+        "name": "author",
+        "type": "string"
+      },
+      {
+        "description": "e.g., \"Arvo Pärt\", \"J.S. Bach\"",
+        "hidden": "conditional",
+        "name": "composer",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Which themes this content speaks to (min 1).",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "theme"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to theme"
+          }
+        ],
+        "name": "themes",
+        "type": "array"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Short description for cards and previews. 1–2 sentences.",
+        "name": "description",
+        "type": "text",
+        "title": "Brief Description"
+      },
+      {
+        "rows": 6,
+        "description": "Deeper context. Why this matters, what to notice, how it connects to the tradition.",
+        "name": "context",
+        "type": "text"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "High-res image. Min 1200px. Every content item must have an image.",
+        "name": "image",
+        "type": "image"
+      },
+      {
+        "description": "e.g., \"1498–1499\" or \"c. 1600\"",
+        "hidden": "conditional",
+        "name": "year",
+        "type": "string",
+        "title": "Year / Date Range"
+      },
+      {
+        "description": "e.g., \"Oil on canvas\", \"Marble\", \"Fresco\"",
+        "hidden": "conditional",
+        "name": "medium",
+        "type": "string"
+      },
+      {
+        "fields": [
+          {
+            "rows": 3,
+            "name": "verse",
+            "type": "text",
+            "title": "Scripture Verse"
+          },
+          {
+            "description": "e.g., \"Lamentations 1:12\"",
+            "name": "reference",
+            "type": "string",
+            "title": "Scripture Reference"
+          }
+        ],
+        "hidden": "conditional",
+        "name": "scripturePairing",
+        "type": "object"
+      },
+      {
+        "description": "The primary quote. Source = work title.",
+        "fields": [
+          {
+            "rows": 3,
+            "name": "text",
+            "type": "text",
+            "title": "Quote Text"
+          },
+          {
+            "description": "e.g., \"Confessions, Book X\"",
+            "name": "source",
+            "type": "string"
+          },
+          {
+            "name": "attribution",
+            "type": "string",
+            "title": "Attribution (legacy)"
+          }
+        ],
+        "hidden": "conditional",
+        "name": "quote",
+        "type": "object",
+        "title": "Primary Quote"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Ancient",
+              "value": "ancient"
+            },
+            {
+              "title": "Patristic",
+              "value": "patristic"
+            },
+            {
+              "title": "Medieval",
+              "value": "medieval"
+            },
+            {
+              "title": "Renaissance",
+              "value": "renaissance"
+            },
+            {
+              "title": "Modern",
+              "value": "modern"
+            },
+            {
+              "title": "Contemporary",
+              "value": "contemporary"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "description": "Historical era of the thinker",
+        "hidden": "conditional",
+        "name": "era",
+        "type": "string"
+      },
+      {
+        "description": "e.g., \"Platonist\", \"Thomist\", \"Phenomenologist\"",
+        "hidden": "conditional",
+        "name": "tradition",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "e.g., \"God's Grandeur\" or \"The Brothers Karamazov\"",
+        "hidden": "conditional",
+        "name": "workTitle",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Poetry",
+              "value": "poetry"
+            },
+            {
+              "title": "Novel",
+              "value": "novel"
+            },
+            {
+              "title": "Essay",
+              "value": "essay"
+            },
+            {
+              "title": "Letter",
+              "value": "letter"
+            },
+            {
+              "title": "Homily",
+              "value": "homily"
+            },
+            {
+              "title": "Prayer",
+              "value": "prayer"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "hidden": "conditional",
+        "name": "literaryForm",
+        "type": "string"
+      },
+      {
+        "rows": 8,
+        "description": "A passage or stanza. Must be public domain or properly licensed.",
+        "hidden": "conditional",
+        "name": "excerpt",
+        "type": "text"
+      },
+      {
+        "description": "e.g., \"Hilliard Ensemble\"",
+        "hidden": "conditional",
+        "name": "performer",
+        "type": "string"
+      },
+      {
+        "description": "Approximate listening/viewing time",
+        "hidden": "conditional",
+        "name": "durationMinutes",
+        "type": "number",
+        "title": "Duration (minutes)"
+      },
+      {
+        "description": "Optional audio pairing for any content type. Use the file upload for in-app playback (preferred). Use the URL for direct MP3 links. External link (YouTube, Spotify) opens outside the app.",
+        "fields": [
+          {
+            "options": {
+              "accept": "audio/*"
+            },
+            "description": "Upload an MP3 — plays directly in KALLOS. Preferred over URL.",
+            "name": "audioFile",
+            "type": "file",
+            "title": "Audio File Upload (in-app playback)"
+          },
+          {
+            "description": "Direct MP3 link (e.g. archive.org) — plays in-app. Use if file upload is not possible.",
+            "name": "audioUrl",
+            "type": "string",
+            "title": "Audio URL (in-app playback)"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "YouTube, Spotify, or Apple Music. Only used if no file or audio URL is provided. Opens outside the app.",
+            "name": "externalUrl",
+            "type": "url",
+            "title": "External Link (reference only)"
+          }
+        ],
+        "name": "audioSource",
+        "type": "object"
+      },
+      {
+        "description": "e.g., \"Cistercian monastic brewing\", \"3rd-generation Neapolitan bakery\"",
+        "hidden": "conditional",
+        "name": "craftTradition",
+        "type": "string"
+      },
+      {
+        "rows": 3,
+        "description": "What does this point toward? The beauty-connection.",
+        "hidden": "conditional",
+        "name": "pointsToward",
+        "type": "text"
+      },
+      {
+        "rows": 4,
+        "description": "How this landscape speaks to creation theology. Paired thinker/scripture connection.",
+        "hidden": "conditional",
+        "name": "creationTheology",
+        "type": "text"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Video",
+              "value": "video"
+            },
+            {
+              "title": "Podcast",
+              "value": "podcast"
+            },
+            {
+              "title": "Documentary",
+              "value": "documentary"
+            },
+            {
+              "title": "Lecture",
+              "value": "lecture"
+            }
+          ],
+          "layout": "radio"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "video",
+                  "podcast",
+                  "documentary",
+                  "lecture"
+                ]
+              },
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "hidden": "conditional",
+        "name": "mediaType",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              },
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "YouTube, Vimeo, or podcast URL",
+        "hidden": "conditional",
+        "name": "mediaUrl",
+        "type": "url",
+        "title": "Media URL"
+      },
+      {
+        "description": "If part of a series. e.g., \"Bishop Barron's Word on Fire\"",
+        "hidden": "conditional",
+        "name": "series",
+        "type": "string"
+      },
+      {
+        "description": "e.g., Mathematics, Physics, Biology, Astronomy, Geometry",
+        "hidden": "conditional",
+        "name": "discipline",
+        "type": "string"
+      },
+      {
+        "description": "The key concept, e.g., \"Golden Ratio\", \"Fibonacci Sequence\", \"Double Helix\"",
+        "hidden": "conditional",
+        "name": "principle",
+        "type": "string",
+        "title": "Principle or Discovery"
+      },
+      {
+        "rows": 3,
+        "description": "How does this reveal beauty, truth, or the divine? The contemplative thread.",
+        "hidden": "conditional",
+        "name": "beautyConnection",
+        "type": "text"
+      },
+      {
+        "description": "1–3 questions for contemplation.",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "reflectionQuestions",
+        "type": "array"
+      },
+      {
+        "rows": 3,
+        "description": "Why this was chosen. The human voice behind the curation.",
+        "name": "curatorNote",
+        "type": "text"
+      },
+      {
+        "rows": 6,
+        "description": "Optional. A traditional Catholic prayer shown in the expandable \"Traditional Prayer\" drawer on the Pray step of Visio Divina. Leave blank to use the built-in fallback prayer.",
+        "name": "traditionalPrayer",
+        "type": "text",
+        "title": "Traditional Prayer (Pray step)"
+      },
+      {
+        "description": "Attribution for the prayer above, e.g. \"Act of Adoration, Traditional\" or \"St. Francis of Assisi\". Shown below the prayer text.",
+        "hidden": "conditional",
+        "name": "traditionalPrayerSource",
+        "type": "string",
+        "title": "Traditional Prayer — Source"
+      },
+      {
+        "description": "Link specific tradition reflections to this content item for the Visio Divina \"Go Deeper\" carousel. Order here = carousel order. If empty, the carousel shows reflections matching this item's themes.",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "traditionReflection"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to tradition reflection (church fathers, saints & popes)"
+          }
+        ],
+        "name": "traditionReflections",
+        "type": "array",
+        "title": "Go Deeper: Tradition Reflections"
+      },
+      {
+        "description": "e.g., \"St. Peter's Basilica\", \"Grande Chartreuse\"",
+        "name": "locationName",
+        "type": "string"
+      },
+      {
+        "description": "e.g., \"Rome\", \"Florence\"",
+        "name": "city",
+        "type": "string"
+      },
+      {
+        "description": "KALLOS is global — no default country.",
+        "name": "country",
+        "type": "string"
+      },
+      {
+        "description": "For Explore map view. Only populate when content has a meaningful physical location.",
+        "fields": [
+          {
+            "description": "e.g., 41.9022",
+            "name": "lat",
+            "type": "number",
+            "title": "Latitude"
+          },
+          {
+            "description": "e.g., 12.4568",
+            "name": "lng",
+            "type": "number",
+            "title": "Longitude"
+          }
+        ],
+        "name": "coordinates",
+        "type": "object",
+        "title": "Map Coordinates"
+      },
+      {
+        "hidden": true,
+        "name": "locationType",
+        "type": "string",
+        "title": "Location Type (legacy — use Content Type)"
+      },
+      {
+        "rows": 5,
+        "hidden": true,
+        "name": "historicalSummary",
+        "type": "text",
+        "title": "Historical Summary (legacy — use Context)"
+      },
+      {
+        "hidden": true,
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      }
+    ],
+    "name": "contentItem",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Journey title. e.g., \"Light\"",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "URL-safe. Source: title.",
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Which theme this Journey explores",
+        "to": [
+          {
+            "type": "theme"
+          }
+        ],
+        "name": "theme",
+        "type": "reference"
+      },
+      {
+        "rows": 4,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "What the seeker will explore over 7 days. Shown on Journey card.",
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Cover image for Journey card. High-res.",
+        "name": "heroImage",
+        "type": "image"
+      },
+      {
+        "initialValue": 10,
+        "description": "Default: 10. Shown as \"~10 min/day\".",
+        "name": "estimatedMinutesPerDay",
+        "type": "number"
+      },
+      {
+        "initialValue": false,
+        "description": "Toggle on when all 7 days are ready.",
+        "name": "isPublished",
+        "type": "boolean",
+        "title": "Published"
+      },
+      {
+        "description": "Display order in Journey list.",
+        "name": "order",
+        "type": "number",
+        "title": "Display Order"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 9
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Up to 9 days. Each follows: Open → Encounter → Reflect → Connect → Go Deeper.",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "min",
+                        "constraint": 1
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 9
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "1–7",
+                "name": "dayNumber",
+                "type": "number"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "e.g., \"The First Light\" or \"What Darkness Teaches\"",
+                "name": "dayTitle",
+                "type": "string"
+              },
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "ALWAYS required. The visual anchor for the day. Min 1200px.",
+                "name": "openImage",
+                "type": "image",
+                "title": "Opening Image"
+              },
+              {
+                "rows": 3,
+                "description": "Brief opening text (~1 min read). Sets the day's frame.",
+                "name": "openText",
+                "type": "text",
+                "title": "Opening Text"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "The primary content for this day (3–5 min encounter).",
+                "to": [
+                  {
+                    "type": "contentItem"
+                  }
+                ],
+                "name": "encounterContent",
+                "type": "reference"
+              },
+              {
+                "rows": 3,
+                "description": "Optional editorial guidance. e.g., \"Listen with your eyes closed for the first minute.\"",
+                "name": "encounterGuidance",
+                "type": "text"
+              },
+              {
+                "rows": 5,
+                "description": "Interpretive layer specific to this day's content type. Sacred art → symbolism/iconography. Literature → close reading. Music → listening guide. Landscape → ecological/geological insight. Thinkers → intellectual context. Pattern & Proof → plain-language explanation. Watch & Listen → viewing guide. Food & Wine → craft tradition.",
+                "name": "encounterNote",
+                "type": "text"
+              },
+              {
+                "description": "Optional audio pairing for this day. Use file upload for in-app playback; URL for direct MP3 links; external link for YouTube/Spotify (opens outside app).",
+                "fields": [
+                  {
+                    "description": "e.g., \"Allegri — Miserere Mei, Deus\"",
+                    "name": "title",
+                    "type": "string"
+                  },
+                  {
+                    "description": "e.g., \"Gregorio Allegri\"",
+                    "name": "composer",
+                    "type": "string",
+                    "title": "Composer / Artist"
+                  },
+                  {
+                    "description": "e.g., \"Public domain — multiple recordings on Musopen and Internet Archive\"",
+                    "name": "licensingNote",
+                    "type": "string"
+                  },
+                  {
+                    "options": {
+                      "accept": "audio/*"
+                    },
+                    "description": "Upload an MP3 — plays directly in KALLOS.",
+                    "name": "audioFile",
+                    "type": "file",
+                    "title": "Audio File (in-app playback)"
+                  },
+                  {
+                    "description": "Direct MP3 link (e.g. archive.org) — plays in-app.",
+                    "name": "audioUrl",
+                    "type": "string",
+                    "title": "Audio URL (in-app playback)"
+                  },
+                  {
+                    "validation": [
+                      {
+                        "rules": [
+                          {
+                            "flag": "uri",
+                            "constraint": {
+                              "options": {
+                                "scheme": [
+                                  "/^http$/",
+                                  "/^https$/"
+                                ],
+                                "allowRelative": false,
+                                "relativeOnly": false,
+                                "allowCredentials": false
+                              }
+                            }
+                          }
+                        ],
+                        "level": "error"
+                      }
+                    ],
+                    "description": "YouTube, Spotify, or Apple Music. Opens outside the app.",
+                    "name": "externalUrl",
+                    "type": "url",
+                    "title": "External Link (reference only)"
+                  }
+                ],
+                "name": "auditio",
+                "type": "object",
+                "title": "Auditio (Audio Suggestion)"
+              },
+              {
+                "description": "Optional philosophy + scripture pairing for this day. Connects the encounter to broader intellectual and spiritual tradition.",
+                "fields": [
+                  {
+                    "rows": 3,
+                    "description": "A quote from a philosopher, thinker, or writer (may be secular). e.g., Plato, Bergson, Socrates.",
+                    "name": "philosophyQuote",
+                    "type": "text"
+                  },
+                  {
+                    "description": "Full attribution. e.g., \"Plato, Republic (Allegory of the Cave)\"",
+                    "name": "philosophySource",
+                    "type": "string"
+                  },
+                  {
+                    "rows": 3,
+                    "description": "Scripture pairing for this day.",
+                    "name": "scriptureVerse",
+                    "type": "text"
+                  },
+                  {
+                    "description": "e.g., \"1 Corinthians 13:12\"",
+                    "name": "scriptureReference",
+                    "type": "string"
+                  },
+                  {
+                    "rows": 3,
+                    "description": "Why this pairing works. How the philosophy and scripture echo each other and connect to the day's encounter.",
+                    "name": "connectionNote",
+                    "type": "text"
+                  }
+                ],
+                "name": "lectio",
+                "type": "object"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "min",
+                        "constraint": 1
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 2
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Journey-specific questions for this day (1–2).",
+                "of": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "name": "reflectQuestions",
+                "type": "array",
+                "title": "Reflection Questions"
+              },
+              {
+                "description": "One sentence threading to tomorrow. e.g., \"Tomorrow: what happens when the light goes away?\"",
+                "name": "connectThread",
+                "type": "string"
+              },
+              {
+                "description": "Optional tradition reflections for this day.",
+                "of": [
+                  {
+                    "to": [
+                      {
+                        "type": "traditionReflection"
+                      }
+                    ],
+                    "type": "reference",
+                    "title": "Reference to tradition reflection (church fathers, saints & popes)"
+                  }
+                ],
+                "name": "goDeeper",
+                "type": "array"
+              }
+            ],
+            "type": "object",
+            "name": "journeyDay"
+          }
+        ],
+        "name": "days",
+        "type": "array"
+      }
+    ],
+    "name": "journey",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "dateFormat": "YYYY-MM-DD"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The date this prompt appears. One per day. Format: YYYY-MM-DD.",
+        "name": "date",
+        "type": "date"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The featured content for this day.",
+        "to": [
+          {
+            "type": "contentItem"
+          }
+        ],
+        "name": "content",
+        "type": "reference",
+        "title": "Featured Content"
+      },
+      {
+        "rows": 2,
+        "description": "Optional: shown on the Today page card as the teaser. Not shown inside the prompt practice.",
+        "name": "promptQuestion",
+        "type": "text"
+      },
+      {
+        "rows": 3,
+        "description": "Optional: why this was chosen for today. The human editorial voice.",
+        "name": "curatorNote",
+        "type": "text"
+      },
+      {
+        "description": "Optional: scripture, or a philosophy + scripture pairing. Philosophy first, scripture second. If philosophyText is provided, both are shown as a pairing.",
+        "fields": [
+          {
+            "rows": 3,
+            "description": "A philosopher reaching toward a truth that scripture names. Plato, Aristotle, Marcus Aurelius, Seneca, Boethius, etc. Leave blank for scripture-only.",
+            "name": "philosophyText",
+            "type": "text",
+            "title": "Philosophy Quote (optional — shown first)"
+          },
+          {
+            "description": "e.g. \"Plato, Republic — Allegory of the Cave\" or \"Marcus Aurelius, Meditations IV.3\"",
+            "name": "philosophyAttribution",
+            "type": "string"
+          },
+          {
+            "rows": 4,
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "text",
+            "type": "text",
+            "title": "Scripture / Primary Text (shown second in a pairing, or alone)"
+          },
+          {
+            "description": "e.g. \"1 Corinthians 13:12\" or \"Psalm 46:10\"",
+            "name": "attribution",
+            "type": "string",
+            "title": "Scripture Attribution"
+          }
+        ],
+        "name": "lectio",
+        "type": "object",
+        "title": "Reading (Lectio)"
+      },
+      {
+        "description": "Optional: a piece of music to accompany the practice.",
+        "fields": [
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Name of the piece, e.g. \"Kommt, ihr Töchter, helft mir klagen\"",
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "artist",
+            "type": "string",
+            "title": "Artist / Composer"
+          },
+          {
+            "description": "Use either the file upload or the URL — not both.",
+            "fields": [
+              {
+                "options": {
+                  "accept": "audio/*"
+                },
+                "name": "audioFile",
+                "type": "file",
+                "title": "Audio File Upload"
+              },
+              {
+                "description": "Direct MP3 link for in-app playback — use archive.org or another hosted source.",
+                "name": "audioUrl",
+                "type": "string",
+                "title": "Audio URL"
+              }
+            ],
+            "name": "audioUrl",
+            "type": "object",
+            "title": "Audio Source (in-app playback)"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "YouTube, Spotify, or Apple Music. Only use if no Audio File or Audio URL is provided above. This opens outside KALLOS and breaks the in-app experience.",
+            "name": "url",
+            "type": "url",
+            "title": "External Link (reference only — opens outside app)"
+          }
+        ],
+        "name": "auditio",
+        "type": "object",
+        "title": "Music (Auditio)"
+      },
+      {
+        "rows": 3,
+        "description": "An invitation to carry something into the day. One concrete, gentle action.",
+        "name": "actio",
+        "type": "text",
+        "title": "Action (Actio)"
+      },
+      {
+        "description": "Optional: if a Journey deepens this prompt, link it here. Shown as a quiet CTA at the bottom of the prompt.",
+        "to": [
+          {
+            "type": "journey"
+          }
+        ],
+        "name": "relatedJourney",
+        "type": "reference"
+      },
+      {
+        "description": "Optional theme tag. Helps users on a Journey see the connection.",
+        "to": [
+          {
+            "type": "theme"
+          }
+        ],
+        "name": "theme",
+        "type": "reference"
+      }
+    ],
+    "name": "dailyPrompt",
+    "type": "document",
+    "title": "Pause & Ponder"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Order of the splash page (1, 2, etc.)",
+        "name": "pageNumber",
+        "type": "number"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Image with Quote",
+              "value": "image-quote"
+            },
+            {
+              "title": "Text Content",
+              "value": "text-content"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "image-quote",
+        "name": "pageType",
+        "type": "string"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Full-width promo image (top 2/3 of screen)",
+        "hidden": "conditional",
+        "name": "heroImage",
+        "type": "image"
+      },
+      {
+        "rows": 2,
+        "description": "e.g., \"Beauty will save the world\"",
+        "hidden": "conditional",
+        "name": "quote",
+        "type": "text"
+      },
+      {
+        "description": "e.g., \"Fyodor Dostoevsky\"",
+        "hidden": "conditional",
+        "name": "quoteAttribution",
+        "type": "string"
+      },
+      {
+        "description": "e.g., \"Your Companion for Contemplation\"",
+        "hidden": "conditional",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "rows": 4,
+        "description": "Main description paragraph",
+        "hidden": "conditional",
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "description": "e.g., \"Let's explore\"",
+        "hidden": "conditional",
+        "name": "buttonText",
+        "type": "string"
+      },
+      {
+        "description": "Hex color (e.g., #FFFFFF). Default: white at 70% opacity",
+        "hidden": "conditional",
+        "name": "quoteColor",
+        "type": "string",
+        "title": "Quote Text Color"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Italic (default)",
+              "value": "italic"
+            },
+            {
+              "title": "Normal",
+              "value": "normal"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "italic",
+        "hidden": "conditional",
+        "name": "quoteFont",
+        "type": "string",
+        "title": "Quote Font Style"
+      },
+      {
+        "description": "Hex color. Default: white at 40% opacity",
+        "hidden": "conditional",
+        "name": "attributionColor",
+        "type": "string",
+        "title": "Attribution Text Color"
+      },
+      {
+        "description": "Hex color. Default: #16110d (espresso)",
+        "hidden": "conditional",
+        "name": "bottomBackgroundColor",
+        "type": "string",
+        "title": "Bottom Section Background"
+      },
+      {
+        "description": "Hex color. Default: white at 90% opacity",
+        "hidden": "conditional",
+        "name": "titleColor",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Small",
+              "value": "text-xl"
+            },
+            {
+              "title": "Medium (default)",
+              "value": "text-2xl"
+            },
+            {
+              "title": "Large",
+              "value": "text-3xl"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "text-2xl",
+        "hidden": "conditional",
+        "name": "titleSize",
+        "type": "string"
+      },
+      {
+        "description": "Hex color. Default: white at 50% opacity",
+        "hidden": "conditional",
+        "name": "descriptionColor",
+        "type": "string"
+      },
+      {
+        "description": "Hex color. Default: #C19B5F (gold)",
+        "hidden": "conditional",
+        "name": "buttonBackgroundColor",
+        "type": "string"
+      },
+      {
+        "description": "Hex color. Default: #FFFFFF (white)",
+        "hidden": "conditional",
+        "name": "buttonTextColor",
+        "type": "string"
+      },
+      {
+        "description": "Hex color for top-left. Default: #4C3759 (purple)",
+        "hidden": "conditional",
+        "name": "backgroundGradientStart",
+        "type": "string"
+      },
+      {
+        "description": "Hex color for bottom-right. Default: #203545 (dark teal)",
+        "hidden": "conditional",
+        "name": "backgroundGradientEnd",
+        "type": "string"
+      }
+    ],
+    "name": "splashPage",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Church Father",
+              "value": "church-father"
+            },
+            {
+              "title": "Saint",
+              "value": "saint"
+            },
+            {
+              "title": "Pope",
+              "value": "pope"
+            },
+            {
+              "title": "Doctor of the Church",
+              "value": "doctor"
+            },
+            {
+              "title": "Theologian",
+              "value": "theologian"
+            },
+            {
+              "title": "Mystic",
+              "value": "mystic"
+            },
+            {
+              "title": "Philosopher",
+              "value": "philosopher"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "church-father",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "church-father",
+                  "saint",
+                  "pope",
+                  "doctor",
+                  "theologian",
+                  "mystic",
+                  "philosopher"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Category of the source",
+        "name": "authorType",
+        "type": "string",
+        "title": "Author type"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Short label, e.g. \"Beauty as a path to God\"",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "rows": 4,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "2–4 sentences in plain language (the reflection, not necessarily a direct quote)",
+        "name": "summary",
+        "type": "text"
+      },
+      {
+        "description": "One memorable line to show above the summary, if desired",
+        "name": "shortQuote",
+        "type": "string",
+        "title": "Short quote (optional)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Attribution, e.g. \"St. Augustine, On True Religion\" or \"Benedict XVI, Address to Artists\"",
+        "name": "source",
+        "type": "string"
+      },
+      {
+        "description": "Which KALLOS themes this reflection connects to. Replaces the legacy theme dropdown.",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "theme"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to theme"
+          }
+        ],
+        "name": "themes",
+        "type": "array"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Beauty",
+              "value": "beauty"
+            },
+            {
+              "title": "Truth",
+              "value": "truth"
+            },
+            {
+              "title": "Beauty and truth",
+              "value": "beauty-and-truth"
+            },
+            {
+              "title": "Contemplation",
+              "value": "contemplation"
+            },
+            {
+              "title": "Encounter with God",
+              "value": "encounter"
+            },
+            {
+              "title": "Action / living it out",
+              "value": "action"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "description": "Kept for migration. Use the Themes field above going forward.",
+        "hidden": true,
+        "name": "theme",
+        "type": "string",
+        "title": "Theme (legacy — use Themes above)"
+      },
+      {
+        "initialValue": 0,
+        "description": "Lower numbers appear first when showing multiple reflections",
+        "name": "order",
+        "type": "number",
+        "title": "Display order"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Early Church / Fathers",
+              "value": "fathers"
+            },
+            {
+              "title": "Medieval",
+              "value": "medieval"
+            },
+            {
+              "title": "Modern",
+              "value": "modern"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "description": "e.g. \"Early Church\", \"Medieval\", \"Modern\" – for future use or labels",
+        "name": "era",
+        "type": "string",
+        "title": "Era (optional)"
+      }
+    ],
+    "name": "traditionReflection",
+    "type": "document",
+    "title": "Tradition Reflection (Church Fathers, Saints & Popes)"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "e.g., \"Seeking Beauty in Vatican City\"",
+        "name": "title",
+        "type": "string",
+        "title": "Full Title"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "e.g., \"Vatican City\" (shown in navigation)",
+        "name": "shortTitle",
+        "type": "string"
+      },
+      {
+        "initialValue": 1,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "season",
+        "type": "number",
+        "title": "Season Number"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "episodeNumber",
+        "type": "number"
+      },
+      {
+        "rows": 4,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Brief description of the episode (2-3 sentences)",
+        "name": "summary",
+        "type": "text",
+        "title": "Episode Summary"
+      },
+      {
+        "description": "e.g., \"Vatican City, Rome, Italy\"",
+        "name": "locationLabel",
+        "type": "string"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Main image for the episode (1200-1600px wide, JPEG)",
+        "name": "heroImage",
+        "type": "image"
+      },
+      {
+        "name": "durationMinutes",
+        "type": "number",
+        "title": "Duration (minutes)"
+      },
+      {
+        "description": "e.g., \"January 19, 2026\"",
+        "name": "airDate",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link to watch on EWTN+",
+        "name": "ewtnPlusUrl",
+        "type": "url",
+        "title": "EWTN+ URL"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "YouTube video link (e.g., https://youtu.be/y2eLdkXVQgg)",
+        "name": "youtubeUrl",
+        "type": "url",
+        "title": "YouTube URL"
+      },
+      {
+        "initialValue": false,
+        "description": "Toggle on when episode is available to watch",
+        "name": "isReleased",
+        "type": "boolean",
+        "title": "Is Released?"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "name": "role",
+                "type": "string"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "featuredExperts",
+        "type": "array"
+      },
+      {
+        "description": "Add artworks featured in this episode",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "contentItem"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to content item"
+          }
+        ],
+        "name": "artworks",
+        "type": "array"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "rows": 2,
+                "name": "question",
+                "type": "text",
+                "title": "Reflection Question"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Individual",
+                      "value": "individual"
+                    },
+                    {
+                      "title": "Family",
+                      "value": "family"
+                    },
+                    {
+                      "title": "Group",
+                      "value": "group"
+                    }
+                  ]
+                },
+                "name": "suggestedUse",
+                "type": "string"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "reflections",
+        "type": "array",
+        "title": "Episode Reflections"
+      }
+    ],
+    "name": "episode",
+    "type": "document"
+  }
+]

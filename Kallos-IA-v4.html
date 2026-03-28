@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KALLOS — Information Architecture v4</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #111820;
+    color: #e8e0d4;
+    font-family: 'Georgia', serif;
+    padding: 40px 24px 80px;
+    min-width: 900px;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .page-header h1 {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #C19B5F;
+    margin-bottom: 10px;
+  }
+  .page-header h2 {
+    font-size: 28px;
+    font-weight: 400;
+    color: #f0ece6;
+    margin-bottom: 6px;
+  }
+  .page-header p {
+    font-size: 13px;
+    color: #6a8a9a;
+    font-family: Arial, sans-serif;
+  }
+  .page-header .tagline {
+    font-family: 'Georgia', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: #C19B5F;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  /* ── Nav bar diagram ── */
+  .nav-row {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 0;
+  }
+  .nav-tab {
+    background: #1a2e3a;
+    border: 1.5px solid #2e4d5e;
+    padding: 16px 28px;
+    text-align: center;
+    min-width: 160px;
+    cursor: default;
+    position: relative;
+  }
+  .nav-tab:first-child { border-radius: 4px 0 0 0; }
+  .nav-tab:last-child  { border-radius: 0 4px 0 0; border-right: 1.5px solid #2e4d5e; }
+  .nav-tab + .nav-tab  { border-left: none; }
+  .nav-tab .icon { font-size: 20px; display: block; margin-bottom: 4px; }
+  .nav-tab .label {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #C19B5F;
+  }
+  .nav-tab .sublabel {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    color: #5a7a8a;
+    margin-top: 2px;
+  }
+
+  /* ── Connector line from nav to columns ── */
+  .connector-row {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+  }
+  .connector-cell {
+    min-width: 160px;
+    height: 28px;
+    border-left: 1.5px solid #2e4d5e;
+    border-right: 1.5px solid #2e4d5e;
+    border-bottom: 1.5px solid #2e4d5e;
+    margin-right: -1.5px;
+  }
+
+  /* ── Columns ── */
+  .columns {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 40px;
+  }
+
+  .column {
+    width: 220px;
+    flex-shrink: 0;
+  }
+
+  /* ── Screen cards ── */
+  .screen {
+    background: #1a2e3a;
+    border: 1.5px solid #2e4d5e;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .screen-header {
+    background: #203545;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #2e4d5e;
+  }
+  .screen-icon { font-size: 14px; }
+  .screen-title {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #e8e0d4;
+  }
+  .screen-badge {
+    margin-left: auto;
+    background: #C19B5F22;
+    border: 1px solid #C19B5F55;
+    border-radius: 2px;
+    padding: 2px 6px;
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    color: #C19B5F;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .screen-body { padding: 12px 14px; }
+  .screen-item {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: #8ab0c0;
+    padding: 4px 0;
+    padding-left: 12px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .screen-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 5px;
+    height: 1px;
+    background: #C19B5F66;
+  }
+  .screen-item.highlight {
+    color: #e8e0d4;
+  }
+  .screen-item.action {
+    color: #C19B5F;
+    font-weight: 700;
+  }
+  .screen-divider {
+    height: 1px;
+    background: #2e4d5e;
+    margin: 8px 0;
+  }
+
+  /* ── Shared / modal screens ── */
+  .shared-section {
+    max-width: 940px;
+    margin: 0 auto 48px;
+  }
+  .shared-section h3 {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #C19B5F;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .shared-grid {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .shared-screen {
+    flex: 1;
+    min-width: 200px;
+    max-width: 260px;
+    background: #1a2e3a;
+    border: 1.5px solid #2e4d5e;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .shared-screen.special {
+    border-color: #C19B5F55;
+    background: #1c2e20;
+  }
+
+  /* ── User flows ── */
+  .flows-section {
+    max-width: 940px;
+    margin: 0 auto 48px;
+  }
+  .flows-section h3 {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #C19B5F;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 14px;
+    background: #151f28;
+    border: 1px solid #2e4d5e;
+    border-radius: 4px;
+    padding: 10px 16px;
+    flex-wrap: wrap;
+  }
+  .flow-persona {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #C19B5F;
+    min-width: 160px;
+    flex-shrink: 0;
+  }
+  .flow-steps {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+    flex: 1;
+  }
+  .flow-step {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: #8ab0c0;
+    background: #1a2e3a;
+    border: 1px solid #2e4d5e;
+    border-radius: 3px;
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+  .flow-step.tab { color: #C19B5F; border-color: #C19B5F44; }
+  .flow-step.action { color: #e8e0d4; }
+  .flow-arrow {
+    font-size: 12px;
+    color: #2e4d5e;
+    padding: 0 6px;
+  }
+
+  /* ── Changes from current ── */
+  .changes-section {
+    max-width: 760px;
+    margin: 0 auto 40px;
+  }
+  .changes-section h3 {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #C19B5F;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .changes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .change-box {
+    background: #1a2e3a;
+    border: 1.5px solid #2e4d5e;
+    border-radius: 4px;
+    padding: 16px;
+  }
+  .change-box.remove { border-color: #662933; background: #1e1822; }
+  .change-box.keep   { border-color: #2e5a2a; background: #18221a; }
+  .change-box.add    { border-color: #C19B5F55; background: #1e1c15; }
+  .change-box h4 {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .change-box.remove h4 { color: #cc4455; }
+  .change-box.keep h4   { color: #4a9a44; }
+  .change-box.add h4    { color: #C19B5F; }
+  .change-item {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: #7a9aaa;
+    padding: 3px 0;
+    padding-left: 12px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .change-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 5px;
+    height: 1px;
+  }
+  .change-box.remove .change-item::before { background: #cc4455; }
+  .change-box.keep   .change-item::before { background: #4a9a44; }
+  .change-box.add    .change-item::before { background: #C19B5F; }
+
+  /* ── Section labels ── */
+  .section-label {
+    text-align: center;
+    margin: 40px 0 20px;
+  }
+  .section-label span {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #C19B5F;
+    border-bottom: 1px solid #C19B5F44;
+    padding-bottom: 4px;
+  }
+
+  /* ── Footer note ── */
+  .footer-note {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: #3a5a6a;
+    margin-top: 48px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="page-header">
+  <h1>Information Architecture · v3</h1>
+  <h2>KALLOS</h2>
+  <p class="tagline">Love the beautiful and the good</p>
+  <p>February 2026 · Working name &amp; tagline · Watch &amp; Listen included</p>
+</div>
+
+<!-- Nav bar -->
+<div style="max-width: 940px; margin: 0 auto;">
+  <div class="nav-row">
+    <div class="nav-tab">
+      <span class="icon">✦</span>
+      <span class="label">Today</span>
+      <span class="sublabel">Daily entry point</span>
+    </div>
+    <div class="nav-tab">
+      <span class="icon">◎</span>
+      <span class="label">Explore</span>
+      <span class="sublabel">Browse + map</span>
+    </div>
+    <div class="nav-tab">
+      <span class="icon">◈</span>
+      <span class="label">Journeys</span>
+      <span class="sublabel">Curated sequences</span>
+    </div>
+    <div class="nav-tab">
+      <span class="icon">♡</span>
+      <span class="label">Library</span>
+      <span class="sublabel">Saved + history</span>
+    </div>
+  </div>
+
+  <!-- Columns -->
+  <div class="columns" style="margin-top: 0;">
+
+    <!-- TODAY -->
+    <div class="column">
+      <div class="screen">
+        <div class="screen-header">
+          <span class="screen-icon">✦</span>
+          <span class="screen-title">Today</span>
+          <span class="screen-badge">Home</span>
+        </div>
+        <div class="screen-body">
+          <div class="screen-item highlight">Full-bleed featured content</div>
+          <div class="screen-item">Content type badge (Art / Music / Poetry / Video…)</div>
+          <div class="screen-item">Single reflection question</div>
+          <div class="screen-item action">→ Save · Share · Pray · Go Deeper</div>
+          <div class="screen-divider"></div>
+          <div class="screen-item highlight">Active Journey progress card</div>
+          <div class="screen-item">Day 3 of 7: Light — Continue</div>
+          <div class="screen-divider"></div>
+          <div class="screen-item">3 related pieces from today's theme</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPLORE -->
+    <div class="column">
+      <div class="screen">
+        <div class="screen-header">
+          <span class="screen-icon">◎</span>
+          <span class="screen-title">Explore</span>
+        </div>
+        <div class="screen-body">
+          <div class="screen-item highlight">Search bar</div>
+          <div class="screen-item highlight">View toggle: Grid | Map</div>
+          <div class="screen-item">Filter pills: All · Sacred Art · Music · Poetry · Food & Wine · Thinkers · Landscape · Watch & Listen</div>
+          <div class="screen-divider"></div>
+          <div class="screen-item highlight">Grid view — content cards</div>
+          <div class="screen-item">Image, type, title, location</div>
+          <div class="screen-divider"></div>
+          <div class="screen-item highlight">Map view</div>
+          <div class="screen-item">Colour-coded markers by type</div>
+          <div class="screen-item">Filter by type, distance, city</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOURNEYS -->
+    <div class="column">
+      <div class="screen">
+        <div class="screen-header">
+          <span class="screen-icon">◈</span>
+          <span class="screen-title">Journeys</span>
+        </div>
+        <div class="screen-body">
+          <div class="screen-item highlight">Active journey (if any)</div>
+          <div class="screen-item">Progress bar · Next step CTA</div>
+          <div class="screen-divider"></div>
+          <div class="screen-item highlight">Browse all journeys</div>
+          <div class="screen-item">Filter: Theme · Season · Location · Thinker</div>
+          <div class="screen-divider"></div>
+          <div class="screen-item">Journey card: title, length, content type icons (art / video / music / poetry…), short description</div>
+          <div class="screen-divider"></div>
+          <div class="screen-item action">→ Journey Detail</div>
+          <div class="screen-item">Overview · Day-by-day list · Start / Continue</div>
+          <div class="screen-divider"></div>
+          <div class="screen-item highlight">Journey day types</div>
+          <div class="screen-item">Art · Quote · Poem · Music · Video · Podcast · Food</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIBRARY -->
+    <div class="column">
+      <div class="screen">
+        <div class="screen-header">
+          <span class="screen-icon">♡</span>
+          <span class="screen-title">Library</span>
+        </div>
+        <div class="screen-body">
+          <div class="screen-item highlight">Saved items</div>
+          <div class="screen-item">Filter by content type</div>
+          <div class="screen-divider"></div>
+          <div class="screen-item highlight">Completed journeys</div>
+          <div class="screen-item">Revisit any day</div>
+          <div class="screen-divider"></div>
+          <div class="screen-item highlight">Visio Divina history</div>
+          <div class="screen-item">Every artwork prayed with</div>
+          <div class="screen-divider"></div>
+          <div class="screen-item">All content types mixed or filtered</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Shared / Universal screens -->
+<div class="section-label"><span>Universal Screens — accessed from any tab</span></div>
+
+<div class="shared-section">
+  <div class="shared-grid">
+
+    <div class="shared-screen">
+      <div class="screen-header">
+        <span class="screen-icon">◻</span>
+        <span class="screen-title">Content Detail</span>
+        <span class="screen-badge">All types</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-item highlight">Hero image / audio / text block</div>
+        <div class="screen-item">Title, attribution, location</div>
+        <div class="screen-item">Context paragraph (3 sentences)</div>
+        <div class="screen-item">Scripture or quote (by type)</div>
+        <div class="screen-item">Reflection questions (collapsed)</div>
+        <div class="screen-divider"></div>
+        <div class="screen-item action">→ Save · Share</div>
+        <div class="screen-item action">→ Pray with this (if Sacred Art)</div>
+        <div class="screen-item action">→ Go Deeper (expandable)</div>
+      </div>
+    </div>
+
+    <div class="shared-screen special">
+      <div class="screen-header" style="background:#1c2e20; border-bottom-color:#2e5a2a;">
+        <span class="screen-icon">✧</span>
+        <span class="screen-title">Visio Divina</span>
+        <span class="screen-badge" style="border-color:#4a9a4455; color:#4a9a44;">Practice</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-item highlight">Full-screen image (pinch-to-zoom)</div>
+        <div class="screen-item">Step: Gaze → Meditate → Pray → Contemplate → Action</div>
+        <div class="screen-item">Swipe left/right between steps</div>
+        <div class="screen-item">Optional: Chant / Ambient music</div>
+        <div class="screen-divider"></div>
+        <div class="screen-item action">→ Go Deeper (fixed bar)</div>
+        <div class="screen-item">Church Fathers · Saints · Popes</div>
+        <div class="screen-item">(Already built ✓)</div>
+      </div>
+    </div>
+
+    <div class="shared-screen">
+      <div class="screen-header">
+        <span class="screen-icon">↓</span>
+        <span class="screen-title">Go Deeper</span>
+        <span class="screen-badge">Expandable</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-item highlight">Tradition reflections</div>
+        <div class="screen-item">Church Fathers, Saints, Popes</div>
+        <div class="screen-item">Themed to beauty → truth → God</div>
+        <div class="screen-divider"></div>
+        <div class="screen-item highlight">Watch &amp; Listen card</div>
+        <div class="screen-item">Related video or podcast</div>
+        <div class="screen-item">Curator's note: why this belongs here</div>
+        <div class="screen-divider"></div>
+        <div class="screen-item">Available from:</div>
+        <div class="screen-item">— Visio Divina (built ✓)</div>
+        <div class="screen-item">— Content Detail (new)</div>
+        <div class="screen-item">— Journey day (new)</div>
+      </div>
+    </div>
+
+    <div class="shared-screen" style="border-color:#3a5a7a; background:#151e28;">
+      <div class="screen-header" style="background:#1a2a3a; border-bottom-color:#2e4d6a;">
+        <span class="screen-icon">▶</span>
+        <span class="screen-title">Watch &amp; Listen</span>
+        <span class="screen-badge" style="border-color:#3a6a9a55; color:#6aaad4;">Content Type</span>
+      </div>
+      <div class="screen-body">
+        <div class="screen-item highlight">Embedded video player (YouTube)</div>
+        <div class="screen-item">or Podcast episode link</div>
+        <div class="screen-divider"></div>
+        <div class="screen-item highlight">Curator's context</div>
+        <div class="screen-item">Why this video / why now</div>
+        <div class="screen-item">Series, speaker, duration</div>
+        <div class="screen-divider"></div>
+        <div class="screen-item highlight">Source types</div>
+        <div class="screen-item">Documentary series (e.g. classical studies, art history)</div>
+        <div class="screen-item">Art / philosophy lectures</div>
+        <div class="screen-item">Classical studies series</div>
+        <div class="screen-item">Theology podcasts</div>
+        <div class="screen-divider"></div>
+        <div class="screen-item action">→ Save · Share · Go Deeper</div>
+        <div class="screen-item action">→ Add to active Journey</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- User flows -->
+<div class="section-label"><span>Key User Flows</span></div>
+
+<div class="flows-section">
+
+  <div class="flow">
+    <div class="flow-persona">Daily Contemplative</div>
+    <div class="flow-steps">
+      <span class="flow-step tab">Today</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step action">Daily Prompt</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Content Detail</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step action">Pray with this</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Visio Divina</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step action">Go Deeper</span>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-persona">Traveler in Rome</div>
+    <div class="flow-steps">
+      <span class="flow-step tab">Explore</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step action">Map view</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Marker (Sacred Art)</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Content Detail</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step action">Pray · Save</span>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-persona">Journey User</div>
+    <div class="flow-steps">
+      <span class="flow-step tab">Today</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step action">Active Journey card</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Journey step</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Content Detail</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step action">Mark complete</span>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-persona">Curious Seeker</div>
+    <div class="flow-steps">
+      <span class="flow-step tab">Explore</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step action">Filter: Thinkers</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">C.S. Lewis quote</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Content Detail</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step action">Related Journey</span>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-persona">Video / Podcast User</div>
+    <div class="flow-steps">
+      <span class="flow-step tab">Explore</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step action">Filter: Watch &amp; Listen</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Series / episode card</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">Content Detail (embed)</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step action">Go Deeper · Save · Add to Journey</span>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-persona">New User</div>
+    <div class="flow-steps">
+      <span class="flow-step action">Splash / Onboarding</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">What draws you? (Art / Music / Food / All)</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step tab">Today</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step action">Suggested first Journey</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- What changes -->
+<div class="section-label"><span>What Changes from Current Prototype</span></div>
+
+<div class="changes-section">
+  <div class="changes-grid">
+
+    <div class="change-box remove">
+      <h4>Remove</h4>
+      <div class="change-item">Home tab = Episodes list</div>
+      <div class="change-item">Episode detail page</div>
+      <div class="change-item">Episode-based navigation structure</div>
+      <div class="change-item">EWTN series dependency</div>
+      <div class="change-item">Artwalk as a top-level tab</div>
+    </div>
+
+    <div class="change-box keep">
+      <h4>Keep (already built)</h4>
+      <div class="change-item">Visio Divina flow (Gaze → Action)</div>
+      <div class="change-item">Go Deeper section architecture</div>
+      <div class="change-item">Map with colour-coded markers</div>
+      <div class="change-item">ArtworkViewer (pinch-to-zoom)</div>
+      <div class="change-item">Favorites (fix Sanity data source)</div>
+      <div class="change-item">Sanity CMS + all schemas</div>
+      <div class="change-item">Design system (teal, gold, sharp corners)</div>
+      <div class="change-item">Splash / onboarding flow</div>
+    </div>
+
+    <div class="change-box add">
+      <h4>Add — Nav & Structure</h4>
+      <div class="change-item">Today tab (Daily Prompt as home screen)</div>
+      <div class="change-item">Journeys tab + Journey detail page</div>
+      <div class="change-item">Library tab (replaces Favorites)</div>
+      <div class="change-item">Map moved inside Explore tab</div>
+      <div class="change-item">Universal Content Detail page (all types)</div>
+      <div class="change-item">Onboarding: what draws you? preference</div>
+    </div>
+
+    <div class="change-box add">
+      <h4>Add — Content Types</h4>
+      <div class="change-item">Music (new Sanity schema + cards)</div>
+      <div class="change-item">Thinkers & Quotes</div>
+      <div class="change-item">Literature & Poetry</div>
+      <div class="change-item">Food & Wine</div>
+      <div class="change-item">Watch &amp; Listen (video + podcast)</div>
+      <div class="change-item">Daily Prompt (Sanity scheduling)</div>
+      <div class="change-item">Curated Journey (Sanity sequence editor)</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section-label"><span>Journey Framework — Integrated Curriculum Model</span></div>
+
+<div class="shared-section" style="max-width:940px; margin: 0 auto 48px;">
+  <div style="background:#1a2e3a; border:1.5px solid #2e4d5e; border-radius:4px; padding:20px; margin-bottom:16px;">
+    <div style="font-family:Arial,sans-serif; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#C19B5F; margin-bottom:12px;">The Model</div>
+    <div style="font-family:Arial,sans-serif; font-size:11px; color:#8ab0c0; line-height:1.8;">Each Journey is built around a <strong style="color:#e8e0d4;">Theme</strong> — a big enduring human question. Every content type answers the same question from a different angle. Art, music, poetry, food, thinkers, landscape all in conversation with each other. ~10 minutes/day. 7 days.</div>
+  </div>
+
+  <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-bottom:16px;">
+    <div style="background:#151f28; border:1px solid #2e4d5e; border-radius:4px; padding:12px 16px; min-width:140px; text-align:center;">
+      <div style="font-family:Georgia,serif; font-size:18px; color:#C19B5F; margin-bottom:4px;">①</div>
+      <div style="font-family:Arial,sans-serif; font-size:11px; font-weight:700; color:#e8e0d4;">Open</div>
+      <div style="font-family:Arial,sans-serif; font-size:10px; color:#5a7a8a; margin-top:2px;">Image always present · 1 min</div>
+    </div>
+    <div style="background:#151f28; border:1px solid #2e4d5e; border-radius:4px; padding:12px 16px; min-width:140px; text-align:center;">
+      <div style="font-family:Georgia,serif; font-size:18px; color:#C19B5F; margin-bottom:4px;">②</div>
+      <div style="font-family:Arial,sans-serif; font-size:11px; font-weight:700; color:#e8e0d4;">Encounter</div>
+      <div style="font-family:Arial,sans-serif; font-size:10px; color:#5a7a8a; margin-top:2px;">Primary content · 3–5 min</div>
+    </div>
+    <div style="background:#151f28; border:1px solid #2e4d5e; border-radius:4px; padding:12px 16px; min-width:140px; text-align:center;">
+      <div style="font-family:Georgia,serif; font-size:18px; color:#C19B5F; margin-bottom:4px;">③</div>
+      <div style="font-family:Arial,sans-serif; font-size:11px; font-weight:700; color:#e8e0d4;">Reflect</div>
+      <div style="font-family:Arial,sans-serif; font-size:10px; color:#5a7a8a; margin-top:2px;">1–2 questions · 2 min</div>
+    </div>
+    <div style="background:#151f28; border:1px solid #2e4d5e; border-radius:4px; padding:12px 16px; min-width:140px; text-align:center;">
+      <div style="font-family:Georgia,serif; font-size:18px; color:#C19B5F; margin-bottom:4px;">④</div>
+      <div style="font-family:Arial,sans-serif; font-size:11px; font-weight:700; color:#e8e0d4;">Connect</div>
+      <div style="font-family:Arial,sans-serif; font-size:10px; color:#5a7a8a; margin-top:2px;">Thread to tomorrow · 30 sec</div>
+    </div>
+    <div style="background:#151f28; border:1px solid #2e4d5e; border-radius:4px; padding:12px 16px; min-width:140px; text-align:center;">
+      <div style="font-family:Georgia,serif; font-size:18px; color:#C19B5F; margin-bottom:4px;">⑤</div>
+      <div style="font-family:Arial,sans-serif; font-size:11px; font-weight:700; color:#e8e0d4;">Go Deeper</div>
+      <div style="font-family:Arial,sans-serif; font-size:10px; color:#5a7a8a; margin-top:2px;">Optional · user's choice</div>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+    <div style="background:#1c1f14; border:1px solid #C19B5F44; border-radius:4px; padding:10px 16px; font-family:Arial,sans-serif; font-size:11px; color:#C19B5F;">✦ Light</div>
+    <div style="background:#1c1f14; border:1px solid #C19B5F44; border-radius:4px; padding:10px 16px; font-family:Arial,sans-serif; font-size:11px; color:#C19B5F;">◌ Silence</div>
+    <div style="background:#1c1f14; border:1px solid #C19B5F44; border-radius:4px; padding:10px 16px; font-family:Arial,sans-serif; font-size:11px; color:#C19B5F;">✦ Suffering &amp; Beauty</div>
+    <div style="background:#1c1f14; border:1px solid #C19B5F44; border-radius:4px; padding:10px 16px; font-family:Arial,sans-serif; font-size:11px; color:#C19B5F;">◎ Creation</div>
+    <div style="background:#1c1f14; border:1px solid #C19B5F44; border-radius:4px; padding:10px 16px; font-family:Arial,sans-serif; font-size:11px; color:#C19B5F;">♡ Home / The Restless Heart</div>
+  </div>
+</div>
+
+<div class="footer-note">
+  KALLOS · Love the beautiful and the good · Information Architecture v4 · February 2026 · Working name &amp; tagline
+</div>
+
+</body>
+</html>

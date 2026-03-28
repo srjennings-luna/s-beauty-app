@@ -94,7 +94,11 @@ declare const signAsync: (message: Bytes, secretKey: Bytes) => Promise<Bytes>;
  * Follows RFC8032 5.1.6.
  */
 declare const sign: (message: Bytes, secretKey: Bytes) => Bytes;
-/** Verification options. zip215: true (default) follows ZIP215 spec. false would follow RFC8032. */
+/**
+ * Verification options. zip215: true (default) follows ZIP215 spec. false would follow RFC8032.
+ *
+ * Any message with pubkey from `ED25519_TORSION_SUBGROUP` would be valid in sigs under ZIP215.
+ */
 export type EdDSAVerifyOpts = {
     zip215?: boolean;
 };

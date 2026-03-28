@@ -24,6 +24,7 @@ Read this at the start of every session. It contains all key product decisions, 
 - Test with `npm run build` after every step. Commit after every step so there's a clean rollback.
 - Prefer the Claude Code app tab over the terminal.
 - All future documents: HTML, not Word/docx. Sheri is not a Microsoft user.
+- Design direction reference: **Variant.com** — use for layout, spacing, and typography inspiration.
 
 ---
 
@@ -55,7 +56,7 @@ Read this at the start of every session. It contains all key product decisions, 
 | `KALLOS-Bosch-Sanity-Entry-Guide.html` | 8-day Bosch journey Sanity entry guide — all fields for all 8 days, including medium, themes, location. Ready for manual Sanity entry. |
 | `KALLOS-HolyWeek-2026-Pipeline.html` | Holy Week P&P pipeline — 8 days (Palm Sunday–Easter), hooks, Surprising History notes, audio table. Needs Lectio + Actio before Sanity entry. |
 | `KALLOS-Content-Guide-HolyWeek.html` | Agent content instructions for Holy Week P&P — arc table, hook guidance, Surprising History layer, Lectio territory by day, Actio rules, audio table, voice rules, pre-publish checklist. |
-| `KALLOS-HolyWeek-Sanity-Entry-Guide.html` | Holy Week P&P Sanity entry guide — all 8 days (Palm Sunday–Easter), all fields pre-filled except Lectio + Actio (placeholders with territory guidance). Deadline March 27. |
+| `KALLOS-HolyWeek-Sanity-Entry-Guide.html` | Holy Week P&P Sanity entry guide — all 8 days (Palm Sunday–Easter), all fields pre-filled except Lectio + Actio (placeholders with territory guidance). Deadline March 28. |
 | `KALLOS-PM-Brief.html` | Product brief for cold sessions — product purpose, the seven real users, what "earns its place," Lectio quality standard, Sheri's working style, settled decisions. Read this before any content or editorial work. |
 | `KALLOS-Onboarding-Copy.html` | Onboarding screen copy — 4 screens, voice-reviewed March 2026. Reference doc for onboarding build. |
 
@@ -114,6 +115,17 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ Onboarding Screen 4 secondary CTA revised: "Browse Journeys" → "Start with Beauty, Truth & Goodness →"
 - ✅ Intro Journey restructured: 3-day entry-point version (Beauty / Truth / Goodness) + 7-day deeper dive — see Journey Framework below
 
+### Phase 2 Work Done (March 27, 2026)
+- ✅ Onboarding flow built : 5 screens, Stories-style progress bar + swipe, espresso mode (`app/splash/page.tsx`)
+- ✅ Beta onboarding gate : `localStorage` replaced with `sessionStorage`. Shows once per browser session, resets on close. See Beta behavior note in Onboarding Framework below.
+- ✅ Pulsing circle nav button on all onboarding screens , consistent with Breathe page animation language (`kallosNavBreathe` keyframe, 3.5s ease-in-out)
+- ✅ Onboarding typography finalized . KALLOS wordmark: Montserrat 1.75rem tracking 0.3em weight 600. Headlines: Cormorant 2.125rem italic. Body: Open Sans 0.9375rem weight 300 lineHeight 1.8. Screen 3 cards: Open Sans (not Cormorant, not quotes).
+- ✅ Safe area bottom padding: `calc(env(safe-area-inset-bottom, 0px) + 88px)` across all 5 screens
+- ✅ Primary CTA label confirmed: "Start here →" routes to `beauty-truth-and-goodness` journey slug
+- ✅ Beta feedback survey drafted : 6 questions, anonymous, no Google account required. Ready for Sheri to enter in Google Forms.
+- ✅ Beta tester text message drafted
+- ✅ Audio player bug fixed: added useEffect cleanup to stop audio when journey closes, added pause/play event listeners to keep UI in sync if browser interrupts playback. Both bugs resolved in `CircularAudioPlayer` in `JourneyDaySteps.tsx`.
+
 ### Phase 2 Work Done (March 25, 2026)
 - ✅ Em dash ban enforced universally — all content docs and pipeline docs cleaned (87–88 em dashes removed per doc)
 - ✅ Audio sourcing rules synced across all docs — both content guides now match the full 5-rule framework in CLAUDE.md (Pixabay, Musopen, FMA, Internet Archive, gregorian-chant-hymns.com, Bandcamp; genre guidance; worked examples)
@@ -126,15 +138,30 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ Bosch journey + Bosch Sanity entry guide added to CLAUDE.md content docs table
 
 ### Up Next: Phase 2 Remaining
-- Seed content into Sanity: Intro journey, Themes 2–5, Pause & Ponder prompts
+
+**Next session priorities (in order):**
+1. **Holy Week Sanity entry:** deadline March 28. All 8 days, use `KALLOS-HolyWeek-Sanity-Entry-Guide.html`. Lectio + Actio still need to be written first.
+2. **Explore screen purpose & design:** current Explore feels like a database. Three directions under consideration (see Parking Lot). Product design session before any code.
+3. **Standards for seeding docs:** define a repeatable format/checklist for Sanity entry guides so every new content type gets the same treatment.
+4. **3-day BTG journey content review:** reshape Days 1, 3, 5 from existing 7-day doc into standalone 3-day entry-point journey. Sanity entry guide needed.
+5. **Create Google Forms beta feedback survey:** 6 questions drafted (March 27). Sheri enters in Google Forms.
+6. **Content pipeline audit:** review all P&P + Journey content for variety and cohesion across the full arc. Claude content audit pass.
+
+**Also pending (smaller):**
+- Explore page duplicate content items: when a content item has been uploaded more than once to Sanity, each instance shows as a separate card on Explore. Confirmed with Adoration of the Magi and Calling of Matthew. Needs dedup logic or a Sanity cleanup pass. Discuss before building.
+- Days 4–8 P&P rewrites in Sanity: edits from `KALLOS-PP-Audit-Days4-8.html`. Sheri manual entry.
+- Day 2 Bosch Sanity updates: `philosophyText` + `philosophyAttribution` + Auditio YouTube URL. Sheri manual entry.
+- Scripture audit (NIV → RSV-2CE): Holy Week + Days 9–18 drafted before translation standard was set. Verify before or during Sanity entry.
+- Background music player: restore for Journey steps (removed when Stories nav replaced footer). Discuss placement with Sheri before building.
+- Seed content into Sanity: Intro journey, Themes 2–5
 - Source high-res images for all new content (search terms provided in docs)
-- Build onboarding flow — structure defined (see Onboarding Framework below). Copy still being wordsmithed by Sheri. Do not build until copy is confirmed.
+- ✅ Onboarding flow built: 5 screens live (March 27, 2026)
 - Sanity Studio manual tasks (Sheri): rename Studio URL, update splash content
 - User testing with Stories navigation and Breathe page
 
 ### Onboarding Framework — Settled Decisions (March 27, 2026)
 
-**Copy status:** Sheri is wordsmithing. Do not build until copy is confirmed. These are structural/behavior decisions, not copy decisions.
+**Build status:** ✅ Built and deployed (March 27, 2026). `app/splash/page.tsx`.
 
 **Screen count:** Target 5 screens. 4 feels tight; up to 6 is acceptable. Each screen does one thing.
 
@@ -157,7 +184,7 @@ Read this at the start of every session. It contains all key product decisions, 
 - Do NOT suppress onboarding after first view. Every time the app opens, onboarding shows.
 - "Skip" = skip for now. Not a permanent dismissal.
 - Rationale: beta testers may return days later and need the context. A user who skips on first open and comes back should still see the intro.
-- Code implication: Remove the `localStorage.getItem("kallos-onboarded")` suppress check on the Today page. OR replace "set and never show again" with a session-only flag (show once per browser session, not once ever).
+- Code implemented: `sessionStorage` flag (`kallos-session`) — set on skip or CTA tap, checked on Today page load. Shows once per browser session, resets when tab is closed.
 - ⚠️ **Revisit after beta.** When the app goes live, onboarding should show once per install/account, not every session. This is a deliberate beta-only choice.
 
 **Skip behavior:**
@@ -362,7 +389,7 @@ The Lectio is a philosophy + scripture pairing — two voices arriving at the sa
 - Write for the curious seeker — someone moved by beauty, regardless of faith background. Assume curiosity, not faith.
 - Never use: "journey," "sacred," "profound," "transformative," "spiritual practice," "invitation to…"
 - Never use **"shaft"** when describing light. Use "ray" or "stream" instead. (e.g., "a ray of light," not "a shaft of light")
-- **No em dashes.** Em dashes are a telltale sign of AI-generated text and are banned in all KALLOS content. Use a comma, a period, or a short hyphen instead.
+- **No em dashes. This applies everywhere.** Em dashes are a telltale sign of AI-generated text and are banned in all KALLOS content AND in all docs Claude writes or updates during a session (CLAUDE.md, skills tracker, session summaries, entry guides, everything). Use a comma, a period, a colon, or a short hyphen instead. Before ending any session, Claude must grep new content for em dashes and fix them.
 - Curator note max length: 3–5 sentences. Short enough to read in one breath.
 - Questions must connect to the user's real life — not hypothetical ("what would it feel like") but personal ("what was the last time you…")
 - No explaining the art. The hook reveals what isn't obvious; the image speaks for itself.

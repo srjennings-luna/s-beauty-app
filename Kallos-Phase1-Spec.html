@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KALLOS — Phase 1 Implementation Spec</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.8; color: #2C2C2C; background: #FFFFFF;
+        }
+        h1, h2, h3, h4 {
+            font-family: Arial, sans-serif; font-weight: 600; color: #111820;
+            margin-top: 1.5em; margin-bottom: 0.75em; letter-spacing: -0.5px;
+        }
+        h1 { font-size: 3.2em; margin-top: 0; }
+        h2 { font-size: 2.2em; margin-top: 2em; padding-top: 1.5em; border-top: 2px solid #C19B5F; }
+        h3 { font-size: 1.6em; color: #1A3D52; }
+        h4 { font-size: 1.2em; color: #2E5F78; }
+        p { margin-bottom: 1em; font-size: 1.05em; }
+        .container { max-width: 900px; margin: 0 auto; padding: 60px 40px; }
+
+        .cover {
+            background: linear-gradient(135deg, #111820 0%, #1A3D52 100%);
+            color: #F0F4F6; padding: 100px 40px; text-align: center;
+            margin-bottom: 60px; border-bottom: 4px solid #C19B5F;
+        }
+        .cover h1 { color: #C19B5F; font-size: 4em; letter-spacing: 2px; margin-bottom: 0.2em; }
+        .cover .subtitle { font-size: 1.6em; color: #F0F4F6; font-style: italic; font-family: Georgia, serif; margin-bottom: 1em; }
+        .cover .meta { font-size: 0.95em; color: #8AACBF; text-transform: uppercase; letter-spacing: 1px; }
+
+        .purpose {
+            background: #F5F0E8; border-left: 4px solid #C19B5F; padding: 20px 25px;
+            margin: 30px 0; font-size: 1.05em;
+        }
+
+        .schema-block {
+            background: #F8FAFB; border: 1px solid #D1D9DE; padding: 25px 30px;
+            margin: 20px 0; border-left: 4px solid #2E5F78;
+        }
+        .schema-block h4 { margin-top: 0; color: #111820; font-size: 1.3em; }
+        .schema-block .type-label {
+            display: inline-block; background: #2E5F78; color: white;
+            font-size: 0.75em; padding: 2px 10px; letter-spacing: 1px;
+            text-transform: uppercase; margin-bottom: 10px;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin: 15px 0 25px 0; font-size: 0.95em; }
+        th { background: #111820; color: #F0F4F6; text-align: left; padding: 10px 14px; font-weight: 600; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { padding: 10px 14px; border-bottom: 1px solid #E8ECF0; vertical-align: top; }
+        tr:nth-child(even) td { background: #F8FAFB; }
+
+        .field-name { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.9em; color: #2E5F78; font-weight: 600; }
+        .field-type { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.85em; color: #93583E; }
+        .required { color: #C62828; font-weight: 600; font-size: 0.8em; }
+        .conditional { color: #6A1B9A; font-size: 0.85em; font-style: italic; }
+
+        .migration-note {
+            background: #FFF8E1; border: 1px solid #FFE082; padding: 15px 20px;
+            margin: 15px 0; font-size: 0.95em;
+        }
+        .migration-note strong { color: #E65100; }
+
+        .handoff {
+            background: #E8F5E9; border: 1px solid #A5D6A7; padding: 15px 20px;
+            margin: 15px 0;
+        }
+        .handoff strong { color: #2E7D32; }
+
+        .danger {
+            background: #FFEBEE; border: 1px solid #EF9A9A; padding: 15px 20px;
+            margin: 15px 0;
+        }
+        .danger strong { color: #C62828; }
+
+        .pill {
+            display: inline-block; padding: 4px 14px; font-size: 0.8em;
+            font-weight: 600; letter-spacing: 0.5px; margin: 3px;
+        }
+        .pill-keep { background: #E8F5E9; color: #2E7D32; }
+        .pill-modify { background: #FFF8E1; color: #E65100; }
+        .pill-new { background: #E3F2FD; color: #1565C0; }
+        .pill-retire { background: #FFEBEE; color: #C62828; }
+
+        .divider { border-top: 1px solid #E0E0E0; margin: 40px 0; }
+
+        code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            background: #F0F4F6; padding: 2px 6px; font-size: 0.9em; color: #2E5F78;
+        }
+
+        ul { margin: 10px 0 15px 20px; }
+        li { margin-bottom: 6px; font-size: 1em; }
+    </style>
+</head>
+<body>
+
+<div class="cover">
+    <h1>KALLOS</h1>
+    <div class="subtitle">Phase 1: Foundation & Seeding — Implementation Spec</div>
+    <div class="meta">Handoff document for Claude Code &bull; February 2026</div>
+</div>
+
+<div class="container">
+
+    <!-- PURPOSE -->
+    <div class="purpose">
+        <strong>What this document is:</strong> A complete spec for Phase 1 implementation. It tells Claude Code exactly what to build, what to change, and what to leave alone. Each section ends with a handoff summary — the specific files to create or modify, in what order.
+    </div>
+
+    <!-- OVERVIEW -->
+    <h2>Overview: What Changes</h2>
+
+    <p>The app is transitioning from an EWTN companion app (episode-based, location-first) to KALLOS — an independent contemplative discovery app (content-first, theme-organized). Phase 1 lays the foundation.</p>
+
+    <h3>Schema Status</h3>
+    <p>
+        <span class="pill pill-retire">RETIRE: episode</span>
+        <span class="pill pill-modify">MODIFY: artwork → contentItem</span>
+        <span class="pill pill-keep">KEEP: splashPage</span>
+        <span class="pill pill-keep">KEEP: traditionReflection (expand themes)</span>
+        <span class="pill pill-new">NEW: theme</span>
+        <span class="pill pill-new">NEW: journey</span>
+        <span class="pill pill-new">NEW: dailyPrompt</span>
+    </p>
+
+    <div class="migration-note">
+        <strong>Migration note:</strong> The existing Sanity dataset has live content (episodes, artworks, tradition reflections, splash pages). Don't delete the <code>episode</code> schema immediately — deprecate it. Existing <code>artwork</code> documents can be migrated to the new <code>contentItem</code> schema by adding the new fields; the existing field structure is mostly compatible.
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ============================================ -->
+    <!-- SCHEMA 1: THEME -->
+    <!-- ============================================ -->
+    <h2>1. New Schema: <code>theme</code></h2>
+
+    <div class="schema-block">
+        <span class="type-label">Document</span>
+        <h4>theme</h4>
+        <p>The organizing principle for all content. Themes tag every content item and structure every Journey. The five founding themes are: Light, Silence, Suffering & Beauty, Creation, Home / The Restless Heart.</p>
+
+        <table>
+            <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">title</td>
+                    <td class="field-type">string</td>
+                    <td class="required">Yes</td>
+                    <td>Theme name. e.g., "Light"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">slug</td>
+                    <td class="field-type">slug</td>
+                    <td class="required">Yes</td>
+                    <td>URL-safe version. Source: title. e.g., "light"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">question</td>
+                    <td class="field-type">string</td>
+                    <td class="required">Yes</td>
+                    <td>The central question. e.g., "What does light reveal that darkness hides?"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">description</td>
+                    <td class="field-type">text (3 rows)</td>
+                    <td class="required">Yes</td>
+                    <td>2–3 sentence description of the theme for the Explore/Journey UI</td>
+                </tr>
+                <tr>
+                    <td class="field-name">color</td>
+                    <td class="field-type">string</td>
+                    <td>No</td>
+                    <td>Hex color for UI pills and theme cards. e.g., "#C19B5F"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">order</td>
+                    <td class="field-type">number</td>
+                    <td>No</td>
+                    <td>Display order in theme lists. Initial: 1–5.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">image</td>
+                    <td class="field-type">image (hotspot)</td>
+                    <td>No</td>
+                    <td>Optional hero image for theme cards in Explore UI</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ============================================ -->
+    <!-- SCHEMA 2: CONTENT ITEM -->
+    <!-- ============================================ -->
+    <h2>2. Modified Schema: <code>artwork</code> → <code>contentItem</code></h2>
+
+    <div class="migration-note">
+        <strong>Why one unified type:</strong> All 7 content types share core fields (title, image, themes, reflection questions). Journeys, the Explore tab, and the Daily Prompt all need to reference content — one type means one query, one reference type, one filter system. Sanity's conditional field visibility keeps the Studio UX clean for each content type.
+    </div>
+
+    <div class="schema-block">
+        <span class="type-label">Document</span>
+        <h4>contentItem</h4>
+        <p>Replaces the current <code>artwork</code> schema. The <code>contentType</code> field replaces <code>locationType</code> and expands from 5 location categories to 7 content types.</p>
+
+        <h4>Shared Fields (always visible)</h4>
+        <table>
+            <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">contentType</td>
+                    <td class="field-type">string (radio)</td>
+                    <td class="required">Yes</td>
+                    <td>
+                        Options: <code>sacred-art</code>, <code>thinker</code>, <code>literature</code>, <code>music</code>, <code>food-wine</code>, <code>landscape</code>, <code>watch-listen</code><br>
+                        <em>Initial: sacred-art. Replaces locationType.</em>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="field-name">title</td>
+                    <td class="field-type">string</td>
+                    <td class="required">Yes</td>
+                    <td>Content title. e.g., "Pietà" or "Into Great Silence"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">image</td>
+                    <td class="field-type">image (hotspot)</td>
+                    <td class="required">Yes</td>
+                    <td>High-res image. Min 1200px, up to 4500px for detail works. Every content item must have an image — this is a core KALLOS principle.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">description</td>
+                    <td class="field-type">text (3 rows)</td>
+                    <td class="required">Yes</td>
+                    <td>Short description for cards and previews. 1–2 sentences.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">context</td>
+                    <td class="field-type">text (6 rows)</td>
+                    <td>No</td>
+                    <td>Deeper context. Replaces <code>historicalSummary</code>. Why this matters, what to notice, how it connects to the tradition.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">themes</td>
+                    <td class="field-type">array of references → theme</td>
+                    <td class="required">Yes (min 1)</td>
+                    <td>Which themes this content speaks to. e.g., a Caravaggio could be tagged Light + Suffering & Beauty.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">reflectionQuestions</td>
+                    <td class="field-type">array of string</td>
+                    <td>No</td>
+                    <td>1–3 questions for contemplation. Used in Reflect step of Journeys and on content detail page.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">curatorNote</td>
+                    <td class="field-type">text (3 rows)</td>
+                    <td>No</td>
+                    <td>Why this was chosen. The human voice behind the curation. Shown on detail view.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Location Fields (visible for all types — optional for non-place content)</h4>
+        <table>
+            <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">locationName</td>
+                    <td class="field-type">string</td>
+                    <td>No</td>
+                    <td>e.g., "St. Peter's Basilica", "Grande Chartreuse"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">city</td>
+                    <td class="field-type">string</td>
+                    <td>No</td>
+                    <td>e.g., "Rome", "Florence"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">country</td>
+                    <td class="field-type">string</td>
+                    <td>No</td>
+                    <td>Default: empty (not Italy anymore — KALLOS is global)</td>
+                </tr>
+                <tr>
+                    <td class="field-name">coordinates</td>
+                    <td class="field-type">object { lat: number, lng: number }</td>
+                    <td>No</td>
+                    <td>For Explore map view. Only populate when content has a meaningful physical location.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Sacred Art & Architecture Fields</h4>
+        <p class="conditional">Visible when contentType = sacred-art</p>
+        <table>
+            <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">artist</td>
+                    <td class="field-type">string</td>
+                    <td>No</td>
+                    <td>e.g., "Michelangelo Buonarroti"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">year</td>
+                    <td class="field-type">string</td>
+                    <td>No</td>
+                    <td>e.g., "1498–1499" or "c. 1600"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">medium</td>
+                    <td class="field-type">string</td>
+                    <td>No</td>
+                    <td>e.g., "Oil on canvas", "Marble", "Fresco"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">scripturePairing</td>
+                    <td class="field-type">object { verse: text, reference: string }</td>
+                    <td>No</td>
+                    <td>Scripture paired with this work. e.g., "Lamentations 1:12"</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Thinkers & Quotes Fields</h4>
+        <p class="conditional">Visible when contentType = thinker</p>
+        <table>
+            <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">thinkerName</td>
+                    <td class="field-type">string</td>
+                    <td class="required">Yes</td>
+                    <td>e.g., "St. Augustine", "Roger Scruton"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">quote</td>
+                    <td class="field-type">object { text: text, source: string }</td>
+                    <td class="required">Yes</td>
+                    <td>The primary quote. Source = work title, e.g., "Confessions, Book X"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">era</td>
+                    <td class="field-type">string (dropdown)</td>
+                    <td>No</td>
+                    <td>Options: ancient, patristic, medieval, renaissance, modern, contemporary</td>
+                </tr>
+                <tr>
+                    <td class="field-name">tradition</td>
+                    <td class="field-type">string</td>
+                    <td>No</td>
+                    <td>e.g., "Platonist", "Thomist", "Phenomenologist"</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Literature & Poetry Fields</h4>
+        <p class="conditional">Visible when contentType = literature</p>
+        <table>
+            <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">author</td>
+                    <td class="field-type">string</td>
+                    <td class="required">Yes</td>
+                    <td>e.g., "Gerard Manley Hopkins"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">workTitle</td>
+                    <td class="field-type">string</td>
+                    <td class="required">Yes</td>
+                    <td>e.g., "God's Grandeur" or "The Brothers Karamazov"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">excerpt</td>
+                    <td class="field-type">text (8 rows)</td>
+                    <td>No</td>
+                    <td>A passage or stanza. Must be public domain or properly licensed.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">literaryForm</td>
+                    <td class="field-type">string (dropdown)</td>
+                    <td>No</td>
+                    <td>Options: poetry, novel, essay, letter, homily, prayer</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Music Fields</h4>
+        <p class="conditional">Visible when contentType = music</p>
+        <table>
+            <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">composer</td>
+                    <td class="field-type">string</td>
+                    <td>No</td>
+                    <td>e.g., "Arvo Pärt", "J.S. Bach"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">performer</td>
+                    <td class="field-type">string</td>
+                    <td>No</td>
+                    <td>e.g., "Hilliard Ensemble"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">durationMinutes</td>
+                    <td class="field-type">number</td>
+                    <td>No</td>
+                    <td>Approximate listening time</td>
+                </tr>
+                <tr>
+                    <td class="field-name">musicUrl</td>
+                    <td class="field-type">url</td>
+                    <td>No</td>
+                    <td>YouTube, Spotify, or Apple Music link for listening</td>
+                </tr>
+                <tr>
+                    <td class="field-name">audioFile</td>
+                    <td class="field-type">file</td>
+                    <td>No</td>
+                    <td>Direct audio file (for public domain / licensed tracks hosted in Sanity)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Food & Wine Fields</h4>
+        <p class="conditional">Visible when contentType = food-wine</p>
+        <table>
+            <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">craftTradition</td>
+                    <td class="field-type">string</td>
+                    <td>No</td>
+                    <td>e.g., "Cistercian monastic brewing", "3rd-generation Neapolitan bakery"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">pointsToward</td>
+                    <td class="field-type">text (3 rows)</td>
+                    <td>No</td>
+                    <td>What does this point toward? The beauty-connection. Required editorial voice.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Natural Landscape Fields</h4>
+        <p class="conditional">Visible when contentType = landscape</p>
+        <table>
+            <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">creationTheology</td>
+                    <td class="field-type">text (4 rows)</td>
+                    <td>No</td>
+                    <td>How this landscape speaks to creation theology. Paired thinker/scripture connection.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Watch & Listen Fields</h4>
+        <p class="conditional">Visible when contentType = watch-listen</p>
+        <table>
+            <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">mediaType</td>
+                    <td class="field-type">string (radio)</td>
+                    <td class="required">Yes</td>
+                    <td>Options: <code>video</code>, <code>podcast</code>, <code>documentary</code>, <code>lecture</code></td>
+                </tr>
+                <tr>
+                    <td class="field-name">mediaUrl</td>
+                    <td class="field-type">url</td>
+                    <td class="required">Yes</td>
+                    <td>YouTube, Vimeo, or podcast URL</td>
+                </tr>
+                <tr>
+                    <td class="field-name">durationMinutes</td>
+                    <td class="field-type">number</td>
+                    <td>No</td>
+                    <td>Video/podcast duration</td>
+                </tr>
+                <tr>
+                    <td class="field-name">series</td>
+                    <td class="field-type">string</td>
+                    <td>No</td>
+                    <td>If part of a series. e.g., "Seeking Beauty", "Bishop Barron's Word on Fire"</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="migration-note">
+        <strong>Migration from existing artwork data:</strong>
+        <ul>
+            <li><code>locationType</code> → map to <code>contentType</code>: sacred-art stays sacred-art, architecture → sacred-art, workshop → food-wine, cultural → food-wine, landscape → landscape</li>
+            <li><code>historicalSummary</code> → rename to <code>context</code></li>
+            <li><code>quote</code> object (text + attribution) → keep as-is for backward compat, use <code>curatorNote</code> going forward</li>
+            <li>Add empty <code>themes: []</code> to all existing docs (to be populated by Content Agent)</li>
+            <li>Existing image, coordinates, location fields are unchanged</li>
+        </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ============================================ -->
+    <!-- SCHEMA 3: JOURNEY -->
+    <!-- ============================================ -->
+    <h2>3. New Schema: <code>journey</code></h2>
+
+    <div class="schema-block">
+        <span class="type-label">Document</span>
+        <h4>journey</h4>
+        <p>A 7-day curated exploration of one theme across multiple content types. The integrated curriculum model — all content answers the same central question from different angles.</p>
+
+        <table>
+            <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">title</td>
+                    <td class="field-type">string</td>
+                    <td class="required">Yes</td>
+                    <td>Journey title. e.g., "Light"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">slug</td>
+                    <td class="field-type">slug</td>
+                    <td class="required">Yes</td>
+                    <td>URL-safe. Source: title.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">theme</td>
+                    <td class="field-type">reference → theme</td>
+                    <td class="required">Yes</td>
+                    <td>Which theme this Journey explores</td>
+                </tr>
+                <tr>
+                    <td class="field-name">description</td>
+                    <td class="field-type">text (4 rows)</td>
+                    <td class="required">Yes</td>
+                    <td>What the seeker will explore over 7 days. Shown on Journey card.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">heroImage</td>
+                    <td class="field-type">image (hotspot)</td>
+                    <td class="required">Yes</td>
+                    <td>Cover image for Journey card. High-res.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">estimatedMinutesPerDay</td>
+                    <td class="field-type">number</td>
+                    <td>No</td>
+                    <td>Default: 10. Shown as "~10 min/day"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">isPublished</td>
+                    <td class="field-type">boolean</td>
+                    <td>No</td>
+                    <td>Default: false. Toggle when all 7 days are ready.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">order</td>
+                    <td class="field-type">number</td>
+                    <td>No</td>
+                    <td>Display order in Journey list.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">days</td>
+                    <td class="field-type">array of journeyDay objects</td>
+                    <td class="required">Yes</td>
+                    <td>Exactly 7 days. See journeyDay structure below.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>journeyDay (inline object within days array)</h4>
+        <p>Each day follows the 5-step structure: Open → Encounter → Reflect → Connect → Go Deeper.</p>
+        <table>
+            <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">dayNumber</td>
+                    <td class="field-type">number</td>
+                    <td class="required">Yes</td>
+                    <td>1–7</td>
+                </tr>
+                <tr>
+                    <td class="field-name">dayTitle</td>
+                    <td class="field-type">string</td>
+                    <td class="required">Yes</td>
+                    <td>e.g., "The First Light" or "What Darkness Teaches"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">openImage</td>
+                    <td class="field-type">image (hotspot)</td>
+                    <td class="required">Yes</td>
+                    <td><strong>ALWAYS required.</strong> The visual anchor for the day. Min 1200px. This is the image the user sees first and returns to. Every day has an image regardless of content type.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">openText</td>
+                    <td class="field-type">text (3 rows)</td>
+                    <td>No</td>
+                    <td>Brief opening text (~1 min read). Sets the day's frame. Optional if image alone is sufficient.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">encounterContent</td>
+                    <td class="field-type">reference → contentItem</td>
+                    <td class="required">Yes</td>
+                    <td>The primary content for this day. Links to a contentItem of any type. This is the 3–5 min encounter.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">encounterGuidance</td>
+                    <td class="field-type">text (3 rows)</td>
+                    <td>No</td>
+                    <td>Optional editorial guidance for how to engage with this content. e.g., "Listen with your eyes closed for the first minute."</td>
+                </tr>
+                <tr>
+                    <td class="field-name">reflectQuestions</td>
+                    <td class="field-type">array of string</td>
+                    <td class="required">Yes (1–2)</td>
+                    <td>Journey-specific reflection questions for this day (may differ from the contentItem's own reflection questions).</td>
+                </tr>
+                <tr>
+                    <td class="field-name">connectThread</td>
+                    <td class="field-type">string</td>
+                    <td>No</td>
+                    <td>One sentence threading to tomorrow. e.g., "Tomorrow: what happens when the light goes away?"</td>
+                </tr>
+                <tr>
+                    <td class="field-name">goDeeper</td>
+                    <td class="field-type">array of references → traditionReflection</td>
+                    <td>No</td>
+                    <td>Optional tradition reflections for this day. User's choice to explore.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ============================================ -->
+    <!-- SCHEMA 4: DAILY PROMPT -->
+    <!-- ============================================ -->
+    <h2>4. New Schema: <code>dailyPrompt</code></h2>
+
+    <div class="schema-block">
+        <span class="type-label">Document</span>
+        <h4>dailyPrompt</h4>
+        <p>The Today tab centerpiece. One curated piece of content + one reflection question, editorially chosen. Not algorithmic. Designed to be opened every morning.</p>
+
+        <table>
+            <thead>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="field-name">date</td>
+                    <td class="field-type">date</td>
+                    <td class="required">Yes</td>
+                    <td>The date this prompt appears. One per day. Format: YYYY-MM-DD.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">content</td>
+                    <td class="field-type">reference → contentItem</td>
+                    <td class="required">Yes</td>
+                    <td>The featured content for this day.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">promptQuestion</td>
+                    <td class="field-type">text (2 rows)</td>
+                    <td class="required">Yes</td>
+                    <td>The single reflection question for the day. Curated specifically for this pairing.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">curatorNote</td>
+                    <td class="field-type">text (3 rows)</td>
+                    <td>No</td>
+                    <td>Optional: why this was chosen for today. The human editorial voice.</td>
+                </tr>
+                <tr>
+                    <td class="field-name">theme</td>
+                    <td class="field-type">reference → theme</td>
+                    <td>No</td>
+                    <td>Optional theme tag. Helps if user is on a Journey — they see the connection.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ============================================ -->
+    <!-- SCHEMA 5: TRADITION REFLECTION UPDATE -->
+    <!-- ============================================ -->
+    <h2>5. Modified Schema: <code>traditionReflection</code></h2>
+
+    <div class="schema-block">
+        <span class="type-label">Modify existing</span>
+        <h4>traditionReflection</h4>
+        <p>Keep everything. Add one field: <code>themes</code> (array of references → theme). This replaces the current string-based <code>theme</code> dropdown so tradition reflections connect to the same theme system as all content.</p>
+
+        <table>
+            <thead>
+                <tr><th>Change</th><th>Details</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Add field:</strong> <code>themes</code></td>
+                    <td>Array of references → theme. Replaces the current string dropdown. Keep the old <code>theme</code> field temporarily for migration, but hide it in the Studio.</td>
+                </tr>
+                <tr>
+                    <td><strong>Keep everything else</strong></td>
+                    <td>authorType, title, summary, shortQuote, source, order, era — all unchanged.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ============================================ -->
+    <!-- EWTN REMOVAL -->
+    <!-- ============================================ -->
+    <h2>6. EWTN Removal & Rebranding</h2>
+
+    <p>Every reference to EWTN, "Seeking Beauty", episodes, and David Henrie needs to be removed or replaced. Here's the complete list:</p>
+
+    <table>
+        <thead>
+            <tr><th>File</th><th>What to Change</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="field-name">app/layout.tsx</td>
+                <td>
+                    Metadata title → "KALLOS — Love the beautiful and the good"<br>
+                    Metadata description → update to KALLOS description<br>
+                    Keywords → remove "EWTN", "Catholic" — add "beauty", "contemplation", "classical", "tradition"
+                </td>
+            </tr>
+            <tr>
+                <td class="field-name">app/page.tsx</td>
+                <td>
+                    Remove "An EWTN+ Original Series" text<br>
+                    Remove "with David Henrie"<br>
+                    Remove hardcoded Unsplash hero image<br>
+                    Rebuild as Today tab (see Navigation section below)
+                </td>
+            </tr>
+            <tr>
+                <td class="field-name">sanity/schemaTypes/episode.ts</td>
+                <td>
+                    Keep file but add deprecation comment at top<br>
+                    Do NOT delete — existing Sanity data references it<br>
+                    Remove from Studio navigation (hide from sidebar) once contentItem is live
+                </td>
+            </tr>
+            <tr>
+                <td class="field-name">sanity/schemaTypes/artwork.ts</td>
+                <td>
+                    Rename to <code>contentItem.ts</code><br>
+                    Update schema name from 'artwork' to 'contentItem'<br>
+                    Apply all new fields from Section 2 above
+                </td>
+            </tr>
+            <tr>
+                <td class="field-name">data/episodes.ts</td>
+                <td>Delete. Only used by broken Favorites page. Favorites will be rebuilt.</td>
+            </tr>
+            <tr>
+                <td class="field-name">lib/types.ts</td>
+                <td>
+                    Replace Episode type with ContentItem type<br>
+                    Add Theme, Journey, JourneyDay, DailyPrompt types<br>
+                    Update Artwork type → ContentItem<br>
+                    Keep TraditionReflection, update theme field to themes array
+                </td>
+            </tr>
+            <tr>
+                <td class="field-name">lib/sanity.ts</td>
+                <td>
+                    Replace all episode queries with contentItem queries<br>
+                    Add: getContentByTheme(), getDailyPrompt(), getJourney(), getThemes()<br>
+                    Keep: getTraditionReflections() (update theme filter)<br>
+                    Keep: image URL builder
+                </td>
+            </tr>
+            <tr>
+                <td class="field-name">tailwind.config.ts</td>
+                <td>
+                    Remove ewtn-red, ewtn-red-dark color definitions<br>
+                    Fix accent-gold to #C19B5F (currently #C9A227 — wrong)
+                </td>
+            </tr>
+            <tr>
+                <td class="field-name">localStorage keys</td>
+                <td>Rename <code>seeking-beauty-onboarded</code> → <code>kallos-onboarded</code><br>
+                    Rename <code>seeking-beauty-favorites</code> → <code>kallos-favorites</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="divider"></div>
+
+    <!-- ============================================ -->
+    <!-- NAVIGATION -->
+    <!-- ============================================ -->
+    <h2>7. Navigation: 3 Tabs → 4 Tabs</h2>
+
+    <table>
+        <thead>
+            <tr><th>Current</th><th>New</th><th>Route</th><th>What It Shows</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Home (episodes)</td>
+                <td><strong>Today</strong></td>
+                <td><code>/</code></td>
+                <td>Daily Beauty Prompt (hero), active Journey progress (if any), recent content</td>
+            </tr>
+            <tr>
+                <td>Artwalk (map)</td>
+                <td><strong>Explore</strong></td>
+                <td><code>/explore</code></td>
+                <td>All content with type filters + theme filters + map toggle. Content-first, location as lens.</td>
+            </tr>
+            <tr>
+                <td><em>new</em></td>
+                <td><strong>Journeys</strong></td>
+                <td><code>/journeys</code></td>
+                <td>Available Journeys. Cards with theme, description, progress. Tap → Journey detail with 7 days.</td>
+            </tr>
+            <tr>
+                <td>Favorites</td>
+                <td><strong>Library</strong></td>
+                <td><code>/library</code></td>
+                <td>Favorites + completed Journeys + Visio Divina history. Personal collection.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="danger">
+        <strong>Do not break:</strong> The Visio Divina prayer page (<code>/pray/[artworkId]</code>) and Go Deeper section are already built and working. The prayer page references artworks by Sanity <code>_id</code>. When renaming artwork → contentItem, ensure the <code>_id</code> values in Sanity are preserved. The prayer route should continue to work — just update the query to fetch from contentItem instead of artwork.
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ============================================ -->
+    <!-- KNOWN BUGS -->
+    <!-- ============================================ -->
+    <h2>8. Bug Fixes (while you're in there)</h2>
+
+    <table>
+        <thead>
+            <tr><th>Priority</th><th>Issue</th><th>Fix</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="required">CRITICAL</td>
+                <td>Favorites page uses static <code>data/episodes.ts</code> IDs instead of Sanity IDs</td>
+                <td>Rebuild Library page to query Sanity by stored IDs. Delete <code>data/episodes.ts</code>.</td>
+            </tr>
+            <tr>
+                <td class="required">HIGH</td>
+                <td>globals.css has rounded corners in some classes despite design doc saying NO rounded corners</td>
+                <td>Audit all <code>border-radius</code> in globals.css. Set to 0 everywhere. Design system: sharp/square corners only.</td>
+            </tr>
+            <tr>
+                <td class="required">HIGH</td>
+                <td>tailwind.config has wrong accent-gold (#C9A227 instead of #C19B5F)</td>
+                <td>Fix to <code>#C19B5F</code>.</td>
+            </tr>
+            <tr>
+                <td>MEDIUM</td>
+                <td>TypeScript types redefined in multiple page files instead of using lib/types.ts</td>
+                <td>Consolidate. All pages import from <code>lib/types.ts</code>.</td>
+            </tr>
+            <tr>
+                <td>MEDIUM</td>
+                <td>No error/empty states — users see infinite loading on fetch failure</td>
+                <td>Add error boundaries and "nothing here yet" states to all pages.</td>
+            </tr>
+            <tr>
+                <td>MEDIUM</td>
+                <td>Accessibility: icon buttons missing <code>aria-label</code></td>
+                <td>Add aria-labels to all icon-only buttons (close, toggle, favorite).</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="divider"></div>
+
+    <!-- ============================================ -->
+    <!-- IMPLEMENTATION ORDER -->
+    <!-- ============================================ -->
+    <h2>9. Implementation Order (for Claude Code)</h2>
+
+    <p>Do these in order — each step depends on the one before it.</p>
+
+    <div class="schema-block">
+        <h4>Step 1: Sanity Schema Updates</h4>
+        <p>Create <code>theme.ts</code>, <code>contentItem.ts</code>, <code>journey.ts</code>, <code>dailyPrompt.ts</code> in <code>sanity/schemaTypes/</code>. Update <code>index.ts</code> to export all schemas. Keep <code>episode.ts</code> but add deprecation comment. Keep <code>splashPage.ts</code> unchanged. Update <code>traditionReflection.ts</code> with themes array.</p>
+        <div class="handoff">
+            <strong>Files:</strong> <code>sanity/schemaTypes/theme.ts</code> (new), <code>sanity/schemaTypes/contentItem.ts</code> (new, replaces artwork.ts), <code>sanity/schemaTypes/journey.ts</code> (new), <code>sanity/schemaTypes/dailyPrompt.ts</code> (new), <code>sanity/schemaTypes/index.ts</code> (update), <code>sanity/schemaTypes/traditionReflection.ts</code> (update), <code>sanity/schemaTypes/episode.ts</code> (deprecation comment only)
+        </div>
+    </div>
+
+    <div class="schema-block">
+        <h4>Step 2: TypeScript Types + Sanity Queries</h4>
+        <p>Update <code>lib/types.ts</code> with new types (ContentItem, Theme, Journey, JourneyDay, DailyPrompt). Update <code>lib/sanity.ts</code> with new GROQ queries. Remove episode-specific queries.</p>
+        <div class="handoff">
+            <strong>Files:</strong> <code>lib/types.ts</code> (rewrite), <code>lib/sanity.ts</code> (rewrite queries)
+        </div>
+    </div>
+
+    <div class="schema-block">
+        <h4>Step 3: EWTN Removal + Rebranding</h4>
+        <p>Update layout.tsx metadata, remove all EWTN references, fix tailwind.config colors, rename localStorage keys. Update splash pages for KALLOS branding (content comes from Sanity — just update the schema references if needed).</p>
+        <div class="handoff">
+            <strong>Files:</strong> <code>app/layout.tsx</code>, <code>tailwind.config.ts</code>, <code>hooks/useFavorites.ts</code>, <code>lib/favorites.ts</code>, <code>app/splash/page.tsx</code>
+        </div>
+    </div>
+
+    <div class="schema-block">
+        <h4>Step 4: Navigation + Page Structure</h4>
+        <p>Update Navigation.tsx from 3 tabs to 4 tabs (Today, Explore, Journeys, Library). Create new route folders. Rename <code>app/map/</code> → build <code>app/explore/</code>. Create <code>app/journeys/</code> and <code>app/library/</code>. Rebuild <code>app/page.tsx</code> as Today tab.</p>
+        <div class="handoff">
+            <strong>Files:</strong> <code>components/ui/Navigation.tsx</code> (update), <code>app/page.tsx</code> (rebuild as Today), <code>app/explore/page.tsx</code> (new, based on map page), <code>app/journeys/page.tsx</code> (new), <code>app/journeys/[slug]/page.tsx</code> (new), <code>app/library/page.tsx</code> (new, replaces favorites)
+        </div>
+    </div>
+
+    <div class="schema-block">
+        <h4>Step 5: Bug Fixes + Cleanup</h4>
+        <p>Fix all known bugs from RECOMMENDATIONS.md. Delete <code>data/episodes.ts</code>. Remove unused code. Add error/empty states. Fix accessibility issues. Audit globals.css for rounded corners.</p>
+        <div class="handoff">
+            <strong>Files:</strong> <code>app/globals.css</code> (audit), <code>data/episodes.ts</code> (delete), various components for aria-labels and error states
+        </div>
+    </div>
+
+    <div class="schema-block">
+        <h4>Step 6: Test & Deploy</h4>
+        <p>Run <code>npm run build</code> to catch TypeScript errors. Test all routes. Verify Visio Divina still works. Check map markers. Commit and push to GitHub → Vercel auto-deploys.</p>
+        <div class="handoff">
+            <strong>Commands:</strong> <code>npm run build</code>, <code>npm run dev</code> (manual testing), <code>git add/commit/push</code>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ============================================ -->
+    <!-- DESIGN SYSTEM REMINDERS -->
+    <!-- ============================================ -->
+    <h2>10. Design System Reminders</h2>
+
+    <p>These are non-negotiable. Read <code>CLAUDE_REFERENCE.md</code> before writing any UI code.</p>
+
+    <table>
+        <thead>
+            <tr><th>Rule</th><th>Details</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>No rounded corners</strong></td><td>border-radius: 0 everywhere. Sharp/square corners. Classical aesthetic.</td></tr>
+            <tr><td><strong>Dark theme</strong></td><td>Background: #203545 (dark teal). Gradient: lighter teal top → darker teal bottom.</td></tr>
+            <tr><td><strong>Gold accent</strong></td><td>#C19B5F — for CTAs, active states, gold highlights. NOT #C9A227.</td></tr>
+            <tr><td><strong>Typography</strong></td><td>Montserrat (headlines), Open Sans (body), Cormorant Garamond (scripture/quotes).</td></tr>
+            <tr><td><strong>White opacity levels</strong></td><td>100% (titles), 80% (body), 50% (secondary), 40% (tertiary).</td></tr>
+            <tr><td><strong>Images</strong></td><td>Min 1200px wide. Up to 4500px. 8x zoom built in. Pinch-to-zoom via react-zoom-pan-pinch.</td></tr>
+            <tr><td><strong>Safe areas</strong></td><td>Padding for phone notches and home indicators.</td></tr>
+        </tbody>
+    </table>
+
+    <div class="divider"></div>
+
+    <!-- ============================================ -->
+    <!-- FULL REBRANDING CHECKLIST -->
+    <!-- ============================================ -->
+    <h2>11. Full Rebranding: Seeking Beauty → KALLOS</h2>
+
+    <p>Every instance of "Seeking Beauty", "s-beauty", and EWTN references across the entire project. This is the complete list — nothing should survive.</p>
+
+    <h3>Project & Package Names</h3>
+    <table>
+        <thead>
+            <tr><th>Location</th><th>Current</th><th>Change To</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="field-name">package.json → name</td>
+                <td><code>"seeking-beauty-app"</code></td>
+                <td><code>"kallos-app"</code></td>
+            </tr>
+            <tr>
+                <td class="field-name">sanity/package.json → name</td>
+                <td><code>"seeking-beauty-studio"</code></td>
+                <td><code>"kallos-studio"</code></td>
+            </tr>
+            <tr>
+                <td class="field-name">sanity/sanity.config.ts → title</td>
+                <td><code>'Seeking Beauty CMS'</code></td>
+                <td><code>'KALLOS CMS'</code></td>
+            </tr>
+            <tr>
+                <td class="field-name">GitHub repo</td>
+                <td><code>srjennings-luna/s-beauty-app</code></td>
+                <td>Rename to <code>srjennings-luna/kallos-app</code> (Sheri does this in GitHub Settings → rename)</td>
+            </tr>
+            <tr>
+                <td class="field-name">Vercel project</td>
+                <td><code>s-beauty-app.vercel.app</code></td>
+                <td>Rename to <code>kallos-app.vercel.app</code> (Sheri does this in Vercel dashboard → Settings → Project Name)</td>
+            </tr>
+            <tr>
+                <td class="field-name">Sanity Studio URL</td>
+                <td><code>seeking-beauty.sanity.studio</code></td>
+                <td>Rename to <code>kallos.sanity.studio</code> (Sheri does this in Sanity Manage → Project Settings → Studio URL)</td>
+            </tr>
+            <tr>
+                <td class="field-name">Local folder on Mac</td>
+                <td><code>~/Documents/seeking-beauty-app</code></td>
+                <td>Rename to <code>~/Documents/kallos-app</code> (Sheri renames in Finder)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="migration-note">
+        <strong>Note:</strong> Items marked "Sheri does this" are settings changes in third-party dashboards that Claude Code cannot do. These are manual steps — takes ~2 minutes total. Do these AFTER all code changes are committed and pushed. GitHub will auto-redirect the old repo URL. Vercel will need the new repo URL connected.
+    </div>
+
+    <h3>Code Files — Every "Seeking Beauty" Reference</h3>
+    <table>
+        <thead>
+            <tr><th>File</th><th>What to Change</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="field-name">app/layout.tsx</td>
+                <td>
+                    title: → <code>"KALLOS — Love the beautiful and the good"</code><br>
+                    description: → update for KALLOS<br>
+                    keywords: → remove EWTN, Catholic, David Henrie
+                </td>
+            </tr>
+            <tr>
+                <td class="field-name">app/page.tsx</td>
+                <td>
+                    Remove "Seeking Beauty" title text<br>
+                    Remove "with David Henrie" subtitle<br>
+                    Remove "An EWTN+ Original Series"<br>
+                    Change <code>seeking-beauty-onboarded</code> → <code>kallos-onboarded</code><br>
+                    Rebuild as Today page (see Step 4)
+                </td>
+            </tr>
+            <tr>
+                <td class="field-name">app/splash/page.tsx</td>
+                <td>
+                    Line 47: Remove "Seeking Beauty invites you..." EWTN copy → replace with KALLOS onboarding copy<br>
+                    Line 80: <code>seeking-beauty-onboarded</code> → <code>kallos-onboarded</code><br>
+                    Line 118: alt text → <code>"KALLOS"</code>
+                </td>
+            </tr>
+            <tr>
+                <td class="field-name">lib/favorites.ts</td>
+                <td><code>"seeking-beauty-favorites"</code> → <code>"kallos-favorites"</code></td>
+            </tr>
+            <tr>
+                <td class="field-name">CLAUDE_REFERENCE.md</td>
+                <td>
+                    Line 1: → <code>"# KALLOS App - Reference Document"</code><br>
+                    Line 16: → update project description to KALLOS<br>
+                    Line 37: → update Sanity Studio URL<br>
+                    Line 39: → update GitHub repo URL<br>
+                    Line 269: → update Studio URL reference
+                </td>
+            </tr>
+            <tr>
+                <td class="field-name">README.md</td>
+                <td>Rewrite entirely for KALLOS. Short: what it is, tech stack, how to run, links.</td>
+            </tr>
+            <tr>
+                <td class="field-name">RECOMMENDATIONS.md</td>
+                <td>Line 1: → <code>"# KALLOS App – Review & Recommendations"</code><br>Update all "Seeking Beauty" references.</td>
+            </tr>
+            <tr>
+                <td class="field-name">DEPLOYMENT.md</td>
+                <td>Update all references: project name, URLs, folder paths.</td>
+            </tr>
+            <tr>
+                <td class="field-name">docs/VISIO_DIVINA_RESEARCH.md</td>
+                <td>Replace all "Seeking Beauty" → "KALLOS" (6 instances).</td>
+            </tr>
+            <tr>
+                <td class="field-name">sanity/schemaTypes/episode.ts</td>
+                <td>Line 12: Remove "Seeking Beauty in Vatican City" example → use generic example.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Files to Delete</h3>
+    <table>
+        <thead>
+            <tr><th>File</th><th>Reason</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="field-name">data/episodes.ts</td>
+                <td>Static EWTN episode data. Only used by broken Favorites page. Delete entirely.</td>
+            </tr>
+            <tr>
+                <td class="field-name">scripts/migrate-to-sanity.ts</td>
+                <td>One-time EWTN migration script. No longer needed. Contains hardcoded EWTN episode data.</td>
+            </tr>
+            <tr>
+                <td class="field-name">sanity/create-splash-pages.mjs</td>
+                <td>One-time script with EWTN copy. No longer needed.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Sanity CMS Content (manual in Studio)</h3>
+    <p>After code deploys, Sheri should update in Sanity Studio:</p>
+    <table>
+        <thead>
+            <tr><th>Content Type</th><th>What to Update</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Splash Pages</td>
+                <td>Update onboarding copy to KALLOS branding. Remove EWTN references from descriptions.</td>
+            </tr>
+            <tr>
+                <td>Episodes (legacy)</td>
+                <td>Leave as-is for now. They'll be hidden from Studio sidebar once contentItem schema is live. Can be archived later.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="divider"></div>
+
+    <div class="purpose" style="margin-top: 40px;">
+        <strong>How to use this document:</strong> Open Claude Code in the <code>seeking-beauty-app</code> repo directory. Tell it: "Read Kallos-Phase1-Spec.html and implement Step 1." Work through each step in order. After each step, run <code>npm run build</code> to verify nothing breaks. Commit after each step so you can roll back if needed.
+        <br><br>
+        <strong>Manual steps for Sheri (after code is pushed):</strong>
+        <ol style="margin-top: 10px;">
+            <li>Rename GitHub repo: Settings → Repository name → <code>kallos-app</code></li>
+            <li>Rename Vercel project: Settings → General → Project Name → <code>kallos-app</code></li>
+            <li>Rename Sanity Studio URL: manage.sanity.io → Project Settings → <code>kallos.sanity.studio</code></li>
+            <li>Rename local folder in Finder: <code>seeking-beauty-app</code> → <code>kallos-app</code></li>
+            <li>Update Sanity Studio splash page content with KALLOS copy</li>
+        </ol>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "app/**/*",
+    "components/**/*",
+    "lib/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "sanity"
+  ]
+}
