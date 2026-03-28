@@ -226,7 +226,7 @@ export default function SplashPage() {
             <p style={{ fontFamily: montserrat, fontSize: "0.58rem", letterSpacing: "0.18em", textTransform: "uppercase", color: G, marginBottom: "10px" }}>
               Pause &amp; Ponder
             </p>
-            <p style={{ fontFamily: cormorant, fontSize: "1.15rem", fontStyle: "italic", color: CREAM, lineHeight: 1.5 }}>
+            <p style={{ fontFamily: openSans, fontSize: "0.9375rem", color: CREAM_DIM, lineHeight: 1.7, fontWeight: 300 }}>
               Every day, a piece of art and a question to sit with.
             </p>
           </div>
@@ -238,7 +238,7 @@ export default function SplashPage() {
             <p style={{ fontFamily: montserrat, fontSize: "0.58rem", letterSpacing: "0.18em", textTransform: "uppercase", color: G, marginBottom: "10px" }}>
               Journeys
             </p>
-            <p style={{ fontFamily: cormorant, fontSize: "1.15rem", fontStyle: "italic", color: CREAM, lineHeight: 1.5 }}>
+            <p style={{ fontFamily: openSans, fontSize: "0.9375rem", color: CREAM_DIM, lineHeight: 1.7, fontWeight: 300 }}>
               Or go deeper. A theme, an artist, a question. One day at a time.
             </p>
           </div>
