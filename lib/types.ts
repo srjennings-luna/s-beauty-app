@@ -138,6 +138,7 @@ export type Journey = {
   isPublished: boolean;
   order?: number;
   days: JourneyDay[];
+  totalDays?: number;
 };
 
 // ─── Daily Prompt ─────────────────────────────────────────────────────────────

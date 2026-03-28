@@ -146,7 +146,8 @@ export async function getJourneys() {
       "heroImageUrl": heroImage.asset->url,
       estimatedMinutesPerDay,
       isPublished,
-      order
+      order,
+      "totalDays": count(days)
     }
   `)
 }

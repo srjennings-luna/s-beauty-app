@@ -99,7 +99,7 @@ export default function JourneysPage() {
           <div className="px-5 space-y-6">
             {journeys.map((journey) => {
               const completedDays = progress[journey.slug.current] ?? 0;
-              const totalDays = journey.days?.length ?? 7;
+              const totalDays = journey.totalDays ?? 7;
               const pct = Math.round((completedDays / totalDays) * 100);
               const isStarted = completedDays > 0;
 
