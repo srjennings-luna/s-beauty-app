@@ -65,8 +65,8 @@ export default function SplashPage() {
   const cormorant = "Cormorant Garamond, Georgia, serif";
   const openSans = "Open Sans, sans-serif";
 
-  const GoldRule = () => (
-    <div style={{ height: "1px", width: "32px", backgroundColor: G, margin: "18px 0" }} />
+  const GoldRule = ({ mt = 56, mb = 56 }: { mt?: number; mb?: number }) => (
+    <div style={{ height: "1px", width: "48px", backgroundColor: G, marginTop: mt, marginBottom: mb }} />
   );
 
   // Inline nav button — defined outside render cycle so click handlers survive re-renders
@@ -149,25 +149,25 @@ export default function SplashPage() {
         >
           <div>
             <div className={anim(0)}>
-              <p style={{ fontFamily: montserrat, fontSize: "2rem", letterSpacing: "0.32em", textTransform: "uppercase", color: CREAM, fontWeight: 600 }}>
+              <p style={{ fontFamily: montserrat, fontSize: "1.75rem", letterSpacing: "0.3em", textTransform: "uppercase", color: CREAM, fontWeight: 600 }}>
                 KALLOS
               </p>
-              <p style={{ fontFamily: cormorant, fontSize: "1.05rem", fontStyle: "italic", color: "rgba(253,246,232,0.55)", letterSpacing: "0.1em", marginTop: "6px" }}>
+              <p style={{ fontFamily: cormorant, fontSize: "1.25rem", fontStyle: "italic", color: "rgba(253,246,232,0.5)", letterSpacing: "0.06em", marginTop: "6px" }}>
                 kal · os
               </p>
             </div>
 
             <GoldRule />
 
-            <p className={anim(0, 100)} style={{ fontFamily: cormorant, fontSize: "1.75rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.4 }}>
+            <p className={anim(0, 100)} style={{ fontFamily: cormorant, fontSize: "2.125rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.2, marginBottom: "40px" }}>
               &ldquo;Beauty will save the world.&rdquo;
             </p>
 
-            <p className={anim(0, 200)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, marginTop: "20px" }}>
+            <p className={anim(0, 200)} style={{ fontFamily: openSans, fontSize: "0.9375rem", color: CREAM_DIM, lineHeight: 1.8, fontWeight: 300 }}>
               Rediscover beauty, truth and goodness through tradition. The Greeks called it KALLOS, and they believed the three were inseparable.
             </p>
 
-            <p className={anim(0, 300)} style={{ fontFamily: montserrat, fontSize: "0.72rem", color: G, letterSpacing: "0.06em", marginTop: "22px" }}>
+            <p className={anim(0, 300)} style={{ fontFamily: montserrat, fontSize: "0.875rem", color: G, letterSpacing: "0.02em", marginTop: "48px" }}>
               Your daily dose of what is beautiful. true. good.
             </p>
           </div>
@@ -183,21 +183,21 @@ export default function SplashPage() {
           style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
         >
           <div className={`w-full transition-all duration-700 ${current === 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-            <p style={{ fontFamily: cormorant, fontSize: "2rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.3 }}>
+            <p style={{ fontFamily: cormorant, fontSize: "2.125rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.25 }}>
               Beauty. Truth. Goodness.
             </p>
 
-            <div style={{ height: "1px", width: "32px", backgroundColor: G, margin: "20px 0" }} />
+            <div style={{ height: "1px", width: "48px", backgroundColor: G, margin: "48px 0" }} />
 
-            <p className={anim(1, 150)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8 }}>
+            <p className={anim(1, 150)} style={{ fontFamily: openSans, fontSize: "0.9375rem", color: CREAM_DIM, lineHeight: 1.8, fontWeight: 300 }}>
               Ancient philosophers called them the transcendentals: beauty, truth, goodness. Three things woven together that finding one means brushing against the divine.
             </p>
 
-            <p className={anim(1, 250)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, marginTop: "16px" }}>
+            <p className={anim(1, 250)} style={{ fontFamily: openSans, fontSize: "0.9375rem", color: CREAM_DIM, lineHeight: 1.8, fontWeight: 300, marginTop: "32px" }}>
               The tradition that produced the greatest art in the Western world kept all three in the same room.
             </p>
 
-            <p className={anim(1, 350)} style={{ fontFamily: montserrat, fontSize: "0.7rem", letterSpacing: "0.1em", color: G, marginTop: "18px" }}>
+            <p className={anim(1, 350)} style={{ fontFamily: montserrat, fontSize: "0.875rem", color: G, letterSpacing: "0.02em", marginTop: "48px" }}>
               KALLOS is built on that.
             </p>
           </div>
@@ -254,17 +254,17 @@ export default function SplashPage() {
           style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
         >
           <div className={`w-full transition-all duration-700 ${current === 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-            <p style={{ fontFamily: cormorant, fontSize: "1.8rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.35 }}>
+            <p style={{ fontFamily: cormorant, fontSize: "2.125rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.25 }}>
               You already know this feeling.
             </p>
 
-            <div style={{ height: "1px", width: "32px", backgroundColor: G, margin: "20px 0" }} />
+            <div style={{ height: "1px", width: "48px", backgroundColor: G, margin: "48px 0" }} />
 
-            <p className={anim(3, 150)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8 }}>
+            <p className={anim(3, 150)} style={{ fontFamily: openSans, fontSize: "0.9375rem", color: CREAM_DIM, lineHeight: 1.8, fontWeight: 300 }}>
               The painting you can&apos;t look away from. The piece of music that opens something in you. The line from a book you&apos;ve carried for years.
             </p>
 
-            <p className={anim(3, 250)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8, marginTop: "16px" }}>
+            <p className={anim(3, 250)} style={{ fontFamily: openSans, fontSize: "0.9375rem", color: CREAM_DIM, lineHeight: 1.8, fontWeight: 300, marginTop: "32px" }}>
               KALLOS is built for exactly that.
             </p>
           </div>
@@ -280,13 +280,13 @@ export default function SplashPage() {
           style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
         >
           <div className={`w-full transition-all duration-700 ${current === 4 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-            <div style={{ height: "1px", width: "32px", backgroundColor: G, marginBottom: "22px" }} />
+            <div style={{ height: "1px", width: "48px", backgroundColor: G, marginBottom: "48px" }} />
 
-            <p style={{ fontFamily: cormorant, fontSize: "1.75rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.35, marginBottom: "18px" }}>
+            <p style={{ fontFamily: cormorant, fontSize: "2.125rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.25, marginBottom: "32px" }}>
               Start where you are.
             </p>
 
-            <p className={anim(4, 100)} style={{ fontFamily: openSans, fontSize: "0.875rem", color: CREAM_DIM, lineHeight: 1.8 }}>
+            <p className={anim(4, 100)} style={{ fontFamily: openSans, fontSize: "0.9375rem", color: CREAM_DIM, lineHeight: 1.8, fontWeight: 300 }}>
               No preparation needed. No right way to begin. Start a 3-day journey into beauty, truth and goodness. Something new every day.
             </p>
           </div>
