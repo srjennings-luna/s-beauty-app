@@ -107,13 +107,18 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ Nav icons — all icons use stroke-only active state (strokeWidth 2 vs 1.5 inactive). Fixes Today tab showing only a green dot (fill has no effect on open line paths like sun rays). Inactive opacity bumped 35% → 55%.
 - ✅ Tap targets fixed — FavoriteButton sm/md increased to 44px (w-11 h-11). Explore pray icon increased from 28px to 44px.
 - ✅ Go Deeper step hidden when day has zero tradition reflections. Progress bar auto-adjusts from 6 to 5 segments.
-- ✅ Cormorant accessibility — Lectio quotes >150 chars fall back to Open Sans 0.95rem. Cormorant preserved for short quotes only.
+- ✅ Cormorant accessibility — Lectio quotes >150 chars fall back to Open Sans 0.95rem. Cormorant preserved for short quotes only. (Superseded March 28 — see font audit below.)
 - ✅ P&P archive built in Library — all past prompts browseable without notifications. All/Saved filter toggle. Gold heart indicator on saved prompts.
 - ✅ Journey day Encounter + Breathe layers fixed — curatorNote displays on Encounter, encounterNote collapsible ("Look Closer"), Lectio and Auditio layers render, CircularAudioPlayer shared component added.
 - ✅ Onboarding Screen 1 headline revised to: "Beauty calls deep to the soul" — replaces "Beauty has always been trying to tell you something"
 - ✅ Onboarding Screen 1 pronunciation added: *kal · os* in small Cormorant italic below wordmark
 - ✅ Onboarding Screen 4 secondary CTA revised: "Browse Journeys" → "Start with Beauty, Truth & Goodness →"
 - ✅ Intro Journey restructured: 3-day entry-point version (Beauty / Truth / Goodness) + 7-day deeper dive — see Journey Framework below
+
+### Phase 2 Work Done (March 28, 2026)
+- ✅ Cormorant font audit and fixes: full app audit across JourneyDaySteps.tsx, ArtworkViewer.tsx, prompt/page.tsx. All small-size Cormorant (openText, audio titles, Breathe helper text, ArtworkViewer quotes) replaced with Open Sans italic. Lectio 150-char conditional removed; both philosophy and scripture quotes now always Cormorant at clamp(1.3rem, 4.5vw, 1.55rem), consistent every day. Font hierarchy locked: Montserrat (labels), Open Sans regular (body), Open Sans italic (contemplative instruction), Cormorant (quotes at 1.3rem+ only).
+- ✅ Swipe sensitivity fixed: threshold raised 60px to 90px, angle tightened to 22 degrees, time window reduced to 350ms. touch-action: pan-y added to swipe container to fix off-center artifacts on iOS. Multi-touch guard added so pinch-to-zoom on Breathe no longer accidentally triggers a swipe. Transitioning lock (520ms) prevents double-swipe mid-animation.
+- ✅ Build verification rule added to CLAUDE.md: run npm run build first; fall back to npx tsc --noEmit if SWC binary error (Cowork VM ARM64 limitation). Update the rule if environment changes.
 
 ### Phase 2 Work Done (March 27, 2026)
 - ✅ Onboarding flow built : 5 screens, Stories-style progress bar + swipe, espresso mode (`app/splash/page.tsx`)
@@ -199,7 +204,7 @@ Read this at the start of every session. It contains all key product decisions, 
 ---
 
 ### P&P Page — Known UI Fixes Needed
-- **Typography**: ✅ Fixed — Cormorant reserved for prompt question, lectio quotes, auditio title. Open Sans everywhere else.
+- **Typography**: ✅ Fixed — Cormorant for prompt question and lectio quotes (both, always, at 1.3rem+). Open Sans italic for auditio title and all contemplative instruction text. Open Sans regular everywhere else.
 - **Context teaser**: ✅ Fixed — First 2 sentences always visible, "Read more" reveals rest.
 - **Hero image zoom**: ✅ Implemented pinch-to-zoom (8x max) + pan using react-zoom-pan-pinch. "pinch to explore" hint shown bottom-right. **Revisit after living with it** — if pinch feels awkward in the scroll context, switch to Option 2: tap hero → full-screen lightbox with zoom + pan.
 
@@ -274,7 +279,7 @@ All live in the `contentItem` Sanity schema with `contentType` field:
   - **Parchment mode** (browse): `#fdf6e8` — Today, Explore, Journeys, Library
 - **Gold accent:** `#C19B5F` — CTAs, active states, labels. NOT `#C9A227`.
 - **Sage:** `#4a7a62` — active step indicator, interactive elements
-- **Typography:** Montserrat (headlines), Open Sans (body), Cormorant Garamond (scripture/quotes)
+- **Typography:** Montserrat (labels/UI), Open Sans regular (body), Open Sans italic (contemplative instructional text), Cormorant Garamond (quoted material only — 1.3rem minimum, line height 1.4). Below 1.3rem, use Open Sans italic instead. Cormorant is a display typeface; it breaks down at small sizes on screen.
 - **Images:** Min 1200px, up to 4500px. 8x zoom on Breathe page and P&P hero (react-zoom-pan-pinch).
 - **Safe areas:** Always pad for phone notches and home indicators.
 - **DEPRECATED:** `#203545` (old dark teal) — do NOT use anywhere. Espresso `#16110d` replaced it.
@@ -351,7 +356,7 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 - **Visio Divina** (`/pray/[artworkId]`) — 5-step prayer: Gaze → Meditate → Pray → Contemplate → Action
 - **Go Deeper** — Tradition reflections (Church Fathers, Saints, Popes) expandable bar
 - **8x pinch-to-zoom** — On Breathe page (Journey), content detail (Explore), and P&P hero image
-- **P&P page** — No Begin state. Layout: Image → Title/date → Curator Note → Prompt Question → Context teaser → Lectio → Auditio → Actio. Typography: Cormorant for prompt question, lectio quotes, auditio title only.
+- **P&P page** — No Begin state. Layout: Image → Title/date → Curator Note → Prompt Question → Context teaser → Lectio → Auditio → Actio. Typography: Cormorant for prompt question and lectio quotes (both, always, at 1.3rem+). Open Sans italic for auditio title. Open Sans regular for everything else.
 - **Music player** — Chant / Ambient options on Pray page
 - **Map** with colored markers by content type
 

@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import type { JourneyDay } from "@/lib/types";
 
-const STEP_LABELS = ["Open", "Encounter", "Breathe", "Reflect", "Connect", "Go Deeper"];
+const STEP_LABELS = ["Open", "Encounter", "Breathe", "Reflect", "Go Deeper", "Connect"];
 
 // ── Breathe overlay — continuous breathing pulse ─────────────────────────────
 // Loops infinitely while the Breathe page is visible. pointer-events: none
@@ -696,7 +696,7 @@ function StepReflect({
 }
 
 // ── Step 4: Connect — text above, constrained image window below ──────────────
-function StepConnect({ day, nextDayImageUrl }: { day: JourneyDay; nextDayImageUrl?: string }) {
+function StepConnect({ day, nextDayImageUrl, onClose }: { day: JourneyDay; nextDayImageUrl?: string; onClose: () => void }) {
   return (
     <div className="h-full flex flex-col" style={{ background: C.bg }}>
 
@@ -705,9 +705,12 @@ function StepConnect({ day, nextDayImageUrl }: { day: JourneyDay; nextDayImageUr
 
       {/* Text — centered above the window */}
       <div className="flex-1 flex flex-col items-center justify-center px-8">
-        <p className="text-xs tracking-widest uppercase mb-5" style={{ color: C.sageMuted, letterSpacing: "0.2em" }}>
-          Tomorrow
-        </p>
+        {/* Label: "TOMORROW" when there is a next day, nothing when last day */}
+        {nextDayImageUrl && (
+          <p className="text-xs tracking-widest uppercase mb-5" style={{ color: C.sageMuted, letterSpacing: "0.2em" }}>
+            Tomorrow
+          </p>
+        )}
         {day.connectThread ? (
           <p
             className="font-serif-elegant italic text-center"
@@ -715,10 +718,37 @@ function StepConnect({ day, nextDayImageUrl }: { day: JourneyDay; nextDayImageUr
           >
             {day.connectThread}
           </p>
-        ) : (
+        ) : nextDayImageUrl ? (
+          // Has a next day but no thread text — neutral bridge
           <p className="text-sm text-center" style={{ color: C.creamFaint }}>
-            You&apos;ve completed today&apos;s journey.
+            Something new waits tomorrow.
           </p>
+        ) : (
+          // Last day of the journey — close or start a new journey
+          <div className="flex flex-col items-center gap-5" style={{ maxWidth: "260px" }}>
+            <p className="text-xs tracking-widest uppercase" style={{ color: C.sageMuted, letterSpacing: "0.2em" }}>
+              Journey complete
+            </p>
+            <a
+              href="/journeys"
+              className="w-full text-center text-sm tracking-widest uppercase py-3 px-6"
+              style={{
+                background: C.gold,
+                color: C.bg,
+                fontWeight: 600,
+                letterSpacing: "0.15em",
+              }}
+            >
+              Start a new journey
+            </a>
+            <button
+              onClick={onClose}
+              className="text-sm tracking-wide"
+              style={{ color: C.creamDim }}
+            >
+              Close
+            </button>
+          </div>
         )}
       </div>
 
@@ -921,8 +951,8 @@ export default function JourneyDaySteps({
     <StepEncounter key="encounter" day={day} />,
     <StepBreathe key="breathe" day={day} />,
     <StepReflect key="reflect" day={day} questionIndex={questionIndex} onNextQuestion={handleNextQuestion} />,
-    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} />,
     ...(hasGoDeeper ? [<StepGoDeeper key="deeper" day={day} />] : []),
+    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} onClose={onClose} />,
   ];
 
   return (
