@@ -4,7 +4,7 @@ import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 
 // Preview URL for the KALLOS app on Vercel
-const APP_PREVIEW_URL = 'https://kallos-app.vercel.app'
+const APP_PREVIEW_URL = 'https://s-beauty-app.vercel.app'
 
 // Custom document action: opens the P&P page in preview mode for the given date
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

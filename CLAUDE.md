@@ -13,6 +13,8 @@ Read this at the start of every session. It contains all key product decisions, 
 **Founding statement:** Beauty is the splendor of truth
 **Type:** Independent contemplative discovery app (not an EWTN companion — no relationship or rights)
 **Primary audience:** The curious seeker — moved by beauty, asking deeper questions, regardless of faith background
+**Live app URL:** https://s-beauty-app.vercel.app
+**Sanity Studio URL:** https://seeking-beauty.sanity.studio (to be renamed kallos.sanity.studio)
 
 ---
 
@@ -116,6 +118,8 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ Intro Journey restructured: 3-day entry-point version (Beauty / Truth / Goodness) + 7-day deeper dive — see Journey Framework below
 
 ### Phase 2 Work Done (March 28, 2026)
+- ✅ BTG Day 3 (Goodness) content complete: new content item (Caravaggio "Supper at Emmaus," 1601, National Gallery London) + journey day record. Hook: ichthys hidden in fruit basket wicker and tablecloth shadow (verified, National Gallery). Concept: bonum as third Transcendental. Lectio: Aristotle Nicomachean Ethics Book I opening + Luke 24:31 RSV-2CE. Music: "Perfect Situation" by Alana Jordan (Pixabay, CC0, track ID 500256). Day title: TBD (options: "What beauty asks of us" / "What you were aiming at" / "Everything was pointing here" / "The one who was there"). Sanity entry guide: `KALLOS-BTG-Day3-Goodness-SanityEntry.html`. Note: no context field on journey day schema (content item context field carries the philosophical depth). No actio field on journey day schema (P&P only).
+- ✅ Journey day Connect step fixed: step order corrected (Go Deeper before Connect), "TOMORROW" label conditional on nextDayImageUrl, last-day state renders "Journey complete" + "Start a new journey" CTA + Close button.
 - ✅ Cormorant font audit and fixes: full app audit across JourneyDaySteps.tsx, ArtworkViewer.tsx, prompt/page.tsx. All small-size Cormorant (openText, audio titles, Breathe helper text, ArtworkViewer quotes) replaced with Open Sans italic. Lectio 150-char conditional removed; both philosophy and scripture quotes now always Cormorant at clamp(1.3rem, 4.5vw, 1.55rem), consistent every day. Font hierarchy locked: Montserrat (labels), Open Sans regular (body), Open Sans italic (contemplative instruction), Cormorant (quotes at 1.3rem+ only).
 - ✅ Swipe sensitivity fixed: threshold raised 60px to 90px, angle tightened to 22 degrees, time window reduced to 350ms. touch-action: pan-y added to swipe container to fix off-center artifacts on iOS. Multi-touch guard added so pinch-to-zoom on Breathe no longer accidentally triggers a swipe. Transitioning lock (520ms) prevents double-swipe mid-animation.
 - ✅ Build verification rule added to CLAUDE.md: run npm run build first; fall back to npx tsc --noEmit if SWC binary error (Cowork VM ARM64 limitation). Update the rule if environment changes.
