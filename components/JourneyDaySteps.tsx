@@ -182,6 +182,17 @@ function CircularAudioPlayer({
   const [audioPlaying, setAudioPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  // Stop audio and clean up when the component unmounts (journey closes)
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = "";
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
   if (!audioSrc && !externalUrl) return null;
 
   if (!audioSrc && externalUrl) {
@@ -219,9 +230,13 @@ function CircularAudioPlayer({
             setAudioPlaying(false);
           } else {
             if (!audioRef.current) {
-              audioRef.current = new Audio(audioSrc!);
-              audioRef.current.volume = 0.85;
-              audioRef.current.onended = () => setAudioPlaying(false);
+              const audio = new Audio(audioSrc!);
+              audio.volume = 0.85;
+              // Sync UI state when audio ends or is paused externally (e.g. iOS interruption)
+              audio.addEventListener("ended", () => setAudioPlaying(false));
+              audio.addEventListener("pause", () => setAudioPlaying(false));
+              audio.addEventListener("play", () => setAudioPlaying(true));
+              audioRef.current = audio;
             }
             audioRef.current.play().catch(() => {});
             setAudioPlaying(true);
