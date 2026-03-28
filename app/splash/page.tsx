@@ -65,7 +65,7 @@ export default function SplashPage() {
   const cormorant = "Cormorant Garamond, Georgia, serif";
   const openSans = "Open Sans, sans-serif";
 
-  const GoldRule = ({ mt = 56, mb = 56 }: { mt?: number; mb?: number }) => (
+  const GoldRule = ({ mt = 48, mb = 48 }: { mt?: number; mb?: number }) => (
     <div style={{ height: "1px", width: "48px", backgroundColor: G, marginTop: mt, marginBottom: mb }} />
   );
 
@@ -145,7 +145,7 @@ export default function SplashPage() {
         {/* ════════════════════════════════ SCREEN 1 — Brand Identity ════════════════════════════════ */}
         <div
           className="min-w-full h-full flex flex-col px-10"
-          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 88px)" }}
         >
           <div>
             <div className={anim(0)}>
@@ -180,7 +180,7 @@ export default function SplashPage() {
         {/* ════════════════════════════════ SCREEN 2 — The Three ════════════════════════════════ */}
         <div
           className="min-w-full h-full flex flex-col px-10"
-          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 88px)" }}
         >
           <div className={`w-full transition-all duration-700 ${current === 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             <p style={{ fontFamily: cormorant, fontSize: "2.125rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.25 }}>
@@ -210,7 +210,7 @@ export default function SplashPage() {
         {/* ════════════════════════════════ SCREEN 3 — Feature Tour ════════════════════════════════ */}
         <div
           className="min-w-full h-full flex flex-col px-6"
-          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 88px)" }}
         >
           <p
             className={anim(2)}
@@ -251,7 +251,7 @@ export default function SplashPage() {
         {/* ════════════════════════════════ SCREEN 4 — Hook ════════════════════════════════ */}
         <div
           className="min-w-full h-full flex flex-col px-10"
-          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 88px)" }}
         >
           <div className={`w-full transition-all duration-700 ${current === 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             <p style={{ fontFamily: cormorant, fontSize: "2.125rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.25 }}>
@@ -277,7 +277,7 @@ export default function SplashPage() {
         {/* ════════════════════════════════ SCREEN 5 — Invitation ════════════════════════════════ */}
         <div
           className="min-w-full h-full flex flex-col px-8"
-          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 44px)" }}
+          style={{ backgroundColor: E, paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 88px)" }}
         >
           <div className={`w-full transition-all duration-700 ${current === 4 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             <div style={{ height: "1px", width: "48px", backgroundColor: G, marginBottom: "48px" }} />
