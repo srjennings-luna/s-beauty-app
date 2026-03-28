@@ -696,7 +696,7 @@ function StepReflect({
 }
 
 // ── Step 4: Connect — text above, constrained image window below ──────────────
-function StepConnect({ day, nextDayImageUrl, onClose }: { day: JourneyDay; nextDayImageUrl?: string; onClose: () => void }) {
+function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete }: { day: JourneyDay; nextDayImageUrl?: string; onClose: () => void; onMarkComplete: () => void }) {
   return (
     <div className="h-full flex flex-col" style={{ background: C.bg }}>
 
@@ -729,8 +729,8 @@ function StepConnect({ day, nextDayImageUrl, onClose }: { day: JourneyDay; nextD
             <p className="text-xs tracking-widest uppercase" style={{ color: C.sageMuted, letterSpacing: "0.2em" }}>
               Journey complete
             </p>
-            <a
-              href="/journeys"
+            <button
+              onClick={() => { onMarkComplete(); window.location.href = "/journeys"; }}
               className="w-full text-center text-sm tracking-widest uppercase py-3 px-6"
               style={{
                 background: C.gold,
@@ -740,7 +740,7 @@ function StepConnect({ day, nextDayImageUrl, onClose }: { day: JourneyDay; nextD
               }}
             >
               Start a new journey
-            </a>
+            </button>
             <button
               onClick={onClose}
               className="text-sm tracking-wide"
@@ -952,7 +952,7 @@ export default function JourneyDaySteps({
     <StepBreathe key="breathe" day={day} />,
     <StepReflect key="reflect" day={day} questionIndex={questionIndex} onNextQuestion={handleNextQuestion} />,
     ...(hasGoDeeper ? [<StepGoDeeper key="deeper" day={day} />] : []),
-    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} onClose={() => { if (!isComplete) onMarkComplete(); onClose(); }} />,
+    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} onMarkComplete={onMarkComplete} onClose={() => { if (!isComplete) onMarkComplete(); onClose(); }} />,
   ];
 
   return (

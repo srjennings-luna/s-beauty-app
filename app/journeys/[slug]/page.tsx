@@ -260,12 +260,12 @@ export default function JourneyDetailPage() {
               {journey.estimatedMinutesPerDay ?? 10} min/day
             </span>
             <span className="text-[#7a9a8a]/40">·</span>
-            <span className="text-[#7a9a8a] text-xs">7 days</span>
+            <span className="text-[#7a9a8a] text-xs">{totalDays} days</span>
             {completedCount > 0 && (
               <>
                 <span className="text-[#7a9a8a]/40">·</span>
                 <span className="text-[#4a7a62] text-xs">
-                  {completedCount}/7 complete
+                  {completedCount}/{totalDays} complete
                 </span>
               </>
             )}
