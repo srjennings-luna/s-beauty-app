@@ -214,7 +214,7 @@ export default function SplashPage() {
         >
           <p
             className={anim(2)}
-            style={{ fontFamily: cormorant, fontSize: "1.5rem", fontStyle: "italic", fontWeight: 400, color: CREAM, marginBottom: "28px" }}
+            style={{ fontFamily: cormorant, fontSize: "2.125rem", fontStyle: "italic", fontWeight: 400, color: CREAM, lineHeight: 1.25, marginBottom: "40px" }}
           >
             Two ways to explore.
           </p>
