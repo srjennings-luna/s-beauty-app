@@ -69,53 +69,22 @@ export default function SplashPage() {
     <div style={{ height: "1px", width: "32px", backgroundColor: G, margin: "18px 0" }} />
   );
 
-  // Breathing nav button — matches the Breathe page pulse style
-  const NavButton = ({ onClick, animClass }: { onClick: () => void; animClass: string }) => (
-    <>
-      <style>{`
-        @keyframes kallosNavBreathe {
-          0%, 100% { transform: scale(1); opacity: 0.45; }
-          50%       { transform: scale(1.55); opacity: 0; }
-        }
-        .kallos-nav-ring {
-          animation: kallosNavBreathe 3.5s ease-in-out infinite;
-        }
-      `}</style>
-      <div className={`flex justify-end ${animClass}`}>
-        <button
-          onClick={onClick}
-          style={{ position: "relative", width: 52, height: 52, display: "flex", alignItems: "center", justifyContent: "center" }}
-          aria-label="Next screen"
-        >
-          {/* Breathing outer ring */}
-          <div
-            className="kallos-nav-ring"
-            style={{
-              position: "absolute",
-              inset: -6,
-              borderRadius: "50%",
-              border: `1px solid rgba(193,155,95,0.5)`,
-              pointerEvents: "none",
-            }}
-          />
-          {/* Static circle */}
-          <div style={{
-            width: 52,
-            height: 52,
-            borderRadius: "50%",
-            border: `1px solid rgba(193,155,95,0.55)`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}>
-            {/* Arrow */}
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(193,155,95,0.85)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </div>
-        </button>
-      </div>
-    </>
+  // Inline nav button — defined outside render cycle so click handlers survive re-renders
+  const navBtn = (animClass: string, onTap: () => void) => (
+    <div className={`flex justify-end ${animClass}`}>
+      <button
+        onClick={onTap}
+        aria-label="Next screen"
+        style={{ position: "relative", width: 56, height: 56, display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        <div className="kallos-nav-ring" style={{ position: "absolute", inset: -8, borderRadius: "50%", border: "1px solid rgba(193,155,95,0.45)", pointerEvents: "none" }} />
+        <div style={{ width: 56, height: 56, borderRadius: "50%", border: "1px solid rgba(193,155,95,0.55)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(193,155,95,0.85)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </div>
+      </button>
+    </div>
   );
 
   return (
@@ -125,6 +94,14 @@ export default function SplashPage() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
+      <style>{`
+        @keyframes kallosNavBreathe {
+          0%, 100% { transform: scale(1); opacity: 0.45; }
+          50%       { transform: scale(1.55); opacity: 0; }
+        }
+        .kallos-nav-ring { animation: kallosNavBreathe 3.5s ease-in-out infinite; }
+      `}</style>
+
       {/* ── Progress bar ── */}
       <div
         className="absolute left-0 right-0 z-50 flex gap-0.5"
@@ -197,7 +174,7 @@ export default function SplashPage() {
 
           <div className="flex-1" />
 
-          <NavButton onClick={next} animClass={anim(0, 400)} />
+          {navBtn(anim(0, 400), next)}
         </div>
 
         {/* ════════════════════════════════ SCREEN 2 — The Three ════════════════════════════════ */}
@@ -227,7 +204,7 @@ export default function SplashPage() {
 
           <div className="flex-1" />
 
-          <NavButton onClick={next} animClass={anim(1, 400)} />
+          {navBtn(anim(1, 400), next)}
         </div>
 
         {/* ════════════════════════════════ SCREEN 3 — Feature Tour ════════════════════════════════ */}
@@ -268,7 +245,7 @@ export default function SplashPage() {
 
           <div className="flex-1" />
 
-          <NavButton onClick={next} animClass={anim(2, 300)} />
+          {navBtn(anim(2, 300), next)}
         </div>
 
         {/* ════════════════════════════════ SCREEN 4 — Hook ════════════════════════════════ */}
@@ -294,7 +271,7 @@ export default function SplashPage() {
 
           <div className="flex-1" />
 
-          <NavButton onClick={next} animClass={anim(3, 350)} />
+          {navBtn(anim(3, 350), next)}
         </div>
 
         {/* ════════════════════════════════ SCREEN 5 — Invitation ════════════════════════════════ */}
