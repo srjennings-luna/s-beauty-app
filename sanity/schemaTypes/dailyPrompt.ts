@@ -115,6 +115,13 @@ export default defineType({
           type: 'url',
           description: 'YouTube, Spotify, or Apple Music. Only use if no Audio File or Audio URL is provided above. This opens outside KALLOS and breaks the in-app experience.',
         }),
+        defineField({
+          name: 'verbaOriginal',
+          title: 'Verba — Text',
+          type: 'text',
+          rows: 10,
+          description: 'Optional. Paste lyrics or text here in any format — Latin only, English only, or both together (interleaved or stacked). Shown in a scrollable expandable panel below the audio player, labelled VERBA.',
+        }),
       ],
     }),
     defineField({

@@ -97,16 +97,17 @@ function DailyPromptPageInner() {
   const [musicMenuOpen, setMusicMenuOpen] = useState(false);
   const [checkedItems, setCheckedItems]   = useState<boolean[]>([]);
   const [contextExpanded, setContextExpanded] = useState(false);
+  const [verbaOpen, setVerbaOpen]             = useState(false);
 
   const heroRef     = useRef<HTMLDivElement>(null);
   const actioRef    = useRef<HTMLDivElement>(null);
   const audioRef    = useRef<HTMLAudioElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  // ── Load prompt — preview mode fetches drafts; normal mode fetches published ─
+  // ── Load prompt — preview mode fetches drafts; falls back to published if no token ─
   useEffect(() => {
     const fetchFn = isPreview && dateParam
-      ? getDailyPromptPreview(dateParam)
+      ? getDailyPromptPreview(dateParam).then(data => data ?? getDailyPrompt(dateParam))
       : getDailyPrompt(dateParam);
     fetchFn
       .then((data) => {
@@ -578,6 +579,54 @@ function DailyPromptPageInner() {
                   </p>
                   {prompt.auditio.artist && (
                     <p className="text-sm mt-1" style={{ color: C.creamFaint }}>{prompt.auditio.artist}</p>
+                  )}
+                </div>
+              )}
+
+              {/* ── Verba — expandable lyrics panel (only when text is present) ── */}
+              {prompt.auditio.verbaOriginal && (
+                <div className="mt-6">
+                  <button
+                    onClick={() => setVerbaOpen(v => !v)}
+                    className="flex items-center gap-2 text-left"
+                    style={{ color: C.sageMuted }}
+                    aria-expanded={verbaOpen}
+                  >
+                    <span className="text-xs tracking-widest" style={{ letterSpacing: "0.2em" }}>VERBA</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      width="14"
+                      height="14"
+                      style={{
+                        transform: verbaOpen ? "rotate(180deg)" : "rotate(0deg)",
+                        transition: "transform 0.25s ease",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </button>
+
+                  {verbaOpen && (
+                    <div
+                      className="mt-4 overflow-y-auto"
+                      style={{
+                        maxHeight: "14rem",
+                        borderLeft: `2px solid ${C.divider}`,
+                        paddingLeft: "1rem",
+                      }}
+                    >
+                      <p
+                        className="whitespace-pre-line leading-relaxed"
+                        style={{ color: C.creamDim, fontSize: "0.85rem", fontStyle: "italic" }}
+                      >
+                        {prompt.auditio.verbaOriginal}
+                      </p>
+                    </div>
                   )}
                 </div>
               )}

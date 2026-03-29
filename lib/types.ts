@@ -153,9 +153,10 @@ export type DailyPromptLectio = {
 export type DailyPromptAuditio = {
   title: string;
   artist?: string;
-  audioFileUrl?: string; // Sanity-hosted file — resolved asset URL, plays in-app
-  audioUrl?: string;     // External URL string — plays in-app
-  url?: string;          // External link (YouTube, Spotify, etc.) — fallback only
+  audioFileUrl?: string;    // Sanity-hosted file — resolved asset URL, plays in-app
+  audioUrl?: string;        // External URL string — plays in-app
+  url?: string;             // External link (YouTube, Spotify, etc.) — fallback only
+  verbaOriginal?: string;   // Lyrics / text shown in VERBA panel (any format)
 };
 
 export type DailyPrompt = {

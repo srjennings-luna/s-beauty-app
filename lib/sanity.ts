@@ -232,7 +232,8 @@ const DAILY_PROMPT_FIELDS = `
     artist,
     url,
     "audioFileUrl": audioUrl.audioFile.asset->url,
-    "audioUrl": audioUrl.audioUrl
+    "audioUrl": audioUrl.audioUrl,
+    verbaOriginal
   },
   actio,
   "relatedJourney": relatedJourney->{
