@@ -107,7 +107,7 @@ function DailyPromptPageInner() {
   // ── Load prompt — preview mode fetches drafts; falls back to published if no token ─
   useEffect(() => {
     const fetchFn = isPreview && dateParam
-      ? getDailyPromptPreview(dateParam).then(data => data ?? getDailyPrompt(dateParam))
+      ? getDailyPromptPreview(dateParam).catch(() => null).then(data => data ?? getDailyPrompt(dateParam))
       : getDailyPrompt(dateParam);
     fetchFn
       .then((data) => {
