@@ -7,7 +7,7 @@ import { getAllContentItems, getThemes } from "@/lib/sanity";
 import type { ContentItem, Theme, ContentType, Artwork, LocationType } from "@/lib/types";
 import ArtworkViewer from "@/components/ArtworkViewer";
 
-// Dynamically import map (no SSR) — reuses existing GlobalMap component
+// Dynamically import map (no SSR)
 const GlobalMap = dynamic(() => import("@/components/GlobalMap"), {
   ssr: false,
   loading: () => (
@@ -20,8 +20,6 @@ const GlobalMap = dynamic(() => import("@/components/GlobalMap"), {
   ),
 });
 
-// ── Content type display labels ──────────────────────────────────────────────
-
 const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
   "sacred-art": "Sacred Art",
   "thinker": "Thinkers",
@@ -33,7 +31,6 @@ const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
   "math-science": "Pattern & Proof",
 };
 
-// Map ContentType → legacy LocationType for GlobalMap marker colours
 const CONTENT_TYPE_TO_LOCATION: Record<ContentType, LocationType> = {
   "sacred-art": "sacred-art",
   "thinker": "architecture",
@@ -45,7 +42,6 @@ const CONTENT_TYPE_TO_LOCATION: Record<ContentType, LocationType> = {
   "math-science": "architecture",
 };
 
-// Adapt ContentItem → Artwork shape expected by GlobalMap / ArtworkViewer
 function toArtwork(item: ContentItem): Artwork {
   return {
     id: item._id,
@@ -78,8 +74,7 @@ export default function ExplorePage() {
   const [error, setError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
 
-  const [typeFilter, setTypeFilter] = useState<ContentType | null>(null);
-  const [themeFilter, setThemeFilter] = useState<string | null>(null); // theme _id
+  const [selectedTheme, setSelectedTheme] = useState<Theme | null>(null);
   const [showMap, setShowMap] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Artwork | null>(null);
 
@@ -91,7 +86,7 @@ export default function ExplorePage() {
           getThemes(),
         ]);
         setContent(items ?? []);
-        setThemes(allThemes ?? []);
+        setThemes((allThemes ?? []).sort((a: Theme, b: Theme) => (a.order ?? 99) - (b.order ?? 99)));
       } catch (err) {
         console.error("Error fetching Explore data:", err);
         setError(true);
@@ -102,23 +97,32 @@ export default function ExplorePage() {
     fetchData();
   }, [retryCount]);
 
-  // Apply filters and sort alphabetically by title
+  // Filter content by selected theme
   const filtered = useMemo(() => {
-    let result = [...content];
-    if (typeFilter) result = result.filter((i) => i.contentType === typeFilter);
-    if (themeFilter) result = result.filter((i) => i.themes?.some((t) => t._id === themeFilter));
-    result.sort((a, b) => a.title.localeCompare(b.title));
-    return result;
-  }, [content, typeFilter, themeFilter]);
+    if (!selectedTheme) return content;
+    return content.filter((i) => i.themes?.some((t) => t._id === selectedTheme._id));
+  }, [content, selectedTheme]);
 
-  // Only items with valid coordinates go on the map
   const mappable = useMemo(
     () => filtered.filter((i) => i.coordinates?.lat && i.coordinates?.lng),
     [filtered]
   );
 
-  const artworks = useMemo(() => filtered.map(toArtwork), [filtered]);
   const mappableArtworks = useMemo(() => mappable.map(toArtwork), [mappable]);
+
+  // Separate themes into populated and empty, so empty ones sort to bottom
+  const { populatedThemes, emptyThemes } = useMemo(() => {
+    const populated: Theme[] = [];
+    const empty: Theme[] = [];
+    for (const theme of themes) {
+      const hasContent = content.some((i) => i.themes?.some((t) => t._id === theme._id));
+      if (hasContent) populated.push(theme);
+      else empty.push(theme);
+    }
+    return { populatedThemes: populated, emptyThemes: empty };
+  }, [themes, content]);
+
+  const headerTitle = showMap ? "Map" : selectedTheme ? selectedTheme.title : "Explore";
 
   return (
     <div className="h-screen bg-[#fdf6e8] flex flex-col overflow-hidden">
@@ -126,14 +130,27 @@ export default function ExplorePage() {
       {/* ── Header ── */}
       <div className="bg-[#fdf6e8] border-b border-black/8 px-4 pt-12 pb-3 flex-shrink-0">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-[#1a1a1a]">
-              {showMap ? "Map" : "Explore"}
-            </h1>
-            <p className="text-sm text-[#7a9a8a] mt-0.5">
-              {loading ? "Loading…" : `${filtered.length} item${filtered.length !== 1 ? "s" : ""}`}
-            </p>
+          <div className="flex items-center gap-3">
+            {/* Back button when a theme is selected */}
+            {selectedTheme && !showMap && (
+              <button
+                onClick={() => setSelectedTheme(null)}
+                aria-label="Back to themes"
+                className="w-8 h-8 flex items-center justify-center text-[#1a1a1a]/50 hover:text-[#1a1a1a] transition-colors -ml-1"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+              </button>
+            )}
+            <div>
+              <h1 className="text-xl font-bold text-[#1a1a1a]">{headerTitle}</h1>
+              {selectedTheme && !showMap && (
+                <p className="text-xs text-[#7a9a8a] mt-0.5 italic">{selectedTheme.question}</p>
+              )}
+            </div>
           </div>
+
           {/* Map / List toggle */}
           <button
             onClick={() => setShowMap((v) => !v)}
@@ -141,12 +158,10 @@ export default function ExplorePage() {
             className="w-10 h-10 flex items-center justify-center bg-black/5 text-[#1a1a1a]/60 hover:bg-black/10 transition-colors"
           >
             {showMap ? (
-              // List icon
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                 <path fillRule="evenodd" d="M2.625 6.75a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0A.75.75 0 018.25 6h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75zM2.625 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zM7.5 12a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12A.75.75 0 017.5 12zm-4.875 5.25a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75z" clipRule="evenodd" />
               </svg>
             ) : (
-              // Map icon
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                 <path fillRule="evenodd" d="M8.161 2.58a1.875 1.875 0 011.678 0l4.993 2.498c.106.052.23.052.336 0l3.869-1.935A1.875 1.875 0 0121.75 4.82v12.485c0 .71-.401 1.36-1.037 1.677l-4.875 2.437a1.875 1.875 0 01-1.676 0l-4.994-2.497a.375.375 0 00-.336 0l-3.868 1.935A1.875 1.875 0 012.25 19.18V6.695c0-.71.401-1.36 1.036-1.677l4.875-2.437zM9 6a.75.75 0 01.75.75V15a.75.75 0 01-1.5 0V6.75A.75.75 0 019 6zm6.75 3a.75.75 0 00-1.5 0v8.25a.75.75 0 001.5 0V9z" clipRule="evenodd" />
               </svg>
@@ -154,57 +169,6 @@ export default function ExplorePage() {
           </button>
         </div>
       </div>
-
-      {/* ── Content Type Filter ── */}
-      <div className="bg-[#fdf6e8] border-b border-black/8 px-4 py-2 flex-shrink-0">
-        <div className="flex gap-2 overflow-x-auto hide-scrollbar">
-          <button
-            onClick={() => setTypeFilter(null)}
-            className={`flex-shrink-0 px-3 py-1.5 text-xs font-medium tracking-wide border transition-all ${
-              typeFilter === null
-                ? "border-[#4a7a62] text-[#4a7a62]"
-                : "border-black/10 text-[#7a9a8a] hover:border-[#4a7a62]/40 hover:text-[#4a7a62]"
-            }`}
-          >
-            All
-          </button>
-          {(Object.entries(CONTENT_TYPE_LABELS) as [ContentType, string][]).map(([type, label]) => (
-            <button
-              key={type}
-              onClick={() => setTypeFilter(typeFilter === type ? null : type)}
-              className={`flex-shrink-0 px-3 py-1.5 text-xs font-medium tracking-wide border transition-all ${
-                typeFilter === type
-                  ? "border-[#4a7a62] text-[#4a7a62]"
-                  : "border-black/10 text-[#7a9a8a] hover:border-[#4a7a62]/40 hover:text-[#4a7a62]"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Theme Filter ── */}
-      {themes.length > 0 && (
-        <div className="bg-[#fdf6e8] border-b border-black/5 px-4 py-2 flex-shrink-0">
-          <div className="flex gap-2 overflow-x-auto hide-scrollbar">
-            {themes.map((theme) => (
-              <button
-                key={theme._id}
-                onClick={() => setThemeFilter(themeFilter === theme._id ? null : theme._id)}
-                className={`flex-shrink-0 px-3 py-1 text-xs font-medium transition-all border ${
-                  themeFilter === theme._id
-                    ? "border-[#4a7a62] text-[#4a7a62]"
-                    : "border-black/10 text-[#7a9a8a] hover:border-[#4a7a62]/30 hover:text-[#4a7a62]"
-                }`}
-                style={themeFilter === theme._id && theme.color ? { borderColor: theme.color, color: theme.color } : {}}
-              >
-                {theme.title}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* ── Content Area ── */}
       <div className="flex-1 relative min-h-0">
@@ -233,50 +197,92 @@ export default function ExplorePage() {
             onMarkerClick={(aw) => setSelectedItem(aw)}
             selectedArtwork={selectedItem}
           />
-        ) : filtered.length === 0 ? (
-          <div className="h-full flex items-center justify-center px-8">
-            <div className="text-center">
-              <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-3">Nothing here yet</p>
-              <h2 className="font-serif-elegant text-xl text-[#1a1a1a] mb-2">
-                {typeFilter ? CONTENT_TYPE_LABELS[typeFilter] : "Content"} is being curated
-              </h2>
-              <p className="text-[#7a9a8a] text-sm leading-relaxed">
-                Add Content Items in Sanity Studio to see them here.
-              </p>
-              {(typeFilter || themeFilter) && (
+        ) : !selectedTheme ? (
+
+          // ── Theme Cards Landing ──────────────────────────────────────────
+          <div className="h-full overflow-y-auto pb-20">
+            <div className="px-4 pt-5 pb-3">
+              <p className="text-sm text-[#7a9a8a]">What are you drawn to?</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 px-4 pb-6">
+              {/* Populated themes — tappable */}
+              {populatedThemes.map((theme) => (
                 <button
-                  onClick={() => { setTypeFilter(null); setThemeFilter(null); }}
-                  className="mt-6 px-5 py-2 border border-black/15 text-[#7a9a8a] text-sm hover:border-[#4a7a62]/40 hover:text-[#4a7a62] transition-colors"
+                  key={theme._id}
+                  onClick={() => setSelectedTheme(theme)}
+                  className="text-left relative overflow-hidden aspect-[3/2] flex flex-col justify-end p-3"
+                  style={{ backgroundColor: theme.color ?? "#4a7a62" }}
                 >
-                  Clear filters
+                  {theme.imageUrl && (
+                    <div
+                      className="absolute inset-0 bg-cover bg-center"
+                      style={{ backgroundImage: `url(${theme.imageUrl})` }}
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="relative z-10">
+                    <h2 className="text-white font-semibold text-sm tracking-wide leading-tight">
+                      {theme.title}
+                    </h2>
+                    <p className="text-white/70 text-[11px] mt-0.5 italic leading-snug line-clamp-2">
+                      {theme.question}
+                    </p>
+                  </div>
                 </button>
-              )}
+              ))}
+              {/* Empty themes — non-tappable, grayed out, sorted to bottom */}
+              {emptyThemes.map((theme) => (
+                <div
+                  key={theme._id}
+                  aria-disabled="true"
+                  className="relative overflow-hidden aspect-[3/2] flex flex-col justify-end p-3 opacity-35 grayscale pointer-events-none select-none"
+                  style={{ backgroundColor: theme.color ?? "#4a7a62" }}
+                >
+                  {theme.imageUrl && (
+                    <div
+                      className="absolute inset-0 bg-cover bg-center"
+                      style={{ backgroundImage: `url(${theme.imageUrl})` }}
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="relative z-10">
+                    <h2 className="text-white font-semibold text-sm tracking-wide leading-tight">
+                      {theme.title}
+                    </h2>
+                    <p className="text-white/60 text-[10px] mt-0.5 tracking-widest uppercase">
+                      Coming soon
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
+
         ) : (
-          // List view
+
+          // ── Themed Content Feed ──────────────────────────────────────────
           <div className="h-full overflow-y-auto pb-20">
-            <div className="grid grid-cols-2 gap-3 p-4">
+            <div className="flex flex-col gap-4 px-4 pt-4">
               {filtered.map((item) => (
                 <button
                   key={item._id}
                   onClick={() => setSelectedItem(toArtwork(item))}
-                  className="text-left artwork-card"
+                  className="text-left w-full"
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden">
+                  <div className="relative aspect-[16/9] overflow-hidden w-full">
                     <img
                       src={item.imageUrl}
                       alt={item.title}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent" />
                     {/* Content type badge */}
                     <div className="absolute top-2 left-2">
                       <span className="px-1.5 py-0.5 bg-black/50 backdrop-blur-sm text-white/80 text-[10px] font-medium tracking-wide">
                         {CONTENT_TYPE_LABELS[item.contentType]}
                       </span>
                     </div>
-                    {/* Pray link for eligible items */}
+                    {/* Visio Divina link */}
                     {(item.contentType === "sacred-art" || item.contentType === "landscape") && (
                       <Link
                         href={`/pray/${item._id}`}
@@ -291,12 +297,17 @@ export default function ExplorePage() {
                     )}
                   </div>
                   <div className="mt-2 px-0.5">
-                    <h3 className="text-[#1a1a1a] font-medium text-sm line-clamp-1">
+                    <h3 className="text-[#1a1a1a] font-medium text-sm">
                       {item.title}
                     </h3>
-                    <p className="text-[#7a9a8a] text-xs mt-0.5 line-clamp-1">
+                    <p className="text-[#7a9a8a] text-xs mt-0.5">
                       {item.artist ?? item.composer ?? item.author ?? item.thinkerName ?? item.locationName ?? ""}
                     </p>
+                    {item.description && (
+                      <p className="text-[#5a4a3a] text-xs mt-1.5 leading-relaxed line-clamp-2">
+                        {item.description}
+                      </p>
+                    )}
                   </div>
                 </button>
               ))}
