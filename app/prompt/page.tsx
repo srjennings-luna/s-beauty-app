@@ -317,7 +317,10 @@ function DailyPromptPageInner() {
             centerOnInit
             wheel={{ disabled: true }}
           >
-            <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
+            <TransformComponent
+              wrapperStyle={{ width: "100%", height: "100%" }}
+              contentStyle={{ width: "100%", height: "100%" }}
+            >
               <img
                 src={prompt.content.imageUrl}
                 alt={prompt.content.title}
