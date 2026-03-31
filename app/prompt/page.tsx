@@ -406,7 +406,7 @@ function DailyPromptPageInner() {
               <div>
                 <p
                   className="leading-relaxed mb-3"
-                  style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.7" }}
+                  style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.7", whiteSpace: "pre-line" }}
                 >
                   {teaser}
                 </p>
@@ -418,7 +418,7 @@ function DailyPromptPageInner() {
                           <p
                             key={i}
                             className="leading-relaxed"
-                            style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.7", marginBottom: i < remainderParagraphs.length - 1 ? "0.75rem" : 0 }}
+                            style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.7", whiteSpace: "pre-line", marginBottom: i < remainderParagraphs.length - 1 ? "0.75rem" : 0 }}
                           >
                             {para}
                           </p>
