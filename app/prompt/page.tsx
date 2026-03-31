@@ -398,10 +398,10 @@ function DailyPromptPageInner() {
 
           {/* ── Context — teaser + collapsible ──────────────────────────── */}
           {prompt.content.context && (() => {
-            // Split into sentences; show first 2 as teaser, rest behind toggle
-            const sentences = prompt.content.context.match(/[^.!?]+[.!?]+/g) ?? [prompt.content.context];
-            const teaser = sentences.slice(0, 2).join(" ").trim();
-            const remainder = sentences.slice(2).join(" ").trim();
+            // Split by paragraph breaks (Sanity plain text uses \n\n between paragraphs)
+            const paragraphs = prompt.content.context.split(/\n\n+/).map((p: string) => p.trim()).filter(Boolean);
+            const teaser = paragraphs[0] ?? "";
+            const remainderParagraphs = paragraphs.slice(1);
             return (
               <div>
                 <p
@@ -410,15 +410,20 @@ function DailyPromptPageInner() {
                 >
                   {teaser}
                 </p>
-                {remainder && (
+                {remainderParagraphs.length > 0 && (
                   <>
                     {contextExpanded && (
-                      <p
-                        className="leading-relaxed mb-3"
-                        style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.7" }}
-                      >
-                        {remainder}
-                      </p>
+                      <div className="mb-3">
+                        {remainderParagraphs.map((para: string, i: number) => (
+                          <p
+                            key={i}
+                            className="leading-relaxed"
+                            style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.7", marginBottom: i < remainderParagraphs.length - 1 ? "0.75rem" : 0 }}
+                          >
+                            {para}
+                          </p>
+                        ))}
+                      </div>
                     )}
                     <button
                       onClick={() => setContextExpanded(!contextExpanded)}
