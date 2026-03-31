@@ -321,7 +321,7 @@ function DailyPromptPageInner() {
               <img
                 src={prompt.content.imageUrl}
                 alt={prompt.content.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-top"
               />
             </TransformComponent>
           </TransformWrapper>
