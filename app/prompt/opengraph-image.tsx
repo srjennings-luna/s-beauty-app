@@ -15,11 +15,6 @@ export default async function Image({
   const prompt = await getDailyPrompt(date).catch(() => null);
 
   const imageUrl = prompt?.content?.imageUrl ?? "";
-  const question = prompt?.promptQuestion ?? "A daily pause with beauty.";
-
-  // Truncate aggressively — question text renders at ~1/3 scale in iMessage cards
-  const displayQuestion =
-    question.length > 80 ? question.slice(0, 77) + "..." : question;
 
   return new ImageResponse(
     (
@@ -28,88 +23,72 @@ export default async function Image({
           width: "1200px",
           height: "630px",
           display: "flex",
-          flexDirection: "column",
+          position: "relative",
           background: "#16110d",
         }}
       >
-        {/* Top: artwork fills ~68% of height */}
-        <div
-          style={{
-            position: "relative",
-            width: "1200px",
-            height: "430px",
-            display: "flex",
-            overflow: "hidden",
-          }}
-        >
-          {imageUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={imageUrl}
-              alt=""
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                objectPosition: "center top",
-              }}
-            />
-          )}
-          {/* Subtle fade at bottom edge into the dark strip */}
-          <div
+        {/* Full-bleed artwork */}
+        {imageUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={imageUrl}
+            alt=""
             style={{
               position: "absolute",
-              bottom: "0",
-              left: "0",
-              right: "0",
-              height: "80px",
-              background:
-                "linear-gradient(to bottom, rgba(22,17,13,0) 0%, rgba(22,17,13,1) 100%)",
-              display: "flex",
+              inset: "0",
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: "center top",
             }}
           />
-        </div>
+        )}
 
-        {/* Bottom: solid dark strip with KALLOS branding + question */}
+        {/* Dark vignette — heavier at bottom */}
         <div
           style={{
-            width: "1200px",
-            height: "200px",
-            background: "#16110d",
+            position: "absolute",
+            inset: "0",
+            background:
+              "linear-gradient(to bottom, rgba(22,17,13,0.1) 0%, rgba(22,17,13,0.45) 60%, rgba(22,17,13,0.85) 100%)",
+            display: "flex",
+          }}
+        />
+
+        {/* KALLOS wordmark — bottom left */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "48px",
+            left: "56px",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
-            padding: "0 60px",
-            gap: "14px",
+            gap: "8px",
           }}
         >
-          {/* KALLOS label */}
           <span
             style={{
               color: "#C19B5F",
-              fontSize: "22px",
+              fontSize: "48px",
               letterSpacing: "0.3em",
               fontWeight: 700,
               fontFamily: "Arial, sans-serif",
               textTransform: "uppercase",
             }}
           >
-            KALLOS &nbsp;·&nbsp; Pause &amp; Ponder
+            KALLOS
           </span>
-
-          {/* Question */}
-          <p
+          <span
             style={{
-              color: "rgba(253,246,232,0.92)",
-              fontSize: "52px",
-              lineHeight: 1.3,
-              fontStyle: "italic",
-              fontFamily: "Georgia, serif",
-              margin: "0",
+              color: "rgba(253,246,232,0.6)",
+              fontSize: "22px",
+              letterSpacing: "0.15em",
+              fontFamily: "Arial, sans-serif",
+              textTransform: "uppercase",
             }}
           >
-            {displayQuestion}
-          </p>
+            Pause &amp; Ponder
+          </span>
         </div>
       </div>
     ),
