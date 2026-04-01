@@ -53,13 +53,15 @@ function markCompleted() {
 
 // ── Share ─────────────────────────────────────────────────────────────────────
 async function sharePrompt(prompt: DailyPrompt) {
+  // Always use a date-stable URL so the recipient sees the same day's content
+  const shareUrl = `${window.location.origin}/prompt?date=${prompt.date}`;
   const text = `"${prompt.promptQuestion}"\n\n— KALLOS`;
   if (navigator.share) {
     try {
-      await navigator.share({ title: prompt.content.title, text, url: window.location.href });
+      await navigator.share({ title: "Pause & Ponder — KALLOS", text, url: shareUrl });
     } catch (_) { /* dismissed */ }
   } else {
-    await navigator.clipboard.writeText(text);
+    await navigator.clipboard.writeText(`${text}\n\n${shareUrl}`);
     alert("Copied to clipboard");
   }
 }
