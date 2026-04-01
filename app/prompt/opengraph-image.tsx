@@ -16,19 +16,10 @@ export default async function Image({
 
   const imageUrl = prompt?.content?.imageUrl ?? "";
   const question = prompt?.promptQuestion ?? "A daily pause with beauty.";
-  const dateStr = prompt?.date ?? "";
 
-  const formattedDate = dateStr
-    ? new Date(dateStr + "T12:00:00").toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      })
-    : "";
-
-  // Truncate long questions gracefully
+  // Truncate aggressively — question text renders at ~1/3 scale in iMessage cards
   const displayQuestion =
-    question.length > 110 ? question.slice(0, 107) + "..." : question;
+    question.length > 80 ? question.slice(0, 77) + "..." : question;
 
   return new ImageResponse(
     (
@@ -37,106 +28,88 @@ export default async function Image({
           width: "1200px",
           height: "630px",
           display: "flex",
-          position: "relative",
+          flexDirection: "column",
           background: "#16110d",
-          fontFamily: "Georgia, serif",
         }}
       >
-        {/* Background artwork */}
-        {imageUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={imageUrl}
-            alt=""
-            style={{
-              position: "absolute",
-              inset: "0",
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "center top",
-            }}
-          />
-        )}
-
-        {/* Gradient overlay: lighter at top, heavier at bottom */}
+        {/* Top: artwork fills ~68% of height */}
         <div
           style={{
-            position: "absolute",
-            inset: "0",
-            background:
-              "linear-gradient(to bottom, rgba(22,17,13,0.25) 0%, rgba(22,17,13,0.55) 40%, rgba(22,17,13,0.92) 75%, rgba(22,17,13,0.98) 100%)",
+            position: "relative",
+            width: "1200px",
+            height: "430px",
             display: "flex",
-          }}
-        />
-
-        {/* Content layer */}
-        <div
-          style={{
-            position: "absolute",
-            inset: "0",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            padding: "44px 52px",
+            overflow: "hidden",
           }}
         >
-          {/* Top: KALLOS wordmark + label */}
-          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-            <span
+          {imageUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={imageUrl}
+              alt=""
               style={{
-                color: "#C19B5F",
-                fontSize: "15px",
-                letterSpacing: "0.3em",
-                fontWeight: 700,
-                fontFamily: "Arial, sans-serif",
-                textTransform: "uppercase",
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center top",
               }}
-            >
-              KALLOS
-            </span>
-            <span
-              style={{
-                color: "rgba(253,246,232,0.35)",
-                fontSize: "13px",
-                fontFamily: "Arial, sans-serif",
-                letterSpacing: "0.08em",
-              }}
-            >
-              Pause &amp; Ponder
-            </span>
-          </div>
-
-          {/* Bottom: date + question */}
+            />
+          )}
+          {/* Subtle fade at bottom edge into the dark strip */}
           <div
-            style={{ display: "flex", flexDirection: "column", gap: "14px" }}
+            style={{
+              position: "absolute",
+              bottom: "0",
+              left: "0",
+              right: "0",
+              height: "80px",
+              background:
+                "linear-gradient(to bottom, rgba(22,17,13,0) 0%, rgba(22,17,13,1) 100%)",
+              display: "flex",
+            }}
+          />
+        </div>
+
+        {/* Bottom: solid dark strip with KALLOS branding + question */}
+        <div
+          style={{
+            width: "1200px",
+            height: "200px",
+            background: "#16110d",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            padding: "0 60px",
+            gap: "14px",
+          }}
+        >
+          {/* KALLOS label */}
+          <span
+            style={{
+              color: "#C19B5F",
+              fontSize: "22px",
+              letterSpacing: "0.3em",
+              fontWeight: 700,
+              fontFamily: "Arial, sans-serif",
+              textTransform: "uppercase",
+            }}
           >
-            {formattedDate && (
-              <span
-                style={{
-                  color: "rgba(193,155,95,0.75)",
-                  fontSize: "13px",
-                  letterSpacing: "0.14em",
-                  fontFamily: "Arial, sans-serif",
-                  textTransform: "uppercase",
-                }}
-              >
-                {formattedDate}
-              </span>
-            )}
-            <p
-              style={{
-                color: "rgba(253,246,232,0.95)",
-                fontSize: "34px",
-                lineHeight: 1.45,
-                fontStyle: "italic",
-                margin: "0",
-                maxWidth: "960px",
-              }}
-            >
-              {displayQuestion}
-            </p>
-          </div>
+            KALLOS &nbsp;·&nbsp; Pause &amp; Ponder
+          </span>
+
+          {/* Question */}
+          <p
+            style={{
+              color: "rgba(253,246,232,0.92)",
+              fontSize: "52px",
+              lineHeight: 1.3,
+              fontStyle: "italic",
+              fontFamily: "Georgia, serif",
+              margin: "0",
+            }}
+          >
+            {displayQuestion}
+          </p>
         </div>
       </div>
     ),
