@@ -11,7 +11,7 @@ export default async function Image({
 }: {
   searchParams: Promise<{ date?: string }>;
 }) {
-  const { date } = await searchParams;
+  const { date } = (await searchParams) ?? {};
   const prompt = await getDailyPrompt(date).catch(() => null);
 
   const imageUrl = prompt?.content?.imageUrl ?? "";
