@@ -375,7 +375,7 @@ function DailyPromptPageInner() {
             >
               <p
                 className="leading-relaxed"
-                style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.75" }}
+                style={{ color: C.cream, fontSize: "0.95rem", lineHeight: "1.75" }}
               >
                 {prompt.curatorNote}
               </p>
@@ -410,7 +410,7 @@ function DailyPromptPageInner() {
               <div>
                 <p
                   className="leading-relaxed mb-3"
-                  style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.7", whiteSpace: "pre-line" }}
+                  style={{ color: C.cream, fontSize: "0.95rem", lineHeight: "1.7", whiteSpace: "pre-line" }}
                 >
                   {teaser}
                 </p>
