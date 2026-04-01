@@ -9,9 +9,10 @@ export const contentType = "image/png";
 export default async function Image({
   searchParams,
 }: {
-  searchParams: { date?: string };
+  searchParams: Promise<{ date?: string }>;
 }) {
-  const prompt = await getDailyPrompt(searchParams.date).catch(() => null);
+  const { date } = await searchParams;
+  const prompt = await getDailyPrompt(date).catch(() => null);
 
   const imageUrl = prompt?.content?.imageUrl ?? "";
   const question = prompt?.promptQuestion ?? "A daily pause with beauty.";
