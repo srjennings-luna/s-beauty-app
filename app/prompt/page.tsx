@@ -338,19 +338,18 @@ function DailyPromptPageInner() {
           />
 
           {/* Pinch hint — fades after first interaction */}
-          <p
-            className="absolute bottom-3 right-4 text-xs tracking-wide pointer-events-none"
-            style={{ color: "rgba(253,246,232,0.4)" }}
-          >
-            pinch to explore
-          </p>
         </div>
 
         {/* ── Title + date — always below image, small print ───────────────── */}
         <div className="px-6 pt-5 pb-2" style={{ background: C.bgGradient }}>
-          <p className="text-xs tracking-widest uppercase mb-1" style={{ color: C.sageMuted, letterSpacing: "0.15em" }}>
-            {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
-          </p>
+          <div className="flex items-center justify-between mb-1">
+            <p className="text-xs tracking-widest uppercase" style={{ color: C.sageMuted, letterSpacing: "0.15em" }}>
+              {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+            </p>
+            <p className="text-xs tracking-wide pointer-events-none" style={{ color: "rgba(253,246,232,0.4)" }}>
+              pinch to explore image
+            </p>
+          </div>
           <p
             style={{
               color: C.creamDim,
