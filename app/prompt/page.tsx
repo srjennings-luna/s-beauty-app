@@ -1,31 +1,34 @@
-import { headers } from "next/headers";
 import type { Metadata } from "next";
+import { getDailyPrompt } from "@/lib/sanity";
 import PromptClient from "./PromptClient";
 
-// ── OG metadata — date-aware so social shares always show the correct artwork ─
+// ── OG metadata — fetches Sanity image URL directly for reliable social sharing ─
 export async function generateMetadata({
   searchParams,
 }: {
   searchParams: Promise<{ date?: string }>;
 }): Promise<Metadata> {
   const { date } = (await searchParams) ?? {};
-  const headersList = await headers();
-  const host = headersList.get("host") ?? "s-beauty-app.vercel.app";
-  const protocol = host.includes("localhost") ? "http" : "https";
-  const baseUrl = `${protocol}://${host}`;
-  // Include the date param so every day gets its own OG image (not cached across days)
-  const ogImageUrl = `${baseUrl}/prompt/opengraph-image${date ? `?date=${date}` : ""}`;
+  const prompt = await getDailyPrompt(date).catch(() => null);
+
+  // Use Sanity CDN URL directly — fast, globally cached, no generation timeout.
+  // Append ?w=1200&fit=crop&auto=format so X/Facebook get a web-optimised image,
+  // not a 4500px raw file.
+  const rawImageUrl = prompt?.content?.imageUrl ?? "";
+  const imageUrl = rawImageUrl
+    ? `${rawImageUrl}?w=1200&fit=crop&auto=format`
+    : "";
 
   return {
     title: "Pause & Ponder — KALLOS",
     openGraph: {
       title: "Pause & Ponder — KALLOS",
-      images: [{ url: ogImageUrl, width: 1200, height: 630 }],
+      ...(imageUrl && { images: [{ url: imageUrl, width: 1200, height: 630 }] }),
     },
     twitter: {
-      card: "summary_large_image",
+      card: imageUrl ? "summary_large_image" : "summary",
       title: "Pause & Ponder — KALLOS",
-      images: [ogImageUrl],
+      ...(imageUrl && { images: [imageUrl] }),
     },
   };
 }
