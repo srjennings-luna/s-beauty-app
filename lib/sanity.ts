@@ -210,6 +210,10 @@ export async function getJourney(slug: string) {
           order,
           era
         }
+      } | order(dayNumber asc),
+      "plannedDays": plannedDays[] {
+        dayNumber,
+        dayTitle
       } | order(dayNumber asc)
     }`,
     { slug }

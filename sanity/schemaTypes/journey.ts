@@ -257,6 +257,41 @@ export default defineType({
       ],
       validation: (Rule) => Rule.required().min(1).max(9),
     }),
+    defineField({
+      name: 'plannedDays',
+      title: 'Planned Days (coming soon)',
+      type: 'array',
+      description: 'Day numbers and titles for days not yet built in Sanity. These appear greyed out and non-tappable in the app, so users can see the full journey arc before all days are published.',
+      of: [
+        {
+          type: 'object',
+          name: 'plannedDay',
+          title: 'Planned Day',
+          fields: [
+            {
+              name: 'dayNumber',
+              title: 'Day Number',
+              type: 'number',
+              description: 'Must match the intended day slot (e.g. 2 for Day 2).',
+              validation: (Rule: {required: () => {min: (n: number) => {max: (n: number) => unknown}}}) => Rule.required().min(1).max(9),
+            },
+            {
+              name: 'dayTitle',
+              title: 'Day Title',
+              type: 'string',
+              description: 'The title users will see in the greyed-out row.',
+              validation: (Rule: {required: () => unknown}) => Rule.required(),
+            },
+          ],
+          preview: {
+            select: {dayNumber: 'dayNumber', dayTitle: 'dayTitle'},
+            prepare({dayNumber, dayTitle}: {dayNumber?: number; dayTitle?: string}) {
+              return {title: `Day ${dayNumber}: ${dayTitle || 'Untitled'} (planned)`}
+            },
+          },
+        },
+      ],
+    }),
   ],
   orderings: [
     {

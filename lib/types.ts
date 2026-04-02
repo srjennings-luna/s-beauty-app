@@ -127,6 +127,11 @@ export type JourneyDay = {
   goDeeper?: TraditionReflection[];
 };
 
+export type PlannedDay = {
+  dayNumber: number;
+  dayTitle: string;
+};
+
 export type Journey = {
   _id: string;
   title: string;
@@ -138,6 +143,7 @@ export type Journey = {
   isPublished: boolean;
   order?: number;
   days: JourneyDay[];
+  plannedDays?: PlannedDay[];
   totalDays?: number;
 };
 

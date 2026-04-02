@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getJourney } from "@/lib/sanity";
-import type { Journey, JourneyDay } from "@/lib/types";
+import type { Journey, JourneyDay, PlannedDay } from "@/lib/types";
 import PageTransition from "@/components/ui/PageTransition";
 import JourneyDaySteps from "@/components/JourneyDaySteps";
 
@@ -97,6 +97,44 @@ function DayRow({
   );
 }
 
+// ── Locked day row (planned but not yet published) ────────────────────────────
+
+function LockedDayRow({ planned }: { planned: PlannedDay }) {
+  return (
+    <div className="w-full flex items-center gap-4 px-5 py-4 text-left border-l-2 border-b border-black/5 border-l-black/8 opacity-35 select-none">
+      {/* Day number circle */}
+      <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center text-sm font-bold border border-black/10 text-[#7a9a8a]">
+        {planned.dayNumber}
+      </div>
+
+      <div className="flex-1 min-w-0">
+        <p className="text-[#7a9a8a] text-xs tracking-widest uppercase mb-0.5">
+          Day {planned.dayNumber}
+        </p>
+        <h3 className="font-semibold text-sm line-clamp-1 text-[#7a9a8a]">
+          {planned.dayTitle}
+        </h3>
+      </div>
+
+      {/* Lock icon */}
+      <div className="flex-shrink-0">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          className="w-4 h-4 text-[#7a9a8a]"
+        >
+          <path
+            fillRule="evenodd"
+            d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 export default function JourneyDetailPage() {
@@ -177,7 +215,15 @@ export default function JourneyDetailPage() {
   // ── Derived values ─────────────────────────────────────────────────────────
 
   const completedCount = completedDays.length;
-  const totalDays = journey.days?.length ?? 7;
+
+  // Build merged day list: built days + planned-but-not-yet-built days, sorted by dayNumber.
+  // plannedDays entries that share a dayNumber with a real day are filtered out (already built).
+  const builtDayNumbers = new Set((journey.days ?? []).map((d) => d.dayNumber));
+  const lockedDays: PlannedDay[] = (journey.plannedDays ?? []).filter(
+    (p) => !builtDayNumbers.has(p.dayNumber),
+  );
+  const totalDays = builtDayNumbers.size + lockedDays.length || 7;
+
   const progressPct = Math.round((completedCount / totalDays) * 100);
   const nextDay = journey.days?.find(
     (d) => !completedDays.includes(d.dayNumber),
@@ -290,23 +336,43 @@ export default function JourneyDetailPage() {
           )}
         </div>
 
-        {/* Day list */}
+        {/* Day list — built days and locked planned days merged by dayNumber */}
         <div className="pb-28">
-          {journey.days?.map((day) => {
-            const isComplete = completedDays.includes(day.dayNumber);
-            const isActive =
-              (!isComplete && day === nextDay) ||
-              (completedCount === 0 && day.dayNumber === 1);
-            return (
-              <DayRow
-                key={day.dayNumber}
-                day={day}
-                isComplete={isComplete}
-                isActive={isActive}
-                onOpen={() => setActiveDay(day)}
-              />
-            );
-          })}
+          {(() => {
+            // Build a sorted combined list for rendering
+            type BuiltEntry = { type: "built"; day: JourneyDay };
+            type LockedEntry = { type: "locked"; planned: PlannedDay };
+            type Entry = BuiltEntry | LockedEntry;
+
+            const entries: Entry[] = [
+              ...(journey.days ?? []).map((d): BuiltEntry => ({ type: "built", day: d })),
+              ...lockedDays.map((p): LockedEntry => ({ type: "locked", planned: p })),
+            ].sort((a, b) => {
+              const numA = a.type === "built" ? a.day.dayNumber : a.planned.dayNumber;
+              const numB = b.type === "built" ? b.day.dayNumber : b.planned.dayNumber;
+              return numA - numB;
+            });
+
+            return entries.map((entry) => {
+              if (entry.type === "locked") {
+                return <LockedDayRow key={`planned-${entry.planned.dayNumber}`} planned={entry.planned} />;
+              }
+              const { day } = entry;
+              const isComplete = completedDays.includes(day.dayNumber);
+              const isActive =
+                (!isComplete && day === nextDay) ||
+                (completedCount === 0 && day.dayNumber === 1);
+              return (
+                <DayRow
+                  key={day.dayNumber}
+                  day={day}
+                  isComplete={isComplete}
+                  isActive={isActive}
+                  onOpen={() => setActiveDay(day)}
+                />
+              );
+            });
+          })()}
         </div>
       </div>
     </PageTransition>
