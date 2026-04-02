@@ -22,6 +22,11 @@ export async function generateMetadata({
       title: "Pause & Ponder — KALLOS",
       images: [{ url: ogImageUrl, width: 1200, height: 630 }],
     },
+    twitter: {
+      card: "summary_large_image",
+      title: "Pause & Ponder — KALLOS",
+      images: [ogImageUrl],
+    },
   };
 }
 
