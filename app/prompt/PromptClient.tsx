@@ -344,7 +344,7 @@ function DailyPromptPageInner() {
         <div className="px-6 pt-5 pb-2" style={{ background: C.bgGradient }}>
           <div className="flex items-center justify-between mb-1">
             <p className="text-xs tracking-widest uppercase" style={{ color: C.sageMuted, letterSpacing: "0.15em" }}>
-              {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+              {new Date(prompt.date + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
             </p>
             <p className="text-xs tracking-wide pointer-events-none" style={{ color: "rgba(253,246,232,0.4)" }}>
               pinch to explore image
