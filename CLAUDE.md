@@ -117,6 +117,16 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ Onboarding Screen 4 secondary CTA revised: "Browse Journeys" → "Start with Beauty, Truth & Goodness →"
 - ✅ Intro Journey restructured: 3-day entry-point version (Beauty / Truth / Goodness) + 7-day deeper dive — see Journey Framework below
 
+### Phase 2 Work Done (March 29, 2026)
+- ✅ Verba feature built: optional collapsible scrollable text panel in P&P page (VERBA label, chevron toggle). Appears below audio player only when text is present. Single Sanity field (`verbaOriginal` in auditio object) — paste any format: Latin only, English only, or interleaved. Schema, GROQ query, TypeScript types, and UI all updated.
+- ✅ Verba entry guide format: Holy Week entry guide Day 2 and Day 3 use `<textarea>` elements for reliable copy-paste (line breaks preserved). All other days have optional placeholder.
+- ✅ Day 2 (Holy Monday) Verba text: full Adoro te devote, 7 verses, Latin and English interleaved line by line. Ready in entry guide textarea.
+- ✅ Day 3 (Holy Tuesday) Verba text: Christus factus est (Philippians 2:8-9), Latin and English interleaved line by line. Ready in entry guide textarea.
+- ✅ Adoro te devote MP4 converted to MP3: `01-adoro-te-devote--st-cecilia.mp3` in Documents/Holy Week/Audio-Holy Week/. Ready for Sanity upload.
+- ✅ Preview fallback fixed: preview client errors caught silently; falls back to regular published client. No `NEXT_PUBLIC_SANITY_TOKEN` required for previewing published records.
+- ✅ Sanity Studio preview URL confirmed: `https://s-beauty-app.vercel.app`. Studio deployed with corrected URL.
+- ✅ Audio rule added: gregorian-chant-hymns.com may deliver MP4 files. Convert to MP3 using ffmpeg before uploading to Sanity.
+
 ### Phase 2 Work Done (March 28, 2026)
 - ✅ BTG Day 3 (Goodness) content complete: new content item (Caravaggio "Supper at Emmaus," 1601, National Gallery London) + journey day record. Hook: ichthys hidden in fruit basket wicker and tablecloth shadow (verified, National Gallery). Concept: bonum as third Transcendental. Lectio: Aristotle Nicomachean Ethics Book I opening + Luke 24:31 RSV-2CE. Music: "Perfect Situation" by Alana Jordan (Pixabay, CC0, track ID 500256). Day title: TBD (options: "What beauty asks of us" / "What you were aiming at" / "Everything was pointing here" / "The one who was there"). Sanity entry guide: `KALLOS-BTG-Day3-Goodness-SanityEntry.html`. Note: no context field on journey day schema (content item context field carries the philosophical depth). No actio field on journey day schema (P&P only).
 - ✅ Journey day Connect step fixed: step order corrected (Go Deeper before Connect), "TOMORROW" label conditional on nextDayImageUrl, last-day state renders "Journey complete" + "Start a new journey" CTA + Close button.
@@ -146,11 +156,25 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ skills-tracker skill created — PM resume/skills evidence tracker. Available in Documents folder.
 - ✅ Bosch journey + Bosch Sanity entry guide added to CLAUDE.md content docs table
 
+### Phase 2 Work Done (April 2, 2026)
+- ✅ Context expanded text opacity fixed — expanded paragraphs were using `creamDim` (50% opacity) while teaser used `cream` (88% opacity). Both now use `cream` consistently. Fix in `app/prompt/PromptClient.tsx`.
+- ✅ OG image social sharing fixed — root cause: Next.js auto-generated `og:image` URL did not include the `?date=` param, so all platforms cached one image indefinitely. Fix: added `generateMetadata` export to `app/prompt/page.tsx` (requires server component). Client UI moved to `app/prompt/PromptClient.tsx`. `generateMetadata` now fetches the prompt server-side and sets `og:image` directly to the Sanity CDN URL with `?w=1200&fit=crop&auto=format`. Fast, globally cached, no generation timeout.
+- ✅ Twitter card format fixed — added `twitter:card: "summary_large_image"` to metadata. Without it X defaulted to small thumbnail ("summary") format. Now shows full-bleed artwork card. Confirmed working on X (The Last Supper visible full-width).
+- ✅ `app/prompt/page.tsx` restructured — now a server component (no `"use client"`). Exports `generateMetadata`. Renders `<PromptClient />`. All UI logic lives in `app/prompt/PromptClient.tsx` (client component, unchanged functionally).
+- ✅ `opengraph-image.tsx` kept in place but superseded — `generateMetadata` takes priority. The dynamic image generation route timed out for X/Facebook bots (had to call Sanity + load 4500px painting on demand). Sanity CDN URL is the reliable replacement.
+
+### Phase 2 Work Done (April 1, 2026)
+- ✅ Social sharing built — P&P share button with date-stable URLs (`/prompt?date=YYYY-MM-DD`), native Web Share API. OG image uses Sanity CDN URL directly (see April 2 fix). Confirmed working on X, Facebook, iMessage, Instagram DM. Instagram Stories is a platform limitation (only accepts media files, not URLs).
+- ✅ Vercel build error fixed — `opengraph-image.tsx` `searchParams` typed as `Promise<{date?: string}>` with null-coalesce `?? {}` to handle static prerender.
+- ✅ Holy Week Days 7 and 8 content finalized and entered into Sanity. Day 7 image: Image 1 (dark atmospheric Anastasis, Chora Church). Day 8 audio: placeholder uploaded, may be replaced before Easter.
+- ✅ Day 7 Holy Saturday: curator note updated ("no morning Mass"), actio updated ("Light a candle. Reflect on the week."), Exsultet audio sourced (archive.org, CC0, cantor unattributed).
+- ✅ Day 8 Easter Sunday: context restructured (CHRIST IS RISEN leads), curator note rewritten (Justin Martyr/Emperor's court), prompt question updated ("Did you know it was true?"), Lectio updated (Cicero + Luke 24:5-6).
+
 ### Up Next: Phase 2 Remaining
 
 **Next session priorities (in order):**
-1. **Holy Week Sanity entry:** deadline March 28. All 8 days, use `KALLOS-HolyWeek-Sanity-Entry-Guide.html`. Lectio + Actio still need to be written first.
-2. **Explore screen purpose & design:** current Explore feels like a database. Three directions under consideration (see Parking Lot). Product design session before any code.
+1. ~~**Holy Week Sanity entry:** Days 3-6 still need entry.~~ ✅ All 8 Holy Week days entered and published (April 1, 2026). Day 8 audio is a placeholder — confirm or replace before Easter.
+2. **Today tab redesign:** Remove the tap-to-begin card. Make Today = full P&P experience as the landing state. Decision made March 30 (see Parking Lot). **Now unblocked — Holy Week content is complete.**
 3. **Standards for seeding docs:** define a repeatable format/checklist for Sanity entry guides so every new content type gets the same treatment.
 4. **3-day BTG journey content review:** reshape Days 1, 3, 5 from existing 7-day doc into standalone 3-day entry-point journey. Sanity entry guide needed.
 5. **Create Google Forms beta feedback survey:** 6 questions drafted (March 27). Sheri enters in Google Forms.
@@ -316,7 +340,7 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 | `theme` | ✅ New — 5 founding themes |
 | `contentItem` | ✅ New — replaces artwork. Includes `audioFile` (Sanity-hosted) + `musicUrl` (external link) for music type |
 | `journey` | ✅ New — 7-day structure |
-| `dailyPrompt` | ✅ New — "Pause & Ponder" daily feature on Today tab |
+| `dailyPrompt` | ✅ New — "Pause & Ponder" daily feature on Today tab. Auditio object includes `verbaOriginal` (optional text field for lyrics, shown in collapsible VERBA panel in app) |
 | `splashPage` | ✅ Kept unchanged |
 | `traditionReflection` | ✅ Updated — themes ref array added. ⚠️ **Schema change needed:** `authorType` currently only allows `church-father`, `saint`, `pope`. Need to add 3 new values: `theologian`, `mystic`, `church-doctor`. Also change field to allow **multiple selections** (some figures are both saint + doctor, etc.). **Known mismatches:** Jean-Pierre de Caussade (Jesuit priest, not a saint — currently tagged as `saint` as placeholder until new categories exist). |
 | `episode` | ⚠️ Deprecated — kept to preserve data, hidden from sidebar |
@@ -363,6 +387,7 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 - **P&P page** — No Begin state. Layout: Image → Title/date → Curator Note → Prompt Question → Context teaser → Lectio → Auditio → Actio. Typography: Cormorant for prompt question and lectio quotes (both, always, at 1.3rem+). Open Sans italic for auditio title. Open Sans regular for everything else.
 - **Music player** — Chant / Ambient options on Pray page
 - **Map** with colored markers by content type
+- **P&P Social Sharing** — Share button on P&P page. Uses `navigator.share()` Web Share API. Sends prompt question + "— KALLOS" as message text, date-stable URL (`/prompt?date=YYYY-MM-DD`) as link. Dynamic OG image at `app/prompt/opengraph-image.tsx` (full-bleed artwork + KALLOS wordmark bottom-left, no question text in image). Confirmed working: X, Facebook, iMessage, Instagram DM. Known limitation: Instagram Stories only accepts media files (images/video), not URLs — platform constraint, not a bug. Clipboard fallback for unsupported platforms.
 
 ---
 
@@ -393,6 +418,10 @@ The Lectio is a philosophy + scripture pairing — two voices arriving at the sa
 **The editorial thesis:** The great philosophers were asking questions that scripture had already answered. The Lectio is the room where that conversation happens. Do not force it — a strong scripture alone is better than a strained pairing.
 
 **The quality standard:** Both texts must be chosen because they connect specifically to what the user just encountered in that day's content — not because they relate to the general theme. A quote that could appear in any KALLOS day is the wrong quote for this day. The test: does this pairing make this specific content unlock in a new way? If it's interchangeable with another day, keep looking. The obvious Plato quote, the verse everyone already knows — those are first-search-result choices. The Lectio should feel like a thread the user didn't see coming.
+
+**Philosophy quote format:** One-liner only. Modern, accessible translation. The reader should feel the thought land, not work to parse it. Model: "To philosophize is to learn to die." (Cicero) or "No evil can happen to a good man, either in life or after death." (Plato, Apology). Long multi-clause quotes are not suitable for the Lectio philosophy field regardless of their quality.
+
+**Eucatastrophe rule:** If the word "eucatastrophe" appears in any KALLOS content, it must be defined inline on first use. Format: "a eucatastrophe, a sudden joyful turn after the long darkness." The second use in the same piece does not need re-definition.
 
 ### Voice Rules
 - Write for the curious seeker — someone moved by beauty, regardless of faith background. Assume curiosity, not faith.
@@ -430,7 +459,7 @@ The Auditio is a music pairing for P&P and Journey days. Apply these rules when 
   - [Internet Archive](https://archive.org) — public domain recordings
   - [gregorian-chant-hymns.com](https://gregorian-chant-hymns.com) — free for personal/institutional use, attribution required (note source abbey/schola in Sanity artist field)
   - Bandcamp free downloads, artist sites offering direct downloads with explicit free-use license
-- Format: MP3 preferred. If only MP4/AAC is available, convert to MP3 before uploading to Sanity.
+- Format: MP3 preferred. If only MP4/AAC is available, convert to MP3 before uploading to Sanity. gregorian-chant-hymns.com in particular delivers MP4 files — always convert. Claude can do this with ffmpeg in the Cowork VM.
 
 **2. Connection can be thematic, mood-based, or emotional**
 - Doesn't have to match the subject literally. A piece can match the feeling of a day, the emotional arc, or the theological undercurrent.
@@ -467,8 +496,13 @@ Current: Dark background with next-day image drift animation. Simple.
 Open question: What's the right visual treatment for the "sneak peek" of the next day's image?
 Sheri to brainstorm. Options: letterbox strip, partial reveal from bottom, full-bleed dark with a peek edge.
 
-### Explore Page — Needs Product Design (Deferred to March 27)
-Current Explore page is a filterable content grid with no editorial voice or direction. It has no reason to arrive there except to browse — feels like a database, not a KALLOS experience. Three directions under consideration: (1) editorial landing with rotating featured question + curated picks, (2) organized by the 5 founding themes rather than content type, (3) "What are you drawn to?" serendipity prompt routing to content. Also: content voice audit needed — card copy may not reflect KALLOS voice. Discuss with Sheri before touching any code.
+### Explore Page — ✅ REDESIGNED (March 30, 2026)
+Replaced dual filter rows (content type + theme) with a theme-cards landing page. Five theme cards are the entry point. Tapping a card filters the full content feed to that theme. Empty themes (no content yet) sort to the bottom, grayed out at 35% opacity with grayscale, non-tappable. No dead-end "Coming soon" screen. Map toggle preserved throughout. Design principle settled: "Explore surfaces content items, not features or sub-fields. The richness is discovered, not advertised." Each tab does one thing: Today = P&P, Journeys = journeys, Explore = browse by theme, Library = saved.
+
+Future Explore work (deferred until more content is seeded): larger goal is editorial voice and direction. Content voice audit needed once real images and content density are in place.
+
+### Today Tab — Redesign Pending (Next after Holy Week)
+**Decision (March 30, 2026):** Remove the tap-to-begin card on the Today tab. Make Today = full P&P experience as the landing state, no second gate. Sheri: "I'm leaning towards full page pause and ponder." Rationale: now that Journeys and Explore are their own tabs, Today doesn't need to route anywhere else — it IS the P&P. The BEGIN button on the Today card was the original entry point before dedicated tabs existed; it is now redundant. **Do not build until Holy Week content entry is complete.**
 
 ### Explore — Content Item Card UI Cleanup
 Flagged from screenshot (March 2026). Issues to address:
@@ -506,9 +540,12 @@ These can't be done in code — Sheri does them in dashboards:
    - Add Victoria "O Vos Omnes" YouTube URL to Auditio field
 9. **Days 4–8 — P&P rewrites in Sanity Studio:** Open each daily prompt and apply the edits from `KALLOS-PP-Audit-Days4-8.html`. Includes question rewrites and Lectio pairings for all 5 days.
 10. **Seed Bosch 7-Day Journey into Sanity:** 8 content items + 8 journey day records. Use `KALLOS-Bosch-Sanity-Entry-Guide.html` — all fields ready including medium, themes, location.
-11. **Holy Week P&P — write Lectio pairings (all 8 days):** philosophyText + philosophyAttribution for each day. See `KALLOS-Content-Guide-HolyWeek.html` for territory table (suggested philosophers + scripture direction per day). Needs a dedicated content session before March 27.
-12. **Holy Week P&P — write Actio (all 8 days):** One specific, experiential action per day. See content guide for rules. Note: Holy Saturday actio = "practice waiting" — that is the only correct actio for that day.
-13. **Holy Week P&P — Sanity entry:** All 8 days (Palm Sunday–Easter). Deadline: March 27. Use `KALLOS-HolyWeek-2026-Pipeline.html` — complete all fields including Lectio and Actio (tasks 11–12 above) before entry.
+11. ~~**Holy Week P&P — write Lectio pairings (all 8 days)**~~ ✅ Done (in entry guide)
+12. ~~**Holy Week P&P — write Actio (all 8 days)**~~ ✅ Done (in entry guide)
+13. ~~**Holy Week P&P — Sanity entry:**~~ ✅ All 8 days entered and published (April 1, 2026). Day 8 audio is a placeholder — confirm or replace before Easter. Use Verba textarea for Days 2-3 if re-entering.
+19. **Custom domain:** Replace `s-beauty-app.vercel.app` with `kallos.app` or update Vercel alias to `kallos-app.vercel.app` before wider launch.
+17. **Palm Sunday — Sanity edits still pending:** curator note rewrite (palms as political act = the hook), context fix ("The disciples behind him are not watching Christ. They are watching the crowd." replaces "almost mechanical" line), actio update ("Press play. While it plays, zoom into the painting and find one face. Stay with it until the music ends.")
+18. **Holy Monday — upload audio:** `01-adoro-te-devote--st-cecilia.mp3` is in Documents/Holy Week/Audio-Holy Week/. Upload to Holy Monday Sanity record Audio File Upload field. Then copy Verba text from entry guide textarea into Verba field.
 14. Seed Themes 2–5 content into Sanity (entry guide doc ready)
 15. Source high-res images for all new content (search terms in docs)
 16. Add lat/long coordinates to Bosch Sanity entry guide and Intro Journey content doc — map is empty without them
