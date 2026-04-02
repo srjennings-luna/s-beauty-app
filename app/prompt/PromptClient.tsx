@@ -53,8 +53,11 @@ function markCompleted() {
 
 // ── Share ─────────────────────────────────────────────────────────────────────
 async function sharePrompt(prompt: DailyPrompt) {
-  // Always use a date-stable URL so the recipient sees the same day's content
-  const shareUrl = `${window.location.origin}/prompt?date=${prompt.date}`;
+  // date= ensures the recipient sees the correct day's content.
+  // v= is a cache-buster so X/Facebook always scrape fresh OG metadata on every
+  // share rather than serving a stale cached card from a previous share of the same URL.
+  // The app ignores the v param — only date is used for content lookup.
+  const shareUrl = `${window.location.origin}/prompt?date=${prompt.date}&v=${Date.now()}`;
   const text = `"${prompt.promptQuestion}"\n\n— KALLOS`;
   if (navigator.share) {
     try {
