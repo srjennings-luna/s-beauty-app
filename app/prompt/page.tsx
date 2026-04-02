@@ -422,7 +422,7 @@ function DailyPromptPageInner() {
                           <p
                             key={i}
                             className="leading-relaxed"
-                            style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.7", whiteSpace: "pre-line", marginBottom: i < remainderParagraphs.length - 1 ? "0.75rem" : 0 }}
+                            style={{ color: C.cream, fontSize: "0.95rem", lineHeight: "1.7", whiteSpace: "pre-line", marginBottom: i < remainderParagraphs.length - 1 ? "0.75rem" : 0 }}
                           >
                             {para}
                           </p>
