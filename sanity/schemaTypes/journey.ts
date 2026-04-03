@@ -273,14 +273,16 @@ export default defineType({
               title: 'Day Number',
               type: 'number',
               description: 'Must match the intended day slot (e.g. 2 for Day 2).',
-              validation: (Rule: {required: () => {min: (n: number) => {max: (n: number) => unknown}}}) => Rule.required().min(1).max(9),
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              validation: (Rule: any) => Rule.required().min(1).max(9),
             },
             {
               name: 'dayTitle',
               title: 'Day Title',
               type: 'string',
               description: 'The title users will see in the greyed-out row.',
-              validation: (Rule: {required: () => unknown}) => Rule.required(),
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              validation: (Rule: any) => Rule.required(),
             },
           ],
           preview: {
