@@ -106,7 +106,8 @@ function DailyPromptPageInner() {
 
   const heroRef     = useRef<HTMLDivElement>(null);
   const actioRef    = useRef<HTMLDivElement>(null);
-  const audioRef    = useRef<HTMLAudioElement | null>(null);
+  const audioRef    = useRef<HTMLAudioElement | null>(null);  // background music
+  const auditioRef  = useRef<HTMLAudioElement | null>(null);  // artwork audio — separate so pause/resume works
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   // ── Load prompt — preview mode fetches drafts; falls back to published if no token ─
@@ -174,7 +175,7 @@ function DailyPromptPageInner() {
     setMusicPlaying(false); setMusicMenuOpen(false);
   };
 
-  useEffect(() => () => audioRef.current?.pause(), []);
+  useEffect(() => () => { audioRef.current?.pause(); auditioRef.current?.pause(); }, []);
 
   // ── Toggle actio checkbox ──────────────────────────────────────────────────
   const toggleCheck = (i: number) => {
@@ -530,13 +531,18 @@ function DailyPromptPageInner() {
                   <button
                     onClick={() => {
                       if (musicPlaying) {
-                        stopMusic();
+                        auditioRef.current?.pause();
+                        setMusicPlaying(false);
                       } else {
-                        if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
-                        const a = new Audio(prompt.auditio!.audioFileUrl ?? prompt.auditio!.audioUrl);
-                        a.loop = false; a.volume = 0.85;
-                        a.play().catch(() => {});
-                        audioRef.current = a;
+                        // Stop background music if running
+                        if (audioRef.current) { audioRef.current.pause(); }
+                        // Resume existing auditio, or create fresh if first play or track ended
+                        if (!auditioRef.current || auditioRef.current.ended) {
+                          const a = new Audio(prompt.auditio!.audioFileUrl ?? prompt.auditio!.audioUrl);
+                          a.loop = false; a.volume = 0.85;
+                          auditioRef.current = a;
+                        }
+                        auditioRef.current.play().catch(() => {});
                         setMusicPlaying(true);
                       }
                     }}
