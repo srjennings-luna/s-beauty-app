@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import type { JourneyDay } from "@/lib/types";
+import NarrationButton, { NARRATION_START_EVENT } from "@/components/NarrationButton";
 
 const STEP_LABELS = ["Open", "Encounter", "Breathe", "Reflect", "Go Deeper", "Connect"];
 
@@ -134,9 +135,12 @@ function StepOpen({ day }: { day: JourneyDay }) {
       {/* Dark box — Day number, title, openText */}
       <div className="px-6 pt-6 pb-4">
         <div className="p-6" style={{ background: C.darkBox, border: `1px solid rgba(253,246,232,0.05)` }}>
-          <p className="text-xs tracking-widest uppercase mb-3" style={{ color: C.creamFaint }}>
-            Day {day.dayNumber}
-          </p>
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs tracking-widest uppercase" style={{ color: C.creamFaint }}>
+              Day {day.dayNumber}
+            </p>
+            <NarrationButton audioUrl={day.openTextAudioUrl} />
+          </div>
           <h2
             className="font-serif-elegant mb-4"
             style={{ color: C.cream, fontSize: "clamp(1.4rem, 5vw, 1.9rem)", fontStyle: "italic", lineHeight: "1.1" }}
@@ -191,6 +195,18 @@ function CircularAudioPlayer({
         audioRef.current = null;
       }
     };
+  }, []);
+
+  // Pause Auditio when narration starts so two tracks never overlap
+  useEffect(() => {
+    const handler = () => {
+      if (audioRef.current && !audioRef.current.paused) {
+        audioRef.current.pause();
+        setAudioPlaying(false);
+      }
+    };
+    window.addEventListener(NARRATION_START_EVENT, handler);
+    return () => window.removeEventListener(NARRATION_START_EVENT, handler);
   }, []);
 
   if (!audioSrc && !externalUrl) return null;
@@ -370,9 +386,14 @@ function StepEncounter({ day }: { day: JourneyDay }) {
 
         {/* Curator Note — the hook. First thing the user reads. */}
         {content.curatorNote && (
-          <p className="text-sm leading-relaxed" style={{ color: C.cream, lineHeight: "1.75" }}>
-            {content.curatorNote}
-          </p>
+          <div>
+            <p className="text-sm leading-relaxed" style={{ color: C.cream, lineHeight: "1.75" }}>
+              {content.curatorNote}
+            </p>
+            <div className="mt-2">
+              <NarrationButton audioUrl={content.curatorNoteAudioUrl} />
+            </div>
+          </div>
         )}
 
         {/* Description — brief card text, shown only if no curator note, or as fallback */}
@@ -385,13 +406,16 @@ function StepEncounter({ day }: { day: JourneyDay }) {
         {/* Context — collapsed by default, expandable */}
         {content.context && (
           <div className="pl-4" style={{ borderLeft: `1px solid ${C.divider}` }}>
-            <button
-              onClick={() => setCtxExpanded(!ctxExpanded)}
-              className="flex items-center gap-2 w-full text-left mb-2"
-            >
-              <p className="text-xs tracking-widest uppercase" style={{ color: C.creamFaint }}>Context</p>
-              <span className="text-xs" style={{ color: C.creamFaint, transition: "transform 0.2s", display: "inline-block", transform: ctxExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
-            </button>
+            <div className="flex items-center gap-2 mb-2">
+              <button
+                onClick={() => setCtxExpanded(!ctxExpanded)}
+                className="flex items-center gap-2 text-left"
+              >
+                <p className="text-xs tracking-widest uppercase" style={{ color: C.creamFaint }}>Context</p>
+                <span className="text-xs" style={{ color: C.creamFaint, transition: "transform 0.2s", display: "inline-block", transform: ctxExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
+              </button>
+              <NarrationButton audioUrl={content.contextAudioUrl} />
+            </div>
             {ctxExpanded && (
               <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>{content.context}</p>
             )}
@@ -858,6 +882,9 @@ function StepGoDeeper({ day }: { day: JourneyDay }) {
                       )}
                       <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>{r.summary}</p>
                       {r.era && <p className="text-xs mt-3" style={{ color: C.creamFaint }}>{r.era}</p>}
+                      <div className="mt-3">
+                        <NarrationButton audioUrl={r.reflectionAudioUrl} />
+                      </div>
                     </div>
                   )}
                 </div>

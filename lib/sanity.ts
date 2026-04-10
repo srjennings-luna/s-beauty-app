@@ -52,6 +52,8 @@ const CONTENT_ITEM_FIELDS = `
   "themes": themes[]->{${THEME_FIELDS}},
   reflectionQuestions,
   curatorNote,
+  "curatorNoteAudioUrl": curatorNoteAudio.asset->url,
+  "contextAudioUrl": contextAudio.asset->url,
   locationName,
   city,
   country,
@@ -180,6 +182,7 @@ export async function getJourney(slug: string) {
         dayTitle,
         "openImageUrl": openImage.asset->url,
         openText,
+        "openTextAudioUrl": openTextAudio.asset->url,
         "encounterContent": encounterContent->{${CONTENT_ITEM_FIELDS}},
         encounterGuidance,
         encounterNote,
@@ -208,7 +211,8 @@ export async function getJourney(slug: string) {
           shortQuote,
           source,
           order,
-          era
+          era,
+          "reflectionAudioUrl": reflectionAudio.asset->url
         }
       } | order(dayNumber asc),
       "plannedDays": plannedDays[] {
@@ -230,6 +234,7 @@ const DAILY_PROMPT_FIELDS = `
   "content": content->{${CONTENT_ITEM_FIELDS}},
   promptQuestion,
   curatorNote,
+  "curatorNoteAudioUrl": curatorNoteAudio.asset->url,
   lectio,
   "auditio": auditio {
     title,
@@ -324,6 +329,7 @@ export async function getTraditionReflections(themeId?: string) {
       summary,
       shortQuote,
       source,
+      "reflectionAudioUrl": reflectionAudio.asset->url,
       "themes": themes[]->{${THEME_FIELDS}},
       theme,
       order,

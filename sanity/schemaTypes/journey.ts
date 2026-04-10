@@ -110,6 +110,13 @@ export default defineType({
               description: 'Brief opening text (~1 min read). Sets the day\'s frame.',
             },
             {
+              name: 'openTextAudio',
+              title: 'Opening Text — Narration Audio',
+              type: 'file',
+              description: 'Optional MP3 narration of the opening text. Adds a small listen button.',
+              options: {accept: 'audio/*'},
+            },
+            {
               name: 'encounterContent',
               title: 'Encounter Content',
               type: 'reference',

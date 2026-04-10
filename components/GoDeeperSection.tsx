@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { getTraditionReflections } from "@/lib/sanity";
 import { defaultTraditionReflections } from "@/data/traditionReflections";
 import type { TraditionReflection } from "@/lib/types";
+import NarrationButton from "@/components/NarrationButton";
 
 interface GoDeeperSectionProps {
   reflections?: TraditionReflection[];
@@ -138,6 +139,9 @@ export default function GoDeeperSection({ reflections: propReflections }: GoDeep
                 <p className="text-white/40 text-xs">
                   — {currentReflection.source}
                 </p>
+                <div className="mt-3">
+                  <NarrationButton audioUrl={currentReflection.reflectionAudioUrl} />
+                </div>
               </div>
 
               {/* Dot indicators - unified design */}

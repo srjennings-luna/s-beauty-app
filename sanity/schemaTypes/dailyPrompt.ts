@@ -38,6 +38,13 @@ export default defineType({
       description: 'Optional: why this was chosen for today. The human editorial voice.',
     }),
     defineField({
+      name: 'curatorNoteAudio',
+      title: 'Curator Note — Narration Audio',
+      type: 'file',
+      description: 'Optional MP3 narration of the curator note. Adds a small listen button.',
+      options: {accept: 'audio/*'},
+    }),
+    defineField({
       name: 'lectio',
       title: 'Reading (Lectio)',
       type: 'object',

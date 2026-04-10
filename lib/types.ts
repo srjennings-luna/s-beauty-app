@@ -37,6 +37,8 @@ export type ContentItem = {
   themes: Theme[];
   reflectionQuestions?: string[];
   curatorNote?: string;
+  curatorNoteAudioUrl?: string;
+  contextAudioUrl?: string;
   // Location (optional for non-place content)
   locationName?: string;
   city?: string;
@@ -117,6 +119,7 @@ export type JourneyDay = {
   dayTitle: string;
   openImageUrl: string;
   openText?: string;
+  openTextAudioUrl?: string;
   encounterContent: ContentItem;
   encounterGuidance?: string;
   encounterNote?: string;
@@ -171,6 +174,7 @@ export type DailyPrompt = {
   content: ContentItem;
   promptQuestion: string;
   curatorNote?: string;
+  curatorNoteAudioUrl?: string;
   lectio?: DailyPromptLectio;
   auditio?: DailyPromptAuditio;
   actio?: string;
@@ -187,6 +191,7 @@ export type TraditionReflection = {
   summary: string;
   shortQuote?: string;
   source: string;
+  reflectionAudioUrl?: string;
   themes?: Theme[];
   /** @deprecated Use themes (reference array) instead */
   theme?: string;

@@ -45,6 +45,13 @@ export default defineType({
       rows: 4,
     }),
     defineField({
+      name: 'reflectionAudio',
+      title: 'Reflection — Narration Audio',
+      type: 'file',
+      description: 'Optional MP3 narration of the full reflection. Adds a small listen button when expanded.',
+      options: {accept: 'audio/*'},
+    }),
+    defineField({
       name: 'shortQuote',
       title: 'Short quote (optional)',
       type: 'string',

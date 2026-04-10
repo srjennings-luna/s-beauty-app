@@ -110,6 +110,13 @@ export default defineType({
       description: 'Deeper context. Why this matters, what to notice, how it connects to the tradition.',
     }),
     defineField({
+      name: 'contextAudio',
+      title: 'Context — Narration Audio',
+      type: 'file',
+      description: 'Optional MP3 narration of the context field. Adds a small listen button.',
+      options: {accept: 'audio/*'},
+    }),
+    defineField({
       name: 'image',
       title: 'Image',
       type: 'image',
@@ -373,6 +380,13 @@ export default defineType({
       type: 'text',
       rows: 3,
       description: 'Why this was chosen. The human voice behind the curation.',
+    }),
+    defineField({
+      name: 'curatorNoteAudio',
+      title: 'Curator Note — Narration Audio',
+      type: 'file',
+      description: 'Optional MP3 narration of the curator note. Adds a small listen button.',
+      options: {accept: 'audio/*'},
     }),
 
     defineField({

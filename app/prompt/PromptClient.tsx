@@ -8,6 +8,7 @@ import { getDailyPrompt, getDailyPromptPreview } from "@/lib/sanity";
 import type { DailyPrompt } from "@/lib/types";
 import { addFavorite, removeFavorite, isFavorite } from "@/lib/favorites";
 import PageTransition from "@/components/ui/PageTransition";
+import NarrationButton, { NARRATION_START_EVENT } from "@/components/NarrationButton";
 
 // ── Espresso palette ──────────────────────────────────────────────────────────
 const C = {
@@ -176,6 +177,21 @@ function DailyPromptPageInner() {
   };
 
   useEffect(() => () => { audioRef.current?.pause(); auditioRef.current?.pause(); }, []);
+
+  // Pause background music and Auditio when narration starts
+  useEffect(() => {
+    const handler = () => {
+      if (audioRef.current && !audioRef.current.paused) {
+        audioRef.current.pause();
+        setMusicPlaying(false);
+      }
+      if (auditioRef.current && !auditioRef.current.paused) {
+        auditioRef.current.pause();
+      }
+    };
+    window.addEventListener(NARRATION_START_EVENT, handler);
+    return () => window.removeEventListener(NARRATION_START_EVENT, handler);
+  }, []);
 
   // ── Toggle actio checkbox ──────────────────────────────────────────────────
   const toggleCheck = (i: number) => {
@@ -383,6 +399,11 @@ function DailyPromptPageInner() {
               >
                 {prompt.curatorNote}
               </p>
+              {prompt.curatorNoteAudioUrl && (
+                <div className="mt-3">
+                  <NarrationButton audioUrl={prompt.curatorNoteAudioUrl} />
+                </div>
+              )}
             </div>
           )}
 
@@ -406,6 +427,7 @@ function DailyPromptPageInner() {
 
           {/* ── Context — teaser + collapsible ──────────────────────────── */}
           {prompt.content.context && (() => {
+            const contextAudioUrl = prompt.content.contextAudioUrl;
             // Split by paragraph breaks (Sanity plain text uses \n\n between paragraphs)
             const paragraphs = prompt.content.context.split(/\n\n+/).map((p: string) => p.trim()).filter(Boolean);
             const teaser = paragraphs[0] ?? "";
@@ -418,6 +440,9 @@ function DailyPromptPageInner() {
                 >
                   {teaser}
                 </p>
+                {remainderParagraphs.length === 0 && contextAudioUrl && (
+                  <NarrationButton audioUrl={contextAudioUrl} />
+                )}
                 {remainderParagraphs.length > 0 && (
                   <>
                     {contextExpanded && (
@@ -433,25 +458,28 @@ function DailyPromptPageInner() {
                         ))}
                       </div>
                     )}
-                    <button
-                      onClick={() => setContextExpanded(!contextExpanded)}
-                      className="flex items-center gap-2 text-xs tracking-widest uppercase"
-                      style={{ color: C.sageMuted, letterSpacing: "0.18em" }}
-                    >
-                      <span>{contextExpanded ? "Less" : "Read more"}</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={1.5}
-                        width={14}
-                        height={14}
-                        style={{ transform: contextExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.3s ease" }}
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={() => setContextExpanded(!contextExpanded)}
+                        className="flex items-center gap-2 text-xs tracking-widest uppercase"
+                        style={{ color: C.sageMuted, letterSpacing: "0.18em" }}
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                      </svg>
-                    </button>
+                        <span>{contextExpanded ? "Less" : "Read more"}</span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={1.5}
+                          width={14}
+                          height={14}
+                          style={{ transform: contextExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.3s ease" }}
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        </svg>
+                      </button>
+                      <NarrationButton audioUrl={contextAudioUrl} />
+                    </div>
                   </>
                 )}
               </div>
