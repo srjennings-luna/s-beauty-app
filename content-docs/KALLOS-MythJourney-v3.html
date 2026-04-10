@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KALLOS - When Myth Became Fact: A 7-Day Journey (v3)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Open Sans', sans-serif; line-height: 1.8; color: #2C2C2C; background: #FFFFFF; }
+        .container { max-width: 860px; margin: 0 auto; padding: 60px 40px 120px; }
+        .cover { background: #16110d; color: #fdf6e8; text-align: center; padding: 70px 40px 55px; margin: -60px -40px 52px; }
+        .cover .label { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #C19B5F; margin-bottom: 16px; }
+        .cover h1 { font-size: 34px; font-weight: 300; letter-spacing: 3px; color: #fdf6e8; margin-bottom: 10px; }
+        .cover .sub { font-size: 15px; color: #bfb8aa; font-style: italic; }
+        h2 { font-family: Montserrat, Arial, sans-serif; font-size: 21px; font-weight: 600; color: #16110d; margin-top: 48px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #C19B5F; }
+        h3 { font-family: Montserrat, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #C19B5F; margin-top: 28px; margin-bottom: 8px; letter-spacing: 0.08em; text-transform: uppercase; }
+        p { margin-bottom: 14px; font-size: 15px; }
+        .journey-meta { background: #fdf6e8; border-left: 4px solid #C19B5F; padding: 20px 24px; margin: 28px 0; }
+        .journey-meta p { margin-bottom: 6px; font-size: 14px; }
+        .journey-meta strong { color: #16110d; }
+        .day-block { margin: 48px 0; border: 1px solid #e8e0d4; }
+        .day-header { background: #16110d; color: #fdf6e8; padding: 14px 20px; display: flex; align-items: baseline; gap: 14px; }
+        .day-num { font-family: Montserrat, Arial, sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #C19B5F; flex-shrink: 0; }
+        .day-title { font-size: 18px; font-weight: 300; letter-spacing: 1px; }
+        .day-body { padding: 20px 24px; }
+        .field { margin: 14px 0; }
+        .field-label { font-family: Montserrat, Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #C19B5F; margin-bottom: 4px; }
+        .field-content { font-size: 14px; line-height: 1.75; color: #2C2C2C; }
+        .field-content.quote { font-style: italic; border-left: 2px solid #C19B5F; padding-left: 14px; margin: 8px 0; }
+        .lectio-block { background: #fdf6e8; border: 1px solid #e8e0d4; padding: 16px 20px; margin: 14px 0; }
+        .lectio-block .lectio-label { font-family: Montserrat, Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #16110d; margin-bottom: 10px; }
+        .lectio-row { margin-bottom: 10px; }
+        .lectio-row .tag { font-family: Arial, sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #4a7a62; font-weight: 700; margin-bottom: 2px; }
+        .audio-block { background: #f5f0e8; border: 1px solid #e8e0d4; padding: 14px 18px; margin: 14px 0; }
+        .audio-block .audio-label { font-family: Montserrat, Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #4a7a62; margin-bottom: 8px; }
+        .audio-option { margin-bottom: 8px; font-size: 13px; }
+        .audio-option .opt-tag { font-weight: 700; color: #16110d; }
+        .image-note { background: #fdf0f0; border-left: 3px solid #c25555; padding: 12px 16px; margin: 12px 0; font-size: 13px; }
+        .image-note strong { color: #c25555; }
+        .excerpt-block { background: #16110d; color: #fdf6e8; padding: 28px 32px; margin: 14px 0; font-size: 15px; line-height: 2.0; }
+        .excerpt-block .excerpt-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C19B5F; margin-bottom: 14px; font-weight: 700; }
+        .excerpt-block .excerpt-line { margin-bottom: 4px; }
+        .excerpt-block .excerpt-attr { font-size: 12px; color: #bfb8aa; margin-top: 16px; font-style: italic; }
+        .sanity-note { background: #f5f0e8; border-left: 3px solid #C19B5F; padding: 12px 16px; margin: 12px 0; font-size: 13px; color: #5a5048; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
+        th { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #C19B5F; text-align: left; padding: 8px 10px; border-bottom: 2px solid #C19B5F; background: #fdf6e8; }
+        td { padding: 8px 10px; border-bottom: 1px solid #e8e0d4; vertical-align: top; }
+        .arc-table td:first-child { font-weight: 600; }
+        ul { margin: 8px 0 14px 22px; }
+        li { font-size: 14px; margin-bottom: 4px; }
+        .version-note { background: #16110d; color: #fdf6e8; padding: 20px 24px; margin: 28px 0; font-size: 14px; line-height: 1.7; }
+        .version-note strong { color: #C19B5F; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="cover">
+        <div class="label">KALLOS Journey Content Draft</div>
+        <h1>WHEN MYTH BECAME FACT</h1>
+        <div class="sub">A 7-Day Journey with C.S. Lewis</div>
+    </div>
+
+    <div class="version-note">
+        <strong>Version 3.1 - April 4, 2026.</strong> Sanity-ready edition. All content maps directly to named Sanity fields. No "Symbolism to Call Out" sections remain; that material has been merged into the correct Sanity fields (Context, Encounter Note) where it will be entered. Every field label matches a Sanity field name. Copy-paste ready. This draft incorporates the Markos "Myth Made Fact" research (general vs. special revelation), adds the Sistine Chapel and Orvieto Cathedral sibyls ("they saw dimly"), replaces the Isenheim Altarpiece (wrong journey) with Dante's Purgatorio (the pagan guide who goes as far as he can), and closes with Rublev's Trinity icon (the empty seat at the table). Every day has been tested against the dinner-table rule: would someone repeat this fact tonight? Days 5-7 are new.
+    </div>
+
+    <h2>Journey Overview</h2>
+
+    <div class="journey-meta">
+        <p><strong>Central Question:</strong> What if the oldest human stories were reaching for something real?</p>
+        <p><strong>Duration:</strong> 7 days, approximately 12 minutes per day</p>
+        <p><strong>Theme:</strong> Home / The Restless Heart</p>
+        <p><strong>Journey slug:</strong> when-myth-became-fact</p>
+        <p><strong>Audience hook:</strong> This journey follows C.S. Lewis's central argument: that the universal human impulse to tell stories about dying and rising gods was not wishful thinking, but a signal reaching forward through time.</p>
+    </div>
+
+    <h3>Journey Description (for Journey card in app)</h3>
+    <p class="field-content">Every culture in human history has told a story about a god who dies and returns. C.S. Lewis spent 33 years dismissing this as coincidence. Then he followed the argument to its conclusion. Seven days through the art, philosophy, and landscapes that led him there, and the question he could not stop asking along the way.</p>
+
+    <h3>Emotional Arc</h3>
+    <table class="arc-table">
+        <thead><tr><th>Days</th><th>Movement</th><th>What the user feels</th></tr></thead>
+        <tbody>
+            <tr><td>1-2</td><td>Arrival: The Pattern</td><td>Surprise. The myth appears in places you never expected. Something you dismissed begins to look like a signal. (Day 2 = Venus/Adonis — content pending.)</td></tr>
+            <tr><td>3-4</td><td>Deepening: The Argument</td><td>Intellectual pull. Plato reaching for something he couldn't name. Lewis following the same argument across a rainy Oxford path until he can no longer deny where it leads. The case builds without being made explicitly.</td></tr>
+            <tr><td>5-6</td><td>They Saw Dimly</td><td>The Church honored the partial sight. Pagan prophetesses on the Pope's ceiling, flanked by Hebrew prophets as equals. A pagan poet who guides the pilgrim as far as reason can reach, then stops without a word. The beauty of what was glimpsed, and the ache of the limit.</td></tr>
+            <tr><td>7</td><td>Integration: The Invitation</td><td>Not an argument. Not a conclusion. A table with an empty seat, painted 600 years ago and still waiting. The question lands: will you sit down?</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Content Type Distribution</h3>
+    <p>Sacred Art x3, Landscape x1, Literature x1, Thinker x1 (School of Athens). Five content types across six confirmed days (Day 2 Venus/Adonis pending). Justin Martyr (formerly Thinker Day 4) moved to standalone P&P day with CTA to this journey. Every day includes Auditio (music) as a secondary encounter.</p>
+
+
+    <!-- ===================== DAY 1 ===================== -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 1</span>
+            <span class="day-title">The story that won't stop</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="field-label">Content Type</div>
+                <div class="field-content">Sacred Art</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Content Item</div>
+                <div class="field-content">The Great Eleusinian Relief, c. 440 BC, National Archaeological Museum, Athens</div>
+            </div>
+
+            <div class="image-note">
+                <strong>Image sourcing:</strong> Search "Great Eleusinian Relief" on Wikimedia Commons. The marble relief shows Demeter, Triptolemus, and Persephone. The relief is fully public domain (ancient artwork, pre-1928 photographs). Look for the version showing the full panel with all three figures. Min 1200px for Sanity upload. The relief has fine detail that rewards zoom: the grain sheaf in Triptolemus's hand is small but central to the entire journey's argument.
+            </div>
+
+            <div class="field">
+                <div class="field-label">Opening Text (Step 1)</div>
+                <div class="field-content">
+                    <p>Persephone was in a meadow picking flowers when the earth opened beneath her.</p>
+                    <p>The gods had planted the trap themselves. In the middle of the field, they had grown a narcissus of a hundred blossoms, so beautiful it stopped her mid-step. When she reached down and plucked it, the ground split apart. Hades, lord of the dead, rose up in his golden chariot from the darkness below. He seized her. He dragged her down into his sunless world before she could cry out.</p>
+                    <p>Demeter, her mother, was goddess of the earth and grain. She had dominion over the growing season, the harvest, everything that came up from the ground and fed the living. When Persephone disappeared, Demeter tore her robes and wandered the earth weeping and distraught for nine days without eating or resting. Her grief turned to rage. She caused the crops to wither. Animals starved. The land went cold and dead.</p>
+                    <p>The other gods watched and finally sent word to Hades: return the girl before everything dies. Hades agreed. But before he let Persephone go, he had her eat pomegranate seeds, the food of the dead, which bound her to him and to his kingdom. She could not leave entirely. Each year, when spring comes, she rises to the world of the living for nine months. Each autumn, she descends again for three. Each year, Demeter grieves again. Each year, the earth follows her.</p>
+                    <p>For over a thousand years, the Greeks built a religious rite around this story. Known as the cult of Demeter and Persephone, the Eleusinian Mysteries were the most important religious rites in the ancient world.</p>
+                    <p>Every autumn, thousands of initiates walked the Sacred Way, a fourteen-mile procession from Athens to the town of Eleusis. They began by purifying themselves in the sea. They fasted. They processed through the night by torchlight, singing and calling the name of Persephone. At the end of the road stood the Telesterion, the great sanctuary dedicated to Demeter and Persephone, a hall large enough to hold thousands. Inside, the final revelation took place.</p>
+                    <p>Those who survived described what happened in the Telesterion in only three phrases: something done, something said, something shown. No one said what. Not Plato, who was initiated. Not Cicero, who noted the Mysteries gave "a reason not only to live with joy, but also to die with better hope." Not Marcus Aurelius, who underwent them as emperor. For fifteen centuries, the secret held. When the emperor Theodosius shut the rites down in 392 AD, it died with the last initiates.</p>
+                    <p>But we know the central symbol. What was shown, in silence, at the end of it all.</p>
+                    <p>A single ear of wheat. Something that falls into the ground, dies, and comes back.</p>
+                </div>
+                <details style="margin-top:10px;">
+                    <summary style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#999;cursor:pointer;">ORIGINAL (replaced April 9, 2026 -- lecture mode, no myth story, thesis-first)</summary>
+                    <div style="margin-top:8px;padding:12px;background:#f5f0e8;font-size:13px;color:#5a5048;font-style:italic;">
+                        Every culture in human history has told a story about a god who dies and returns. Egypt. Greece. Scandinavia. Mesoamerica. For a long time, this seemed to prove that Christianity was just one more version of an ancient dream. C.S. Lewis thought the opposite.
+                    </div>
+                </details>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Curator Note (the hook)</div>
+                <div class="field-content">The Eleusinian Mysteries were the most important religious rites in the ancient world. For over 1,500 years, every philosopher, general, and emperor of note underwent initiation. Plato did. Cicero did. Marcus Aurelius did. The central secret was never written down. Initiates were forbidden to reveal what they saw in the final moment of revelation, and none of them did. When the Christian emperor Theodosius shut the rites down in 392 AD, the secret died with the last living initiates. We will never know exactly what was shown. But we know the central symbol: a single ear of wheat, held up in silence. A grain that falls into the ground, dies, and comes back as bread.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Brief Description (for content card)</div>
+                <div class="field-content">A marble relief from the 5th century BC. Two goddesses flank a young man. One hands him a sheaf of wheat. The carving is worn but the gesture is unmistakable: something is being given. Something is being entrusted. The sheaf is small enough to miss if you are not looking for it.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Context (expandable)</div>
+                <div class="field-content">The Eleusinian Mysteries were conducted at the sanctuary of Eleusis, about 20 kilometers from Athens, from roughly 1500 BC to 392 AD. Initiation was open to anyone who spoke Greek and had not committed murder. The rites took place over nine days each autumn. Initiates fasted, processed from Athens to Eleusis on foot, and entered the Telesterion, a great hall that could hold thousands. What happened inside was the best-kept secret in the ancient world. Cicero wrote that the Mysteries gave initiates "a reason not only to live with joy, but also to die with better hope." The early Church Fathers were aware of the parallels between the Eleusinian story and the Christian one. Clement of Alexandria, who had been initiated before his conversion, wrote about the Mysteries at length, arguing that the pagans had glimpsed something real but incomplete. The grain that dies and returns was, for him, a shadow cast by the thing that actually happened.
+
+In the relief itself, the young man Triptolemus stands between the two goddesses receiving a sheaf of grain. In the Eleusinian tradition, this was not agricultural instruction. The grain was the entire argument: something must die underground before it can return as food that sustains the living. Demeter lost her daughter Persephone to the underworld. Persephone returned each spring. The cycle of descent, death, and return was the oldest story the Greek world knew, and they considered it the most important truth they possessed. They built the Mysteries around it and guarded the secret for a millennium and a half. When John's Gospel records Jesus saying "unless a grain of wheat falls into the earth and dies, it remains alone; but if it dies, it bears much fruit," the Greek-speaking audience of the 1st century would have heard the Eleusinian echo immediately.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Note (Journey-specific layer)</div>
+                <div class="field-content">The relief was carved at the height of Athenian civilization, around the same time Sophocles was writing tragedies and Socrates was asking questions in the marketplace. These were not primitive people grasping at superstition. They were the most intellectually rigorous culture the Western world had produced, and they considered the dying-and-rising grain the deepest truth they knew. They wrapped it in secrecy and kept it for 1,500 years. And then it ended, and the secret passed out of the world. Except that it didn't. The same pattern kept appearing: in Osiris, in Balder, in Orpheus, in Adonis, in every culture that told stories. Something about the shape of "descent, death, return" would not let the human imagination go.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Guidance</div>
+                <div class="field-content">Find the sheaf of grain. It is the smallest object in the relief and the reason the relief exists.</div>
+            </div>
+
+            <div class="lectio-block">
+                <div class="lectio-label">Lectio Pairing</div>
+                <div class="lectio-row">
+                    <div class="tag">Philosophy (the question)</div>
+                    <div class="field-content quote">"Blessed is he among men on earth who has seen these Mysteries; but he who is uninitiated and has no part in them never has the same lot once he is dead, down in the darkness and gloom."</div>
+                    <div class="field-content">Pindar, fragment from Dirges (c. 470 BC), on the Eleusinian Mysteries</div>
+                </div>
+                <div class="lectio-row" style="margin-top:12px;">
+                    <div class="tag">Scripture (the arrival)</div>
+                    <div class="field-content quote">"Truly, truly, I say to you, unless a grain of wheat falls into the earth and dies, it remains alone; but if it dies, it bears much fruit."</div>
+                    <div class="field-content">John 12:24, RSV-2CE</div>
+                </div>
+                <div class="lectio-row" style="margin-top:10px;">
+                    <div class="tag">Connection note (internal)</div>
+                    <div class="field-content">Pindar was describing an experience he believed granted a "better hope" in death. He could not have named what the grain pointed toward. Five centuries later, John records Jesus using the same image, the same agricultural fact, the same logic of descent and return, but applying it to himself. The Eleusinian initiates held the grain in silence. Jesus spoke it aloud and then walked into it. The pattern the Mysteries guarded for 1,500 years was, for Christians, the shape of what actually happened.</div>
+                </div>
+            </div>
+
+            <div class="audio-block">
+                <div class="audio-label">Auditio</div>
+                <div class="audio-option"><span class="opt-tag">Primary:</span> Phos Hilaron (O Joyful Light), Byzantine chant, 2nd-3rd century. The oldest known Christian hymn outside the New Testament, dating from roughly the same centuries when the Eleusinian Mysteries were still active. Several public domain recordings on Archive.org. Search "Phos Hilaron Byzantine chant." Approximately 3-5 minutes.</div>
+                <div class="audio-option"><span class="opt-tag">Alternative:</span> Arvo Part, "Spiegel im Spiegel" (Mirror in the Mirror, 1978). A melody that descends and returns. Check Archive.org for public domain recordings. Approximately 10 minutes.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Reflection Questions (Step 4)</div>
+                <div class="field-content">
+                    <p>1. What story do you keep coming back to, a book, a film, a myth, that moves you in ways you can't quite explain? What do you think it is reaching for?</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Connect Thread (Step 5)</div>
+                <div class="field-content">The grain that dies and returns was the Eleusinian secret. But the dying pattern didn't belong to one story. It kept appearing in other myths, other names, other forms -- and not every one of them stayed in the past.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Go Deeper Suggestions</div>
+                <div class="field-content">
+                    <p><strong>1. Clement of Alexandria on the Mysteries (Church Father, Early Church)</strong><br>
+                    Short quote: "I will show you the Word, and the Word's Mysteries, describing them according to the image familiar to you."<br>
+                    Summary: Clement was a 2nd-century Christian theologian who had been initiated into the Eleusinian Mysteries before his conversion. He did not dismiss what he had experienced. He argued that the Mysteries contained real, if incomplete, glimpses of truth, planted by the same God who would later speak directly through Christ. He was one of the first Christian thinkers to take pagan religious experience seriously rather than simply condemning it.<br>
+                    Source: Clement of Alexandria, Exhortation to the Greeks (Protrepticus), ch. 12</p>
+                    <p style="margin-top:12px;"><strong>2. C.S. Lewis on myth as "good dreams" (Modern)</strong><br>
+                    Short quote: "We must not be ashamed of the mythical radiance resting on our theology."<br>
+                    Summary: C.S. Lewis was an Oxford professor who spent years as an atheist before concluding, reluctantly, that Christianity was true. His key insight was that pagan myths about dying and rising gods were not evidence against Christianity but evidence of a universal human sense that this kind of story was the right shape of reality. He called them "good dreams," the kind God sent to prepare the human imagination for the one myth that actually happened in history.<br>
+                    Source: C.S. Lewis, "Myth Became Fact," God in the Dock (1970)</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ===================== DAY 2 ===================== -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 2</span>
+            <span class="day-title">The tears she cried</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="field-label">Content Type</div>
+                <div class="field-content">Sacred Art</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Content Item</div>
+                <div class="field-content">Francesco Furini, <em>Venus Mourning the Death of Adonis</em> (c. 1626–28, Museum of Fine Arts, Budapest. Inventory #493. Oil on canvas, 233 × 190 cm.)</div>
+            </div>
+
+            <div class="image-note">
+                <strong>Image sourcing:</strong> Public domain. Wikimedia Commons: File:Morte_di_Adone_-_Furini.jpg (1,139 × 1,400 px — modest resolution). For higher resolution, check Google Arts &amp; Culture (asset ID: KQH5v4Hdq5a7xg) or contact the Museum of Fine Arts Budapest directly. The painting rewards zoom on Venus's face, the Cupid at her feet, and the attendants' hands. Min 1200px for upload; higher preferred for Breathe step.
+            </div>
+
+            <div class="field">
+                <div class="field-label">Opening Text (Step 1)</div>
+                <div class="field-content">
+                    <p>Myrrha, the princess of Cyprus, was known for her beauty. Her mother, the queen, foolishly bragged that Myrrha was more beautiful than Venus herself. Angered, Venus cursed innocent Myrrha with an unspeakable passion as punishment for the queen's arrogance. Pregnant and distraught, Myrrha fled the castle weeping. The gods saw Myrrha inconsolable and took pity on her, transforming her into a tree. Her tears thickened into sap. When the time came, the gods split open the tree, and Adonis entered the world.</p>
+                    <p>He grew into someone so beautiful that Venus herself -- the goddess who had sent the curse -- fell in love with him. She left Olympus and followed him through the fields like a mortal girl. She warned him away from dangerous animals. He went after a wild boar.</p>
+                    <p>The boar caught him in the thigh. Venus heard him cry out and came running, barefoot over rocks and thorns. She found him in the grass. She lifted his body, still bleeding, and held him in her lap. She was a goddess. She could not bring him back. But she vowed he would not be forgotten.</p>
+                    <p>From the drops of his blood she fashioned a flower, crimson and fragile, that blooms briefly and blows away at the first breeze. The Greeks called it the anemone -- from their word for wind.</p>
+                    <p>A beautiful thing that does not last.</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Curator Note (the hook)</div>
+                <div class="field-content">Francesco Furini painted this in Florence in 1626. He was 23 years old and already on his way to becoming a Catholic priest. Art historians trace the composition to two sources: Raphael's <em>Entombment of Christ</em> and Caravaggio's <em>Entombment</em>. In both, a grieving woman bears the weight of a dead man's body. But there is a third work pointing to a bigger story: Michelangelo's Pietà.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Brief Description (for content card)</div>
+                <div class="field-content">A woman reaches toward a body that has just gone still. Around her, figures hold what she cannot hold herself. At her feet, a small figure looks up at her face.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Context (expandable)</div>
+                <div class="field-content">Francesco Furini (1603–1646) was a Florentine Baroque painter who was ordained a Catholic priest in 1633 and died at forty-three. He is known almost entirely for paintings of women -- mythological and allegorical -- rendered with extraordinary luminosity of skin against very dark backgrounds. He appears to have left no account of how he understood the tension between his subject matter and his vocation.
+
+The myth of Adonis is older than Greece. Versions appear in Sumerian and Phoenician tradition under different names -- the dying god, the inconsolable goddess, the annual return. By the time the Greeks inherited it, the story had been running for centuries.
+
+The festival of the Adonia was observed across the ancient Mediterranean for hundreds of years. Women planted fast-sprouting seeds in shallow terracotta pots, watched them grow and wither within eight days, then carried the dead gardens through the streets in procession, weeping. The rite is documented in Athens, Alexandria, Byblos, and Rome. It was not a fringe cult. Plato mentions women observing it in passing in the Republic, the way you mention something everyone already knows.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Note (Journey-specific layer)</div>
+                <div class="field-content">Venus sent the curse. What came from it was the one thing she could not have planned: the boy she fell in love with, and the sap of his mother's grief. Myrrha's tears hardened into myrrh -- one of the most precious substances in the ancient world. Used in temples. Used to anoint the dead.
+
+A curse that produced something holy.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Guidance</div>
+                <div class="field-content">Find the small figure at her feet. He's known as the god of love.</div>
+            </div>
+
+            <div class="lectio-block">
+                <div class="lectio-label">Lectio Pairing</div>
+                <div class="lectio-row">
+                    <div class="tag">Philosophy (the question)</div>
+                    <div class="field-content quote">"All things change; nothing perishes."</div>
+                    <div class="field-content">Ovid, Metamorphoses XV</div>
+                </div>
+                <div class="lectio-row" style="margin-top:12px;">
+                    <div class="tag">Scripture (the arrival)</div>
+                    <div class="field-content quote">"And going into the house they saw the child with Mary his mother, and they fell down and worshiped him. Then, opening their treasures, they offered him gifts, gold and frankincense and myrrh."</div>
+                    <div class="field-content">Matthew 2:11, RSV-2CE</div>
+                </div>
+                <div class="lectio-row" style="margin-top:10px;">
+                    <div class="tag">Connection note (internal)</div>
+                    <div class="field-content">Myrrha's sap carries her name. Matthew places it -- the resin of grief, used for centuries to anoint the dead -- into the hands of men kneeling before a child. The gift was for burial. They brought it to a birth.</div>
+                </div>
+            </div>
+
+            <div class="audio-block">
+                <div class="audio-label">Auditio</div>
+                <div class="audio-option"><span class="opt-tag">Primary:</span> Purcell, "When I Am Laid in Earth" (Dido's Lament), from <em>Dido and Aeneas</em> (1689). A woman's voice descending a slow bass line. "Remember me, but ah, forget my fate." Public domain; multiple recordings on Musopen and Archive.org. Approximately 4 minutes.</div>
+                <div class="audio-option"><span class="opt-tag">Alternative:</span> Barber, Adagio for Strings (1936). No text, no voice. The same grief without a name. Chosen for JFK's funeral and broadcast without explanation -- it didn't need one. Public domain recordings on Archive.org. Approximately 8 minutes.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Reflection Questions (Step 4)</div>
+                <div class="field-content">
+                    <p>1. What is the most beautiful thing you have lost?</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Connect Thread (Step 5)</div>
+                <div class="field-content">The Greeks wept for Adonis every year. They planted gardens they knew would die. They could feel the shape of what they were mourning. One philosopher believed that shape pointed somewhere -- toward a world where beautiful things do not fall apart. He spent forty years trying to describe it. He never arrived.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Go Deeper Suggestions</div>
+                <div class="field-content">
+                    <p><strong>1. Origen on the Magi's gifts (Church Father, 3rd century)</strong><br>
+                    Short quote: "Gold, as to a king; frankincense, as to God; myrrh, as to one who is to die."<br>
+                    Summary: Origen, writing in Alexandria around 240 AD, read the three gifts as a compressed statement about who the child was. Gold for kingship. Frankincense for divinity. Myrrh for burial. The Magi were not bringing luxury items. They were announcing, at a birth, the kind of death that was coming. Origen saw in the myrrh the visitors' unwitting prophecy: they had carried the resin of grief to a cradle, not yet knowing why it was exactly right.<br>
+                    Source: Origen, <em>Contra Celsum</em>, Book I, ch. 60</p>
+                    <p style="margin-top:12px;"><strong>2. Simone Weil on beauty and loss (Modern)</strong><br>
+                    Short quote: "The beauty of the world is the mouth of a labyrinth."<br>
+                    Summary: Weil, a French philosopher who died in 1943, argued that beauty is not decoration. It is the point where something so real breaks through that you cannot look away and cannot hold it. She believed the ache beauty leaves behind -- the fact that it arrives and goes -- is not a flaw. It is the most reliable signal you have.<br>
+                    Source: Simone Weil, "Love of the Order of the World," <em>Waiting for God</em> (1951)</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ===================== DAY 3 ===================== -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 3</span>
+            <span class="day-title">The longing no one could name</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="field-label">Content Type</div>
+                <div class="field-content">Thinker</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Content Item</div>
+                <div class="field-content">Plato (428-348 BC), featured through Raphael's "The School of Athens" (1509-1511, Apostolic Palace, Vatican)</div>
+            </div>
+
+            <div class="image-note">
+                <strong>Image sourcing:</strong> Raphael's "School of Athens" is fully public domain. Wikimedia Commons has a very high-resolution scan (7,479 x 5,285 px). Search "Raphael School of Athens Wikimedia." For the Breathe step, crop to the central section featuring Plato and Aristotle. The face Raphael gave Plato is the face of Leonardo da Vinci, which is visible on zoom. Min 1200px for upload.
+            </div>
+
+            <div class="field">
+                <div class="field-label">Opening Text (Step 1)</div>
+                <div class="field-content">
+                    <p>In 1508, Pope Julius II gave two commissions at the same time.</p>
+                    <p>He hired Raphael, 25 years old, to paint the walls and ceiling of his private library in the Vatican palace. In the room next door, Michelangelo, 33, was beginning to paint the ceiling of the Sistine Chapel. Same building. Same patron. Same years. Neither man saw what the other was doing. The Sistine Chapel was sealed under scaffolding. The library was Raphael's alone.</p>
+                    <p>In 1511, Julius partially unveiled the Sistine ceiling before it was complete. Raphael slipped in.</p>
+                    <p>He stood beneath Michelangelo's figures and looked. What stopped him was not the grandeur. It was one figure set apart from the crowd: Heraclitus, the Greek philosopher, sitting alone, head down over a notebook, brooding. His face was heavy with the effort of a mind circling something it cannot reach.</p>
+                    <p>Raphael went back to his own fresco. He had not included Heraclitus. Now he painted him in, in the foreground, alone -- and gave him Michelangelo's face.</p>
+                    <p>He did the same for Plato. No one alive in 1509 knew what Plato looked like. Raphael needed a face for the philosopher at the center of his composition, the one pointing upward toward the invisible world he had spent his life trying to describe. He chose the face of Leonardo da Vinci.</p>
+                    <p>Two men, two thousand years apart. Both pointing in the same direction. Both unable to name what they were pointing at.</p>
+                    <p>Plato called it the Form of the Good. He said everything visible in our world is only its shadow, the way shapes on a cave wall are cast by a fire burning outside the cave. He knew the fire was real. He spent forty years trying to describe it. He died still pointing.</p>
+                    <p>Raphael saw that same quality in Leonardo's face. He saw it in Michelangelo's brooding Heraclitus. He put all three of them in the same room -- the philosopher, the artist, the man who recognized in both of them the same condition.</p>
+                    <p>The longing no one could name.</p>
+                </div>
+                <details style="margin-top:10px;">
+                    <summary style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#999;cursor:pointer;">ORIGINAL (replaced April 9, 2026 -- focused only on Raphael's fresco, no thread connecting to title, Michelangelo introduced and dropped)</summary>
+                    <div style="margin-top:8px;padding:12px;background:#f5f0e8;font-size:13px;color:#5a5048;font-style:italic;">
+                        Plato spent 40 years writing about a world beyond this one, a realm where beauty, truth, and goodness exist in their pure form, and everything in our world is only their shadow. He never named what cast the light. He only knew that something did.
+                    </div>
+                </details>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Curator Note (the hook)</div>
+                <div class="field-content">Raphael painted this fresco in the Vatican library while Michelangelo was painting the Sistine Chapel ceiling in the room next door. Same building, same patron, same months. Neither saw the other's work until both were finished. Pope Julius II had commissioned two of the greatest artists alive to fill the same palace with beauty at the same time: one room devoted to human reason, the other to divine revelation. At the center of Raphael's room, Plato points upward. The face Raphael gave him is the face of Leonardo da Vinci. Two men, two thousand years apart, reaching in the same direction. Neither could name what they were pointing at.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Brief Description (for content card)</div>
+                <div class="field-content">Fifty-eight philosophers, mathematicians, and scientists fill a vast Roman hall that never existed. At the center, two figures walk and argue. One points up. The other points forward. They have been doing this for 2,500 years and they are still doing it now.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Context (expandable)</div>
+                <div class="field-content">Raphael painted "The School of Athens" for the private library of Pope Julius II between 1509 and 1511. It sits across from his "Disputation of the Holy Sacrament," one wall devoted to human reason, one to divine revelation. The pairing was deliberate: not opposition, but conversation. The figures in the School of Athens are almost all pagan. Raphael's Pope commissioned a painting celebrating them. The implicit argument is the one Justin Martyr made 1,400 years earlier: reason and revelation are not enemies. The philosophers were asking real questions. The fresco is not paganism tolerated by the Church. It is the Church's confidence that truth-seekers were seeking something real, even when they did not yet have the name for it.
+
+Every figure's pose and attribute is deliberate. Plato holds the Timaeus (his dialogue about the creation of the world) and points upward, toward the transcendent Forms he believed were the source of all reality. Aristotle holds the Ethics and points outward, toward the observable, earthly world he believed was where truth lived. The arch above them frames the sky, visible through the open wall behind them: the debate about whether ultimate reality is up there or down here has been going on for 2,500 years. To the lower right, Euclid bends over a compass drawing geometric forms, a man who believed truth could be proved. To the left, Pythagoras writes in a notebook while a student holds up a tablet showing harmonic ratios, the conviction that the structure of reality is musical. The entire fresco is a map of human reason trying every door.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Note (Journey-specific layer)</div>
+                <div class="field-content">Plato's most famous argument is the Allegory of the Cave. Imagine prisoners chained underground since birth, facing a wall. Behind them, a fire casts shadows of objects on the wall. The prisoners mistake the shadows for reality. One prisoner is freed, walks out into the sunlight, and is nearly blinded. He returns to tell the others. They think he has gone mad. What Plato could not say, the thing the allegory reaches for but never names, is what the sun actually is. He only knew it was the source of everything he could see. Four centuries later, Paul would write: "For now we see in a mirror dimly, but then face to face." The Greek word Paul used for "dimly" shares a root with the shadow-vision Plato described in the cave. Paul was finishing a sentence Plato had started.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Guidance</div>
+                <div class="field-content">Find Plato and Aristotle. Look at the hands first. Then look at their eyes: they are looking at each other, not at us. The argument is still happening.</div>
+            </div>
+
+            <div class="lectio-block">
+                <div class="lectio-label">Lectio Pairing</div>
+                <div class="lectio-row">
+                    <div class="tag">Philosophy (the question)</div>
+                    <div class="field-content quote">"Beauty itself is the clearest, most lovable, and most divine of all things."</div>
+                    <div class="field-content">Plato, Phaedrus 250d</div>
+                </div>
+                <div class="lectio-row" style="margin-top:12px;">
+                    <div class="tag">Scripture (the arrival)</div>
+                    <div class="field-content quote">"For now we see in a mirror dimly, but then face to face. Now I know in part; then I shall know fully, even as I have been fully known."</div>
+                    <div class="field-content">1 Corinthians 13:12, RSV-2CE</div>
+                </div>
+                <div class="lectio-row" style="margin-top:10px;">
+                    <div class="tag">Connection note (internal)</div>
+                    <div class="field-content">Plato described beauty as the most visible of the transcendent Forms, the one human beings can actually perceive even while trapped in the cave. It is the crack in the wall that lets the light in. Paul adds something Plato could never have written: "even as I have been fully known." Not just clarity arriving but relationship. Not just understanding, but being understood. Plato's beauty pointed toward something real. Paul names the one who sees clearly and reaches back. This pairing returns on Day 7. Hold it.</div>
+                </div>
+            </div>
+
+            <div class="audio-block">
+                <div class="audio-label">Auditio</div>
+                <div class="audio-option"><span class="opt-tag">Primary:</span> Bach, Goldberg Variations, Aria (BWV 988). The opening aria is a melody of quiet longing. It returns at the very end of the Variations unchanged, but transformed by everything that came between. Musopen has public domain recordings. Approximately 4-5 minutes for the aria alone.</div>
+                <div class="audio-option"><span class="opt-tag">Alternative:</span> Satie, Gymnopedie No. 1 (1888). Public domain, widely available on Musopen and Archive.org. Gentle, philosophical, neither triumphant nor mournful. Approximately 3 minutes.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Reflection Questions (Step 4)</div>
+                <div class="field-content">
+                    <p>1. What do you find yourself reaching for that you cannot quite name, a feeling, a quality in certain places or music or people that seems to point beyond itself?</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Connect Thread (Step 5)</div>
+                <div class="field-content">Plato was the most rigorous mind of the ancient world, and he could not close the argument. Two thousand years later, an Oxford professor walked into the same question on a rainy autumn night and followed it somewhere Plato never went.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Go Deeper Suggestions</div>
+                <div class="field-content">
+                    <p><strong>1. Augustine on restlessness (Church Father, Early Church)</strong><br>
+                    Short quote: "You have made us for yourself, O Lord, and our heart is restless until it rests in you."<br>
+                    Summary: Augustine wrote this line at the opening of his Confessions in 400 AD. He had spent years as a pagan philosopher and a follower of various religious movements before his conversion. He recognized Plato's longing from the inside: it was his own. What Plato had named as a philosophical condition, Augustine identified as a theological one. The heart that keeps reaching is not malfunctioning. It is calibrated for something specific.<br>
+                    Source: Augustine, Confessions, Book I, Chapter 1</p>
+                    <p style="margin-top:12px;"><strong>2. C.S. Lewis on "Joy" and longing (Modern)</strong><br>
+                    Short quote: "We do not want merely to see beauty... We want something else which can hardly be put into words."<br>
+                    Summary: Before Lewis was a Christian he was an expert in the feeling Plato was trying to name. He called it "Joy," not happiness, but a specific kind of longing that arrives unexpectedly in the presence of beauty or myth or music and then vanishes before you can hold it. He spent years chasing it through Norse mythology, through poetry, through philosophy. He eventually concluded that the longing itself was the most reliable clue he had: you do not long for something that does not exist.<br>
+                    Source: C.S. Lewis, Surprised by Joy (1955), ch. 1</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ===================== DAY 4 ===================== -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 4</span>
+            <span class="day-title">A walk in the rain</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="field-label">Content Type</div>
+                <div class="field-content">Landscape</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Content Item</div>
+                <div class="field-content">Addison's Walk, Magdalen College, Oxford</div>
+            </div>
+
+            <div class="image-note">
+                <strong>Image sourcing:</strong> Search "Addison's Walk Oxford" on Wikimedia Commons or Unsplash. Several atmospheric photos exist of the willow-lined path in autumn. Look for images showing the stream alongside the path (the River Cherwell) and the overhanging willows. The path is often photographed in mist or rain, those versions work best. Confirm license (CC or public domain) before upload.
+            </div>
+
+            <div class="field">
+                <div class="field-label">Opening Text (Step 1)</div>
+                <div class="field-content">
+                    <p>C.S. Lewis knew the story better than almost anyone alive.</p>
+                    <p>He had spent years in the library reading Frazer's Golden Bough, the great catalogue of world mythology. He knew the pattern by heart: a god who descends, dies, and rises again. The Greeks had Adonis. The Egyptians had Osiris. The Babylonians had Tammuz. The Norse had Balder. The same story told in a dozen languages across cultures that had never met. Lewis found it beautiful. He also found it decisive. If the dying-and-rising god appeared everywhere, then Christianity was simply the Hebrew version: one more entry in a catalogue that stretched back to the beginning of human imagination. The pattern proved the story was invented. Invented, and invented again and again, because this was what human beings did when they reached for something they could not have.</p>
+                    <p>By the autumn of 1931, Lewis had reluctantly come to believe in God. He could not take the next step. He had too much Frazer in his head.</p>
+                    <p>On the night of September 19th, he walked along a path beside the River Cherwell with J.R.R. Tolkien and a friend named Hugo Dyson. It was after midnight. It was raining. They had been talking since dinner.</p>
+                    <p>Tolkien did not argue with Lewis's evidence. He took it and turned it around.</p>
+                    <p>The dying-and-rising god appears in every culture in human history, Tolkien said. Lewis had been reading this as proof that the story was invented. But what if it meant the opposite? What if every culture reached for this story because God had placed the longing for it in human nature itself, the way you feel thirst because water exists? The myths weren't lies. They were the human imagination correctly sensing the shape of something real. Reaching in the right direction without the full picture. Every culture that told the dying-and-rising story was seeing dimly. Pointing accurately. Just not yet seeing what they were pointing at.</p>
+                    <p>And then, once, in a specific place, in a specific year, it happened. Not as myth. As fact.</p>
+                    <p>Lewis resisted. They walked in the rain until nearly three in the morning.</p>
+                    <p>Nine days later he wrote to his closest friend: "I have just passed on from believing in God to definitely believing in Christ."</p>
+                    <p>Thirteen years after that walk, Lewis published an essay. He called it "Myth Became Fact."</p>
+                </div>
+                <details style="margin-top:10px;">
+                    <summary style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#999;cursor:pointer;">ORIGINAL (replaced April 9, 2026 -- setting only, no substance of Lewis's argument or intellectual context)</summary>
+                    <div style="margin-top:8px;padding:12px;background:#f5f0e8;font-size:13px;color:#5a5048;font-style:italic;">
+                        This path exists. You can walk it today. It is lined with willows and runs beside a small stream through the grounds of Magdalen College, Oxford. On one September night in 1931, an argument happened here that changed the 20th century.
+                    </div>
+                </details>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Curator Note (the hook)</div>
+                <div class="field-content">On September 19, 1931, C.S. Lewis, J.R.R. Tolkien, and Hugo Dyson walked along this path for three hours after midnight in the rain. Lewis loved mythology but dismissed Christianity as just another myth. Tolkien told him he had it exactly backwards. The pagan myths were not evidence against Christianity. They were the human imagination reaching toward a thing it could not invent, what Tolkien called "splintered fragments of the true light." The myths were not lies. They were rehearsals. Nine days after that walk, Lewis wrote to his friend Arthur Greeves: "I have just passed on from believing in God to definitely believing in Christ."</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Brief Description (for content card)</div>
+                <div class="field-content">A narrow path curves beside a river through old college grounds. Willows overhang the water. The banks are wild and unmown. In autumn, the path is leaf-strewn and half-dark even in daylight. This is where a conversation took place that turned one of the 20th century's most famous atheists into one of its most famous Christians.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Context (expandable)</div>
+                <div class="field-content">The walk is named for Joseph Addison, the 18th-century essayist, who was a Fellow at Magdalen. Lewis had been a Fellow at Magdalen since 1925. He and Tolkien had been meeting for years in a literary group called the Inklings. By September 1931, Lewis believed in God but not in the Incarnation. He thought the Christian story was just another myth, beautiful but not historical. Tolkien's argument that night was simple: myths are not the opposite of truth; they are the human mind's way of reaching toward a truth it cannot yet fully grasp. The Incarnation was the moment the myth and the truth became the same event. Lewis resisted. Then, nine days later, riding in his brother's motorcycle sidecar to Whipsnade Zoo, he arrived at faith. He later wrote that he came "the most reluctant convert in all England."</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Note (Journey-specific layer)</div>
+                <div class="field-content">Tolkien's phrase "splintered fragments of the true light" is worth sitting with. He was not saying all religions are equally true. He was saying that the human imagination, made in the image of a story-telling God, kept reaching toward the same story in different languages, in different cultures, across thousands of years. The fragments fit because they are fragments of the same thing. Lewis later put this in his own words: the pagan stories are "God expressing Himself through the minds of poets, using such images as He found there, while Christianity is God expressing Himself through what we call 'real things.'" The imagination was not lying. It was practicing.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Guidance</div>
+                <div class="field-content">Imagine walking this path after midnight, in the rain, with two friends, arguing about whether a story can be both myth and fact at the same time.</div>
+            </div>
+
+            <div class="lectio-block">
+                <div class="lectio-label">Lectio Pairing</div>
+                <div class="lectio-row">
+                    <div class="tag">Philosophy (the question)</div>
+                    <div class="field-content quote">"There are tears at the heart of things."</div>
+                    <div class="field-content">Virgil, Aeneid Book I ("sunt lacrimae rerum"), c. 19 BC</div>
+                </div>
+                <div class="lectio-row" style="margin-top:12px;">
+                    <div class="tag">Scripture (the arrival)</div>
+                    <div class="field-content quote">"He has made everything beautiful in its time. He has also set eternity in the human heart; yet no one can fathom what God has done from beginning to end."</div>
+                    <div class="field-content">Ecclesiastes 3:11, RSV-2CE</div>
+                </div>
+                <div class="lectio-row" style="margin-top:10px;">
+                    <div class="tag">Connection note (internal)</div>
+                    <div class="field-content">Virgil's "sunt lacrimae rerum" is the most compressed expression of human longing in Latin: the sadness embedded in beautiful things, the grief at the heart of mortal life. He sensed that something was wrong with the world and that beauty was both the evidence and the wound. Ecclesiastes names the source: God placed eternity in the human heart. That is why beautiful things make us sad and restless. We were made for more than what we can hold. Tolkien knew both texts. He made the same argument on the path beside the River Cherwell. Virgil will appear again on Day 5, in a role no one expected a pagan poet to play.</div>
+                </div>
+            </div>
+
+            <div class="audio-block">
+                <div class="audio-label">Auditio</div>
+                <div class="audio-option"><span class="opt-tag">Primary:</span> Elgar, "Nimrod" from Enigma Variations (1899). Quiet, English, deeply moving, the sound of friendship and long evenings. Public domain. Musopen and Archive.org have multiple recordings. Approximately 4 minutes. Written as a portrait of Elgar's close friend A.J. Jaeger, capturing the quality of long conversations between people who understood each other.</div>
+                <div class="audio-option"><span class="opt-tag">Alternative:</span> Sibelius, "Swan of Tuonela" (1895). A tone poem from the Finnish Kalevala, the national epic that profoundly influenced Tolkien's mythology. The swan circles the black river of the Finnish underworld. The exact sound of the beautiful sadness that points beyond itself. Archive.org has public domain recordings. Approximately 8 minutes.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Reflection Questions (Step 4)</div>
+                <div class="field-content">
+                    <p>1. When did a conversation change the way you understood something you had held for years? What made you willing to follow where it led?</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Connect Thread (Step 5)</div>
+                <div class="field-content">Tolkien's argument had been made 1,800 years before that walk. By a philosopher who handed it directly to the Emperor of Rome and lost his head for it.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Go Deeper Suggestions</div>
+                <div class="field-content">
+                    <p><strong>1. Tolkien on myth as "subcreation" (Modern)</strong><br>
+                    Short quote: "We make still by the law in which we're made."<br>
+                    Summary: Tolkien believed that human beings tell stories because they are made in the image of a God who tells stories. He called this "subcreation": our stories are real creative acts, but they derive their power from the original creative act. This is why myths from unconnected cultures keep arriving at the same shapes. Not coincidence, but a shared image stamped on human nature. When Tolkien argued this to Lewis on Addison's Walk, he was drawing on an essay he had been developing for years.<br>
+                    Source: J.R.R. Tolkien, "On Fairy-Stories" (1947)</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ===================== SIDELINED: JUSTIN MARTYR ===================== -->
+    <!-- MOVED TO P&P: This day has been removed from the journey and will become a standalone
+         Pause & Ponder day with a CTA linking to this journey. Decision: April 9, 2026.
+         Rationale: Dante's day carries the same threshold argument more powerfully through story.
+         The "seeds of the Word" concept is referenced in the Sibyls Encounter Note.
+         Justin Martyr's hook (walked into the Emperor's court, was beheaded) is ideal P&P format. -->
+    <div class="day-block" style="opacity:0.45; border: 2px dashed #999; position:relative;">
+        <div style="position:absolute;top:10px;right:12px;font-family:Montserrat,Arial,sans-serif;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;background:#c25555;color:#fff;padding:4px 10px;">SIDELINED — Moving to P&P</div>
+        <div class="day-header" style="background:#555;">
+            <span class="day-num">SIDELINED</span>
+            <span class="day-title">Seeds of the Word (Justin Martyr)</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="field-label">Content Type</div>
+                <div class="field-content">Thinker</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Content Item</div>
+                <div class="field-content">Justin Martyr (c. 100-165 AD)</div>
+            </div>
+
+            <div class="image-note">
+                <strong>Image sourcing:</strong> No portrait from life survives. Options: (1) A manuscript page showing his Apology text (search "Justin Martyr First Apology manuscript" on archive.org or Wikimedia). (2) A historical engraving, search "Justin Martyr engraving" on Wikimedia Commons; several 16th-19th century depictions are public domain. The manuscript page is stronger for this content type: the actual words of his argument in an ancient hand.
+            </div>
+
+            <div class="field">
+                <div class="field-label">Opening Text (Step 1)</div>
+                <div class="field-content">Before Lewis, before Tolkien, there was a philosopher who walked into the most powerful court in the world and handed the Emperor a document making the same argument. His name was Justin. He was executed for it. But the argument survived.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Curator Note (the hook)</div>
+                <div class="field-content">Justin Martyr was a pagan philosopher who converted to Christianity around 130 AD. Shortly after, he walked into the palace of Emperor Antoninus Pius, the most powerful man in the world, and handed him a written defense of Christianity. In it, he made one of the most striking arguments in the history of ideas: the pagan philosophers were not wrong. They were partly right, because the divine Logos, the rational principle underlying all things, was already present in them before the Incarnation, planting seeds of truth. He called these the "logoi spermatikoi," the seeds of the Word. Around 165 AD, he was beheaded for refusing to worship the Roman gods. He had known this was likely when he walked through the palace gates.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Brief Description (for content card)</div>
+                <div class="field-content">A 2nd-century philosopher who trained in the traditions of Socrates and Plato, then converted to a religion the Roman Empire considered illegal. He walked into the Emperor's court carrying a document that argued this religion was the fulfillment of everything Rome's own philosophers had been seeking. He had thought through what would probably happen to him.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Context (expandable)</div>
+                <div class="field-content">Justin was born in Samaria and educated in Greek philosophy. After studying Stoicism, Aristotelianism, Pythagoreanism, and Platonism, he converted to Christianity after a conversation with an old man on a beach who asked him why he was searching for truth in philosophy if the prophets had already spoken it. He continued to wear the philosopher's distinctive cloak after his conversion. He considered himself still a philosopher, but one who had found what the others were searching for. His "First Apology" is addressed directly to Emperor Antoninus Pius. His argument that pagan myths were genuine, if incomplete, preparations for the gospel became one of the foundations of how the early church engaged with Greco-Roman culture. He was not arguing that all paths lead to God. He was arguing that God had been actively preparing humanity for a specific event.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Note (Journey-specific layer)</div>
+                <div class="field-content">Justin's phrase "seeds of the Word" is the origin of the idea that Lewis and Tolkien would reach independently 1,800 years later. The early church did not experience pagan philosophy as an obstacle. They experienced it as a set of real questions that had now received a real answer. Justin's argument is what allows you to read Plato seriously and also read John's Gospel seriously. The two are not contradictions but a conversation across centuries. The next time the Church made this argument with the same confidence, they did not use words. They used paint.
+
+The "seed" metaphor in Justin's argument is deliberately chosen, not decorative. A seed is not a smaller version of the plant. It contains the full genetic information of the plant in a form that cannot yet express itself. Justin was saying that the truth Heraclitus and Plato grasped was genuinely true, not approximate, not confused, but not yet grown. The Incarnation is not a correction of what Plato believed. It is the flowering of what Plato was reaching for. This echoes Day 1: the grain that falls into the ground and dies. Justin's seeds and the Eleusinian wheat are the same image, separated by six centuries and arrived at independently.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Guidance</div>
+                <div class="field-content">He walked into the Emperor's court knowing what he was risking. What argument would make you do that?</div>
+            </div>
+
+            <div class="lectio-block">
+                <div class="lectio-label">Lectio Pairing</div>
+                <div class="lectio-row">
+                    <div class="tag">Philosophy (the question)</div>
+                    <div class="field-content quote">"The Logos is common to all."</div>
+                    <div class="field-content">Heraclitus, Fragment 2 (c. 500 BC)</div>
+                </div>
+                <div class="lectio-row" style="margin-top:12px;">
+                    <div class="tag">Scripture (the arrival)</div>
+                    <div class="field-content quote">"In the beginning was the Word [Logos], and the Word was with God, and the Word was God... And the Word became flesh and dwelt among us."</div>
+                    <div class="field-content">John 1:1, 14, RSV-2CE</div>
+                </div>
+                <div class="lectio-row" style="margin-top:10px;">
+                    <div class="tag">Connection note (internal)</div>
+                    <div class="field-content">Heraclitus used the word "Logos," meaning something like "the rational principle underlying all things," five centuries before John's Gospel. He did not invent the word; he applied it to the deepest level of reality he could reach. John used the same word deliberately. Justin Martyr saw this and concluded: Heraclitus was right about the Logos. He just did not know it had a name, a face, and an address in history. This is the pairing that makes the whole week's argument most explicit. The Logos the Greeks intuited and the Word John names are the same. One is the seed. The other is the tree.</div>
+                </div>
+            </div>
+
+            <div class="audio-block">
+                <div class="audio-label">Auditio</div>
+                <div class="audio-option"><span class="opt-tag">Primary:</span> Gregorian chant, "Veni Creator Spiritus" (Come Creator Spirit). A 9th-century hymn to the Holy Spirit as the Spirit of wisdom and understanding. Appropriate for a day about divine truth seeded through human reason. Multiple recordings on Archive.org and gregorian-chant-hymns.com. Approximately 4-5 minutes.</div>
+                <div class="audio-option"><span class="opt-tag">Alternative:</span> Palestrina, "Sicut cervus" (As the deer). Based on Psalm 42:1: "As a deer longs for flowing streams, so longs my soul for you, O God." Public domain. Multiple recordings on Musopen. The image of an animal driven by instinctive longing toward water is the sonic version of Justin's seed argument: the longing was always pointed at something real.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Reflection Questions (Step 4)</div>
+                <div class="field-content">
+                    <p>1. What is the most surprising thing you have ever discovered was true? Something you had dismissed or half-believed that turned out to be real?</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Connect Thread (Step 5)</div>
+                <div class="field-content">Justin made the argument with words. A thousand years later, the Church made it with paint, on the most famous ceiling in the world. They put pagan prophetesses next to Hebrew prophets, at the same scale, with the same dignity. Not tolerated. Honored.</div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ===================== DAY 5 ===================== -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 5</span>
+            <span class="day-title">They saw dimly</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="field-label">Content Type</div>
+                <div class="field-content">Sacred Art</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Content Item</div>
+                <div class="field-content">Michelangelo, The Cumaean Sibyl / CVMAEA (1510, Sistine Chapel ceiling, Vatican) and Luca Signorelli, The End of the World with Sibyl and David (1499-1502, San Brizio Chapel, Orvieto Cathedral)</div>
+            </div>
+
+            <div class="image-note">
+                <strong>Image sourcing (April 9, 2026):</strong><br><br>
+                <strong>Encounter image:</strong> <code>CAPPELLA_SISTINA_Ceiling.jpg</code> — already in Downloads folder (3129x1125px, full ceiling panoramic). Upload to Sanity and crop in-app to center on the Cumaean Sibyl section. She is in the lower-center portion of the panoramic, the large orange/gold-robed figure bent over a book. Cropping in Sanity allows flexible framing to show her in context with adjacent throne figures.<br><br>
+                <strong>Breathe / close-up image:</strong> <code>cumaean-sibyl-closeup-1500px.jpg</code> (1500x1806px) — already in Documents, upscaled from CumaeanSibylByMichelangelo.jpg. Portrait format. Clear view of her bent over the book, both putti, CVMAEA label visible. Use for Step 1 (Open) and Step 3 (Breathe with 8x zoom).<br><br>
+                <strong>Also needed — Signorelli (secondary/Go Deeper):</strong> Luca Signorelli, The End of the World with Sibyl and David (1499-1502, San Brizio Chapel, Orvieto Cathedral). Search "Signorelli End of World Orvieto fresco Wikimedia" or "Signorelli Sibyl David Orvieto." The sibyl holds her book of prophecies. David raises his hand. Both point toward the same sky. Fully public domain.
+            </div>
+
+            <div class="field">
+                <div class="field-label">Opening Text (Step 1)</div>
+                <div class="field-content">
+                    <p>She lived at Cumae, a Greek colony on the coast of Italy, in a cave cut into rock that still stands. Apollo fell in love with her. He offered her anything she wanted, and she reached down and picked up a handful of sand and asked for as many years of life as there were grains in her fist. She could have had thousands. She got them. But she had not asked for youth, and Apollo would not give what had not been asked. She aged.</p>
+
+                    <p>By the time Virgil wrote about her in the Aeneid, around 19 BC, she was old beyond imagining. When the hero Aeneas needed to descend into the underworld to speak with his dead father, the Cumaean Sibyl was the only guide who could take him. She knew the way. She told him what to bring: a branch of golden leaves from a sacred tree, the golden bough. Without it, the gates of the underworld would not open. She led him through.</p>
+
+                    <p>But she had been old longer than Rome itself. A century before Virgil, according to the historian Livy, she walked into the throne room of Tarquinius Superbus, the last king of Rome, carrying nine books of prophecy. She offered to sell them. He refused: too expensive. She took three books outside, burned them, and returned with six. Same price. He refused again. She burned three more and came back with three. Same price for three that he had refused for nine. He bought what remained. Those books, the Sibylline Books, were stored in the Temple of Jupiter on the Capitoline Hill and consulted by the Roman Senate in moments of national crisis for the next six hundred years.</p>
+
+                    <p>Ovid, writing at the same time as Virgil, let her speak for herself. She said she wanted to disappear. To become nothing but a voice.</p>
+
+                    <p>Virgil, who knew the Sibyl better than any Roman poet, wrote a shorter poem around 40 BC addressed to her. Its opening line reads: "Ultima Cumaei venit iam carminis aetas." Now has come the last age of the Cumaean song. And a few lines later: "Iam nova progenies caelo demittitur alto." Now a new generation descends from heaven on high.</p>
+
+                    <p>He was probably writing about a Roman consul's expected child. He could not have known what he was writing about.</p>
+
+                    <p>Early Christians read that poem and could not stop reading it. Constantine quoted it at the Council of Nicaea. Dante chose Virgil as his guide through the underworld, the same role the Sibyl had played in the Aeneid, partly because of this poem. The medieval funeral hymn Dies Irae opens: "Day of wrath, that day will dissolve the world in ashes, as witnessed by David and the Sibyl." Hebrew king and pagan prophetess in the same breath, at every Christian funeral, for centuries. Augustine, writing around 400 AD, named one of the sibyls a citizen of the City of God. Not as an argument to be defended, but as evidence to be reported. The pagan world had received genuine signals. It was not in the dark. It was seeing dimly.</p>
+
+                    <p>Michelangelo painted her on the ceiling of the Pope's chapel. He did not feature the Delphic Sibyl, or the Erythraean, or the Libyan, though all five are there. He painted the Cumaean Sibyl with the most presence: massive, powerful, bent over an enormous open book, her body the body of someone who has outlived everyone who ever knew her. He labeled her in stone letters: CVMAEA. The woman who burned her own books until the price was met. Who led Aeneas through the underworld. Who wanted only to disappear. Who had written something true a thousand years before anyone knew what it was true of.</p>
+                </div>
+                <details style="margin-top:10px;">
+                    <summary style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#999;cursor:pointer;">ORIGINAL (replaced April 9, 2026 -- thin thesis statement, no story told; rewrote to full Cumaean Sibyl myth per C.S. Lewis method)</summary>
+                    <div style="margin-top:8px;padding:12px;background:#f5f0e8;font-size:13px;color:#5a5048;font-style:italic;">
+                        The philosophers made the argument. But the Church did not stop there. On the walls and ceilings of its most important buildings, it placed pagan prophetesses alongside Hebrew prophets. Not as curiosities. As witnesses.
+                    </div>
+                </details>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Curator Note (the hook)</div>
+                <div class="field-content">Michelangelo painted five pagan women on the ceiling of the Pope's chapel. The Delphic, Erythraean, Cumaean, Persian, and Libyan Sibyls sit at the same scale and with the same monumental dignity as Isaiah, Jeremiah, Ezekiel, and Daniel. They are not decorative. They are not concessions. The Vatican's own description explains why they are there: the Hebrew prophets foresaw the coming of the Messiah for Israel, while the Sibyls, though belonging to the pagan world, are included because of their prophetic gifts, "in this way extending the wait for Redemption from the chosen people to all mankind." The Pope commissioned the most famous ceiling in the world, and one-third of its prophetic figures are pagan women.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Brief Description (for content card)</div>
+                <div class="field-content">The oldest figure on the most famous ceiling in the world. She sits bent over an enormous open book, her body massive and powerful. Her label reads CVMAEA. On her left: Isaiah, who wrote "a virgin shall conceive and bear a son." On her right: Daniel, who wrote of one like a son of man coming with the clouds of heaven. Michelangelo placed her between them on an identical throne at identical scale, and no one who looked up could miss what he meant.</div>
+                <details style="margin-top:10px;">
+                    <summary style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#999;cursor:pointer;">ORIGINAL (replaced April 9, 2026 -- described Delphic Sibyl, not Cumaean; image and focus shifted to Cumaean CVMAEA)</summary>
+                    <div style="margin-top:8px;padding:12px;background:#f5f0e8;font-size:13px;color:#5a5048;font-style:italic;">
+                        A young woman turns sharply on a marble throne, high above the floor of the most famous chapel in the world. Her scroll is half-open. Her eyes are wide. She has just heard something. She is surrounded by Hebrew prophets who heard the same thing and understood it more fully. But she heard it too, and Michelangelo put her on the ceiling anyway.
+                    </div>
+                </details>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Context (expandable)</div>
+                <div class="field-content">The sibyls were pagan prophetesses of the classical world. The word "sibyl" comes from the Greek for "prophetess" or "oracle." The Delphic Sibyl was associated with the Oracle of Delphi, the most important religious site in ancient Greece. The Cumaean Sibyl appears in Virgil's Aeneid, guiding Aeneas through the underworld. Early Christians paid close attention to the sibylline traditions because certain prophecies attributed to the sibyls appeared to predict the coming of Christ. Augustine wrote in The City of God that the Erythraean Sibyl should be counted "among those who belong to the City of God." The medieval hymn Dies Irae, sung at funeral Masses for centuries, opens with the line "Day of wrath, that day will dissolve the world in ashes, as witnessed by David and the Sibyl." Pagan prophetess and Hebrew king, in the same breath, in the same hymn, sung at every Christian funeral. The tradition of honoring the sibyls was not a Renaissance invention. It was a conviction that ran through the Church for over a thousand years.
+
+At Orvieto Cathedral, Luca Signorelli made the same argument a decade before Michelangelo. In his fresco of the End of the World in the San Brizio Chapel (1499-1502), he placed a sibyl holding her book of prophecies directly beside King David. Both point upward toward the apocalyptic portents: ships on mountaintops, the moon turning to blood, the sun going dark. Pagan prophetess and Hebrew king occupy the same wall, the same gesture, the same authority. Signorelli was not being ecumenical. He was being theological: the whole world had been given signals, and the whole world was accountable for what it had been shown.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Note (Journey-specific layer)</div>
+                <div class="field-content">The ceiling has a program. Michelangelo did not arrange figures randomly.
+
+Along both sides of the ceiling, alternating all the way from the entrance to the altar: prophet, sibyl, prophet, sibyl. Seven Hebrew prophets. Five pagan sibyls. Placed in strict alternation, on identical thrones, inside identical gilded frames, at identical scale. Michelangelo did not make the prophets larger or the sibyls smaller. He made them the same.
+
+The Cumaean Sibyl sits between Isaiah and Daniel. Isaiah is the prophet who wrote "Behold, a virgin shall conceive and bear a son." Daniel is the prophet who wrote of "one like a son of man coming with the clouds of heaven," the phrase Jesus used about himself in the Gospels. Between those two, on the same throne and at the same scale, Michelangelo placed the woman who had written "now a new generation descends from heaven on high."
+
+He did not place her near them. He placed her between them.
+
+The rest of the ceiling makes the same argument in a different register. Down the center: the nine Genesis panels, creation through catastrophe, the story of what broke and why repair was needed. Around the outer edges, in the lunettes and arches: the ancestors of Christ from Matthew's genealogy, the human lineage. Along the sides: prophets and sibyls in alternation, looking in toward the center. Two tracks, Hebrew and pagan, that Michelangelo insists are the same track. A 2nd-century philosopher named Justin Martyr had made this argument in words a thousand years earlier — he called the genuine truth in pagan philosophy "seeds of the Word," planted before the Incarnation. Michelangelo made the same argument without a single word.
+
+One more detail. The room where this ceiling hangs is where popes are elected. Every papal conclave since 1512 has taken place under the Cumaean Sibyl's eyes. She has watched every vote.</div>
+                <details style="margin-top:10px;">
+                    <summary style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#999;cursor:pointer;">ORIGINAL (replaced April 9, 2026 -- shifted focus from Markos framework + Delphic expression to Cumaean placement and ceiling program; that's the actual encounter)</summary>
+                    <div style="margin-top:8px;padding:12px;background:#f5f0e8;font-size:13px;color:#5a5048;font-style:italic;">
+                        Louis Markos, a contemporary scholar working in the Lewis tradition, calls this the difference between general revelation and special revelation. General revelation is the way God speaks to all people, through conscience, through creation, through reason, through imagination. Special revelation is God speaking directly: through the prophets, through scripture, through Christ. The sibyls on the Sistine ceiling are the Church's visual argument that general revelation was real. The pagan world was not shut out. It received genuine, if partial, glimpses of the truth. Paul's words from Day 2 return here: "For now we see in a mirror dimly." The sibyls are the "dimly." They saw something real. The ceiling says so.<br><br>
+                        The Delphic Sibyl is the youngest of the five, and art historians have noted that her expression is different from the others. The Cumaean Sibyl is ancient and powerful. The Erythraean Sibyl is absorbed in her book. The Libyan Sibyl twists dramatically to close hers. But the Delphic Sibyl looks startled. Her eyes are wide. Her scroll is only partially open. Michelangelo painted her as someone who has just heard something, something she cannot fully process. Her face is the visual equivalent of Paul's "mirror dimly": genuine sight, but not yet full comprehension. She has heard the signal. She does not yet have the frequency.
+                    </div>
+                </details>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Guidance</div>
+                <div class="field-content">Find her — she's the one bent over the open book. Then look at who is sitting on either side of her.</div>
+            </div>
+
+            <div class="lectio-block">
+                <div class="lectio-label">Lectio Pairing</div>
+                <div class="lectio-row">
+                    <div class="tag">Philosophy (the question)</div>
+                    <div class="field-content quote">"Now a new generation descends from heaven on high."</div>
+                    <div class="field-content">Virgil, Fourth Eclogue, line 7 (c. 40 BC)</div>
+                </div>
+                <div class="lectio-row" style="margin-top:12px;">
+                    <div class="tag">Scripture (the arrival)</div>
+                    <div class="field-content quote">"For my eyes have seen your salvation, which you have prepared in the presence of all peoples, a light for revelation to the Gentiles, and for glory to your people Israel."</div>
+                    <div class="field-content">Luke 2:30-32, RSV-2CE (the Canticle of Simeon, "Nunc Dimittis")</div>
+                </div>
+                <div class="lectio-row" style="margin-top:10px;">
+                    <div class="tag">Connection note (internal)</div>
+                    <div class="field-content">Virgil's Fourth Eclogue was written around 40 BC, probably about a Roman consul's expected child. But the language he used, "a new generation descends from heaven on high," was so striking that early Christians read it as an unwitting prophecy. Constantine quoted it in a speech to the Council of Nicaea. Dante chose Virgil as his guide through the afterlife partly because of this poem. The Nunc Dimittis is Simeon's prayer in the Temple when he sees the infant Christ: "a light for revelation to the Gentiles." The sibyls are the Gentile witnesses. Virgil is one of them. He wrote something truer than he knew, and the Church never forgot it.</div>
+                </div>
+            </div>
+
+            <div class="audio-block">
+                <div class="audio-label">Auditio</div>
+                <div class="audio-option"><span class="opt-tag">Primary:</span> Allegri, "Miserere mei, Deus" (c. 1638). Written for the Sistine Chapel itself. For over a century the Vatican forbade it from being copied or performed elsewhere. The 14-year-old Mozart heard it once and wrote it out from memory. Search Archive.org for public domain recordings. Approximately 12 minutes. If the user is looking at the Sistine sibyls while listening to music written for that same room, the connection is physical, not just thematic.</div>
+                <div class="audio-option"><span class="opt-tag">Alternative:</span> Hildegard von Bingen, "O vis aeternitatis" (O power of eternity). 12th-century composition by a woman mystic and Doctor of the Church. Multiple public domain recordings. Approximately 5 minutes. A woman's voice singing about eternity, paired with images of women who glimpsed it.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Reflection Questions (Step 4)</div>
+                <div class="field-content">
+                    <p>1. Have you ever understood something only in hindsight, realized you had been sensing a truth for years before you had the words for it? What did the "dimly" feel like before it came into focus?</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Connect Thread (Step 5)</div>
+                <div class="field-content">Virgil wrote a poem that said more than he knew. A thousand years later, Dante chose him as the one person in all of history to guide him through the underworld. The pagan poet leads the pilgrim as far as reason and beauty can go. Then he reaches a boundary he cannot cross.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Go Deeper Suggestions</div>
+                <div class="field-content">
+                    <p><strong>1. Augustine on the Erythraean Sibyl (Church Father, Early Church)</strong><br>
+                    Short quote: "She must be counted among those who belong to the City of God."<br>
+                    Summary: In The City of God, Augustine argued that the Erythraean Sibyl had genuinely prophesied the coming of Christ. He did not consider this embarrassing or in need of explanation. He considered it evidence. If God could speak through Balaam's donkey, Augustine reasoned, he could speak through a pagan prophetess. Augustine's willingness to honor pagan insight is one reason the sibyls appear in church art for the next thousand years.<br>
+                    Source: Augustine, City of God, Book XVIII, Chapter 23</p>
+                    <p style="margin-top:12px;"><strong>2. Louis Markos on general revelation (Modern)</strong><br>
+                    Short quote: "If we take the best of general revelation, it will point to special revelation."<br>
+                    Summary: Markos is a contemporary scholar who works in the Lewis and Tolkien tradition. His book The Myth Made Fact retells 50 Greek and Roman myths and shows how each one demonstrates general revelation, the way God speaks to all people through conscience, creation, and imagination, or anticipates special revelation, God speaking directly through Christ. His framework is the clearest modern expression of what the Sistine ceiling shows in paint: the pagan world was not in the dark. It was in the dim light.<br>
+                    Source: Louis Markos, The Myth Made Fact (Classical Academic Press, 2020)</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ===================== DAY 6 ===================== -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 6</span>
+            <span class="day-title">As far as he could go</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="field-label">Content Type</div>
+                <div class="field-content">Literature</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Content Item</div>
+                <div class="field-content">Dante Alighieri, Purgatorio, Canto XXX (c. 1314). The moment Virgil departs.</div>
+            </div>
+
+            <div class="image-note">
+                <strong>Image sourcing — two options:</strong><br><br>
+                <strong>Option A (recommended):</strong> Gustave Dore's engraving of Virgil and Dante in the Divine Comedy. Dore's illustrations (1861-1868) are fully public domain and extraordinarily detailed for zoom. Search "Dore Divine Comedy Purgatorio" on Wikimedia. Look for the image of Dante and Virgil together in Purgatory, or Dante turning to find Virgil gone. Min 3000px. Dore's engravings are black and white with extraordinary tonal depth, perfect for the contemplative dark-mode rendering.<br><br>
+                <strong>Option B:</strong> A manuscript illumination from an early copy of the Divine Comedy. Several 14th-15th century illuminated manuscripts are digitized and public domain (search "Divine Comedy manuscript illumination Wikimedia" or check the Vatican Library digital collection). These have rich color and medieval detail that rewards zoom.
+            </div>
+
+            <div class="field">
+                <div class="field-label">Opening Text (Step 1)</div>
+                <div class="field-content">Dante chose a pagan poet to guide him through the afterlife. Not a saint, not a prophet. A Roman who had been dead for thirteen centuries and had never heard the name of Christ. He chose Virgil because Virgil had gone as far as a human being could go on beauty and reason alone. And then he wrote the moment Virgil could go no further.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Curator Note (the hook)</div>
+                <div class="field-content">Dante spent 20 years writing the Divine Comedy. He chose Virgil as his guide through Hell and Purgatory not because Virgil was a Christian (he wasn't) but because Virgil represented the highest achievement of the pagan world: the poet who sensed the deepest truths, who wrote "there are tears at the heart of things" and "now a new generation descends from heaven on high," and who still could not cross the threshold into what lay beyond. In Canto XXX of the Purgatorio, Dante arrives at the top of Mount Purgatory and sees Beatrice for the first time. He turns to tell Virgil. Virgil is gone. He has left without a word. The greatest guide in Western literature disappears in the middle of a sentence. Dante does not get to say goodbye. He uses Virgil's name three times in four lines, the only place in the entire poem where he breaks his own formal rules. The pagan world brought the pilgrim as far as it could. Then it stepped aside.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Brief Description (for content card)</div>
+                <div class="field-content">A poem written 700 years ago about a man who walks through Hell, climbs a mountain, and enters Paradise, guided first by a pagan poet and then by the woman he loved. The moment the guide changes is one of the most moving passages in any literature. The pagan guide does not fail. He reaches his limit. There is a difference.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Context (expandable)</div>
+                <div class="field-content">Dante Alighieri (1265-1321) wrote the Divine Comedy during his exile from Florence, a political punishment that lasted the rest of his life. The poem is divided into three parts: Inferno (Hell), Purgatorio (Purgatory), and Paradiso (Paradise). Virgil guides Dante through the first two. Beatrice, the woman Dante loved from childhood, guides him through the third. The transition between guides is not arbitrary. Virgil represents reason, philosophy, and the best of pagan civilization. Beatrice represents grace, faith, and the revelation that reason alone cannot reach. Dante's poem is the dramatic version of Justin Martyr's argument: the pagan world produced genuine wisdom, and that wisdom leads you right up to the threshold. But you need something else to cross it. Virgil is not punished for being pagan. He lives in Limbo, a place of natural happiness without the vision of God, "without hope, we live in desire." That line may be the most compassionate description of the pagan condition in all of Christian literature.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Note (Journey-specific layer)</div>
+                <div class="field-content">This day invites the user to read the passage, not just hear about it. The excerpt below is the moment itself. Dante turns to tell Virgil what he sees. Virgil is already gone. Dante calls his name three times, breaking his own verse structure, the way you call out for someone in a room you suddenly realize is empty. The passage is the emotional center of the entire Comedy. Everything the pagan world could give has been given. What follows requires a different kind of sight.</div>
+            </div>
+
+            <div class="excerpt-block">
+                <div class="excerpt-label">Read this passage slowly. It is the moment the guide changes.</div>
+                <div class="excerpt-line">But Virgil had left us bereft of himself,</div>
+                <div class="excerpt-line">Virgil, sweetest father,</div>
+                <div class="excerpt-line">Virgil, to whom I gave myself for my salvation;</div>
+                <div class="excerpt-line">&nbsp;</div>
+                <div class="excerpt-line">and not all that our ancient mother lost</div>
+                <div class="excerpt-line">could keep my cheeks, though washed with dew,</div>
+                <div class="excerpt-line">from turning dark again with tears.</div>
+                <div class="excerpt-attr">Dante, Purgatorio, Canto XXX, lines 49-54<br>Translation: Henry Wadsworth Longfellow (1867)</div>
+            </div>
+
+            <div class="sanity-note">
+                <strong>Literature Day Note:</strong> The excerpt above renders in espresso mode as a standalone reading moment between the Encounter and the Breathe step. The user reads Dante's words directly. This is Day 6's primary encounter: not commentary about the text, but the text itself. The Breathe step that follows uses the Dore engraving, giving the user visual contemplation after the reading. For Sanity, this excerpt should be stored as a rich text block within the day's encounter content, styled distinctly from curator notes.
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Guidance</div>
+                <div class="field-content">Read it twice. The first time, read for the story. The second time, notice how many times Dante says Virgil's name.</div>
+            </div>
+
+            <div class="lectio-block">
+                <div class="lectio-label">Lectio Pairing</div>
+                <div class="lectio-row">
+                    <div class="tag">Philosophy (the question)</div>
+                    <div class="field-content quote">"The hour of departure has arrived, and we go our separate ways: I to die, and you to live. Which of these two is better only God knows."</div>
+                    <div class="field-content">Socrates, in Plato's Apology 42a (399 BC)</div>
+                </div>
+                <div class="lectio-row" style="margin-top:12px;">
+                    <div class="tag">Scripture (the arrival)</div>
+                    <div class="field-content quote">"In my Father's house are many rooms. If it were not so, would I have told you that I go to prepare a place for you? And if I go and prepare a place for you, I will come again and will take you to myself."</div>
+                    <div class="field-content">John 14:2-3, RSV-2CE</div>
+                </div>
+                <div class="lectio-row" style="margin-top:10px;">
+                    <div class="tag">Connection note (internal)</div>
+                    <div class="field-content">Socrates accepted his death with the most graceful uncertainty in the history of philosophy: "which of these two is better only God knows." He did not know what was on the other side. He trusted that the question was worth asking and that the answer was not his to control. Virgil, in Dante's poem, lives in the same condition: without hope, in desire. Both represent the highest dignity of the pagan mind facing its own limit. John 14 is the direct answer: not uncertainty but a room being prepared. Not "which is better, only God knows" but "I will come again and take you to myself." The pagan world's most graceful farewell, answered by a promise of return. Virgil disappears without a word. Christ says: I will come back for you.</div>
+                </div>
+            </div>
+
+            <div class="audio-block">
+                <div class="audio-label">Auditio</div>
+                <div class="audio-option"><span class="opt-tag">Primary:</span> Monteverdi, "Possente spirto" from L'Orfeo, Act III (1607). Orpheus singing at the gates of the underworld, trying to persuade death to let him pass. The first great opera ever composed was about a musician who tried to sing his way past the boundary between life and death. Monteverdi premiered it for the Duke of Mantua. The audience wept. Public domain. Multiple recordings on Archive.org. Approximately 10 minutes. Use the Act III excerpt, where Orpheus's voice breaks against the limit of what beauty can do alone.</div>
+                <div class="audio-option"><span class="opt-tag">Alternative:</span> Vaughan Williams, "The Lark Ascending" (1914). A solo violin line that ascends, wavers, and keeps returning, like a mind circling a question it cannot put down. English, pastoral, and unlike anything else in Western music in its quality of "something almost said." Public domain. Musopen has recordings. Approximately 14 minutes; suggest 4-5 minutes of listening.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Reflection Questions (Step 4)</div>
+                <div class="field-content">
+                    <p>1. Have you ever had a guide, a teacher, a book, a friend, who brought you to the edge of something they could not follow you into? What did you do at the threshold?</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Connect Thread (Step 5)</div>
+                <div class="field-content">Virgil brought the pilgrim as far as beauty and reason could reach. Tomorrow, the journey arrives at a table. There is an empty seat. It has been there for 600 years.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Go Deeper Suggestions</div>
+                <div class="field-content">
+                    <p><strong>1. Benedict XVI on Dante and the limits of reason (Modern, Pope)</strong><br>
+                    Short quote: "Dante represents the one who, even beginning from a situation of deep bewilderment, sets out on a journey toward the vision of God."<br>
+                    Summary: In a 2021 apostolic letter on the 700th anniversary of Dante's death, Pope Benedict XVI described the Divine Comedy as "an expression of the desire for the infinite that is in the human heart." He emphasized that Dante's choice of Virgil was not incidental but theological: the best of human wisdom brings you to the threshold. Grace carries you through the door.<br>
+                    Source: Pope Benedict XVI (Francis promulgated), Candor Lucis Aeternae (2021)</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ===================== DAY 7 ===================== -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 7</span>
+            <span class="day-title">The empty seat</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="field-label">Content Type</div>
+                <div class="field-content">Sacred Art</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Content Item</div>
+                <div class="field-content">Andrei Rublev, The Trinity (c. 1425, Tretyakov Gallery, Moscow)</div>
+            </div>
+
+            <div class="image-note">
+                <strong>Image sourcing:</strong> Fully public domain. Wikimedia Commons has very high-resolution versions (search "Rublev Trinity icon Wikimedia"). Look for the version showing the full panel including the table, the cup, and the tree. The gold background and the subtle color variation in the three figures reward extreme zoom. Min 3000px for Breathe. The key compositional detail: the three figures form a circle, and the fourth side of the table, facing the viewer, is empty.
+            </div>
+
+            <div class="field">
+                <div class="field-label">Opening Text (Step 1)</div>
+                <div class="field-content">All week you followed a pattern: a myth that kept returning, a goddess who could not save what she loved, a philosopher who sensed what it meant, a walk in the rain, pagan women on the Pope's ceiling, a poet who went as far as he could go. The pattern led here. A table. Three figures. An empty seat.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Curator Note (the hook)</div>
+                <div class="field-content">Andrei Rublev painted this icon around 1425 in Russia. Three angels sit at a table. The scene is from Genesis 18: Abraham welcomes three mysterious visitors and offers them a meal. By Rublev's time, the three visitors had been read for centuries as an image of the Trinity, Father, Son, and Holy Spirit appearing together in the Old Testament. What Rublev did that no one before him had done is compositional. The three figures form a circle. Their bodies curve toward each other. The lines of their posture create a chalice shape around the cup on the table. And the fourth side of the table, the side facing the viewer, is empty. There is no fourth figure. The open space faces outward. For 600 years, people have been sitting down in it.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Brief Description (for content card)</div>
+                <div class="field-content">Three figures sit at a table on a gold background. They lean toward each other in a conversation that has no beginning and no end. A cup sits at the center. The fourth side of the table is open. The gold behind them is not decorative. In Byzantine iconography, gold means you are looking at something outside of time. The table is set. The seat is empty. It has been empty for six centuries.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Context (expandable)</div>
+                <div class="field-content">Andrei Rublev (c. 1360-1430) was a Russian monk and iconographer. Almost nothing is known about his life. He painted this icon for the Trinity Lavra of St. Sergius, one of the most important monasteries in Russia, in honor of St. Sergius of Radonezh. It is considered the greatest icon ever painted and was used as the model for all subsequent depictions of the Trinity in Russian art. In 2022, the Russian government returned the icon to the Russian Orthodox Church after decades in the Tretyakov Gallery, and it now resides in the Trinity Cathedral of the Lavra. The icon was intended not for private contemplation but for liturgical use: it hung in the church where the Eucharist was celebrated. The empty space at the table was not an artistic accident. It was a theological claim. The meal depicted in the icon is the same meal offered at the altar. The viewer is not observing a scene from the past. The viewer is being invited to sit down.
+
+Every element in the icon carries specific meaning. The three figures wear different colors: the left figure (traditionally read as the Father) wears a shimmering garment that is hard to fix with the eye, suggesting the unknowability of the Father. The center figure (the Son) wears a dark red robe with a gold stripe, the colors of kingship and divinity combined. The right figure (the Holy Spirit) wears green and blue, the colors of life and sky. Behind the left figure is a building (Abraham's house, but also the Church). Behind the center figure is a tree (the Oak of Mamre, but also the Cross). Behind the right figure is a mountain (Sinai, but also the place of ascent). The cup on the table contains a lamb, a symbol of the Eucharist. The entire composition, figures, gestures, background, all circles back to the cup and the empty space. Everything in the icon says: this meal is for you.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Note (Journey-specific layer)</div>
+                <div class="field-content">This is the image Lewis would have chosen to close this journey. He was never interested in conclusions. He was interested in doors opening. The myths reached for a god who descends. The philosophers sensed a truth they could not name. The sibyls saw dimly. Virgil went as far as he could and stepped aside. And here, at the end, is not an argument or a proof but a table. The question the whole week has been asking, "what were they all reaching for?", receives an answer that is not a proposition but a gesture: sit down. The meal is already set. The cup is on the table. The seat has been open since before you arrived.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Encounter Guidance</div>
+                <div class="field-content">Look at the empty space before you look at the figures. That space is for you.</div>
+            </div>
+
+            <div class="lectio-block">
+                <div class="lectio-label">Lectio Pairing</div>
+                <div class="lectio-row">
+                    <div class="tag">Philosophy (the question)</div>
+                    <div class="field-content quote">"Love is the desire for the perpetual possession of the good."</div>
+                    <div class="field-content">Plato, Symposium 206a (c. 385 BC)</div>
+                </div>
+                <div class="lectio-row" style="margin-top:12px;">
+                    <div class="tag">Scripture (the arrival)</div>
+                    <div class="field-content quote">"Behold, I stand at the door and knock. If anyone hears my voice and opens the door, I will come in to him and eat with him, and he with me."</div>
+                    <div class="field-content">Revelation 3:20, RSV-2CE</div>
+                </div>
+                <div class="lectio-row" style="margin-top:10px;">
+                    <div class="tag">Connection note (internal)</div>
+                    <div class="field-content">The Symposium is Plato's most famous dinner party: a group of philosophers reclining at a table, trying to define love, and failing beautifully. Each speaker gets closer. None arrives. Socrates comes closest: love is not the possession of beauty but the desire for it. He cannot close the distance. Revelation 3:20 closes it from the other direction. Not "you must find me" but "I am already at the door." Not a philosophical ascent but an arrival, from the other side. The Symposium is a table surrounded by seekers. Rublev's icon is a table surrounded by the sought. Plato's philosophers were looking for the good. Revelation says the good was already looking for them. The seat was never empty by accident. It was kept open on purpose.</div>
+                </div>
+            </div>
+
+            <div class="audio-block">
+                <div class="audio-label">Auditio</div>
+                <div class="audio-option"><span class="opt-tag">Primary:</span> Rachmaninoff, Vespers (All-Night Vigil), Op. 37, No. 2 (1915). Written for the Russian Orthodox liturgy, this is the tradition Rublev's icon belongs to. The choral writing is some of the deepest in Western music. Rachmaninoff considered it his finest work. Public domain. Archive.org has recordings by the Estonian Philharmonic Chamber Choir and the St. Petersburg Chamber Choir. Movement 2 ("Bless the Lord, O my soul") is approximately 6 minutes and captures the quality of interior stillness before a shared meal.</div>
+                <div class="audio-option"><span class="opt-tag">Alternative:</span> Arvo Part, "Spiegel im Spiegel" (Mirror in the Mirror, 1978). The title mirrors Paul's "mirror dimly" and "face to face" from Day 3's Lectio, which returns today. The piece is a conversation between piano and violin that never quite resolves, each phrase leaning toward something it does not arrive at. Or: Tavener, "The Lamb" (1982), a setting of William Blake's poem, if rights can be confirmed. Approximately 4 minutes.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Reflection Questions (Step 4)</div>
+                <div class="field-content">
+                    <p>1. You followed a myth from the Eleusinian grain to a goddess weeping in the grass to an Oxford path to the Pope's ceiling to a poet's farewell to a table in an icon. What question has been forming in you this week? Name it.</p>
+                    <p>2. The seat is empty. What would it take for you to sit down?</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Day 6 Closing (replaces Connect Thread)</div>
+                <div class="field-content">The myths were not lies. The philosophers were not lost. The sibyls saw something real. Virgil went as far as beauty and reason could carry him. The table was set before any of them arrived. It is still set. The question this journey has been asking all week is not "is this true?" It is "will you sit down?"</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Go Deeper Suggestions</div>
+                <div class="field-content">
+                    <p><strong>1. Henri Nouwen on Rublev's Trinity (Modern)</strong><br>
+                    Short quote: "The movement from the ordinary and proper place to the place where God dwells is the movement called conversion."<br>
+                    Summary: Henri Nouwen wrote an entire meditation on Rublev's Trinity icon in his book Behold the Beauty of the Lord. He focused on the empty space at the table and argued that the icon is not a painting of the Trinity, it is an invitation into the Trinity. The circle of love between the three figures is not closed. It is deliberately open. The viewer is not observing divine life. The viewer is being invited to participate in it. Nouwen wrote that he spent hours sitting with this icon and that it changed his understanding of prayer: not reaching toward God, but accepting that God has already made room.<br>
+                    Source: Henri Nouwen, Behold the Beauty of the Lord (1987)</p>
+                    <p style="margin-top:12px;"><strong>2. C.S. Lewis on the journey's end (Modern)</strong><br>
+                    Short quote: "The door on which we have been knocking all our lives will open at last."<br>
+                    Summary: In his essay "The Weight of Glory," Lewis described the longing that runs through all of human culture, the same longing this journey has traced from Eleusis to Oxford to the Sistine ceiling, and concluded that it points to a real destination. The myths were rehearsals. The philosophy was preparation. The longing was calibrated. The door, Lewis believed, was never locked. It was waiting for someone to knock from the other side, and to hear the knock from within.<br>
+                    Source: C.S. Lewis, "The Weight of Glory" (1941)</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ===================== SANITY ENTRY CHECKLIST ===================== -->
+    <h2>Sanity Entry Checklist</h2>
+
+    <table>
+        <thead><tr><th>Day</th><th>Content Item</th><th>Image</th><th>Audio</th><th>Status</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Day 1</strong></td><td>Great Eleusinian Relief (Sacred Art)</td><td>Wikimedia Commons</td><td>Archive.org - Phos Hilaron</td><td>Needs entry</td></tr>
+            <tr><td><strong>Day 2</strong></td><td>Francesco Furini, <em>Venus Mourning the Death of Adonis</em> c. 1626–28 (Sacred Art)</td><td>Wikimedia Commons: Morte_di_Adone_-_Furini.jpg (1139×1400px). Higher res: Google Arts &amp; Culture asset KQH5v4Hdq5a7xg or Museum of Fine Arts Budapest</td><td>Primary: Purcell, Dido's Lament (Musopen/Archive.org) — Alt: Barber, Adagio for Strings (Archive.org)</td><td>Content complete — needs Sanity entry</td></tr>
+            <tr><td><strong>Day 3</strong></td><td>Plato / School of Athens (Thinker)</td><td>Wikimedia - very high res</td><td>Musopen - Bach Aria</td><td>Needs entry</td></tr>
+            <tr><td><strong>Day 4</strong></td><td>Addison's Walk (Landscape)</td><td>Wikimedia/Unsplash (check license)</td><td>Archive.org - Elgar Nimrod</td><td>Needs entry</td></tr>
+            <tr><td><strong>Day 5</strong></td><td>Cumaean Sibyl / CVMAEA (Sacred Art)</td><td>CAPPELLA_SISTINA_Ceiling.jpg (Downloads) — crop in Sanity. Close-up: cumaean-sibyl-closeup-1500px.jpg (Documents)</td><td>Archive.org - Allegri Miserere</td><td>Needs entry</td></tr>
+            <tr><td><strong>Day 6</strong></td><td>Dante, Purgatorio XXX (Literature)</td><td>Wikimedia - Dore engraving</td><td>Archive.org - Monteverdi L'Orfeo</td><td>Needs entry</td></tr>
+            <tr><td><strong>Day 7</strong></td><td>Rublev Trinity icon (Sacred Art)</td><td>Wikimedia - very high res</td><td>Archive.org - Rachmaninoff Vespers</td><td>Needs entry</td></tr>
+            <tr><td><strong>SIDELINED</strong></td><td>Justin Martyr — moving to standalone P&P day with CTA to this journey</td><td>Wikimedia - manuscript or engraving</td><td>Archive.org - Veni Creator Spiritus</td><td>Repurpose to P&P</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Journey-Level Sanity Fields</h3>
+    <table>
+        <thead><tr><th>Field</th><th>Value</th></tr></thead>
+        <tbody>
+            <tr><td>Title</td><td>When Myth Became Fact</td></tr>
+            <tr><td>Slug</td><td>when-myth-became-fact</td></tr>
+            <tr><td>Theme</td><td>Home / The Restless Heart</td></tr>
+            <tr><td>Description</td><td>Every culture in human history has told a story about a god who dies and returns. C.S. Lewis spent 33 years dismissing this as coincidence. Then he followed the argument to its conclusion. Seven days through the art, philosophy, and landscapes that led him there.</td></tr>
+            <tr><td>Est. minutes/day</td><td>12</td></tr>
+            <tr><td>Published</td><td>false (until all 7 days complete)</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Dinner-Table Hook Summary</h3>
+    <table>
+        <thead><tr><th>Day</th><th>The fact someone would repeat tonight</th></tr></thead>
+        <tbody>
+            <tr><td><strong>1</strong></td><td>The Eleusinian Mysteries lasted 1,500 years and the secret was never written down. The final revelation was a single ear of wheat.</td></tr>
+            <tr><td><strong>2</strong></td><td>Raphael painted this while Michelangelo painted the Sistine Chapel in the next room. Neither saw the other's work. The face of Plato is the face of Leonardo da Vinci.</td></tr>
+            <tr><td><strong>3</strong></td><td>Tolkien and Lewis walked this path after midnight in the rain for three hours. Nine days later Lewis converted.</td></tr>
+            <tr><td><strong>4</strong></td><td>Justin Martyr walked into the Emperor's palace and handed him a defense of Christianity. He was beheaded for it. He had known that was likely when he walked through the gates.</td></tr>
+            <tr><td><strong>5</strong></td><td>Michelangelo put five pagan women on the ceiling of the Pope's chapel, at the same scale as the Hebrew prophets. At Orvieto, a sibyl and King David share the same wall, the same gesture.</td></tr>
+            <tr><td><strong>6</strong></td><td>Dante chose a pagan poet to guide him through the afterlife. In the most devastating passage of the Divine Comedy, Virgil disappears without a word. Dante says his name three times. He doesn't get to say goodbye.</td></tr>
+            <tr><td><strong>7</strong></td><td>Rublev painted three figures at a table and left the fourth side empty, facing the viewer. It has been empty for 600 years. The seat is for you.</td></tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

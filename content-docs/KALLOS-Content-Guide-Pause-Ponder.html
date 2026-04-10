@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KALLOS - Pause & Ponder Content Guide</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Open Sans', sans-serif; line-height: 1.8; color: #2C2C2C; background: #FFFFFF; }
+        .container { max-width: 860px; margin: 0 auto; padding: 60px 40px 120px; }
+        .cover { background: #16110d; color: #fdf6e8; text-align: center; padding: 70px 40px 55px; margin: -60px -40px 52px; }
+        .cover .label { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #C19B5F; margin-bottom: 16px; }
+        .cover h1 { font-size: 34px; font-weight: 300; letter-spacing: 3px; color: #fdf6e8; margin-bottom: 10px; }
+        .cover .sub { font-size: 15px; color: #bfb8aa; font-style: italic; }
+        .cover .version { font-size: 12px; color: #8a8278; margin-top: 14px; }
+        h2 { font-family: Montserrat, Arial, sans-serif; font-size: 21px; font-weight: 600; color: #16110d; margin-top: 52px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #C19B5F; }
+        h3 { font-family: Montserrat, Arial, sans-serif; font-size: 16px; font-weight: 600; color: #16110d; margin-top: 28px; margin-bottom: 10px; }
+        p { margin-bottom: 14px; font-size: 15px; }
+        .principle { background: #fdf6e8; padding: 20px 24px; margin: 20px 0; border-left: 3px solid #C19B5F; font-size: 15px; }
+        .principle strong { color: #16110d; }
+        .callout { background: #16110d; color: #fdf6e8; padding: 22px 26px; margin: 24px 0; font-size: 15px; line-height: 1.7; }
+        .callout strong { color: #C19B5F; }
+        .field-spec { margin: 16px 0; border: 1px solid #e8e0d4; }
+        .field-spec .field-header { background: #fdf6e8; padding: 10px 16px; font-family: Montserrat, Arial, sans-serif; font-size: 13px; font-weight: 700; color: #16110d; border-bottom: 1px solid #e8e0d4; }
+        .field-spec .field-body { padding: 12px 16px; font-size: 14px; }
+        .field-spec .field-body .req { color: #c25555; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .field-spec .field-body .opt { color: #6b6560; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .example { background: #f5f0e8; padding: 16px 20px; margin: 14px 0; font-size: 14px; line-height: 1.7; }
+        .example .ex-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C19B5F; margin-bottom: 6px; font-weight: 600; }
+        .pairing-example { margin: 16px 0; border: 1px solid #e8e0d4; overflow: hidden; }
+        .pairing-example .pair-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C19B5F; font-weight: 600; padding: 10px 16px 4px; background: #fdf6e8; border-bottom: 1px solid #e8e0d4; }
+        .pairing-example .philosophy { padding: 12px 16px; font-size: 14px; font-style: italic; border-bottom: 1px solid #e8e0d4; background: #fafaf8; }
+        .pairing-example .scripture { padding: 12px 16px; font-size: 14px; font-style: italic; }
+        .pairing-example .pair-attr { font-size: 12px; color: #6b6560; font-style: normal; margin-top: 4px; }
+        .do-dont { display: flex; gap: 16px; margin: 16px 0; }
+        .do-dont > div { flex: 1; padding: 14px 16px; font-size: 13px; line-height: 1.6; }
+        .do-box { background: #f0f7f3; border-left: 3px solid #4a7a62; }
+        .dont-box { background: #fdf0f0; border-left: 3px solid #c25555; }
+        .do-dont .label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+        .do-box .label { color: #4a7a62; }
+        .dont-box .label { color: #c25555; }
+        .voice-rule { padding: 10px 16px; margin: 8px 0; font-size: 14px; border-left: 3px solid #C19B5F; background: #fdf6e8; }
+        .warn-rule { padding: 10px 16px; margin: 8px 0; font-size: 14px; border-left: 3px solid #c25555; background: #fdf0f0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
+        th { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #C19B5F; text-align: left; padding: 8px 10px; border-bottom: 2px solid #C19B5F; background: #fdf6e8; }
+        td { padding: 8px 10px; border-bottom: 1px solid #e8e0d4; vertical-align: top; }
+        .note { font-size: 13px; color: #6b6560; font-style: italic; }
+        .section-note { background: #f0f7f3; border-left: 3px solid #4a7a62; padding: 12px 16px; margin: 16px 0; font-size: 13px; color: #2C2C2C; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="cover">
+        <div class="label">KALLOS Agent Content Instructions</div>
+        <h1>PAUSE & PONDER</h1>
+        <div class="sub">Daily contemplative prompt - how to write it, what to get right, what to avoid</div>
+        <div class="version">Updated March 29, 2026 - Field names, location fields, Lectio sub-fields, Auditio Verba field added</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <h2>What Pause & Ponder Is</h2>
+
+    <div class="principle">
+        <strong>Pause & Ponder is a daily beauty prompt on the Today tab.</strong> Each day features one piece of encounter content (art, music, landscape, literature, thinker, food, pattern & proof, or watch/listen) paired with a contemplative prompt, curator note, lectio, and a small action. The goal is to give the user one beautiful thing to sit with for the day - not a lesson, not a devotion, not a lecture. One encounter. One surprising thing to learn. One question. One invitation.
+    </div>
+
+    <p>The audience is the curious seeker - someone moved by beauty, asking deeper questions, regardless of faith background. Every P&P day uses the classical education approach: leading users toward beauty, truth, and goodness without announcing that's what's happening. The content never assumes faith. It assumes curiosity.</p>
+
+    <div class="callout">
+        <strong>The purpose of P&P in one sentence:</strong> Give users something surprising to sit with and something interesting enough to share - then make it personal, and leave a door open for more.
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <h2>The Hook - The Most Important Principle in This Guide</h2>
+
+    <p>Every P&P day must contain one surprising, specific, shareable fact. Not atmosphere. Not a description of what the content looks like. Something the user genuinely didn't know - something interesting enough that they'd repeat it to another person.</p>
+
+    <div class="principle">
+        <strong>The test:</strong> Would someone say "wait, I didn't know that" - and then repeat it at dinner? If yes, you have the hook. If not, keep looking.
+    </div>
+
+    <p>This is where most content drafts drift. It is easy to write atmospheric description that sounds thoughtful but reveals nothing. "This painting rewards slowness" is atmosphere. "When this triptych is closed, there's a completely different painting on the outside - most people who know the Adoration of the Magi have never seen it" is a hook.</p>
+
+    <p>The hook lives in the <strong>Curator Note</strong>. It must appear there, and it must come first - before the question, before the reflection. The user learns the surprising thing, and then the question asks them to connect it to their own life. That sequence matters. The fact earns the reflection.</p>
+
+    <h3>The Hook Is Not</h3>
+    <div class="warn-rule">A description of what the content looks or sounds like. That's what the description field is for.</div>
+    <div class="warn-rule">A statement about why the content is significant or influential. That belongs in context.</div>
+    <div class="warn-rule">A generic observation that could apply to many works. "This painting is full of hidden symbolism" tells the user nothing specific.</div>
+    <div class="warn-rule">Something the user could guess from looking at the image. The hook reveals what isn't obvious.</div>
+
+    <h3>The Hook Is</h3>
+    <div class="voice-rule">A fact specific to this work, this person, this place - something not visible on the surface.</div>
+    <div class="voice-rule">Something that changes how you experience the content once you know it.</div>
+    <div class="voice-rule">Short enough to land in one read. The best hooks are 2–3 sentences.</div>
+    <div class="voice-rule">Connected to the prompt question that follows - the hook earns the reflection.</div>
+
+    <div class="example">
+        <div class="ex-label">Hook - Bosch, Adoration of the Magi</div>
+        "Most people who know this painting have never seen the other one. Close the panels and there's a completely different painting on the outside - seven scenes of Christ's suffering rendered in black and white to look like carved stone. You were meant to move through all of it before the gold opened. Bosch designed the entrance to adoration through grief."
+    </div>
+
+    <div class="example">
+        <div class="ex-label">Hook - Arvo Pärt, Spiegel im Spiegel</div>
+        "He was expelled from Estonia's Composers' Union for writing Christian music. He went silent for eight years. Then he invented an entirely new compositional style in that silence - tintinnabuli, named after bells. Radiohead has cited him as an influence. His music turns up in hospices and meditation apps. That's the arc of the man you're listening to."
+    </div>
+
+    <div class="do-dont">
+        <div class="do-box">
+            <div class="label">Hook - Does the job</div>
+            "Rembrandt painted this broke, grieving, and near the end of his life. He was the prodigal son. He was also the father. That's why the painting lands the way it does - it was made by someone who'd been both."
+        </div>
+        <div class="dont-box">
+            <div class="label">Not a hook - Atmosphere</div>
+            "This painting rewards slowness. You can't take it in at a glance - Rembrandt refused to let anyone skip ahead. Look for the hands. That's where it gets interesting."
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <h2>The Lectio Pairing - Philosophy and Scripture in Conversation</h2>
+
+    <p>The Lectio is not a proof-text. It is not "the verse that explains this." It is a pairing of two voices - a philosopher and a scripture - that arrive at the same truth from different directions.</p>
+
+    <div class="callout">
+        <strong>The editorial thesis of KALLOS:</strong> The great philosophers were asking questions that scripture had already answered. Plato, Marcus Aurelius, Seneca, Boethius - the Western intellectual tradition has been reaching toward something it couldn't quite name. The Lectio is the moment where philosophy reaches and scripture names it. For the curious seeker, philosophy is the familiar entry point. Scripture is the discovery.
+    </div>
+
+    <p>This is not a new idea. It is the intellectual tradition of the Church Fathers - Justin Martyr called it "seeds of the Word" scattered through Greek thought before the Logos became flesh. Augustine, Aquinas, C.S. Lewis all built on the same conviction: the philosophers were asking the right questions. The Lectio just holds the room where the conversation happens.</p>
+
+    <h3>Two Modes</h3>
+
+    <p><strong>Question and answer.</strong> The philosophy poses the question - the human mind at its best, reaching toward something it can almost but not quite name. Scripture names it. The gap closes and the reader feels it. This is the most powerful mode and the most common.</p>
+
+    <p><strong>Convergence.</strong> Two traditions, same truth, different language. Neither is answering the other. They just arrived at the same place by different roads. Seneca on the brevity of life and Ecclesiastes. Marcus Aurelius on equanimity and "Be still and know that I am God." Still worth showing - the resonance is real even without the question/answer dynamic.</p>
+
+    <h3>The Direction</h3>
+    <p>Almost always: philosophy first, scripture second. Philosophy is the familiar entry point for the curious seeker. They recognize the human question. Finding scripture already there is the moment of discovery. The direction rarely reverses - scripture raising a question that philosophy then answers - because scripture's answers tend to be richer than philosophy's frameworks.</p>
+
+    <h3>Do Not Force It</h3>
+    <p>A strong scripture standing alone is better than a philosophy pairing that feels manufactured. The pairing only works when the resonance is genuinely surprising - when the reader feels the two traditions meeting without being told to. If you have to explain why the pairing works, it doesn't work.</p>
+
+    <div class="pairing-example">
+        <div class="pair-label">Lectio Pairing - Bosch / Closed Panels / Passing Through Darkness</div>
+        <div class="philosophy">
+            "The world of our present life is but a shadow of the real world... the prisoners see only the shadows and take them for realities."
+            <div class="pair-attr">Plato, Republic - Allegory of the Cave</div>
+        </div>
+        <div class="scripture">
+            "For now we see through a glass, darkly; but then face to face: now I know in part; but then shall I know even as also I am known."
+            <div class="pair-attr">1 Corinthians 13:12</div>
+        </div>
+    </div>
+
+    <div class="pairing-example">
+        <div class="pair-label">Lectio Pairing - Convergence Mode (same truth, different roads)</div>
+        <div class="philosophy">
+            "Be still. Stillness reveals the secrets of eternity."
+            <div class="pair-attr">Rainer Maria Rilke</div>
+        </div>
+        <div class="scripture">
+            "Be still, and know that I am God."
+            <div class="pair-attr">Psalm 46:10</div>
+        </div>
+    </div>
+
+    <div class="section-note">
+        <strong>Throughout the app:</strong> The philosophy/scripture pairing is not limited to P&P. This principle should inform Thinker content items, Journey Reflect steps, and Go Deeper tradition reflections wherever the connection is genuine. It is KALLOS's core editorial thesis made structural.
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <h2>The Two-Step Structure</h2>
+
+    <p>Each Pause & Ponder day creates <strong>two Sanity documents</strong>:</p>
+
+    <h3>Step 1 - Content Item</h3>
+    <p>The featured content (a painting, a poem, a landscape, etc.). This lives in the <code>contentItem</code> schema and is reusable across the app - it shows up in Explore, on the map, in Library, and can be referenced by Journeys.</p>
+
+    <h3>Step 2 - Daily Prompt</h3>
+    <p>The P&P wrapper that ties the content item to a specific date and adds the contemplative layer (prompt question, curator note, lectio, auditio, actio). This lives in the <code>dailyPrompt</code> schema.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <h2>Content Item Fields</h2>
+
+    <p>Every content item uses one of the 8 content types. The type determines which fields are available. These are the fields common to all types:</p>
+
+    <div class="field-spec">
+        <div class="field-header">Content Type</div>
+        <div class="field-body"><span class="req">Required</span> - One of: Sacred Art, Thinker, Literature, Music, Food & Wine, Landscape, Watch/Listen, Pattern & Proof. This determines which type-specific fields appear.</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Title</div>
+        <div class="field-body"><span class="req">Required</span> - The name of the work, place, idea, or discovery. Should be evocative, not encyclopedic. "The Bread Ovens of Tuscany" not "Italian Bread Making Traditions."</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Brief Description</div>
+        <div class="field-body"><span class="req">Required</span> - 2–3 sentences. What is this? What does it look, sound, or feel like? Write as if describing it to someone who has never encountered it. Sensory and specific. Do not put the hook here - that belongs in the Curator Note. (Sanity field name: "Brief Description")</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Context</div>
+        <div class="field-body"><span class="req">Required</span> - 3–6 sentences. Why does this matter? Historical, cultural, or theological context that deepens the encounter. This field is collapsible in the app ("Read more") so it can be substantive. Write for the curious reader who wants to go deeper. Do not repeat details already in the Curator Note - the Context gives the broader picture, the Curator Note gives the sharpest surprising fact.</div>
+    </div>
+
+    <div class="callout" style="margin-top:28px;">
+        <strong>Field repetition is the most common failure mode.</strong> The default AI writing pattern is to re-explain the hook in every field -- the curator note states the surprising fact, the context restates it with more words, the reflection question points at it again. By the end the user has read the same beat three times and it has lost all force. Each field does different work. A fact or connection that appears in two fields should be cut from the weaker one.
+    </div>
+
+    <table style="margin-top:16px;">
+        <thead>
+            <tr><th>Field</th><th>Its Job</th><th>What Does Not Belong Here</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Curator Note</strong></td><td>One surprising fact about the artwork or artist. End on the unexpected detail and stop.</td><td>Retelling the story. Theological connections. Explaining what the fact means.</td></tr>
+            <tr><td><strong>Brief Description</strong></td><td>Describe only what you see or hear. Sensory and specific.</td><td>The hook. Significance. Connections to faith.</td></tr>
+            <tr><td><strong>Context</strong></td><td>Background that deepens the encounter -- historical, cultural, theological, whatever serves the day.</td><td>Anything already told in the curator note. Anything another field will say better. The rule is no repetition, not content type restriction.</td></tr>
+            <tr><td><strong>Lectio Connection Note</strong></td><td>Why these two lines sit together. Short. Let the pairing speak.</td><td>Over-explanation. Connections already made in the curator note or context.</td></tr>
+            <tr><td><strong>Reflection Question</strong></td><td>One personal question tied to the emotional core of the day.</td><td>Theological framing. Restating the hook as a question.</td></tr>
+        </tbody>
+    </table>
+
+    <div class="field-spec">
+        <div class="field-header">Image</div>
+        <div class="field-body"><span class="req">Required - no exceptions</span> - High-resolution, minimum 1200px wide (up to 4500px). This is the visual anchor for the entire day. Every content item must have an image, including music, thinkers, and abstract concepts. For non-visual content types, choose an image that evokes the feeling: a concert hall for music, a portrait for a thinker, a landscape for a poem about nature.</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Theme(s)</div>
+        <div class="field-body"><span class="req">Required - at least one</span> - Reference to one or more of the 5 founding themes: Light, Silence, Suffering & Beauty, Creation, Home / The Restless Heart. This determines where the content appears in filtered views.</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Curator Note</div>
+        <div class="field-body"><span class="req">Required</span> - 2–4 sentences. <strong>This is the hook.</strong> The one surprising, specific, shareable fact that changes how you experience this content once you know it. Not atmosphere. Not a description of quality or significance. A fact that makes the user say "I didn't know that" - and repeat it to someone else. See The Hook section above and the Voice section below.</div>
+    </div>
+
+    <h3>Type-Specific Fields</h3>
+
+    <table>
+        <thead>
+            <tr><th>Content Type</th><th>Required Extra Fields</th><th>Optional Fields</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Sacred Art</td><td>Artist / Creator, Year</td><td>Medium, Location Name, Country, Latitude, Longitude</td></tr>
+            <tr><td>Thinker</td><td>Thinker Name</td><td>Era, Tradition, Quote</td></tr>
+            <tr><td>Literature</td><td>Author, Work Title</td><td>Literary Form, Excerpt</td></tr>
+            <tr><td>Music</td><td>Artist / Creator (composer)</td><td>Medium, Audio File/URL</td></tr>
+            <tr><td>Food & Wine</td><td>-</td><td>Location Name, Country, Latitude, Longitude</td></tr>
+            <tr><td>Landscape</td><td>-</td><td>Location Name, Country, Latitude, Longitude</td></tr>
+            <tr><td>Watch/Listen</td><td>Media URL</td><td>Series</td></tr>
+            <tr><td>Pattern & Proof</td><td>-</td><td>Artist / Creator (if attributed)</td></tr>
+        </tbody>
+    </table>
+
+    <div class="field-spec">
+        <div class="field-header">Location Name</div>
+        <div class="field-body"><span class="opt">Optional — use for all content types with a physical location</span> - The museum, church, monastery, landscape, or institution where the work lives. e.g., "National Gallery, London" or "Scrovegni Chapel, Padua." Populate this whenever the location is meaningful to the encounter — it puts the work on the Explore map.</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Country</div>
+        <div class="field-body"><span class="opt">Optional — enter when Location Name is filled</span> - Full country name, e.g., "Italy," "United Kingdom," "France." KALLOS is global — no default country.</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Latitude / Longitude</div>
+        <div class="field-body"><span class="opt">Optional — enter when Location Name is filled</span> - Decimal coordinates for the Explore map. e.g., Latitude: 51.5088, Longitude: -0.1283 (National Gallery, London). Use the entry guide for Holy Week content — coordinates are pre-filled there. For new content, look up coordinates on Google Maps (right-click the location and copy the lat/lng).</div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <h2>Daily Prompt Fields</h2>
+
+    <div class="field-spec">
+        <div class="field-header">Date</div>
+        <div class="field-body"><span class="req">Required</span> - YYYY-MM-DD format. The date this prompt will appear on the Today tab.</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Featured Content</div>
+        <div class="field-body"><span class="req">Required</span> - Link to the content item created in Step 1. In Sanity, search by title to find and select it. (Sanity field name: "Featured Content")</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Prompt Question</div>
+        <div class="field-body"><span class="req">Required</span> - One question. It must flow from the hook in the Curator Note - the surprising fact earns the reflection. Use "you." Write for the person who just read the hook and felt something. The question should land on broad human experience - loss, transition, longing, discovery - not on knowledge of the content. Someone who has never heard of Bosch should be able to answer it. Read it twice before finalizing: if it requires re-reading to parse, rewrite it.</div>
+    </div>
+
+    <div class="example">
+        <div class="ex-label">Good - flows from the hook, lands on human experience</div>
+        "Is there something you had to move through darkness to reach - and what you found on the other side was good, even if it wasn't what you imagined?"<br><br>
+        "When was the last time you gave something - or someone - your full, undivided attention?"<br><br>
+        "What in your life has felt like moving from one kind of darkness into something better - not perfect, but real?"
+    </div>
+
+    <div class="example">
+        <div class="ex-label">Bad - requires knowledge, doesn't flow from hook, too vague</div>
+        "What does this painting teach us about the Incarnation?" - <em>assumes theological knowledge</em><br>
+        "How does this content speak to you?" - <em>no entry point</em><br>
+        "What is Bosch asking you to notice first - the sacred moment at the center, or the world at the margins?" - <em>requires looking at the painting closely; can't answer without it</em>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Curator Note</div>
+        <div class="field-body"><span class="req">Required</span> - Same note as on the content item. This is the hook. See The Hook section and Voice section.</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Lectio — Philosophy Text</div>
+        <div class="field-body"><span class="opt">Optional but strongly encouraged</span> - The philosophy quote. A single passage from a philosopher, thinker, or writer (Plato, Aristotle, Marcus Aurelius, Seneca, etc.) that poses a question the human mind has been asking. Philosophy goes first — it is the familiar entry point for the curious seeker. Do not force it: a strong scripture alone is better than a strained pairing. See The Lectio Pairing section above for full guidance. Scripture translation standard: RSV-2CE only.</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Lectio — Philosophy Source</div>
+        <div class="field-body"><span class="opt">Required when Philosophy Text is filled</span> - Full attribution: Author, Work, Book/Chapter if applicable. e.g., "Aristotle, Nicomachean Ethics, Book II" or "Marcus Aurelius, Meditations, Book IV."</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Lectio — Scripture Text</div>
+        <div class="field-body"><span class="opt">Optional but strongly encouraged</span> - The scripture passage. It names what the philosophy was reaching toward. When the pairing is genuinely resonant, do not explain it — let the reader feel the gap close. All scripture must be RSV-2CE (Revised Standard Version, Second Catholic Edition). Do not use NIV, ESV, NABRE, or other translations.</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Lectio — Scripture Reference</div>
+        <div class="field-body"><span class="opt">Required when Scripture Text is filled</span> - Book, chapter, and verse(s). e.g., "John 1:1-5" or "Psalm 46:10 RSV-2CE."</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Auditio — Title</div>
+        <div class="field-body"><span class="opt">Optional</span> - The name of the piece. Be specific — not "Bach" but "Cello Suite No. 1 in G Major, Prelude." The user should be able to identify exactly what they're hearing.</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Auditio — Artist / Composer</div>
+        <div class="field-body"><span class="opt">Required when Auditio is used</span> - Composer and/or performer. For gregorian-chant-hymns.com material, note the source abbey or schola (e.g., "St. Cecilia's Abbey, UK"). For AI-generated tracks, note the tradition and tool (e.g., "Traditional American Spiritual, generated via Suno").</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Auditio — Audio File (Upload)</div>
+        <div class="field-body"><span class="opt">Strongly preferred over URL</span> - Upload the MP3 directly to Sanity. This keeps playback inside the app. Format: MP3 only. If the source file is MP4 or AAC (gregorian-chant-hymns.com delivers MP4), convert to MP3 using ffmpeg before uploading. See Audio Sourcing Rules below for approved sources and licensing requirements.</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Auditio — Verba (Text)</div>
+        <div class="field-body"><span class="opt">Optional</span> - Lyrics or original text to display alongside the audio. Appears in the app as a collapsible scrollable panel labelled VERBA, below the audio player. Paste anything into this one field: Latin only, English only, or both together in whatever format you choose (interleaved line by line, or stacked sections). Best used for: Gregorian chant with Latin text, hymns with original-language lyrics, poems that are the audio subject. Leave blank if there is no text worth reading alongside the audio.</div>
+    </div>
+
+    <div class="field-spec">
+        <div class="field-header">Actio (Action)</div>
+        <div class="field-body"><span class="req">Required</span> - One small, concrete thing the user can do today. Should be doable by anyone, anywhere, without preparation. Not a prayer. Not homework. An invitation to carry the encounter into ordinary life. When the day has multiple images (like the Bosch open and closed panels), the actio can use both - "look at the closed panel first, then open it."<br><br>
+        <strong>Music + image direction:</strong> Do not add standing instruction ("press play and look at the image") — if it appears every day it becomes invisible. Use the actio to direct the combined experience occasionally, when the music and image together create something meaningfully different from experiencing them separately. When you use it, be specific: not "listen while you look" but "press play. While it plays, zoom into the painting and find one face. Stay with it until the music ends." Used sparingly, this trains the instinct without announcing it — users will start doing it naturally on days you say nothing.</div>
+    </div>
+
+    <div class="example">
+        <div class="ex-label">Good Actio</div>
+        "Look at the closed panel image first. Let those seven scenes sit for a moment before you open to the Adoration. See if the gold hits differently."<br><br>
+        "Step outside tonight and look up. Even in a city, find one star. Let it be old."<br><br>
+        "The next time you eat bread, slow down for one bite. Taste the flour, the water, the heat. Let it be enough."
+    </div>
+
+    <div class="example">
+        <div class="ex-label">Bad Actio</div>
+        "Pray the Rosary in honor of today's content." - <em>assumes practice</em><br>
+        "Research the artist's life and write a journal entry." - <em>homework, not encounter</em><br>
+        "Reflect on how beauty leads to God." - <em>too abstract, nothing to actually do</em>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <h2>Voice & Tone</h2>
+
+    <h3>The Curator Note Voice</h3>
+
+    <p>The curator note is the most important piece of writing in every P&P day. It is the hook - the surprising fact the user will carry into their day and possibly repeat to someone else. Write it as if a knowledgeable, passionate friend just discovered something extraordinary and has thirty seconds to tell you about it.</p>
+
+    <div class="voice-rule"><strong>No first person.</strong> Never "I," "my," or "me." The app does not refer to itself or its curator as a person.</div>
+
+    <div class="voice-rule"><strong>Reveal, don't describe.</strong> The hook tells the user something they didn't know - not what the content looks like, not why it's significant, but a specific fact that changes the experience of it. "Most people who know this painting have never seen the other one" is a revelation. "This painting rewards your attention" is a description.</div>
+
+    <div class="voice-rule"><strong>Specific, not generic.</strong> Every curator note must contain at least one detail that only applies to this particular work, person, or place. If you could swap the content and the note still works, it's too generic.</div>
+
+    <div class="voice-rule"><strong>Casual but not careless.</strong> Contractions are fine. Sentence fragments, used sparingly, are fine. The tone is smart and warm - the voice of someone who reads widely and cares genuinely. Not academic, not churchy, not corporate.</div>
+
+    <div class="voice-rule"><strong>2–4 sentences max.</strong> Say one surprising thing well. Don't pile on. If you have more interesting facts (and you usually will), save them for the context field or Go Deeper material.</div>
+
+    <h3>Avoiding AI Voice Tells</h3>
+
+    <p>Content written by AI tends to drift toward recognizable patterns. These make the content feel assembled rather than written, and users notice - even when they can't name why. Avoid the following:</p>
+
+    <div class="warn-rule"><strong>Dramatic stacked fragments.</strong> "Gethsemane. The arrest. The flagellation. The crucifixion." Lists written as fragments for emotional effect are an AI signature. Write it as a sentence instead.</div>
+
+    <div class="warn-rule"><strong>Parallel triplet constructions.</strong> "Grain becomes bread, bread becomes Body, Body becomes the world." Stacked parallels with the same rhythm feel constructed. Break the pattern.</div>
+
+    <div class="warn-rule"><strong>The "not just X - it's Y" formula.</strong> Overused. "This isn't just a painting about the Nativity - it's an argument about the nature of evil." Fine once. Avoid as a default structure.</div>
+
+    <div class="warn-rule"><strong>Every sentence carrying equal dramatic weight.</strong> Real writing breathes - some sentences are light, some land hard. When every sentence feels weighted for effect, the rhythm gives it away.</div>
+
+    <div class="warn-rule"><strong>Em dashes: banned entirely.</strong> Em dashes are the single most reliable AI text marker. They are not permitted anywhere in KALLOS content, not even in moderation. Use a comma, a period, or a short hyphen instead. Colons setting up revelations are also overused. If you reach for a colon for dramatic effect, rewrite the sentence.</div>
+
+    <div class="do-dont">
+        <div class="do-box">
+            <div class="label">Reads like a person wrote it</div>
+            "Most people who know this painting have never seen the other one. Close the panels and there's a completely different painting on the outside - seven scenes of Christ's suffering rendered in black and white to look like carved stone. You were meant to move through all of it before the gold opened. Bosch designed the entrance to adoration through grief."
+        </div>
+        <div class="dont-box">
+            <div class="label">Reads like AI assembled it</div>
+            "This triptych is not merely a painting. It is a journey. Suffering. Grief. Darkness. And then - light. Bosch understood something the modern world has forgotten: that beauty requires a price. That adoration must be earned. That the gold means nothing without the grief that precedes it."
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <h2>Content Mix & Sequencing</h2>
+
+    <h3>Type Distribution</h3>
+    <p>No two consecutive days should feature the same content type. Aim for variety across the week. A good week might look like: Sacred Art, Thinker, Music, Landscape, Pattern & Proof, Food & Wine, Literature.</p>
+
+    <h3>Theme Distribution</h3>
+    <p>Vary themes across the week. Don't stack three "Creation" days in a row. Each week should touch at least 3 of the 5 themes.</p>
+
+    <h3>Emotional Arc</h3>
+    <p>Be intentional about the emotional rhythm. A heavy day (Suffering & Beauty) should be followed by something lighter or more spacious (Landscape, Music). Don't exhaust the user. The week should breathe.</p>
+
+    <h3>Feast Days</h3>
+    <p>When a P&P day falls on a saint's feast day, follow the <strong>Feast Day Content Guide</strong>. The feast day content uses the same P&P format - the saint's life is told through the lens of art, landscape, literature, etc., not as a biography. The hook principle applies: find the most surprising thing about this person's life, not the most familiar.</p>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <h2>Audio Sourcing Rules (Auditio)</h2>
+
+    <div class="principle">
+        <strong>The goal is to keep the user in the app.</strong> Every audio reference should be a specific arrangement or performance - not an album, not a playlist, not "search for this on Spotify." The user should be able to press play and hear exactly what you intended, without leaving KALLOS.
+    </div>
+
+    <h3>Rule 1 - Licensing First: Free, Downloadable, No Copyright</h3>
+
+    <p>Must be free to download and use with no copyright restrictions. No Spotify, no Apple Music, no YouTube-only, no copyrighted recordings.</p>
+
+    <p><strong>Approved sources (use these first):</strong></p>
+    <ul>
+        <li><a href="https://pixabay.com/music/search/catholic/">Pixabay Music - Catholic</a> - free, no copyright, direct download</li>
+        <li><a href="https://musopen.org">Musopen.org</a> - public domain classical performances</li>
+        <li><a href="https://freemusicarchive.org">Free Music Archive</a> - Creative Commons</li>
+        <li><a href="https://archive.org">Internet Archive</a> - public domain recordings</li>
+        <li><a href="https://gregorian-chant-hymns.com">gregorian-chant-hymns.com</a> - free for personal/institutional use; attribution required (note source abbey/schola in Sanity artist field)</li>
+        <li>Bandcamp free downloads and artist sites offering direct downloads with explicit free-use license</li>
+    </ul>
+
+    <p>Format: MP3 preferred. If only MP4/AAC is available, convert to MP3 before uploading to Sanity.</p>
+
+    <h3>Rule 2 - Connection Can Be Thematic, Mood-Based, or Emotional</h3>
+
+    <p>The Auditio doesn't have to match the subject literally. A piece can match the feeling of a day, the emotional arc, or the theological undercurrent.</p>
+
+    <div class="do-dont">
+        <div class="do-box">
+            <div class="label">Good thematic match</div>
+            Victoria "O Vos Omnes" paired with Bosch's Adoration - matches the grief-to-joy arc of the triptych, not the subject literally.
+        </div>
+        <div class="do-box" style="margin-top:8px;">
+            <div class="label">Good direct match</div>
+            The Porter's Gate, "Breastplate of Saint Patrick" for St. Patrick's Day - matches theme, mood, and subject directly.
+        </div>
+    </div>
+
+    <h3>Rule 3 - Sacred/Classical Is the Safe Anchor — Always Offer an Alternative</h3>
+
+    <div class="voice-rule"><strong>Sacred and classical is always appropriate.</strong> Gregorian chant, polyphony, Bach, Pärt, Taizé — it grounds content in the tradition Sheri is also discovering. It is never wrong. But it cannot be every day. Too much of anything beautiful loses its light. The same register repeated becomes invisible.</div>
+
+    <div class="voice-rule"><strong>Always suggest two options: one sacred/classical, one from a different register.</strong> The alternative can be folk, ambient, meditation, contemporary, world music, or even a well-chosen secular track — as long as it meets Rules 1 and 2. Sheri chooses between them. Don't make the choice for her.</div>
+
+    <div class="voice-rule"><strong>Well-known secular music can work</strong> if it creates genuine contemplative space rather than distraction or irony. The test: does hearing this song in this context open something, or does it close it? A piece like "The Sound of Silence" at the right moment can stop someone cold. The goal is the contemplative opening, not genre compliance.</div>
+
+    <div class="voice-rule"><strong>Context note:</strong> Sheri is also learning the sacred traditions through KALLOS. Audio suggestions are part of that ongoing discovery — not just functional choices. Treat the alternatives as a real invitation to explore, not a fallback.</div>
+
+    <h3>Rule 4 - Specific Arrangements, Not Albums or Playlists</h3>
+
+    <div class="voice-rule">"Arvo Pärt, Spiegel im Spiegel - performed by Tasmin Little and Martin Roscoe (5:42)" not "Arvo Pärt, Tabula Rasa (album)."</div>
+
+    <h3>Rule 5 - Upload to Sanity, Not External Links</h3>
+
+    <div class="voice-rule">Use the <code>audioFile</code> field (Sanity-hosted) whenever possible. This keeps playback inside the app with the native audio player. The <code>musicUrl</code> field (external link) is a last resort. Never link to YouTube, Spotify, or Apple Music - the user hits ads, paywalls, or leaves the contemplative experience.</div>
+
+    <h3>Attribution</h3>
+
+    <p>Note the source and performer in the Sanity <code>artist</code> field. For gregorian-chant-hymns.com material, add the source abbey or schola to the artist field (e.g., "St. Cecilia's Abbey, UK").</p>
+
+    <p class="note">When sourcing audio, document: (1) exact arrangement and performer, (2) source URL, (3) license/public domain status, (4) whether MP3 is ready to upload or needs trimming, (5) duration.</p>
+
+    <div class="do-dont">
+        <div class="do-box">
+            <div class="label">Do</div>
+            Upload an MP3 of a specific public domain performance to Sanity. User presses play, hears music, stays in the app.
+        </div>
+        <div class="dont-box">
+            <div class="label">Don't</div>
+            Link to a YouTube video, Spotify track, or Apple Music page. User leaves the app, hits an ad or a paywall, loses the contemplative moment.
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <h2>The Classical Lens - Every Day Must Pass This Test</h2>
+
+    <div class="principle">
+        <strong>Does this content lead the user toward beauty, truth, or goodness - without telling them that's what's happening?</strong>
+    </div>
+
+    <p>KALLOS uses the classical education approach: the Transcendentals (Beauty, Truth, Goodness) are not taught as concepts. They are encountered through content. The user should feel something shift - not because they've been instructed, but because they've been shown something real.</p>
+
+    <table>
+        <thead>
+            <tr><th>Transcendental</th><th>How It Shows Up in P&P</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Beauty</td><td>The encounter itself - the image, the music, the landscape. The thing that stops the user mid-scroll.</td></tr>
+            <tr><td>Truth</td><td>The hook and the Lectio pairing - what the user didn't know before, and the moment two traditions meet at the same question.</td></tr>
+            <tr><td>Goodness</td><td>The actio - one small action that carries the encounter into the user's day. Beauty and truth made concrete.</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <h2>Common Mistakes</h2>
+
+    <div class="do-dont">
+        <div class="do-box">
+            <div class="label">Right</div>
+            The curator note reveals the most surprising specific fact about this content - something the user didn't know and will repeat.
+        </div>
+        <div class="dont-box">
+            <div class="label">Wrong</div>
+            The curator note describes the atmosphere or quality of the content. "This painting asks for slowness." "This music bypasses the intellect." These say nothing specific.
+        </div>
+    </div>
+
+    <div class="do-dont">
+        <div class="do-box">
+            <div class="label">Right</div>
+            The prompt question flows from the hook and lands on broad human experience - death, loss, transition, longing, discovery. Anyone can answer it.
+        </div>
+        <div class="dont-box">
+            <div class="label">Wrong</div>
+            The prompt question requires looking closely at the content or knowing something about it. "What does Bosch want you to notice first?" doesn't work for someone who's glanced at the image once.
+        </div>
+    </div>
+
+    <div class="do-dont">
+        <div class="do-box">
+            <div class="label">Right</div>
+            The Lectio pairing feels genuinely surprising - two traditions meeting at the same truth without explanation. The reader feels the resonance.
+        </div>
+        <div class="dont-box">
+            <div class="label">Wrong</div>
+            The Lectio pairing feels manufactured - a philosophy quote loosely related to the theme, paired with a scripture that doesn't really answer it. If you have to explain why they go together, they don't go together.
+        </div>
+    </div>
+
+    <div class="do-dont">
+        <div class="do-box">
+            <div class="label">Right</div>
+            Writing that reads like a knowledgeable person sharing something they find genuinely remarkable - specific, warm, direct.
+        </div>
+        <div class="dont-box">
+            <div class="label">Wrong</div>
+            Writing that performs profundity - dramatic fragments, parallel constructions, em dashes as emotional punctuation. The content should feel discovered, not assembled.
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <h2>Quick Reference: The 8 Content Types</h2>
+
+    <table>
+        <thead>
+            <tr><th>Type</th><th>What It Is</th><th>The Beauty It Carries</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Sacred Art</td><td>Paintings, sculptures, icons, frescoes, churches</td><td>Visual truth made visible in form and light</td></tr>
+            <tr><td>Thinker</td><td>Plato, Augustine, Aquinas, C.S. Lewis, Scruton</td><td>Ideas that reorder how you see reality</td></tr>
+            <tr><td>Literature</td><td>Hopkins, Rilke, Dante, Dostoevsky, Tolkien</td><td>Language that says what ordinary speech cannot</td></tr>
+            <tr><td>Music</td><td>Gregorian chant, Pärt, Bach, Palestrina</td><td>Sound that bypasses the intellect and speaks to the soul</td></tr>
+            <tr><td>Food & Wine</td><td>Monastic traditions, ancestral bakeries, natural wine</td><td>Goodness you can taste - integrity made edible</td></tr>
+            <tr><td>Landscape</td><td>Creation theology, places where creation speaks</td><td>The world as scripture written in rock, water, and light</td></tr>
+            <tr><td>Watch/Listen</td><td>Documentaries, podcasts, lectures</td><td>Stories told through moving image and sound</td></tr>
+            <tr><td>Pattern & Proof</td><td>Golden ratio, Fibonacci, DNA, Webb telescope</td><td>The divine signature in mathematical structure</td></tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

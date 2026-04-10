@@ -2,7 +2,7 @@
 
 Read this at the start of every session. It contains all key product decisions, the current state of the project, and how to work with Sheri.
 
-**Also read before any content, editorial, or product work:** `KALLOS-PM-Brief.html` (in Sheri's Documents folder). It contains the product's purpose, the seven real people this is built for, what "earns its place" means, the Lectio quality standard, settled decisions not to relitigate, and how Sheri works as a PM. A session that skips this brief will produce generic output.
+**Also read before any content, editorial, or product work:** `content-docs/KALLOS-Cowork-Briefing.html` (in this repo). It contains the product's purpose, the seven real people this is built for, what "earns its place" means, the Lectio quality standard, settled decisions not to relitigate, and how Sheri works as a PM. A session that skips this brief will produce generic output.
 
 ---
 
@@ -41,10 +41,17 @@ Read this at the start of every session. It contains all key product decisions, 
 | `Kallos-Journeys.html` | All 5 founding themes, all 35 days fully detailed |
 | `Kallos-DailyPrompt-ContentGuide.html` | Editorial guide for Pause & Ponder daily prompts |
 
-**Content docs (in Sheri's Documents folder, not in repo):**
+**Content docs (key files now in `content-docs/` folder in this repo; full set also in Sheri's Documents folder):**
 
 | File | What it is |
 |------|-----------|
+| `content-docs/KALLOS-Cowork-Briefing.html` | **In repo** — master context brief (product purpose, seven users, Lectio standard, Sheri's working style) |
+| `content-docs/KALLOS-Content-Guide-7Day-Journey.html` | **In repo** — agent content instructions for 7-day Journey content |
+| `content-docs/KALLOS-Content-Guide-Pause-Ponder.html` | **In repo** — agent content instructions for Pause and Ponder daily prompts |
+| `content-docs/KALLOS-MythJourney-v3.html` | **In repo** — active Myth Journey (7 days, all fields, all content locked through Day 2) |
+| `content-docs/KALLOS-Myth-Journey-Arc.html` | **In repo** — Myth Journey arc planning doc |
+| `content-docs/KALLOS-Content-Usage-Log.html` | **In repo** — content usage log (tracks audio, quotes, scripture used across all content) |
+| `content-docs/CONTENT-RULES.md` | **In repo** — condensed content rules reference |
 | `KALLOS-Intro-Journey-Beauty-Truth-Goodness.html` | Intro journey — 7 days, all fields, ready for Sanity |
 | `KALLOS-StPatrick-Day1-Draft.html` | St. Patrick feast day content — Day 1 standalone draft for review |
 | `KALLOS-Sanity-Entry-Guide-Themes-2-5.docx` | Entry guide for seeding Themes 2–5 into Sanity |
@@ -431,6 +438,33 @@ The Lectio is a philosophy + scripture pairing — two voices arriving at the sa
 - Curator note max length: 3–5 sentences. Short enough to read in one breath.
 - Questions must connect to the user's real life — not hypothetical ("what would it feel like") but personal ("what was the last time you…")
 - No explaining the art. The hook reveals what isn't obvious; the image speaks for itself.
+
+### Content Revision Rule (Non-Negotiable)
+
+**Never delete original content from Journey or P&P docs.** When content is revised, the new version goes in as the primary content, and the original is preserved in one of two ways:
+
+1. **Inline:** A collapsible/expandable box directly below the revised field, labeled "ORIGINAL" with the date and reason for change.
+2. **End of doc:** A dedicated "Revision History" section at the bottom of the document, with each entry noting the day number, field name, date of change, and reason.
+
+**Why this rule exists:**
+- Sheri needs to see what changed and why, without losing the original thinking.
+- Other agents learning KALLOS voice and tone need examples of both what worked and what was revised -- including the reasoning. A revision log is a training set.
+- Decisions made in one session should be traceable in future sessions.
+
+**Format for inline collapsible box (HTML docs):**
+```html
+<details>
+<summary style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#999;cursor:pointer;">ORIGINAL (replaced [date] -- [reason])</summary>
+<div style="margin-top:8px;padding:12px;background:#f5f0e8;font-size:13px;color:#5a5048;font-style:italic;">
+[original content here]
+</div>
+</details>
+```
+
+**Format for end-of-doc revision log:**
+A section titled "REVISION HISTORY" at the very bottom. Each entry: Day X / Field / Date / Reason / Original text.
+
+This rule applies to all Journey content docs, P&P docs, entry guides, and content audit docs. It does not apply to CLAUDE.md itself or technical/code docs.
 
 ### Surprising History
 Some content — especially feast days and Holy Week — has historical facts with genuine "I didn't know that" power. When a fact clears the dinner-table test, use it. When it doesn't, skip it.

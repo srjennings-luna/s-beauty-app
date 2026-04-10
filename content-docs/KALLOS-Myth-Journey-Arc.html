@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KALLOS - When Myth Became Fact: Journey Arc (8-Day)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f4ee; color: #2C2C2C; }
+
+        .header {
+            background: #16110d;
+            color: #fdf6e8;
+            padding: 40px 48px 32px;
+        }
+        .header .label {
+            font-size: 11px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #C19B5F;
+            margin-bottom: 10px;
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+        .header .sub {
+            font-size: 14px;
+            color: #bfb8aa;
+            font-style: italic;
+        }
+        .header .order-note {
+            margin-top: 14px;
+            font-size: 12px;
+            color: #8a7e6e;
+            background: #1e160f;
+            padding: 10px 14px;
+            display: inline-block;
+        }
+
+        .arc-container {
+            padding: 48px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* SVG Arc Chart */
+        .arc-chart-wrap {
+            background: #16110d;
+            padding: 48px 40px 48px;
+            margin-bottom: 48px;
+            position: relative;
+        }
+        .arc-title {
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #C19B5F;
+            margin-bottom: 24px;
+        }
+
+        svg.arc-chart {
+            width: 100%;
+            height: 260px;
+            overflow: visible;
+        }
+
+        /* Day Cards Grid */
+        .section-label {
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #C19B5F;
+            margin-bottom: 20px;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+
+        .day-card {
+            background: #fff;
+            border-top: 3px solid #C19B5F;
+            padding: 16px 14px;
+            position: relative;
+        }
+
+        .day-card.phase-1 { border-top-color: #8a9e8f; }
+        .day-card.phase-2 { border-top-color: #7b9ab5; }
+        .day-card.phase-3 { border-top-color: #C19B5F; }
+        .day-card.phase-4 { border-top-color: #b5855a; }
+        .day-card.in-progress { border-top-color: #999; border: 2px dashed #ccc; border-top: 3px solid #999; }
+
+        .day-num {
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .day-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #16110d;
+            line-height: 1.35;
+            margin-bottom: 12px;
+            min-height: 36px;
+        }
+
+        .card-field {
+            margin-bottom: 10px;
+        }
+        .card-field-label {
+            font-size: 9px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #C19B5F;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+        .in-progress .card-field-label { color: #999; }
+        .card-field-value {
+            font-size: 11.5px;
+            color: #3a3a3a;
+            line-height: 1.5;
+        }
+        .card-field-value.hook {
+            color: #16110d;
+            font-style: italic;
+        }
+        .card-field-value.lectio {
+            color: #4a7a62;
+            font-style: italic;
+        }
+        .card-field-value.music {
+            color: #7a6d60;
+        }
+        .card-field-value.type-badge {
+            display: inline-block;
+            background: #f0ebe3;
+            color: #5a4e42;
+            font-size: 10px;
+            padding: 2px 8px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .in-progress .card-field-value.type-badge { background: #f0f0f0; color: #999; }
+
+        .phase-flag {
+            font-size: 9px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 3px 8px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .phase-1 .phase-flag { background: #e6ede8; color: #4a7a62; }
+        .phase-2 .phase-flag { background: #e6edf5; color: #4a6e8f; }
+        .phase-3 .phase-flag { background: #f8f0e3; color: #9a7a4a; }
+        .phase-4 .phase-flag { background: #f5ede3; color: #8a5a2a; }
+        .in-progress .phase-flag { background: #f0f0f0; color: #999; }
+
+        .wip-badge {
+            display: inline-block;
+            background: #fff3cd;
+            color: #856404;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        /* Arc annotations */
+        .emotion-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .emotion-row-2 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+        .emotion-cell {
+            background: #16110d;
+            color: #fdf6e8;
+            padding: 14px 12px;
+            font-size: 11.5px;
+            line-height: 1.6;
+        }
+        .emotion-cell .e-day {
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #C19B5F;
+            margin-bottom: 6px;
+        }
+
+        /* Flags section */
+        .flags-section {
+            background: #fff8ef;
+            border-left: 4px solid #C19B5F;
+            padding: 24px 28px;
+            margin-bottom: 48px;
+        }
+        .flags-section h3 {
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #C19B5F;
+            margin-bottom: 16px;
+        }
+        .flag-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+            align-items: flex-start;
+        }
+        .flag-day {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #16110d;
+            min-width: 40px;
+            padding-top: 2px;
+        }
+        .flag-text {
+            font-size: 13px;
+            color: #4a4440;
+            line-height: 1.6;
+        }
+        .flag-text strong { color: #16110d; }
+
+        .arc-label-text {
+            fill: #bfb8aa;
+            font-size: 11px;
+        }
+        .arc-phase-text {
+            fill: #C19B5F;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+        .arc-day-label {
+            fill: #fdf6e8;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .note-section {
+            background: #fff;
+            border: 1px solid #e0d8cc;
+            padding: 24px 28px;
+            margin-bottom: 32px;
+        }
+        .note-section h3 {
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #C19B5F;
+            margin-bottom: 14px;
+        }
+        .note-section p {
+            font-size: 13.5px;
+            line-height: 1.8;
+            color: #3a3530;
+            margin-bottom: 12px;
+        }
+
+        .music-status {
+            background: #f0ebe3;
+            border: 1px solid #e0d4c0;
+            padding: 20px 24px;
+            margin-bottom: 48px;
+        }
+        .music-status h3 {
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #C19B5F;
+            margin-bottom: 14px;
+        }
+        .music-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
+            align-items: flex-start;
+            font-size: 13px;
+            color: #4a4440;
+            line-height: 1.5;
+        }
+        .music-day-tag {
+            font-size: 10px;
+            font-weight: 700;
+            color: #16110d;
+            min-width: 36px;
+            padding-top: 2px;
+        }
+        .music-downloaded { color: #4a7a62; }
+        .music-tbd { color: #999; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="label">KALLOS Journey Arc</div>
+    <h1>WHEN MYTH BECAME FACT</h1>
+    <div class="sub">An 8-Day Journey with C.S. Lewis</div>
+    <div class="order-note">Day order is provisional. All content must be locked before final ordering. Venus/Adonis/Myrrha content in progress.</div>
+</div>
+
+<div class="arc-container">
+
+    <!-- SVG ARC CHART -->
+    <div class="arc-chart-wrap">
+        <div class="arc-title">Emotional Arc (8 Days)</div>
+        <svg class="arc-chart" viewBox="0 0 1060 240" xmlns="http://www.w3.org/2000/svg">
+
+            <!-- Grid lines -->
+            <line x1="60" y1="20" x2="60" y2="185" stroke="#2a2218" stroke-width="1"/>
+            <line x1="60" y1="185" x2="1040" y2="185" stroke="#2a2218" stroke-width="1"/>
+
+            <!-- Y axis labels -->
+            <text x="48" y="30" text-anchor="end" class="arc-label-text">High</text>
+            <text x="48" y="105" text-anchor="end" class="arc-label-text">Mid</text>
+            <text x="48" y="183" text-anchor="end" class="arc-label-text">Open</text>
+
+            <!-- Phase 1: Days 1-2 (Arrival) -->
+            <rect x="62" y="20" width="246" height="165" fill="#4a7a62" fill-opacity="0.07"/>
+            <text x="185" y="210" text-anchor="middle" class="arc-phase-text">ARRIVAL</text>
+
+            <!-- Phase 2: Days 3-5 (Deepening) -->
+            <rect x="308" y="20" width="369" height="165" fill="#4a6e8f" fill-opacity="0.07"/>
+            <text x="492" y="210" text-anchor="middle" class="arc-phase-text">DEEPENING</text>
+
+            <!-- Phase 3: Days 6-7 (They Saw Dimly) -->
+            <rect x="677" y="20" width="246" height="165" fill="#C19B5F" fill-opacity="0.07"/>
+            <text x="800" y="210" text-anchor="middle" class="arc-phase-text">THEY SAW DIMLY</text>
+
+            <!-- Phase 4: Day 8 (Invitation) -->
+            <rect x="923" y="20" width="115" height="165" fill="#b5855a" fill-opacity="0.1"/>
+            <text x="981" y="210" text-anchor="middle" class="arc-phase-text">INVITATION</text>
+
+            <!-- Day x positions: D1=62+(246/2)=185, D2=308+(246/2)=431... wait let me recalc
+                 D1: 62 + 123 = 185
+                 D2: 308 + 123 = 431... no, these are within phases.
+                 Better: evenly space across full width: 70 to 1030, 8 points
+                 Spacing: (1030-70)/7 = 137.1
+                 D1=70, D2=207, D3=344, D4=481, D5=618, D6=755, D7=893, D8=1030
+            -->
+
+            <!-- Arc path: emotional journey -->
+            <!-- D1=70,140; D2=207,120; D3=344,100; D4=481,78; D5=618,58; D6=755,42; D7=893,44; D8=1030,50 -->
+            <path d="M 70,140 C 115,132 160,125 207,120 C 255,114 300,106 344,98 C 395,88 435,78 481,70 C 530,60 570,52 618,46 C 668,38 710,36 755,36 C 810,36 845,40 893,42 C 950,44 990,48 1030,50"
+                  fill="none" stroke="#C19B5F" stroke-width="2.5" stroke-linecap="round"/>
+
+            <!-- Day dots and labels -->
+            <circle cx="70" cy="140" r="6" fill="#8a9e8f"/>
+            <text x="70" y="157" text-anchor="middle" fill="#8a9e8f" font-size="10" font-weight="bold">D1</text>
+            <text x="70" y="126" text-anchor="middle" fill="#8a9e8f" font-size="9">Surprise</text>
+
+            <circle cx="207" cy="120" r="6" fill="#8a9e8f"/>
+            <text x="207" y="137" text-anchor="middle" fill="#8a9e8f" font-size="10" font-weight="bold">D2</text>
+            <text x="207" y="107" text-anchor="middle" fill="#8a9e8f" font-size="9">Grief + beauty</text>
+
+            <circle cx="344" cy="98" r="6" fill="#7b9ab5"/>
+            <text x="344" y="115" text-anchor="middle" fill="#7b9ab5" font-size="10" font-weight="bold">D3</text>
+            <text x="344" y="85" text-anchor="middle" fill="#7b9ab5" font-size="9">Recognition</text>
+
+            <circle cx="481" cy="70" r="6" fill="#7b9ab5"/>
+            <text x="481" y="87" text-anchor="middle" fill="#7b9ab5" font-size="10" font-weight="bold">D4</text>
+            <text x="481" y="57" text-anchor="middle" fill="#7b9ab5" font-size="9">Wonder</text>
+
+            <circle cx="618" cy="46" r="6" fill="#7b9ab5"/>
+            <text x="618" y="63" text-anchor="middle" fill="#7b9ab5" font-size="10" font-weight="bold">D5</text>
+            <text x="618" y="33" text-anchor="middle" fill="#7b9ab5" font-size="9">Intellectual pull</text>
+
+            <circle cx="755" cy="36" r="6" fill="#C19B5F"/>
+            <text x="755" y="53" text-anchor="middle" fill="#C19B5F" font-size="10" font-weight="bold">D6</text>
+            <text x="755" y="23" text-anchor="middle" fill="#C19B5F" font-size="9">Awe</text>
+
+            <circle cx="893" cy="42" r="6" fill="#C19B5F"/>
+            <text x="893" y="59" text-anchor="middle" fill="#C19B5F" font-size="10" font-weight="bold">D7</text>
+            <!-- label above would overlap, put below -->
+            <text x="893" y="78" text-anchor="middle" fill="#C19B5F" font-size="9">Reckoning</text>
+
+            <circle cx="1030" cy="50" r="6" fill="#b5855a"/>
+            <text x="1030" y="67" text-anchor="middle" fill="#b5855a" font-size="10" font-weight="bold">D8</text>
+            <text x="1030" y="83" text-anchor="middle" fill="#b5855a" font-size="9">Open</text>
+
+        </svg>
+    </div>
+
+    <!-- DAY CARDS (4+4 layout) -->
+    <div class="section-label">Day by Day -- Provisional Order</div>
+    <div class="days-grid">
+
+        <!-- Day 1 -->
+        <div class="day-card phase-1">
+            <div class="day-num">Day 1</div>
+            <div class="phase-flag">Arrival</div>
+            <div class="day-title">The story that won't stop</div>
+            <div class="card-field">
+                <div class="card-field-label">Content</div>
+                <div class="card-field-value type-badge">Sacred Art</div>
+                <div class="card-field-value" style="margin-top:4px;">The Great Eleusinian Relief, c. 440 BC, National Archaeological Museum, Athens</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Hook</div>
+                <div class="card-field-value hook">The Eleusinian Mysteries ran for 1,500 years. Every philosopher, general, and emperor of note was initiated. The secret was never written down. Not once. The final revelation, shown in silence to thousands, was a single ear of wheat.</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Lectio</div>
+                <div class="card-field-value lectio">"Blessed is he who has seen these Mysteries." (Pindar) / John 12:24 "unless a grain of wheat falls into the earth and dies..."</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Music</div>
+                <div class="card-field-value music">Phos Hilaron, Byzantine chant (Archive.org) / lyre-harp option: harumachimusic-selene (downloaded)</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Question</div>
+                <div class="card-field-value">What story do you keep coming back to that moves you in ways you can't explain?</div>
+            </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div class="day-card phase-1">
+            <div class="day-num">Day 2</div>
+            <div class="phase-flag">Arrival</div>
+            <div class="day-title">The tears she cried</div>
+            <div class="card-field">
+                <div class="card-field-label">Content</div>
+                <div class="card-field-value type-badge">Sacred Art</div>
+                <div class="card-field-value" style="margin-top:4px;">Francesco Furini, <em>Venus Mourning the Death of Adonis</em> (c. 1626–28, Museum of Fine Arts Budapest, Inv. #493. Oil on canvas, 233 × 190 cm.)</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Hook</div>
+                <div class="card-field-value hook">Furini painted this at 23, already on his way to becoming a Catholic priest. Art historians trace the composition to Raphael's Entombment and Caravaggio's Entombment. But there is a third work pointing to a bigger story: Michelangelo's Pietà.</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Lectio</div>
+                <div class="card-field-value lectio">"All things change; nothing perishes." (Ovid, Metamorphoses XV) / Matthew 2:11 — the Magi's gifts including myrrh</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Music</div>
+                <div class="card-field-value music">Primary: Purcell, Dido's Lament — Dido and Aeneas (1689), Musopen/Archive.org, ~4 min. Alt: Barber, Adagio for Strings (1936), Archive.org, ~8 min.</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Question</div>
+                <div class="card-field-value">What is the most beautiful thing you have lost?</div>
+            </div>
+        </div>
+
+        <!-- Day 3 -->
+        <div class="day-card phase-1">
+            <div class="day-num">Day 3</div>
+            <div class="phase-flag">Arrival</div>
+            <div class="day-title">The longing no one could name</div>
+            <div class="card-field">
+                <div class="card-field-label">Content</div>
+                <div class="card-field-value type-badge">Thinker</div>
+                <div class="card-field-value" style="margin-top:4px;">Plato, via Raphael's School of Athens (1509-11, Vatican)</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Hook</div>
+                <div class="card-field-value hook">Raphael and Michelangelo worked in the same Vatican building, same months, same patron. Neither saw the other's work until both were finished. One room for human reason. One for divine revelation. Raphael gave Plato the face of Leonardo da Vinci.</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Lectio</div>
+                <div class="card-field-value lectio">"Beauty itself is the most divine of all things." (Plato) / 1 Cor 13:12 "now we see in a mirror dimly, but then face to face"</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Music</div>
+                <div class="card-field-value music">Bach, Goldberg Variations Aria (Musopen) / Satie, Gymnopedie No. 1</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Question</div>
+                <div class="card-field-value">What do you find yourself reaching for that you cannot quite name?</div>
+            </div>
+        </div>
+
+        <!-- Day 4 -->
+        <div class="day-card phase-2">
+            <div class="day-num">Day 4</div>
+            <div class="phase-flag">Deepening</div>
+            <div class="day-title">A walk in the rain</div>
+            <div class="card-field">
+                <div class="card-field-label">Content</div>
+                <div class="card-field-value type-badge">Landscape</div>
+                <div class="card-field-value" style="margin-top:4px;">Addison's Walk, Magdalen College, Oxford</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Hook</div>
+                <div class="card-field-value hook">Sept 19, 1931. Lewis, Tolkien, and Hugo Dyson walked here after midnight in the rain for three hours. Nine days later, Lewis wrote: "I have just passed on from believing in God to definitely believing in Christ."</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Lectio</div>
+                <div class="card-field-value lectio">"There are tears at the heart of things." (Virgil) / Ecclesiastes 3:11 "He has set eternity in the human heart"</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Music</div>
+                <div class="card-field-value music">Elgar, Nimrod (downloaded) / Sibelius, Swan of Tuonela (downloaded) -- undecided</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Question</div>
+                <div class="card-field-value">When did a conversation change the way you understood something you had held for years?</div>
+            </div>
+        </div>
+
+        <!-- Day 5 -->
+        <div class="day-card phase-2">
+            <div class="day-num">Day 5</div>
+            <div class="phase-flag">Deepening</div>
+            <div class="day-title">He sang his way into the underworld</div>
+            <div class="card-field">
+                <div class="card-field-label">Content</div>
+                <div class="card-field-value type-badge">Sacred Art</div>
+                <div class="card-field-value" style="margin-top:4px;">Christ as Orpheus, Catacomb of Domitilla, Rome (3rd century AD). Grok-enhanced Wikimedia image approved.</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Hook</div>
+                <div class="card-field-value hook">Early Christians painted Christ playing a lyre in their burial chambers, in the image of Orpheus. Not because they were confused. Because they knew exactly what Orpheus was pointing toward.</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Lectio</div>
+                <div class="card-field-value lectio">TBD -- Heraclitus/Logos + John 1 (from Justin Martyr's argument, reassigned here) or Aeschylus on suffering / Ephesians 4:8-10 on descent and ascent.</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Music</div>
+                <div class="card-field-value music">fideascende-veni-creator-spiritus (downloaded) / lyre/harp: harumachimusic-selene (downloaded)</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Question</div>
+                <div class="card-field-value">What have you pursued past the point where reason said to stop?</div>
+            </div>
+        </div>
+
+        <!-- Day 6 -->
+        <div class="day-card phase-3">
+            <div class="day-num">Day 6</div>
+            <div class="phase-flag">They Saw Dimly</div>
+            <div class="day-title">They saw dimly</div>
+            <div class="card-field">
+                <div class="card-field-label">Content</div>
+                <div class="card-field-value type-badge">Sacred Art</div>
+                <div class="card-field-value" style="margin-top:4px;">Michelangelo, Delphic Sibyl (1509, Sistine Chapel) + Signorelli, Sibyl and David (1499-1502, Orvieto Cathedral)</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Hook</div>
+                <div class="card-field-value hook">Michelangelo put five pagan women on the ceiling of the Pope's chapel, at the same scale as Isaiah and Jeremiah. Not tolerated. Honored. One-third of the prophetic figures on the Sistine ceiling are pagan.</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Lectio</div>
+                <div class="card-field-value lectio">"Now a new generation descends from heaven on high." (Virgil, Fourth Eclogue, c.40 BC) / Luke 2:30-32, Nunc Dimittis: "a light for revelation to the Gentiles"</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Music</div>
+                <div class="card-field-value music">Allegri, Miserere (written for the Sistine Chapel itself, Archive.org) / Hildegard von Bingen, O vis aeternitatis</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Question</div>
+                <div class="card-field-value">Have you ever understood something only in hindsight -- sensed a truth for years before you had the words for it?</div>
+            </div>
+        </div>
+
+        <!-- Day 7 -->
+        <div class="day-card phase-3">
+            <div class="day-num">Day 7</div>
+            <div class="phase-flag">They Saw Dimly</div>
+            <div class="day-title">As far as he could go</div>
+            <div class="card-field">
+                <div class="card-field-label">Content</div>
+                <div class="card-field-value type-badge">Literature</div>
+                <div class="card-field-value" style="margin-top:4px;">Dante, Purgatorio Canto XXX (c.1314). The moment Virgil disappears. Dore engraving (1861-68) as visual anchor.</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Hook</div>
+                <div class="card-field-value hook">Dante spent 20 years writing the Divine Comedy. He chose a pagan poet to guide him through the afterlife. In Canto XXX, at the top of Mount Purgatory, Dante turns to tell Virgil what he sees. Virgil is gone. He says Virgil's name three times. He doesn't get to say goodbye.</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Lectio</div>
+                <div class="card-field-value lectio">"The hour of departure has arrived." (Socrates, Plato's Apology) / John 14:2-3 "I go to prepare a place for you... I will come again"</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Music</div>
+                <div class="card-field-value music">Monteverdi, Possente spirto from L'Orfeo Act III (Archive.org) / Vaughan Williams, The Lark Ascending</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Question</div>
+                <div class="card-field-value">Have you ever had a guide who brought you to the edge of something they could not follow you into?</div>
+            </div>
+        </div>
+
+        <!-- Day 8 -->
+        <div class="day-card phase-4">
+            <div class="day-num">Day 8</div>
+            <div class="phase-flag">Invitation</div>
+            <div class="day-title">The empty seat</div>
+            <div class="card-field">
+                <div class="card-field-label">Content</div>
+                <div class="card-field-value type-badge">Sacred Art</div>
+                <div class="card-field-value" style="margin-top:4px;">Andrei Rublev, The Trinity (c. 1425, Tretyakov Gallery, Moscow)</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Hook</div>
+                <div class="card-field-value hook">Rublev painted three figures at a table and left the fourth side open, facing the viewer. The three figures lean toward each other and their postures form a circle around the cup. The cup holds a lamb. The empty seat has been there for 600 years.</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Lectio</div>
+                <div class="card-field-value lectio">"Love is the desire for the perpetual possession of the good." (Plato, Symposium) / Revelation 3:20 "Behold, I stand at the door and knock... I will come in and eat with him"</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Music</div>
+                <div class="card-field-value music">Rachmaninoff, Vespers Op. 37 No. 2 (Archive.org -- Russian Orthodox tradition, same as Rublev) / Arvo Part, Spiegel im Spiegel</div>
+            </div>
+            <div class="card-field">
+                <div class="card-field-label">Questions</div>
+                <div class="card-field-value">1. Name the question that has been forming in you this week. 2. The seat is empty. What would it take for you to sit down?</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- EMOTIONAL THREAD -->
+    <div class="section-label">What the user feels, day by day</div>
+    <div class="emotion-row">
+        <div class="emotion-cell">
+            <div class="e-day">Day 1</div>
+            Surprise. A secret kept for 1,500 years. A single ear of grain. Something you had filed under "ancient superstition" begins to look like a signal pointing at something real.
+        </div>
+        <div class="emotion-cell">
+            <div class="e-day">Day 2</div>
+            Grief and beauty. A woman turned into a tree. Her tears become burial spice for a baby. The dying-and-rising pattern is no longer abstract. It has a mother and a body.
+        </div>
+        <div class="emotion-cell">
+            <div class="e-day">Day 3</div>
+            Recognition. Plato had the same longing you do. He spent forty years pointing toward something he could not name. Neither can you. But the pointing feels familiar.
+        </div>
+        <div class="emotion-cell">
+            <div class="e-day">Day 4</div>
+            Wonder. A specific path. A specific night. A specific argument that changed a specific man. The stakes stop feeling theoretical.
+        </div>
+    </div>
+    <div class="emotion-row-2">
+        <div class="emotion-cell">
+            <div class="e-day">Day 5</div>
+            Intellectual pull. Early Christians did not hide from the myth. They painted it on their burial chamber walls. Someone chose to say: this is who Orpheus was always pointing toward.
+        </div>
+        <div class="emotion-cell">
+            <div class="e-day">Day 6</div>
+            Awe. The Church did not apologize for the pagan prophetesses. It put them on the most famous ceiling in the world. The women who saw dimly are painted in the same room where the Pope prays.
+        </div>
+        <div class="emotion-cell">
+            <div class="e-day">Day 7</div>
+            Reckoning. The greatest guide in Western literature disappears without a word. The pagan world brought the pilgrim as far as it could. And then it stepped aside.
+        </div>
+        <div class="emotion-cell">
+            <div class="e-day">Day 8</div>
+            Open. Not a conclusion. A table. An empty seat. The journey ends without closing. The question that has been forming all week lands on the user's doorstep: will you sit down?
+        </div>
+    </div>
+
+    <!-- MUSIC STATUS -->
+    <div class="music-status">
+        <h3>Audio Pipeline Status</h3>
+        <div class="music-row">
+            <div class="music-day-tag">D1</div>
+            <div class="music-downloaded">harumachimusic-selene-161017.mp3 downloaded (lyre/harp). Phos Hilaron sourcing TBD.</div>
+        </div>
+        <div class="music-row">
+            <div class="music-day-tag">D2</div>
+            <div class="music-tbd">TBD -- on pause until copy is complete. alanajordan-ritual-ambient-folk-instrumental (downloaded) is a candidate.</div>
+        </div>
+        <div class="music-row">
+            <div class="music-day-tag">D3</div>
+            <div class="music-tbd">TBD -- Bach Aria or Satie. Neither downloaded yet.</div>
+        </div>
+        <div class="music-row">
+            <div class="music-day-tag">D4</div>
+            <div class="music-downloaded">Elgar Nimrod downloaded. Sibelius Swan of Tuonela downloaded. Undecided between the two.</div>
+        </div>
+        <div class="music-row">
+            <div class="music-day-tag">D5</div>
+            <div class="music-downloaded">fideascende-veni-creator-spiritus-324807.mp3 downloaded. harumachimusic-selene also a candidate.</div>
+        </div>
+        <div class="music-row">
+            <div class="music-day-tag">D6-8</div>
+            <div class="music-tbd">TBD -- Allegri Miserere, Rachmaninoff Vespers, Monteverdi L'Orfeo all confirmed as sources but not downloaded. Music on pause until copy is locked.</div>
+        </div>
+    </div>
+
+    <!-- FLAGS -->
+    <div class="flags-section">
+        <h3>Open questions and decisions pending</h3>
+        <div class="flag-item">
+            <div class="flag-day">D2</div>
+            <div class="flag-text"><strong>Content in progress.</strong> Venus/Adonis/Myrrha day needs full content written: opening text (Lewis voice), curator note, encounter note, Lectio pairing, reflection question, connect thread. Image research needed -- Titian's Venus and Adonis (Prado, public domain) is the primary candidate. Position within the journey is provisional.</div>
+        </div>
+        <div class="flag-item">
+            <div class="flag-day">D5</div>
+            <div class="flag-text"><strong>Lectio pairing to confirm.</strong> Justin Martyr's Heraclitus/Logos + John 1 pairing was originally on his day. Now that he is sidelined, this pairing may be the strongest fit for the Orpheus catacomb day (the Logos was what Orpheus was always reaching for). Confirm before Sanity entry.</div>
+        </div>
+        <div class="flag-item">
+            <div class="flag-day">D4</div>
+            <div class="flag-text"><strong>Music decision pending.</strong> Elgar Nimrod and Sibelius Swan of Tuonela are both downloaded. Nimrod: English, friendship, long evenings -- fits the Inklings quality. Swan of Tuonela: Finnish underworld myth, directly Tolkien-adjacent. Both are right. Pick one when opening text is finalized.</div>
+        </div>
+        <div class="flag-item">
+            <div class="flag-day">Order</div>
+            <div class="flag-text"><strong>Final day order not yet set.</strong> Current order is provisional. Once Venus/Adonis content is written, review the full 8-day arc for pacing: two visual myth days before philosophy, then landscape, then catacomb, then sibyls, then literature, then icon. Does that build correctly? The Pieta comparison (Day 2) should not come too close to the Trinity icon (Day 8) or the emotional echo will be too obvious. Consider spacing.</div>
+        </div>
+        <div class="flag-item">
+            <div class="flag-day">All</div>
+            <div class="flag-text"><strong>Opening text rewrites not yet applied to v3 doc.</strong> Days 1, 2, 3, 7 rewrites are written and awaiting approval. Day 5 (Cumaean Sibyl) rewrite approved. Day 4 (Orpheus) full content written and approved. Justin Martyr needs to be sidelined in the doc. None of these changes have been applied to KALLOS-MythJourney-v3.html yet.</div>
+        </div>
+    </div>
+
+    <div class="note-section">
+        <h3>The thread that runs through all 8 days</h3>
+        <p>Day 1 opens in a Greek sanctuary with a secret that ran for 1,500 years and died without being written down. Its symbol was a grain of wheat. Day 8 closes in a Russian monastery with an icon that has been inviting someone to sit down for 600 years. The seat is still empty.</p>
+        <p>In between: a mother whose tears became burial spice for a baby born to die. A philosopher who pointed toward the light his whole life without being able to name it. A rainy walk where the argument was finally made. A burial fresco that said the myth and the event were the same thing. Five pagan women on the ceiling of the Pope's chapel. A poet who led the pilgrim as far as beauty and reason could carry him, and then stepped aside without a word.</p>
+        <p>The arc is not an argument. It is a following. Every day the user takes one more step in the direction C.S. Lewis walked for 33 years. The journey does not close. It opens into a question the user has to answer for themselves.</p>
+    </div>
+
+</div>
+
+</body>
+</html>
