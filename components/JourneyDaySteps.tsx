@@ -614,27 +614,27 @@ function StepBreathe({ day }: { day: JourneyDay }) {
             className="absolute inset-x-0 bottom-0 pointer-events-none flex flex-col items-center"
             style={{ paddingBottom: "calc(max(env(safe-area-inset-bottom, 0px), 24px) + 72px)", gap: "10px" }}
           >
-            <p
-              className="italic text-center px-10 leading-relaxed"
-              style={{
-                color: "rgba(253,246,232,0.55)",
-                fontSize: "0.875rem",
-                letterSpacing: "0.02em",
-              }}
-            >
-              Sit with this image and let your eyes explore
-            </p>
-            {day.encounterGuidance && (
+            {day.encounterGuidance ? (
               <p
-                className="text-center px-10 leading-relaxed"
+                className="italic text-center px-10 leading-relaxed"
                 style={{
-                  color: "rgba(253,246,232,0.42)",
+                  color: "rgba(253,246,232,0.55)",
                   fontSize: "0.875rem",
-                  fontStyle: "italic",
-                  marginTop: "6px",
+                  letterSpacing: "0.02em",
                 }}
               >
                 {day.encounterGuidance}
+              </p>
+            ) : (
+              <p
+                className="italic text-center px-10 leading-relaxed"
+                style={{
+                  color: "rgba(253,246,232,0.55)",
+                  fontSize: "0.875rem",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                Sit with this image and let your eyes explore
               </p>
             )}
           </div>
