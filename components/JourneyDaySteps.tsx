@@ -1016,6 +1016,7 @@ export default function JourneyDaySteps({
             className="pointer-events-auto flex items-center justify-between px-5 pb-2"
             style={{ paddingTop: "max(env(safe-area-inset-top, 0px), 48px)" }}
           >
+            {/* Left: close on step 0, back arrow on steps 1+ */}
             <button
               onClick={step === 0 ? onClose : handlePrev}
               className="w-9 h-9 flex items-center justify-center"
@@ -1033,21 +1034,38 @@ export default function JourneyDaySteps({
               )}
             </button>
 
-            {step > 0 && (
+            {/* Center: step label on steps 1+ */}
+            {step > 0 ? (
               <span className="text-xs tracking-widest uppercase" style={{ color: C.creamDim }}>
                 {STEP_LABELS[step]}
               </span>
+            ) : (
+              <span />
             )}
-            {step === 0 && <span className="w-9" />}
 
-            {step > 0 ? (
-              <button onClick={onClose} className="w-9 h-9 flex items-center justify-center" style={{ color: C.creamFaint }} aria-label="Close">
+            {/* Right: forward arrow on non-last steps, close X on last step */}
+            {isLastStep ? (
+              <button
+                onClick={onClose}
+                className="w-9 h-9 flex items-center justify-center"
+                style={{ color: C.creamFaint }}
+                aria-label="Close journey"
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             ) : (
-              <div className="w-9" />
+              <button
+                onClick={handleNext}
+                className="w-9 h-9 flex items-center justify-center"
+                style={{ color: "rgba(255,255,255,0.6)" }}
+                aria-label="Next step"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                  <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
+                </svg>
+              </button>
             )}
           </div>
 
