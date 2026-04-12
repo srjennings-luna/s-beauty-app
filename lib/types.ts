@@ -123,6 +123,7 @@ export type JourneyDay = {
   encounterContent: ContentItem;
   encounterGuidance?: string;
   encounterNote?: string;
+  encounterNoteAudioUrl?: string;
   lectio?: JourneyDayLectio;
   auditio?: JourneyDayAuditio;
   reflectQuestions: string[];

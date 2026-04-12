@@ -133,10 +133,17 @@ export default defineType({
             },
             {
               name: 'encounterNote',
-              title: 'Encounter Note',
+              title: 'Encounter Note (Look Closer)',
               type: 'text',
               rows: 5,
               description: 'Interpretive layer specific to this day\'s content type. Sacred art → symbolism/iconography. Literature → close reading. Music → listening guide. Landscape → ecological/geological insight. Thinkers → intellectual context. Pattern & Proof → plain-language explanation. Watch & Listen → viewing guide. Food & Wine → craft tradition.',
+            },
+            {
+              name: 'encounterNoteAudio',
+              title: 'Encounter Note — Narration Audio',
+              type: 'file',
+              description: 'Optional MP3 narration of the Look Closer text. Adds a Listen button at the top of the Look Closer section.',
+              options: { accept: 'audio/*' },
             },
             {
               name: 'auditio',

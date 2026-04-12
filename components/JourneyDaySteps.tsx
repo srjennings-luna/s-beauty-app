@@ -535,13 +535,16 @@ function StepEncounter({ day }: { day: JourneyDay }) {
         {/* Encounter Note — interpretive layer (iconography, listening guide, etc.) */}
         {day.encounterNote && (
           <div className="pl-4" style={{ borderLeft: `1px solid ${C.divider}` }}>
-            <button
-              onClick={() => setNoteExpanded(!noteExpanded)}
-              className="flex items-center gap-2 w-full text-left mb-2"
-            >
-              <p className="text-xs tracking-widest uppercase" style={{ color: C.creamFaint }}>Look Closer</p>
-              <span className="text-xs" style={{ color: C.creamFaint, transition: "transform 0.2s", display: "inline-block", transform: noteExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
-            </button>
+            <div className="flex items-center gap-3 mb-2">
+              <button
+                onClick={() => setNoteExpanded(!noteExpanded)}
+                className="flex items-center gap-2 text-left"
+              >
+                <p className="text-xs tracking-widest uppercase" style={{ color: C.creamFaint }}>Look Closer</p>
+                <span className="text-xs" style={{ color: C.creamFaint, transition: "transform 0.2s", display: "inline-block", transform: noteExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
+              </button>
+              <NarrationButton audioUrl={day.encounterNoteAudioUrl} />
+            </div>
             {noteExpanded && (
               <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>{day.encounterNote}</p>
             )}

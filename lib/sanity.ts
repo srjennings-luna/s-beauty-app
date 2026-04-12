@@ -186,6 +186,7 @@ export async function getJourney(slug: string) {
         "encounterContent": encounterContent->{${CONTENT_ITEM_FIELDS}},
         encounterGuidance,
         encounterNote,
+        "encounterNoteAudioUrl": encounterNoteAudio.asset->url,
         "lectio": lectio {
           philosophyQuote,
           philosophySource,
