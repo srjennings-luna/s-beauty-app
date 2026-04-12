@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 
-// Dispatched when narration starts — CircularAudioPlayer and PromptClient listen
-// and pause their own audio so two tracks never play simultaneously.
+// Dispatched when narration starts — audio players pause so two tracks never overlap.
 export const NARRATION_START_EVENT = "kallos-narration-start";
+// Dispatched when narration ends (naturally or manually) — audio players resume.
+export const NARRATION_END_EVENT = "kallos-narration-end";
 
 interface NarrationButtonProps {
   audioUrl?: string;
@@ -45,12 +46,18 @@ export default function NarrationButton({ audioUrl, color = "#C19B5F" }: Narrati
     if (playing) {
       audioRef.current?.pause();
       setPlaying(false);
+      // Signal audio players to resume (user manually stopped narration)
+      window.dispatchEvent(new CustomEvent(NARRATION_END_EVENT));
     } else {
       // Signal all audio players (Auditio music, background music) to pause
       window.dispatchEvent(new CustomEvent(NARRATION_START_EVENT));
       if (!audioRef.current) {
         const audio = new Audio(audioUrl);
-        audio.addEventListener("ended", () => setPlaying(false));
+        audio.addEventListener("ended", () => {
+          setPlaying(false);
+          // Signal audio players to resume after narration finishes naturally
+          window.dispatchEvent(new CustomEvent(NARRATION_END_EVENT));
+        });
         audio.addEventListener("pause", () => setPlaying(false));
         audioRef.current = audio;
       }

@@ -8,7 +8,12 @@ import { getDailyPrompt, getDailyPromptPreview } from "@/lib/sanity";
 import type { DailyPrompt } from "@/lib/types";
 import { addFavorite, removeFavorite, isFavorite } from "@/lib/favorites";
 import PageTransition from "@/components/ui/PageTransition";
-import NarrationButton, { NARRATION_START_EVENT } from "@/components/NarrationButton";
+import NarrationButton, { NARRATION_START_EVENT, NARRATION_END_EVENT } from "@/components/NarrationButton";
+
+function formatTime(s: number): string {
+  const m = Math.floor(s / 60);
+  return `${m}:${Math.floor(s % 60).toString().padStart(2, "0")}`;
+}
 
 // ── Espresso palette ──────────────────────────────────────────────────────────
 const C = {
@@ -105,11 +110,16 @@ function DailyPromptPageInner() {
   const [contextExpanded, setContextExpanded] = useState(false);
   const [verbaOpen, setVerbaOpen]             = useState(false);
 
-  const heroRef     = useRef<HTMLDivElement>(null);
-  const actioRef    = useRef<HTMLDivElement>(null);
-  const audioRef    = useRef<HTMLAudioElement | null>(null);  // background music
-  const auditioRef  = useRef<HTMLAudioElement | null>(null);  // artwork audio — separate so pause/resume works
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const [auditioProgress, setAuditioProgress] = useState(0);
+  const [auditioDuration, setAudiotioDuration] = useState(0);
+
+  const heroRef               = useRef<HTMLDivElement>(null);
+  const actioRef              = useRef<HTMLDivElement>(null);
+  const audioRef              = useRef<HTMLAudioElement | null>(null);  // background music
+  const auditioRef            = useRef<HTMLAudioElement | null>(null);  // artwork audio
+  const observerRef           = useRef<IntersectionObserver | null>(null);
+  const wasAuditioPlayingRef  = useRef(false);  // was auditio playing when narration started?
+  const wasMusicPlayingRef    = useRef(false);  // was background music playing?
 
   // ── Load prompt — preview mode fetches drafts; falls back to published if no token ─
   useEffect(() => {
@@ -178,9 +188,11 @@ function DailyPromptPageInner() {
 
   useEffect(() => () => { audioRef.current?.pause(); auditioRef.current?.pause(); }, []);
 
-  // Pause background music and Auditio when narration starts
+  // Pause music/Auditio when narration starts; auto-resume when narration ends
   useEffect(() => {
-    const handler = () => {
+    const startHandler = () => {
+      wasAuditioPlayingRef.current = !!(auditioRef.current && !auditioRef.current.paused);
+      wasMusicPlayingRef.current   = !!(audioRef.current  && !audioRef.current.paused);
       if (audioRef.current && !audioRef.current.paused) {
         audioRef.current.pause();
         setMusicPlaying(false);
@@ -189,8 +201,23 @@ function DailyPromptPageInner() {
         auditioRef.current.pause();
       }
     };
-    window.addEventListener(NARRATION_START_EVENT, handler);
-    return () => window.removeEventListener(NARRATION_START_EVENT, handler);
+    const endHandler = () => {
+      if (wasAuditioPlayingRef.current && auditioRef.current) {
+        auditioRef.current.play().catch(() => {});
+        setMusicPlaying(true);
+        wasAuditioPlayingRef.current = false;
+      } else if (wasMusicPlayingRef.current && audioRef.current) {
+        audioRef.current.play().catch(() => {});
+        setMusicPlaying(true);
+        wasMusicPlayingRef.current = false;
+      }
+    };
+    window.addEventListener(NARRATION_START_EVENT, startHandler);
+    window.addEventListener(NARRATION_END_EVENT, endHandler);
+    return () => {
+      window.removeEventListener(NARRATION_START_EVENT, startHandler);
+      window.removeEventListener(NARRATION_END_EVENT, endHandler);
+    };
   }, []);
 
   // ── Toggle actio checkbox ──────────────────────────────────────────────────
@@ -555,47 +582,89 @@ function DailyPromptPageInner() {
               {/* Resolve playable URL: Sanity-hosted file takes priority over external URL */}
               {(prompt.auditio.audioFileUrl ?? prompt.auditio.audioUrl) ? (
                 /* ── In-app player — direct MP3 ── */
-                <div className="flex items-center gap-6">
-                  <button
-                    onClick={() => {
-                      if (musicPlaying) {
-                        auditioRef.current?.pause();
-                        setMusicPlaying(false);
-                      } else {
-                        // Stop background music if running
-                        if (audioRef.current) { audioRef.current.pause(); }
-                        // Resume existing auditio, or create fresh if first play or track ended
-                        if (!auditioRef.current || auditioRef.current.ended) {
-                          const a = new Audio(prompt.auditio!.audioFileUrl ?? prompt.auditio!.audioUrl);
-                          a.loop = false; a.volume = 0.85;
-                          auditioRef.current = a;
+                <div>
+                  <div className="flex items-center gap-6">
+                    <button
+                      onClick={() => {
+                        if (musicPlaying) {
+                          auditioRef.current?.pause();
+                          setMusicPlaying(false);
+                        } else {
+                          // Stop background music if running
+                          if (audioRef.current) { audioRef.current.pause(); }
+                          // Create fresh audio element on first play or after track ended
+                          if (!auditioRef.current || auditioRef.current.ended) {
+                            const a = new Audio(prompt.auditio!.audioFileUrl ?? prompt.auditio!.audioUrl);
+                            a.loop = false; a.volume = 0.85;
+                            a.addEventListener("timeupdate", () => {
+                              if (a.duration) setAuditioProgress(a.currentTime / a.duration);
+                            });
+                            a.addEventListener("loadedmetadata", () => setAudiotioDuration(a.duration));
+                            a.addEventListener("ended", () => {
+                              setMusicPlaying(false);
+                              setAuditioProgress(0);
+                            });
+                            auditioRef.current = a;
+                          }
+                          auditioRef.current.play().catch(() => {});
+                          setMusicPlaying(true);
                         }
-                        auditioRef.current.play().catch(() => {});
-                        setMusicPlaying(true);
-                      }
-                    }}
-                    className="flex-shrink-0 flex items-center justify-center shadow-2xl"
-                    style={{ width: 64, height: 64, borderRadius: "50%", background: C.cream, color: C.bg }}
-                    aria-label={musicPlaying ? "Pause" : "Play"}
-                  >
-                    {musicPlaying ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                        <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
-                      </svg>
-                    ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    )}
-                  </button>
-                  <div className="flex-grow min-w-0">
-                    <p className="italic truncate" style={{ color: C.cream, fontSize: "0.95rem" }}>
-                      {prompt.auditio.title}
-                    </p>
-                    {prompt.auditio.artist && (
-                      <p className="text-sm mt-1 truncate" style={{ color: C.creamFaint }}>{prompt.auditio.artist}</p>
-                    )}
+                      }}
+                      className="flex-shrink-0 flex items-center justify-center shadow-2xl"
+                      style={{ width: 64, height: 64, borderRadius: "50%", background: C.cream, color: C.bg }}
+                      aria-label={musicPlaying ? "Pause" : "Play"}
+                    >
+                      {musicPlaying ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                          <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      )}
+                    </button>
+                    <div className="flex-grow min-w-0">
+                      <p className="italic truncate" style={{ color: C.cream, fontSize: "0.95rem" }}>
+                        {prompt.auditio.title}
+                      </p>
+                      {prompt.auditio.artist && (
+                        <p className="text-sm mt-1 truncate" style={{ color: C.creamFaint }}>{prompt.auditio.artist}</p>
+                      )}
+                    </div>
                   </div>
+                  {/* Progress bar — only shows once audio has loaded metadata */}
+                  {auditioDuration > 0 && (
+                    <div className="mt-4">
+                      <div style={{ position: "relative", width: "100%", height: 20, display: "flex", alignItems: "center" }}>
+                        {/* Visual track */}
+                        <div style={{ position: "absolute", width: "100%", height: 3, background: "rgba(253,246,232,0.12)" }}>
+                          <div style={{ width: `${auditioProgress * 100}%`, height: "100%", background: C.gold }} />
+                        </div>
+                        {/* Invisible range input handles click + drag + touch */}
+                        <input
+                          type="range"
+                          min={0}
+                          max={1}
+                          step={0.001}
+                          value={auditioProgress}
+                          onChange={(e) => {
+                            const ratio = parseFloat(e.target.value);
+                            if (auditioRef.current) {
+                              auditioRef.current.currentTime = ratio * auditioDuration;
+                            }
+                            setAuditioProgress(ratio);
+                          }}
+                          style={{ position: "absolute", width: "100%", height: "100%", opacity: 0, cursor: "pointer", margin: 0, padding: 0, zIndex: 1 }}
+                          aria-label="Seek"
+                        />
+                      </div>
+                      <div className="flex justify-between mt-1" style={{ color: C.creamFaint, fontSize: "0.65rem", letterSpacing: "0.04em" }}>
+                        <span>{formatTime(auditioProgress * auditioDuration)}</span>
+                        <span>{formatTime(auditioDuration)}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : prompt.auditio.url ? (
                 /* ── External reference — no play button ── */

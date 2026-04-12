@@ -3,7 +3,12 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import type { JourneyDay } from "@/lib/types";
-import NarrationButton, { NARRATION_START_EVENT } from "@/components/NarrationButton";
+import NarrationButton, { NARRATION_START_EVENT, NARRATION_END_EVENT } from "@/components/NarrationButton";
+
+function formatTime(s: number): string {
+  const m = Math.floor(s / 60);
+  return `${m}:${Math.floor(s % 60).toString().padStart(2, "0")}`;
+}
 
 const STEP_LABELS = ["Open", "Encounter", "Breathe", "Reflect", "Go Deeper", "Connect"];
 
@@ -184,7 +189,10 @@ function CircularAudioPlayer({
   externalUrl?: string;
 }) {
   const [audioPlaying, setAudioPlaying] = useState(false);
+  const [audioProgress, setAudioProgress] = useState(0);
+  const [audioDuration, setAudioDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const wasPlayingRef = useRef(false);
 
   // Stop audio and clean up when the component unmounts (journey closes)
   useEffect(() => {
@@ -197,16 +205,28 @@ function CircularAudioPlayer({
     };
   }, []);
 
-  // Pause Auditio when narration starts so two tracks never overlap
+  // Pause when narration starts; auto-resume when narration ends
   useEffect(() => {
-    const handler = () => {
+    const startHandler = () => {
+      wasPlayingRef.current = !!(audioRef.current && !audioRef.current.paused);
       if (audioRef.current && !audioRef.current.paused) {
         audioRef.current.pause();
         setAudioPlaying(false);
       }
     };
-    window.addEventListener(NARRATION_START_EVENT, handler);
-    return () => window.removeEventListener(NARRATION_START_EVENT, handler);
+    const endHandler = () => {
+      if (wasPlayingRef.current && audioRef.current) {
+        audioRef.current.play().catch(() => {});
+        setAudioPlaying(true);
+        wasPlayingRef.current = false;
+      }
+    };
+    window.addEventListener(NARRATION_START_EVENT, startHandler);
+    window.addEventListener(NARRATION_END_EVENT, endHandler);
+    return () => {
+      window.removeEventListener(NARRATION_START_EVENT, startHandler);
+      window.removeEventListener(NARRATION_END_EVENT, endHandler);
+    };
   }, []);
 
   if (!audioSrc && !externalUrl) return null;
@@ -238,63 +258,98 @@ function CircularAudioPlayer({
   }
 
   return (
-    <div className="flex items-center gap-5">
-      <button
-        onClick={() => {
-          if (audioPlaying) {
-            audioRef.current?.pause();
-            setAudioPlaying(false);
-          } else {
-            if (!audioRef.current) {
-              const audio = new Audio(audioSrc!);
-              audio.volume = 0.85;
-              // Sync UI state when audio ends or is paused externally (e.g. iOS interruption)
-              audio.addEventListener("ended", () => setAudioPlaying(false));
-              audio.addEventListener("pause", () => setAudioPlaying(false));
-              audio.addEventListener("play", () => setAudioPlaying(true));
-              audioRef.current = audio;
+    <div>
+      <div className="flex items-center gap-5">
+        <button
+          onClick={() => {
+            if (audioPlaying) {
+              audioRef.current?.pause();
+              setAudioPlaying(false);
+            } else {
+              if (!audioRef.current) {
+                const audio = new Audio(audioSrc!);
+                audio.volume = 0.85;
+                audio.addEventListener("timeupdate", () => {
+                  if (audio.duration) setAudioProgress(audio.currentTime / audio.duration);
+                });
+                audio.addEventListener("loadedmetadata", () => setAudioDuration(audio.duration));
+                audio.addEventListener("ended", () => { setAudioPlaying(false); setAudioProgress(0); });
+                audio.addEventListener("pause", () => setAudioPlaying(false));
+                audio.addEventListener("play",  () => setAudioPlaying(true));
+                audioRef.current = audio;
+              }
+              audioRef.current.play().catch(() => {});
+              setAudioPlaying(true);
             }
-            audioRef.current.play().catch(() => {});
-            setAudioPlaying(true);
-          }
-        }}
-        className="flex-shrink-0 flex items-center justify-center shadow-2xl"
-        style={{ width: 64, height: 64, borderRadius: "50%", background: C.cream, color: C.bg }}
-        aria-label={audioPlaying ? "Pause" : "Play"}
-      >
-        {audioPlaying ? (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-            <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
-          </svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        )}
-      </button>
-      <div className="flex-grow min-w-0">
-        {title && (
-          <p className="italic truncate" style={{ color: C.cream, fontSize: "0.95rem" }}>
-            {title}
+          }}
+          className="flex-shrink-0 flex items-center justify-center shadow-2xl"
+          style={{ width: 64, height: 64, borderRadius: "50%", background: C.cream, color: C.bg }}
+          aria-label={audioPlaying ? "Pause" : "Play"}
+        >
+          {audioPlaying ? (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          )}
+        </button>
+        <div className="flex-grow min-w-0">
+          {title && (
+            <p className="italic truncate" style={{ color: C.cream, fontSize: "0.95rem" }}>
+              {title}
+            </p>
+          )}
+          {subtitle && (
+            <p className="text-sm mt-1 truncate" style={{ color: C.creamFaint }}>
+              {subtitle}
           </p>
         )}
-        {subtitle && (
-          <p className="text-sm mt-1 truncate" style={{ color: C.creamFaint }}>
-            {subtitle}
-          </p>
-        )}
-        {externalUrl && (
-          <a
-            href={externalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs mt-1 inline-block"
-            style={{ color: C.sageMuted }}
-          >
-            Also on YouTube / Spotify →
-          </a>
-        )}
+          {externalUrl && (
+            <a
+              href={externalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs mt-1 inline-block"
+              style={{ color: C.sageMuted }}
+            >
+              Also on YouTube / Spotify →
+            </a>
+          )}
+        </div>
       </div>
+      {/* Progress bar — only shows once audio has loaded metadata */}
+      {audioDuration > 0 && (
+        <div className="mt-4">
+          <div style={{ position: "relative", width: "100%", height: 20, display: "flex", alignItems: "center" }}>
+            <div style={{ position: "absolute", width: "100%", height: 3, background: "rgba(253,246,232,0.12)" }}>
+              <div style={{ width: `${audioProgress * 100}%`, height: "100%", background: C.gold }} />
+            </div>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.001}
+              value={audioProgress}
+              onChange={(e) => {
+                const ratio = parseFloat(e.target.value);
+                if (audioRef.current) {
+                  audioRef.current.currentTime = ratio * audioDuration;
+                }
+                setAudioProgress(ratio);
+              }}
+              style={{ position: "absolute", width: "100%", height: "100%", opacity: 0, cursor: "pointer", margin: 0, padding: 0, zIndex: 1 }}
+              aria-label="Seek"
+            />
+          </div>
+          <div className="flex justify-between mt-1" style={{ color: C.creamFaint, fontSize: "0.65rem", letterSpacing: "0.04em" }}>
+            <span>{formatTime(audioProgress * audioDuration)}</span>
+            <span>{formatTime(audioDuration)}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
