@@ -110,7 +110,6 @@ function DailyPromptPageInner() {
   const [contextExpanded, setContextExpanded] = useState(false);
   const [verbaOpen, setVerbaOpen]             = useState(false);
 
-  const [auditioProgress, setAuditioProgress] = useState(0);
   const [auditioDuration, setAudiotioDuration] = useState(0);
 
   const heroRef               = useRef<HTMLDivElement>(null);
@@ -118,8 +117,12 @@ function DailyPromptPageInner() {
   const audioRef              = useRef<HTMLAudioElement | null>(null);  // background music
   const auditioRef            = useRef<HTMLAudioElement | null>(null);  // artwork audio
   const observerRef           = useRef<IntersectionObserver | null>(null);
-  const wasAuditioPlayingRef  = useRef(false);  // was auditio playing when narration started?
-  const wasMusicPlayingRef    = useRef(false);  // was background music playing?
+  const wasAuditioPlayingRef  = useRef(false);
+  const wasMusicPlayingRef    = useRef(false);
+  // DOM refs for Auditio progress bar — direct manipulation for smooth real-time updates
+  const auditioFillRef        = useRef<HTMLDivElement | null>(null);
+  const auditioTimeRef        = useRef<HTMLSpanElement | null>(null);
+  const auditioRangeRef       = useRef<HTMLInputElement | null>(null);
 
   // ── Load prompt — preview mode fetches drafts; falls back to published if no token ─
   useEffect(() => {
@@ -597,12 +600,18 @@ function DailyPromptPageInner() {
                             const a = new Audio(prompt.auditio!.audioFileUrl ?? prompt.auditio!.audioUrl);
                             a.loop = false; a.volume = 0.85;
                             a.addEventListener("timeupdate", () => {
-                              if (a.duration) setAuditioProgress(a.currentTime / a.duration);
+                              if (!a.duration) return;
+                              const pct = a.currentTime / a.duration;
+                              if (auditioFillRef.current)  auditioFillRef.current.style.width  = `${pct * 100}%`;
+                              if (auditioTimeRef.current)  auditioTimeRef.current.textContent  = formatTime(a.currentTime);
+                              if (auditioRangeRef.current) auditioRangeRef.current.value       = String(pct);
                             });
                             a.addEventListener("loadedmetadata", () => setAudiotioDuration(a.duration));
                             a.addEventListener("ended", () => {
                               setMusicPlaying(false);
-                              setAuditioProgress(0);
+                              if (auditioFillRef.current)  auditioFillRef.current.style.width  = "0%";
+                              if (auditioTimeRef.current)  auditioTimeRef.current.textContent  = "0:00";
+                              if (auditioRangeRef.current) auditioRangeRef.current.value       = "0";
                             });
                             auditioRef.current = a;
                           }
@@ -637,30 +646,29 @@ function DailyPromptPageInner() {
                   {auditioDuration > 0 && (
                     <div className="mt-4">
                       <div style={{ position: "relative", width: "100%", height: 20, display: "flex", alignItems: "center" }}>
-                        {/* Visual track */}
                         <div style={{ position: "absolute", width: "100%", height: 3, background: "rgba(253,246,232,0.12)" }}>
-                          <div style={{ width: `${auditioProgress * 100}%`, height: "100%", background: C.gold }} />
+                          <div ref={auditioFillRef} style={{ width: "0%", height: "100%", background: C.gold }} />
                         </div>
-                        {/* Invisible range input handles click + drag + touch */}
+                        {/* Uncontrolled range input — value updated via ref in timeupdate for smooth scrubbing */}
                         <input
+                          ref={auditioRangeRef}
                           type="range"
                           min={0}
                           max={1}
                           step={0.001}
-                          value={auditioProgress}
+                          defaultValue={0}
                           onChange={(e) => {
                             const ratio = parseFloat(e.target.value);
-                            if (auditioRef.current) {
-                              auditioRef.current.currentTime = ratio * auditioDuration;
-                            }
-                            setAuditioProgress(ratio);
+                            if (auditioRef.current) auditioRef.current.currentTime = ratio * auditioDuration;
+                            if (auditioFillRef.current)  auditioFillRef.current.style.width  = `${ratio * 100}%`;
+                            if (auditioTimeRef.current)  auditioTimeRef.current.textContent  = formatTime(ratio * auditioDuration);
                           }}
                           style={{ position: "absolute", width: "100%", height: "100%", opacity: 0, cursor: "pointer", margin: 0, padding: 0, zIndex: 1 }}
                           aria-label="Seek"
                         />
                       </div>
                       <div className="flex justify-between mt-1" style={{ color: C.creamFaint, fontSize: "0.65rem", letterSpacing: "0.04em" }}>
-                        <span>{formatTime(auditioProgress * auditioDuration)}</span>
+                        <span ref={auditioTimeRef}>0:00</span>
                         <span>{formatTime(auditioDuration)}</span>
                       </div>
                     </div>

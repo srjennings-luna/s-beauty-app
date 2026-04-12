@@ -189,10 +189,13 @@ function CircularAudioPlayer({
   externalUrl?: string;
 }) {
   const [audioPlaying, setAudioPlaying] = useState(false);
-  const [audioProgress, setAudioProgress] = useState(0);
   const [audioDuration, setAudioDuration] = useState(0);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const wasPlayingRef = useRef(false);
+  const audioRef        = useRef<HTMLAudioElement | null>(null);
+  const wasPlayingRef   = useRef(false);
+  // DOM refs for progress bar — direct manipulation bypasses React batching for smooth updates
+  const progressFillRef = useRef<HTMLDivElement | null>(null);
+  const currentTimeRef  = useRef<HTMLSpanElement | null>(null);
+  const rangeRef        = useRef<HTMLInputElement | null>(null);
 
   // Stop audio and clean up when the component unmounts (journey closes)
   useEffect(() => {
@@ -270,10 +273,19 @@ function CircularAudioPlayer({
                 const audio = new Audio(audioSrc!);
                 audio.volume = 0.85;
                 audio.addEventListener("timeupdate", () => {
-                  if (audio.duration) setAudioProgress(audio.currentTime / audio.duration);
+                  if (!audio.duration) return;
+                  const pct = audio.currentTime / audio.duration;
+                  if (progressFillRef.current) progressFillRef.current.style.width = `${pct * 100}%`;
+                  if (currentTimeRef.current)  currentTimeRef.current.textContent  = formatTime(audio.currentTime);
+                  if (rangeRef.current)        rangeRef.current.value              = String(pct);
                 });
                 audio.addEventListener("loadedmetadata", () => setAudioDuration(audio.duration));
-                audio.addEventListener("ended", () => { setAudioPlaying(false); setAudioProgress(0); });
+                audio.addEventListener("ended", () => {
+                  setAudioPlaying(false);
+                  if (progressFillRef.current) progressFillRef.current.style.width = "0%";
+                  if (currentTimeRef.current)  currentTimeRef.current.textContent  = "0:00";
+                  if (rangeRef.current)        rangeRef.current.value              = "0";
+                });
                 audio.addEventListener("pause", () => setAudioPlaying(false));
                 audio.addEventListener("play",  () => setAudioPlaying(true));
                 audioRef.current = audio;
@@ -325,27 +337,28 @@ function CircularAudioPlayer({
         <div className="mt-4">
           <div style={{ position: "relative", width: "100%", height: 20, display: "flex", alignItems: "center" }}>
             <div style={{ position: "absolute", width: "100%", height: 3, background: "rgba(253,246,232,0.12)" }}>
-              <div style={{ width: `${audioProgress * 100}%`, height: "100%", background: C.gold }} />
+              <div ref={progressFillRef} style={{ width: "0%", height: "100%", background: C.gold }} />
             </div>
+            {/* Uncontrolled range input — value updated via ref in timeupdate for smooth scrubbing */}
             <input
+              ref={rangeRef}
               type="range"
               min={0}
               max={1}
               step={0.001}
-              value={audioProgress}
+              defaultValue={0}
               onChange={(e) => {
                 const ratio = parseFloat(e.target.value);
-                if (audioRef.current) {
-                  audioRef.current.currentTime = ratio * audioDuration;
-                }
-                setAudioProgress(ratio);
+                if (audioRef.current) audioRef.current.currentTime = ratio * audioDuration;
+                if (progressFillRef.current) progressFillRef.current.style.width = `${ratio * 100}%`;
+                if (currentTimeRef.current)  currentTimeRef.current.textContent  = formatTime(ratio * audioDuration);
               }}
               style={{ position: "absolute", width: "100%", height: "100%", opacity: 0, cursor: "pointer", margin: 0, padding: 0, zIndex: 1 }}
               aria-label="Seek"
             />
           </div>
           <div className="flex justify-between mt-1" style={{ color: C.creamFaint, fontSize: "0.65rem", letterSpacing: "0.04em" }}>
-            <span>{formatTime(audioProgress * audioDuration)}</span>
+            <span ref={currentTimeRef}>0:00</span>
             <span>{formatTime(audioDuration)}</span>
           </div>
         </div>
@@ -442,12 +455,10 @@ function StepEncounter({ day }: { day: JourneyDay }) {
         {/* Curator Note — the hook. First thing the user reads. */}
         {content.curatorNote && (
           <div>
-            <p className="text-sm leading-relaxed" style={{ color: C.cream, lineHeight: "1.75" }}>
+            <NarrationButton audioUrl={content.curatorNoteAudioUrl} />
+            <p className="text-sm leading-relaxed mt-2" style={{ color: C.cream, lineHeight: "1.75" }}>
               {content.curatorNote}
             </p>
-            <div className="mt-2">
-              <NarrationButton audioUrl={content.curatorNoteAudioUrl} />
-            </div>
           </div>
         )}
 
@@ -927,9 +938,10 @@ function StepGoDeeper({ day }: { day: JourneyDay }) {
                   </button>
                   {isOpen && (
                     <div className="px-5 pb-5">
+                      <NarrationButton audioUrl={r.reflectionAudioUrl} />
                       {r.shortQuote && (
                         <p
-                          className="font-serif-elegant italic text-sm pl-3 mb-4"
+                          className="font-serif-elegant italic text-sm pl-3 mb-4 mt-3"
                           style={{ color: "rgba(255,255,255,0.8)", borderLeft: `2px solid ${C.gold}` }}
                         >
                           &ldquo;{r.shortQuote}&rdquo;
@@ -937,9 +949,6 @@ function StepGoDeeper({ day }: { day: JourneyDay }) {
                       )}
                       <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>{r.summary}</p>
                       {r.era && <p className="text-xs mt-3" style={{ color: C.creamFaint }}>{r.era}</p>}
-                      <div className="mt-3">
-                        <NarrationButton audioUrl={r.reflectionAudioUrl} />
-                      </div>
                     </div>
                   )}
                 </div>
