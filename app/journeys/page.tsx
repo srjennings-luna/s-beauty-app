@@ -118,11 +118,20 @@ export default function JourneysPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/30 to-transparent" />
 
-                    {/* Progress badge */}
+                    {/* Progress / complete badge */}
                     {isStarted && (
-                      <span className="absolute top-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-xs font-medium">
-                        {pct >= 100 ? "Complete ✓" : `Day ${completedDays}/${totalDays}`}
-                      </span>
+                      pct >= 100 ? (
+                        <div className="absolute top-3 right-3 flex items-center justify-center"
+                          style={{ width: 30, height: 30, borderRadius: "50%", backgroundColor: "rgba(193,155,95,0.92)" }}>
+                          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <polyline points="2.5,7 5.5,10 11.5,4" stroke="#fdf6e8" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                      ) : (
+                        <span className="absolute top-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-xs font-medium">
+                          Day {completedDays}/{totalDays}
+                        </span>
+                      )
                     )}
 
                     {/* Title overlay */}
