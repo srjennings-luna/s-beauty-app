@@ -1158,7 +1158,7 @@ export default function JourneyDaySteps({
             {/* Right: forward arrow on non-last steps, close X on last step */}
             {isLastStep ? (
               <button
-                onClick={onClose}
+                onClick={() => { if (!isComplete) onMarkComplete(); onClose(); }}
                 className="w-9 h-9 flex items-center justify-center"
                 style={{ color: C.creamFaint }}
                 aria-label="Close journey"
