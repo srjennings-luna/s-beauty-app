@@ -244,6 +244,7 @@ export default function JourneyDetailPage() {
         onMarkComplete={() => toggleDayComplete(activeDay.dayNumber)}
         journeyTitle={journey.title}
         journeySlug={slug}
+        journeyHeroImageUrl={journey.heroImageUrl}
       />
     );
   }
