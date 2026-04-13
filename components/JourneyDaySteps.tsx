@@ -795,7 +795,6 @@ function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete, journeyTit
       ? `${window.location.origin}/journeys/${journeySlug}`
       : window.location.href;
     const title = journeyTitle ?? "A Journey on KALLOS";
-    const text = journeyTitle ? `I've been on the "${journeyTitle}" journey on KALLOS.` : "I've been on a journey on KALLOS.";
 
     if (navigator.share) {
       // Try to include the hero image as a file so it appears in the share sheet
@@ -806,14 +805,14 @@ function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete, journeyTit
           const ext = blob.type.includes("png") ? "png" : "jpg";
           const file = new File([blob], `kallos-journey.${ext}`, { type: blob.type });
           if (navigator.canShare({ files: [file] })) {
-            await navigator.share({ files: [file], title, text, url });
+            await navigator.share({ files: [file], title, url });
             return;
           }
         } catch {
           // fetch or canShare failed — fall through to URL-only share
         }
       }
-      navigator.share({ title, text, url }).catch(() => {});
+      navigator.share({ title, url }).catch(() => {});
     } else {
       navigator.clipboard.writeText(url).catch(() => {});
     }
@@ -874,19 +873,28 @@ function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete, journeyTit
         )}
       </div>
 
-      {/* Share CTA — hairline rule + icon + small caps text */}
-      <div className="flex-shrink-0 flex flex-col items-center" style={{ paddingBottom: "8px" }}>
-        <div style={{ width: 32, height: 1, background: `rgba(193,155,95,0.3)`, marginBottom: 14 }} />
+      {/* Share CTA — circle icon + small caps text */}
+      <div className="flex-shrink-0 flex flex-col items-center" style={{ paddingTop: "20px", paddingBottom: "8px" }}>
         <button
           onClick={handleShare}
           className="flex flex-col items-center gap-2"
           style={{ background: "none", border: "none", cursor: "pointer" }}
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(193,155,95,0.65)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-          </svg>
+          <div style={{
+            width: 40,
+            height: 40,
+            borderRadius: "50%",
+            border: "1px solid rgba(193,155,95,0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(193,155,95,0.75)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+          </div>
           <span className="text-xs tracking-widest uppercase" style={{ color: `rgba(193,155,95,0.65)`, letterSpacing: "0.28em" }}>
             Share this journey
           </span>
