@@ -874,15 +874,22 @@ function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete, journeyTit
         )}
       </div>
 
-      {/* Share CTA — hairline rule + small caps text */}
+      {/* Share CTA — hairline rule + icon + small caps text */}
       <div className="flex-shrink-0 flex flex-col items-center" style={{ paddingBottom: "8px" }}>
         <div style={{ width: 32, height: 1, background: `rgba(193,155,95,0.3)`, marginBottom: 14 }} />
         <button
           onClick={handleShare}
-          className="text-xs tracking-widest uppercase"
-          style={{ color: `rgba(193,155,95,0.65)`, letterSpacing: "0.28em", background: "none", border: "none", cursor: "pointer" }}
+          className="flex flex-col items-center gap-2"
+          style={{ background: "none", border: "none", cursor: "pointer" }}
         >
-          Share this journey
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(193,155,95,0.65)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          <span className="text-xs tracking-widest uppercase" style={{ color: `rgba(193,155,95,0.65)`, letterSpacing: "0.28em" }}>
+            Share this journey
+          </span>
         </button>
       </div>
 
