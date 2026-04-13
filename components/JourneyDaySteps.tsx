@@ -874,7 +874,7 @@ function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete, journeyTit
       </div>
 
       {/* Share CTA — circle icon + small caps text */}
-      <div className="flex-shrink-0 flex flex-col items-center" style={{ paddingTop: "20px", paddingBottom: "8px" }}>
+      <div className="flex-shrink-0 flex flex-col items-center" style={{ paddingTop: "20px", paddingBottom: "24px" }}>
         <button
           onClick={handleShare}
           className="flex flex-col items-center gap-2"
