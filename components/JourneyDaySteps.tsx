@@ -789,7 +789,22 @@ function StepReflect({
 }
 
 // ── Step 4: Connect — text above, constrained image window below ──────────────
-function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete }: { day: JourneyDay; nextDayImageUrl?: string; onClose: () => void; onMarkComplete: () => void }) {
+function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete, journeyTitle, journeySlug }: { day: JourneyDay; nextDayImageUrl?: string; onClose: () => void; onMarkComplete: () => void; journeyTitle?: string; journeySlug?: string; }) {
+  const handleShare = () => {
+    const url = journeySlug
+      ? `${window.location.origin}/journeys/${journeySlug}`
+      : window.location.href;
+    if (navigator.share) {
+      navigator.share({
+        title: journeyTitle ?? "A Journey on KALLOS",
+        text: journeyTitle ? `I've been on the "${journeyTitle}" journey on KALLOS.` : "I've been on a journey on KALLOS.",
+        url,
+      }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(url).catch(() => {});
+    }
+  };
+
   return (
     <div className="h-full flex flex-col" style={{ background: C.bg }}>
 
@@ -845,6 +860,18 @@ function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete }: { day: J
         )}
       </div>
 
+      {/* Share CTA — hairline rule + small caps text */}
+      <div className="flex-shrink-0 flex flex-col items-center" style={{ paddingBottom: "8px" }}>
+        <div style={{ width: 32, height: 1, background: `rgba(193,155,95,0.3)`, marginBottom: 14 }} />
+        <button
+          onClick={handleShare}
+          className="text-xs tracking-widest uppercase"
+          style={{ color: `rgba(193,155,95,0.65)`, letterSpacing: "0.28em", background: "none", border: "none", cursor: "pointer" }}
+        >
+          Share this journey
+        </button>
+      </div>
+
       {/* Image window — constrained frame, image drifts inside */}
       <div
         className="flex-shrink-0 flex flex-col items-center"
@@ -852,7 +879,7 @@ function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete }: { day: J
       >
         {nextDayImageUrl ? (
           <>
-            <p className="text-xs tracking-widest uppercase mb-3" style={{ color: C.creamFaint, letterSpacing: "0.18em" }}>
+            <p className="text-xs tracking-widest uppercase mb-3" style={{ color: C.creamDim, letterSpacing: "0.18em" }}>
               A glimpse of what&apos;s next
             </p>
             {/* The frame — 2/3 screen width, panoramic ratio, hard clip edges */}
@@ -973,12 +1000,16 @@ export default function JourneyDaySteps({
   onClose,
   onMarkComplete,
   isComplete,
+  journeyTitle,
+  journeySlug,
 }: {
   day: JourneyDay;
   nextDay?: JourneyDay;
   onClose: () => void;
   onMarkComplete: () => void;
   isComplete: boolean;
+  journeyTitle?: string;
+  journeySlug?: string;
 }) {
   const [step, setStep] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -1046,7 +1077,7 @@ export default function JourneyDaySteps({
     <StepBreathe key="breathe" day={day} />,
     <StepReflect key="reflect" day={day} questionIndex={questionIndex} onNextQuestion={handleNextQuestion} />,
     ...(hasGoDeeper ? [<StepGoDeeper key="deeper" day={day} />] : []),
-    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} onMarkComplete={onMarkComplete} onClose={() => { if (!isComplete) onMarkComplete(); onClose(); }} />,
+    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} onMarkComplete={onMarkComplete} onClose={() => { if (!isComplete) onMarkComplete(); onClose(); }} journeyTitle={journeyTitle} journeySlug={journeySlug} />,
   ];
 
   return (

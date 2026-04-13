@@ -242,6 +242,8 @@ export default function JourneyDetailPage() {
         isComplete={completedDays.includes(activeDay.dayNumber)}
         onClose={() => setActiveDay(null)}
         onMarkComplete={() => toggleDayComplete(activeDay.dayNumber)}
+        journeyTitle={journey.title}
+        journeySlug={slug}
       />
     );
   }
