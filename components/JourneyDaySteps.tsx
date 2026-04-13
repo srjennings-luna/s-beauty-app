@@ -789,29 +789,14 @@ function StepReflect({
 }
 
 // ── Step 4: Connect — text above, constrained image window below ──────────────
-function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete, journeyTitle, journeySlug, journeyHeroImageUrl }: { day: JourneyDay; nextDayImageUrl?: string; onClose: () => void; onMarkComplete: () => void; journeyTitle?: string; journeySlug?: string; journeyHeroImageUrl?: string; }) {
-  const handleShare = async () => {
+function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete, journeyTitle, journeySlug }: { day: JourneyDay; nextDayImageUrl?: string; onClose: () => void; onMarkComplete: () => void; journeyTitle?: string; journeySlug?: string; }) {
+  const handleShare = () => {
     const url = journeySlug
       ? `${window.location.origin}/journeys/${journeySlug}`
       : window.location.href;
     const title = journeyTitle ?? "A Journey on KALLOS";
 
     if (navigator.share) {
-      // Try to include the hero image as a file so it appears in the share sheet
-      if (journeyHeroImageUrl && navigator.canShare) {
-        try {
-          const res = await fetch(journeyHeroImageUrl);
-          const blob = await res.blob();
-          const ext = blob.type.includes("png") ? "png" : "jpg";
-          const file = new File([blob], `kallos-journey.${ext}`, { type: blob.type });
-          if (navigator.canShare({ files: [file] })) {
-            await navigator.share({ files: [file], title, url });
-            return;
-          }
-        } catch {
-          // fetch or canShare failed — fall through to URL-only share
-        }
-      }
       navigator.share({ title, url }).catch(() => {});
     } else {
       navigator.clipboard.writeText(url).catch(() => {});
@@ -1031,7 +1016,6 @@ export default function JourneyDaySteps({
   isComplete,
   journeyTitle,
   journeySlug,
-  journeyHeroImageUrl,
 }: {
   day: JourneyDay;
   nextDay?: JourneyDay;
@@ -1040,7 +1024,6 @@ export default function JourneyDaySteps({
   isComplete: boolean;
   journeyTitle?: string;
   journeySlug?: string;
-  journeyHeroImageUrl?: string;
 }) {
   const [step, setStep] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -1108,7 +1091,7 @@ export default function JourneyDaySteps({
     <StepBreathe key="breathe" day={day} />,
     <StepReflect key="reflect" day={day} questionIndex={questionIndex} onNextQuestion={handleNextQuestion} />,
     ...(hasGoDeeper ? [<StepGoDeeper key="deeper" day={day} />] : []),
-    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} onMarkComplete={onMarkComplete} onClose={() => { if (!isComplete) onMarkComplete(); onClose(); }} journeyTitle={journeyTitle} journeySlug={journeySlug} journeyHeroImageUrl={journeyHeroImageUrl} />,
+    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} onMarkComplete={onMarkComplete} onClose={() => { if (!isComplete) onMarkComplete(); onClose(); }} journeyTitle={journeyTitle} journeySlug={journeySlug} />,
   ];
 
   return (
