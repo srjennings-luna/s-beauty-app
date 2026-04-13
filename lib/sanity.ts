@@ -160,7 +160,7 @@ export async function getJourneys() {
       estimatedMinutesPerDay,
       isPublished,
       order,
-      "totalDays": count(days)
+      "totalDays": coalesce(totalDays, count(days))
     }
   `)
 }
@@ -177,6 +177,7 @@ export async function getJourney(slug: string) {
       estimatedMinutesPerDay,
       isPublished,
       order,
+      "totalDays": coalesce(totalDays, count(days)),
       "days": days[] {
         dayNumber,
         dayTitle,

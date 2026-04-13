@@ -272,6 +272,13 @@ export default defineType({
       validation: (Rule) => Rule.required().min(1).max(9),
     }),
     defineField({
+      name: 'totalDays',
+      title: 'Total Days (full arc)',
+      type: 'number',
+      description: 'The intended total number of days for this journey. Used for the progress bar and day count even before all days are built. Leave blank to auto-calculate from built + planned days.',
+      validation: (Rule) => Rule.min(1).max(365),
+    }),
+    defineField({
       name: 'plannedDays',
       title: 'Planned Days (coming soon)',
       type: 'array',

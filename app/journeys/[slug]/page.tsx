@@ -222,7 +222,7 @@ export default function JourneyDetailPage() {
   const lockedDays: PlannedDay[] = (journey.plannedDays ?? []).filter(
     (p) => !builtDayNumbers.has(p.dayNumber),
   );
-  const totalDays = builtDayNumbers.size + lockedDays.length || 7;
+  const totalDays = journey.totalDays ?? (builtDayNumbers.size + lockedDays.length || 7);
 
   const progressPct = Math.round((completedCount / totalDays) * 100);
   const nextDay = journey.days?.find(
@@ -283,15 +283,6 @@ export default function JourneyDetailPage() {
             </svg>
           </button>
 
-          {/* Theme pill */}
-          {journey.theme?.color && (
-            <span
-              className="absolute top-12 right-4 px-2 py-1 text-white text-xs font-medium tracking-wide"
-              style={{ backgroundColor: journey.theme.color }}
-            >
-              {journey.theme.title}
-            </span>
-          )}
         </div>
 
         {/* Journey info */}

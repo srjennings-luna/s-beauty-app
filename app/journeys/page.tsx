@@ -118,20 +118,10 @@ export default function JourneysPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/30 to-transparent" />
 
-                    {/* Theme pill */}
-                    {journey.theme && (
-                      <span
-                        className="absolute top-3 left-3 px-2 py-1 text-white text-xs font-medium tracking-wide"
-                        style={{ backgroundColor: journey.theme.color ?? "#4a7a62" }}
-                      >
-                        {journey.theme.title}
-                      </span>
-                    )}
-
                     {/* Progress badge */}
                     {isStarted && (
                       <span className="absolute top-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-xs font-medium">
-                        Day {completedDays}/{totalDays}
+                        {pct >= 100 ? "Complete ✓" : `Day ${completedDays}/${totalDays}`}
                       </span>
                     )}
 
