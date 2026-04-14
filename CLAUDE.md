@@ -518,7 +518,14 @@ These govern the selection of all content items — art, photography, music, thi
 - **Also:** Landscape, Food & Wine, Math & Science, Watch/Listen, Photography
 If all proposed content clusters in sacred art and thinkers, flag it. This applies to music selection too: have we considered ambient, folk, jazz, world music, contemporary alongside or instead of chant and classical sacred? If all music suggestions are from the same register, flag it.
 
-**5. Pictorialist photography is an underused content type that belongs in KALLOS.** Pictorialism (c. 1845–1945) is photography that carries the same intentionality as painting — soft focus, tonal richness, deliberate composition, emotional depth. It is not documentary; it is not raw. It shows ordinary subjects (a field, a hillside, a figure at a window, morning mist) with the same reverence and beauty we associate with sacred art. Major pictorialist photographers — Stieglitz, Steichen, Käsebier, Clarence White — are almost entirely public domain (pre-1928) and almost entirely unknown to a general audience. This makes them ideal for KALLOS: beautiful, contemplative, surprising, accessible. The George Eastman House exhibition "Truth/Beauty: Pictorialism and the Photograph as Art, 1845–1945" named the connection directly. Before defaulting to another painting, ask: is there a pictorialist photograph that carries this day's quality?
+**5. Pictorialist photography is an underused content type that belongs in KALLOS.** Pictorialism (c. 1845-1945) is photography that carries the same intentionality as painting: soft focus, tonal richness, deliberate composition, emotional depth. The core principle: a photograph should be *made*, not just *taken*. It shows ordinary subjects (a field, a figure at a window, a child's face, morning mist) with the same reverence we associate with sacred art, without announcing itself as religious. Key photographers, all public domain (pre-1928), almost none known to a general audience:
+- **Julia Margaret Cameron** (UK, 1815-1879): intentionally soft, allegorical portraits. Her *Prayer* (1866) shows a child looking upward, hands clasped: Sehnsucht in a face, no explanation needed.
+- **Alfred Stieglitz** (USA): Photo-Secession movement, atmospheric street and landscape work.
+- **Edward Steichen** (USA): atmospheric landscapes (*The Flatiron*), hand-colored prints. Extraordinary tonal range.
+- **Henry Peach Robinson** (UK, 1830-1901): combination printing, staged pastoral scenes with warm golden tones.
+- **Peter Henry Emerson** (UK, 1856-1936): rural English landscapes and laborers (*Polling the Marsh Hay*, c. 1885).
+
+The George Eastman House exhibition "Truth/Beauty: Pictorialism and the Photograph as Art, 1845-1945" named the connection to the Transcendentals directly. Before defaulting to another painting, ask: is there a pictorialist photograph that carries this day's quality?
 
 ---
 
