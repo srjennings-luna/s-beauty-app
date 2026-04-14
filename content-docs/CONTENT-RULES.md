@@ -42,6 +42,25 @@ Never delete rewrites. Keep the original in a collapsed/hidden block with a labe
 - **Fact-check all time and duration claims.** "He spent 40 years on this question" — verify this before it goes in. If it's wrong, it breaks trust across the whole piece.
 - **No jargon or obscure references without inline explanation.** Users will not know what a kestrel is. If using a specific or technical term (bird species, architectural term, Latin phrase), define it or replace it with a term users will immediately understand. "A hawk" is better than "a kestrel" if the distinction doesn't add meaning for the user.
 
+## Copy Length and Text-to-Speech
+
+The app has text-to-speech. Users can listen rather than read. This changes the length constraint for body copy fields.
+
+**Short fields (keep tight regardless of TTS):**
+- Opening Text: visual landing, rendered before audio starts. One scene, one turn, stop.
+- Connect Thread: a thread, not a paragraph. 2–3 sentences.
+- Encounter Guidance: one sentence.
+
+**Fields that can now breathe (TTS removes the wall-of-text problem):**
+- Curator Note: can carry a full story if the story earns it. The dinner-table test still applies — it must be surprising and specific — but length is no longer the constraint.
+- Encounter Note / Look Closer: can develop; 3–5 sentences is fine.
+- Context / Look Closer (collapsible): can be fuller background.
+- Tradition Reflections: can carry more texture — biographical detail, a second voice beat — as long as each reflection has one clear point and doesn't repeat another field.
+
+**The rule that does not change:** every field still has one job. TTS gives more room to do that job well; it does not license repetition or padding.
+
+**TTS workflow:** TTS audio is created during Sanity entry, field by field. Every field you enter is also the TTS script. Read each field aloud before confirming the entry. If it sounds wrong when spoken, fix it before moving on.
+
 ## Field-by-Field Rules — The Most Important Section
 
 Every field has a specific job. **Fields must not repeat each other's work.** This is the most common failure mode — re-explaining the opening text in every subsequent field.

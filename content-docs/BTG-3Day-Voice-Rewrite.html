@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTG 3-Day — Voice Rewrite · KALLOS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #fdf6e8; color: #1a1a1a; font-size: 15px; line-height: 1.7; }
+
+        .cover { background: #1a1a1a; color: #fdf6e8; padding: 64px 40px; text-align: center; }
+        .cover h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.8em; font-weight: 300; margin-bottom: 0.2em; letter-spacing: 0.03em; }
+        .cover .sub { font-size: 0.75em; letter-spacing: 0.22em; text-transform: uppercase; color: #c19b5f; margin-bottom: 1.2em; }
+        .cover .desc { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.1em; color: #bbb; max-width: 580px; margin: 0 auto; line-height: 1.9; }
+
+        .container { max-width: 880px; margin: 0 auto; padding: 48px 40px; }
+
+        /* Arc overview */
+        .arc { background: #fff; border: 1px solid #e5ddd0; border-left: 4px solid #1a1a1a; padding: 1.25em 1.5em; margin-bottom: 2.5em; }
+        .arc-label { font-size: 0.65em; letter-spacing: 0.18em; text-transform: uppercase; color: #9a9488; font-weight: 700; margin-bottom: 0.5em; }
+        .arc p { font-family: 'Cormorant Garamond', serif; font-size: 1.05em; line-height: 1.85; color: #2a2a2a; margin-bottom: 0.5em; }
+        .arc p:last-child { margin-bottom: 0; }
+
+        /* Alert / flag */
+        .alert { background: #fff8ee; border-left: 4px solid #e8a240; padding: 1em 1.25em; margin-bottom: 1.5em; font-size: 0.88em; color: #5a4a30; }
+        .alert strong { color: #c06820; display: block; margin-bottom: 0.35em; }
+        .alert p { margin-bottom: 0.4em; }
+        .alert p:last-child { margin-bottom: 0; }
+
+        .flag { background: #fff0f0; border-left: 4px solid #b04040; padding: 1em 1.25em; margin-bottom: 1.5em; font-size: 0.88em; color: #5a2020; }
+        .flag strong { color: #901010; display: block; margin-bottom: 0.35em; }
+        .flag p { margin-bottom: 0.4em; }
+        .flag p:last-child { margin-bottom: 0; }
+
+        .caution { background: #f5f0e8; border-left: 4px solid #c19b5f; padding: 1em 1.25em; margin-bottom: 1.5em; font-size: 0.88em; color: #4a3f35; }
+        .caution strong { color: #8a6a30; display: block; margin-bottom: 0.35em; }
+
+        /* Day blocks */
+        .day-block { margin-bottom: 4em; }
+        .day-header { background: #4a7a62; color: #fdf6e8; padding: 1em 1.5em; display: flex; gap: 1em; align-items: baseline; flex-wrap: wrap; margin-bottom: 0; }
+        .day-num { font-size: 0.68em; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.65; }
+        .day-title { font-family: 'Cormorant Garamond', serif; font-size: 1.55em; font-weight: 300; }
+        .day-theme { margin-left: auto; font-size: 0.72em; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.55; }
+
+        .diag { background: #fdf6e8; border-left: 3px solid #c19b5f; padding: 0.9em 1.25em; margin-bottom: 0; font-size: 0.85em; color: #4a3f35; }
+        .diag-label { font-size: 0.62em; letter-spacing: 0.15em; text-transform: uppercase; color: #c19b5f; font-weight: 700; margin-bottom: 0.35em; }
+        .tag { display: inline-block; background: #b04040; color: #fff; font-size: 0.64em; letter-spacing: 0.07em; text-transform: uppercase; padding: 0.14em 0.38em; margin: 0 0.12em 0.25em 0; vertical-align: middle; }
+        .tag.warn { background: #c19b5f; }
+        .tag.ok { background: #4a7a62; }
+        .tag.new { background: #1a1a1a; }
+
+        .field-block { background: #fff; border: 1px solid #e5ddd0; margin-bottom: 1px; }
+        .field-name { font-size: 0.66em; letter-spacing: 0.16em; text-transform: uppercase; color: #7a9a8a; font-weight: 700; padding: 0.75em 1.25em 0; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; }
+        @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+        .col { padding: 0.85em 1.25em 1em; }
+        .col-label { font-size: 0.63em; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; margin-bottom: 0.45em; }
+        .col-current { background: #fef8f8; border-right: 1px solid #e5ddd0; }
+        .col-current .col-label { color: #b04040; }
+        .col-revised { background: #f4faf5; }
+        .col-revised .col-label { color: #4a7a62; }
+        .col-keep { background: #f8f8f4; }
+        .col-keep .col-label { color: #7a7a5a; }
+
+        .copy { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 1.05em; line-height: 1.85; color: #1a1a1a; }
+        .copy p { margin-bottom: 0.6em; }
+        .copy p:last-child { margin-bottom: 0; }
+
+        .note { font-size: 0.8em; color: #6a8a7a; padding: 0.55em 1.25em 0.75em; border-top: 1px solid #f0ebe0; line-height: 1.6; }
+
+        /* Fields that need no change */
+        .field-keep { background: #fafaf8; border: 1px solid #e5ddd0; border-left: 3px solid #c8c8a8; margin-bottom: 1px; padding: 0.75em 1.25em 0.9em; }
+        .field-keep .field-label { font-size: 0.64em; letter-spacing: 0.14em; text-transform: uppercase; color: #8a8a6a; font-weight: 700; margin-bottom: 0.35em; }
+        .field-keep .keep-value { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.0em; line-height: 1.8; color: #2a2a2a; }
+        .field-keep .keep-note { font-size: 0.78em; color: #8a8a6a; margin-top: 0.35em; font-style: normal; }
+
+        /* New content for Day 3 */
+        .field-new { background: #f3faf5; border: 1px solid #b8ddc8; border-left: 3px solid #4a7a62; margin-bottom: 1px; padding: 0.75em 1.25em 0.9em; }
+        .field-new .field-label { font-size: 0.64em; letter-spacing: 0.14em; text-transform: uppercase; color: #4a7a62; font-weight: 700; margin-bottom: 0.35em; }
+        .field-new .new-value { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.0em; line-height: 1.8; color: #1a1a1a; }
+        .field-new .new-note { font-size: 0.78em; color: #5a8a6a; margin-top: 0.35em; }
+
+        /* Quote block */
+        .quote-block { background: #fff0f0; border: 1px solid #f0d0d0; border-left: 4px solid #b04040; padding: 1em 1.25em; margin-bottom: 1px; }
+        .quote-block .qb-label { font-size: 0.64em; letter-spacing: 0.14em; text-transform: uppercase; color: #b04040; font-weight: 700; margin-bottom: 0.35em; }
+        .quote-block .qb-remove { color: #901010; font-size: 0.9em; margin-bottom: 0.35em; }
+        .quote-block .qb-replace { color: #2a5a3a; font-size: 0.9em; margin-top: 0.5em; }
+
+        /* Priority */
+        .priority { background: #1a1a1a; color: #fdf6e8; padding: 1.75em 2em; margin-top: 3.5em; }
+        .priority h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.4em; font-weight: 300; color: #c19b5f; margin-bottom: 0.9em; }
+        .priority-item { display: flex; gap: 1em; margin-bottom: 0.8em; font-size: 0.88em; color: #ccc; }
+        .priority-item:last-child { margin-bottom: 0; }
+        .p-num { color: #c19b5f; font-weight: 700; min-width: 1.5em; }
+        .p-text strong { color: #fdf6e8; }
+
+        footer { text-align: center; color: #9a9488; font-size: 0.8em; padding: 2.5em 40px; border-top: 1px solid #e5ddd0; margin-top: 3em; }
+    </style>
+</head>
+<body>
+
+<div class="cover">
+    <h1>Beauty, Truth &amp; Goodness</h1>
+    <div class="sub">3-Day Journey · Voice Rewrite · Sanity Edit Guide</div>
+    <div class="desc">These three days introduce the Transcendentals to users who have never heard the term. The goal is not to explain what they are — it is to show the user what they already know about them, and have known for a long time.</div>
+</div>
+
+<div class="container">
+
+    <!-- ARC OVERVIEW -->
+    <!-- JOURNEY DESCRIPTION CARD -->
+    <div class="arc" style="border-left-color: #c19b5f; margin-bottom: 1.5em;">
+        <div class="arc-label">Journey Description Card — paste into Sanity journey record</div>
+        <p>Three things have been stopping people mid-sentence since before Plato had words for them. C.S. Lewis followed one of them for thirty years before he understood what it was pointing at. Three days. One thread.</p>
+        <div class="note" style="border-top: none; padding-top: 0; margin-top: 0.75em;">This is what users see before they start the journey. Lewis's register: names the experience before the concept, promises discovery not explanation, leaves them slightly curious rather than fully oriented. Do not list the three days or explain the arc.</div>
+    </div>
+
+    <div class="arc">
+        <div class="arc-label">The Arc — internal reference</div>
+        <p>Day 1 is the feeling. Something moved you — you could not name it, and it refused to fully satisfy you. Lewis spent thirty years following that thread. He called it Joy.</p>
+        <p>Day 2 is the question that feeling opens. Beauty is not just pleasant. It has a radiance that points past itself toward something real. Aquinas called this <em>splendor veri</em> — the radiance of truth. He stopped writing mid-sentence when he finally saw it.</p>
+        <p>Day 3 is the arrival. Two disciples walked seven miles on a road from Jerusalem beside the answer to the question they had been asking. They did not recognize it until dinner.</p>
+        <p>The voice throughout: specific over general. Story before concept. The user arrives at the idea — it is never announced. <strong>TTS note:</strong> copy is written for both eye and ear. Every field Sheri enters into Sanity is also the TTS script. Read each field aloud before finalising.</p>
+    </div>
+
+    <!-- QUOTE FLAGS -->
+    <div class="flag">
+        <strong>Fix this before editing anything else — Day 1 Quote</strong>
+        <p><strong>Remove:</strong> "The heart has eyes which the intellect cannot understand." — John Henry Newman. This quote does not appear in Newman's verified writings. It is a widely circulated misattribution.</p>
+        <p><strong>Replace with option A:</strong> "The heart has its reasons which reason does not know." — Blaise Pascal, <em>Pensées</em> §423 (1669). Verified original. This is almost certainly the source the Newman version was garbled from.</p>
+        <p><strong>Replace with option B:</strong> Remove the quote entirely and let the CS Lewis passage carry the day. There is no obligation to have a quote if the best verified option repeats a thought already present in the encounter text.</p>
+    </div>
+
+    <div class="caution">
+        <strong>Caravaggio on Day 2 and Day 3 — flag for review</strong>
+        Day 2 uses <em>The Calling of Saint Matthew</em> (1600). Day 3 uses <em>The Supper at Emmaus</em> (1601). Two Caravaggio paintings on consecutive days. This can work — it traces one painter across two moments, and both paintings are different enough in subject that they won't feel repetitive. But the copy should not call attention to it unless intentional. The Day 2 Connect Thread below threads this deliberately. If it feels like too much, Day 2 could swap to a different artist for Truth — Vermeer's <em>Woman Reading a Letter</em> (c. 1663) also works for the light-from-outside-the-frame concept, and creates variety.
+    </div>
+
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- DAY 1 -->
+    <!-- ════════════════════════════════════════════ -->
+
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 1</span>
+            <span class="day-title">The Inconsolable Longing</span>
+            <span class="day-theme">Beauty</span>
+        </div>
+
+        <div class="diag">
+            <div class="diag-label">Diagnosis</div>
+            <span class="tag">generic opening</span>
+            <span class="tag">lecture mode</span>
+            <span class="tag warn">connect announces Day 2</span>
+            <span class="tag warn">quote unverifiable — fix first</span>
+            <p style="margin-top:0.6em;">The opening lists generic experiences ("A painting in a museum. A line of poetry.") instead of showing one specific thing. The user is told what they probably already think. The Curator Note names "Joy" and immediately defines it — abstract before specific. Lewis's actual story (the Norse poem at age eight, the biscuit tin lid, the autumn light) is far more arresting than any description of what Joy is. The Connect Thread summarizes the day and announces tomorrow. The quote is a misattribution and must be replaced.</p>
+        </div>
+
+        <!-- Opening Text -->
+        <div class="field-block">
+            <div class="field-name">Opening Text</div>
+            <div class="two-col">
+                <div class="col col-current">
+                    <div class="col-label">Current — replace</div>
+                    <div class="copy"><p>You came here because something moved you. A painting in a museum. A line of poetry. A piece of music. The beauty of a place. Something you couldn't quite name, but it mattered. That feeling is not an accident. It is an invitation.</p></div>
+                </div>
+                <div class="col col-revised">
+                    <div class="col-label">Revised — paste into Sanity</div>
+                    <div class="copy">
+                        <p>C.S. Lewis was eight years old when he read a line in a poem about Norse mythology. He could not have told you what the poem meant. He only knew that it made him ache for something he couldn't name.</p>
+                        <p>He spent the next thirty years chasing that feeling. He followed it into music, into landscape, into other people's poetry. Each time it moved him, it also refused to satisfy him fully. Like following a scent you can never trace to its source.</p>
+                        <p>He eventually concluded that this was the point. The longing itself was the message.</p>
+                        <p>You don't have to agree with what he concluded. But you probably know the feeling.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="note">Opens with a specific person in a specific moment — age eight, a Norse poem, an unnamed ache — rather than a list of generic experiences the user has already categorized. The user arrives at the concept instead of being handed it.</div>
+        </div>
+
+        <!-- Curator Note -->
+        <div class="field-block">
+            <div class="field-name">Curator Note / Description</div>
+            <div class="two-col">
+                <div class="col col-current">
+                    <div class="col-label">Current — replace</div>
+                    <div class="copy"><p>C.S. Lewis called it "joy" — not happiness, but a kind of longing that comes when beauty touches us. It's the feeling you get when a song unexpectedly moves you to tears. When you turn a corner in a city and time stops. When you read a line someone wrote centuries ago and feel completely understood. This feeling is not sentimental. It is one of the most real things we experience. And it tells you something crucial: you are capable of encountering something beyond yourself.</p></div>
+                </div>
+                <div class="col col-revised">
+                    <div class="col-label">Revised — paste into Sanity</div>
+                    <div class="copy">
+                        <p>He called it "Joy" with a capital letter, to distinguish it from ordinary happiness. Happiness was contentment. Joy was different: a sudden sharp longing, arriving without warning, pointing toward something it could never provide.</p>
+                        <p>He found it in a toy garden his brother had made from a biscuit tin lid — moss and small stones arranged inside it. He found it in a particular kind of autumn light. He found it in that Norse poem at eight. And he discovered, over decades, that every time he reached for the thing Joy seemed to be pointing at, the Joy vanished — and whatever he had grabbed wasn't it.</p>
+                        <p>What he eventually understood: Joy was not pointing at any earthly thing. It was pointing past all of them.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="note">Specific details — biscuit tin lid, moss and stones, autumn light — do the work that the abstract paragraph was trying to do. The user experiences the concept rather than reading its definition.</div>
+        </div>
+
+        <!-- Quote -->
+        <div class="quote-block">
+            <div class="qb-label">Quote field — must fix</div>
+            <div class="qb-remove"><strong>Remove:</strong> "The heart has eyes which the intellect cannot understand." — John Henry Newman <span style="color:#b04040;">(unverifiable; widely circulated misattribution)</span></div>
+            <div class="qb-replace"><strong>Option A — replace with:</strong> "The heart has its reasons which reason does not know." — Blaise Pascal, <em>Pensées</em> §423 (1669). <span style="color:#4a7a62;">Verified.</span></div>
+            <div class="qb-replace"><strong>Option B:</strong> Remove the quote field entirely. Let the CS Lewis passage carry the day. If both options feel redundant given the encounter text, blank is correct.</div>
+        </div>
+
+        <!-- Connect Thread -->
+        <div class="field-block">
+            <div class="field-name">Connect Text (thread to Day 2)</div>
+            <div class="two-col">
+                <div class="col col-current">
+                    <div class="col-label">Current — replace</div>
+                    <div class="copy"><p>Beauty is never accidental. It always points somewhere. Tomorrow, we follow that pointing — and discover what beauty is actually trying to tell us.</p></div>
+                </div>
+                <div class="col col-revised">
+                    <div class="col-label">Revised — paste into Sanity</div>
+                    <div class="copy"><p>Lewis said Joy always pointed toward something none of the beautiful things he followed could actually give him. In 1600, a painter in Rome thought he knew what it was pointing at. He put it in the light.</p></div>
+                </div>
+            </div>
+            <div class="note">Creates a question — what did the painter think it was pointing at? — without summarizing the day or announcing tomorrow's subject. "He put it in the light" earns the transition to Caravaggio without naming him.</div>
+        </div>
+    </div>
+
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- DAY 2 -->
+    <!-- ════════════════════════════════════════════ -->
+
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 2</span>
+            <span class="day-title">Light From Outside the Frame</span>
+            <span class="day-theme">Truth</span>
+        </div>
+
+        <div class="diag">
+            <div class="diag-label">Diagnosis</div>
+            <span class="tag">abstract thesis opening</span>
+            <span class="tag">explains before arriving</span>
+            <span class="tag warn">connect announces Day 3</span>
+            <span class="tag ok">quote verified — keep</span>
+            <p style="margin-top:0.6em;">The opening is beauty speaking in the abstract ("At some point, every genuine beauty asks the same silent question"). The Curator Note introduces Aquinas by title, defines what he believed, then explains the painting through his lens — the user is told what the painting means before they have looked at it. The Context field names and explains <em>splendor veri</em> as a delivered concept rather than an arrived-at discovery. Aquinas's actual story (the silent boy called "dumb ox," the unfinished synthesis, "all I have written is straw") makes the concept vivid. The concept alone does not. The Aquinas quote is verified — keep it.</p>
+        </div>
+
+        <!-- Opening Text -->
+        <div class="field-block">
+            <div class="field-name">Opening Text</div>
+            <div class="two-col">
+                <div class="col col-current">
+                    <div class="col-label">Current — replace</div>
+                    <div class="copy"><p>At some point, every genuine beauty asks the same silent question: "Where do I come from? What does it mean that I exist?"</p></div>
+                </div>
+                <div class="col col-revised">
+                    <div class="col-label">Revised — paste into Sanity</div>
+                    <div class="copy">
+                        <p>In 1600, Caravaggio completed an altarpiece for the French church in Rome. His patrons expected saints to look like saints. His Matthew looked like a laborer. His light came from sources you couldn't see.</p>
+                        <p><em>The Calling of Saint Matthew</em> shows a man sitting in a dark corner counting money at a tax collector's table. Light enters from outside the frame — from a source entirely off-canvas. It cuts across the room at an impossible angle. A hand points. Matthew looks up, startled, and touches his own chest as if asking: me?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="note">The abstract thesis question ("Where do I come from?") is the meaning the painting carries. The painting itself is more arresting than any statement of that meaning. Show the painting; let the user feel the question rather than read it.</div>
+        </div>
+
+        <!-- Curator Note -->
+        <div class="field-block">
+            <div class="field-name">Curator Note / Description</div>
+            <div class="two-col">
+                <div class="col col-current">
+                    <div class="col-label">Current — replace</div>
+                    <div class="copy"><p>Thomas Aquinas, the great medieval theologian, defined truth this simply: it is the correspondence between the mind and reality. The painting is beautiful because it corresponds to something real about calling, about light, about transformation. It's not making something up. It's showing us what is actually true about how love works. And Aquinas understood something crucial: all genuine beauty is a form of truth. When something is truly beautiful, it is because it reveals something real.</p></div>
+                </div>
+                <div class="col col-revised">
+                    <div class="col-label">Revised — paste into Sanity</div>
+                    <div class="copy">
+                        <p>Thomas Aquinas was the strangest child his monastery had ever received. His father sent him to Monte Cassino at age five. The monks watched him grow into a boy who barely spoke and appeared to be working on one question for years at a time. His classmates at university called him "the dumb ox."</p>
+                        <p>He became one of the most influential philosophers of the medieval world. In the last seven years of his life, he wrote the <em>Summa Theologiae</em> — a synthesis of everything he understood about God, beauty, truth, and how they connect. He never finished it. On December 6, 1273, during Mass, something happened. He set down his pen and said: "All that I have written seems to me like straw compared to what I have seen." He did not write another word.</p>
+                        <p>What he had written before he stopped: genuine beauty is not just pleasing. It has a radiance — <em>splendor</em> — that comes from the thing itself, not from the viewer. It corresponds to something true about reality that goes beyond what paint or stone or light alone can account for.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="note">By the time the user reads "splendor," they have already experienced the concept — they have watched a man spend his life chasing something he could not fully name, and then stop mid-sentence when he finally saw it. The concept lands because the story did the work first.</div>
+        </div>
+
+        <!-- Quote — keep -->
+        <div class="field-keep">
+            <div class="field-label">Quote — keep as is (verified)</div>
+            <div class="keep-value">"Pulchrum est id quod visum placet." (Beauty is what pleases when seen.)</div>
+            <div class="keep-note">Thomas Aquinas, <em>Summa Theologiae</em> I-II.27.1. Verified. No change needed.</div>
+        </div>
+
+        <!-- Connect Thread — updated for new Day 3 -->
+        <div class="field-block">
+            <div class="field-name">Connect Text (thread to Day 3)</div>
+            <div class="two-col">
+                <div class="col col-current">
+                    <div class="col-label">Current — replace</div>
+                    <div class="copy"><p>If beauty reveals truth, then understanding the true has consequences. It changes how we act. Tomorrow, we discover what beauty and truth together are asking of us.</p></div>
+                </div>
+                <div class="col col-revised">
+                    <div class="col-label">Revised — paste into Sanity</div>
+                    <div class="copy"><p>Aquinas stopped mid-sentence when he finally saw what he had been writing toward. Two disciples leaving Jerusalem that same evening were walking beside the same thing. They went seven miles before they found out.</p></div>
+                </div>
+            </div>
+            <div class="note">Threads Aquinas (Day 2) forward to the Emmaus road without naming Day 3's subject or announcing "tomorrow." "That same evening" is figurative compression — it places both men inside the same unseen-presence moment. The user arrives at Day 3 asking: what happened at the end of those seven miles?</div>
+        </div>
+    </div>
+
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- DAY 3 -->
+    <!-- ════════════════════════════════════════════ -->
+
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 3</span>
+            <span class="day-title">Everything was pointing here</span>
+            <span class="day-theme">Goodness</span>
+        </div>
+
+        <div class="diag">
+            <div class="diag-label">Note — Day 3 is a complete content replacement</div>
+            <span class="tag new">new artwork</span>
+            <span class="tag new">new concept anchor</span>
+            <span class="tag ok">opening text already strong</span>
+            <span class="tag ok">curator note already strong</span>
+            <span class="tag warn">Dorothy Day quote — verify before entry</span>
+            <p style="margin-top:0.6em;">The current Day 3 (Benedict / monastery bread) is replaced entirely by the <em>Supper at Emmaus</em> Day 3 guide. The replacement content is largely well-written — story-first, specific, voice-consistent. The fields below are structured as paste-ready entry copy. The only open issue before entry is the Dorothy Day quote in Tradition Reflection 3.</p>
+        </div>
+
+        <!-- dayTitle -->
+        <div class="field-new">
+            <div class="field-label">Day Title — confirmed</div>
+            <div class="new-value">Everything was pointing here</div>
+            <div class="new-note">Confirmed. Arc completion title. No other option under consideration.</div>
+        </div>
+
+        <!-- Opening Text -->
+        <div class="field-new">
+            <div class="field-label">Opening Text — paste into Sanity</div>
+            <div class="new-value">You followed beauty into truth. This is where truth leads.</div>
+            <div class="new-note">Ten words. Cormorant italic rendering. Completes the three-day arc without explaining it. Do not elaborate. This sentence is the arrival — everything that follows opens from here.</div>
+        </div>
+
+        <!-- Curator Note -->
+        <div class="field-new">
+            <div class="field-label">Curator Note / Description — paste into Sanity</div>
+            <div class="new-value">In the basket of fruit at the front of this table, two stray strands of wicker form the outline of a fish. The shadow the basket casts on the tablecloth completes it: a body and a tail. Early Christians used the fish as their sign for Christ, and Caravaggio hid one in the still life before the disciples at the table had found him. The philosophers had a word for what this painting is about: <em>bonum.</em> The Good. Not goodness as a list of rules but the thing every living creature reaches toward. These two disciples walked seven miles beside it before a broken piece of bread opened their eyes.</div>
+            <div class="new-note">Hook is the verified ichthys detail — documented by the National Gallery, London. The fish in the wicker and tablecloth shadow is real and specific. From there: bonum named in one sentence, defined by contrast (not rules — the thing every creature reaches toward), then closed by the Emmaus story. Story-first, concept-second. No em dashes.</div>
+        </div>
+
+        <!-- Encounter Note / Look Closer -->
+        <div class="field-new">
+            <div class="field-label">Encounter Note / Look Closer — paste into Sanity</div>
+            <div class="new-value">The innkeeper standing behind them has served dinner to a man crucified three days ago and is already thinking about the next table. The two disciples are about to overturn their chairs. Caravaggio put all three in the same frame: recognition, astonishment, and ordinary life continuing as if nothing changed. The question he left unanswered is which figure you are.</div>
+            <div class="new-note">All details are from the painting and verifiable. The closing question is personal and open — not a reflection prompt, but an observation that invites the user to locate themselves. Strong as is.</div>
+        </div>
+
+        <!-- Quote -->
+        <div class="field-keep">
+            <div class="field-label">Quote — paste into Sanity (verified scripture)</div>
+            <div class="keep-value">"Stay with us, for it is toward evening and the day is now far spent."</div>
+            <div class="keep-note">Luke 24:29, RSV-2CE. Verified. The words the disciples spoke to the stranger before they recognized him. The quote carries the whole day's theme: an invitation extended in ignorance, which turns out to be the most significant invitation they ever issued.</div>
+        </div>
+
+        <!-- Lectio -->
+        <div class="field-keep">
+            <div class="field-label">Lectio — Philosophy (paste into Sanity)</div>
+            <div class="keep-value">Every art and every inquiry, and similarly every action and pursuit, is thought to aim at some good.</div>
+            <div class="keep-note">Aristotle, <em>Nicomachean Ethics</em>, Book I, opening line. Verified. Most KALLOS users will never have read it. It is the foundational statement of Goodness as a transcendental — everything in existence is oriented toward the Good. Direct, simple, and completely unexpected as a pairing with Luke.</div>
+        </div>
+
+        <div class="field-keep">
+            <div class="field-label">Lectio — Scripture (paste into Sanity)</div>
+            <div class="keep-value">And their eyes were opened and they recognized him; and he vanished out of their sight.</div>
+            <div class="keep-note">Luke 24:31, RSV-2CE. Verify exact wording before entry. The Lectio pairing is the argument of the day in two sentences: Aristotle names the principle (everything aims at some good), Luke shows the moment of arrival (and their eyes were opened). Philosophy asks; scripture answers.</div>
+        </div>
+
+        <!-- Tradition Reflection 1 — Augustine -->
+        <div class="field-new">
+            <div class="field-label">Tradition Reflection 1 — Augustine — paste into Sanity</div>
+            <div class="new-value"><strong>Augustine of Hippo</strong> (4th–5th century CE)<br><br>"Our heart is restless until it rests in Thee."<br><br>Augustine of Hippo is one of the most restless minds in the history of Western thought. He spent decades following every version of the Good he could find: philosophy, ambition, pleasure, competing schools of thought. None of it held. The Confessions is the record of a man who chased the transcendental Good across every corner of his life before discovering it had been present all along. He arrived at the same table as the Emmaus disciples, by a much longer road.</div>
+            <div class="new-note">Quote: <em>Confessions</em> I.1.1 (c. 401 CE). Verified. "Rests in Thee" is the traditional English rendering. Do not modernize to "You" — the archaic form is part of the text's weight. The parallel to Emmaus (arriving at a table after a long road) closes the reflection without stating it as a lesson.</div>
+        </div>
+
+        <!-- Tradition Reflection 2 — Aquinas -->
+        <div class="field-new">
+            <div class="field-label">Tradition Reflection 2 — Aquinas — paste into Sanity</div>
+            <div class="new-value"><strong>Thomas Aquinas</strong> (13th century CE)<br><br>"Bonum est diffusivum sui." (The good is self-diffusive.)<br><br>Aquinas spent his life building the most systematic account of the Transcendentals the Western tradition has produced. His insight about goodness is simple: it cannot contain itself. Goodness by its nature pours outward, shares itself, communicates. This is not a metaphor. It is the reason fire gives warmth, the reason parents teach their children, the reason a stranger on the road eventually broke bread with two grieving disciples he had just met. The Good does what it is.</div>
+            <div class="new-note">Formula attributed to Aquinas drawing on Pseudo-Dionysius. Verified as authentic Thomistic formula. The three examples (fire, parents, stranger) move from physical law to human action to the Emmaus moment — the arc closes inside the reflection itself.</div>
+        </div>
+
+        <!-- Tradition Reflection 3 — Dorothy Day — FLAGGED -->
+        <div class="field-block">
+            <div class="field-name">Tradition Reflection 3 — Dorothy Day — verify quote before entry</div>
+            <div class="two-col">
+                <div class="col col-current" style="background: #fff8f0;">
+                    <div class="col-label" style="color: #c06820;">Current draft — quote needs verification</div>
+                    <div class="copy">
+                        <p><strong>Dorothy Day</strong> (20th century CE)</p>
+                        <p style="font-style:normal; margin-top: 0.5em;">"I really only love God as much as I love the person I love the least."</p>
+                        <p>A journalist and activist who spent decades running houses of hospitality for the homeless in New York City. She understood that the Transcendentals do not stay in the realm of philosophy. Goodness always lands somewhere specific: in a meal, at a table, across from a particular face. The question is not whether you believe in the Good in the abstract. It is whether you can recognize it in the person in front of you right now, especially the one you did not choose to sit beside.</p>
+                    </div>
+                </div>
+                <div class="col col-revised">
+                    <div class="col-label">If quote cannot be verified — revised</div>
+                    <div class="copy">
+                        <p><strong>Dorothy Day</strong> (20th century CE)</p>
+                        <p style="font-style:normal; margin-top: 0.5em; font-family: Georgia, serif;">"The biggest challenge of the day is: how to bring about a revolution of the heart."</p>
+                        <p>A journalist and activist who spent decades running houses of hospitality for the homeless in New York City. She understood that the Transcendentals do not stay in the realm of philosophy. Goodness always lands somewhere specific: in a meal, at a table, across from a particular face. The question is not whether you believe in the Good in the abstract. It is whether you can recognize it in the person in front of you right now, especially the one you did not choose to sit beside.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="note">The body text of the reflection is strong and can stay regardless of which quote is used. The "I really only love God as much as..." quote is attributed to Day in some sources but may be apocryphal — verify against her verified writings (<em>The Long Loneliness</em>, <em>By Little and By Little</em>) before entry. Backup quote above is from <em>The Long Loneliness</em> and is widely verified. If the original can be sourced, keep it — it is the stronger quote.</div>
+        </div>
+
+        <!-- Connect Thread / Journey Close -->
+        <div class="field-block">
+            <div class="field-name">Connect Text — Journey Close</div>
+            <div class="two-col">
+                <div class="col col-current">
+                    <div class="col-label">If field renders before "Journey complete" CTA</div>
+                    <div class="copy"><p>The philosophers named what you have been following. What they could not do is say where it came from, or what it was pointing at. Every culture in human history that asked that question answered it the same way — not with an argument, but with a story. The story kept appearing in places that had never heard of each other.</p></div>
+                </div>
+                <div class="col col-revised">
+                    <div class="col-label">If field is null (last day renders Journey complete)</div>
+                    <div class="copy"><p style="font-style: normal; font-family: Inter, sans-serif; font-size: 0.9em; color: #7a9a8a;">Leave blank. The "Journey complete" state and "Start a new journey" CTA appear automatically. The bridge to Myth Became Fact is carried by the journey close copy above — confirm with dev whether a closing text field exists on the final day before entering.</p></div>
+                </div>
+            </div>
+            <div class="note">The left column is the bridge to Myth Became Fact. It closes the BTG arc without satisfying it — the user has the vocabulary (Beauty, Truth, Goodness are real) but the deeper question (where do they point?) remains open. That is exactly the question Myth Became Fact answers. Do not add this as a Connect Thread if Day 3 already renders a Journey complete state — confirm the UX before entering. If no closing text field exists, consider adding one.</div>
+        </div>
+    </div>
+
+
+    <!-- ARC CLOSE — CLOSING COPY NOTE -->
+    <div class="arc" style="border-left-color: #4a7a62; margin-top: 0; margin-bottom: 3.5em;">
+        <div class="arc-label">Arc Note — for internal reference</div>
+        <p>The three-day arc closes with a specific verb pattern: Lewis <em>felt</em> something (Day 1), Aquinas <em>saw</em> something (Day 2), the disciples at Emmaus <em>recognized</em> something (Day 3). Each arrival is more embodied than the last. The copy should preserve this progression — Day 3 is not an idea, it is a meal.</p>
+        <p>When all the voice edits are in: read Day 1 Opening Text through Day 3 Curator Note in sequence. The progression from the Norse poem ache to the fish hidden in the wicker basket should feel like one long thread, not three separate days. If any moment breaks the thread, that is the next place to look.</p>
+    </div>
+
+
+    <!-- PRIORITY ORDER -->
+    <div class="priority">
+        <h2>Order of Entry</h2>
+
+        <div class="priority-item">
+            <span class="p-num">1</span>
+            <span class="p-text"><strong>Day 1 — fix the Newman quote (5 min).</strong> Replace with Pascal or remove before touching anything else. Incorrect attributions are the hardest errors to correct once users have encountered them.</span>
+        </div>
+
+        <div class="priority-item">
+            <span class="p-num">2</span>
+            <span class="p-text"><strong>Day 3 — verify Dorothy Day quote before entry (research step).</strong> Check against <em>The Long Loneliness</em> and <em>By Little and By Little</em>. If found, use it. If not found, use the backup quote provided above. The body text of Tradition Reflection 3 is ready regardless.</span>
+        </div>
+
+        <div class="priority-item">
+            <span class="p-num">3</span>
+            <span class="p-text"><strong>All three Connect Threads (15 min).</strong> These are the last thing a user reads each day. The revised threads above are short and paste directly into Sanity. Day 3 Connect Thread is null — leave blank.</span>
+        </div>
+
+        <div class="priority-item">
+            <span class="p-num">4</span>
+            <span class="p-text"><strong>Day 3 — complete content replacement (45–60 min).</strong> Replace all Day 3 fields with the Emmaus content above. This includes new artwork, new opening, new curator note, encounter note, quote, lectio, and all three tradition reflections. The full set of paste-ready copy is above.</span>
+        </div>
+
+        <div class="priority-item">
+            <span class="p-num">5</span>
+            <span class="p-text"><strong>Day 2 Opening Text and Curator Note (20 min).</strong> Replace abstract thesis with the Caravaggio story; replace the Aquinas definition with the Aquinas "dumb ox" story.</span>
+        </div>
+
+        <div class="priority-item">
+            <span class="p-num">6</span>
+            <span class="p-text"><strong>Day 1 Opening Text and Curator Note (20 min).</strong> Replace generic list with the CS Lewis Norse poem story; replace the abstract Joy definition with the biscuit tin / autumn light / pointing-past-earthly-things passage.</span>
+        </div>
+
+        <div class="priority-item">
+            <span class="p-num">—</span>
+            <span class="p-text"><strong>Day titles to enter:</strong> Day 1 = <em>The Inconsolable Longing</em> · Day 2 = <em>Light From Outside the Frame</em> · Day 3 = <em>Everything Was Pointing Here</em></span>
+        </div>
+
+        <div class="priority-item">
+            <span class="p-num">—</span>
+            <span class="p-text"><strong>Journey description card:</strong> "Three things have been stopping people mid-sentence since before Plato had words for them. C.S. Lewis followed one of them for thirty years before he understood what it was pointing at. Three days. One thread."</span>
+        </div>
+
+        <div class="priority-item">
+            <span class="p-num">—</span>
+            <span class="p-text"><strong>TTS — read every field aloud before confirming.</strong> Copy is written for both eye and ear. Sheri creates the TTS recording during Sanity entry. Anything that reads awkwardly aloud needs to be caught before publishing.</span>
+        </div>
+
+        <div class="priority-item">
+            <span class="p-num">—</span>
+            <span class="p-text"><strong>Day 3 journey close:</strong> Confirm with dev whether a closing text field exists on the final day before entering. If yes, enter the bridge copy from the Connect Text section above. If no, note as a product request — the bridge to Myth Became Fact should not be silent.</span>
+        </div>
+
+        <div class="priority-item">
+            <span class="p-num">—</span>
+            <span class="p-text"><strong>After all edits:</strong> Read Day 1 Opening Text through Day 3 Curator Note in one pass. The arc should feel like a single thread. If anything breaks the line, flag it for the next session.</span>
+        </div>
+    </div>
+
+</div>
+
+<footer>KALLOS Editorial · BTG 3-Day Voice Rewrite · April 2026 · Replaces BTG-3Day-Field-Revisions.html</footer>
+
+</body>
+</html>

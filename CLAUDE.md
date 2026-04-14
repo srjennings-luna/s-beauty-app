@@ -50,6 +50,8 @@ Read this at the start of every session. It contains all key product decisions, 
 | `content-docs/KALLOS-Content-Guide-Pause-Ponder.html` | **In repo** — agent content instructions for Pause and Ponder daily prompts |
 | `content-docs/KALLOS-MythJourney-v3.html` | **In repo** — active Myth Journey (7 days, all fields, all content locked through Day 2) |
 | `content-docs/KALLOS-JustinMartyr-PP-SanityEntry.html` | **In repo** — "They Were Early" Justin Martyr Pause and Ponder Sanity entry guide. April 12, 2026. All fields complete. Includes CTA linking to When Myth Became Fact journey. |
+| `content-docs/BTG-3Day-Voice-Rewrite.html` | **In repo** — Complete voice rewrite of the 3-day BTG journey. April 13, 2026. Treats BTG as a standalone playlist for users who have never heard the term "Transcendentals." Includes Journey Description Card, Lewis-register titles, all 3 days (Day 3 = Emmaus), Day 3 Journey Close (bridge to Myth Became Fact), quote flags (Newman/Dorothy Day), and priority Sanity entry order. Supersedes `BTG-3Day-Field-Revisions.html`. |
+| `content-docs/KALLOS-BTG-Day3-Goodness-SanityEntry.html` | **In repo** — Day 3 Goodness (Emmaus) Sanity entry guide. Caravaggio "Supper at Emmaus" 1601. Day title: "Everything Was Pointing Here." All fields complete. Dorothy Day quote (Tradition Reflection 3) needs verification before entry. |
 | `content-docs/KALLOS-Myth-Journey-Arc.html` | **In repo** — Myth Journey arc planning doc |
 | `content-docs/KALLOS-Content-Usage-Log.html` | **In repo** — content usage log (tracks audio, quotes, scripture used across all content) |
 | `content-docs/CONTENT-RULES.md` | **In repo** — condensed content rules reference |
@@ -171,6 +173,14 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ Theme pill removed from journey pages — removed from journey card list and journey detail hero. Theme tagging serves the Explore filter, not a visible label.
 - ✅ `totalDays` field added to Sanity journey schema — editors set the intended full arc once. GROQ queries updated to `coalesce(totalDays, count(days))`. Detail page prefers Sanity field. Sanity Studio deployed. All 4 journeys updated: Beauty Truth & Goodness (3 days), When Myth Became Fact (7 days), Light (7 days), Bosch (8 days).
 - ✅ Journey complete badge redesigned — gold filled circle (30px, rgba(193,155,95,0.92)) with cream checkmark SVG. Replaces "Complete ✓" text badge. In-progress journeys still show "Day X/Y" text badge.
+- ✅ BTG 3-day journey voice rewrite complete — treated as standalone playlist for users who have never heard the term "Transcendentals." New doc: `content-docs/BTG-3Day-Voice-Rewrite.html`. Supersedes `BTG-3Day-Field-Revisions.html`.
+- ✅ BTG Day 3 replaced entirely: monastery/Benedict content out, Caravaggio "Supper at Emmaus" (1601, National Gallery) in. Day title confirmed: "Everything Was Pointing Here." Sanity entry guide: `content-docs/KALLOS-BTG-Day3-Goodness-SanityEntry.html`.
+- ✅ BTG day titles updated to Lewis register: "The Inconsolable Longing" (Day 1, Lewis's own phrase from The Weight of Glory), "Light From Outside the Frame" (Day 2), "Everything Was Pointing Here" (Day 3).
+- ✅ Day 2 Connect Thread updated to point to Emmaus (previous version pointed to monastery/Benedict Day 3, which no longer exists).
+- ✅ Journey Description Card written in Lewis register: "Three things have been stopping people mid-sentence since before Plato had words for them. C.S. Lewis followed one of them for thirty years before he understood what it was pointing at. Three days. One thread."
+- ✅ Day 3 Journey Close written as bridge to Myth Became Fact: opens the question of where the Transcendentals point without answering it.
+- ✅ TTS workflow note added to CONTENT-RULES.md: every field entered in Sanity is also the TTS script. Read aloud before confirming.
+- ✅ Caravaggio factual error corrected in Day 2: "The Calling of Saint Matthew" was NOT rejected. The rejected painting was a different commission (Saint Matthew and the Angel, first version). Fixed in voice rewrite.
 
 ### Phase 2 Work Done (April 2, 2026)
 - ✅ Context expanded text opacity fixed — expanded paragraphs were using `creamDim` (50% opacity) while teaser used `cream` (88% opacity). Both now use `cream` consistently. Fix in `app/prompt/PromptClient.tsx`.
@@ -192,7 +202,8 @@ Read this at the start of every session. It contains all key product decisions, 
 1. ~~**Holy Week Sanity entry:** Days 3-6 still need entry.~~ ✅ All 8 Holy Week days entered and published (April 1, 2026). Day 8 audio is a placeholder — confirm or replace before Easter.
 2. **Today tab redesign:** Remove the tap-to-begin card. Make Today = full P&P experience as the landing state. Decision made March 30 (see Parking Lot). **Now unblocked — Holy Week content is complete.**
 3. **Standards for seeding docs:** define a repeatable format/checklist for Sanity entry guides so every new content type gets the same treatment.
-4. **3-day BTG journey content review:** reshape Days 1, 3, 5 from existing 7-day doc into standalone 3-day entry-point journey. Sanity entry guide needed.
+4. ~~**3-day BTG journey content review:** reshape Days 1, 3, 5 from existing 7-day doc into standalone 3-day entry-point journey. Sanity entry guide needed.~~ ✅ Done (April 13, 2026). Voice rewrite complete. See `content-docs/BTG-3Day-Voice-Rewrite.html`.
+4a. **BTG Sanity entry:** Enter all BTG revised copy using `BTG-3Day-Voice-Rewrite.html` (priority order at bottom of doc). Fix Newman quote (Day 1) first. Verify Dorothy Day quote (Day 3) before entering Tradition Reflection 3. Confirm Day 3 Journey Close field with dev. Create TTS for each field during entry.
 5. **Create Google Forms beta feedback survey:** 6 questions drafted (March 27). Sheri enters in Google Forms.
 6. **Content pipeline audit:** review all P&P + Journey content for variety and cohesion across the full arc. Claude content audit pass.
 
@@ -596,3 +607,8 @@ These can't be done in code — Sheri does them in dashboards:
 14. Seed Themes 2–5 content into Sanity (entry guide doc ready)
 15. Source high-res images for all new content (search terms in docs)
 16. Add lat/long coordinates to Bosch Sanity entry guide and Intro Journey content doc — map is empty without them
+22. **BTG Day 1 — Newman quote:** Fix before Sanity entry. Replace with Pascal Pensées §423 (copy in `BTG-3Day-Voice-Rewrite.html`) or remove entirely. Do not enter the current Newman quote — it cannot be verified.
+23. **BTG Day 3 — Dorothy Day quote:** Verify before entering Tradition Reflection 3. Check The Long Loneliness and By Little and By Little. Backup quote from The Long Loneliness is in `BTG-3Day-Voice-Rewrite.html` if the primary cannot be confirmed.
+24. **BTG Sanity entry — all 3 days:** Enter revised copy using `BTG-3Day-Voice-Rewrite.html`. Priority order is at the bottom of that doc. Create TTS audio for each field during entry (read aloud before confirming — the field is both the copy and the TTS script).
+25. **BTG Day 3 Journey Close — confirm field with dev:** Does a closing text field exist on the last journey day before the "Journey complete" CTA? The bridge copy to Myth Became Fact is written and ready in `BTG-3Day-Voice-Rewrite.html`. Confirm before entering.
+26. **BTG Days 2 and 3 — Caravaggio back-to-back:** Decide whether two consecutive Caravaggio days is acceptable, or whether Day 2 should use a different artist for variety. Vermeer alternative is noted in `BTG-3Day-Voice-Rewrite.html`.
