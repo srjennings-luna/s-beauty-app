@@ -16,6 +16,12 @@ These rules apply to all content writing sessions for KALLOS — journeys, Pause
 
 **5. Pictorialist photography is an underused content type that belongs in KALLOS.** The core principle: a photograph should be *made*, not just *taken*. Pictorialism (c. 1845-1945) shows ordinary subjects with the same intentionality and reverence as sacred painting: soft focus, tonal richness, emotional depth, without announcing itself as religious. Key photographers (all public domain pre-1928): Julia Margaret Cameron (*Prayer*, 1866), Alfred Stieglitz, Edward Steichen, Henry Peach Robinson, Peter Henry Emerson. Reference: George Eastman House exhibition "Truth/Beauty: Pictorialism and the Photograph as Art, 1845-1945." Before defaulting to another painting, ask: is there a pictorialist photograph that carries this day's quality?
 
+## Art and Music Are a Single Content Decision
+
+The art and music for each journey day are not selected separately. They are a pairing — one content decision, not two. The art alone is less than. The music alone is less than. Together they create the full experience the copy is built to carry. When selecting content for any day, find the pair. Do not lock the art and then hunt for music to fit it. Find what works as a unit.
+
+This applies to content selection order: propose art and music together, not sequentially.
+
 ## Audio (Auditio) Selection Rules
 
 - Music should match the story and emotional arc of the day, not necessarily the historical period of the artwork

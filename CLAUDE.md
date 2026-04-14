@@ -534,6 +534,10 @@ The George Eastman House exhibition "Truth/Beauty: Pictorialism and the Photogra
 
 **Never frame KALLOS as "not a Catholic app."** That framing is unnecessary and inaccurate. The tradition KALLOS recovers is rooted in the Church — do not apologize for that or distance from it. The content points toward beauty, truth, and goodness. Beauty, truth, and goodness point toward God. KALLOS does not make that argument explicitly — it makes the encounter possible. The tradition belongs to everyone. These two things are not in tension.
 
+### Art and Music Are a Single Content Decision
+
+The art and music for each journey day are not selected separately — they are a pairing, one decision. The art alone is incomplete. The music alone is incomplete. The experience is the combination. When selecting content for any day, propose art and music together as a unit. Do not lock the art first and then hunt for music to fit it. Find what works as a pair.
+
 ### Auditio (Audio) Selection Criteria
 The Auditio is a music pairing for P&P and Journey days. Apply these rules when selecting or suggesting audio:
 
