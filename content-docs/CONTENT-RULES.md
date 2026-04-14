@@ -2,9 +2,19 @@
 
 These rules apply to all content writing sessions for KALLOS — journeys, Pause & Ponder, and feast days.
 
-## Content Repetition Prevention
+## Content Selection Rules
 
-Before suggesting any audio track, philosophy quote, or scripture quote, check `KALLOS-Content-Usage-Log.html` first. If it's already been used, warn and suggest an alternative.
+**These apply before any content item is proposed or accepted.**
+
+**1. Check the usage log first — mandatory.** Before suggesting any artwork, artist, thinker, music track, philosophy quote, or scripture, check `KALLOS-Content-Usage-Log.html`. Flag exact duplicates. Flag same-artist, same-tradition, or same-period as potential duplicates even if the specific work differs. If the log is out of date, update it before proceeding.
+
+**2. Ask about existing journeys before proposing content.** When starting any content work, ask: "What journeys already exist that touch this theme or use this artist/thinker?" Do not assume the current doc is the full picture.
+
+**3. Flag similarity before proceeding.** If a proposed content item resembles something already in use — by artist, tradition, period, or emotional register — say so: "This feels similar to [X] in [Y journey] because [reason]. Intentional, or should we look elsewhere?" Claude may be wrong. The point is to surface it.
+
+**4. Content type diversity is enforced, not aspirational.** KALLOS has 8 content types. Sacred art and thinkers are two of them. Before finalizing any day, ask: have we considered landscape, food/wine, math/science, photography, literature, or music-as-content? If all choices cluster in sacred art and thinkers, flag it. Same rule applies to music: have we considered ambient, folk, jazz, world music, or contemporary tracks? If all music suggestions are chant and classical, flag it.
+
+**5. Finding the sacred in the ordinary is the default question.** For both art and music, ask first: "where does a curious person already encounter this quality in their ordinary life?" A photograph, a field recording, a folk melody, a mathematical pattern — these can land harder than overtly sacred choices because they meet the audience where they are. Sacred art and chant are valid and important. They are one option among many, not the default.
 
 ## Audio (Auditio) Selection Rules
 

@@ -503,6 +503,25 @@ Some content — especially feast days and Holy Week — has historical facts wi
 - **Frequency:** Not every day. Only when the material genuinely earns it.
 - **Not a Sanity field.** This is an editorial decision about where to place content you already have — not a new structural element.
 
+### Content Selection Rules
+
+These govern the selection of all content items — art, photography, music, thinkers, literature, landscape, food/wine, math/science — across all journeys and P&P prompts. Apply before proposing or accepting any content.
+
+**1. Cross-journey content check — mandatory.** Before proposing or accepting any content item, read `content-docs/KALLOS-Content-Usage-Log.html`. Flag exact duplicates. Flag same-artist, same-tradition, same-period as potential duplicates even if the specific work differs. Do not proceed with content selection without this check. If the log is out of date, update it before making decisions.
+
+**2. Content-work pre-check.** When starting any content work on a journey, ask Sheri: "What journeys already exist that overlap with this theme, artist, or thinker?" Do not assume the current doc is the full picture. The answer may reveal conflicts that change the entire approach.
+
+**3. Similarity flagging.** If Sheri proposes content that resembles existing content — by artist, tradition, period, conceptual territory, or emotional register — say so before proceeding. Format: "This feels similar to [X] in [Y journey] — I think it's similar because [specific reason]. Is that intentional, or should we look for a different angle?" Claude may be wrong about whether it's truly similar. The goal is to surface it for a decision, not block it.
+
+**4. Content type diversity — enforced, not aspirational.** Before finalizing any journey day, ask: have we considered the full range of KALLOS's 8 content types? Sacred art and thinkers are not defaults — they are two options among eight:
+- Sacred art, Thinker, Literature, Music (as content item type)
+- **Also:** Landscape, Food & Wine, Math & Science, Watch/Listen, Photography
+If all proposed content clusters in sacred art and thinkers, flag it. This applies to music selection too: have we considered ambient, folk, jazz, world music, contemporary alongside or instead of chant and classical sacred? If all music suggestions are from the same register, flag it.
+
+**5. Finding the sacred in the ordinary is the default question.** For both art and music, the first question is NOT "what sacred work depicts this concept?" It is: "where does a curious person already encounter this quality in their ordinary life, without knowing what it's pointing at?" A photograph of light on a table, a field recording, a folk melody, a mathematical pattern, a piece of bread — these can land harder than overtly sacred choices precisely because they meet the audience where they are. Sacred art and chant are valid and important. They are one option among many, not the default.
+
+---
+
 ### Language Rule
 **Never say "non-Catholic" as a user category.** Sheri IS Catholic. Users may or may not be. The audience is always "the curious seeker." This applies to all docs, code comments, and content.
 
