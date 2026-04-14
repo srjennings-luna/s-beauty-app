@@ -24,6 +24,7 @@ This applies to content selection order: propose art and music together, not seq
 
 ## Audio (Auditio) Selection Rules
 
+- **Target length: 3-5 minutes.** Journey day audio plays during a contemplative step, not a concert. Longer pieces (10+ minutes) can still be used — trim to the most evocative section using ffmpeg. Claude can do this: download the recording, trim to the right time range, export as MP3. No separate tool needed.
 - Music should match the story and emotional arc of the day, not necessarily the historical period of the artwork
 - Option A vs Option B must be genuinely different: different sound, different genre, different mood. Never two similar tracks as options.
 - Must be free to download with no copyright restrictions (Pixabay, Musopen, Free Music Archive, Internet Archive)
