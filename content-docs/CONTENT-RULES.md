@@ -28,6 +28,20 @@ Never delete rewrites. Keep the original in a collapsed/hidden block with a labe
 - No first person. No app-speak.
 - Assume no one knows the content. Explain symbolism inline every time.
 
+## Quote and Attribution Rules
+
+- **No invented quotes.** Never attribute words to someone who did not say them — not even plausible-sounding ones.
+- **Paraphrase is allowed only if:** (a) the original quote is real and verifiable, (b) the meaning is not changed, and (c) it is labeled as a paraphrase or summary, not presented in quotation marks as a direct quote.
+- **"(paraphrased)" is a red flag.** If a quote needs to be labeled paraphrased in published copy, it should not appear as a quote. Either find the real quote, or summarize it in prose without quotation marks.
+- When in doubt, cite the source document (book, speech, interview) so it can be verified.
+
+## Specificity Rules
+
+- **Never use vague references.** "A monk in the 13th century" is not acceptable if you can name the monk. Name the person, or give enough context that the reader can understand without needing to know who you mean. Vague references ask for trust that hasn't been built yet.
+- **No absolute superlatives without sourcing.** "He was the greatest philosopher of the medieval world" is a claim that needs backup. Use "considered by many to be" or "among the most influential" unless you can cite who made the claim and when.
+- **Fact-check all time and duration claims.** "He spent 40 years on this question" — verify this before it goes in. If it's wrong, it breaks trust across the whole piece.
+- **No jargon or obscure references without inline explanation.** Users will not know what a kestrel is. If using a specific or technical term (bird species, architectural term, Latin phrase), define it or replace it with a term users will immediately understand. "A hawk" is better than "a kestrel" if the distinction doesn't add meaning for the user.
+
 ## Field-by-Field Rules — The Most Important Section
 
 Every field has a specific job. **Fields must not repeat each other's work.** This is the most common failure mode — re-explaining the opening text in every subsequent field.

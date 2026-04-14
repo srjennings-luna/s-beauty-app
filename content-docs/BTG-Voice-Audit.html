@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTG Journey Voice Audit — KALLOS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fdf6e8;
+            color: #1a1a1a;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .cover {
+            background: #1a1a1a;
+            color: #fdf6e8;
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .cover h1 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 3em;
+            font-weight: 300;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.4em;
+        }
+
+        .cover .subtitle {
+            font-size: 0.9em;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #c19b5f;
+            margin-bottom: 1.5em;
+        }
+
+        .cover .summary {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.15em;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #ccc;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* ── VERDICT ─────────────────────────────── */
+        .verdict-box {
+            background: #fff;
+            border: 2px solid #c19b5f;
+            padding: 2em;
+            margin-bottom: 3em;
+        }
+
+        .verdict-box h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6em;
+            font-weight: 400;
+            color: #1a1a1a;
+            margin-bottom: 0.75em;
+        }
+
+        .verdict-box p {
+            color: #3a3a3a;
+            margin-bottom: 0.75em;
+        }
+
+        .verdict-box p:last-child { margin-bottom: 0; }
+
+        .score-row {
+            display: flex;
+            gap: 2em;
+            margin: 1.5em 0;
+            flex-wrap: wrap;
+        }
+
+        .score-item {
+            flex: 1;
+            min-width: 180px;
+            background: #fdf6e8;
+            border: 1px solid #e5ddd0;
+            padding: 1em;
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 0.75em;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #7a9a8a;
+            margin-bottom: 0.4em;
+        }
+
+        .score-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8em;
+            color: #1a1a1a;
+        }
+
+        .score-note {
+            font-size: 0.8em;
+            color: #7a9a8a;
+            margin-top: 0.2em;
+        }
+
+        /* ── PRINCIPLES ─────────────────────────── */
+        .principles {
+            background: #1a1a1a;
+            color: #fdf6e8;
+            padding: 2em;
+            margin-bottom: 3em;
+        }
+
+        .principles h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4em;
+            font-weight: 300;
+            color: #c19b5f;
+            margin-bottom: 1em;
+        }
+
+        .principle {
+            margin-bottom: 0.8em;
+            padding-left: 1.2em;
+            border-left: 2px solid #c19b5f;
+            font-size: 0.95em;
+            color: #ddd;
+        }
+
+        /* ── DAY BLOCK ────────────────────────────── */
+        .day-block {
+            background: #fff;
+            border: 1px solid #e5ddd0;
+            margin-bottom: 3em;
+        }
+
+        .day-header {
+            background: #4a7a62;
+            color: #fdf6e8;
+            padding: 1.25em 2em;
+            display: flex;
+            align-items: baseline;
+            gap: 1em;
+            flex-wrap: wrap;
+        }
+
+        .day-num {
+            font-size: 0.8em;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        .day-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6em;
+            font-weight: 300;
+        }
+
+        .day-subject {
+            font-size: 0.8em;
+            opacity: 0.7;
+            margin-left: auto;
+        }
+
+        .day-body {
+            padding: 2em;
+        }
+
+        /* ── FIELD ───────────────────────────────── */
+        .field {
+            margin-bottom: 2.5em;
+        }
+
+        .field-label {
+            font-size: 0.72em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #7a9a8a;
+            font-weight: 600;
+            margin-bottom: 0.75em;
+        }
+
+        /* ── COMPARISON ──────────────────────────── */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5em;
+        }
+
+        @media (max-width: 700px) {
+            .comparison { grid-template-columns: 1fr; }
+        }
+
+        .col-current {
+            background: #f9f0f0;
+            border-left: 3px solid #b04040;
+            padding: 1.25em;
+        }
+
+        .col-revised {
+            background: #f0f4f0;
+            border-left: 3px solid #4a7a62;
+            padding: 1.25em;
+        }
+
+        .col-label {
+            font-size: 0.7em;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 0.75em;
+        }
+
+        .col-current .col-label { color: #b04040; }
+        .col-revised .col-label { color: #4a7a62; }
+
+        .copy-text {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-style: italic;
+            font-size: 1.05em;
+            line-height: 1.85;
+            color: #1a1a1a;
+        }
+
+        .copy-text p {
+            margin-bottom: 0.75em;
+        }
+
+        .copy-text p:last-child { margin-bottom: 0; }
+
+        /* ── DIAGNOSIS ───────────────────────────── */
+        .diagnosis {
+            background: #fdf6e8;
+            border: 1px solid #e5ddd0;
+            padding: 1.25em 1.5em;
+            margin-bottom: 1.5em;
+        }
+
+        .diagnosis-label {
+            font-size: 0.72em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #c19b5f;
+            font-weight: 600;
+            margin-bottom: 0.5em;
+        }
+
+        .diagnosis p {
+            font-size: 0.95em;
+            color: #3a3a3a;
+            margin-bottom: 0.4em;
+        }
+
+        .diagnosis p:last-child { margin-bottom: 0; }
+
+        /* ── ISSUES ──────────────────────────────── */
+        .issue {
+            display: inline-block;
+            background: #b04040;
+            color: white;
+            font-size: 0.7em;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.2em 0.5em;
+            margin: 0 0.2em 0.4em 0;
+        }
+
+        .issue.minor {
+            background: #c19b5f;
+        }
+
+        /* ── DIVIDER ─────────────────────────────── */
+        hr {
+            border: none;
+            border-top: 1px solid #e5ddd0;
+            margin: 2em 0;
+        }
+
+        h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2em;
+            font-weight: 400;
+            color: #1a1a1a;
+            margin-bottom: 0.5em;
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #7a9a8a;
+            font-style: italic;
+            margin-top: 0.5em;
+        }
+
+        /* ── SUMMARY TABLE ───────────────────────── */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5em 0;
+        }
+
+        .summary-table th {
+            text-align: left;
+            font-size: 0.75em;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #7a9a8a;
+            padding: 0.6em 1em;
+            border-bottom: 2px solid #e5ddd0;
+        }
+
+        .summary-table td {
+            padding: 0.7em 1em;
+            font-size: 0.95em;
+            border-bottom: 1px solid #e5ddd0;
+            vertical-align: top;
+        }
+
+        .summary-table tr:last-child td { border-bottom: none; }
+
+        .dot-red { color: #b04040; font-size: 1.3em; line-height: 1; }
+        .dot-yellow { color: #c19b5f; font-size: 1.3em; line-height: 1; }
+        .dot-green { color: #4a7a62; font-size: 1.3em; line-height: 1; }
+
+        footer {
+            text-align: center;
+            color: #7a9a8a;
+            font-size: 0.85em;
+            padding: 3em 40px;
+            border-top: 1px solid #e5ddd0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+    <h1>BTG Voice Audit</h1>
+    <div class="subtitle">Beauty, Truth &amp; Goodness — Editorial Review</div>
+    <div class="summary">Does this journey speak in the storyteller voice — specific, surprising, following the thread — or is it lecture mode? Current copy vs. revised, field by field.</div>
+</div>
+
+<div class="container">
+
+    <!-- VERDICT -->
+    <div class="verdict-box">
+        <h2>The Verdict</h2>
+        <p>The BTG journey was written thesis-first. Every day starts with a concept, then reaches for an example to illustrate it. The Myth Journey works the opposite way: it starts with the story, and lets meaning emerge from the specific. The result is that BTG often tells users what to feel instead of giving them something to feel.</p>
+
+        <p>This is not a complete rewrite. The structure is sound. The artwork choices are right. The Go Deeper material is largely excellent. What needs revision is the <strong>Opening Text</strong> on every day, the <strong>Encounter copy</strong> on Days 2–3, and every <strong>Connect Thread</strong>. Those are the first-impression and last-impression fields — and right now they're doing the heavy lifting of explanation when they should be doing the lighter, harder work of invitation.</p>
+
+        <p>The voice to write toward: C.S. Lewis at a dinner table, not C.S. Lewis at a lectern. Specific. A little surprised by what he's found. Following a thread without revealing the end. Never explaining what you're about to feel. </p>
+
+        <div class="score-row">
+            <div class="score-item">
+                <div class="score-label">Opening Texts</div>
+                <div class="score-value">2/7</div>
+                <div class="score-note">need revision</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Encounter Copy</div>
+                <div class="score-value">3/7</div>
+                <div class="score-note">lecture mode issues</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Connect Threads</div>
+                <div class="score-value">0/6</div>
+                <div class="score-note">all announce tomorrow</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Go Deeper</div>
+                <div class="score-value">6/7</div>
+                <div class="score-note">mostly strong</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRINCIPLES -->
+    <div class="principles">
+        <h2>The Rules (from Myth Journey training)</h2>
+        <div class="principle">Open with a story or a specific surprising fact — never with a concept or thesis statement.</div>
+        <div class="principle">Never explain what the artwork means. Point toward it. Let them discover.</div>
+        <div class="principle">The Connect Thread creates a question. It does not summarize the day or announce tomorrow's subject.</div>
+        <div class="principle">Specific over general. Name the year. Name the city. Name the actual person.</div>
+        <div class="principle">The dinner-table test: would you say this to a smart friend at dinner, or does it only happen in classrooms?</div>
+        <div class="principle">Quotes must be verifiable. No "(paraphrased)" in the final copy.</div>
+        <div class="principle">Never tell the user what they're about to feel. Give them something to feel.</div>
+    </div>
+
+    <!-- QUICK SUMMARY TABLE -->
+    <div class="field">
+        <div class="field-label">At-a-Glance Summary by Day</div>
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Subject</th>
+                    <th>Opening</th>
+                    <th>Encounter</th>
+                    <th>Connect</th>
+                    <th>Primary Issue</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>CS Lewis / Joy</td>
+                    <td><span class="dot-yellow">●</span></td>
+                    <td><span class="dot-red">●</span></td>
+                    <td><span class="dot-red">●</span></td>
+                    <td>Immediately goes abstract after decent hook; lecture on the Transcendentals; Connect announces Day 2</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Caravaggio</td>
+                    <td><span class="dot-red">●</span></td>
+                    <td><span class="dot-red">●</span></td>
+                    <td><span class="dot-red">●</span></td>
+                    <td>Tells you what you'll feel; explains painting's meaning; paraphrased quote; Connect announces Day 3</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Aquinas</td>
+                    <td><span class="dot-red">●</span></td>
+                    <td><span class="dot-red">●</span></td>
+                    <td><span class="dot-red">●</span></td>
+                    <td>Entirely concept-first; names and explains <em>splendor veri</em> without arriving at it; weakest day</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Hopkins</td>
+                    <td><span class="dot-yellow">●</span></td>
+                    <td><span class="dot-yellow">●</span></td>
+                    <td><span class="dot-red">●</span></td>
+                    <td>Opening is thin; encounter explains Hopkins's meaning instead of trusting the poem; Connect announces</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Arvo Pärt</td>
+                    <td><span class="dot-red">●</span></td>
+                    <td><span class="dot-yellow">●</span></td>
+                    <td><span class="dot-red">●</span></td>
+                    <td>Abstract opening thesis; encounter has good specific detail but explains "Music does something words cannot"</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Benedict / Bread</td>
+                    <td><span class="dot-red">●</span></td>
+                    <td><span class="dot-green">●</span></td>
+                    <td><span class="dot-red">●</span></td>
+                    <td>Opens with abstract thesis; buries the excellent monastery paragraph; Connect is a journey summary</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Rembrandt</td>
+                    <td><span class="dot-red">●</span></td>
+                    <td><span class="dot-yellow">●</span></td>
+                    <td>—</td>
+                    <td>Opening summarizes the journey instead of opening; Emerson quote unrelated to the day's themes</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">● Red = needs revision &nbsp; ● Amber = revise or trim &nbsp; ● Green = keep</p>
+    </div>
+
+    <hr>
+
+    <!-- ═══════════════ DAY 1 ═══════════════ -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 1</span>
+            <span class="day-title">You felt something</span>
+            <span class="day-subject">CS Lewis / Joy / No artwork</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="diagnosis">
+                    <div class="diagnosis-label">Diagnosis</div>
+                    <p><span class="issue">abstract pivot</span> <span class="issue">lecture mode</span> <span class="issue minor">unverifiable quote</span></p>
+                    <p>The opening paragraph is the best writing in the day — specific enough, personal enough. But the moment the user meets CS Lewis, the text pivots to "For centuries, Western philosophy taught..." That sentence belongs in an academic catalogue, not in someone's pocket at 7am. The Newman quote ("The heart has eyes which the intellect cannot understand") cannot be found in Newman's verified writing — it reads like an apocryphal attribution. The Encounter essentially delivers a lecture on the Transcendentals: "reality has three transcendental properties — Beauty, Truth, and Goodness... This journey explores that ancient insight." This is the itinerary, not the journey. Save the framework for later. Open with the experience.</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Opening Text</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>You came here because something moved you. A painting in a museum. A line of poetry. A piece of music. The beauty of a place. Something you couldn't quite name, but it mattered. That feeling is not an accident. It is an invitation.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>C.S. Lewis was riding on the top deck of a bus heading down Headington Hill, Oxford, Trinity term 1929, when he felt it.</p>
+                            <p>He described it later as a door he'd been keeping shut. Not dramatically. Just quietly, stubbornly closed. On the bus, he felt himself at a choice: open it or not. He opened it. He wrote that he felt "the melting of ice." He called it the most surprising thing that had ever happened to him.</p>
+                            <p>He had no name for what he'd felt. He'd been chasing the same sensation since he was a child: reading Norse mythology, listening to certain music, standing at the edge of a field at dusk. Something moved him. It pointed toward something. It was never satisfied by what it pointed at.</p>
+                            <p>He spent twenty years trying to figure out what it was pointing toward.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Encounter Copy (key section)</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>For centuries, Western philosophy taught that reality has three transcendental properties — Beauty, Truth, and Goodness. They are not separate. When something is truly beautiful, it also points toward truth. When we understand the truth of something, it calls us toward goodness. And when we act with genuine goodness, there is always beauty in it. This journey explores that ancient insight: you don't have to believe anything to start. You just have to follow what moved you.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>He called it <em>Joy</em> — not happiness, not contentment. Something closer to a wound. A longing that came with its own ache. He traced it back through his life and found it in strange places: a toy garden his brother had made from a biscuit tin. The idea of autumn. A line in a poem by Longfellow: "I heard a voice that cried, Balder the Beautiful / Is dead, is dead." He read that line and felt it stab him with an inexplicable desire — for what, he couldn't say. Not Balder. Not Norse mythology. Something the line was pointing at.</p>
+                            <p>He spent years mistaking the pointer for the thing itself. He went after beauty and found it was pointing somewhere. He followed poetry, music, landscape, and each time they moved him, they also refused to fully satisfy him. Like following a scent you can never trace to its source.</p>
+                            <p>He concluded, eventually, that this was the point. The longing was the signal. It was telling him something about what he was made for.</p>
+                            <p>You don't have to agree with his conclusion to follow the same thread.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Connect Thread</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>Beauty is never accidental. It always points somewhere. Tomorrow, we meet a painter who understood this perfectly.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>Lewis said Joy always pointed toward something he couldn't name, something none of the beautiful things he'd followed could actually give him. A painter working in Rome in 1599 thought he knew what it was. He put it in the light.</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="note">Why: The current thread summarizes ("beauty always points") then announces ("a painter who understood this perfectly"). The revision creates a question — what was Caravaggio pointing at? — without revealing the answer.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════ DAY 2 ═══════════════ -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 2</span>
+            <span class="day-title">The painter who saw God's light</span>
+            <span class="day-subject">Caravaggio — Calling of Saint Matthew</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="diagnosis">
+                    <div class="diagnosis-label">Diagnosis</div>
+                    <p><span class="issue">tells not shows</span> <span class="issue">explains meaning</span> <span class="issue">paraphrased quote</span></p>
+                    <p>Opening sentence is a lecture: "Stand in front of this painting and you understand something immediately: light is not neutral. It chooses." This is telling users what they will experience. The Myth Journey never tells you what you'll feel — it describes what happened, specifically, and trusts you to feel it. The encounter then explains: "What makes this painting transcendent is Caravaggio's understanding of light itself... light is the medium of divine action... how God calls." All of that is correct — but it's being explained rather than arrived at. The Caravaggio quote is marked "(paraphrased)" — unverifiable quotes should be cut. The day's most compelling material is the specific fact about the first rejected version of the painting, which doesn't appear here at all.</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Opening Text</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>Stand in front of this painting and you understand something immediately: light is not neutral. It chooses. It illuminates and it awakens. It is an act of grace.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>In 1599, Caravaggio painted an altarpiece for the French church in Rome. The church rejected it.</p>
+                            <p>The figure of Matthew looked too much like a laborer, they said. His feet were dirty. His legs were too thick. He didn't look like a saint. Caravaggio, who had already killed a man by this point and was wanted for assault in three separate incidents, painted it again.</p>
+                            <p>In the second version (the one hanging there now), Matthew sits in a dark corner counting money at a tax collector's table. The men around him are entirely ordinary. The light comes from outside the frame, from a source you cannot see. It crosses the room at an impossible angle. A figure stands in the doorway, unremarkable, arm extended, one finger pointing. Matthew looks up, startled, and touches his own chest as if asking: <em>me?</em></p>
+                            <p>Caravaggio understood something about being found where you actually are. He'd spent his whole career painting it.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Encounter Copy (key section — what to cut)</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current — Cut or rewrite</div>
+                        <div class="copy-text">
+                            <p>What makes this painting transcendent is Caravaggio's understanding of light itself. For him, light is not mere illumination. It is the medium of divine action. It is how God calls. It is how God sees us. When light touches something, that thing is no longer hidden — it is revealed, chosen, transformed. In painting this, Caravaggio shows us the deepest truth about beauty: it is always a call. It always asks something of us. And it is always specific — it finds us where we are, not where we think we should be.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised — Let them arrive</div>
+                        <div class="copy-text">
+                            <p>The men at the table barely react. Two of them don't look up at all. One shields his eyes, not dramatically, more like someone who has learned not to notice things. Another leans in toward Matthew, curious about the pointing finger, as if waiting to see what Matthew does. Only Matthew reacts as if the light has found something specific in him.</p>
+                            <p>The genius of this painting is that everyone in it is standing in the same light. But not everyone is the same when the light finds them.</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="note">Why: The current copy explains the painting's theological meaning in full. The revision describes what's actually visible and lets the meaning come from looking. The user arrives at the insight rather than receiving it pre-packaged.</p>
+            </div>
+
+            <div class="field">
+                <h3>Quote — Remove (paraphrased)</h3>
+                <div class="col-current" style="padding: 1.25em; margin-bottom: 1em;">
+                    <div class="col-label">Current — Remove</div>
+                    <div class="copy-text">
+                        <p>"I paint with my brush, but God paints with light. I only try to follow where the light leads."<br>— Caravaggio (paraphrased)</p>
+                    </div>
+                </div>
+                <p class="note">Paraphrased quotes have no place in KALLOS content. Caravaggio left no verified writings. If a quote is needed here, use a contemporary source on Caravaggio (Giovanni Baglione, who disliked him, or Giulio Mancini, who was his physician) — or leave the space for the painting to speak.</p>
+            </div>
+
+            <div class="field">
+                <h3>Connect Thread</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>Caravaggio painted light as divine action. But where does this light come from? Tomorrow, we meet a mystic who spent his life thinking about exactly this question.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>Caravaggio was working from something built over centuries before he picked up a brush. Thomas Aquinas, a Dominican friar writing in 13th-century Naples, had tried to think it all the way through: what exactly was happening when light touched something and you felt it. He got further than anyone. He still didn't reach the end.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════ DAY 3 ═══════════════ -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 3</span>
+            <span class="day-title">Where beauty points</span>
+            <span class="day-subject">Thomas Aquinas — Splendor Veri</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="diagnosis">
+                    <div class="diagnosis-label">Diagnosis</div>
+                    <p><span class="issue">weakest day</span> <span class="issue">all concept, no story</span> <span class="issue">explains the concept</span></p>
+                    <p>This is the most thoroughly lecture-mode day in the journey. The opening is a thesis question ("At some point, every genuine beauty asks the same silent question: 'Where do I come from?'"). The encounter defines, names, and explains <em>splendor veri</em> as a term before the user has had any experience that would make the term meaningful. "This is what Aquinas called <em>splendor veri</em> — the splendor of truth. Beauty is what truth looks like when light falls on it." That's true — but it's being delivered as a lecture. Aquinas himself is fascinating: the strange silent child, the monk who wrote 8 million words and then stopped mid-sentence. His story should open the day. The concept should arrive at the end.</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Opening Text</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>At some point, every genuine beauty asks the same silent question: "Where do I come from? What does it mean that I exist?"</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>Thomas Aquinas was five years old when his father sent him to a monastery. The monks at Monte Cassino watched him grow into something odd: a boy who barely spoke, moved slowly, and appeared to be thinking about one question for years at a time. His classmates called him "the dumb ox."</p>
+                            <p>He became one of the most influential philosophers of the medieval world.</p>
+                            <p>In the last seven years of his life, he wrote the <em>Summa Theologiae</em>, a total synthesis of everything he understood about God, the soul, beauty, and how they connect. He never finished it. On December 6, 1273, something happened to him during Mass. He never described what it was. He set down his pen and said: "All that I have written seems to me like straw compared to what I have seen." He didn't write another word. He died four months later.</p>
+                            <p>What he had seen, he couldn't say. But what he wrote before he stopped contains the clearest thinking anyone has ever done about why beautiful things tell the truth.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Encounter Copy (key section)</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>Thomas Aquinas, the great medieval theologian, defined truth this simply: it is the correspondence between the mind and reality. The painting is beautiful because it corresponds to something real about calling, about light, about transformation. It's not making something up. It's showing us what is actually true about how love works.</p>
+                            <p>This is what Aquinas called <em>splendor veri</em> — the splendor of truth. Beauty is what truth looks like when light falls on it. And so when we encounter genuine beauty, we are not escaping from truth. We are being led toward it.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>Aquinas started with a simple observation. A painting can be technically perfect (correct proportions, expert brushwork, exactly what it set out to depict) and still feel dead. Another painting can be rougher, less polished, and stop you in a corridor. You don't know why. You only know the difference between them.</p>
+                            <p>Aquinas called what the second painting had <em>splendor</em>: a radiance, a brightness that comes from the thing itself and not just from how it's made. He argued it wasn't a feeling you projected onto the painting. It was something the painting was doing: revealing something about reality that the paint alone couldn't account for.</p>
+                            <p>He spent his scholarly life on this question. He died mid-sentence. He never got all the way to the end.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Connect Thread</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>If beauty reveals truth, then every beautiful thing is telling us something about what is real. Tomorrow, we listen to a poet who spent his life learning to hear what creation is saying.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>Aquinas used a single word for it: <em>splendor</em>. A poet six centuries later went looking for what that looked like on ordinary things: hawks, coals, the flight of a finch. He found it. But he burned everything first.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════ DAY 4 ═══════════════ -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 4</span>
+            <span class="day-title">Everything speaks</span>
+            <span class="day-subject">Gerard Manley Hopkins — Poetry</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="diagnosis">
+                    <div class="diagnosis-label">Diagnosis</div>
+                    <p><span class="issue minor">thin opening</span> <span class="issue minor">explains the poem</span> <span class="issue">announces tomorrow</span></p>
+                    <p>Day 4 is one of the stronger days — it uses actual poem lines, and the quote from "Spring" is excellent. The main problems: the opening is a setup line ("A poet walked through an ordinary world and saw it burning with light") rather than a story. The encounter explains what Hopkins meant ("What did Hopkins mean? That the world is not dead") rather than trusting the poem. Hopkins's actual story is extraordinary — he burned his poems, spent seven years in silence, then returned — and it would make a much stronger opening than the generic description. The Connect Thread announces tomorrow ("Tomorrow, we listen to what happens when sound becomes a language for the sacred") which both summarizes Day 4 and spoils Day 5.</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Opening Text</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>A poet walked through an ordinary world and saw it burning with light. He spent his life trying to help others see what he saw. That seeing is available to you.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>Gerard Manley Hopkins burned his poems.</p>
+                            <p>He had been writing for six years, extraordinary poems, entirely original, nothing like anything being written in England at the time, when he entered the Jesuit novitiate in 1868. He believed his writing was a distraction. He threw everything on the fire. He didn't write another poem for seven years.</p>
+                            <p>Then a priest at his seminary mentioned, offhandedly, that someone ought to write something about the five Franciscan nuns who had drowned in a German shipwreck. Hopkins asked his rector if he had permission to try. The rector said he supposed so. That winter, Hopkins sat down and wrote a 280-line poem unlike anything written in English before or since. The sound of a mind running at full speed.</p>
+                            <p>He went on to write everything in the six years that followed. He died in 1889 without having published a single poem. His friend Robert Bridges kept the manuscripts for thirty years. The world discovered him in 1918.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Encounter Copy — The explanation to remove</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current — Cut</div>
+                        <div class="copy-text">
+                            <p>What did Hopkins mean? That the world is not dead. That every particular thing — every dappled thing, every pied beauty — radiates divine light. That a kestrel, a piece of coal, a shaft of light through factory smoke, carries within it the fingerprints of God. Not as metaphor. As literal truth.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised — Trust the poem</div>
+                        <div class="copy-text">
+                            <p>He was writing in the 1870s and 1880s, surrounded by the Industrial Revolution. Smokestacks. Rail lines. The English countryside being methodically replaced with soot and iron. He looked at the same world and wrote: <em>The world is charged with the grandeur of God. It will flame out, like shining from shook foil.</em></p>
+                            <p>He wasn't arguing for it. He was reporting it. He had looked at ordinary things: hawks in flight, pieces of coal, dappled light on a field, and seen them doing something that shouldn't, technically, have been visible. He spent his whole career trying to describe what that was.</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="note">Why: The current copy explains what Hopkins meant. The revision keeps the report, not the interpretation. The user can arrive at "literal truth" on their own.</p>
+            </div>
+
+            <div class="field">
+                <h3>Connect Thread</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>When we see the world as Hopkins did, we begin to understand its music. Tomorrow, we listen to what happens when sound becomes a language for the sacred.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>Hopkins called the world "charged," the way a wire is charged. He meant there was something stored in it, waiting to be released. An Estonian composer spent eight years in silence before he figured out how to release it. He did it with one note at a time.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════ DAY 5 ═══════════════ -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 5</span>
+            <span class="day-title">The language of silence</span>
+            <span class="day-subject">Arvo Pärt — Music</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="diagnosis">
+                    <div class="diagnosis-label">Diagnosis</div>
+                    <p><span class="issue">abstract thesis opening</span> <span class="issue minor">explains what music does</span> <span class="issue">announces tomorrow</span></p>
+                    <p>Day 5 has the best specific material in the encounter copy — the tintinnabuli technique, "Spiegel im Spiegel," the silence between phrases. That's all solid. But the opening is a pure abstract thesis ("Some truths cannot be spoken. They can only be heard in the spaces between words") and the encounter ends by explaining what music does ("Music does something words cannot... the deepest truths are only accessible through beauty"). Pärt's actual story is remarkable — the eight years of silence, the Soviet ban on "Credo," the emergence of a completely new compositional language — and it belongs at the opening, not in the middle. The encounter can trust the listener to feel what tintinnabuli does without explaining why music is important.</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Opening Text</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>Some truths cannot be spoken. They can only be heard in the spaces between words, in sound that seems to come from nowhere and everywhere at once.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>In 1968, Arvo Pärt wrote a piece called "Credo." The Soviet cultural authorities banned it immediately. The word <em>credo</em> ("I believe") was politically unacceptable.</p>
+                            <p>Pärt entered eight years of silence. He stopped composing. He studied Gregorian chant and early polyphony. He read the Desert Fathers. He began listening to the space between notes, the silence that makes the notes possible.</p>
+                            <p>In 1976 he emerged with a new technique he called <em>tintinnabuli</em>, from the Latin for "little bells." The first piece he wrote with it was "Für Alina." One page. Four minutes. A small thing that arrived from eight years of not speaking.</p>
+                            <p>Everything he has written since sounds like a bell ringing in a very large, very still room.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Encounter Copy — The explanation to remove</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current — Cut</div>
+                        <div class="copy-text">
+                            <p>Music does something words cannot. It speaks to the deepest parts of us without passing through reason or judgment. When you hear Pärt's work, you are encountering a truth that cannot be translated into language without being diminished. This is what the mystics knew: sometimes the deepest truths are only accessible through beauty.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised — Let the music do it</div>
+                        <div class="copy-text">
+                            <p>He was asked once what tintinnabuli meant to him. He said: "I have discovered that it is enough when a single note is beautifully played."</p>
+                            <p>He meant it. Each phrase in his music rings and seems to reflect off itself. The silence between phrases is not emptiness. It is the note still going.</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="note">The Pärt quote (already in the current day) is genuine and excellent. Let it do the work. Remove the paragraph that explains what music does.</p>
+            </div>
+
+            <div class="field">
+                <h3>Connect Thread</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>Truth speaks through light and through sound. But the deepest truths call us to do something. They call us toward the good. Tomorrow, we meet a contemplative tradition that understands action as prayer.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>Pärt learned to listen to what was already there. In a monastery in southern Italy, men have been doing something like this with bread for fifteen centuries. It turns out that bread, made with that kind of attention, tastes completely different.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════ DAY 6 ═══════════════ -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 6</span>
+            <span class="day-title">What beauty asks of us</span>
+            <span class="day-subject">Benedict / Bread / Benedictine Hospitality</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="diagnosis">
+                    <div class="diagnosis-label">Diagnosis</div>
+                    <p><span class="issue">abstract thesis opening</span> <span class="issue minor">buries the story</span></p>
+                    <p>Day 6 is actually the closest day to Myth Journey voice — the monastery paragraph is excellent, and the Benedict quote is real and grounded. The problem is structural: the excellent writing is buried under an abstract opening ("Beauty is not just something we observe. It is something that transforms us into people who are capable of responding to it"). That sentence is the ending of a thought, not the beginning of an experience. Move the monastery paragraph to the top. The encounter section explaining "what the good means in practice" is also slightly lecture mode but close enough to fix with a trim. The Connect Thread is the weakest in the journey — it summarizes the entire arc ("Beauty, truth, and goodness are not separate") which is both a spoiler and a lesson.</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Opening Text — Swap order</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>Beauty is not just something we observe. It is something that transforms us into people who are capable of responding to it. And the deepest response to beauty is always an act of love.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>There is a monastery in southern Italy called Monte Cassino. Records show it has been making bread since the sixth century. Not approximately since. There are records.</p>
+                            <p>The Rule of Saint Benedict, written by the monastery's founder in 530 AD, includes specific instructions for bread: who bakes it, how it is to be distributed, that the portion for the sick should be larger. Benedict was not primarily a mystic. He was a man who thought very carefully about bread.</p>
+                            <p>He also wrote this: "All guests who present themselves are to be welcomed as Christ." Not as if they were Christ. As Christ. The stranger arriving hungry at the gate <em>is</em> Christ. The bread you put in their hands is what you put in his.</p>
+                            <p>He wrote this in the sixth century, while the Roman Empire was collapsing around him. Roads were unsafe. The economy had broken down. Visigoths had sacked Rome. Benedict sat down and wrote instructions about bread and hospitality that have been followed, continuously, for fifteen hundred years.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Connect Thread</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>Beauty, truth, and goodness are not separate. Tomorrow, we see them whole — the complete vision of a life transformed by encounter with what is sacred.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>In 1669, a painter in Amsterdam, sixty-three years old and blind in one eye, picked up a brush. He had been thinking about one story for thirty years. He had finally lived enough to paint it.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════ DAY 7 ═══════════════ -->
+    <div class="day-block">
+        <div class="day-header">
+            <span class="day-num">Day 7</span>
+            <span class="day-title">The complete vision</span>
+            <span class="day-subject">Rembrandt — Return of the Prodigal Son</span>
+        </div>
+        <div class="day-body">
+
+            <div class="field">
+                <div class="diagnosis">
+                    <div class="diagnosis-label">Diagnosis</div>
+                    <p><span class="issue">summary as opening</span> <span class="issue minor">over-explains the painting</span> <span class="issue minor">wrong closing quote</span></p>
+                    <p>The opening summarizes what the user has already done ("You have followed a path. From the moment beauty moved you, through the truths it revealed, to the good it calls you toward"). This is the letter recapping the trip while the trip is still happening. The encounter is close — it describes the painting well. But it then over-explains: "This painting contains everything we have learned. The beauty of light and form (Caravaggio's lesson). The truth it reveals..." If the journey has worked, the user will feel the connections without being told. The Emerson quote at the end ("Do not go where the path may lead...") is the kind of thing you find embroidered on a motivational pillow. It has no connection to the prodigal son, to Rembrandt, or to the themes of the journey. Replace or remove it. Rembrandt's own story should open the day — it is the Prodigal Son story, lived. </p>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Opening Text</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current</div>
+                        <div class="copy-text">
+                            <p>You have followed a path. From the moment beauty moved you, through the truths it revealed, to the good it calls you toward. Now we look at the vision whole — what it means to live a life awakened to beauty, shaped by truth, and oriented toward goodness.</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised</div>
+                        <div class="copy-text">
+                            <p>Rembrandt van Rijn painted <em>The Return of the Prodigal Son</em> when he was sixty-three years old, blind in one eye, and bankrupt. His wife had died. His son Titus had died. He had already sold everything he owned to pay his debts — his paintings, his props, his costumes, the accumulated work of a lifetime. He kept painting.</p>
+                            <p>The painting is almost nine feet tall. The father in it is very nearly blind, his eyes unfocused, his gaze directed inward. He leans forward with effort toward the kneeling figure. His hands rest on his son's shoulders. Look closely at the hands: one is larger and flat, a man's hand, strong. The other is smaller and curved, more like a woman's hand, gentle. One father, with both kinds of love.</p>
+                            <p>Art historians believe Rembrandt had been thinking about this painting for thirty years. It may be the last major canvas he completed. He died the following year.</p>
+                            <p>He may have been painting himself.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <h3>Encounter Copy — The over-explanation to cut</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current — Cut this paragraph</div>
+                        <div class="copy-text">
+                            <p>This painting contains everything we have learned. The beauty of light and form (Caravaggio's lesson). The truth it reveals — that we can be known and still loved, that returning home is possible (the deepest truth about human existence). And the goodness it calls forth — the tenderness of touch, the willingness to receive another without judgment (the call to become people of mercy).</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised — Trust the journey</div>
+                        <div class="copy-text">
+                            <p>The light in the painting falls on the place where the two bodies meet. It is the only bright point in the canvas. Everything else recedes into darkness.</p>
+                            <p>Rembrandt had spent his whole career painting light. Here, at the end, he knew exactly where to put it.</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="note">If the previous six days have done their work, the user will feel the connections to Caravaggio's light, to Aquinas's splendor, to Hopkins's charged world, without being told. The journey earns its resonance by not explaining it.</p>
+            </div>
+
+            <div class="field">
+                <h3>Quote — Replace</h3>
+                <div class="comparison">
+                    <div class="col-current">
+                        <div class="col-label">Current — Remove</div>
+                        <div class="copy-text">
+                            <p>"Do not go where the path may lead. Go instead where there is no path and leave a trail."<br>— Often attributed to Emerson</p>
+                        </div>
+                    </div>
+                    <div class="col-revised">
+                        <div class="col-label">Revised — Use this instead</div>
+                        <div class="copy-text">
+                            <p>"Our Lord finds our desires, not too strong, but too weak. We are half-hearted creatures, fooling about with drink and sex and ambition when infinite joy is offered us, like an ignorant child who wants to go on making mud pies in a slum because he cannot imagine what is meant by the offer of a holiday at the sea."<br>— C.S. Lewis, <em>The Weight of Glory</em> (1941)</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="note">This threads back to Day 1 — Lewis's Joy — and closes the loop. The journey opened with what moved him and ends with what he made of it. The "mud pies in a slum" image is also quintessential Lewis at dinner: specific, strange, memorable, and completely serious. Alternatively, the Rembrandt/prodigal son story is the quote — you don't need a separate one.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════ PRIORITY ORDER ═══════════════ -->
+    <div class="verdict-box">
+        <h2>Where to Start</h2>
+        <p>If you're entering these changes in Sanity, this is the order that will have the most impact per hour of effort:</p>
+
+        <p><strong>1. All Connect Threads (6 fields, high impact, short copy).</strong> These are the last thing a user reads each day. They're currently doing the wrong job — summarizing and announcing. The revised threads are all 2–3 sentences. This can be done in one sitting.</p>
+
+        <p><strong>2. Day 2 Opening Text (Caravaggio).</strong> First artwork day, highest traffic. The rejected-first-painting story is the strongest hook rewrite in this document. Changes the entire tone of Days 2–7.</p>
+
+        <p><strong>3. Day 3 Opening Text (Aquinas).</strong> Currently the weakest day. The Aquinas story — the dumb ox, the pen set down, the "straw" — is extraordinary. This one rewrite turns the conceptually driest day into potentially the most memorable.</p>
+
+        <p><strong>4. Day 1 Opening Text + Encounter.</strong> The CS Lewis Headington Hill story. Opens the whole journey differently.</p>
+
+        <p><strong>5. Day 6 Opening Text.</strong> Move the monastery paragraph to the top — this is a structural fix, not a rewrite. Ten seconds in Sanity.</p>
+
+        <p><strong>6. Day 5 Opening Text (Pärt).</strong> The eight years of silence story. Cut the final "Music does something words cannot" paragraph.</p>
+
+        <p><strong>7. Day 7 Opening Text + quote swap.</strong> Rembrandt's biography + replacing the Emerson quote with Lewis. This closes the CS Lewis thread that opened Day 1.</p>
+    </div>
+
+</div>
+
+<footer>
+    KALLOS Editorial — BTG Voice Audit &nbsp;·&nbsp; April 2026
+</footer>
+
+</body>
+</html>

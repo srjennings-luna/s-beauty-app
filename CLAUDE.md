@@ -164,6 +164,14 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ skills-tracker skill created — PM resume/skills evidence tracker. Available in Documents folder.
 - ✅ Bosch journey + Bosch Sanity entry guide added to CLAUDE.md content docs table
 
+### Phase 2 Work Done (April 13, 2026)
+- ✅ Share CTA added to Journey Connect step — circle icon (40px, gold border) + "SHARE THIS JOURNEY" small caps label. Uses Web Share API: shares journey title + URL. Clipboard fallback for unsupported platforms. paddingBottom 24px (matches paddingTop 20px rhythm).
+- ✅ OG meta tags for journey pages — created `app/journeys/[slug]/layout.tsx` with `generateMetadata`. Pulls journey title, description, and hero image from Sanity. Enables rich iMessage/social link preview cards. `NEXT_PUBLIC_SITE_URL=https://s-beauty-app.vercel.app` set in .env.local and Vercel environment variables.
+- ✅ X button on Connect step now marks day complete — header close button was calling `onClose` without `onMarkComplete`. Fixed to match swipe behavior.
+- ✅ Theme pill removed from journey pages — removed from journey card list and journey detail hero. Theme tagging serves the Explore filter, not a visible label.
+- ✅ `totalDays` field added to Sanity journey schema — editors set the intended full arc once. GROQ queries updated to `coalesce(totalDays, count(days))`. Detail page prefers Sanity field. Sanity Studio deployed. All 4 journeys updated: Beauty Truth & Goodness (3 days), When Myth Became Fact (7 days), Light (7 days), Bosch (8 days).
+- ✅ Journey complete badge redesigned — gold filled circle (30px, rgba(193,155,95,0.92)) with cream checkmark SVG. Replaces "Complete ✓" text badge. In-progress journeys still show "Day X/Y" text badge.
+
 ### Phase 2 Work Done (April 2, 2026)
 - ✅ Context expanded text opacity fixed — expanded paragraphs were using `creamDim` (50% opacity) while teaser used `cream` (88% opacity). Both now use `cream` consistently. Fix in `app/prompt/PromptClient.tsx`.
 - ✅ OG image social sharing fixed — root cause: Next.js auto-generated `og:image` URL did not include the `?date=` param, so all platforms cached one image indefinitely. Fix: added `generateMetadata` export to `app/prompt/page.tsx` (requires server component). Client UI moved to `app/prompt/PromptClient.tsx`. `generateMetadata` now fetches the prompt server-side and sets `og:image` directly to the Sanity CDN URL with `?w=1200&fit=crop&auto=format`. Fast, globally cached, no generation timeout.
@@ -347,7 +355,7 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 |--------|--------|
 | `theme` | ✅ New — 5 founding themes |
 | `contentItem` | ✅ New — replaces artwork. Includes `audioFile` (Sanity-hosted) + `musicUrl` (external link) for music type |
-| `journey` | ✅ New — 7-day structure |
+| `journey` | ✅ New — 7-day structure. Added `totalDays` number field (April 13, 2026) — editors set intended arc length independently of built days. |
 | `dailyPrompt` | ✅ New — "Pause & Ponder" daily feature on Today tab. Auditio object includes `verbaOriginal` (optional text field for lyrics, shown in collapsible VERBA panel in app) |
 | `splashPage` | ✅ Kept unchanged |
 | `traditionReflection` | ✅ Updated — themes ref array added. ⚠️ **Schema change needed:** `authorType` currently only allows `church-father`, `saint`, `pope`. Need to add 3 new values: `theologian`, `mystic`, `church-doctor`. Also change field to allow **multiple selections** (some figures are both saint + doctor, etc.). **Known mismatches:** Jean-Pierre de Caussade (Jesuit priest, not a saint — currently tagged as `saint` as placeholder until new categories exist). |
@@ -395,6 +403,8 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 - **P&P page** — No Begin state. Layout: Image → Title/date → Curator Note → Prompt Question → Context teaser → Lectio → Auditio → Actio. Typography: Cormorant for prompt question and lectio quotes (both, always, at 1.3rem+). Open Sans italic for auditio title. Open Sans regular for everything else.
 - **Music player** — Chant / Ambient options on Pray page
 - **Map** with colored markers by content type
+- **Journey Social Sharing** — Share CTA on Connect step (Step 5). Circle icon + "SHARE THIS JOURNEY" small caps. Web Share API sends journey title + URL. OG meta tags on each journey page pull title, description, and hero image from Sanity for rich link previews. `NEXT_PUBLIC_SITE_URL` env var controls base URL.
+- **Journey complete badge** — Gold filled circle (30px) with cream checkmark SVG in top-right corner of journey card. Shows when journey progress reaches 100%. In-progress shows "Day X/Y" text badge.
 - **P&P Social Sharing** — Share button on P&P page. Uses `navigator.share()` Web Share API. Sends prompt question + "— KALLOS" as message text, date-stable URL (`/prompt?date=YYYY-MM-DD`) as link. Dynamic OG image at `app/prompt/opengraph-image.tsx` (full-bleed artwork + KALLOS wordmark bottom-left, no question text in image). Confirmed working: X, Facebook, iMessage, Instagram DM. Known limitation: Instagram Stories only accepts media files (images/video), not URLs — platform constraint, not a bug. Clipboard fallback for unsupported platforms.
 
 ---
@@ -578,6 +588,8 @@ These can't be done in code — Sheri does them in dashboards:
 11. ~~**Holy Week P&P — write Lectio pairings (all 8 days)**~~ ✅ Done (in entry guide)
 12. ~~**Holy Week P&P — write Actio (all 8 days)**~~ ✅ Done (in entry guide)
 13. ~~**Holy Week P&P — Sanity entry:**~~ ✅ All 8 days entered and published (April 1, 2026). Day 8 audio is a placeholder — confirm or replace before Easter. Use Verba textarea for Days 2-3 if re-entering.
+20. **Day 1 Connect Thread em dash in Sanity:** Text reads "other forms — and not every one of them stayed in the past." Replace "—" with a comma. Manual Sanity edit on the When Myth Became Fact journey, Day 1 Connect Thread field.
+21. **Set `totalDays` for all journeys in Sanity Studio:** ✅ Done April 13. BTG = 3, When Myth Became Fact = 7, Light = 7, Bosch = 8.
 19. **Custom domain:** Replace `s-beauty-app.vercel.app` with `kallos.app` or update Vercel alias to `kallos-app.vercel.app` before wider launch.
 17. **Palm Sunday — Sanity edits still pending:** curator note rewrite (palms as political act = the hook), context fix ("The disciples behind him are not watching Christ. They are watching the crowd." replaces "almost mechanical" line), actio update ("Press play. While it plays, zoom into the painting and find one face. Stay with it until the music ends.")
 18. **Holy Monday — upload audio:** `01-adoro-te-devote--st-cecilia.mp3` is in Documents/Holy Week/Audio-Holy Week/. Upload to Holy Monday Sanity record Audio File Upload field. Then copy Verba text from entry guide textarea into Verba field.
