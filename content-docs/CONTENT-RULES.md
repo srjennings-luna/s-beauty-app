@@ -21,7 +21,9 @@ Never delete rewrites. Keep the original in a collapsed/hidden block with a labe
 ## Voice Rules
 
 - Lead with a story, not a lecture. C.S. Lewis style: invite the user to discover, don't tell them what to think.
+- **C.S. Lewis is an internal register test, not a name to announce to the audience.** "Would Lewis say this?" is the editorial self-check — specific over general, story before concept, never lectures. Lewis does not appear in user-facing copy unless he IS the content item (e.g., a Thinker day about Lewis himself).
 - Start opening text with a person, a scene, a specific moment — never a thesis statement
+- **Opening text length follows content, not a target.** One short scene is right for some days. A full myth story is right for others. The test is whether the content earns the length, not whether the length matches a rule. When Myth Became Fact Day 1 opens with a full myth story — that length is correct.
 - Every curator note opens with one surprising, specific, shareable fact (the dinner-table test)
 - No em dashes (telltale AI text)
 - Banned words: "journey" (for the experience), "sacred," "profound," "transformative," "spiritual practice," "invitation to...," "encounter with the divine," "nourish your soul"
@@ -60,6 +62,11 @@ The app has text-to-speech. Users can listen rather than read. This changes the 
 **The rule that does not change:** every field still has one job. TTS gives more room to do that job well; it does not license repetition or padding.
 
 **TTS workflow:** TTS audio is created during Sanity entry, field by field. Every field you enter is also the TTS script. Read each field aloud before confirming the entry. If it sounds wrong when spoken, fix it before moving on.
+
+**ElevenLabs pacing controls:**
+- Comma: natural breath beat. Use for a short pause mid-sentence.
+- Ellipsis (...): trailing pause with trailing-off quality. Longer than a comma but softer. Avoid if the copy needs to land firmly — use a period instead.
+- SSML break tag: precise control. `<break time="300ms"/>` inserts an exact pause. Use when neither a comma nor an ellipsis gives the right weight (e.g., a two-word phrase that needs a beat after it without trailing off).
 
 ## Field-by-Field Rules — The Most Important Section
 
