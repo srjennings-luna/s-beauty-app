@@ -166,6 +166,14 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ skills-tracker skill created — PM resume/skills evidence tracker. Available in Documents folder.
 - ✅ Bosch journey + Bosch Sanity entry guide added to CLAUDE.md content docs table
 
+### Phase 2 Work Done (April 21, 2026)
+- ✅ Conversation backup hook — added `SessionEnd` hook to `~/.claude/settings.json`. Backups now write on every session close, not only on context compression. Backup location: `~/Documents/claude-conversation-backups/`.
+- ✅ Sanity "Preview in app" expanded — now available on `journey` (→ `/journeys/[slug]`), `contentItem` sacred-art (→ `/pray/[id]`), and `splashPage` (→ `/splash`) in addition to `dailyPrompt`. Refactored with `resolvePreviewUrl()` helper in `sanity/sanity.config.ts`. Non-previewable types show a clear alert.
+- ✅ Sanity Studio upgraded to React 19.2.5 — matches main app. `react`, `react-dom`, `@types/react` all updated in `sanity/package.json`. Studio redeployed clean.
+- ✅ Journey day deep-linking — `?day=N` URL parameter added. Tapping a shared day link opens that day's stepper directly. Per-day OG metadata: day artwork, day title, "Day N of [Journey]" as description. `app/journeys/[slug]/page.tsx` converted to server component with `generateMetadata` handling both journey-level and day-level cases. Client UI extracted to `app/journeys/[slug]/JourneyDetailClient.tsx` with `useSearchParams` URL sync.
+- ✅ Share This Day — upload arrow icon on each day list row (left of chevron). `stopPropagation` so tap-to-open still works. Shares `title + url` only (no text field) to prevent double link previews in iMessage.
+- ✅ Share icon consistency — upload arrow SVG used app-wide: Share This Journey (Connect step, replaces 3-circle network icon), P&P share (top bar), Share This Day (day list row).
+
 ### Phase 2 Work Done (April 13, 2026)
 - ✅ Share CTA added to Journey Connect step — circle icon (40px, gold border) + "SHARE THIS JOURNEY" small caps label. Uses Web Share API: shares journey title + URL. Clipboard fallback for unsupported platforms. paddingBottom 24px (matches paddingTop 20px rhythm).
 - ✅ OG meta tags for journey pages — created `app/journeys/[slug]/layout.tsx` with `generateMetadata`. Pulls journey title, description, and hero image from Sanity. Enables rich iMessage/social link preview cards. `NEXT_PUBLIC_SITE_URL=https://s-beauty-app.vercel.app` set in .env.local and Vercel environment variables.
@@ -418,9 +426,11 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 - **P&P page** — No Begin state. Layout: Image → Title/date → Curator Note → Prompt Question → Context teaser → Lectio → Auditio → Actio. Typography: Cormorant for prompt question and lectio quotes (both, always, at 1.3rem+). Open Sans italic for auditio title. Open Sans regular for everything else.
 - **Music player** — Chant / Ambient options on Pray page
 - **Map** with colored markers by content type
-- **Journey Social Sharing** — Share CTA on Connect step (Step 5). Circle icon + "SHARE THIS JOURNEY" small caps. Web Share API sends journey title + URL. OG meta tags on each journey page pull title, description, and hero image from Sanity for rich link previews. `NEXT_PUBLIC_SITE_URL` env var controls base URL.
+- **Journey Social Sharing** — Share CTA on Connect step (Step 5). Upload arrow icon + "SHARE THIS JOURNEY" small caps. Web Share API sends journey title + URL. OG meta tags on each journey page pull title, description, and hero image from Sanity for rich link previews. `NEXT_PUBLIC_SITE_URL` env var controls base URL.
+- **Share This Day** — Upload arrow icon on each day list row (left of chevron). Shares `/journeys/[slug]?day=N` with day title + "Day N of [Journey]" as OG metadata. iMessage card shows day artwork and day title. `stopPropagation` so tap-to-open still works.
+- **Journey day deep-linking** — `?day=N` URL param. Shared day link opens that day's stepper directly. Per-day OG metadata served from server component `generateMetadata` in `app/journeys/[slug]/page.tsx`.
 - **Journey complete badge** — Gold filled circle (30px) with cream checkmark SVG in top-right corner of journey card. Shows when journey progress reaches 100%. In-progress shows "Day X/Y" text badge.
-- **P&P Social Sharing** — Share button on P&P page. Uses `navigator.share()` Web Share API. Sends prompt question + "— KALLOS" as message text, date-stable URL (`/prompt?date=YYYY-MM-DD`) as link. Dynamic OG image at `app/prompt/opengraph-image.tsx` (full-bleed artwork + KALLOS wordmark bottom-left, no question text in image). Confirmed working: X, Facebook, iMessage, Instagram DM. Known limitation: Instagram Stories only accepts media files (images/video), not URLs — platform constraint, not a bug. Clipboard fallback for unsupported platforms.
+- **P&P Social Sharing** — Share button on P&P page (upload arrow icon). Uses `navigator.share()` Web Share API. Sends prompt question + "— KALLOS" as message text, date-stable URL (`/prompt?date=YYYY-MM-DD`) as link. Dynamic OG image at `app/prompt/opengraph-image.tsx` (full-bleed artwork + KALLOS wordmark bottom-left, no question text in image). Confirmed working: X, Facebook, iMessage, Instagram DM. Known limitation: Instagram Stories only accepts media files (images/video), not URLs — platform constraint, not a bug. Clipboard fallback for unsupported platforms.
 
 ---
 
@@ -503,6 +513,16 @@ Some content — especially feast days and Holy Week — has historical facts wi
 - **Frequency:** Not every day. Only when the material genuinely earns it.
 - **Not a Sanity field.** This is an editorial decision about where to place content you already have — not a new structural element.
 
+### Journey Hero Image Convention
+
+**The hero image for every journey is the Day 1 artwork.** It is the entry point into the journey — it sets the tone without previewing the resolution. Using the final day's artwork gives away the ending before the user begins. Using art from outside the journey introduces an image with no role in the content.
+
+Established April 17, 2026. Apply to all new journeys going forward. Existing journeys may need updating if they use placeholder or thematically-selected-but-unrelated art.
+
+**BTG II (Beauty, Truth & Goodness — 3 Day):** Hero image = Julia Margaret Cameron, "English Blossoms" (Day 1 artwork). Cropped file ready: `JMG-English-Blossoms-cropped.jpg` in `Documents/Journeys/BTG-New Revised Journey/new btg artworks/`.
+
+---
+
 ### Content Selection Rules
 
 These govern the selection of all content items — art, photography, music, thinkers, literature, landscape, food/wine, math/science — across all journeys and P&P prompts. Apply before proposing or accepting any content.
@@ -584,6 +604,9 @@ Replaced with Stories-style thin progress bar at top + swipe navigation. No foot
 ### ~~Breath Interaction~~ ✅ RESOLVED
 Built as dedicated Breathe page (Step 3). Full-bleed image with 8x zoom, pulsing dot animation (CSS keyframe, `scale(1)→scale(4)`, 8s infinite loop), helper text "Sit with this image and let your eyes explore." Cormorant Garamond italic.
 
+### Journey Day Stepper — Share This Day placement (April 21, 2026)
+Share This Day currently lives on the day list row only. In-stepper placement was explored and deferred: left header felt wrong for a content app; bottom share bar conflicts with copy-heavy steps (Day 1 opening text fills the screen); Connect step is a candidate but needs intentional design alongside Share This Journey. Revisit when there is dedicated design time. The day list row share covers the content-review and pre-experience use cases for now.
+
 ### Journey Day Steps — Connect Step (Step 5)
 Current: Dark background with next-day image drift animation. Simple.
 Open question: What's the right visual treatment for the "sneak peek" of the next day's image?
@@ -660,3 +683,6 @@ These can't be done in code — Sheri does them in dashboards:
 33. **BTG Day 1 — TR2 Augustine:** Verify quote source before entry — see flag in `BTG-3Day-Voice-Rewrite.html`. Enter revised body text (story-first rewrite). Do not enter until quote is confirmed. Note: "Our heart is restless until it rests in Thee" is reserved for Day 3 TR1 — do not use here.
 34. **BTG Day 1 — TR3 JPII:** Replace current unverified quote with "Beauty is a key to the mystery and a call to transcendence." from *Letter to Artists* (1999). Verify exact paragraph number before entry. Enter revised body text from `BTG-3Day-Voice-Rewrite.html`.
 35. **Verify before Day 1 Sanity entry:** (a) Simone Weil quote exact wording — *Waiting for God*, chapter on beauty. (b) JPII Letter to Artists paragraph number for "Beauty is a key to the mystery." (c) Psalm 27:4 RSV-2CE exact wording (already in item 30 above — confirm against RSV-2CE text).
+36. **Schema: Add Photography as content type** — Content type selector in Sanity does not currently include Photography. Add `photography` as an option alongside sacred-art, thinker, literature, music, landscape, food-wine, math-science, watch-listen. Needed before any Pictorialist photography content item can be entered (e.g., Cameron "English Blossoms" Day 1).
+37. **Schema: Add "Ancient" as Era option in Go Deeper (Tradition Reflections)** — The Era dropdown for TR entries does not currently include Ancient. Add it as an option. Needed for BTG Day 2 TR1 (Aristotle, 384-322 BCE) and any other pre-Medieval thinkers.
+38. **Schema: Add "Fresco" as Medium option** — The Medium dropdown does not include Fresco. Add it alongside Oil on canvas, Oil on panel, Engraving, Marble relief, etc. Needed for Raphael's School of Athens (Myth Journey Day 3) and any future fresco content. Enter as custom text in Sanity for now.
