@@ -1,195 +1,98 @@
-"use client";
-
-import { useEffect, useState, useCallback } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { Suspense } from "react";
+import type { Metadata } from "next";
 import { getJourney } from "@/lib/sanity";
-import type { Journey, JourneyDay, PlannedDay } from "@/lib/types";
-import PageTransition from "@/components/ui/PageTransition";
-import JourneyDaySteps from "@/components/JourneyDaySteps";
+import JourneyDetailClient from "./JourneyDetailClient";
 
-// ── Progress helpers ─────────────────────────────────────────────────────────
+// ── Metadata ─────────────────────────────────────────────────────────────────
 
-const PROGRESS_KEY = "kallos-journey-progress";
-
-function loadProgress(slug: string): number[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(PROGRESS_KEY);
-    return (JSON.parse(raw ?? "{}")?.[slug]?.completedDays ?? []) as number[];
-  } catch {
-    return [];
-  }
-}
-
-function saveProgress(slug: string, completedDays: number[]) {
-  try {
-    const raw = localStorage.getItem(PROGRESS_KEY);
-    const data = JSON.parse(raw ?? "{}");
-    data[slug] = { completedDays, updatedAt: new Date().toISOString() };
-    localStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
-  } catch {
-    /* ignore */
-  }
-}
-
-// ── Day row (overview list item — taps to open stepper) ──────────────────────
-
-function DayRow({
-  day,
-  isComplete,
-  isActive,
-  onOpen,
+export async function generateMetadata({
+  params,
+  searchParams,
 }: {
-  day: JourneyDay;
-  isComplete: boolean;
-  isActive: boolean;
-  onOpen: () => void;
-}) {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ day?: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const { day: dayParam } = await searchParams;
+  const journey = await getJourney(slug);
 
-  return (
-    <button
-      className={`w-full flex items-center gap-4 px-5 py-4 text-left border-l-2 transition-colors bg-white border-b border-black/5 ${
-        isComplete ? "border-l-[#4a7a62]" : "border-l-black/8"
-      }`}
-      onClick={onOpen}
-    >
-      {/* Day number circle */}
-      <div
-        className={`flex-shrink-0 w-9 h-9 flex items-center justify-center text-sm font-bold border transition-colors ${
-          isComplete
-            ? "border-[#4a7a62] text-[#4a7a62] bg-[#4a7a62]/8"
-            : isActive
-            ? "border-[#1a1a1a]/40 text-[#1a1a1a]"
-            : "border-black/10 text-[#7a9a8a]"
-        }`}
-      >
-        {isComplete ? "✓" : day.dayNumber}
-      </div>
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://kallos.app";
 
-      <div className="flex-1 min-w-0">
-        <p className="text-[#7a9a8a] text-xs tracking-widest uppercase mb-0.5">
-          Day {day.dayNumber}
-        </p>
-        <h3
-          className={`font-semibold text-sm line-clamp-1 transition-colors ${
-            isActive || isComplete ? "text-[#1a1a1a]" : "text-[#7a9a8a]"
-          }`}
-        >
-          {day.dayTitle}
-        </h3>
-      </div>
+  if (!journey) {
+    return {
+      title: "Journey — KALLOS",
+      description: "A contemplative journey through beauty, truth, and goodness.",
+    };
+  }
 
-      <div className="flex-shrink-0 flex items-center gap-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className="w-4 h-4 text-[#7a9a8a]"
-        >
-          <path
-            fillRule="evenodd"
-            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </div>
-    </button>
-  );
-}
+  // Per-day metadata when ?day=N is present
+  if (dayParam) {
+    const dayNum = parseInt(dayParam, 10);
+    const day = journey.days?.find((d: { dayNumber: number }) => d.dayNumber === dayNum);
+    if (day) {
+      const pageUrl = `${siteUrl}/journeys/${slug}?day=${dayNum}`;
+      const imageUrl = day.openImageUrl ?? journey.heroImageUrl ?? null;
+      const description = `Day ${dayNum} of ${journey.title}`;
+      return {
+        title: `${day.dayTitle} — KALLOS`,
+        description,
+        metadataBase: new URL(siteUrl),
+        openGraph: {
+          title: day.dayTitle,
+          description,
+          url: pageUrl,
+          siteName: "KALLOS",
+          type: "website",
+          ...(imageUrl && {
+            images: [{ url: imageUrl, width: 1200, height: 630, alt: day.dayTitle }],
+          }),
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: day.dayTitle,
+          description,
+          ...(imageUrl && { images: [imageUrl] }),
+        },
+      };
+    }
+  }
 
-// ── Locked day row (planned but not yet published) ────────────────────────────
-
-function LockedDayRow({ planned }: { planned: PlannedDay }) {
-  return (
-    <div className="w-full flex items-center gap-4 px-5 py-4 text-left border-l-2 border-b border-black/5 border-l-black/8 opacity-35 select-none">
-      {/* Day number circle */}
-      <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center text-sm font-bold border border-black/10 text-[#7a9a8a]">
-        {planned.dayNumber}
-      </div>
-
-      <div className="flex-1 min-w-0">
-        <p className="text-[#7a9a8a] text-xs tracking-widest uppercase mb-0.5">
-          Day {planned.dayNumber}
-        </p>
-        <h3 className="font-semibold text-sm line-clamp-1 text-[#7a9a8a]">
-          {planned.dayTitle}
-        </h3>
-      </div>
-
-      {/* Lock icon */}
-      <div className="flex-shrink-0">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className="w-4 h-4 text-[#7a9a8a]"
-        >
-          <path
-            fillRule="evenodd"
-            d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </div>
-    </div>
-  );
+  // Journey-level metadata
+  const pageUrl = `${siteUrl}/journeys/${slug}`;
+  const imageUrl = journey.heroImageUrl ?? null;
+  return {
+    title: `${journey.title} — KALLOS`,
+    description: journey.description,
+    metadataBase: new URL(siteUrl),
+    openGraph: {
+      title: journey.title,
+      description: journey.description,
+      url: pageUrl,
+      siteName: "KALLOS",
+      type: "website",
+      ...(imageUrl && {
+        images: [{ url: imageUrl, width: 1200, height: 630, alt: journey.title }],
+      }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: journey.title,
+      description: journey.description,
+      ...(imageUrl && { images: [imageUrl] }),
+    },
+  };
 }
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 
-export default function JourneyDetailPage() {
-  const params = useParams();
-  const router = useRouter();
-  const slug = params?.slug as string;
-
-  const [journey, setJourney] = useState<Journey | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [completedDays, setCompletedDays] = useState<number[]>([]);
-  const [activeDay, setActiveDay] = useState<JourneyDay | null>(null);
-
-  useEffect(() => {
-    if (!slug) return;
-    async function fetchData() {
-      try {
-        const data = await getJourney(slug);
-        setJourney(data ?? null);
-        setCompletedDays(loadProgress(slug));
-      } catch (err) {
-        console.error("Error fetching journey:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, [slug]);
-
-  const toggleDayComplete = useCallback(
-    (dayNumber: number) => {
-      setCompletedDays((prev) => {
-        const next = prev.includes(dayNumber)
-          ? prev
-          : [...prev, dayNumber];
-        saveProgress(slug, next);
-        return next;
-      });
-    },
-    [slug],
-  );
-
-  // ── Loading state ──────────────────────────────────────────────────────────
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#fdf6e8] flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-[#4a7a62] rounded-full animate-spin mb-2" />
-          <p className="text-[#7a9a8a] text-sm">Loading journey…</p>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Not found state ────────────────────────────────────────────────────────
+export default async function JourneyDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const journey = await getJourney(slug);
 
   if (!journey) {
     return (
@@ -198,176 +101,27 @@ export default function JourneyDetailPage() {
           <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-3">
             Not found
           </p>
-          <h2 className="text-[#1a1a1a] text-xl font-bold mb-4">
-            Journey not found
-          </h2>
-          <button
-            onClick={() => router.back()}
-            className="text-[#7a9a8a] text-sm hover:text-[#1a1a1a] transition-colors"
-          >
-            ← Go back
-          </button>
+          <h2 className="text-[#1a1a1a] text-xl font-bold mb-4">Journey not found</h2>
+          <a href="/journeys" className="text-[#7a9a8a] text-sm hover:text-[#1a1a1a] transition-colors">
+            ← Back to journeys
+          </a>
         </div>
       </div>
     );
   }
-
-  // ── Derived values ─────────────────────────────────────────────────────────
-
-  const completedCount = completedDays.length;
-
-  // Build merged day list: built days + planned-but-not-yet-built days, sorted by dayNumber.
-  // plannedDays entries that share a dayNumber with a real day are filtered out (already built).
-  const builtDayNumbers = new Set((journey.days ?? []).map((d) => d.dayNumber));
-  const lockedDays: PlannedDay[] = (journey.plannedDays ?? []).filter(
-    (p) => !builtDayNumbers.has(p.dayNumber),
-  );
-  const totalDays = journey.totalDays ?? (builtDayNumbers.size + lockedDays.length || 7);
-
-  const progressPct = Math.round((completedCount / totalDays) * 100);
-  const nextDay = journey.days?.find(
-    (d) => !completedDays.includes(d.dayNumber),
-  );
-
-  // ── Full-screen day stepper (when a day is tapped) ─────────────────────────
-
-  if (activeDay) {
-    const nextDay = journey.days?.find(
-      (d) => d.dayNumber === activeDay.dayNumber + 1,
-    );
-    return (
-      <JourneyDaySteps
-        day={activeDay}
-        nextDay={nextDay}
-        isComplete={completedDays.includes(activeDay.dayNumber)}
-        onClose={() => setActiveDay(null)}
-        onMarkComplete={() => toggleDayComplete(activeDay.dayNumber)}
-        journeyTitle={journey.title}
-        journeySlug={slug}
-      />
-    );
-  }
-
-  // ── Journey overview ───────────────────────────────────────────────────────
 
   return (
-    <PageTransition>
-      <div className="min-h-screen bg-[#fdf6e8]">
-        {/* Hero */}
-        <div className="relative h-[280px]">
-          <img
-            src={journey.heroImageUrl}
-            alt={journey.title}
-            className="w-full h-full object-cover"
-          />
-          {/* Gradient fades to parchment at bottom */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#fdf6e8]" />
-
-          {/* Back button */}
-          <button
-            onClick={() => router.back()}
-            aria-label="Go back"
-            className="absolute top-12 left-4 w-9 h-9 flex items-center justify-center bg-black/40 backdrop-blur-sm text-white"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-5 h-5"
-            >
-              <path
-                fillRule="evenodd"
-                d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-
-        </div>
-
-        {/* Journey info */}
-        <div className="px-5 pt-2 pb-6">
-          <h1 className="font-serif-elegant text-3xl text-[#1a1a1a] mb-2">
-            {journey.title}
-          </h1>
-          <p className="text-[#7a9a8a] text-sm leading-relaxed mb-4">
-            {journey.description}
-          </p>
-
-          <div className="flex items-center gap-4 mb-4">
-            <span className="text-[#7a9a8a] text-xs">
-              {journey.estimatedMinutesPerDay ?? 10} min/day
-            </span>
-            <span className="text-[#7a9a8a]/40">·</span>
-            <span className="text-[#7a9a8a] text-xs">{totalDays} days</span>
-            {completedCount > 0 && (
-              <>
-                <span className="text-[#7a9a8a]/40">·</span>
-                <span className="text-[#4a7a62] text-xs">
-                  {completedCount}/{totalDays} complete
-                </span>
-              </>
-            )}
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#fdf6e8] flex items-center justify-center">
+          <div className="text-center">
+            <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-[#4a7a62] rounded-full animate-spin mb-2" />
+            <p className="text-[#7a9a8a] text-sm">Loading journey…</p>
           </div>
-
-          {/* Progress bar */}
-          <div className="h-1 bg-black/5 mb-2">
-            <div
-              className="h-full bg-[#4a7a62] transition-all duration-500"
-              style={{ width: `${progressPct}%` }}
-            />
-          </div>
-
-          {/* Jump to next day */}
-          {nextDay && completedCount > 0 && (
-            <button
-              onClick={() => setActiveDay(nextDay)}
-              className="cta-inline mt-2"
-            >
-              Continue with Day {nextDay.dayNumber}: {nextDay.dayTitle} →
-            </button>
-          )}
         </div>
-
-        {/* Day list — built days and locked planned days merged by dayNumber */}
-        <div className="pb-28">
-          {(() => {
-            // Build a sorted combined list for rendering
-            type BuiltEntry = { type: "built"; day: JourneyDay };
-            type LockedEntry = { type: "locked"; planned: PlannedDay };
-            type Entry = BuiltEntry | LockedEntry;
-
-            const entries: Entry[] = [
-              ...(journey.days ?? []).map((d): BuiltEntry => ({ type: "built", day: d })),
-              ...lockedDays.map((p): LockedEntry => ({ type: "locked", planned: p })),
-            ].sort((a, b) => {
-              const numA = a.type === "built" ? a.day.dayNumber : a.planned.dayNumber;
-              const numB = b.type === "built" ? b.day.dayNumber : b.planned.dayNumber;
-              return numA - numB;
-            });
-
-            return entries.map((entry) => {
-              if (entry.type === "locked") {
-                return <LockedDayRow key={`planned-${entry.planned.dayNumber}`} planned={entry.planned} />;
-              }
-              const { day } = entry;
-              const isComplete = completedDays.includes(day.dayNumber);
-              const isActive =
-                (!isComplete && day === nextDay) ||
-                (completedCount === 0 && day.dayNumber === 1);
-              return (
-                <DayRow
-                  key={day.dayNumber}
-                  day={day}
-                  isComplete={isComplete}
-                  isActive={isActive}
-                  onOpen={() => setActiveDay(day)}
-                />
-              );
-            });
-          })()}
-        </div>
-      </div>
-    </PageTransition>
+      }
+    >
+      <JourneyDetailClient journey={journey} slug={slug} />
+    </Suspense>
   );
 }
