@@ -6,27 +6,60 @@ import {schemaTypes} from './schemaTypes'
 // Preview URL for the KALLOS app on Vercel
 const APP_PREVIEW_URL = 'https://s-beauty-app.vercel.app'
 
-// Custom document action: opens the P&P page in preview mode for the given date
+// Resolve the in-app preview URL for a given schema type + document.
+// Returns null (with a reason) when a document can't be previewed yet.
+function resolvePreviewUrl(
+  schemaType: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  doc: any,
+): {url: string} | {error: string} {
+  switch (schemaType) {
+    case 'dailyPrompt': {
+      const date = doc?.date as string | undefined
+      if (!date) return {error: 'Save the document with a date first, then use Preview in app.'}
+      return {url: `${APP_PREVIEW_URL}/prompt?date=${date}&preview=1`}
+    }
+    case 'journey': {
+      const slug = doc?.slug?.current as string | undefined
+      if (!slug) return {error: 'Save the document with a slug first, then use Preview in app.'}
+      return {url: `${APP_PREVIEW_URL}/journeys/${slug}?preview=1`}
+    }
+    case 'contentItem': {
+      const contentType = doc?.contentType as string | undefined
+      const id = doc?._id as string | undefined
+      if (contentType !== 'sacred-art') {
+        return {error: 'Preview in app is only available for sacred-art content items.'}
+      }
+      if (!id) return {error: 'Save the document first, then use Preview in app.'}
+      const cleanId = id.replace(/^drafts\./, '')
+      return {url: `${APP_PREVIEW_URL}/pray/${cleanId}?preview=1`}
+    }
+    case 'splashPage':
+      return {url: `${APP_PREVIEW_URL}/splash?preview=1`}
+    default:
+      return {error: 'Preview in app is not available for this content type.'}
+  }
+}
+
+// Custom document action: opens the in-app preview for the current document.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function PreviewInAppAction(props: any) {
   const doc = props.draft || props.published
-  const date = doc?.date as string | undefined
+  const result = resolvePreviewUrl(props.type as string, doc)
 
   return {
     label: 'Preview in app',
     onHandle: () => {
-      if (date) {
-        window.open(
-          `${APP_PREVIEW_URL}/prompt?date=${date}&preview=1`,
-          '_blank',
-          'noopener,noreferrer'
-        )
+      if ('url' in result) {
+        window.open(result.url, '_blank', 'noopener,noreferrer')
       } else {
-        alert('Save the document with a date first, then use Preview in app.')
+        alert(result.error)
       }
     },
   }
 }
+
+const PREVIEWABLE_TYPES = new Set(['dailyPrompt', 'journey', 'contentItem', 'splashPage'])
 
 export default defineConfig({
   name: 'default',
@@ -56,7 +89,7 @@ export default defineConfig({
   document: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     actions: (prev: any[], context: any) => {
-      if (context.schemaType === 'dailyPrompt') {
+      if (PREVIEWABLE_TYPES.has(context.schemaType)) {
         return [...prev, PreviewInAppAction]
       }
       return prev
