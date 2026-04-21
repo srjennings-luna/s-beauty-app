@@ -38,11 +38,13 @@ function DayRow({
   isComplete,
   isActive,
   onOpen,
+  onShare,
 }: {
   day: JourneyDay;
   isComplete: boolean;
   isActive: boolean;
   onOpen: () => void;
+  onShare: () => void;
 }) {
   return (
     <button
@@ -76,7 +78,16 @@ function DayRow({
         </h3>
       </div>
 
-      <div className="flex-shrink-0 flex items-center gap-2">
+      <div className="flex-shrink-0 flex items-center gap-1">
+        <button
+          onClick={(e) => { e.stopPropagation(); onShare(); }}
+          className="w-8 h-8 flex items-center justify-center text-[#b0c4b8] hover:text-[#4a7a62] transition-colors"
+          aria-label={`Share Day ${day.dayNumber}`}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+            <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/>
+          </svg>
+        </button>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
@@ -308,6 +319,15 @@ export default function JourneyDetailClient({
                   isComplete={isComplete}
                   isActive={isActive}
                   onOpen={() => openDay(day)}
+                  onShare={() => {
+                    const url = `${window.location.origin}/journeys/${slug}?day=${day.dayNumber}`;
+                    const title = `Day ${day.dayNumber} of ${journey.title} — KALLOS`;
+                    if (navigator.share) {
+                      navigator.share({ title, url }).catch(() => {});
+                    } else {
+                      navigator.clipboard.writeText(url).catch(() => {});
+                    }
+                  }}
                 />
               );
             });

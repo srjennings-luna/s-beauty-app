@@ -875,9 +875,7 @@ function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete, journeyTit
             justifyContent: "center",
           }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(193,155,95,0.75)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/>
             </svg>
           </div>
           <span className="text-xs tracking-widest uppercase" style={{ color: `rgba(193,155,95,0.65)`, letterSpacing: "0.28em" }}>
@@ -1045,19 +1043,6 @@ export default function JourneyDaySteps({
   const handleNextQuestion = useCallback(() => setQuestionIndex((i) => i + 1), []);
   const isLastStep = step === totalSteps - 1;
 
-  const handleShareDay = useCallback(() => {
-    const url = journeySlug
-      ? `${window.location.origin}/journeys/${journeySlug}?day=${day.dayNumber}`
-      : window.location.href;
-    const title = journeyTitle
-      ? `Day ${day.dayNumber} of ${journeyTitle} — KALLOS`
-      : `Day ${day.dayNumber}: ${day.dayTitle} — KALLOS`;
-    if (navigator.share) {
-      navigator.share({ title, url }).catch(() => {});
-    } else {
-      navigator.clipboard.writeText(url).catch(() => {});
-    }
-  }, [day.dayNumber, day.dayTitle, journeySlug, journeyTitle]);
 
   // Swipe detection
   // touch-action: pan-y on the container (see JSX below) tells the browser to handle
@@ -1171,42 +1156,30 @@ export default function JourneyDaySteps({
               <span />
             )}
 
-            {/* Right: share-day icon + forward arrow (or close X on last step) */}
-            <div className="flex items-center gap-1">
+            {/* Right: forward arrow on non-last steps, close X on last step */}
+            {isLastStep ? (
               <button
-                onClick={handleShareDay}
+                onClick={() => { if (!isComplete) onMarkComplete(); onClose(); }}
                 className="w-9 h-9 flex items-center justify-center"
-                style={{ color: "rgba(255,255,255,0.6)" }}
-                aria-label="Share this day"
+                style={{ color: C.creamFaint }}
+                aria-label="Close journey"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              {isLastStep ? (
-                <button
-                  onClick={() => { if (!isComplete) onMarkComplete(); onClose(); }}
-                  className="w-9 h-9 flex items-center justify-center"
-                  style={{ color: C.creamFaint }}
-                  aria-label="Close journey"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              ) : (
-                <button
-                  onClick={handleNext}
-                  className="w-9 h-9 flex items-center justify-center"
-                  style={{ color: "rgba(255,255,255,0.6)" }}
-                  aria-label="Next step"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                    <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
-                  </svg>
-                </button>
-              )}
-            </div>
+            ) : (
+              <button
+                onClick={handleNext}
+                className="w-9 h-9 flex items-center justify-center"
+                style={{ color: "rgba(255,255,255,0.6)" }}
+                aria-label="Next step"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                  <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
+                </svg>
+              </button>
+            )}
           </div>
 
         </div>
