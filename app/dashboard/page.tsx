@@ -167,13 +167,49 @@ export default async function DashboardPage() {
     notFound();
   }
 
-  const [journeys, contentItems, trData, audioStatus, tts] = await Promise.all([
-    getDashboardJourneyCompletion() as Promise<JourneyCompletionRow[]>,
-    getDashboardContentItems() as Promise<ContentItemRow[]>,
-    getDashboardTraditionReflections() as Promise<{ list: TRRow[]; byJourney: TRByJourney[] }>,
-    getDashboardAudioStatus() as Promise<{ journeys: AudioJourney[]; prompts: AudioPrompt[] }>,
-    getDashboardTTSAudit() as Promise<TTSResult>,
+  const [rawJourneys, rawContentItems, rawTrData, rawAudioStatus, rawTTS] = await Promise.all([
+    getDashboardJourneyCompletion() as Promise<(JourneyCompletionRow | null)[] | null>,
+    getDashboardContentItems() as Promise<(ContentItemRow | null)[] | null>,
+    getDashboardTraditionReflections() as Promise<{ list: (TRRow | null)[] | null; byJourney: (TRByJourney | null)[] | null } | null>,
+    getDashboardAudioStatus() as Promise<{ journeys: (AudioJourney | null)[] | null; prompts: (AudioPrompt | null)[] | null } | null>,
+    getDashboardTTSAudit() as Promise<TTSResult | null>,
   ]);
+
+  // ─── Null-safe normalization ─────────────────────────────────────────
+  // Sanity `->` dereferences return null when a reference target is missing
+  // (deleted doc, unpublished, or orphaned). Those nulls flatten into arrays
+  // like `days[].goDeeper[]->{...}`. Filter everything once, at the boundary,
+  // so downstream code and JSX can assume non-null rows.
+  const notNull = <T,>(x: T): x is NonNullable<T> => x != null;
+
+  const journeys: JourneyCompletionRow[] = (rawJourneys ?? []).filter(notNull).map((j) => ({
+    ...j,
+    days: (j.days ?? []).filter(notNull),
+  }));
+  const contentItems: ContentItemRow[] = (rawContentItems ?? []).filter(notNull);
+  const trData: { list: TRRow[]; byJourney: TRByJourney[] } = {
+    list: (rawTrData?.list ?? []).filter(notNull),
+    byJourney: (rawTrData?.byJourney ?? []).filter(notNull).map((j) => ({
+      ...j,
+      trRefs: (j.trRefs ?? []).filter(notNull),
+    })),
+  };
+  const audioStatus: { journeys: AudioJourney[]; prompts: AudioPrompt[] } = {
+    journeys: (rawAudioStatus?.journeys ?? []).filter(notNull).map((j) => ({
+      ...j,
+      days: (j.days ?? []).filter(notNull),
+    })),
+    prompts: (rawAudioStatus?.prompts ?? []).filter(notNull),
+  };
+  const tts: TTSResult = {
+    journeyDayTTS: (rawTTS?.journeyDayTTS ?? []).filter(notNull).map((j) => ({
+      ...j,
+      days: (j.days ?? []).filter(notNull),
+    })),
+    contentItemTTS: (rawTTS?.contentItemTTS ?? []).filter(notNull),
+    dailyPromptTTS: (rawTTS?.dailyPromptTTS ?? []).filter(notNull),
+    traditionReflectionTTS: (rawTTS?.traditionReflectionTTS ?? []).filter(notNull),
+  };
 
   // ─── Section 1 data prep ─────────────────────────────────────────────
   const journeysSorted = [...journeys].sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
