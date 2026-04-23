@@ -48,13 +48,16 @@ Read this at the start of every session. It contains all key product decisions, 
 | `content-docs/KALLOS-Cowork-Briefing.html` | **In repo** — master context brief (product purpose, seven users, Lectio standard, Sheri's working style) |
 | `content-docs/KALLOS-Content-Guide-7Day-Journey.html` | **In repo** — agent content instructions for 7-day Journey content |
 | `content-docs/KALLOS-Content-Guide-Pause-Ponder.html` | **In repo** — agent content instructions for Pause and Ponder daily prompts |
-| `content-docs/KALLOS-MythJourney-v3.html` | **In repo** — active Myth Journey (7 days, all fields, all content locked through Day 2) |
+| `content-docs/KALLOS-MythJourney-v3.html` | **In repo** — active Myth Journey (7 days, all fields). Days 1-4 complete in Sanity (Day 4 entered April 22, 2026). Days 5-7 pending. |
 | `content-docs/KALLOS-JustinMartyr-PP-SanityEntry.html` | **In repo** — "They Were Early" Justin Martyr Pause and Ponder Sanity entry guide. April 12, 2026. All fields complete. Includes CTA linking to When Myth Became Fact journey. |
 | `content-docs/BTG-3Day-Voice-Rewrite.html` | **In repo** — Complete voice rewrite of the 3-day BTG journey. April 13, 2026. Treats BTG as a standalone playlist for users who have never heard the term "Transcendentals." Includes Journey Description Card, Lewis-register titles, all 3 days (Day 3 = Emmaus), Day 3 Journey Close (bridge to Myth Became Fact), quote flags (Newman/Dorothy Day), and priority Sanity entry order. Supersedes `BTG-3Day-Field-Revisions.html`. |
 | `content-docs/KALLOS-BTG-Day3-Goodness-SanityEntry.html` | **In repo** — Day 3 Goodness (Emmaus) Sanity entry guide. Caravaggio "Supper at Emmaus" 1601. Day title: "Everything Was Pointing Here." All fields complete. Dorothy Day quote (Tradition Reflection 3) needs verification before entry. |
 | `content-docs/KALLOS-Myth-Journey-Arc.html` | **In repo** — Myth Journey arc planning doc |
 | `content-docs/KALLOS-Content-Usage-Log.html` | **In repo** — content usage log (tracks audio, quotes, scripture used across all content) |
 | `content-docs/CONTENT-RULES.md` | **In repo** — condensed content rules reference |
+| `content-docs/KALLOS-CC-Audit-Brief.html` | **In repo** — Claude Code audit brief. READ THIS before any architecture or schema work. Three tasks: schema audit, full content inventory (including Go Deeper tracker), and regenerable content dashboard. No code changes during the audit session — query and report only. |
+| `content-docs/KALLOS-Schema-Audit.html` | **In repo** — Task 1 output from audit (April 23, 2026). Full schema field inventory, cross-schema duplicate detection, GROQ trace, dead-field analysis, 15 prioritized recommendations (R1–R15). Read before any schema or data migration work. |
+| `content-docs/KALLOS-Content-Inventory.html` | **In repo** — Task 2 output from audit (April 23, 2026). Full Sanity content inventory snapshot: 53 content items, 27 P&P prompts, 28 tradition reflections, 5 journeys. Field-by-field completeness, TTS coverage (70,017 char gap), consolidated red list. GROQ queries embedded at bottom for reuse. |
 | `KALLOS-Intro-Journey-Beauty-Truth-Goodness.html` | Intro journey — 7 days, all fields, ready for Sanity |
 | `KALLOS-StPatrick-Day1-Draft.html` | St. Patrick feast day content — Day 1 standalone draft for review |
 | `KALLOS-Sanity-Entry-Guide-Themes-2-5.docx` | Entry guide for seeding Themes 2–5 into Sanity |
@@ -165,6 +168,10 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ session-close skill created — approval-gated session documentation tool. Available in Documents folder.
 - ✅ skills-tracker skill created — PM resume/skills evidence tracker. Available in Documents folder.
 - ✅ Bosch journey + Bosch Sanity entry guide added to CLAUDE.md content docs table
+
+### Phase 2 Work Done (April 22, 2026)
+- ✅ When Myth Became Fact Day 4 content complete and entered in Sanity — all fields revised: Curator Note (Mythopoeia/Philomythus to Misomythus hook), Opening Text (thirst metaphor removed, paragraph break added), Context (em dashes fixed, Whipsnade quote confirmed), Go Deeper (Tertullian "anima naturaliter Christiana" replaces Tolkien subcreation repeat), Auditio (Scarborough Fair piano, NowoArt, Pixabay, confirmed uploaded). Hero image: addisons-walk-bw-warm.jpg (real Flickr photo, converted to warm duotone).
+- ✅ Disputation of the Holy Sacrament P&P v2 complete — new beneath-scenes Curator Note, Renaissance disputatio Context opening, new Prompt Question (mystery exceeds inquiry), new Actio (Host then beneath-scenes), copy-paste buttons added to all fields. Pagan Sacrifice journey concept captured in doc.
 
 ### Phase 2 Work Done (April 21, 2026)
 - ✅ Conversation backup hook — added `SessionEnd` hook to `~/.claude/settings.json`. Backups now write on every session close, not only on context compression. Backup location: `~/Documents/claude-conversation-backups/`.
@@ -505,6 +512,22 @@ A section titled "REVISION HISTORY" at the very bottom. Each entry: Day X / Fiel
 
 This rule applies to all Journey content docs, P&P docs, entry guides, and content audit docs. It does not apply to CLAUDE.md itself or technical/code docs.
 
+### Go Deeper Standard
+Go Deeper tradition reflections must add genuinely new content not already present in the Encounter Note. If the Go Deeper summary covers the same argument as the Encounter Note in different words, it fails. The test: could this TR appear in any journey day, or is it specific to this one?
+
+Voices must come from tradition: Church Fathers, philosophers, historical thinkers — with specific quotes and verifiable sources. Summaries should name what is surprising or new in the source, not describe the book's cover. "Lewis's own account of his conversion" is not sufficient — name what specifically in the account earns reading it.
+
+Each journey day should use a different voice. Before proposing a TR, check who has already been used in the journey. Do not repeat Church Fathers across adjacent days.
+
+### TTS Pronunciation Flag
+When a proper noun has a non-obvious pronunciation, add a TTS sanity-note to the field in the content doc. Format: "TTS note: [word] is pronounced [phonetic] — not [common mispronunciation]."
+
+Confirmed flags for When Myth Became Fact:
+- "Magdalen" (Magdalen College, Oxford) = "Maudlin" — not "Mag-da-len"
+- "Reading" (Reading University, England) = "Redding" — not "Reeding"
+
+Apply the same pattern to any place name, proper noun, or Latin/Greek term that a TTS engine would likely mispronounce.
+
 ### Surprising History
 Some content — especially feast days and Holy Week — has historical facts with genuine "I didn't know that" power. When a fact clears the dinner-table test, use it. When it doesn't, skip it.
 
@@ -685,4 +708,35 @@ These can't be done in code — Sheri does them in dashboards:
 35. **Verify before Day 1 Sanity entry:** (a) Simone Weil quote exact wording — *Waiting for God*, chapter on beauty. (b) JPII Letter to Artists paragraph number for "Beauty is a key to the mystery." (c) Psalm 27:4 RSV-2CE exact wording (already in item 30 above — confirm against RSV-2CE text).
 36. **Schema: Add Photography as content type** — Content type selector in Sanity does not currently include Photography. Add `photography` as an option alongside sacred-art, thinker, literature, music, landscape, food-wine, math-science, watch-listen. Needed before any Pictorialist photography content item can be entered (e.g., Cameron "English Blossoms" Day 1).
 37. **Schema: Add "Ancient" as Era option in Go Deeper (Tradition Reflections)** — The Era dropdown for TR entries does not currently include Ancient. Add it as an option. Needed for BTG Day 2 TR1 (Aristotle, 384-322 BCE) and any other pre-Medieval thinkers.
+39. **Claude Code task — Sanity Go Deeper content inventory:** Query Sanity for all entered Tradition Reflection (Go Deeper) content across all journeys and output as a content list doc. Purpose: prevent duplicate voices across journeys as content scales. Pending until after Days 5-7 Myth Journey Sanity entry.
 38. **Schema: Add "Fresco" as Medium option** — The Medium dropdown does not include Fresco. Add it alongside Oil on canvas, Oil on panel, Engraving, Marble relief, etc. Needed for Raphael's School of Athens (Myth Journey Day 3) and any future fresco content. Enter as custom text in Sanity for now.
+
+### Manual tasks from April 23 schema + content audit
+
+Full detail in `content-docs/KALLOS-Schema-Audit.html` and `content-docs/KALLOS-Content-Inventory.html`. Summarized here for quick reference.
+
+40. **Journey `totalDays` — Light and Bosch still null.** CLAUDE.md item 21 says it was done. It wasn't. Enter 7 for Light, 8 for Bosch. **Sanity.**
+41. **Hieronymus Bosch — trim trailing space in journey title.** Search for other places that use the title before editing. **Sanity.**
+42. **BTG II and When Myth Became Fact both have `order = 1`.** Duplicate sort key. Re-sort. **Sanity.**
+43. **Bosch journey — zero Tradition Reflections linked across all 8 days.** Largest editorial gap. **Sanity.** Plan a TR session.
+44. **Light journey — no lectio, no auditio, no encounterNote on any of the 7 days.** Predates current editorial standard. Decide: update in place, replace, or leave as-is for historical reasons. **Sanity.**
+45. **BTG II — Days 2 and 3 missing `goDeeper` entries.** **Sanity.**
+46. **Myth Became Fact — only 1 TR/day across Days 1-4.** Editorial target is 2-3/day. Add a second TR to each built day when revising. **Sanity.**
+47. **5 sacred-art content items missing curatorNote:** Holy Monday, Holy Thursday, Holy Tuesday, The Haywain (central), The Liturgy of Eating Well, The Atacama Desert. **Sanity.**
+48. **Orphan Tradition Reflection:** "Hospitality is prayer" (Saint Benedict) is not linked from any journey or content item. Link it or delete it. **Sanity.**
+49. **11 Tradition Reflections have no theme tag; 4 have no era tag.** List in Content Inventory. **Sanity.**
+50. **10 of 27 daily prompts are scripture-only (no philosophy pairing).** Add philosophy per the Lectio standard when it can be found. **Sanity.**
+51. **20 of 27 daily prompts are untagged with a theme.** Low priority but affects Explore filter. **Sanity.**
+52. **Content item duplicates in Sanity:** "Spiegel im Spiegel" (×2), "The Adoration of the Magi (Triptych)" (×2), "The Calling of Saint Matthew" (×2), "The Supper at Emmaus" (×2). Dedup pass or cleanup. **Migration / Sanity.**
+53. **1 music item has legacy `audioFile` + `musicUrl` fields** (Spiegel im Spiegel, one of two). Move to `audioSource.audioFile`. **Migration.**
+54. **11 legacy `_type: "artwork"` records** still in Sanity. Schema is unregistered; data reachable only via fallback query. Plan a one-time migration to contentItem or formally archive. **Migration.**
+55. **6 legacy `_type: "episode"` records** still in Sanity. No GROQ query in the app reads them. Either migrate forward or accept as archival. **Migration.**
+56. **CLAUDE.md Schema Status table is stale on `traditionReflection.authorType`.** The values `theologian`, `mystic`, `doctor` already exist in the schema (confirmed in code). What's *still* true: the field is single-select (`radio`) and cannot represent Aquinas = saint + doctor or Augustine = father + doctor. Schema change = convert to multi-select array. See Schema Audit R8.
+57. **Rendering bug — `traditionalPrayerSource` never displays.** UI at `app/pray/[artworkId]/page.tsx:486` renders it, but `getArtworkById` in `lib/sanity.ts` does not project it. Three-line fix. Approve first. See Schema Audit R2.
+58. **Rendering asymmetry — `contentItem.curatorNote` on P&P.** Field is fetched but not rendered on the P&P page; only `dailyPrompt.curatorNote` renders. On Journey Day, `contentItem.curatorNote` IS rendered. Decide canonical home before companion journeys. See Schema Audit R1.
+59. **TTS gap — 70,017 characters / ~13,464 words** across published records have no audio. Biggest: `contentItem.context` (32,846 chars in 44 records). All 27 P&P curator notes are audio-less. See Content Inventory 2e for provider pricing.
+60. **Dashboard enabled flag:** Add `DASHBOARD_ENABLED=true` to Vercel environment variables before the `/dashboard` route will be reachable in production. Without the flag, the route returns 404. Add to `.env.local` for local testing. The dashboard is also `noindex, nofollow` by default.
+
+### New app surface
+
+- **`/dashboard`** — content operations dashboard. Server-rendered, revalidated every 60s, gated by `DASHBOARD_ENABLED` env var, no-indexed. 7 sections: Journey Completion, Content Library, Tradition Reflections, Audio Status, Schema Health (static), TTS Coverage, Companion Journey placeholders. See `app/dashboard/page.tsx` + 5 new named query functions in `lib/sanity.ts` (search for "Dashboard queries"). Schema Health section is hand-maintained — update the `SCHEMA_HEALTH` const in the page file after every audit.

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KALLOS — Claude Code Audit Brief</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Georgia', serif; line-height: 1.8; color: #2C2C2C; background: #FFFFFF; }
+    .container { max-width: 900px; margin: 0 auto; padding: 60px 40px 120px; }
+    .cover { background: #16110d; color: #fdf6e8; text-align: center; padding: 60px 40px 48px; margin: -60px -40px 52px; }
+    .cover .label { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #C19B5F; margin-bottom: 16px; }
+    .cover h1 { font-size: 28px; font-weight: 300; letter-spacing: 3px; color: #fdf6e8; margin-bottom: 8px; }
+    .cover .sub { font-size: 14px; color: #bfb8aa; font-style: italic; }
+    .cover .date { font-size: 11px; color: #7a7062; margin-top: 12px; }
+    h2 { font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; color: #C19B5F; margin-top: 48px; margin-bottom: 16px; letter-spacing: 0.2em; text-transform: uppercase; padding-bottom: 8px; border-bottom: 1px solid #e8e0d4; }
+    h3 { font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; color: #16110d; margin: 24px 0 10px; }
+    p { font-size: 14px; margin-bottom: 12px; }
+    .context-box { background: #fdf6e8; border-left: 4px solid #C19B5F; padding: 18px 22px; margin: 28px 0; font-size: 14px; line-height: 1.8; }
+    .context-box strong { color: #16110d; }
+    .task-block { border: 1px solid #e8e0d4; margin: 24px 0; }
+    .task-header { background: #16110d; color: #fdf6e8; padding: 12px 20px; display: flex; align-items: baseline; gap: 14px; }
+    .task-num { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C19B5F; flex-shrink: 0; }
+    .task-title { font-size: 16px; font-weight: 300; }
+    .task-body { padding: 18px 22px; }
+    .task-body p { font-size: 14px; margin-bottom: 10px; }
+    .task-body ul { margin: 8px 0 14px 22px; }
+    .task-body li { font-size: 14px; margin-bottom: 6px; }
+    .output-block { background: #f5f0e8; border-left: 3px solid #C19B5F; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .output-block .out-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #C19B5F; font-weight: 700; margin-bottom: 6px; }
+    .warn-block { background: #fdf0f0; border-left: 3px solid #c25555; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .warn-block .warn-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #c25555; font-weight: 700; margin-bottom: 6px; }
+    .success-block { background: #f0f7f3; border-left: 3px solid #4a7a62; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .success-block .suc-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #4a7a62; font-weight: 700; margin-bottom: 6px; }
+    code { font-family: 'Courier New', monospace; font-size: 12px; background: #f0ebe0; padding: 2px 6px; }
+    .code-block { font-family: 'Courier New', monospace; font-size: 12px; background: #f0ebe0; padding: 14px 16px; margin: 10px 0; line-height: 1.6; white-space: pre-wrap; }
+    .priority-tag { font-family: Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; margin-left: 8px; }
+    .p1 { background: #fdf0f0; color: #c25555; }
+    .p2 { background: #fff5e0; color: #a06010; }
+    .p3 { background: #f0f7f3; color: #4a7a62; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+    th { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #fdf6e8; background: #16110d; text-align: left; padding: 8px 12px; }
+    td { padding: 8px 12px; border-bottom: 1px solid #e8e0d4; vertical-align: top; }
+    tr:nth-child(even) td { background: #fdf6e8; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="cover">
+    <div class="label">Claude Code — Working Brief</div>
+    <h1>KALLOS ARCHITECTURE AUDIT</h1>
+    <div class="sub">Schema health, content inventory, and dashboard output</div>
+    <div class="date">April 2026 — Read this at the start of the session before doing anything else</div>
+  </div>
+
+  <div class="context-box">
+    <strong>Why this brief exists:</strong> KALLOS is preparing to build companion journeys for pitch demos (EWTN Seeking Beauty, CTS pilgrimage, Elizabeth Lev lecture). Before building on top of the current architecture, we need a clean picture of what exists, what's messy, and what needs to change. This brief has three tasks. Do them in order. Do not skip to Task 3 before completing Task 1.
+  </div>
+
+
+  <h2>Project Context</h2>
+
+  <p><strong>Sanity Project ID:</strong> <code>em44j9m8</code></p>
+  <p><strong>Studio URL:</strong> seeking-beauty.sanity.studio</p>
+  <p><strong>App URL:</strong> s-beauty-app.vercel.app</p>
+  <p><strong>Repo:</strong> kallos-app (local at ~/Documents/kallos-app)</p>
+
+  <p>Read <code>CLAUDE.md</code> in the repo root before starting. It contains the full schema list, design system, and current phase status. Read <code>content-docs/KALLOS-Cowork-Briefing.html</code> for product context. Do not make any changes to code or schema during this session unless explicitly instructed below.</p>
+
+  <div class="warn-block">
+    <div class="warn-label">Model</div>
+    Use <strong>Claude Opus</strong> for this session. The schema audit requires holding schema files, TypeScript types, GROQ queries, and live Sanity data in mind simultaneously and finding contradictions across all of them. The recommendations require synthesis across multiple sources. This is not the place to save on model cost — the output of this session shapes every architecture decision that follows.
+  </div>
+
+  <div class="warn-block">
+    <div class="warn-label">Read and recommend — do not fix</div>
+    This is a read-and-report session. Do not modify any schema, code, or Sanity data. Query, analyze, produce output files, and make recommendations. Recommendations are not fixes — CC should state what should change and why, but make no changes. All recommendations go into the output files for Sheri to review and approve in a separate session before any code is touched.
+  </div>
+
+  <div class="context-box">
+    <strong>Working style for this session:</strong> Surface findings as you go. After completing each sub-task (1a, 1b, 2a, 2b, etc.), present key findings in the conversation before proceeding to the next. Pause and ask Sheri at any point where a finding requires product context to interpret correctly — for example, whether a field duplication is intentional design or an entry error, or whether an orphaned record should be linked or deleted.
+    <br><br>
+    If Sheri does not respond within a couple of minutes and the question is not critical or architecturally complex to resolve later, do not wait — move on, add the question to the recommendations list with a flag, and continue. Reserve the hard stops for findings where proceeding without an answer would produce unreliable recommendations downstream. Use judgment: a missing theme tag can wait; a fundamental question about which schema a field belongs to cannot.
+  </div>
+
+
+  <!-- TASK 1 -->
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 1</span>
+      <span class="task-title">Schema Architecture Audit <span class="priority-tag p1">Priority 1</span></span>
+    </div>
+    <div class="task-body">
+      <p>Map the full schema architecture and identify structural problems. This is the prerequisite for everything else.</p>
+
+      <h3>1a. Field inventory across all schemas</h3>
+      <p>For every schema in <code>sanity/schemaTypes/</code>, list every field: field name, field type, whether it is required, and whether it appears in any other schema under the same name. Produce this as a table.</p>
+
+      <h3>1b. Cross-schema duplicate detection</h3>
+      <p>The known problem: <code>contentItem</code> and <code>journeyDay</code> share field names (curatorialNote, context, encounterNote, etc.). Some content was entered in both places by mistake because the fields have the same name and it was initially unclear which one the app displays. Identify every field that exists in both schemas and flag it.</p>
+
+      <h3>1c. GROQ query trace</h3>
+      <p>For each shared/duplicate field found in 1b: trace which GROQ query in the app actually pulls that field and renders it. Check <code>lib/sanity.ts</code>, <code>app/journeys/</code>, <code>app/prompt/</code>, and any other data-fetching files. For each duplicate field, answer: is the app using the contentItem version, the journeyDay version, or both? Flag any field where both versions might be displayed simultaneously.</p>
+
+      <h3>1d. Dead fields</h3>
+      <p>Identify any fields that exist in the schema but are never referenced in any GROQ query. These are either unused or they should be added to queries.</p>
+
+      <h3>1e. Schema health summary and recommendations</h3>
+      <p>Produce a plain-language summary of current state. Then for each issue found, provide a specific recommendation: what should change, why, and what the risk is if it stays as-is. Prioritize: what must be fixed before companion journeys are built, what should be fixed soon, and what can wait. Do not implement any recommendation — document it only. Sheri will review and approve before any changes are made.</p>
+
+      <div class="output-block">
+        <div class="out-label">Output</div>
+        Save as <code>content-docs/KALLOS-Schema-Audit.html</code> — a structured report with tables. Use the KALLOS HTML style (dark espresso header, gold accents, field tables). No code changes.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- TASK 2 -->
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 2</span>
+      <span class="task-title">Content Inventory — Full Sanity Query <span class="priority-tag p1">Priority 1</span></span>
+    </div>
+    <div class="task-body">
+      <p>Query Sanity for all entered content and produce a complete inventory. Use the Sanity API with the project ID above. All queries use GROQ.</p>
+
+      <div class="warn-block">
+        <div class="warn-label">Critical: do not hardcode field names</div>
+        Do not use a preset list of field names for any part of this task. Use the complete field inventory produced in Task 1 to determine which fields exist on each schema. Task 2 must cover every field Task 1 found — including any that were not anticipated in this brief. If Task 1 finds fields that are not mentioned below, include them. The point of doing Task 1 first is so that Task 2 is complete, not just a check of fields someone remembered to list.
+      </div>
+
+      <h3>Reporting depth for all sections</h3>
+      <p>Apply these rules to every field on every document type throughout Tasks 2a-2f. Different field types have different definitions of "missing" — do not default to text-only checks.</p>
+
+      <ul>
+        <li><strong>Text fields:</strong> Populated = yes / no / partial (partial = content present but under 20 characters for a field that should be a full sentence). Preview = first 80 characters. Do not return full content.</li>
+        <li><strong>Single-value selection fields</strong> (e.g. contentType, authorType, era, medium): Populated = yes if an option was selected, no if the field was left unselected. "No selection made" is a missing field — treat it the same as blank text.</li>
+        <li><strong>Array fields</strong> (e.g. themes, tags): Populated = yes if the array has at least one entry, no if the array is empty or absent. Report entry count when present. An empty array is a missing field.</li>
+        <li><strong>Image and audio upload fields:</strong> Populated = yes if an asset is attached, no if empty. Report asset filename when present.</li>
+        <li><strong>Reference fields</strong> (e.g. journey association, day association, linked content item): Populated = yes if linked, no/unlinked if the reference is absent. An unlinked record that should belong to a parent is an orphan — flag it separately in the consolidated red list.</li>
+      </ul>
+      <p>These rules apply universally. Section 2d has additional analysis on top of these rules, but the same completeness definitions apply to journey days, content items, daily prompts, and every other document type.</p>
+
+      <h3>2a. Journey and journey day inventory</h3>
+      <p>For each journey: title, slug, totalDays field value, number of journey day records actually entered, completion percentage. For each journey day within each journey: title, and the populated/preview status of every field found in the journeyDay schema (Task 1 output). Group days under their parent journey.</p>
+
+      <h3>2b. Content item inventory</h3>
+      <p>For each content item: the populated/preview status of every field found in the contentItem schema (Task 1 output). Group by contentType. Show count per type at the top of each group.</p>
+
+      <h3>2c. Daily prompt (P&P) inventory</h3>
+      <p>For each daily prompt: date, title, and the populated/preview status of every field found in the dailyPrompt schema (Task 1 output). List date range covered. Flag any record missing a field that Task 1 marked as required.</p>
+
+      <h3>2d. Tradition reflection (Go Deeper) inventory</h3>
+      <p>This section has additional analysis requirements. For every tradition reflection across all journeys and days, report completeness across all field types — not just text fields.</p>
+
+      <p>Apply the universal field-type completeness rules from the Reporting Depth section above to every tradition reflection field. Flag any record where one or more fields of any type are missing — including no era selected, no theme tagged, no authorType chosen, even if the text content (quote and summary) is present. A partially complete record is a data quality issue regardless of which fields are missing. Tradition reflections with no journey or day association are orphans — flag them in a separate list.</p>
+
+      <p>Then produce two additional summary views:</p>
+      <ul>
+        <li><strong>Thinker usage map:</strong> Group all TRs by author name. Flag any author appearing in more than one journey. Flag any author appearing more than twice across the whole content set.</li>
+        <li><strong>Tradition type breakdown:</strong> Count TRs by authorType. Show count and percentage for each type. Flag any type with zero entries.</li>
+      </ul>
+
+      <h3>2e. TTS coverage audit — published records only</h3>
+      <p>TTS audio is billed by character count. Before any decision is made about generating or commissioning TTS, we need to know exactly how many characters of text content exist without audio coverage, and where it lives.</p>
+
+      <p>Query published records only — exclude any document whose <code>_id</code> starts with <code>drafts.</code></p>
+
+      <p>Do not use judgment to determine which fields are TTS candidates. Use the schema. A TTS-candidate field is defined as: a text field that has a corresponding audio upload field adjacent to it in the same schema object, excluding any field that is part of the <code>auditio</code> object (which holds curated music, not TTS). Use the field inventory from Task 1 to identify all such text+audio pairs across every schema. This grounds the audit in the architecture — if a text field was designed with a paired audio field, TTS was intended. If the audio field is empty on a published record, that is the gap.</p>
+
+      <p>For each TTS-candidate text field on each published document, report:</p>
+      <ul>
+        <li>Whether an audioFile is already attached to that record (yes/no)</li>
+        <li>Character count of the text field content</li>
+        <li>Word count of the text field content</li>
+      </ul>
+
+      <p>Then produce two aggregations:</p>
+      <ul>
+        <li><strong>By document type:</strong> Total characters and words missing TTS coverage, grouped by journeyDay / dailyPrompt / traditionReflection / contentItem</li>
+        <li><strong>Grand total:</strong> All characters and words across all published documents with no audio. This is the number Sheri uses to estimate cost.</li>
+      </ul>
+
+      <p>Include a cost reference table using current published pricing for the three most relevant TTS providers. Do not calculate a specific dollar figure — output the character total and let Sheri apply the rate. The table should show rate per 1,000 characters for: Google Cloud TTS Neural2, Amazon Polly Neural, and ElevenLabs (lowest available tier). Verify current pricing via web search before including figures — do not use potentially outdated training data for pricing.</p>
+
+      <h3>2f. Missing content flags — consolidated red list with recommendations</h3>
+      <p>After completing 2a-2e, produce a single consolidated list of every missing or partial field across all document types. Sort by severity: required fields missing first, optional fields missing second, partial fields last. TTS gaps from 2e are a separate category at the bottom.</p>
+      <p>For each item in the red list, include a brief recommendation: is this a Sanity entry task (Sheri enters missing content), a schema task (field needs to be added, removed, or restructured), or a data migration task (content exists but is in the wrong field and needs to be moved)? Distinguishing these three types means Sheri immediately knows whether to open Sanity Studio, schedule a CC session, or flag it for the schema design session.</p>
+
+      <div class="output-block">
+        <div class="out-label">Output</div>
+        <p>1. <code>content-docs/KALLOS-Content-Inventory.html</code> — full inventory with all tables, styled in KALLOS brand. This is the static snapshot for offline reference.</p>
+        <p style="margin-top:8px;">2. The data structures needed to build the live dashboard in Task 3. Document the GROQ queries and their return shapes as comments in the inventory file so they can be reused in <code>lib/sanity.ts</code>.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- TASK 3 -->
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 3</span>
+      <span class="task-title">Content Dashboard — Live Next.js Page <span class="priority-tag p2">Priority 2</span></span>
+    </div>
+    <div class="task-body">
+      <p>Build the content dashboard as a protected page in the existing Next.js app at <code>/dashboard</code>. The page queries Sanity server-side at load time so it is always current without any manual step, script, or webhook. Sheri bookmarks it and opens it before any content session.</p>
+
+      <div class="warn-block">
+        <div class="warn-label">Why not a script or webhook</div>
+        A script requires a manual trigger and produces stale data between runs. A webhook requires a live endpoint, separate hosting, and handling for missed events. A Next.js server component uses infrastructure already in place — the app, the existing Sanity client, and Vercel — and is always current on load with no additional infrastructure.
+      </div>
+
+      <h3>Route and implementation</h3>
+      <p><code>app/dashboard/page.tsx</code> — server component. Styled with Tailwind using the existing KALLOS espresso/parchment/gold design system. Add an environment variable gate (<code>DASHBOARD_ENABLED=true</code>) so the route returns 404 if the variable is absent — this protects against accidental public exposure at launch. Set <code>revalidate: 60</code> so repeated page loads within a session serve a cache rather than hammering Sanity, while staying no more than 60 seconds stale.</p>
+
+      <h3>Data fetching</h3>
+      <p>One GROQ query per section, all run server-side. Add named query functions to <code>lib/sanity.ts</code> (e.g., <code>getJourneyCompletionStatus</code>, <code>getTraditionReflectionInventory</code>, <code>getAudioStatus</code>). Use the existing Sanity client. No new dependencies required.</p>
+
+      <h3>Dashboard sections (in this order):</h3>
+
+      <h3>Section 1 — Journey Completion Status</h3>
+      <p>One row per journey. Columns: Journey name, total days intended (totalDays field), days entered, completion %, per-day field status. Traffic light per day: green = all key fields populated (openingText, curatorNote, context, audioFile, at least one TR), yellow = some missing, red = not started. Where possible, link each day row directly to its Sanity Studio document.</p>
+
+      <h3>Section 2 — Content Item Library</h3>
+      <p>All content items grouped by contentType. Show title, era, medium, journey association, image status (uploaded yes/no), audio status. Count per type shown at top of each group.</p>
+
+      <h3>Section 3 — Go Deeper / Tradition Reflection Tracker</h3>
+      <p>The specific output requested from the standing to-do list. Show:</p>
+      <ul>
+        <li>All tradition reflections grouped by journey and day</li>
+        <li>Thinker usage map: any thinker appearing in more than one journey flagged in amber</li>
+        <li>Tradition type breakdown: Church Fathers / Philosophers / Saints / Popes / Modern / Other — count and percentage</li>
+        <li>Days with zero TRs flagged in red</li>
+      </ul>
+
+      <h3>Section 4 — Audio Status</h3>
+      <p>Two tables: Journey day audio (which days have audioFile uploaded) and P&P audio (which daily prompts have audio). Missing entries flagged red.</p>
+
+      <h3>Section 5 — Schema Health</h3>
+      <p>This section is static — it does not query Sanity. It is populated manually from the Task 1 findings and updated whenever a schema audit session is run. Include a "last audited" date field and top 3 issues in plain language. Overall traffic light status. Instructions at the top of the section tell CC how to update it.</p>
+
+      <h3>Section 6 — TTS Coverage and Cost Estimate</h3>
+      <p>Published records only. Two views:</p>
+      <ul>
+        <li><strong>Coverage table:</strong> One row per document type (journeyDay, dailyPrompt, traditionReflection, contentItem). Columns: total published records, records with audio, records missing audio, total characters missing TTS coverage, total words missing TTS coverage.</li>
+        <li><strong>Cost reference:</strong> Grand total characters missing TTS. Below the total, a static pricing reference table showing rate per 1,000 characters for Google Cloud TTS Neural2, Amazon Polly Neural, and ElevenLabs. Sheri applies the rate herself — the dashboard shows the character count, not a dollar figure, since pricing changes.</li>
+      </ul>
+      <p>This section queries live from Sanity on page load. The pricing reference table is static and should be updated manually when rates change.</p>
+
+      <h3>Section 7 — Companion Journey Readiness (placeholder)</h3>
+      <p>Placeholder rows for the three planned companion journeys: Seeking Beauty Episode 1, CTS Rome Pilgrimage, Elizabeth Lev Pio Cristiano. No live data yet. Static until companion journey content is entered in Sanity, at which point this section should query and display completion status the same way Section 1 does.</p>
+
+      <div class="output-block">
+        <div class="out-label">Output</div>
+        <p><strong>Primary:</strong> <code>app/dashboard/page.tsx</code> — server component. Styled in KALLOS design system. Deployed to Vercel as part of the normal app.</p>
+        <p style="margin-top:8px;"><strong>Supporting:</strong> New named GROQ query functions in <code>lib/sanity.ts</code>.</p>
+        <p style="margin-top:8px;"><strong>Also produce:</strong> A static one-time HTML snapshot from Task 2 data saved as <code>content-docs/KALLOS-Content-Inventory.html</code> — for reference in offline sessions or when the app is not running.</p>
+      </div>
+
+      <div class="success-block">
+        <div class="suc-label">Success criteria</div>
+        Opening <code>/dashboard</code> in the browser immediately answers these questions without opening Sanity Studio:
+        <ul style="margin-top:8px;">
+          <li>Which journey days are complete vs. missing key fields?</li>
+          <li>Has any thinker been used in more than one journey?</li>
+          <li>Which days are missing audio?</li>
+          <li>What is the current tradition reflection coverage across all journeys?</li>
+          <li>What are the top schema health issues and when were they last audited?</li>
+          <li>How many published records are missing TTS audio, and what is the total character count?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <h2>Order of Operations</h2>
+
+  <table>
+    <thead><tr><th>Step</th><th>Task</th><th>Depends on</th><th>Output</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Read CLAUDE.md and Cowork Briefing</td><td>Nothing</td><td>Context only</td></tr>
+      <tr><td>2</td><td>Schema audit (Task 1a-1e)</td><td>Step 1</td><td>KALLOS-Schema-Audit.html</td></tr>
+      <tr><td>3</td><td>Sanity content queries (Task 2a-2e)</td><td>Step 1</td><td>KALLOS-Content-Inventory.html</td></tr>
+      <tr><td>4</td><td>Dashboard build (Task 3)</td><td>Steps 2 and 3</td><td>app/dashboard/page.tsx + GROQ queries in lib/sanity.ts + KALLOS-Content-Inventory.html (static snapshot)</td></tr>
+      <tr><td>5</td><td>Update CLAUDE.md</td><td>Step 4</td><td>Add new docs to content docs table; add schema issues to Manual Tasks</td></tr>
+    </tbody>
+  </table>
+
+
+  <h2>Do Not Do This Session</h2>
+
+  <div class="warn-block">
+    <div class="warn-label">Out of scope</div>
+    <ul>
+      <li>Do not fix schema issues found in Task 1 — document them only. Schema changes require a separate design session with Sheri first.</li>
+      <li>Do not modify any Sanity content — query only.</li>
+      <li>Do not build companion journey schemas or content — this audit is the prerequisite for that work.</li>
+      <li>Do not deploy anything to Vercel or Sanity Studio.</li>
+      <li>Do not run npm run build — this is not a code session.</li>
+    </ul>
+  </div>
+
+
+  <h2>What Comes After This Session</h2>
+
+  <p>The outputs from this session feed directly into the next Cowork session where Sheri and Claude will:</p>
+  <ul style="margin: 10px 0 0 22px;">
+    <li>Review schema audit findings and decide which fixes to prioritize</li>
+    <li>Design the companion journey schema with flexibility, personalization tier, voice register, and CTA fields built in from the start</li>
+    <li>Review the Go Deeper inventory to understand which thinkers are available for companion journeys vs. already used</li>
+    <li>Map the three demo companion journeys (Seeking Beauty Ep1, CTS Rome, Elizabeth Lev Pio Cristiano) before writing any content</li>
+  </ul>
+
+  <p style="margin-top:24px; font-size:13px; color:#8a7a6a; font-style:italic;">Brief created April 2026. Companion journey context: see Cowork session notes. Schema context: see CLAUDE.md Phase 2 Work Done and Schema Status sections.</p>
+
+</div>
+</body>
+</html>

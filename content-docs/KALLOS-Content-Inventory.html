@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KALLOS — Content Inventory</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Georgia', serif; line-height: 1.7; color: #2C2C2C; background: #FFFFFF; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 60px 30px 120px; }
+  .cover { background: #16110d; color: #fdf6e8; text-align: center; padding: 60px 40px 48px; margin: -60px -30px 52px; }
+  .cover .label { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #C19B5F; margin-bottom: 16px; }
+  .cover h1 { font-size: 28px; font-weight: 300; letter-spacing: 3px; color: #fdf6e8; margin-bottom: 8px; }
+  .cover .sub { font-size: 14px; color: #bfb8aa; font-style: italic; }
+  .cover .date { font-size: 11px; color: #7a7062; margin-top: 12px; }
+  h2 { font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; color: #C19B5F; margin-top: 48px; margin-bottom: 16px; letter-spacing: 0.2em; text-transform: uppercase; padding-bottom: 8px; border-bottom: 1px solid #e8e0d4; }
+  h3 { font-family: Arial, sans-serif; font-size: 15px; font-weight: 700; color: #16110d; margin: 26px 0 10px; }
+  h4 { font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; color: #4a7a62; text-transform: uppercase; letter-spacing: 0.1em; margin: 20px 0 8px; }
+  p { font-size: 14px; margin-bottom: 12px; }
+  ul { margin: 10px 0 14px 24px; font-size: 14px; }
+  li { margin-bottom: 6px; }
+  .context-box { background: #fdf6e8; border-left: 4px solid #C19B5F; padding: 16px 22px; margin: 20px 0; font-size: 13px; line-height: 1.7; }
+  .context-box strong { color: #16110d; }
+  .warn-block { background: #fdf0f0; border-left: 3px solid #c25555; padding: 12px 18px; margin: 14px 0; font-size: 13px; }
+  .warn-block .warn-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #c25555; font-weight: 700; margin-bottom: 4px; }
+  code { font-family: 'Courier New', monospace; font-size: 11px; background: #f0ebe0; padding: 2px 5px; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 11px; }
+  th { font-family: Arial, sans-serif; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: #fdf6e8; background: #16110d; text-align: left; padding: 6px 8px; }
+  td { padding: 5px 8px; border-bottom: 1px solid #e8e0d4; vertical-align: top; }
+  tr:nth-child(even) td { background: #fdf6e8; }
+  .y { color: #4a7a62; font-weight: 700; }
+  .n { color: #c25555; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .priority-tag { font-family: Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; margin-left: 8px; }
+  .p1 { background: #fdf0f0; color: #c25555; }
+  .p2 { background: #fff5e0; color: #a06010; }
+  .p3 { background: #f0f7f3; color: #4a7a62; }
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 20px 0; }
+  .stat-card { border: 1px solid #e8e0d4; padding: 14px 16px; background: #fdfaf2; }
+  .stat-num { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 34px; font-weight: 400; color: #16110d; line-height: 1; }
+  .stat-label { font-family: Arial, sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #C19B5F; margin-top: 8px; }
+  .stat-sub { font-size: 11px; color: #7a7062; margin-top: 4px; }
+  .journey-block { border: 1px solid #e8e0d4; margin: 18px 0; }
+  .journey-head { background: #16110d; color: #fdf6e8; padding: 10px 18px; display: flex; gap: 14px; align-items: baseline; }
+  .journey-head .jtitle { font-size: 16px; font-weight: 400; }
+  .journey-head .jprogress { font-family: Arial, sans-serif; font-size: 11px; color: #C19B5F; letter-spacing: 0.1em; }
+  .journey-body { padding: 12px 18px; overflow-x: auto; }
+  .red-row { background: #fdf0f0 !important; }
+  .groq-block { background: #0d0906; color: #fdf6e8; padding: 14px 18px; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 11px; line-height: 1.5; white-space: pre-wrap; overflow-x: auto; }
+  .groq-label { font-family: Arial, sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #C19B5F; margin-bottom: 6px; margin-top: 18px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="cover">
+  <div class="label">Claude Code &mdash; Architecture Audit</div>
+  <h1>KALLOS CONTENT INVENTORY</h1>
+  <div class="sub">Task 2 output &mdash; live Sanity query snapshot, field-by-field coverage, TTS audit, red list</div>
+  <div class="date">April 23, 2026 snapshot &mdash; em44j9m8 production dataset, published records only unless noted</div>
+</div>
+
+<div class="context-box">
+  <strong>How to read this document:</strong> Every table reports the full state of a document type against every field Task 1 found in its schema. Populated = yes / no / partial per the reporting rules. Counts are live at query time. Red rows flag records with one or more missing required fields. Recommendations are scoped per-field: "Sanity entry" = Sheri enters content; "schema" = field structure changes; "migration" = content moved between fields.
+  <br><br>
+  <strong>What this document isn&rsquo;t:</strong> A plan. All findings are reported, not fixed. GROQ queries used to generate this report are embedded at the bottom of the document for direct reuse in <code>lib/sanity.ts</code>.
+</div>
+
+<h2>Snapshot</h2>
+<div class="stat-grid">
+  <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">Journeys</div><div class="stat-sub">All published &mdash; 0 drafts</div></div>
+  <div class="stat-card"><div class="stat-num">53</div><div class="stat-label">Content Items</div><div class="stat-sub">0 drafts</div></div>
+  <div class="stat-card"><div class="stat-num">27</div><div class="stat-label">Daily Prompts</div><div class="stat-sub">0 drafts</div></div>
+  <div class="stat-card"><div class="stat-num">28</div><div class="stat-label">Tradition Reflections</div><div class="stat-sub">0 drafts</div></div>
+  <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Themes</div><div class="stat-sub">5 founding + BTG</div></div>
+  <div class="stat-card"><div class="stat-num">2</div><div class="stat-label">Splash Pages</div><div class="stat-sub">Healthy</div></div>
+  <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Episodes (legacy)</div><div class="stat-sub">Orphan &mdash; no GROQ reads them</div></div>
+  <div class="stat-card"><div class="stat-num">11</div><div class="stat-label">Legacy Artworks</div><div class="stat-sub">Schema unregistered, data survives</div></div>
+</div>
+
+<h3>Theme coverage</h3>
+<table><thead><tr><th>#</th><th>Theme</th><th>Content items</th><th>Journeys</th><th>Daily Prompts</th><th>Tradition Reflections</th></tr></thead><tbody>
+<tr><td>1</td><td>Light</td><td class="num y">19</td><td class="num y">1</td><td class="num y">1</td><td class="num y">15</td></tr>
+<tr><td>2</td><td>Silence</td><td class="num y">8</td><td class="num n">0</td><td class="num n">0</td><td class="num n">0</td></tr>
+<tr><td>3</td><td>Suffering &amp; Beauty</td><td class="num y">17</td><td class="num y">1</td><td class="num y">5</td><td class="num n">0</td></tr>
+<tr><td>4</td><td>Creation</td><td class="num y">9</td><td class="num n">0</td><td class="num n">0</td><td class="num n">0</td></tr>
+<tr><td>5</td><td>Home / The Restless Heart</td><td class="num y">20</td><td class="num y">1</td><td class="num y">1</td><td class="num y">1</td></tr>
+<tr><td>6</td><td>Beauty, Truth &amp; Goodness</td><td class="num y">7</td><td class="num y">2</td><td class="num n">0</td><td class="num y">1</td></tr>
+</tbody></table>
+<p style="font-size:12px;color:#7a7062;"><em>Silence and Creation have content items but no journey, no prompts, and no tradition reflections. Beauty, Truth &amp; Goodness was added as a 6th theme.</em></p>
+<h2>2a. Journey &amp; Journey Day Inventory</h2>
+<p>5 published journeys. Each day reports populated state of every <code>journeyDay</code> field from Task 1. <strong>Required fields (red if missing):</strong> <code>dayTitle</code>, <code>openImage</code>, <code>encounterContent</code> (ref), <code>reflectQuestions</code> (min 1).</p>
+<div class="warn-block"><div class="warn-label">Architectural note</div><code>journeyDay</code> is an inline object inside <code>journey.days[]</code>, not a standalone document. Days can only be addressed by parent journey + dayNumber. No stable <code>_id</code> per day.</div>
+<h3>Journey-level summary</h3>
+<table><thead><tr><th>Journey</th><th>Slug</th><th>Theme</th><th>Days built</th><th>totalDays</th><th>% complete</th><th>Published</th><th>Order</th></tr></thead><tbody>
+<tr><td>When Myth Became Fact</td><td><code>when-myth-became-fact</code></td><td>Home / The Restless Heart</td><td class="num">4</td><td class="num">7</td><td class="num">57%</td><td class="y">Y</td><td class="num">1</td></tr>
+<tr><td>Beauty, Truth &amp; Goodness II</td><td><code>beauty-truth-goodness-II</code></td><td>Beauty, Truth &amp; Goodness</td><td class="num">3</td><td class="num">3</td><td class="num">100%</td><td class="y">Y</td><td class="num">1</td></tr>
+<tr><td>Beauty, Truth &amp; Goodness</td><td><code>beauty-truth-and-goodness</code></td><td>Beauty, Truth &amp; Goodness</td><td class="num">3</td><td class="num">3</td><td class="num">100%</td><td class="y">Y</td><td class="num">2</td></tr>
+<tr><td>Light</td><td><code>light</code></td><td>Light</td><td class="num">7</td><td class="num"><span class="n">null</span></td><td class="num">&mdash;</td><td class="y">Y</td><td class="num">3</td></tr>
+<tr><td>Hieronymus Bosch </td><td><code>hieronymus-bosch</code></td><td>Suffering &amp; Beauty</td><td class="num">8</td><td class="num"><span class="n">null</span></td><td class="num">&mdash;</td><td class="y">Y</td><td class="num">4</td></tr>
+</tbody></table>
+<p style="font-size:12px;color:#7a7062;"><em><strong>Red flag:</strong> Light and Bosch have null <code>totalDays</code>. CLAUDE.md manual task 21 says this was done; the data says otherwise. BTG II and Myth both have <code>order = 1</code> (duplicate sort key).</em></p>
+<div class="journey-block"><div class="journey-head"><span class="jtitle">When Myth Became Fact</span><span class="jprogress">4 / 7 days</span></div><div class="journey-body">
+<table><thead><tr><th>#</th><th>Day title</th><th>openImg</th><th>openText (c)</th><th>openAud</th><th>encGuid</th><th>encNote (c)</th><th>encAud</th><th>audTitle</th><th>audFile</th><th>audURL</th><th>lectio phil</th><th>lectio scr</th><th>connNote</th><th>Rq</th><th>Connect</th><th>goDeeper</th></tr></thead><tbody>
+<tr><td class="num">1</td><td>The story that won't stop</td><td><span class="y">Y</span></td><td class="num">2664</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">731</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">1</td></tr>
+<tr><td class="num">2</td><td>The tears she cried</td><td><span class="y">Y</span></td><td class="num">1295</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">322</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">1</td></tr>
+<tr><td class="num">3</td><td>The longing no one could name</td><td><span class="y">Y</span></td><td class="num">1935</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">779</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">1</td></tr>
+<tr><td class="num">4</td><td>A walk in the rain</td><td><span class="y">Y</span></td><td class="num">2240</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">590</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">1</td></tr>
+</tbody></table></div></div>
+<div class="journey-block"><div class="journey-head"><span class="jtitle">Beauty, Truth &amp; Goodness II</span><span class="jprogress">3 / 3 days</span></div><div class="journey-body">
+<table><thead><tr><th>#</th><th>Day title</th><th>openImg</th><th>openText (c)</th><th>openAud</th><th>encGuid</th><th>encNote (c)</th><th>encAud</th><th>audTitle</th><th>audFile</th><th>audURL</th><th>lectio phil</th><th>lectio scr</th><th>connNote</th><th>Rq</th><th>Connect</th><th>goDeeper</th></tr></thead><tbody>
+<tr><td class="num">1</td><td>The Inconsolable Longing</td><td><span class="y">Y</span></td><td class="num">1321</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">286</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">1</td></tr>
+<tr><td class="num">2</td><td>All the Instruments of the World</td><td><span class="y">Y</span></td><td class="num">2105</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">316</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">0</td></tr>
+<tr><td class="num">3</td><td>Everything Was Pointing Here</td><td><span class="y">Y</span></td><td class="num">1639</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">223</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="n">&mdash;</span></td><td class="num">0</td></tr>
+</tbody></table></div></div>
+<div class="journey-block"><div class="journey-head"><span class="jtitle">Beauty, Truth &amp; Goodness</span><span class="jprogress">3 / 3 days</span></div><div class="journey-body">
+<table><thead><tr><th>#</th><th>Day title</th><th>openImg</th><th>openText (c)</th><th>openAud</th><th>encGuid</th><th>encNote (c)</th><th>encAud</th><th>audTitle</th><th>audFile</th><th>audURL</th><th>lectio phil</th><th>lectio scr</th><th>connNote</th><th>Rq</th><th>Connect</th><th>goDeeper</th></tr></thead><tbody>
+<tr><td class="num">1</td><td>You felt something</td><td><span class="y">Y</span></td><td class="num">237</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">466</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">1</td></tr>
+<tr><td class="num">2</td><td>Where beauty points</td><td><span class="y">Y</span></td><td class="num">92</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">379</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">1</td></tr>
+<tr><td class="num">3</td><td>Everything was pointing here</td><td><span class="y">Y</span></td><td class="num">59</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">366</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="n">&mdash;</span></td><td class="num">1</td></tr>
+</tbody></table></div></div>
+<div class="journey-block"><div class="journey-head"><span class="jtitle">Light</span><span class="jprogress">7 days (totalDays unset)</span></div><div class="journey-body">
+<table><thead><tr><th>#</th><th>Day title</th><th>openImg</th><th>openText (c)</th><th>openAud</th><th>encGuid</th><th>encNote (c)</th><th>encAud</th><th>audTitle</th><th>audFile</th><th>audURL</th><th>lectio phil</th><th>lectio scr</th><th>connNote</th><th>Rq</th><th>Connect</th><th>goDeeper</th></tr></thead><tbody>
+<tr><td class="num">1</td><td>In the beginning</td><td><span class="y">Y</span></td><td class="num">189</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">2</td></tr>
+<tr><td class="num">2</td><td>The drama of light</td><td><span class="y">Y</span></td><td class="num">106</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">2</td></tr>
+<tr><td class="num">3</td><td>Light as a name of God</td><td><span class="y">Y</span></td><td class="num">144</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">3</td></tr>
+<tr><td class="num">4</td><td>The world charged</td><td><span class="y">Y</span></td><td class="num">176</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">2</td></tr>
+<tr><td class="num">5</td><td>Light you can hear</td><td><span class="y">Y</span></td><td class="num">112</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">2</td></tr>
+<tr><td class="num">6</td><td>Light in ordinary things</td><td><span class="y">Y</span></td><td class="num">140</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">2</td></tr>
+<tr><td class="num">7</td><td>Light as destination</td><td><span class="y">Y</span></td><td class="num">67</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">1</td><td><span class="n">&mdash;</span></td><td class="num">3</td></tr>
+</tbody></table></div></div>
+<div class="journey-block"><div class="journey-head"><span class="jtitle">Hieronymus Bosch </span><span class="jprogress">8 days (totalDays unset)</span></div><div class="journey-body">
+<table><thead><tr><th>#</th><th>Day title</th><th>openImg</th><th>openText (c)</th><th>openAud</th><th>encGuid</th><th>encNote (c)</th><th>encAud</th><th>audTitle</th><th>audFile</th><th>audURL</th><th>lectio phil</th><th>lectio scr</th><th>connNote</th><th>Rq</th><th>Connect</th><th>goDeeper</th></tr></thead><tbody>
+<tr><td class="num">1</td><td>Light from Darkness</td><td><span class="y">Y</span></td><td class="num">244</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">381</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">0</td></tr>
+<tr><td class="num">2</td><td>The Doors Open</td><td><span class="y">Y</span></td><td class="num">356</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">941</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">0</td></tr>
+<tr><td class="num">3</td><td>Reading the Room</td><td><span class="y">Y</span></td><td class="num">193</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">444</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">0</td></tr>
+<tr><td class="num">4</td><td>What We Desire</td><td><span class="y">Y</span></td><td class="num">309</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">1564</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">0</td></tr>
+<tr><td class="num">5</td><td>What We're Chasing</td><td><span class="y">Y</span></td><td class="num">230</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">1093</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">0</td></tr>
+<tr><td class="num">6</td><td>When Beauty Turns</td><td><span class="y">Y</span></td><td class="num">261</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">884</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">0</td></tr>
+<tr><td class="num">7</td><td>What Holds Us</td><td><span class="y">Y</span></td><td class="num">296</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">491</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td class="num">1</td><td><span class="y">Y</span></td><td class="num">0</td></tr>
+<tr><td class="num">8</td><td>Holding Both</td><td><span class="y">Y</span></td><td class="num">320</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td class="num">502</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">1</td><td><span class="n">&mdash;</span></td><td class="num">0</td></tr>
+</tbody></table></div></div>
+<h2>2b. Content Item Inventory</h2>
+<p><strong>53 content items, 0 drafts.</strong> Grouped by contentType. Required fields per schema: <code>contentType</code>, <code>title</code>, <code>themes</code> (min 1), <code>description</code>, <code>image</code>. Conditional-required: <code>thinkerName</code> for thinkers; <code>author</code> + <code>workTitle</code> for literature; <code>mediaType</code> + <code>mediaUrl</code> for watch-listen.</p>
+<div class="warn-block"><div class="warn-label">Duplicate titles live in Sanity</div><ul style="margin-top:4px;"><li>"Spiegel im Spiegel" (&times;2 music)</li><li>"The Adoration of the Magi (Triptych)" (&times;2 sacred-art)</li><li>"The Calling of Saint Matthew" (&times;2 sacred-art)</li><li>"The Supper at Emmaus" (&times;2 sacred-art)</li></ul>Confirms the Explore-duplicate bug in CLAUDE.md. Needs dedup or a Sanity cleanup pass.</div>
+<h3>food-wine <span class="priority-tag p3">3</span></h3>
+<table><thead><tr><th>Title</th><th>Byline</th><th>Img</th><th>Desc (c)</th><th>Context (c)</th><th>ctxAud</th><th>Curator (c)</th><th>curAud</th><th>Themes</th><th>RefQs</th><th>audFile</th><th>audUrl</th><th>extUrl</th><th>legacy?</th><th>TR refs</th></tr></thead><tbody>
+<tr><td>Cistercian Honey from Umbria</td><td></td><td><span class="y">Y</span></td><td class="num">288</td><td class="num">1126</td><td><span class="n">&mdash;</span></td><td class="num">281</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">2</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Bread Ovens of Tuscany</td><td></td><td><span class="y">Y</span></td><td class="num">261</td><td class="num">461</td><td><span class="n">&mdash;</span></td><td class="num">143</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Liturgy of Eating Well</td><td></td><td><span class="y">Y</span></td><td class="num">267</td><td class="num">499</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+</tbody></table>
+<h3>landscape <span class="priority-tag p3">4</span></h3>
+<table><thead><tr><th>Title</th><th>Byline</th><th>Img</th><th>Desc (c)</th><th>Context (c)</th><th>ctxAud</th><th>Curator (c)</th><th>curAud</th><th>Themes</th><th>RefQs</th><th>audFile</th><th>audUrl</th><th>extUrl</th><th>legacy?</th><th>TR refs</th></tr></thead><tbody>
+<tr><td>Addison's Walk</td><td></td><td><span class="y">Y</span></td><td class="num">190</td><td class="num">850</td><td><span class="y">Y</span></td><td class="num">495</td><td><span class="y">Y</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">1</td></tr>
+<tr><td>Skógafoss Waterfall, Iceland</td><td></td><td><span class="y">Y</span></td><td class="num">184</td><td class="num">490</td><td><span class="n">&mdash;</span></td><td class="num">162</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Atacama Desert at Dawn</td><td></td><td><span class="y">Y</span></td><td class="num">254</td><td class="num">313</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Hills That Held Him</td><td></td><td><span class="y">Y</span></td><td class="num">418</td><td class="num">646</td><td><span class="n">&mdash;</span></td><td class="num">392</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+</tbody></table>
+<h3>literature <span class="priority-tag p3">3</span></h3>
+<table><thead><tr><th>Title</th><th>Byline</th><th>Img</th><th>Desc (c)</th><th>Context (c)</th><th>ctxAud</th><th>Curator (c)</th><th>curAud</th><th>Themes</th><th>RefQs</th><th>audFile</th><th>audUrl</th><th>extUrl</th><th>legacy?</th><th>TR refs</th></tr></thead><tbody>
+<tr><td>God's Grandeur</td><td>Gerard Manley Hopkins</td><td><span class="y">Y</span></td><td class="num">294</td><td class="num">1132</td><td><span class="n">&mdash;</span></td><td class="num">308</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">2</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Pied Beauty</td><td>Gerard Manley Hopkins</td><td><span class="y">Y</span></td><td class="num">249</td><td class="num">522</td><td><span class="n">&mdash;</span></td><td class="num">212</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Lake Isle of Innisfree</td><td>William Butler Yeats</td><td><span class="y">Y</span></td><td class="num">417</td><td class="num">597</td><td><span class="n">&mdash;</span></td><td class="num">280</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+</tbody></table>
+<h3>math-science <span class="priority-tag p3">3</span></h3>
+<table><thead><tr><th>Title</th><th>Byline</th><th>Img</th><th>Desc (c)</th><th>Context (c)</th><th>ctxAud</th><th>Curator (c)</th><th>curAud</th><th>Themes</th><th>RefQs</th><th>audFile</th><th>audUrl</th><th>extUrl</th><th>legacy?</th><th>TR refs</th></tr></thead><tbody>
+<tr><td>The Double Helix: Code Written Before Language</td><td></td><td><span class="y">Y</span></td><td class="num">488</td><td class="num">719</td><td><span class="n">&mdash;</span></td><td class="num">238</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Fibonacci Spiral: Mathematics the Eye Already Knows</td><td></td><td><span class="y">Y</span></td><td class="num">460</td><td class="num">652</td><td><span class="n">&mdash;</span></td><td class="num">185</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Webb's First Deep Field: 13 Billion Years of Light</td><td></td><td><span class="y">Y</span></td><td class="num">504</td><td class="num">632</td><td><span class="n">&mdash;</span></td><td class="num">263</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+</tbody></table>
+<h3>music <span class="priority-tag p3">3</span></h3>
+<table><thead><tr><th>Title</th><th>Byline</th><th>Img</th><th>Desc (c)</th><th>Context (c)</th><th>ctxAud</th><th>Curator (c)</th><th>curAud</th><th>Themes</th><th>RefQs</th><th>audFile</th><th>audUrl</th><th>extUrl</th><th>legacy?</th><th>TR refs</th></tr></thead><tbody>
+<tr><td>Missa Papae Marcelli</td><td>Giovanni Pierluigi da Palestrina</td><td><span class="y">Y</span></td><td class="num">239</td><td class="num">401</td><td><span class="n">&mdash;</span></td><td class="num">355</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Spiegel im Spiegel</td><td>Arvo Pärt</td><td><span class="y">Y</span></td><td class="num">553</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td class="num">207</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">2</td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">L</span></td><td class="num">0</td></tr>
+<tr><td>Spiegel im Spiegel</td><td>Arvo Pärt</td><td><span class="y">Y</span></td><td class="num">294</td><td class="num">486</td><td><span class="n">&mdash;</span></td><td class="num">192</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+</tbody></table>
+<h3>sacred-art <span class="priority-tag p3">31</span></h3>
+<table><thead><tr><th>Title</th><th>Byline</th><th>Img</th><th>Desc (c)</th><th>Context (c)</th><th>ctxAud</th><th>Curator (c)</th><th>curAud</th><th>Themes</th><th>RefQs</th><th>audFile</th><th>audUrl</th><th>extUrl</th><th>legacy?</th><th>TR refs</th></tr></thead><tbody>
+<tr><td>Adoration of the Magi — Exterior (Grisaille Passion Panels)</td><td>Hieronymus Bosch</td><td><span class="y">Y</span></td><td class="num">190</td><td class="num">560</td><td><span class="n">&mdash;</span></td><td class="num">529</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Christ in Gethsemane (Agony in the Garden)</td><td>El Greco</td><td><span class="y">Y</span></td><td class="num">238</td><td class="num">386</td><td><span class="n">&mdash;</span></td><td class="num">234</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Easter Sunday</td><td>Andrea Mantegna</td><td><span class="y">Y</span></td><td class="num">147</td><td class="num">976</td><td><span class="n">&mdash;</span></td><td class="num">348</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>English Blossoms</td><td>Julia Margaret Cameron</td><td><span class="y">Y</span></td><td class="num">401</td><td class="num">1857</td><td><span class="y">Y</span></td><td class="num">653</td><td><span class="y">Y</span></td><td class="num">1</td><td class="num">1</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">1</td></tr>
+<tr><td>God separating Light from Darkness</td><td>Michelangelo Buonarroti</td><td><span class="y">Y</span></td><td class="num">285</td><td class="num">1068</td><td><span class="n">&mdash;</span></td><td class="num">230</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">2</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Good Friday</td><td>Diego Velázquez</td><td><span class="y">Y</span></td><td class="num">207</td><td class="num">714</td><td><span class="n">&mdash;</span></td><td class="num">267</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Holy Monday</td><td>German School, 16th Century</td><td><span class="y">Y</span></td><td class="num">224</td><td class="num">1192</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Holy Saturday</td><td>Byzantine (artist unknown)</td><td><span class="y">Y</span></td><td class="num">192</td><td class="num">992</td><td><span class="n">&mdash;</span></td><td class="num">277</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Holy Thursday</td><td>Leonardo da Vinci</td><td><span class="y">Y</span></td><td class="num">154</td><td class="num">1645</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Holy Tuesday</td><td>El Greco (Domenikos Theotokopoulos)</td><td><span class="y">Y</span></td><td class="num">228</td><td class="num">1054</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Melencolia I</td><td>Albrecht Dürer</td><td><span class="y">Y</span></td><td class="num">388</td><td class="num">1462</td><td><span class="y">Y</span></td><td class="num">281</td><td><span class="y">Y</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">2</td></tr>
+<tr><td>Palm Sunday</td><td>Giotto di Bondone</td><td><span class="y">Y</span></td><td class="num">172</td><td class="num">656</td><td><span class="n">&mdash;</span></td><td class="num">244</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Spy Wednesday</td><td>Caravaggio (Michelangelo Merisi da Caravaggio)</td><td><span class="y">Y</span></td><td class="num">164</td><td class="num">1324</td><td><span class="n">&mdash;</span></td><td class="num">322</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Adoration of the Magi (Triptych)</td><td>Hieronymus Bosch</td><td><span class="y">Y</span></td><td class="num">246</td><td class="num">668</td><td><span class="n">&mdash;</span></td><td class="num">711</td><td><span class="n">&mdash;</span></td><td class="num">3</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Adoration of the Magi (Triptych)</td><td>Hieronymus Bosch</td><td><span class="y">Y</span></td><td class="num">344</td><td class="num">667</td><td><span class="n">&mdash;</span></td><td class="num">712</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Calling of Saint Matthew</td><td>Michelangelo Merisi da Caravaggio</td><td><span class="y">Y</span></td><td class="num">228</td><td class="num">633</td><td><span class="n">&mdash;</span></td><td class="num">218</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">2</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Calling of Saint Matthew</td><td>Michelangelo Merisi da Caravaggio</td><td><span class="y">Y</span></td><td class="num">248</td><td class="num">670</td><td><span class="n">&mdash;</span></td><td class="num">461</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Conjurer (The Magician)</td><td>Hieronymus Bosch</td><td><span class="y">Y</span></td><td class="num">212</td><td class="num">695</td><td><span class="n">&mdash;</span></td><td class="num">442</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Coronation of the Virgin</td><td>Fra Angelico (Guido di Pietro, O.P.)</td><td><span class="y">Y</span></td><td class="num">280</td><td class="num">1427</td><td><span class="n">&mdash;</span></td><td class="num">445</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">2</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Garden of Earthly Delights - Full Triptych</td><td>Hieronymus Bosch</td><td><span class="y">Y</span></td><td class="num">234</td><td class="num">689</td><td><span class="n">&mdash;</span></td><td class="num">535</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Garden of Earthly Delights - Hell Panel</td><td>Hieronymus Bosch</td><td><span class="y">Y</span></td><td class="num">187</td><td class="num">682</td><td><span class="n">&mdash;</span></td><td class="num">510</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Garden of Earthly Delights — Central Panel</td><td>Hieronymus Bosch</td><td><span class="y">Y</span></td><td class="num">278</td><td class="num">669</td><td><span class="n">&mdash;</span></td><td class="num">488</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Great Eleusinian Relief</td><td>Unknown</td><td><span class="y">Y</span></td><td class="num">211</td><td class="num">1820</td><td><span class="y">Y</span></td><td class="num">673</td><td><span class="y">Y</span></td><td class="num">1</td><td class="num">1</td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">1</td></tr>
+<tr><td>The Haywain Triptych - Central Panel</td><td>Hieronymus Bosch</td><td><span class="y">Y</span></td><td class="num">272</td><td class="num">691</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Return of the Prodigal Son</td><td>Rembrandt van Rijn</td><td><span class="y">Y</span></td><td class="num">268</td><td class="num">522</td><td><span class="n">&mdash;</span></td><td class="num">206</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The School of Athens</td><td>Raphael  - (Raffaello Sanzio da Urbino)</td><td><span class="y">Y</span></td><td class="num">258</td><td class="num">1268</td><td><span class="y">Y</span></td><td class="num">713</td><td><span class="y">Y</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">1</td></tr>
+<tr><td>The Supper at Emmaus</td><td>Rembrandt van Rijn</td><td><span class="y">Y</span></td><td class="num">487</td><td class="num">1757</td><td><span class="y">Y</span></td><td class="num">298</td><td><span class="y">Y</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">1</td></tr>
+<tr><td>The Supper at Emmaus</td><td>Michelangelo Merisi da Caravaggio</td><td><span class="y">Y</span></td><td class="num">539</td><td class="num">1014</td><td><span class="n">&mdash;</span></td><td class="num">593</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Temptation of Saint Anthony - Central Panel</td><td>Hieronymus Bosch</td><td><span class="y">Y</span></td><td class="num">265</td><td class="num">672</td><td><span class="n">&mdash;</span></td><td class="num">505</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Trinity (Troitsa)</td><td>Andrei Rublev</td><td><span class="y">Y</span></td><td class="num">241</td><td class="num">459</td><td><span class="n">&mdash;</span></td><td class="num">193</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Venus Mourning the Death of Adonis</td><td>Francesco Furini</td><td><span class="y">Y</span></td><td class="num">160</td><td class="num">986</td><td><span class="y">Y</span></td><td class="num">378</td><td><span class="y">Y</span></td><td class="num">1</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">1</td></tr>
+</tbody></table>
+<h3>thinker <span class="priority-tag p3">5</span></h3>
+<table><thead><tr><th>Title</th><th>Byline</th><th>Img</th><th>Desc (c)</th><th>Context (c)</th><th>ctxAud</th><th>Curator (c)</th><th>curAud</th><th>Themes</th><th>RefQs</th><th>audFile</th><th>audUrl</th><th>extUrl</th><th>legacy?</th><th>TR refs</th></tr></thead><tbody>
+<tr><td>Light as a Name of God</td><td>Pseudo-Dionysius the Areopagite</td><td><span class="y">Y</span></td><td class="num">268</td><td class="num">1298</td><td><span class="n">&mdash;</span></td><td class="num">486</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">2</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Our Heart is Restless</td><td>St. Augustine of Hippo</td><td><span class="y">Y</span></td><td class="num">251</td><td class="num">550</td><td><span class="n">&mdash;</span></td><td class="num">252</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">2</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>Roger Scruton on the Sacred and the Beautiful</td><td>Roger Scruton</td><td><span class="y">Y</span></td><td class="num">253</td><td class="num">492</td><td><span class="n">&mdash;</span></td><td class="num">229</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+<tr><td>The Art of Being Moved</td><td>C.S. Lewis</td><td><span class="y">Y</span></td><td class="num">223</td><td class="num">476</td><td><span class="n">&mdash;</span></td><td class="num">465</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">1</td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">1</td></tr>
+<tr><td>They Were Early</td><td>Justin Martyr (c. 100–165 AD)</td><td><span class="y">Y</span></td><td class="num">296</td><td class="num">2259</td><td><span class="y">Y</span></td><td class="num">244</td><td><span class="n">&mdash;</span></td><td class="num">1</td><td class="num">0</td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+</tbody></table>
+<h3>watch-listen <span class="priority-tag p3">1</span></h3>
+<table><thead><tr><th>Title</th><th>Byline</th><th>Img</th><th>Desc (c)</th><th>Context (c)</th><th>ctxAud</th><th>Curator (c)</th><th>curAud</th><th>Themes</th><th>RefQs</th><th>audFile</th><th>audUrl</th><th>extUrl</th><th>legacy?</th><th>TR refs</th></tr></thead><tbody>
+<tr><td>My Octopus Teacher</td><td></td><td><span class="y">Y</span></td><td class="num">261</td><td class="num">629</td><td><span class="n">&mdash;</span></td><td class="num">215</td><td><span class="n">&mdash;</span></td><td class="num">2</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td>&mdash;</td><td class="num">0</td></tr>
+</tbody></table>
+<h2>2c. Daily Prompt Inventory</h2>
+<p><strong>27 prompts.</strong> Date range: 2026-03-06 &rarr; 2026-04-12. 0 drafts. Required fields: <code>date</code>, <code>content</code> (ref), <code>lectio.text</code>.</p>
+<table><thead><tr><th>Date</th><th>Content (title)</th><th>promptQ (c)</th><th>curator (c)</th><th>curAud</th><th>phil (c)</th><th>scr (c)</th><th>audTitle</th><th>audFile</th><th>audUrlStr</th><th>audExt</th><th>verba (c)</th><th>actio (c)</th><th>relJrny</th><th>theme</th></tr></thead><tbody>
+<tr><td>2026-03-06</td><td>The Calling of Saint Matthew</td><td class="num">40</td><td class="num">181</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">75</td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">129</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td></tr>
+<tr><td>2026-03-17</td><td>The Hills That Held Him</td><td class="num">73</td><td class="num">392</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">147</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">259</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td></tr>
+<tr><td>2026-03-18</td><td>The Adoration of the Magi (Triptych)</td><td class="num">146</td><td class="num">530</td><td><span class="n">&mdash;</span></td><td class="num">218</td><td class="num">129</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">258</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-03-20</td><td>Missa Papae Marcelli</td><td class="num">85</td><td class="num">195</td><td><span class="n">&mdash;</span></td><td class="num">50</td><td class="num">62</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">86</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-03-21</td><td>Christ in Gethsemane (Agony in the Garden)</td><td class="num">187</td><td class="num">234</td><td><span class="n">&mdash;</span></td><td class="num">76</td><td class="num">93</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">102</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-03-22</td><td>The Atacama Desert at Dawn</td><td class="num">141</td><td class="num">413</td><td><span class="n">&mdash;</span></td><td class="num">106</td><td class="num">33</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">34</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-03-23</td><td>The Double Helix: Code Written Before Language</td><td class="num">143</td><td class="num">237</td><td><span class="n">&mdash;</span></td><td class="num">88</td><td class="num">113</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">155</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-03-24</td><td>The Bread Ovens of Tuscany</td><td class="num">96</td><td class="num">143</td><td><span class="n">&mdash;</span></td><td class="num">98</td><td class="num">93</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">109</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-03-25</td><td>The Trinity (Troitsa)</td><td class="num">84</td><td class="num">193</td><td><span class="n">&mdash;</span></td><td class="num">51</td><td class="num">67</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">106</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-03-26</td><td>Skógafoss Waterfall, Iceland</td><td class="num">88</td><td class="num">162</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">98</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">126</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-03-27</td><td>Pied Beauty</td><td class="num">123</td><td class="num">212</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">81</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">112</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-03-28</td><td>The Fibonacci Spiral: Mathematics the Eye Already </td><td class="num">80</td><td class="num">295</td><td><span class="n">&mdash;</span></td><td class="num">23</td><td class="num">153</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">108</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-03-29</td><td>Palm Sunday</td><td class="num">61</td><td class="num">244</td><td><span class="n">&mdash;</span></td><td class="num">89</td><td class="num">55</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">83</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-03-30</td><td>Holy Monday</td><td class="num">112</td><td class="num">269</td><td><span class="n">&mdash;</span></td><td class="num">73</td><td class="num">175</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">1994</td><td class="num">191</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-03-31</td><td>Holy Tuesday</td><td class="num">105</td><td class="num">246</td><td><span class="n">&mdash;</span></td><td class="num">180</td><td class="num">123</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">201</td><td class="num">67</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td></tr>
+<tr><td>2026-04-01</td><td>Spy Wednesday</td><td class="num">76</td><td class="num">322</td><td><span class="n">&mdash;</span></td><td class="num">124</td><td class="num">198</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">2890</td><td class="num">90</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-04-02</td><td>Holy Thursday</td><td class="num">68</td><td class="num">312</td><td><span class="n">&mdash;</span></td><td class="num">31</td><td class="num">176</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">71</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td></tr>
+<tr><td>2026-04-03</td><td>Good Friday</td><td class="num">44</td><td class="num">181</td><td><span class="n">&mdash;</span></td><td class="num">64</td><td class="num">177</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">285</td><td class="num">22</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td></tr>
+<tr><td>2026-04-04</td><td>Holy Saturday</td><td class="num">86</td><td class="num">277</td><td><span class="n">&mdash;</span></td><td class="num">105</td><td class="num">167</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">36</td><td><span class="n">&mdash;</span></td><td><span class="y">Y</span></td></tr>
+<tr><td>2026-04-05</td><td>Easter Sunday</td><td class="num">99</td><td class="num">348</td><td><span class="n">&mdash;</span></td><td class="num">35</td><td class="num">73</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">407</td><td class="num">60</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-04-06</td><td>Spiegel im Spiegel</td><td class="num">103</td><td class="num">192</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">67</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">130</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-04-07</td><td>Roger Scruton on the Sacred and the Beautiful</td><td class="num">104</td><td class="num">229</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">69</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">112</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-04-08</td><td>My Octopus Teacher</td><td class="num">108</td><td class="num">215</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">157</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">117</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-04-09</td><td>The Lake Isle of Innisfree</td><td class="num">98</td><td class="num">280</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">203</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">220</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-04-10</td><td>Webb's First Deep Field: 13 Billion Years of Light</td><td class="num">89</td><td class="num">263</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">191</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">168</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-04-11</td><td>The Return of the Prodigal Son</td><td class="num">95</td><td class="num">206</td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">158</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">0</td><td class="num">96</td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td></tr>
+<tr><td>2026-04-12</td><td>They Were Early</td><td class="num">68</td><td class="num">244</td><td><span class="n">&mdash;</span></td><td class="num">27</td><td class="num">127</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="n">&mdash;</span></td><td><span class="n">&mdash;</span></td><td class="num">1500</td><td class="num">207</td><td><span class="y">Y</span></td><td><span class="y">Y</span></td></tr>
+</tbody></table>
+<h4>P&amp;P Coverage Summary</h4>
+<ul>
+<li><strong>27 / 27</strong> have curatorNote, promptQuestion, scripture, actio &mdash; editorial baseline holds.</li>
+<li><strong>0 / 27</strong> have curator audio &mdash; universal TTS gap for the daily hook.</li>
+<li><strong>17 / 27</strong> have philosophy pairing (10 are scripture-only).</li>
+<li><strong>16 / 27</strong> have audio file uploaded. 11 have no audio of any kind.</li>
+<li><strong>6 / 27</strong> have Verba text.</li>
+<li><strong>2 / 27</strong> link a related journey.</li>
+<li><strong>7 / 27</strong> are tagged with a theme (20 untagged).</li>
+</ul>
+<h2>2d. Tradition Reflection ("Go Deeper") Inventory</h2>
+<p><strong>28 tradition reflections.</strong> 0 drafts. Required fields: <code>authorType</code>, <code>title</code>, <code>summary</code>, <code>source</code>.</p>
+<table><thead><tr><th>Author type</th><th>Era</th><th>Title</th><th>Source</th><th>Summary (c)</th><th>ShortQuote (c)</th><th>Audio</th><th>Themes</th></tr></thead><tbody>
+<tr><td>church-father</td><td>fathers</td><td>Augustine on restlessness</td><td>Augustine, Confessions, Book I, Chapter 1</td><td class="num">443</td><td class="num">87</td><td><span class="y">Y</span></td><td>Home / The Restless Heart</td></tr>
+<tr class="red-row"><td>church-father</td><td>fathers</td><td>Bonum est diffusivum sui. (The good is self-diffusive)</td><td>Thomas Aquinas (13th century CE)</td><td class="num">478</td><td class="num">44</td><td><span class="n">&mdash;</span></td><td><span class="n">none</span></td></tr>
+<tr class="red-row"><td>church-father</td><td>fathers</td><td>Clement of Alexandria on the Mysteries </td><td>Clement of Alexandria, Exhortation to the Greeks (Protrepticus), ch. 1</td><td class="num">438</td><td class="num">107</td><td><span class="y">Y</span></td><td><span class="n">none</span></td></tr>
+<tr><td>church-father</td><td>fathers</td><td>God as Light Who Gives Without Losing</td><td>St. Gregory of Nyssa, On the Soul and the Resurrection, 4th century</td><td class="num">248</td><td class="num">120</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr><td>church-father</td><td>fathers</td><td>Light Enters the Darkness</td><td>John 1:5 / St. John the Evangelist, prologue to the Fourth Gospel</td><td class="num">320</td><td class="num">70</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr><td>church-father</td><td>fathers</td><td>Light as the First Gift</td><td>St. Basil the Great, Hexaemeron (Homilies on the Six Days of Creation)</td><td class="num">275</td><td class="num">148</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr class="red-row"><td>church-father</td><td>fathers</td><td>Origen on the Magi's gifts</td><td>Origen, Contra Celsum, Book I, ch. 60</td><td class="num">439</td><td class="num">75</td><td><span class="y">Y</span></td><td><span class="n">none</span></td></tr>
+<tr class="red-row"><td>church-father</td><td>fathers</td><td>Tertullian on the soul's witness</td><td>Tertullian, Apology, ch. 17</td><td class="num">483</td><td class="num">44</td><td><span class="y">Y</span></td><td><span class="n">none</span></td></tr>
+<tr><td>church-father</td><td>fathers</td><td>The Invisible Light Beyond Light</td><td>Pseudo-Dionysius the Areopagite, Mystical Theology, 5th century</td><td class="num">307</td><td class="num">75</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr class="red-row"><td>church-father</td><td>modern</td><td>The Sacred in the Present Moment</td><td>Jean-Pierre de Caussade, Abandonment to Divine Providence, 18th centur</td><td class="num">300</td><td class="num">102</td><td><span class="n">&mdash;</span></td><td><span class="n">none</span></td></tr>
+<tr><td>church-father</td><td>fathers</td><td>The Weight of Glory</td><td>St. Augustine, Confessions, Book X, 4th century</td><td class="num">303</td><td class="num">129</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr class="red-row"><td>philosopher</td><td><span class="n">unset</span></td><td>Beauty absolute, separate, simple, and everlasting.</td><td>Plato (428–348 BCE)</td><td class="num">499</td><td class="num">57</td><td><span class="y">Y</span></td><td><span class="n">none</span></td></tr>
+<tr class="red-row"><td>philosopher</td><td>modern</td><td>Edith Stein</td><td>Edith Stein, Letter to Mother Petra Brüning, March 23, 1938</td><td class="num">716</td><td class="num">102</td><td><span class="y">Y</span></td><td><span class="n">none</span></td></tr>
+<tr class="red-row"><td>philosopher</td><td><span class="n">unset</span></td><td>On the Search for Truth</td><td>Aristotle, Metaphysics 993a (W.D. Ross translation)</td><td class="num">458</td><td class="num">207</td><td><span class="y">Y</span></td><td><span class="n">none</span></td></tr>
+<tr class="red-row"><td>philosopher</td><td><span class="n">unset</span></td><td>Plato — Journey Synthesis</td><td>Plato, Republic Book VII, 517b–c. Verify translation.</td><td class="num">2122</td><td class="num">178</td><td><span class="y">Y</span></td><td><span class="n">none</span></td></tr>
+<tr class="red-row"><td>philosopher</td><td>modern</td><td>Truth give to our senses</td><td>Truth is Symphonic: Aspects of Christian Pluralism</td><td class="num">134</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td><span class="n">none</span></td></tr>
+<tr><td>pope</td><td>modern</td><td>Beauty Will Save the World</td><td>Pope Benedict XVI, Address to Artists, Sistine Chapel, 2009</td><td class="num">282</td><td class="num">119</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr><td>pope</td><td>modern</td><td>Beauty as a Path to God</td><td>Art and the saints are the greatest apologetic for our faith.</td><td class="num">298</td><td class="num">0</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr><td>pope</td><td>modern</td><td>Creation as a Luminous Gift</td><td>Pope Benedict XVI, In the Beginning: A Catholic Understanding of the S</td><td class="num">291</td><td class="num">123</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr><td>pope</td><td>modern</td><td>The Finger That Points</td><td>Pope Francis, Interview with Antonio Spadaro, S.J., La Civiltà Cattoli</td><td class="num">316</td><td class="num">167</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr><td>pope</td><td>modern</td><td>What beauty does</td><td>John Paul II (1920–2005 CE), Letter to Artists, §16 (1999)</td><td class="num">498</td><td class="num">58</td><td><span class="y">Y</span></td><td>Beauty, Truth &amp; Goodness</td></tr>
+<tr><td>saint</td><td>medieval</td><td>Holiness in the Pots and Pans</td><td>St. Teresa of Ávila, The Book of Foundations, 16th century</td><td class="num">302</td><td class="num">33</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr class="red-row"><td>saint</td><td><span class="n">unset</span></td><td>Hospitality is prayer</td><td>Saint Benedict (6th c.)</td><td class="num">107</td><td class="num">64</td><td><span class="n">&mdash;</span></td><td><span class="n">none</span></td></tr>
+<tr><td>saint</td><td>medieval</td><td>Prayer as Standing in the Light</td><td>St. Teresa of Ávila, The Book of Her Life, 16th century</td><td class="num">262</td><td class="num">130</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr><td>saint</td><td>medieval</td><td>The Canticle of Creation</td><td>St. Francis of Assisi, Canticle of the Sun, 1225</td><td class="num">316</td><td class="num">192</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr><td>saint</td><td>modern</td><td>The Little Way of Light</td><td>St. Thérèse of Lisieux, The Story of a Soul, 1897</td><td class="num">278</td><td class="num">165</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr><td>saint</td><td>medieval</td><td>The Living Light of Creation</td><td>St. Hildegard of Bingen, Scivias, 12th century</td><td class="num">405</td><td class="num">129</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+<tr><td>saint</td><td>medieval</td><td>The Music of Silence</td><td>St. John of the Cross, The Dark Night of the Soul, 16th century</td><td class="num">313</td><td class="num">112</td><td><span class="n">&mdash;</span></td><td>Light</td></tr>
+</tbody></table>
+<h4>AuthorType breakdown</h4>
+<table><thead><tr><th>Type</th><th>Count</th><th>%</th></tr></thead><tbody>
+<tr><td>church-father</td><td class="num">11</td><td class="num">39%</td></tr>
+<tr><td>saint</td><td class="num">7</td><td class="num">25%</td></tr>
+<tr><td>philosopher</td><td class="num">5</td><td class="num">18%</td></tr>
+<tr><td>pope</td><td class="num">5</td><td class="num">18%</td></tr>
+<tr class="red-row"><td>doctor</td><td class="num n">0</td><td class="num n">0%</td></tr>
+<tr class="red-row"><td>theologian</td><td class="num n">0</td><td class="num n">0%</td></tr>
+<tr class="red-row"><td>mystic</td><td class="num n">0</td><td class="num n">0%</td></tr>
+</tbody></table>
+<p style="font-size:12px;color:#7a7062;"><em>Three of the 7 authorType values are unused. The Go Deeper editorial rule says Aquinas (saint + doctor) and Augustine (church-father + doctor) should carry both labels &mdash; the current <code>radio</code> layout prevents this.</em></p>
+
+<h4>Era breakdown</h4>
+<table><thead><tr><th>Era</th><th>Count</th></tr></thead><tbody>
+<tr class="red-row"><td>(unset)</td><td class="num n">4</td></tr>
+<tr><td>fathers</td><td class="num">10</td></tr>
+<tr><td>medieval</td><td class="num">5</td></tr>
+<tr><td>modern</td><td class="num">9</td></tr>
+</tbody></table>
+<p style="font-size:12px;color:#7a7062;"><em>No "ancient" value exists in the schema. 4 TRs have no era tag.</em></p>
+
+<h4>Thinker usage map</h4>
+<p>No author appears in more than one journey. Two authors appear more than once in the full TR set: Pope Benedict XVI (2), St. Teresa of &Aacute;vila (2) &mdash; both within the editorial norm.</p>
+
+<h4>TR usage per journey</h4>
+<table><thead><tr><th>Journey</th><th>Days built</th><th>TRs linked</th><th>TR / day</th><th>Status</th></tr></thead><tbody>
+<tr><td>Light</td><td class="num">7</td><td class="num">16</td><td class="num">2.3</td><td class="y">Matches editorial target (2&ndash;3/day)</td></tr>
+<tr class="red-row"><td>Hieronymus Bosch</td><td class="num">8</td><td class="num n">0</td><td class="num n">0</td><td class="n">NO TRs LINKED across any of 8 days</td></tr>
+<tr class="red-row"><td>When Myth Became Fact</td><td class="num">4</td><td class="num">4</td><td class="num">1.0</td><td class="n">Only 1 TR/day &mdash; under target</td></tr>
+<tr><td>Beauty, Truth &amp; Goodness (original)</td><td class="num">3</td><td class="num">3</td><td class="num">1.0</td><td>Minimum compliance</td></tr>
+<tr class="red-row"><td>Beauty, Truth &amp; Goodness II (new)</td><td class="num">3</td><td class="num">1</td><td class="num n">0.3</td><td class="n">Only Day 1 has a TR linked</td></tr>
+</tbody></table>
+
+<h4>Orphan TRs</h4>
+<p>1 TR has no journey day link AND no content item link:</p>
+<ul><li><strong>Hospitality is prayer</strong> &mdash; Saint Benedict (6th c.)</li></ul>
+<p>11 TRs have no theme tag (see full table above for details).</p>
+<h2>2e. TTS Coverage Audit (Published Records Only)</h2>
+<p>A TTS-candidate field is defined as: a text field that has a corresponding audio upload field adjacent to it in the same schema object, excluding any field inside the <code>auditio</code> object (which holds curated music, not narration). Character and word counts below are for records where the text field is populated but the paired audio field is empty.</p>
+
+<h3>Coverage by field type</h3>
+<table><thead><tr><th>Field (schema.field)</th><th>Pairing</th><th>Records populated</th><th>With audio</th><th>Missing audio</th><th>Missing chars</th><th>~Missing words</th></tr></thead><tbody>
+<tr><td><code>journeyDay.openText</code></td><td>+ openTextAudio</td><td class="num">25</td><td class="num y">7</td><td class="num n">18</td><td class="num">3,531</td><td class="num">679</td></tr>
+<tr><td><code>journeyDay.encounterNote</code></td><td>+ encounterNoteAudio</td><td class="num">18</td><td class="num y">7</td><td class="num n">11</td><td class="num">7,511</td><td class="num">1,444</td></tr>
+<tr><td><code>contentItem.curatorNote</code></td><td>+ curatorNoteAudio</td><td class="num">47</td><td class="num y">7</td><td class="num n">40</td><td class="num">13,579</td><td class="num">2,611</td></tr>
+<tr><td><code>contentItem.context</code></td><td>+ contextAudio</td><td class="num">52</td><td class="num y">8</td><td class="num n">44</td><td class="num">32,846</td><td class="num">6,317</td></tr>
+<tr><td><code>dailyPrompt.curatorNote</code></td><td>+ curatorNoteAudio</td><td class="num">27</td><td class="num n">0</td><td class="num n">27</td><td class="num">7,015</td><td class="num">1,349</td></tr>
+<tr><td><code>traditionReflection.summary</code></td><td>+ reflectionAudio</td><td class="num">28</td><td class="num y">9</td><td class="num n">19</td><td class="num">5,535</td><td class="num">1,064</td></tr>
+<tr style="background:#16110d;color:#fdf6e8;"><td style="color:#C19B5F;"><strong>GRAND TOTAL</strong></td><td></td><td></td><td></td><td></td><td style="color:#fdf6e8;" class="num"><strong>70,017</strong></td><td style="color:#fdf6e8;" class="num"><strong>13,464</strong></td></tr>
+</tbody></table>
+
+<h3>Coverage by document type</h3>
+<table><thead><tr><th>Document type</th><th>Missing chars</th><th>% of total</th><th>Biggest gap</th></tr></thead><tbody>
+<tr><td><code>contentItem</code></td><td class="num">46,425</td><td class="num">66%</td><td>context (32,846) + curator notes (13,579)</td></tr>
+<tr><td><code>journeyDay</code></td><td class="num">11,042</td><td class="num">16%</td><td>encounterNote "Look Closer" text</td></tr>
+<tr><td><code>dailyPrompt</code></td><td class="num">7,015</td><td class="num">10%</td><td>All 27 records missing curator audio</td></tr>
+<tr><td><code>traditionReflection</code></td><td class="num">5,535</td><td class="num">8%</td><td>Summary narration</td></tr>
+</tbody></table>
+
+<h3>Cost reference &mdash; verified April 23, 2026</h3>
+<p>Sheri applies the rate. Character total above = 70,017. Providers list below shows current published rates. Verify at time of use.</p>
+<table><thead><tr><th>Provider</th><th>Tier</th><th>Rate per 1,000 chars</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Google Cloud TTS</td><td>Neural2 / WaveNet</td><td class="num">$0.016</td><td>First 1M chars/month free (ongoing free tier)</td></tr>
+<tr><td>Amazon Polly</td><td>Neural</td><td class="num">$0.016</td><td>First 1M chars/month free for 12 months after sign-up</td></tr>
+<tr><td>ElevenLabs API</td><td>Flash / Turbo</td><td class="num">$0.060</td><td>Lowest paid API rate. Multilingual v2/v3: $0.12/1K</td></tr>
+<tr><td>ElevenLabs subscription</td><td>Starter</td><td class="num">~$5 / month &asymp; 30K chars</td><td>Commercial license included. Over limit charged extra.</td></tr>
+</tbody></table>
+<p style="font-size:12px;color:#7a7062;"><em>Sources verified via web search on 2026-04-23: Google Cloud Text-to-Speech pricing page, AWS Polly pricing page, ElevenLabs API pricing page. Rates can change; do not quote these beyond April 2026.</em></p>
+<h2>2f. Consolidated Red List</h2>
+<p>All missing/partial fields, sorted by severity. Each item includes a recommendation: <strong>Sanity</strong> (Sheri enters content in Studio), <strong>Schema</strong> (schema change needed), or <strong>Migration</strong> (content in wrong field). TTS gaps listed separately at the bottom.</p>
+
+<h3>Missing required fields <span class="priority-tag p1">Priority 1</span></h3>
+<table><thead><tr><th>Doc type</th><th>Record</th><th>Field missing</th><th>Recommendation</th></tr></thead><tbody>
+<tr><td>journey</td><td>Light</td><td><code>totalDays</code> (null)</td><td><strong>Sanity.</strong> Enter 7. CLAUDE.md task 21 is stale.</td></tr>
+<tr><td>journey</td><td>Hieronymus Bosch</td><td><code>totalDays</code> (null)</td><td><strong>Sanity.</strong> Enter 8.</td></tr>
+<tr><td>journey</td><td>Hieronymus Bosch</td><td>Trailing space in title</td><td><strong>Sanity.</strong> Trim title. May break GROQ slug-based lookups elsewhere &mdash; check first.</td></tr>
+<tr><td>journey</td><td>Beauty, Truth &amp; Goodness II + Myth</td><td>Both have <code>order = 1</code></td><td><strong>Sanity.</strong> Re-sort. Causes unpredictable Journey tab ordering.</td></tr>
+</tbody></table>
+
+<h3>Missing optional fields &mdash; editorial gaps <span class="priority-tag p2">Priority 2</span></h3>
+
+<h4>Light journey (all 7 days)</h4>
+<ul>
+<li><strong>No lectio</strong> on any day (no philosophy, no scripture, no connection note). <strong>Sanity.</strong> Lectio pairing is a core editorial standard &mdash; Light is the journey most out of compliance.</li>
+<li><strong>No auditio</strong> on any day (no audio title, no audio file, no URL). <strong>Sanity.</strong></li>
+<li><strong>encounterNote = 0 chars</strong> on every day. <strong>Sanity.</strong> The "Look Closer" layer carries symbolism &mdash; all 7 days empty is a systematic gap.</li>
+<li><strong>openText is very short</strong> (60&ndash;190 chars) compared to Myth (1,300&ndash;2,700). <strong>Sanity.</strong> Likely intentional &mdash; Light predates the story-first voice rule.</li>
+</ul>
+
+<h4>Hieronymus Bosch journey (all 8 days)</h4>
+<ul>
+<li><strong>goDeeper = 0 TRs on every day.</strong> <strong>Sanity.</strong> Bosch's 8 days have no tradition reflections linked. Largest editorial gap in the project.</li>
+<li><strong>Day 8 has no lectio</strong> (no phil, no scripture, no connection note). <strong>Sanity.</strong></li>
+<li>No openTextAudio, no encounterNoteAudio on any day. <strong>Sanity.</strong> (TTS below.)</li>
+</ul>
+
+<h4>Beauty, Truth &amp; Goodness II (Days 2&ndash;3)</h4>
+<ul>
+<li>Days 2 and 3 have no <code>goDeeper</code> array entry (field unset, not empty). <strong>Sanity.</strong></li>
+</ul>
+
+<h4>Beauty, Truth &amp; Goodness (original)</h4>
+<ul>
+<li>No openTextAudio on any day. <strong>Sanity.</strong></li>
+<li>No encounterNoteAudio on any day. <strong>Sanity.</strong></li>
+<li>Very short openText (59&ndash;237 chars). <strong>Migration / Sanity.</strong> Pre-dates voice rewrite &mdash; BTG II supersedes it.</li>
+</ul>
+
+<h4>Content items</h4>
+<ul>
+<li>5 sacred-art items have no curatorNote: Holy Monday, Holy Thursday, Holy Tuesday, The Haywain (central panel), The Liturgy of Eating Well, The Atacama Desert. <strong>Sanity.</strong></li>
+<li>4 duplicate titles (see 2b). <strong>Migration / Sanity.</strong> Dedup at source or add a dedup pass in Explore query.</li>
+<li>1 music item has legacy <code>audioFile</code> + <code>musicUrl</code> (Spiegel im Spiegel, one of two). <strong>Migration.</strong> Move to <code>audioSource.audioFile</code>.</li>
+<li>Most content items have 0 reflectionQuestions. <strong>Sanity / Schema.</strong> If the field is only intended for Visio Divina, make it conditional on <code>contentType == "sacred-art"</code> or hidden on non-sacred-art types to reduce editor confusion.</li>
+</ul>
+
+<h4>Daily prompts</h4>
+<ul>
+<li>10 / 27 prompts are scripture-only (no philosophy pairing). <strong>Sanity.</strong> Lectio standard requires the pairing when it can be found.</li>
+<li>11 / 27 prompts have no audio at all. <strong>Sanity.</strong> (TTS below.)</li>
+<li>20 / 27 prompts untagged with a theme. <strong>Sanity.</strong> Low-priority &mdash; theme tag drives Explore filtering.</li>
+<li>25 / 27 prompts have no <code>relatedJourney</code> link. <strong>Sanity.</strong> Discretionary &mdash; only relevant when a P&amp;P day has a journey it bridges to.</li>
+</ul>
+
+<h4>Tradition reflections</h4>
+<ul>
+<li>11 / 28 TRs have no theme tag. <strong>Sanity.</strong></li>
+<li>4 / 28 TRs have no era tag. <strong>Sanity.</strong></li>
+<li>19 / 28 TRs have no audio. <strong>Sanity.</strong> (TTS below.)</li>
+<li>1 orphan TR (Saint Benedict "Hospitality is prayer") &mdash; not linked from any journey day or content item. <strong>Sanity.</strong> Link it or delete it.</li>
+</ul>
+
+<h3>Schema-level issues <span class="priority-tag p2">Priority 2</span></h3>
+<ul>
+<li>11 legacy <code>artwork</code> records in Sanity. <strong>Migration / Schema.</strong> Data still fetchable via fallback query; Studio cannot edit them. Migrate or archive.</li>
+<li>6 <code>episode</code> records in Sanity. <strong>Migration / Schema.</strong> No GROQ query reads them. Migrate to contentItem or decide they are archival only.</li>
+<li><code>traditionReflection.era</code> missing "ancient" value (CLAUDE.md task 37). <strong>Schema.</strong></li>
+<li><code>traditionReflection.authorType</code> is single-select (<code>radio</code>). <strong>Schema.</strong> Aquinas is saint + doctor; Augustine is father + doctor. See Schema Audit R8.</li>
+<li>No Photography content type (CLAUDE.md task 36). <strong>Schema.</strong> Needed before Cameron "English Blossoms" can be entered as photography. Currently entered as sacred-art.</li>
+</ul>
+
+<h3>TTS gaps &mdash; separate category <span class="priority-tag p2">Priority 2</span></h3>
+<ul>
+<li><strong>70,017 characters / ~13,464 words</strong> missing audio across published records.</li>
+<li><strong>Biggest single gap:</strong> <code>contentItem.context</code> &mdash; 32,846 chars in 44 records. This is the heavy-lift narration field.</li>
+<li><strong>100% coverage gap:</strong> <code>dailyPrompt.curatorNote</code> &mdash; 27 / 27 prompts have no curator audio. Systematic, not one-off.</li>
+<li><strong>Journey days:</strong> 18 days have openText without audio; 11 days have encounterNote without audio.</li>
+<li><strong>Recommendation:</strong> Sanity entry (Sheri records or generates TTS). Use the cost table in 2e to scope.</li>
+</ul>
+<h2>GROQ Queries &mdash; For Dashboard Reuse</h2>
+<p>The queries below are the exact shapes used to produce this inventory. They can be ported directly into <code>lib/sanity.ts</code> for the live dashboard in Task 3.</p>
+
+<div class="groq-label">Q1. Journey completion status (Dashboard Section 1)</div>
+<div class="groq-block">*[_type == "journey"] | order(order asc) {
+  _id, title, "slug": slug.current, description, order, isPublished,
+  "totalDays": coalesce(totalDays, count(days)),
+  "daysBuilt": count(days),
+  "plannedCount": count(plannedDays),
+  estimatedMinutesPerDay,
+  "themeName": theme-&gt;title,
+  "hasHero": defined(heroImage),
+  "days": days[] | order(dayNumber asc) {
+    dayNumber, dayTitle,
+    "hasOpenImage": defined(openImage),
+    "openTextLen": length(coalesce(openText, "")),
+    "hasOpenTextAudio": defined(openTextAudio.asset),
+    "encounterRef": encounterContent._ref,
+    "hasEncGuidance": length(coalesce(encounterGuidance, "")) &gt; 0,
+    "encNoteLen": length(coalesce(encounterNote, "")),
+    "hasEncNoteAudio": defined(encounterNoteAudio.asset),
+    "hasAuditioTitle": defined(auditio.title),
+    "hasAuditioAudio": defined(auditio.audioFile.asset),
+    "hasAuditioUrl": defined(auditio.audioUrl),
+    "hasLectioPhil": length(coalesce(lectio.philosophyQuote, "")) &gt; 0,
+    "hasLectioScr": length(coalesce(lectio.scriptureVerse, "")) &gt; 0,
+    "hasLectioConnect": length(coalesce(lectio.connectionNote, "")) &gt; 0,
+    "reflectCount": count(reflectQuestions),
+    "hasConnect": length(coalesce(connectThread, "")) &gt; 0,
+    "goDeeperCount": count(goDeeper)
+  }
+}</div>
+
+<div class="groq-label">Q2. Content item inventory (Dashboard Section 2)</div>
+<div class="groq-block">*[_type == "contentItem" &amp;&amp; !string::startsWith(_id, "drafts.")] | order(contentType asc, title asc) {
+  _id, contentType, title, artist, thinkerName, author, composer, workTitle, year, medium, era, tradition, literaryForm, mediaType, discipline, principle,
+  "hasImage": defined(image.asset),
+  "descLen": length(coalesce(description, "")),
+  "contextLen": length(coalesce(context, "")),
+  "hasContextAudio": defined(contextAudio.asset),
+  "curatorLen": length(coalesce(curatorNote, "")),
+  "hasCuratorAudio": defined(curatorNoteAudio.asset),
+  "reflectCount": count(reflectionQuestions),
+  "themeCount": count(themes),
+  "themes": themes[]-&gt;title,
+  "hasAudioFile": defined(audioSource.audioFile.asset),
+  "hasAudioUrl": defined(audioSource.audioUrl),
+  "hasExternalUrl": defined(audioSource.externalUrl),
+  "hasLegacyAudioFile": defined(audioFile.asset),
+  "legacyMusicUrl": musicUrl,
+  "trRefCount": count(traditionReflections),
+  "hasLoc": defined(locationName),
+  "hasCoords": defined(coordinates.lat)
+}</div>
+
+<div class="groq-label">Q3. Tradition reflection inventory + thinker usage (Dashboard Section 3)</div>
+<div class="groq-block">*[_type == "traditionReflection" &amp;&amp; !string::startsWith(_id, "drafts.")] | order(authorType asc, title asc) {
+  _id, authorType, title, source, era,
+  "summaryLen": length(coalesce(summary, "")),
+  "shortQuoteLen": length(coalesce(shortQuote, "")),
+  "hasReflectionAudio": defined(reflectionAudio.asset),
+  "themeCount": count(themes),
+  "themeNames": themes[]-&gt;title,
+  order,
+  "inAnyJourneyDay": count(*[_type=="journey" &amp;&amp; references(^._id)]) &gt; 0,
+  "inAnyContentItem": count(*[_type=="contentItem" &amp;&amp; references(^._id)]) &gt; 0
+}
+
+// Companion: TRs grouped under each journey&rsquo;s days
+*[_type == "journey"] | order(order asc) {
+  title, "slug": slug.current,
+  "goDeeperRefs": days[].goDeeper[]-&gt;{ _id, title, source, authorType, era }
+}</div>
+
+<div class="groq-label">Q4. Audio / TTS coverage (Dashboard Sections 4 + 6)</div>
+<div class="groq-block">{
+  "journeyDayTTS": *[_type=="journey"]{ title, "days": days[]{ dayNumber, dayTitle,
+    "openTextChars": length(coalesce(openText, "")),
+    "openTextHasAudio": defined(openTextAudio.asset),
+    "encounterNoteChars": length(coalesce(encounterNote, "")),
+    "encounterNoteHasAudio": defined(encounterNoteAudio.asset)
+  } },
+  "contentItemTTS": *[_type=="contentItem" &amp;&amp; !string::startsWith(_id, "drafts.")]{
+    _id, title, contentType,
+    "curatorChars": length(coalesce(curatorNote, "")),
+    "curatorHasAudio": defined(curatorNoteAudio.asset),
+    "contextChars": length(coalesce(context, "")),
+    "contextHasAudio": defined(contextAudio.asset)
+  },
+  "dailyPromptTTS": *[_type=="dailyPrompt" &amp;&amp; !string::startsWith(_id, "drafts.")]{
+    _id, date, "contentTitle": content-&gt;title,
+    "curatorChars": length(coalesce(curatorNote, "")),
+    "curatorHasAudio": defined(curatorNoteAudio.asset)
+  },
+  "traditionReflectionTTS": *[_type=="traditionReflection" &amp;&amp; !string::startsWith(_id, "drafts.")]{
+    _id, title, authorType,
+    "summaryChars": length(coalesce(summary, "")),
+    "summaryHasAudio": defined(reflectionAudio.asset)
+  }
+}</div>
+
+<div class="groq-label">Q5. Daily prompt archive (Section 2 companion)</div>
+<div class="groq-block">*[_type=="dailyPrompt" &amp;&amp; !string::startsWith(_id, "drafts.")] | order(date desc) {
+  _id, date,
+  "contentTitle": content-&gt;title,
+  "promptQLen": length(coalesce(promptQuestion, "")),
+  "curatorLen": length(coalesce(curatorNote, "")),
+  "hasCuratorAudio": defined(curatorNoteAudio.asset),
+  "lectioPhilLen": length(coalesce(lectio.philosophyText, "")),
+  "lectioScrLen": length(coalesce(lectio.text, "")),
+  "auditioTitle": auditio.title,
+  "hasAuditioFile": defined(auditio.audioUrl.audioFile.asset),
+  "hasAuditioUrlStr": defined(auditio.audioUrl.audioUrl),
+  "hasAuditioExt": defined(auditio.url),
+  "verbaLen": length(coalesce(auditio.verbaOriginal, "")),
+  "actioLen": length(coalesce(actio, "")),
+  "hasRelatedJourney": defined(relatedJourney),
+  "hasTheme": defined(theme)
+}</div>
+
+<div class="groq-label">Q6. Theme usage totals</div>
+<div class="groq-block">*[_type=="theme"] | order(order asc) {
+  _id, title, "slug": slug.current, question, order,
+  "contentCount": count(*[_type=="contentItem" &amp;&amp; references(^._id)]),
+  "trCount": count(*[_type=="traditionReflection" &amp;&amp; references(^._id)]),
+  "journeyCount": count(*[_type=="journey" &amp;&amp; references(^._id)]),
+  "promptCount": count(*[_type=="dailyPrompt" &amp;&amp; references(^._id)])
+}</div>
+
+<p style="margin-top:32px; font-size:11px; color:#8a7a6a; font-style:italic;">Inventory generated April 23, 2026 from the em44j9m8 production dataset. Published records only unless noted. Queries are read-only; no data was modified during this session.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KALLOS: Session Benchmark — Story Voice & Context Standards</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Georgia, serif; background: #faf8f4; color: #16110d; line-height: 1.7; }
+        .container { max-width: 860px; margin: 0 auto; padding: 40px 32px; }
+        h1 { font-size: 26px; font-weight: normal; color: #1a1208; margin-bottom: 6px; }
+        h2 { font-size: 17px; font-weight: bold; color: #C19B5F; text-transform: uppercase; letter-spacing: 0.08em; margin: 40px 0 12px; border-bottom: 1px solid #e0d4c0; padding-bottom: 6px; }
+        h3 { font-size: 15px; font-weight: bold; color: #16110d; margin: 24px 0 8px; }
+        p { margin-bottom: 14px; font-size: 15px; }
+        .meta { color: #888; font-size: 13px; margin-bottom: 32px; }
+        .score-bar { display: flex; gap: 20px; margin: 20px 0 32px; }
+        .score-item { flex: 1; background: #fff; border: 1px solid #e0d4c0; border-radius: 6px; padding: 16px 20px; }
+        .score-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #888; margin-bottom: 6px; }
+        .score-value { font-size: 22px; font-weight: bold; color: #C19B5F; }
+        .score-note { font-size: 12px; color: #666; margin-top: 4px; }
+        .compare-block { margin: 20px 0; }
+        .compare-label { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 10px; display: inline-block; margin-bottom: 8px; }
+        .before { background: #fdecea; color: #a33; }
+        .after { background: #eaf4ea; color: #2a6a2a; }
+        .quote-block { background: #fff; border-left: 3px solid #C19B5F; padding: 14px 18px; margin: 12px 0 20px; font-size: 14.5px; font-style: italic; }
+        .rule-block { background: #fff; border: 1px solid #e0d4c0; border-radius: 4px; padding: 16px 20px; margin: 12px 0; }
+        .rule-block .rule-title { font-weight: bold; font-size: 14px; margin-bottom: 8px; color: #1a1208; }
+        .rule-block p { font-size: 14px; margin-bottom: 6px; }
+        .checklist { list-style: none; padding: 0; margin: 12px 0; }
+        .checklist li { padding: 6px 0 6px 24px; position: relative; font-size: 14px; border-bottom: 1px solid #f0ebe0; }
+        .checklist li:before { content: "✓"; position: absolute; left: 0; color: #2a6a2a; font-weight: bold; }
+        .checklist li.warn:before { content: "?"; color: #C19B5F; }
+        .checklist li.pending:before { content: "○"; color: #aaa; }
+        .drift-pattern { background: #fffbf0; border: 1px solid #e8d89a; border-radius: 4px; padding: 14px 18px; margin: 12px 0; }
+        .drift-label { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #a07b20; letter-spacing: 0.06em; margin-bottom: 6px; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+        th { background: #f0ebe0; padding: 8px 12px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: #666; }
+        td { padding: 10px 12px; border-bottom: 1px solid #ede7d9; vertical-align: top; }
+        .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 3px; font-weight: bold; }
+        .tag-locked { background: #eaf4ea; color: #2a6a2a; }
+        .tag-pending { background: #fffbf0; color: #a07b20; }
+        .tag-verify { background: #fdecea; color: #a33; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>KALLOS Session Benchmark</h1>
+    <p class="meta">BTG 3-Day Journey — Story Voice & Context Standards | Session: April 14–15, 2026</p>
+
+    <div class="score-bar">
+        <div class="score-item">
+            <div class="score-label">Opening Texts Rebuilt</div>
+            <div class="score-value">3 / 3</div>
+            <div class="score-note">All locked. Story carries theme, not artwork description.</div>
+        </div>
+        <div class="score-item">
+            <div class="score-label">Context Fields Rebuilt</div>
+            <div class="score-value">3 / 3</div>
+            <div class="score-note">Museum labels → world-building narrative.</div>
+        </div>
+        <div class="score-item">
+            <div class="score-label">Em Dashes Remaining</div>
+            <div class="score-value">0</div>
+            <div class="score-note">Checked and cleared across full document.</div>
+        </div>
+        <div class="score-item">
+            <div class="score-label">Rules Documented</div>
+            <div class="score-value">2 new</div>
+            <div class="score-note">Context Field Standard + Story Voice principle.</div>
+        </div>
+    </div>
+
+    <h2>The Core Principle Established This Session</h2>
+
+    <p>Before this session, story voice had been applied selectively — usually caught when a draft landed wrong, then fixed. By the end of this session, the principle is documented, has a named failure mode, and has a named benchmark.</p>
+
+    <div class="rule-block">
+        <div class="rule-title">Story Voice Principle (now in CONTENT-RULES.md)</div>
+        <p>The opening text carries the day's <strong>theme</strong> via story. It never describes the artwork or artist. The image and music carry the encounter. The text carries the theme.</p>
+        <p>This same principle now extends to <strong>Context fields</strong>. Context drops the reader into a world. It does not summarize art history.</p>
+    </div>
+
+    <div class="rule-block">
+        <div class="rule-title">The Museum Label Failure Mode (named and documented)</div>
+        <p>When a Context field defaults to technique description, exhibition history, or movement names, it reads like a museum placard. The test: <em>Read it aloud. Does it sound like a museum placard? Rewrite it.</em></p>
+        <p>The benchmark for every Context field: Myth Journey Day 1 (Eleusinian Mysteries). That text drops the reader into a living world. Every BTG Context was rewritten to that standard.</p>
+    </div>
+
+    <h2>Before / After: Opening Texts</h2>
+
+    <h3>Day 1 — Beauty</h3>
+    <div class="compare-block">
+        <div class="compare-label before">Before</div>
+        <div class="quote-block">Began with Diotima's speech in Plato's Symposium. Described the "ladder of beauty" (ascending from beautiful bodies → souls → activities → knowledge → Beauty itself). Announced what the day was about before the reader had encountered anything.</div>
+    </div>
+    <div class="compare-block">
+        <div class="compare-label after">After (locked)</div>
+        <div class="quote-block">Dandelion folk legend: the flower fairy, the three gifts (resilience, long season, wishes). Children making wishes by blowing seeds. "And then, briefly, you want it back. Philosophers had a word for that. They called it beauty. That sharp feeling of wonder and joy that doesn't last, but is a mere echo of something greater."</div>
+    </div>
+    <p><strong>What changed:</strong> The reader arrives at the concept of beauty through an experience. The Symposium now lives in TR1 where it belongs — as a thinker voice, not as the opening argument.</p>
+
+    <h3>Day 2 — Truth</h3>
+    <div class="compare-block">
+        <div class="compare-label before">Before</div>
+        <div class="quote-block">Began by describing Dürer: his precision, his technique, his commitment to the mastery project. Same structural problem as original Day 1 — describing the artwork rather than carrying the theme.</div>
+    </div>
+    <div class="compare-block">
+        <div class="compare-label after">After (locked)</div>
+        <div class="quote-block">Augustine on the beach. Shell/ocean/hole story. Night sky closing: "The more you learn about what you are seeing, the larger it gets." Closes on truth as threshold, not solved problem. Dürer now lives in the Context field, where his mastery project is the world the reader enters.</div>
+    </div>
+
+    <h3>Day 3 — Goodness</h3>
+    <div class="compare-block">
+        <div class="compare-label before">Before</div>
+        <div class="quote-block">10-word arc statement, then Three Trees (a tree for each day's theme). Clean as structure, but summary rather than story — told the reader what to think rather than showing a human being encountering goodness.</div>
+    </div>
+    <div class="compare-block">
+        <div class="compare-label after">After (locked)</div>
+        <div class="quote-block">Tolstoy's Martin the Cobbler. The cobbler who waits all day for Christ to come, helps three ordinary people, is disappointed, and then hears: "I was in the old man... I was in the mother and her child... I was in the two you helped to forgive each other." Closes: "Goodness does not arrive the way you are expecting. It comes toward you, and asks only that you be present enough to see it. That is what goodness actually is. Not an achievement. A recognition."</div>
+    </div>
+
+    <h2>Before / After: Context Fields</h2>
+
+    <table>
+        <thead><tr><th>Day</th><th>Before</th><th>After</th></tr></thead>
+        <tbody>
+            <tr>
+                <td><strong>Day 1</strong><br>Cameron</td>
+                <td>Photographic Society debate, soft focus technique, Tennyson circle connections, exhibition history.</td>
+                <td>Cameron's argument: a photograph made the way the Society wanted is a document. Her blur was not a mistake — it was a claim about beauty. She never changed her technique. "She never changed her technique" is the entire argument.</td>
+            </tr>
+            <tr>
+                <td><strong>Day 2</strong><br>Dürer</td>
+                <td>Renaissance biography, woodcut technique, Northern Renaissance context, Melencolia I iconography list.</td>
+                <td>The Renaissance mastery project: if you study the visible world carefully enough, you can master it. Dürer as its most committed practitioner — and the problem that became visible the closer he studied. The truncated polyhedron as a picture of that problem. "He never made Melencolia II."</td>
+            </tr>
+            <tr>
+                <td><strong>Day 3</strong><br>Rembrandt</td>
+                <td>Baroque chiaroscuro, Rembrandt's light technique, provenance of the 1648 Louvre painting.</td>
+                <td>The Emmaus road told from the disciples' point of view: walking away from Jerusalem, past tense in their minds, the stranger who joins them. Rembrandt's circumstances at 42 — his wife dead six years, finances collapsing — woven in at the end, so the reader understands what he brought to this scene.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>New Addition: Day 3 TR4 — Cave Allegory as Journey Synthesis</h2>
+
+    <p>Plato's Allegory of the Cave added as the final Tradition Reflection for Day 3. It functions as a capstone for all three days: Day 1 is the shadows (beauty pointing to something more real), Day 2 is the real objects (truth that exceeds the container you brought), Day 3 is the sun (the Form of the Good, which was casting both all along).</p>
+
+    <div class="quote-block">"Beauty, Truth, and Goodness are not three separate things. They are one thing seen from three distances. The Transcendentals converge. They have always been one."</div>
+
+    <h2>Drift Patterns: What Causes the Voice to Slip</h2>
+
+    <p>Two patterns caused regressions this session. Both are now documented.</p>
+
+    <div class="drift-pattern">
+        <div class="drift-label">Drift Pattern 1: Content-First Writing</div>
+        <p>When content (artwork, artist, philosopher) is selected first, writing naturally starts by describing that content. The opening text ends up describing Dürer's technique or Plato's Symposium — correct information, wrong field.</p>
+        <p><strong>The fix:</strong> Ask the theme question first. "What human experience does Day X carry?" Find the story that holds that experience. Then let the content items illuminate it.</p>
+    </div>
+
+    <div class="drift-pattern">
+        <div class="drift-label">Drift Pattern 2: Museum Label Default</div>
+        <p>Context fields default to art history because that information is easy to access and sounds authoritative. Technique, exhibition history, movement names — all present in training data, all wrong for KALLOS.</p>
+        <p><strong>The fix:</strong> The museum label test. Read the field aloud. If it sounds like a placard, rewrite it. The question is not "what is true about this artwork?" but "what world did this artwork come from, and what was at stake there?"</p>
+    </div>
+
+    <h2>Session Audit Results — Field by Field</h2>
+
+    <ul class="checklist">
+        <li>Day 1 Opening Text — locked (dandelion legend)</li>
+        <li>Day 1 Context — rebuilt (Cameron's blur as philosophical claim)</li>
+        <li>Day 1 TR1 Plato body — fixed (dandelion reference replaces old ladder reference)</li>
+        <li>Day 1 TR2 Augustine — clean</li>
+        <li>Day 1 TR3 JPII — clean <span class="tag tag-verify">VERIFY: paragraph number</span></li>
+        <li>Day 1 Reflect — clean</li>
+        <li>Day 1 Connect Thread — clean</li>
+        <li>Day 1 Lectio — clean <span class="tag tag-verify">VERIFY: Simone Weil exact quote; RSV-2CE scripture</span></li>
+        <li>Day 2 Opening Text — locked (Augustine beach/shell/ocean + night sky)</li>
+        <li>Day 2 Context — rebuilt (Dürer's mastery project and its built-in problem)</li>
+        <li>Day 2 TR1 Aristotle — clean</li>
+        <li>Day 2 TR2 Aquinas (straw moment) — clean</li>
+        <li class="warn">Day 2 TR3 Edith Stein — <span class="tag tag-verify">VERIFY: quote and source before Sanity entry</span></li>
+        <li>Day 2 Reflect — clean</li>
+        <li>Day 2 Connect Thread — clean</li>
+        <li>Day 2 Lectio — clean <span class="tag tag-verify">VERIFY: RSV-2CE Luke 24:29, 24:31 exact wording</span></li>
+        <li>Day 3 Opening Text — locked (Martin the Cobbler)</li>
+        <li>Day 3 Context — rebuilt (Emmaus road as living narrative)</li>
+        <li class="warn">Day 3 TR1 Augustine (restless heart) — flagged: third Augustine appearance. Your decision.</li>
+        <li>Day 3 TR2 Aquinas (bonum est diffusivum sui) — clean</li>
+        <li class="warn">Day 3 TR3 Dorothy Day — <span class="tag tag-verify">VERIFY: quote and source before Sanity entry</span></li>
+        <li>Day 3 TR4 Plato Cave — locked (journey synthesis capstone)</li>
+        <li>Day 3 Reflect — clean</li>
+        <li>Day 3 Connect Thread / Journey Close — clean</li>
+        <li>Day 3 Lectio — clean <span class="tag tag-verify">VERIFY: RSV-2CE Luke 24:29, 24:31 exact wording</span></li>
+        <li>Em dashes across full document — 0 remaining</li>
+        <li>Banned words across full document — clean</li>
+    </ul>
+
+    <h2>Open Decisions (Sheri's Call)</h2>
+
+    <table>
+        <thead><tr><th>Item</th><th>The Question</th><th>Options</th></tr></thead>
+        <tbody>
+            <tr>
+                <td><strong>Augustine ×3</strong></td>
+                <td>Day 1 TR2 (beauty), Day 2 Opening (truth), Day 3 TR1 (restless heart/goodness). Is this an intentional through-line showing one human who traveled all three days?</td>
+                <td>Keep as structural choice, or replace Day 3 TR1 with a different voice</td>
+            </tr>
+            <tr>
+                <td><strong>Plato ×2</strong></td>
+                <td>Day 1 TR1 (Symposium/ladder) and Day 3 TR4 (Republic/Cave). Different doctrines, not repetition. Defensible. But two Plato appearances in one journey.</td>
+                <td>Both stay, or replace Day 1 TR1 with a different thinker</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Verification Queue (Before Sanity Entry)</h2>
+
+    <table>
+        <thead><tr><th>Item</th><th>What to Verify</th><th>Day</th></tr></thead>
+        <tbody>
+            <tr><td>Simone Weil, <em>Waiting for God</em></td><td>Exact quote wording</td><td>Day 1 Lectio</td></tr>
+            <tr><td>JPII, <em>Letter to Artists</em></td><td>Paragraph number</td><td>Day 1 TR3</td></tr>
+            <tr><td>Augustine, "How can beauty bring you to the Beautiful"</td><td>Source document (Sermon 241?)</td><td>Day 1 TR2</td></tr>
+            <tr><td>Edith Stein quote</td><td>Exact wording and source</td><td>Day 2 TR3</td></tr>
+            <tr><td>Dorothy Day quote</td><td>Exact wording and source</td><td>Day 3 TR3</td></tr>
+            <tr><td>Luke 24:29 and 24:31</td><td>RSV-2CE exact wording</td><td>Day 3 Lectio</td></tr>
+            <tr><td>Plato, Republic 517b–c</td><td>Exact translation used</td><td>Day 3 TR4</td></tr>
+        </tbody>
+    </table>
+
+    <h2>Working Agreement: What Changed</h2>
+
+    <p>At the start of this session the document had three opening texts built around the artwork, not the theme. The Context fields read like museum labels. By the end:</p>
+
+    <ul class="checklist">
+        <li>Every opening text leads with a story that carries the day's theme</li>
+        <li>Every Context field drops the reader into the world the artwork came from</li>
+        <li>The museum label failure mode is named, tested, and in CONTENT-RULES.md</li>
+        <li>The Myth Journey Day 1 Context is the named benchmark for every future Context field</li>
+        <li>The drift patterns are documented so they surface in the next audit automatically</li>
+    </ul>
+
+    <p style="margin-top:32px; font-size:13px; color:#888;">Last updated: April 15, 2026. Next session: complete verification queue, proceed to Sanity entry.</p>
+
+    <h2>Edit Quality KPIs</h2>
+
+    <p>These metrics track whether content rules are reducing the editing burden over time. Three dimensions are measured each session: severity of edits made, the rule category that caused them, and who caught the issue. As rules mature, majors should decrease first, the Claude-caught ratio should rise, and repeat rule categories should disappear.</p>
+
+    <h3>How to score a session</h3>
+    <p><strong>Edit severity:</strong> Major = full field rewritten. Minor = 1–2 sentences changed. Micro = word, phrase, or punctuation.</p>
+    <p><strong>Reason categories:</strong> Museum label (Context field drift) | Content repeat (read-through test failure) | Voice drift (artwork description vs. theme) | Banned pattern (em dash, banned word, jargon) | Factual/accuracy | TTS/pacing | Process (unapproved write)</p>
+    <p><strong>Who caught it:</strong> Claude = caught in autonomous audit before Sheri reviewed. Sheri = caught during Sheri's review pass.</p>
+
+    <h3>Session Scorecard History</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Session</th>
+                <th>Majors</th>
+                <th>Minors</th>
+                <th>Micros</th>
+                <th>Total</th>
+                <th>Top reason categories</th>
+                <th>Claude caught</th>
+                <th>Sheri caught</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background:#fffbf0;">
+                <td><strong>Apr 14–15, 2026</strong><br><span style="font-size:11px;color:#888;">Baseline session — BTG 3-Day rebuild</span></td>
+                <td>8</td>
+                <td>10</td>
+                <td>10</td>
+                <td>28</td>
+                <td>Museum label (3), Content repeat (8), Voice drift (4), Banned pattern (4), Accuracy (2), TTS (3), Process (3)</td>
+                <td>6 (21%)</td>
+                <td>22 (79%)</td>
+            </tr>
+            <tr>
+                <td><strong>Apr 22, 2026</strong><br><span style="font-size:11px;color:#888;">Myth Journey Day 4 — Curator Note, Go Deeper, Opening Text, Context, Auditio</span></td>
+                <td>4</td>
+                <td>6</td>
+                <td>3</td>
+                <td>13</td>
+                <td>Banned pattern / em dashes (5), Content repeat (2), Field confusion / hook not WOW (2), Content selection (1), Accuracy / attribution (1), Specificity (1), Polish (1)</td>
+                <td>3 (23%)</td>
+                <td>10 (77%)</td>
+            </tr>
+            <tr style="color:#aaa; font-style:italic;">
+                <td>Next session</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Target direction</h3>
+    <p>Majors reduce first — structural rules (museum label, voice drift) landing means fewer full rewrites. Minors follow as the read-through test becomes habitual. The Claude-caught ratio rising toward 50%+ means the audit is doing its job before Sheri reviews. A reason category disappearing entirely means that rule is documented well enough to prevent the failure.</p>
+
+    <div style="background:#fff; border:1px solid #e0d4c0; border-radius:4px; padding:16px 20px; margin:16px 0;">
+        <div style="font-size:11px; font-weight:bold; text-transform:uppercase; letter-spacing:0.08em; color:#888; margin-bottom:8px;">Scoring note for session-close</div>
+        <p style="font-size:14px; margin-bottom:6px;">At each session close, count every edit made to user-facing copy fields. Assign severity and reason. Note who caught it. Add a row to the table above. Do not count internal notes, Sanity entry notes, or verify flags — only fields that appear in the app.</p>
+        <p style="font-size:14px; margin:0;">If a field was revised more than once in a session, count each revision separately. A field that went through three drafts before landing is three edits, not one.</p>
+    </div>
+
+</div>
+</body>
+</html>

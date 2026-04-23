@@ -411,3 +411,131 @@ export async function getArtworkById(id: string) {
   )
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Dashboard queries — /dashboard route (Task 3 from KALLOS-CC-Audit-Brief)
+// Each function powers one dashboard section. All server-side.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function getDashboardJourneyCompletion() {
+  return sanityClient.fetch(`
+    *[_type == "journey"] | order(order asc) {
+      _id, title, "slug": slug.current, description, order, isPublished,
+      "totalDays": coalesce(totalDays, count(days)),
+      "daysBuilt": count(days),
+      "plannedCount": count(plannedDays),
+      estimatedMinutesPerDay,
+      "themeName": theme->title,
+      "days": days[] | order(dayNumber asc) {
+        dayNumber, dayTitle,
+        "hasOpenImage": defined(openImage),
+        "openTextLen": length(coalesce(openText, "")),
+        "hasOpenTextAudio": defined(openTextAudio.asset),
+        "hasEncounterRef": defined(encounterContent._ref),
+        "encNoteLen": length(coalesce(encounterNote, "")),
+        "hasEncNoteAudio": defined(encounterNoteAudio.asset),
+        "hasAuditio": defined(auditio.title),
+        "hasAuditioFile": defined(auditio.audioFile.asset),
+        "hasLectio": length(coalesce(lectio.scriptureVerse, "")) > 0,
+        "reflectCount": count(reflectQuestions),
+        "hasConnect": length(coalesce(connectThread, "")) > 0,
+        "goDeeperCount": count(goDeeper)
+      }
+    }
+  `)
+}
+
+export async function getDashboardContentItems() {
+  return sanityClient.fetch(`
+    *[_type == "contentItem" && !string::startsWith(_id, "drafts.")] | order(contentType asc, title asc) {
+      _id, contentType, title, artist, thinkerName, author, composer, year, medium, era,
+      "hasImage": defined(image.asset),
+      "hasCurator": length(coalesce(curatorNote, "")) > 0,
+      "hasContext": length(coalesce(context, "")) > 0,
+      "hasAudioFile": defined(audioSource.audioFile.asset) || defined(audioFile.asset),
+      "themeCount": count(themes),
+      "themeNames": themes[]->title,
+      "journeyTitles": *[_type=="journey" && references(^._id)].title
+    }
+  `)
+}
+
+export async function getDashboardTraditionReflections() {
+  return sanityClient.fetch(`
+    {
+      "list": *[_type == "traditionReflection" && !string::startsWith(_id, "drafts.")] | order(authorType asc, title asc) {
+        _id, authorType, title, source, era,
+        "hasSummary": length(coalesce(summary, "")) > 0,
+        "hasAudio": defined(reflectionAudio.asset),
+        "themeCount": count(themes),
+        "themeNames": themes[]->title,
+        "journeyCount": count(*[_type=="journey" && references(^._id)]),
+        "journeyTitles": *[_type=="journey" && references(^._id)].title
+      },
+      "byJourney": *[_type == "journey"] | order(order asc) {
+        _id, title, "slug": slug.current,
+        "daysBuilt": count(days),
+        "trRefs": days[].goDeeper[]->{ _id, title, source, authorType, era }
+      }
+    }
+  `)
+}
+
+export async function getDashboardAudioStatus() {
+  return sanityClient.fetch(`
+    {
+      "journeys": *[_type == "journey"] | order(order asc) {
+        title, "slug": slug.current,
+        "days": days[] | order(dayNumber asc) {
+          dayNumber, dayTitle,
+          "hasOpenTextAudio": defined(openTextAudio.asset),
+          "hasEncNoteAudio": defined(encounterNoteAudio.asset),
+          "hasAuditio": defined(auditio.audioFile.asset)
+        }
+      },
+      "prompts": *[_type == "dailyPrompt" && !string::startsWith(_id, "drafts.")] | order(date desc) {
+        _id, date,
+        "contentTitle": content->title,
+        "hasCuratorAudio": defined(curatorNoteAudio.asset),
+        "hasAuditioFile": defined(auditio.audioUrl.audioFile.asset),
+        "hasAuditioUrl": defined(auditio.audioUrl.audioUrl),
+        "hasAuditioExt": defined(auditio.url)
+      }
+    }
+  `)
+}
+
+export async function getDashboardTTSAudit() {
+  return sanityClient.fetch(`
+    {
+      "journeyDayTTS": *[_type=="journey"]{
+        title,
+        "days": days[]{
+          dayNumber, dayTitle,
+          "openTextChars": length(coalesce(openText, "")),
+          "openTextHasAudio": defined(openTextAudio.asset),
+          "encounterNoteChars": length(coalesce(encounterNote, "")),
+          "encounterNoteHasAudio": defined(encounterNoteAudio.asset)
+        }
+      },
+      "contentItemTTS": *[_type=="contentItem" && !string::startsWith(_id, "drafts.")]{
+        _id, title, contentType,
+        "curatorChars": length(coalesce(curatorNote, "")),
+        "curatorHasAudio": defined(curatorNoteAudio.asset),
+        "contextChars": length(coalesce(context, "")),
+        "contextHasAudio": defined(contextAudio.asset)
+      },
+      "dailyPromptTTS": *[_type=="dailyPrompt" && !string::startsWith(_id, "drafts.")]{
+        _id, date,
+        "contentTitle": content->title,
+        "curatorChars": length(coalesce(curatorNote, "")),
+        "curatorHasAudio": defined(curatorNoteAudio.asset)
+      },
+      "traditionReflectionTTS": *[_type=="traditionReflection" && !string::startsWith(_id, "drafts.")]{
+        _id, title, authorType,
+        "summaryChars": length(coalesce(summary, "")),
+        "summaryHasAudio": defined(reflectionAudio.asset)
+      }
+    }
+  `)
+}
+

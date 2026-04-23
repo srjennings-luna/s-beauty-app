@@ -58,6 +58,17 @@
         th { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #C19B5F; text-align: left; padding: 8px 10px; border-bottom: 2px solid #C19B5F; background: #fdf6e8; }
         td { padding: 8px 10px; border-bottom: 1px solid #e8e0d4; vertical-align: top; font-size: 13px; }
         .arc-table td:first-child { font-weight: 600; }
+
+        .sanity-section { margin: 22px 0 8px; }
+        .sanity-section-label { font-family: Montserrat, Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #fff; background: #16110d; padding: 7px 14px; margin-bottom: 10px; display: block; }
+        .go-deeper-item { background: #fdf8f0; border: 1px solid #e8d8c0; padding: 14px 18px; margin: 10px 0; }
+        .go-deeper-item .gd-header { font-family: Montserrat, Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #8B6914; margin-bottom: 10px; border-bottom: 1px solid #e8d8c0; padding-bottom: 6px; }
+        .tts-note { background: #e8f4e8; border-left: 3px solid #4a7a62; padding: 6px 12px; font-size: 12px; color: #2a5a42; font-style: italic; margin: 4px 0; }
+        .missing-field { background: #fff0f0; border-left: 3px solid #c25555; padding: 6px 12px; font-size: 12px; color: #7a2020; margin: 4px 0; }
+        .field { position: relative; }
+        .copy-btn { position: absolute; top: 0; right: 0; background: #f0ece4; border: 1px solid #d8cfc0; color: #8a7a60; font-family: Montserrat, Arial, sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 8px; cursor: pointer; border-radius: 2px; opacity: 0; transition: opacity 0.15s; }
+        .field:hover .copy-btn { opacity: 1; }
+        .copy-btn.copied { background: #4a7a62; border-color: #4a7a62; color: #fff; opacity: 1; }
     </style>
 </head>
 <body>
@@ -80,6 +91,7 @@
         <p><strong>Duration:</strong> 3 days, approximately 10–12 minutes per day</p>
         <p><strong>Theme:</strong> Beauty, Truth, Goodness: the Transcendentals</p>
         <p><strong>Journey slug:</strong> beauty-truth-goodness (confirm in Sanity)</p>
+        <p><strong>Hero Image:</strong> Julia Margaret Cameron, <em>English Blossoms</em> (Day 1 artwork). Cropped file ready: <code>JMG-English-Blossoms-cropped.jpg</code> in <code>Documents/Journeys/BTG-New Revised Journey/new btg artworks/</code>. KALLOS convention: hero image = Day 1 artwork. Do not use placeholder or thematically-related art from outside the journey.</p>
         <p><strong>Medium arc:</strong> Photography (Day 1) → Engraving (Day 2) → Painting (Day 3)</p>
         <p><strong>Audio arc:</strong> Lark Ascending (English pastoral longing) → Spem in Alium (vast, 40-voice hope) → Sicut Cervus (still, interior arrival)</p>
     </div>
@@ -127,10 +139,13 @@
             <div class="field">
                 <div class="field-label">Opening Text (Step 1)</div>
                 <div class="field-content">
-                    <p>In Plato's Symposium, a philosopher named Socrates tells a story about the best lesson he ever received. His teacher was a woman named Diotima, and her subject was beauty.</p>
-                    <p>She described it as a ladder. At the bottom: one beautiful person or thing. Then, if you keep following it, beauty in all beautiful things. Then beauty in souls, in knowledge, in whole ways of living. And at the very top, if you make it that far, you arrive at something that was present in all of them and reducible to none of them. Not beautiful here and gone there. Not beautiful now and ugly later. Just beauty itself: simple, separate, everlasting.</p>
-                    <p>What she was describing is not a mystical experience. It is something most people have already had, without words for it. You hear a piece of music and something in you stills. You look at a photograph and feel more than you expected. You are in the presence of something that seems to be pointing at something it cannot itself provide.</p>
-                    <p>The philosophers called this beauty. Not decorative beauty. Not pleasant beauty. The kind that stops you, and then refuses to fully satisfy you, because it is pointing.</p>
+                    <p>There is an old legend about dandelions.</p>
+                    <p>The story begins with a flower fairy who set out to find her favorite flower. She visited a garden full of beautiful blossoming flowers and asked where they would like to live. The tulip asked for a castle lawn so a princess could admire its color. The rose wished to grow on castle walls where it would be admired for its strength and beauty. The violet wanted to hide deep in the shaded woods where no one would disturb it. The dandelion said it would like to grow wherever children can find it.</p>
+                    <p>The fairy was so moved by the dandelion&#39;s kindness that she named it the &#34;Children&#39;s Flower&#34;. She gave it three special gifts: resilience, a long season and wishes. Wishes, where children tell it their dreams and blow on the seeds to make a wish.</p>
+                    <p>So it grows in the cracks of pavements, in the corners of schoolyards, along every path small feet have ever taken. It is the flower that asks nothing of you. It simply appears where children are.</p>
+                    <p>Most of us have made a wish with the dandelion and blown its seeds. The seeds catch the air and drift in whatever direction the wind decides.</p>
+                    <p>And then, briefly, you want it back.</p>
+                    <p>Philosophers had a word for that. They called it beauty. That sharp feeling of wonder and joy that doesn&#39;t last, but is a mere echo of something greater.</p>
                 </div>
                 <details style="margin-top:8px;">
                     <summary style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#999;cursor:pointer;">ARCHIVED (replaced April 14, 2026: was JMC biography, not about Beauty as theme)</summary>
@@ -140,7 +155,11 @@
 
             <div class="field">
                 <div class="field-label">Curator Note (the hook)</div>
-                <div class="field-content">Julia Margaret Cameron began photography at forty-eight and had eleven years of serious work before she died. In that time she became one of the most important photographers of the Victorian era and one of the most controversial. The Photographic Society of London, almost entirely men, repeatedly criticized her for submitting blurry, out-of-focus images. She refused to change her technique. She understood something most photographers of her era did not: a photograph should be made, not taken. The blur was not an error. It was the act of looking closely enough that the thing stopped being a fact and became a feeling. The same principle is what separates a snapshot from a painting. She applied it to a camera, and the debate about what photography could be began there.</div>
+                <div class="field-content">Julia Margaret Cameron became one of the most important photographers of the Victorian era and one of the most controversial. The Photographic Society of London repeatedly criticized her for submitting blurry, out-of-focus images. She refused to change her technique. She understood something most photographers of her era did not: a photograph should be made, not taken. The blur was not an error. It was the act of looking closely enough that the thing stopped being a fact and became a feeling. The same principle is what separates a snapshot from a painting. She applied it to a camera, and the debate about what photography could be began there.</div>
+                <details style="margin-top:8px;">
+                    <summary style="font-size:11px;color:#888;cursor:pointer;letter-spacing:0.05em;">Original version (replaced Apr 15, 2026 — content repeat: age/years info noted elsewhere)</summary>
+                    <div style="padding:10px 14px;background:#f9f6f0;border-left:2px solid #ccc;margin-top:6px;font-size:13px;color:#666;font-style:italic;line-height:1.75;">Julia Margaret Cameron began photography at forty-eight and had eleven years of serious work before she died. In that time she became one of the most important photographers of the Victorian era and one of the most controversial. The Photographic Society of London, almost entirely men, repeatedly criticized her for submitting blurry, out-of-focus images. She refused to change her technique. She understood something most photographers of her era did not: a photograph should be made, not taken. The blur was not an error. It was the act of looking closely enough that the thing stopped being a fact and became a feeling. The same principle is what separates a snapshot from a painting. She applied it to a camera, and the debate about what photography could be began there.</div>
+                </details>
             </div>
 
             <div class="field">
@@ -151,21 +170,22 @@
             <div class="field">
                 <div class="field-label">Context (expandable)</div>
                 <div class="field-content">
-                    <p>Pictorialism (c. 1845–1945) was a photographic movement that insisted photography was a fine art, not merely a recording technology. Its practitioners believed a photograph should be made: composed, lit, printed, and sometimes hand-altered, with the same intentionality a painter brings to a canvas. Julia Margaret Cameron was among its most important early practitioners.</p>
-                    <p>Cameron worked in the era of wet-plate collodion photography, where exposures lasted several minutes. Long exposures created natural blur in subjects who moved; Cameron welcomed this as part of the image's quality rather than correcting for it. Her subjects (artists, scientists, clergy, writers, children) were posed with deliberate attention to light and composition. She worked in a converted chicken house with a glass roof, controlling the light through fabric hung from the ceiling.</p>
-                    <p>The George Eastman House in Rochester, New York holds one of the most significant collections of pictorialist photography. Their exhibition "Truth/Beauty: Pictorialism and the Photograph as Art, 1845–1945" identified Cameron's work as foundational to the movement. The title of that exhibition, Truth/Beauty, is the same formulation KALLOS's three-day journey is built on, arrived at independently.</p>
-                    <p>English Blossoms (1873) is in the Metropolitan Museum of Art's open access collection. Cameron made the photograph two years before the end of her active photographic work. In 1875, she and her husband moved to Ceylon, where she continued photographing until her death in 1879.</p>
+                    <p>In 1873, the question of whether photography could be art was not settled. The Photographic Society of London had been reviewing submissions for decades, and their standard was technical precision: sharp focus, correct exposure, faithful reproduction of what the lens saw. By that standard, Julia Margaret Cameron was a failure. The Society repeatedly criticized her work as defective. Her images were soft, poorly exposed, improperly focused. She submitted them anyway.</p>
+                    <p>Cameron's argument was different from theirs. A photograph made the way the Society wanted was a document. What she wanted to make was not a document. She had spent years watching painters. She knew Tennyson, Browning, Darwin, the Pre-Raphaelites; she photographed them all. She understood that what a painter brings to a canvas is not accuracy but attention: the quality of looking that makes you feel the person in the portrait is more themselves than any photograph of them. She wanted to bring that quality to a camera.</p>
+                    <p>The blur was not an accident. It was a claim. When a figure moved during a long exposure and Cameron kept the image rather than retaking it, she was saying: this is more alive than a sharp one. The slight softness is evidence of a breathing person. The inaccuracy is the truth.</p>
+                    <p>In doing this she was making an argument about beauty that the Western tradition had been making since Plato: beauty is not a property of the object, measured and confirmed. It is the quality of meeting between what is seen and what sees. You cannot manufacture it by precision. You can only offer the conditions for it to arrive.</p>
+                    <p>English Blossoms was made two years before Cameron left England for Ceylon with her husband. She was 57. She had eleven years of serious photographic work in total. The Photographic Society never changed its verdict. She never changed her technique.</p>
                 </div>
             </div>
 
             <div class="field">
                 <div class="field-label">Encounter Note (Look Closer)</div>
-                <div class="field-content">Cameron's exposure times were long enough that any movement during the exposure created blur. The girls would have had to hold still for several minutes while she worked. One of them did not hold entirely still. Rather than retaking the photograph, Cameron kept it. The slight blur of that figure is not a flaw. It is evidence of a living person inside the frame, someone who breathed, shifted, existed. The fact that this is a photograph of real children who sat for Cameron in 1873 and are now long gone gives the image a weight that no painting quite carries in the same way.</div>
+                <div class="field-content">Cameron arranged the flowers herself. These children are not caught in a moment. This is a portrait, made with the same attention she brought to Tennyson and Darwin. She did not distinguish between a famous man and two children when she decided something was worth looking at carefully.</div>
             </div>
 
             <div class="field">
                 <div class="field-label">Encounter Guidance</div>
-                <div class="field-content">Look at the smaller child in front. Notice how she holds still.</div>
+                <div class="field-content">Notice the stillness between them.</div>
             </div>
 
             <div class="lectio-block">
@@ -200,7 +220,11 @@
 
             <div class="field">
                 <div class="field-label">Connect Thread (Step 5: bridge to Day 2)</div>
-                <div class="field-content">Cameron spent her life following the feeling that ordinary things were carrying more than they knew how to say. She called it making a photograph. In 1514, a German engraver named Albrecht Dürer tried to draw it: all the instruments of human mastery around a winged figure who still could not move.</div>
+                <div class="field-content">Every beautiful thing is pointing at something. Tomorrow, find out what Augustine of Hippo discovered about where it points.</div>
+                <details style="margin-top:8px;">
+                    <summary style="font-size:11px;color:#888;cursor:pointer;letter-spacing:0.05em;">Original version (replaced Apr 15, 2026 — connects Cameron/photographer rather than beauty→truth arc)</summary>
+                    <div style="padding:10px 14px;background:#f9f6f0;border-left:2px solid #ccc;margin-top:6px;font-size:13px;color:#666;font-style:italic;line-height:1.75;">Cameron spent her life following the feeling that ordinary things were carrying more than they knew how to say. Four centuries earlier, a German engraver named Albrecht Dürer had the same feeling. He drew it.</div>
+                </details>
             </div>
 
             <div class="tr-block">
@@ -209,14 +233,14 @@
                 <div class="tr-item">
                     <div class="tr-thinker">Plato (428–348 BCE)</div>
                     <div class="tr-quote">"Beauty absolute, separate, simple, and everlasting."</div>
-                    <div class="tr-body">In the Symposium, Plato has an old woman named Diotima instruct Socrates on how love actually works. She describes a ladder. You begin with one beautiful person. Then you see beauty in all beautiful persons. Then in souls. Then in knowledge. Then, suddenly, you arrive at Beauty itself: not beautiful here and not there, not beautiful now and gone later, but a beauty that simply is. Cameron's photographs were an attempt to hold something like this still. Every time someone looks at English Blossoms and feels more than they expected, they are on Diotima's ladder without knowing it.</div>
+                    <div class="tr-body">In the Symposium, Plato has an old woman named Diotima instruct Socrates on how love actually works. She describes a ladder. You begin with one beautiful person. Then you see beauty in all beautiful persons. Then in souls. Then in knowledge. Then, suddenly, you arrive at Beauty itself: not beautiful here and not there, not beautiful now and gone later, but a beauty that simply is. The child who blows a dandelion and feels something she cannot name is already on this ladder without knowing it. Cameron's photographs are another step. When you look at English Blossoms and feel more than two children and flowers, you have taken it.</div>
                     <div class="sanity-note">Quote: Plato, <em>Symposium</em> 211a (Jowett translation). Verified.</div>
                 </div>
 
                 <div class="tr-item">
                     <div class="tr-thinker">Augustine of Hippo (354–430 CE)</div>
                     <div class="tr-quote">"How can beauty bring you to the Beautiful? How can desire lead you to the Desirable? Ask the earth, and it will cry out: 'I am beautiful, but I am not the Beautiful.'"</div>
-                    <div class="tr-body">Augustine spent a decade in Carthage and Rome chasing every version of beauty that promised to hold still. Philosophy, ambition, love. None of it held. The Confessions is the record of a man who held one beautiful thing after another, and felt each one saying the same thing: not here. Not me. Keep looking. What he eventually understood: every beautiful thing is carrying a message from something it is not itself. Cameron's photographs say exactly this. Two children with flowers between them are beautiful. They are not the Beautiful. They are pointing.</div>
+                    <div class="tr-body">Augustine spent a decade in Carthage and Rome chasing every version of beauty that promised to hold still. Philosophy, ambition, love. None of it held. The Confessions is the record of a man who held one beautiful thing after another, and felt each one saying the same thing: not here. Not me. Keep looking. What he eventually understood: every beautiful thing is carrying a message, from something it is not itself. Cameron's photographs say exactly this. Two children with flowers between them are beautiful. They are not the Beautiful. They are pointing.</div>
                     <div class="verify-flag"><strong>VERIFY before entry:</strong> The "How can beauty bring you to the Beautiful" passage is from Augustine's Sermons or Enarrationes in Psalmos. Confirm exact source (possibly Sermon 241) before entry.</div>
                 </div>
 
@@ -224,7 +248,7 @@
                     <div class="tr-thinker">John Paul II (1920–2005 CE)</div>
                     <div class="tr-quote">"Beauty is a key to the mystery and a call to transcendence."</div>
                     <div class="tr-body">In 1999, John Paul II wrote an open letter to artists: painters, sculptors, architects, musicians, and writers. He was a poet himself, and had spent decades thinking about what beauty does that argument cannot. He described it as a summons: not a gentle suggestion toward the divine, but a call. A key that fits a lock most people do not know they are carrying. Cameron's photographs work this way. When you look at English Blossoms and feel more than two children and flowers, the key has turned.</div>
-                    <div class="verify-flag"><strong>VERIFY before entry:</strong> Quote from <em>Letter to Artists</em> (1999). Verify paragraph number before entry, likely §16. Confirm exact wording against the Vatican text.</div>
+                    <div class="verify-flag"><strong>VERIFIED:</strong> Quote from <em>Letter to Artists</em>, §16 (1999). Exact wording confirmed against Vatican text.</div>
                 </div>
             </div>
 
@@ -232,6 +256,7 @@
     </div>
 
 
+    <!-- ===================== DAY 2 ===================== -->
     <!-- ===================== DAY 2 ===================== -->
     <div class="day-block">
         <div class="day-header">
@@ -241,124 +266,271 @@
         </div>
         <div class="day-body">
 
-            <div class="sanity-note" style="margin-bottom:14px;"><strong>Day title note:</strong> "All the Instruments of the World" is a new title written for the Dürer content. The previous title "Light From Outside the Frame" was written for Caravaggio's Calling of Matthew and does not fit this engraving. Confirm day title before Sanity entry.</div>
+            <div class="sanity-note" style="margin-bottom:14px;"><strong>Day title note:</strong> "All the Instruments of the World" replaces the previous title "Light From Outside the Frame" (written for Caravaggio, not Dürer). Confirm before entry.</div>
+
+            <!-- JOURNEY DAY FIELDS -->
+            <span class="sanity-section-label">Journey Day</span>
 
             <div class="field">
-                <div class="field-label">Content Type</div>
-                <div class="field-content">Sacred Art (Engraving)</div>
+                <div class="field-label">Day Number</div>
+                <div class="field-content">2</div>
             </div>
 
             <div class="field">
-                <div class="field-label">Content Item</div>
-                <div class="field-content">Albrecht Dürer, <em>Melencolia I</em>, 1514. Engraving. National Gallery of Art, Washington DC. Also: Wikimedia Commons high-resolution scan, public domain.</div>
-            </div>
-
-            <div class="image-note">
-                <strong>Image sourcing:</strong> Public domain: the engraving is 500 years old. For highest resolution: Wikimedia Commons, search "Melencolia I Dürer." The NGA Washington also offers a high-resolution download. The engraving rewards zoom on the magic square (upper right), the compass in the figure's hand, the polyhedron and sphere in the foreground, and the hourglass on the wall. Min 1200px for Sanity upload; a larger file is preferable for the Encounter step where users zoom in.
+                <div class="field-label">Day Title</div>
+                <div class="field-content">All the Instruments of the World</div>
             </div>
 
             <div class="field">
-                <div class="field-label">Opening Text (Step 1)</div>
+                <div class="field-label">Opening Image</div>
+                <div class="field-content">Dürer, <em>Melencolia I</em> — same file as content item image (see sourcing note below). Upload the high-resolution image here as the day opener.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Opening Text</div>
                 <div class="field-content">
-                    <p>In 1514, Albrecht Dürer made an engraving of a winged figure seated at a table surrounded by tools.</p>
-                    <p>Compass. Scales. Hourglass. Magic square. A truncated polyhedron, a geometric solid whose angles Dürer calculated himself. A sphere. A ladder. A sleeping dog. Around her feet: a plane, nails, a saw, a hammer. Every instrument of measurement, craft, geometry, and construction that a Renaissance artist and scientist could assemble into a single image.</p>
-                    <p>And in the middle of all of it, the figure sits motionless. She holds the compass loosely, not using it. Her face is turned toward something just outside the frame: something the viewer cannot see. She has everything the human mind could devise. She still cannot move.</p>
-                    <p>Dürer called it <em>Melencolia I</em>. He never made the other two.</p>
+                    <p>Augustine of Hippo spent years trying to understand the Trinity. Not just to believe it, but to comprehend it: to hold in his mind how three could be one and one could be three. He wrote a book about it. It ran to fifteen volumes.</p>
+                    <p>Augustine was not a man who came to truth easily. He had spent his youth pursuing everything the world offered: pleasure, ambition, philosophy. He followed one school of thought and then another, restless, unsatisfied. He would later write: "Our heart is restless until it rests in you." By the time he sat down to write about the Trinity, he had spent decades learning what truth was not. He knew, better than most, what it cost to follow a question honestly.</p>
+                    <p>One day, according to an old story, he was walking on the beach still wrestling with the question. He saw a child who had dug a small hole in the sand and was running back and forth to the water with a shell, pouring the sea into the hole, one shell at a time.</p>
+                    <p>Augustine asked what he was doing.</p>
+                    <p>The child said: I am emptying the ocean into this hole.</p>
+                    <p>Augustine said that was impossible. The ocean was too large. The hole too small. The shell too small.</p>
+                    <p>The child looked at him. What you are trying to do, the child said, is more impossible than this.</p>
+                    <p>Then the child was gone.</p>
+                    <p>What the child had shown him was not that his question was unanswerable. It was that his question was right. More right than he had known. You do not bring a shell to an ocean that does not exist. The very fact that truth could not be fully contained was evidence that it was real, and vast, and worth every one of those fifteen volumes.</p>
+                    <p>Most of us have felt something like this. Look at the night sky long enough. The more you learn about what you are seeing, the larger it gets. The distances. The age of the light. How many of those points are not stars but entire galaxies? Every answer opens ten more questions. The knowing does not shrink the mystery. It reveals how much more there is.</p>
+                    <p>The more carefully you look, the more it becomes clear: you are not the source of what you are seeing. You are the one uncovering it.</p>
                 </div>
             </div>
 
             <div class="field">
-                <div class="field-label">Curator Note (the hook)</div>
-                <div class="field-content">In the upper right corner of the engraving, there is a magic square: a four-by-four grid of numbers where every row, column, and diagonal adds to the same total: 34. The numbers 15 and 14 appear side by side in the bottom row. Dürer made this engraving in 1514. He hid the year in the mathematics. This is not the only thing hidden in Melencolia I. Art historians have spent five hundred years cataloguing its symbols. The debate about what Dürer was encoding is not settled. What is certain: this is the most complex engraving he ever made, and he made it in the year his mother died. Thomas Aquinas, who spent his life building the most systematic account of beauty and truth the Western tradition has produced, stopped writing mid-sentence at the end of his life. He said everything he had written seemed like straw compared to what he had finally seen. Dürer drew exactly what that moment looks like from the outside.</div>
+                <div class="field-label">Opening Text Audio</div>
+                <div class="tts-note">Generated during Sanity entry — read aloud before confirming TTS.</div>
+            </div>
+
+            <!-- ENCOUNTER CONTENT (CONTENT ITEM) -->
+            <span class="sanity-section-label">Encounter Content — Content Item</span>
+
+            <div class="field">
+                <div class="field-label">Content Type</div>
+                <div class="field-content">Sacred Art (Engraving) — <em>check Day 1 entry to confirm correct type label format used in Sanity</em></div>
             </div>
 
             <div class="field">
-                <div class="field-label">Brief Description (for content card)</div>
+                <div class="field-label">Title</div>
+                <div class="field-content">Melencolia I</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Artist / Creator</div>
+                <div class="field-content">Albrecht Dürer</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Themes</div>
+                <div class="field-content">Beauty, Truth &amp; Goodness</div>
+                <div class="sanity-note">Select the "Beauty, Truth &amp; Goodness" journey document from the Themes reference selector.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Brief Description</div>
                 <div class="field-content">A sixteenth-century engraving. A winged allegorical figure sits surrounded by instruments of geometry and construction: compass, scales, polyhedron, magic square, hourglass. She holds a compass loosely in her right hand, not working with it. Her face is turned away from the tools, toward something out of frame. Every instrument of human knowledge is present. None of them is being used.</div>
             </div>
 
             <div class="field">
-                <div class="field-label">Context (expandable)</div>
+                <div class="field-label">Context</div>
                 <div class="field-content">
-                    <p>Melencolia I is one of three master engravings Dürer made in 1513–14, alongside <em>Knight, Death and the Devil</em> and <em>Saint Jerome in His Study</em>. These three are considered the pinnacle of his technical achievement as an engraver. They were also made in a period of personal crisis. His friend and patron Willibald Pirckheimer wrote that after his mother's death in 1514, Dürer was "not himself."</p>
-                    <p>The figure in the engraving draws on the Renaissance theory of the four humors, in which melancholy (associated with the element earth and the planet Saturn) was linked to intellectual genius. Cornelius Agrippa, in his <em>Occult Philosophy</em> (which Dürer knew), described three types of melancholy: artistic, scientific, and prophetic. Melencolia I is generally read as the artistic-scientific type: the mind that has mastered everything the visible world has to offer and still finds it insufficient.</p>
-                    <p>The truncated polyhedron in the foreground (the solid with angled faces) has been analyzed for centuries. It does not correspond exactly to any regular geometric solid. Dürer may have been depicting a shape that cannot be fully understood, one that always has another face you haven't seen yet.</p>
-                    <p>Thomas Aquinas coined the term <em>splendor veri</em>, the radiance of truth, to describe why genuine beauty is not merely pleasant. It has a quality that comes from the thing itself, not from the viewer, because it corresponds to something true about reality. Dürer's engraving is, among other things, a picture of what happens when you have chased the splendor and run out of instruments.</p>
+                    <p>The Renaissance had a project. Beginning in the 14th century and accelerating through the 15th and 16th, Europe's greatest minds committed to a single proposition: if you study the visible world carefully enough, you can master it. Not just describe it. Master it. Geometry, proportion, perspective, anatomy. Each was a tool for bringing the visible world under the authority of the human mind.</p>
+                    <p>Albrecht Dürer was among the most committed practitioners of this project. He studied geometry obsessively. He wrote treatises on proportion and measurement. He traveled to Venice twice to learn from Italian masters. Whatever could be measured, he measured. Whatever could be drawn, he drew.</p>
+                    <p>In 1514, Dürer made Melencolia I. He named it as if there would be a second. He never made one. That same year, his mother died.</p>
+                    <p>The project had a problem that its practitioners were beginning to feel: the closer you studied the visible world, the larger it got. Every answer opened ten more questions. Proportion could be calculated, but beauty could not be derived from proportion alone. The geometry of a human face could be analyzed, but analysis did not explain why one face moved you and another did not.</p>
+                    <p>The tools are all there. The mind has run to the edge of what the tools can reach.</p>
+                    <p>Dürer placed a truncated polyhedron in the foreground: a solid with angled sides that does not correspond to any regular geometric form. It always has another side you have not seen yet. He may have been making a picture of the problem itself.</p>
                 </div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Context Audio</div>
+                <div class="tts-note">Generated during Sanity entry — read aloud before confirming TTS.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Image</div>
+                <div class="image-note"><strong>Image sourcing:</strong> Public domain. For highest resolution: Wikimedia Commons, search "Melencolia I Dürer." The NGA Washington also offers a high-resolution download. The engraving rewards zoom on the magic square (upper right), the compass in the figure's hand, the polyhedron and sphere in the foreground, and the hourglass on the wall. Min 1200px for Sanity upload.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Year / Date</div>
+                <div class="field-content">1514</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Medium</div>
+                <div class="field-content">Engraving</div>
             </div>
 
             <div class="field">
                 <div class="field-label">Encounter Note (Look Closer)</div>
-                <div class="field-content">Dürer was one of the most technically precise engravers who ever lived. Every line in Melencolia I is deliberate. The compass in the figure's right hand is not being used: she holds it the way you hold something you no longer need, or do not yet know how to use again. Five hundred years later, her expression is still legible. Not despair. Not defeat. Something more like the face of someone who has run out of road and is waiting to see what comes next.</div>
+                <div class="field-content">The compass in the figure's right hand is not being used. She holds it the way you hold something you no longer need. Or do not yet know how to use again. Her expression is still legible. Not despair. Not defeat. Something more like the face of someone who has run out of road, and is waiting to see what comes next.</div>
             </div>
+
+            <div class="field">
+                <div class="field-label">Curator Note</div>
+                <div class="field-content">In the upper right corner of the engraving, there is a magic square: a four-by-four grid of numbers where every row, column, and diagonal adds to 34. The numbers 15 and 14 appear side by side in the bottom row. Dürer made this engraving in 1514. He hid the year in the mathematics.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Curator Audio</div>
+                <div class="tts-note">Generated during Sanity entry — read aloud before confirming TTS.</div>
+            </div>
+
+            <!-- GO DEEPER — WITHIN CONTENT ITEM -->
+            <span class="sanity-section-label">Go Deeper (within Content Item) — 3 Tradition Reflections</span>
+
+            <div class="go-deeper-item">
+                <div class="gd-header">TR 1 — Aristotle (Display Order: 1)</div>
+                <div class="field"><div class="field-label">Author Type</div><div class="field-content">Philosopher</div></div>
+                <div class="field"><div class="field-label">Title</div><div class="field-content missing-field">Match format used in Day 1 TRs. Suggest: "On the Search for Truth" or "Aristotle"</div></div>
+                <div class="field"><div class="field-label">Summary</div><div class="field-content">Aristotle opened the Metaphysics with a claim about human nature: all human beings by nature desire to know. He spent the next fourteen books trying to satisfy that desire. He reached further than anyone before him. He also understood the limit: truth is not a destination you arrive at and unpack your bags. It is a direction you face. The figure in Dürer's engraving has been facing this direction for a very long time. Aristotle would have recognized her.</div></div>
+                <div class="field"><div class="field-label">Audio</div><div class="tts-note">Generated during Sanity entry — TTS.</div></div>
+                <div class="field"><div class="field-label">Short Quote</div><div class="field-content">"The investigation of truth is in one way hard, in another easy. An indication of this is found in the fact that no one is able to attain the truth adequately, while, on the other hand, no one fails entirely."</div></div>
+                <div class="field"><div class="field-label">Source</div><div class="field-content">Aristotle, <em>Metaphysics</em> 993a (W.D. Ross translation)</div><div class="verify-flag"><strong>VERIFY before entry:</strong> Confirm exact translation. The Greek is: "περὶ τῆς ἀληθείας θεωρῆσαι τρόπον μέν τινα χαλεπόν." Multiple good translations exist.</div></div>
+                <div class="field"><div class="field-label">Themes</div><div class="field-content">truth, knowledge, inquiry, philosophy</div></div>
+                <div class="field"><div class="field-label">Display Order</div><div class="field-content">1</div></div>
+                <div class="field"><div class="field-label">Era</div><div class="field-content">Ancient (384–322 BCE)</div></div>
+                <div class="field"><div class="field-label">Source (link / reference)</div><div class="field-content missing-field">Add URL or leave blank — confirm if this field is required in Sanity.</div></div>
+            </div>
+
+            <div class="go-deeper-item">
+                <div class="gd-header">TR 2 — Thomas Aquinas (Display Order: 2)</div>
+                <div class="field"><div class="field-label">Author Type</div><div class="field-content">Saint, Doctor of the Church</div></div>
+                <div class="field"><div class="field-label">Title</div><div class="field-content missing-field">Match format used in Day 1 TRs. Suggest: "On the Limits of Knowledge" or "Thomas Aquinas"</div></div>
+                <div class="field"><div class="field-label">Summary</div><div class="field-content">Thomas Aquinas was the strangest child his monastery had ever received. His father sent him to Monte Cassino at age five. The monks watched him grow into a boy who barely spoke, who appeared to be working on one question for years at a time. His classmates at the University of Naples called him "the dumb ox." He became one of the most influential philosophers of the medieval world. In the last seven years of his life, he wrote the <em>Summa Theologiae</em>, a synthesis of everything he understood about God, beauty, truth, and how they connect. He never finished it. On December 6, 1273, something happened during Mass. He set down his pen and never wrote another word. What he had written before he stopped: genuine beauty is not just pleasing. It has a radiance, <em>splendor</em>, that comes from the thing itself, not from the viewer. He called this <em>splendor veri</em>: the radiance of truth. Whatever he saw on December 6, it confirmed that he had been right, and that the words were only ever a pointing.</div></div>
+                <div class="field"><div class="field-label">Audio</div><div class="tts-note">Generated during Sanity entry — TTS.</div></div>
+                <div class="field"><div class="field-label">Short Quote</div><div class="field-content">"All that I have written seems to me like straw compared to what I have seen."</div></div>
+                <div class="field"><div class="field-label">Source</div><div class="field-content">Documented by Reginald of Piperno, biographer of Aquinas, shortly before Aquinas's death (December 1273). Verified in multiple sources.</div></div>
+                <div class="field"><div class="field-label">Themes</div><div class="field-content">truth, vision, mystery, revelation</div></div>
+                <div class="field"><div class="field-label">Display Order</div><div class="field-content">2</div></div>
+                <div class="field"><div class="field-label">Era</div><div class="field-content">Medieval (1225–1274 CE)</div></div>
+                <div class="field"><div class="field-label">Source (link / reference)</div><div class="field-content missing-field">Add URL or leave blank.</div></div>
+            </div>
+
+            <div class="go-deeper-item">
+                <div class="gd-header">TR 3 — Edith Stein (Display Order: 3)</div>
+                <div class="field"><div class="field-label">Author Type</div><div class="field-content">Saint, Martyr</div></div>
+                <div class="field"><div class="field-label">Title</div><div class="field-content missing-field">Match format used in Day 1 TRs. Suggest: "On Truth and Faith" or "Edith Stein"</div></div>
+                <div class="field"><div class="field-label">Summary</div><div class="field-content">Edith Stein was a philosopher trained under Edmund Husserl, one of the founders of phenomenology, the rigorous study of conscious experience. She spent the first half of her career as an atheist philosopher, following the argument wherever it led. Reading Teresa of Ávila one night, she said, "This is the truth." She converted to Catholicism, became a Carmelite nun, and continued writing philosophy until the Nazis arrested her in 1942. She was killed at Auschwitz. The discipline she brought to her earlier atheist philosophy did not end when she converted. She understood that the pursuit of truth, taken seriously enough, has always arrived somewhere. Dürer's figure is still at the threshold. Stein crossed it.</div></div>
+                <div class="field"><div class="field-label">Audio</div><div class="tts-note">Generated during Sanity entry — TTS.</div></div>
+                <div class="field"><div class="field-label">Short Quote</div><div class="field-content">"The search for truth is in itself a reaching out toward God, whether the seeker is aware of it or not."</div></div>
+                <div class="field"><div class="field-label">Source</div><div class="field-content">Edith Stein, Letter to Mother Petra Brüning, March 23, 1938. ✅ Confirmed.</div></div>
+                <div class="field"><div class="field-label">Themes</div><div class="field-content">truth, philosophy, faith, conversion</div></div>
+                <div class="field"><div class="field-label">Display Order</div><div class="field-content">3</div></div>
+                <div class="field"><div class="field-label">Era</div><div class="field-content">Modern (1891–1942 CE)</div></div>
+                <div class="field"><div class="field-label">Source (link / reference)</div><div class="field-content missing-field">Add URL or leave blank.</div></div>
+            </div>
+
+            <!-- LOCATION (back to content item) -->
+            <span class="sanity-section-label">Location (Content Item)</span>
+
+            <div class="field">
+                <div class="field-label">Location Name</div>
+                <div class="field-content">National Gallery of Art</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Location City</div>
+                <div class="field-content">Washington</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Location Country</div>
+                <div class="field-content">United States</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Latitude</div>
+                <div class="field-content">38.8912</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Longitude</div>
+                <div class="field-content">-77.0230</div>
+            </div>
+
+            <!-- ENCOUNTER GUIDANCE -->
+            <span class="sanity-section-label">Encounter Guidance</span>
 
             <div class="field">
                 <div class="field-label">Encounter Guidance</div>
-                <div class="field-content">Find the compass in her right hand. Notice how she holds it.</div>
-            </div>
-
-            <div class="lectio-block">
-                <div class="lectio-label">Lectio Pairing</div>
-                <div class="lectio-row">
-                    <div class="tag">Philosophy (the question)</div>
-                    <div class="field-content quote">"Pulchrum est id quod visum placet." (Beauty is what pleases when seen.)</div>
-                    <div class="field-content">Thomas Aquinas, <em>Summa Theologiae</em> I-II.27.1. Verified.</div>
-                </div>
-                <div class="lectio-row" style="margin-top:12px;">
-                    <div class="tag">Scripture (the arrival)</div>
-                    <div class="field-content quote">"Pilate said to him, 'What is truth?' After he had said this, he went out to the Jews again."</div>
-                    <div class="field-content">John 18:38, RSV-2CE</div>
-                    <div class="verify-flag"><strong>VERIFY before entry:</strong> Confirm exact RSV-2CE wording of John 18:38. The verse ends mid-conversation: Pilate asks "What is truth?" and then leaves without waiting for an answer. This is intentional: the question lands, and the questioner walks away before the answer comes.</div>
-                </div>
-                <div class="lectio-row" style="margin-top:10px;">
-                    <div class="tag">Connection Note (internal: do not enter in Sanity)</div>
-                    <div class="field-content">Aquinas names the faculty (beauty pleases when seen, and the whole question is what enables true seeing). Pilate enacts the problem: he was in the presence of the answer and walked out of the room. Dürer's figure is somewhere between these two: she has the instruments, she has the question, she has stopped moving. The answer is not in the engraving. It will arrive at a table in Day 3.</div>
-                </div>
-            </div>
-
-            <div class="audio-block">
-                <div class="audio-label">Auditio</div>
-                <div class="audio-option"><span class="opt-tag">Primary (locked):</span> Thomas Tallis, <em>Spem in Alium</em> (40-part motet, c. 1570). Trimmed to 4:45 with 15-second fade out. File: <strong>spem-in-alium-btg-d2-4m45s.mp3</strong>. Located in: Journeys/BTG-New Revised Journey/new btg audio/. Upload this file to Sanity Auditio. The motet is written for 40 voices in 8 choirs: the experience of something too vast to take in from a single vantage point. The title means "hope in any other." Tallis was in his 70s when he wrote it, having outlasted multiple English monarchs and the entire English Reformation. Pairing with Melencolia I: both hold the edge between human exhaustion and something beyond it.</div>
+                <div class="field-content">Notice everything that is not being used.</div>
             </div>
 
             <div class="field">
-                <div class="field-label">Reflect (single personal question)</div>
-                <div class="field-content">Is there something you have pursued seriously, say knowledge, skill, or understanding, that gave you more than you expected and still left something unanswered?</div>
+                <div class="field-label">EG Audio</div>
+                <div class="tts-note">Generated during Sanity entry — TTS.</div>
+            </div>
+
+            <!-- AUDITIO -->
+            <span class="sanity-section-label">Auditio</span>
+
+            <div class="field">
+                <div class="field-label">Auditio Title</div>
+                <div class="field-content">Spem in Alium</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Composer</div>
+                <div class="field-content">Thomas Tallis</div>
+            </div>
+            <div class="field">
+                <div class="field-label">License Note</div>
+                <div class="field-content">Public domain composition (c. 1570). Recording trimmed to 4:45 with 15-second fade out. Confirm recording source license before entry.</div>
+            </div>
+            <div class="field">
+                <div class="field-label">File</div>
+                <div class="field-content"><strong>spem-in-alium-btg-d2-4m45s.mp3</strong> — located in Journeys/BTG-New Revised Journey/new btg audio/</div>
+            </div>
+            <div class="sanity-note">Pairing note: 40-part motet, 40 voices in 8 choirs — the experience of something too vast to take in from a single vantage point. Title means "hope in any other." Tallis was in his 70s when he wrote it, having outlasted multiple English monarchs and the entire English Reformation. Pairs with Melencolia I: both hold the edge between human exhaustion and something beyond it.</div>
+
+            <!-- LECTIO -->
+            <span class="sanity-section-label">Lectio Pairing</span>
+
+            <div class="field">
+                <div class="field-label">Philosophy Quote</div>
+                <div class="field-content quote">"Pulchrum est id quod visum placet." (Beauty is what pleases when seen.)</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Philosophy Source</div>
+                <div class="field-content">Thomas Aquinas, <em>Summa Theologiae</em> I-II.27.1. Verified.</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Scripture Verse</div>
+                <div class="field-content quote">"Pilate said to him, 'What is truth?' After he had said this, he went out to the Jews again."</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Scripture Reference</div>
+                <div class="field-content">John 18:38, RSV-2CE<div class="verify-flag"><strong>VERIFY before entry:</strong> Confirm exact RSV-2CE wording. The verse ends mid-conversation: Pilate asks "What is truth?" and then leaves without waiting for an answer. This is intentional.</div></div>
+            </div>
+            <div class="field">
+                <div class="field-label">Connection Note</div>
+                <div class="field-content">Aquinas names the faculty (beauty pleases when seen, and the whole question is what enables true seeing). Pilate enacts the problem: he was in the presence of the answer and walked out of the room. Dürer's figure is somewhere between these two: she has the instruments, she has the question, she has stopped moving. The answer is not in the engraving. It will arrive at a table in Day 3.</div>
+            </div>
+
+            <!-- DAY WRAP -->
+            <span class="sanity-section-label">Day Wrap</span>
+
+            <div class="field">
+                <div class="field-label">Reflection Question</div>
+                <div class="field-content">Is there something you have pursued seriously that gave you more than you expected and still left something unanswered?</div>
             </div>
 
             <div class="field">
-                <div class="field-label">Connect Thread (Step 5: bridge to Day 3)</div>
-                <div class="field-content">Aquinas stopped mid-sentence when he finally saw what he had spent his life writing toward. Two men leaving Jerusalem that same week were walking beside the same thing for seven miles. They did not recognize it until they sat down to eat.</div>
+                <div class="field-label">Connect Thread</div>
+                <div class="field-content">Follow truth faithfully enough and it brings you somewhere your mind cannot go alone. Tomorrow, find out what Tolstoy has to say about what's on the other side of the door.</div>
             </div>
 
-            <div class="tr-block">
-                <div class="tr-label">Tradition Reflections</div>
-
-                <div class="tr-item">
-                    <div class="tr-thinker">Aristotle (384–322 BCE)</div>
-                    <div class="tr-quote">"The investigation of truth is in one way hard, in another easy. An indication of this is found in the fact that no one is able to attain the truth adequately, while, on the other hand, no one fails entirely."</div>
-                    <div class="tr-body">Aristotle opened the Metaphysics with a claim about human nature: all human beings by nature desire to know. He spent the next fourteen books trying to satisfy that desire. He reached further than anyone before him. He also understood the limit: truth is not a destination you arrive at and unpack your bags. It is a direction you face. The figure in Dürer's engraving has been facing this direction for a very long time. Aristotle would have recognized her.</div>
-                    <div class="verify-flag"><strong>VERIFY before entry:</strong> Aristotle, <em>Metaphysics</em> 993a. Confirm exact translation used. The Greek is: "περὶ τῆς ἀληθείας θεωρῆσαι τρόπον μέν τινα χαλεπόν." Multiple good translations exist; W.D. Ross version is most common.</div>
-                </div>
-
-                <div class="tr-item">
-                    <div class="tr-thinker">Thomas Aquinas (1225–1274 CE)</div>
-                    <div class="tr-quote">"All that I have written seems to me like straw compared to what I have seen."</div>
-                    <div class="tr-body">Thomas Aquinas was the strangest child his monastery had ever received. His father sent him to Monte Cassino at age five. The monks watched him grow into a boy who barely spoke, who appeared to be working on one question for years at a time. His classmates at the University of Naples called him "the dumb ox." He became one of the most influential philosophers of the medieval world. In the last seven years of his life, he wrote the <em>Summa Theologiae</em>, a synthesis of everything he understood about God, beauty, truth, and how they connect. He never finished it. On December 6, 1273, something happened during Mass. He set down his pen and never wrote another word. What he had written before he stopped: genuine beauty is not just pleasing. It has a radiance, <em>splendor</em>, that comes from the thing itself, not from the viewer. He called this <em>splendor veri</em>: the radiance of truth. Whatever he saw on December 6, it confirmed that he had been right, and that the words were only ever a pointing.</div>
-                    <div class="sanity-note">Quote: documented in the biography by Reginald of Piperno, shortly before Aquinas's death. Verified in multiple sources. The Aquinas dates confirm: Summa written 1265–1273, left unfinished at his death in 1274.</div>
-                </div>
-
-                <div class="tr-item">
-                    <div class="tr-thinker">Edith Stein (1891–1942 CE)</div>
-                    <div class="tr-quote">"The search for truth is in itself a reaching out toward God, whether the seeker is aware of it or not."</div>
-                    <div class="tr-body">Edith Stein was a philosopher trained under Edmund Husserl, one of the founders of phenomenology, the rigorous study of conscious experience. She spent the first half of her career as an atheist philosopher, following the argument wherever it led. Reading Teresa of Ávila one night, she said, "This is the truth." She converted to Catholicism, became a Carmelite nun, and continued writing philosophy until the Nazis arrested her in 1942. She was killed at Auschwitz. The discipline she brought to her earlier atheist philosophy did not end when she converted. She understood that the pursuit of truth, taken seriously enough, has always arrived somewhere. Dürer's figure is still at the threshold. Stein crossed it.</div>
-                    <div class="verify-flag"><strong>VERIFY before entry:</strong> This quote is attributed to Stein in several sources but the exact origin (which work, what context) needs confirmation before entry. If unverifiable, backup: "The soul, too, has a life that consists in the search for truth." Stein, <em>Finite and Eternal Being</em> (1936), verify exact wording.</div>
-                </div>
+            <div class="field">
+                <div class="field-label">Go Deeper Selection</div>
+                <div class="field-content">Select: TR1 Aristotle · TR2 Thomas Aquinas · TR3 Edith Stein</div>
             </div>
 
         </div>
     </div>
-
 
     <!-- ===================== DAY 3 ===================== -->
     <div class="day-block">
@@ -369,132 +541,311 @@
         </div>
         <div class="day-body">
 
-            <div class="sanity-note" style="margin-bottom:14px;"><strong>Artwork update note:</strong> Day 3 uses Rembrandt's <em>Supper at Emmaus</em> (1648, Louvre), not Caravaggio's version (1601, National Gallery London). These are completely different paintings of the same subject. Any Caravaggio-specific details (fish in wicker basket, overturning chairs, innkeeper) belong to the Caravaggio version only. The Rembrandt is intimate, still, and luminous: Christ is the light source in the Rembrandt. Read fields carefully before entry.</div>
+            <div class="sanity-note" style="margin-bottom:14px;background:#fdecea;border-left:4px solid #c0392b;"><strong>Artwork note:</strong> Day 3 uses Rembrandt's <em>Supper at Emmaus</em> (1648, Louvre), NOT Caravaggio's version (1601, National Gallery London). These are entirely different paintings. The Rembrandt is intimate, still, and luminous. Christ is the light source. Read all fields before entry.</div>
+
+            <!-- JOURNEY DAY FIELDS -->
+            <span class="sanity-section-label">Journey Day</span>
+
+            <div class="field">
+                <div class="field-label">Day Number</div>
+                <div class="field-content">3</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Day Title</div>
+                <div class="field-content">Everything Was Pointing Here</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Opening Image</div>
+                <div class="field-content">Rembrandt, <em>The Supper at Emmaus</em> (1648) — same file as content item image. See sourcing note below. Upload here as the day opener.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Opening Text</div>
+                <div class="field-content">
+                    <p>You can follow beauty. You can follow truth. Goodness works differently.</p>
+                    <p>Martin Avdeitch was an old cobbler who had lost everything. His wife. His children. His reason to keep going. He found his way back through the Gospels, reading them late at night after his work was done.</p>
+                    <p>One night he fell asleep over his Bible and heard a voice. Look out into the street tomorrow, it said. I will come to you.</p>
+                    <p>Martin woke the next morning with something he had not felt in years. He cleaned the glass of his small window, the one at street level where he could watch the feet of passersby. He sat down at his bench. He waited.</p>
+                    <p>He worked. He watched. Every time a shadow crossed the window he looked up.</p>
+                    <p>What came was ordinary. An old soldier, cold and tired, who needed tea. A young mother with a hungry baby, who needed warmth and bread. A boy caught stealing an apple by the old woman who sold them.</p>
+                    <p>Martin helped them all.</p>
+                    <p>The street grew dark. Martin lit his lamp and sat down with his Bible. His heart was quiet in the way that follows disappointment. He had waited all day. He had been so certain.</p>
+                    <p>The voice returned. Martin, it said, did you not recognize me?</p>
+                    <p>I was in the old man warming his hands at your fire. I was in the mother and her child. I was in the boy caught stealing, and in the woman who let him go.</p>
+                    <p>The story is Tolstoy&#39;s. The idea is older. Goodness does not arrive the way you are expecting. It comes in the ordinary person at your door. It comes toward you, and asks only that you be present enough to see it.</p>
+                    <p>That is what goodness actually is. Not a pursuit. A recognition. One that sometimes, has to seek you.</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Opening Text Audio</div>
+                <div class="tts-note">Generated during Sanity entry — read aloud before confirming TTS.</div>
+            </div>
+
+            <!-- ENCOUNTER CONTENT (CONTENT ITEM) -->
+            <span class="sanity-section-label">Encounter Content — Content Item</span>
 
             <div class="field">
                 <div class="field-label">Content Type</div>
-                <div class="field-content">Sacred Art (Painting)</div>
+                <div class="field-content">Sacred Art (Painting) — <em>confirm type label matches format used in Days 1 and 2</em></div>
             </div>
 
             <div class="field">
-                <div class="field-label">Content Item</div>
-                <div class="field-content">Rembrandt van Rijn, <em>The Supper at Emmaus</em>, 1648. Oil on panel. Musée du Louvre, Paris. Inv. 1739.</div>
-            </div>
-
-            <div class="image-note">
-                <strong>Image sourcing:</strong> The Louvre's open access collection. Go to collections.louvre.fr, search "Supper at Emmaus Rembrandt 1648." Confirm you have the 1648 version (Louvre) and not the 1629 version (Jacquemart-André Museum, Paris). The two paintings are very different in composition and mood. The 1648 version shows Christ as the light source: he is luminous while the room is in shadow. Min 1200px for Sanity; a larger file is recommended for the Encounter step. The painting rewards zoom on the disciple at left (hands folded, face lifted) and on the servant in the background.
+                <div class="field-label">Title</div>
+                <div class="field-content">The Supper at Emmaus</div>
             </div>
 
             <div class="field">
-                <div class="field-label">Opening Text (Step 1)</div>
-                <div class="field-content">You followed beauty into truth. This is where truth leads.</div>
-            </div>
-
-            <div class="sanity-note">Opening Text note: Ten words. Renders in Cormorant italic. Completes the three-day arc without explaining it. Do not elaborate. This sentence is the arrival.</div>
-
-            <div class="field">
-                <div class="field-label">Curator Note (the hook)</div>
-                <div class="field-content">Rembrandt painted the Emmaus road story five times. The 1648 version, now in the Louvre, is the one that holds still. The earlier versions are dramatic; this one is interior. In it, Christ does not look like a figure of triumph or announcement. He is seated, breaking bread, the source of the light in the painting. The two disciples flank him. One is turned toward him with his hands folded and his face lifted, the posture of someone who has stopped breathing for a moment. The servant in the background, oblivious, continues setting the table. Rembrandt painted this in the year his house and possessions went to auction to pay his debts. He knew something about sitting at a table with what you thought was gone.</div>
+                <div class="field-label">Artist / Creator</div>
+                <div class="field-content">Rembrandt van Rijn</div>
             </div>
 
             <div class="field">
-                <div class="field-label">Brief Description (for content card)</div>
+                <div class="field-label">Themes</div>
+                <div class="field-content">goodness, recognition, ordinary, presence, Emmaus</div>
+                <div class="missing-field">Confirm tag format matches Days 1 and 2. Add or adjust as needed.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Brief Description</div>
                 <div class="field-content">A seventeenth-century painting. Three figures sit at a simple table in a dimly lit room. The central figure, Christ, is the source of the light in the painting; the room is in shadow behind him. On his left, a disciple sits with hands folded and face lifted in a gesture of recognition. On his right, another disciple looks on. In the background, a servant continues setting the table, unaware. Rembrandt painted this in a single, still moment: the second between recognition and speech.</div>
             </div>
 
             <div class="field">
-                <div class="field-label">Context (expandable)</div>
+                <div class="field-label">Context</div>
                 <div class="field-content">
-                    <p>The Emmaus road story is told in Luke 24:13–35. On the day of the Resurrection, two of Jesus's disciples were walking from Jerusalem to the village of Emmaus, a journey of about seven miles. A stranger joined them on the road. They talked for the entire journey. He explained the scriptures to them. They did not recognize him. When they reached Emmaus, they invited him to stay with them, saying "Stay with us, for it is toward evening and the day is now far spent." At the table, when he broke the bread, they recognized him, and he vanished.</p>
-                    <p>Rembrandt painted this scene five times across his career. The 1648 Louvre version is the last and, most art historians agree, the most fully realized. By 1648, Rembrandt was in serious financial difficulty; his house and his art collection would be auctioned off within a few years. His wife Saskia had died of tuberculosis in 1642. He had navigated the entire first half of his career in circumstances that required him to keep looking.</p>
-                    <p>In the painting, Christ is the source of the light, a practice Rembrandt refined across his career, placing the illuminating figure at the center of shadow rather than lit by an external source. The disciple on the left has recognized him. His hands are folded, his face lifted. The moment Rembrandt painted is not the shout of recognition but the moment just before: the intake of breath of breath.</p>
-                    <p>The philosophers had a word for what this day is about: <em>bonum</em>. The Good. Not goodness as a list of rules, but the thing every living creature reaches toward. Aristotle opened the Nicomachean Ethics with this claim: every art and every inquiry aims at some good. Aquinas built on it: the Good is self-diffusive, it pours outward, it cannot contain itself. The stranger on the Emmaus road was the Good, walking seven miles beside two people who were looking for him, until the bread broke and their eyes opened.</p>
+                    <p>On the day of the Resurrection, two of Jesus&#39;s disciples were walking away from Jerusalem.</p>
+                    <p>Not toward it. Away. They were heading to a village called Emmaus, about seven miles west. They had been in Jerusalem when it happened. Now they were leaving. Their hope had been specific: "We had hoped that he was the one to redeem Israel." Past tense. It was over.</p>
+                    <p>A stranger started walking alongside them on the road. He asked what they were talking about. They stopped walking. Luke writes that they stood still, looking sad. Then they told him everything: the arrest, the death, the empty tomb, the women who said they had seen angels. They told him all of it as people tell a story that is finished.</p>
+                    <p>The stranger listened. Then he walked with them for the remaining miles, explaining the scriptures as they went. By the time they reached Emmaus, something had shifted enough that they didn&#39;t want him to leave. Stay with us, they said. It's almost evening.</p>
+                    <p>At the table he took bread, blessed it, broke it, and gave it to them. Their eyes were opened. They instantly recognized him. And then he was gone.</p>
+                    <p>Luke records what they said immediately afterward: "Did not our hearts burn within us while he talked to us on the road?" They had felt it the whole time and not known what it was.</p>
+                    <p>They rose that same hour and walked back to Jerusalem. Seven miles. In the dark.</p>
+                    <p>When Rembrandt painted this very scene, he was a widower at 42, having lost his wife six years earlier. His finances were collapsing. His house and his entire art collection would go to auction within two years. He knew that weight. He had spent his career painting the faces of people carrying something heavy. In 1648, he painted the moment it lifted. With the breaking of the bread.</p>
                 </div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Context Audio</div>
+                <div class="tts-note">Generated during Sanity entry — read aloud before confirming TTS.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Image</div>
+                <div class="image-note"><strong>Image sourcing:</strong> Louvre open access collection. Go to collections.louvre.fr, search "Supper at Emmaus Rembrandt 1648." Confirm you have the <strong>1648 version (Louvre, Inv. 1739)</strong> — NOT the 1629 version (Jacquemart-André Museum, Paris). The two paintings are very different. The 1648 version shows Christ as the light source. Min 1200px; larger file recommended for Encounter zoom step. Rewards zoom on the disciple at left (hands folded, face lifted) and on the servant in the background.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Year / Date</div>
+                <div class="field-content">1648</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Medium</div>
+                <div class="field-content">Oil on panel</div>
             </div>
 
             <div class="field">
                 <div class="field-label">Encounter Note (Look Closer)</div>
-                <div class="field-content">The disciple on the left has stopped eating. His hands are folded in front of him and his face is lifted toward the figure at the center of the table. Christ is glowing, gently, while everything around him is in shadow. This disciple has been sitting at this table for a moment before he understood where he was. Nothing is dramatic. No chair has been overturned. The recognition is entirely interior: the most interior moment Rembrandt ever painted, in a career full of interior moments. What makes it visible is the light.</div>
+                <div class="field-content">This disciple has been sitting at this table for a moment before he understood who was beside him. Nothing is dramatic. No chair has been overturned. The recognition is entirely interior. What makes it visible is the light.</div>
             </div>
+
+            <div class="field">
+                <div class="field-label">Curator Note</div>
+                <div class="field-content">Rembrandt painted the Emmaus road story five times. The 1648 version, now in the Louvre, is the one that holds still. The earlier versions are dramatic; this one is interior. He painted it in the year his house went to auction. He knew something about sitting across from what you thought was gone.</div>
+            </div>
+
+            <div class="field">
+                <div class="field-label">Curator Audio</div>
+                <div class="tts-note">Generated during Sanity entry — read aloud before confirming TTS.</div>
+            </div>
+
+            <!-- GO DEEPER — WITHIN CONTENT ITEM -->
+            <span class="sanity-section-label">Go Deeper (within Content Item) — 4 Tradition Reflections</span>
+
+            <div class="go-deeper-item">
+                <div class="gd-header">TR 1 — Augustine of Hippo (Display Order: 1)</div>
+                <div class="field"><div class="field-label">Author Type</div><div class="field-content">Saint, Doctor of the Church</div></div>
+                <div class="field"><div class="field-label">Title</div><div class="field-content missing-field">Match format used in Day 1 TRs. Suggest: "On Restless Hearts" or "Augustine of Hippo"</div></div>
+                <div class="field"><div class="field-label">Summary</div><div class="field-content">Augustine of Hippo is one of the most restless minds in the history of Western thought. He spent decades following every version of the Good he could find: philosophy, ambition, pleasure, competing schools of thought. None of it held. The Confessions is the record of a man who chased the transcendental Good across every corner of his life before discovering it had been present all along. He arrived at the same table as the Emmaus disciples, by a much longer road.</div></div>
+                <div class="field"><div class="field-label">Audio</div><div class="tts-note">Generated during Sanity entry — TTS.</div></div>
+                <div class="field"><div class="field-label">Short Quote</div><div class="field-content">"Our heart is restless until it rests in Thee."</div><div class="sanity-note">"Rests in Thee" is the traditional English rendering. Do not modernize to "You." The archaic form is part of the text's weight.</div></div>
+                <div class="field"><div class="field-label">Source</div><div class="field-content">Augustine, <em>Confessions</em> I.1.1 (c. 401 CE). Verified.</div></div>
+                <div class="field"><div class="field-label">Themes</div><div class="field-content">goodness, restlessness, love, longing</div></div>
+                <div class="field"><div class="field-label">Display Order</div><div class="field-content">1</div></div>
+                <div class="field"><div class="field-label">Era</div><div class="field-content">Patristic (354–430 CE)</div></div>
+                <div class="field"><div class="field-label">Source (link / reference)</div><div class="field-content missing-field">Add URL or leave blank.</div></div>
+            </div>
+
+            <div class="go-deeper-item">
+                <div class="gd-header">TR 2 — Thomas Aquinas (Display Order: 2)</div>
+                <div class="field"><div class="field-label">Author Type</div><div class="field-content">Saint, Doctor of the Church</div></div>
+                <div class="field"><div class="field-label">Title</div><div class="field-content missing-field">Match format used in Day 1 TRs. Suggest: "On the Self-Diffusion of the Good" or "Thomas Aquinas"</div></div>
+                <div class="field"><div class="field-label">Summary</div><div class="field-content">Aquinas spent his life on the Transcendentals. His insight about goodness is the simplest: it cannot contain itself. Goodness pours outward, seeks out, shares. This is not metaphor. It is the reason fire gives warmth, the reason parents teach their children. It is also the reason that on the road to Emmaus, when two disciples were walking away from Jerusalem in grief, the one they were grieving came to find them. He knew them. He walked beside them for seven miles. He opened the scriptures — explaining everything written about his death and his conquering of it, from Moses through all the prophets. By the time they reached the table, he had already given them everything needed to see. The Good does not wait to be found. It seeks.</div></div>
+                <div class="field"><div class="field-label">Audio</div><div class="tts-note">Generated during Sanity entry — TTS.</div></div>
+                <div class="field"><div class="field-label">Short Quote</div><div class="field-content">"Bonum est diffusivum sui." (The good is self-diffusive.)</div></div>
+                <div class="field"><div class="field-label">Source</div><div class="field-content">Aquinas drawing on Pseudo-Dionysius. Verified as authentic Thomistic formula.</div></div>
+                <div class="field"><div class="field-label">Themes</div><div class="field-content">goodness, transcendentals, diffusion, generosity</div></div>
+                <div class="field"><div class="field-label">Display Order</div><div class="field-content">2</div></div>
+                <div class="field"><div class="field-label">Era</div><div class="field-content">Medieval (1225–1274 CE)</div></div>
+                <div class="field"><div class="field-label">Source (link / reference)</div><div class="field-content missing-field">Add URL or leave blank.</div></div>
+            </div>
+
+            <div class="go-deeper-item">
+                <div class="gd-header">TR 3 — Dorothy Day (Display Order: 3)</div>
+                <div class="field"><div class="field-label">Author Type</div><div class="field-content">Servant of God (not yet beatified — confirm what Author Type options exist in Sanity)</div></div>
+                <div class="field"><div class="field-label">Title</div><div class="field-content missing-field">Match format used in Day 1 TRs. Suggest: "On Recognizing the Good" or "Dorothy Day"</div></div>
+                <div class="field"><div class="field-label">Summary</div><div class="field-content">A journalist and activist who spent decades running houses of hospitality for the homeless in New York City. She understood that the Transcendentals do not stay in the realm of philosophy. Goodness always lands somewhere specific: in a meal, at a table, across from a particular face. The question is not whether you believe in the Good in the abstract. It is whether you can recognize it in the person in front of you right now, especially the one you did not choose to sit beside.</div></div>
+                <div class="field"><div class="field-label">Audio</div><div class="tts-note">Generated during Sanity entry — TTS.</div></div>
+                <div class="field"><div class="field-label">Short Quote</div><div class="field-content missing-field">VERIFY before entry: Two options — (1) "The biggest challenge of the day is: how to bring about a revolution of the heart." (2) "I really only love God as much as I love the person I love the least." Use whichever can be verified against <em>The Long Loneliness</em> or <em>By Little and By Little</em>. Option 2 is the stronger quote if verifiable.</div></div>
+                <div class="field"><div class="field-label">Source</div><div class="field-content missing-field">VERIFY: Confirm quote, source work, and page reference before entry.</div></div>
+                <div class="field"><div class="field-label">Themes</div><div class="field-content">goodness, hospitality, ordinary, action</div></div>
+                <div class="field"><div class="field-label">Display Order</div><div class="field-content">3</div></div>
+                <div class="field"><div class="field-label">Era</div><div class="field-content">Modern (1897–1980 CE)</div></div>
+                <div class="field"><div class="field-label">Source (link / reference)</div><div class="field-content missing-field">Add URL or leave blank.</div></div>
+            </div>
+
+            <div class="go-deeper-item">
+                <div class="gd-header">TR 4 — Plato — Journey Synthesis (Display Order: 4)</div>
+                <div class="sanity-note">This TR functions as the journey capstone, not a standard thinker reflection. It should appear last (Display Order 4). The body is longer than standard TRs — this is intentional. It closes the three-day arc through the Cave allegory. Check if Sanity has a character limit on the Summary field; if so, trim to the core paragraphs (Cave story through "The Form of the Good").</div>
+                <div class="field"><div class="field-label">Author Type</div><div class="field-content">Philosopher</div></div>
+                <div class="field"><div class="field-label">Title</div><div class="field-content missing-field">Match format used in Day 1 TRs. Suggest: "The Cave and the Sun" or "Plato — Journey Synthesis"</div></div>
+                <div class="field"><div class="field-label">Summary</div><div class="field-content">
+                    <p>In Book VII of the Republic, Plato asks us to imagine a cave.</p>
+                    <p>A group of prisoners have lived there since childhood. They are chained by their legs and their necks, fixed in place, able to look only at the stone wall in front of them. They cannot turn their heads. They have never seen the fire that burns behind them, or the walkway above it, or the people who pass along that walkway carrying various objects, including carved statues of people and animals made of wood. All they have ever seen are the shadows those figures cast on the wall ahead.</p>
+                    <p>To the prisoners, the shadows are not shadows. They are the world. The prisoners have named them, studied them, held competitions among themselves to see who can best predict which shadow will appear next. Their entire understanding of reality is built from images of images.</p>
+                    <p>Then one prisoner is freed. He is forced to turn around. The firelight is immediate and painful. He cannot see. He is dragged, struggling, toward the cave entrance, into daylight. Outside, his eyes are overwhelmed. He can make out nothing at first. Gradually, slowly, he begins to see shadows on the ground, then reflections in water, then the actual objects themselves, solid and real. Finally he looks up. He sees the sun. Not a reflection of the sun. Not a report of it. The sun directly. The source of all the light that made any of it visible.</p>
+                    <p>He understands. Everything he named in the cave was a shadow of a shadow. The real objects were there all along. And the sun was the reason any of them could be seen at all.</p>
+                    <p>Plato called the sun the Form of the Good.</p>
+                    <p>The three days you have just walked correspond to his three stages. On Day 1, you encountered a shadow: a beautiful thing pointing toward something more real than itself. On Day 2, you found the object: truth that exceeded the container you brought to hold it. On Day 3, you arrived at goodness, the source of light that was illuminating both beauty and truth.</p>
+                    <p>Beauty, Truth, and Goodness are not three separate things. They are one thing seen from three distances. The Transcendentals converge. They have always been one.</p>
+                </div></div>
+                <div class="field"><div class="field-label">Audio</div><div class="tts-note">Generated during Sanity entry — TTS. This is the longest TR; listen carefully before confirming.</div></div>
+                <div class="field"><div class="field-label">Short Quote</div><div class="field-content">"The Form of the Good is the last thing to be seen, and only with great effort. But once seen, it must be recognized as the cause of all that is right and beautiful in everything."</div><div class="verify-flag"><strong>VERIFY before entry:</strong> Close rendering of Republic 517b–c. Confirm against Grube/Reeve or Cornford translation before entry.</div></div>
+                <div class="field"><div class="field-label">Source</div><div class="field-content">Plato, <em>Republic</em> Book VII, 517b–c. Verify translation.</div></div>
+                <div class="field"><div class="field-label">Themes</div><div class="field-content">goodness, transcendentals, cave allegory, philosophy, synthesis</div></div>
+                <div class="field"><div class="field-label">Display Order</div><div class="field-content">4</div></div>
+                <div class="field"><div class="field-label">Era</div><div class="field-content">Ancient (c. 428–348 BCE)</div></div>
+                <div class="field"><div class="field-label">Source (link / reference)</div><div class="field-content missing-field">Add URL or leave blank.</div></div>
+            </div>
+
+            <!-- LOCATION (back to content item) -->
+            <span class="sanity-section-label">Location (Content Item)</span>
+
+            <div class="field">
+                <div class="field-label">Location Name</div>
+                <div class="field-content">Musée du Louvre</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Location City</div>
+                <div class="field-content">Paris</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Location Country</div>
+                <div class="field-content">France</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Latitude</div>
+                <div class="field-content">48.8606</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Longitude</div>
+                <div class="field-content">2.3376</div>
+            </div>
+
+            <!-- ENCOUNTER GUIDANCE -->
+            <span class="sanity-section-label">Encounter Guidance</span>
 
             <div class="field">
                 <div class="field-label">Encounter Guidance</div>
-                <div class="field-content">Find the disciple on the left. Notice what his hands are doing.</div>
+                <div class="field-content">Notice who is the source of the light.</div>
             </div>
 
             <div class="field">
-                <div class="field-label">Quote (separate from Lectio)</div>
-                <div class="field-content quote">"Stay with us, for it is toward evening and the day is now far spent."</div>
-                <div class="field-content">Luke 24:29, RSV-2CE. Verify exact wording before entry. These are the words the disciples spoke to the stranger before they recognized him: an invitation extended in ignorance, which turned out to be the most significant invitation they ever issued.</div>
+                <div class="field-label">EG Audio</div>
+                <div class="tts-note">Generated during Sanity entry — read aloud before confirming TTS.</div>
             </div>
 
-            <div class="lectio-block">
-                <div class="lectio-label">Lectio Pairing</div>
-                <div class="lectio-row">
-                    <div class="tag">Philosophy (the question)</div>
-                    <div class="field-content quote">"Every art and every inquiry, and similarly every action and pursuit, is thought to aim at some good."</div>
-                    <div class="field-content">Aristotle, <em>Nicomachean Ethics</em>, Book I, opening line. Verified.</div>
-                </div>
-                <div class="lectio-row" style="margin-top:12px;">
-                    <div class="tag">Scripture (the arrival)</div>
-                    <div class="field-content quote">"And their eyes were opened and they recognized him; and he vanished out of their sight."</div>
-                    <div class="field-content">Luke 24:31, RSV-2CE. Verify exact wording before entry.</div>
-                </div>
-                <div class="lectio-row" style="margin-top:10px;">
-                    <div class="tag">Connection Note (internal: do not enter in Sanity)</div>
-                    <div class="field-content">Aristotle names the principle: everything in existence is oriented toward the Good. Luke shows the moment of arrival: and their eyes were opened. The Lectio pairing is the argument of the three-day journey in two sentences. Philosophy asks; scripture answers. Rembrandt painted the second between the two.</div>
-                </div>
-            </div>
-
-            <div class="audio-block">
-                <div class="audio-label">Auditio</div>
-                <div class="audio-option"><span class="opt-tag">Primary (locked):</span> Giovanni Pierluigi da Palestrina, <em>Sicut Cervus</em>. No trim needed; already within 3–5 minute target. Source from Internet Archive or Musopen (public domain recording). File should be downloaded and uploaded to Sanity Auditio as MP3. The text is from Psalm 42: "As the deer pants for streams of water, so my soul pants for you, my God." The music is a four-voice motet, still and deeply interior: the musical equivalent of the disciple's folded hands in Rembrandt's painting. Pairing: both the music and the painting hold arrival as a moment of absolute stillness.</div>
-            </div>
+            <!-- AUDITIO -->
+            <span class="sanity-section-label">Auditio</span>
 
             <div class="field">
-                <div class="field-label">Reflect (single personal question)</div>
-                <div class="field-content">Have you ever recognized something (a moment, a person, a place) only after it had already passed?</div>
+                <div class="field-label">Auditio Title</div>
+                <div class="field-content">Sicut Cervus</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Composer</div>
+                <div class="field-content">Giovanni Pierluigi da Palestrina</div>
+            </div>
+            <div class="field">
+                <div class="field-label">License Note</div>
+                <div class="field-content">Public domain composition. Confirm recording source license before entry (verify Internet Archive or Musopen recording is public domain).</div>
+            </div>
+            <div class="field">
+                <div class="field-label">File</div>
+                <div class="field-content"><strong>10 Palestrina_ Motets - Sicut Cervus.mp3</strong> — located in Journeys/BTG-New Revised Journey/new btg audio/. No trim needed; already within 3–5 minute target.</div>
+            </div>
+            <div class="sanity-note">Pairing note: Text from Psalm 42 — "As the deer pants for streams of water, so my soul pants for you, my God." Four-voice motet, still and interior. The musical equivalent of the disciple's folded hands in Rembrandt's painting. Both hold arrival as a moment of absolute stillness.</div>
+
+            <!-- LECTIO -->
+            <span class="sanity-section-label">Lectio Pairing</span>
+
+            <div class="field">
+                <div class="field-label">Philosophy Quote</div>
+                <div class="field-content quote">"Every art and every inquiry, and similarly every action and pursuit, is thought to aim at some good."</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Philosophy Source</div>
+                <div class="field-content">Aristotle, <em>Nicomachean Ethics</em>, Book I, opening line. Verified.</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Scripture Verse</div>
+                <div class="field-content quote">"And their eyes were opened and they recognized him; and he vanished out of their sight."</div>
+            </div>
+            <div class="field">
+                <div class="field-label">Scripture Reference</div>
+                <div class="field-content">Luke 24:31, RSV-2CE<div class="verify-flag"><strong>VERIFY before entry:</strong> Confirm exact RSV-2CE wording before entry.</div></div>
+            </div>
+            <div class="field">
+                <div class="field-label">Connection Note</div>
+                <div class="field-content">Aristotle names the principle: everything in existence is oriented toward the Good. Luke shows the moment of arrival: and their eyes were opened. The Lectio pairing is the argument of the three-day journey in two sentences. Philosophy asks; scripture answers. Rembrandt painted the second between the two.</div>
+            </div>
+
+            <!-- DAY WRAP -->
+            <span class="sanity-section-label">Day Wrap</span>
+
+            <div class="field">
+                <div class="field-label">Reflection Question</div>
+                <div class="field-content">Is there a moment in your life that only made sense looking back?</div>
             </div>
 
             <div class="field">
                 <div class="field-label">Connect Thread / Journey Close</div>
-                <div class="field-content">The philosophers named what you have been following. What they could not do is say where it came from, or what it was pointing at. Every culture in human history that asked that question answered it the same way: not with an argument, but with a story. The story kept appearing in places that had never heard of each other.</div>
-                <div class="sanity-note">Note: This is the bridge to the Myth Became Fact journey. Confirm with dev whether a closing text field exists on the final day of a journey before entering. If yes, enter above. If no, note as product request: the bridge to Myth Became Fact should not be silent.</div>
+                <div class="field-content missing-field">No Connect Thread on the final day. The app handles the end-of-journey experience: "Start another journey" CTA + share option. Do not enter a connection note here. No Sanity field needed.</div>
+                <details style="margin-top:8px;">
+                    <summary style="font-size:11px;color:#888;cursor:pointer;letter-spacing:0.05em;">Bridge copy (not entered — preserved for reference)</summary>
+                    <div style="padding:10px 14px;background:#f9f6f0;border-left:2px solid #ccc;margin-top:6px;font-size:13px;color:#666;font-style:italic;line-height:1.75;">The philosophers named what you have been following. What they could not do is say where it came from, or what it was pointing at. Every culture in human history that asked that question answered it the same way: not with an argument, but with a story. The story kept appearing in places that had never heard of each other.</div>
+                </details>
             </div>
 
-            <div class="tr-block">
-                <div class="tr-label">Tradition Reflections</div>
-
-                <div class="tr-item">
-                    <div class="tr-thinker">Augustine of Hippo (354–430 CE)</div>
-                    <div class="tr-quote">"Our heart is restless until it rests in Thee."</div>
-                    <div class="tr-body">Augustine of Hippo is one of the most restless minds in the history of Western thought. He spent decades following every version of the Good he could find: philosophy, ambition, pleasure, competing schools of thought. None of it held. The Confessions is the record of a man who chased the transcendental Good across every corner of his life before discovering it had been present all along. He arrived at the same table as the Emmaus disciples, by a much longer road.</div>
-                    <div class="sanity-note">Quote: <em>Confessions</em> I.1.1 (c. 401 CE). Verified. "Rests in Thee" is the traditional English rendering. Do not modernize to "You." The archaic form is part of the text's weight.</div>
-                </div>
-
-                <div class="tr-item">
-                    <div class="tr-thinker">Thomas Aquinas (1225–1274 CE)</div>
-                    <div class="tr-quote">"Bonum est diffusivum sui." (The good is self-diffusive.)</div>
-                    <div class="tr-body">Aquinas spent his life building the most systematic account of the Transcendentals the Western tradition has produced. His insight about goodness is simple: it cannot contain itself. Goodness by its nature pours outward, shares itself, communicates. This is not a metaphor. It is the reason fire gives warmth, the reason parents teach their children, the reason a stranger on the road eventually broke bread with two grieving disciples he had just met. The Good does what it is.</div>
-                    <div class="sanity-note">Formula attributed to Aquinas drawing on Pseudo-Dionysius. Verified as authentic Thomistic formula. The three examples in the body (fire, parents, stranger) move from physical law to human action to the Emmaus moment: the arc closes inside the reflection.</div>
-                </div>
-
-                <div class="tr-item">
-                    <div class="tr-thinker">Dorothy Day (1897–1980 CE)</div>
-                    <div class="tr-quote">"The biggest challenge of the day is: how to bring about a revolution of the heart."</div>
-                    <div class="tr-body">A journalist and activist who spent decades running houses of hospitality for the homeless in New York City. She understood that the Transcendentals do not stay in the realm of philosophy. Goodness always lands somewhere specific: in a meal, at a table, across from a particular face. The question is not whether you believe in the Good in the abstract. It is whether you can recognize it in the person in front of you right now, especially the one you did not choose to sit beside.</div>
-                    <div class="verify-flag"><strong>VERIFY before entry:</strong> Quote from <em>The Long Loneliness</em>. Confirm exact wording and page reference. If the alternate quote ("I really only love God as much as I love the person I love the least") can be verified against her writings (<em>The Long Loneliness</em>, <em>By Little and By Little</em>), it is the stronger quote. Use whichever can be verified. Body text of this reflection is ready regardless of which quote is used.</div>
-                </div>
+            <div class="field">
+                <div class="field-label">Go Deeper Selection</div>
+                <div class="field-content">Select: TR1 Augustine · TR2 Thomas Aquinas · TR3 Dorothy Day · TR4 Plato (Journey Synthesis)</div>
             </div>
 
         </div>
     </div>
 
-
     <!-- ===================== SANITY ENTRY ORDER ===================== -->
     <h2>Order of Entry</h2>
 
     <p>These steps reflect what is verified and ready. Fields marked VERIFY must be checked before entry.</p>
+
+    <div class="sanity-note" style="background:#fdecea; border-left:4px solid #c0392b; margin-bottom:20px;">
+        <strong>AB TEST — DO NOT OVERWRITE PUBLISHED JOURNEY.</strong> The currently published BTG journey must remain live and untouched. This content doc is for a new, separate journey entry in Sanity to be AB tested against the published version. Create a new Journey, Journey Days, Content Items, and Tradition Reflection items from scratch. Entry format should follow the same structure as the Myth Became Fact journey. As you enter, note any doc format issues — the output of that feedback becomes the standard journey doc template to be updated in the Content Guide.
+    </div>
 
     <table>
         <thead><tr><th>#</th><th>Step</th><th>Day</th><th>Status</th></tr></thead>
@@ -502,7 +853,7 @@
             <tr><td>1</td><td>Upload audio files: lark-ascending-btg-d1-3m30s.mp3 · spem-in-alium-btg-d2-4m45s.mp3 · Sicut Cervus MP3 (source from Musopen)</td><td>All</td><td>Files ready (Days 1 &amp; 2 trimmed); Day 3 source and download needed</td></tr>
             <tr><td>2</td><td>Upload artwork images: Cameron English Blossoms (Met open access) · Dürer Melencolia I (NGA/Wikimedia) · Rembrandt Emmaus 1648 (Louvre: confirm 1648 Louvre version, not 1629 Jacquemart-André)</td><td>All</td><td>Source downloads needed</td></tr>
             <tr><td>3</td><td>Verify Simone Weil quote (<em>Waiting for God</em>) before Day 1 Lectio entry</td><td>Day 1</td><td>Pending verification</td></tr>
-            <tr><td>4</td><td>Verify JPII "Beauty is a key" quote against Letter to Artists: confirm paragraph number</td><td>Day 1</td><td>Pending verification</td></tr>
+            <tr><td>4</td><td>Verify JPII "Beauty is a key" quote against Letter to Artists: confirm paragraph number</td><td>Day 1</td><td>✅ Confirmed: §16</td></tr>
             <tr><td>5</td><td>Verify Augustine "How can beauty bring you to the Beautiful": confirm source (Sermon 241 or Enarrationes)</td><td>Day 1</td><td>Pending verification</td></tr>
             <tr><td>6</td><td>Verify Edith Stein TR3 Day 2 quote: source document and exact wording</td><td>Day 2</td><td>Pending verification</td></tr>
             <tr><td>7</td><td>Verify Dorothy Day TR3 Day 3: confirm which quote and source</td><td>Day 3</td><td>Pending verification</td></tr>
@@ -516,5 +867,34 @@
     </table>
 
 </div>
+
+<script>
+document.querySelectorAll('.field').forEach(function(field) {
+    var contentEl = field.querySelector('.field-content');
+    if (!contentEl) return;
+
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    field.appendChild(btn);
+
+    btn.addEventListener('click', function() {
+        // Clone and strip metadata elements before copying
+        var clone = contentEl.cloneNode(true);
+        clone.querySelectorAll('.verify-flag, .missing-field, .tts-note, .image-note, .sanity-note, details').forEach(function(el) {
+            el.remove();
+        });
+        var text = clone.innerText.trim();
+        navigator.clipboard.writeText(text).then(function() {
+            btn.textContent = 'Copied';
+            btn.classList.add('copied');
+            setTimeout(function() {
+                btn.textContent = 'Copy';
+                btn.classList.remove('copied');
+            }, 1500);
+        });
+    });
+});
+</script>
 </body>
 </html>

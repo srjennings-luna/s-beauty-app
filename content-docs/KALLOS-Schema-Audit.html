@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KALLOS — Schema Audit</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Georgia', serif; line-height: 1.7; color: #2C2C2C; background: #FFFFFF; }
+    .container { max-width: 1080px; margin: 0 auto; padding: 60px 40px 120px; }
+    .cover { background: #16110d; color: #fdf6e8; text-align: center; padding: 60px 40px 48px; margin: -60px -40px 52px; }
+    .cover .label { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #C19B5F; margin-bottom: 16px; }
+    .cover h1 { font-size: 28px; font-weight: 300; letter-spacing: 3px; color: #fdf6e8; margin-bottom: 8px; }
+    .cover .sub { font-size: 14px; color: #bfb8aa; font-style: italic; }
+    .cover .date { font-size: 11px; color: #7a7062; margin-top: 12px; }
+    h2 { font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; color: #C19B5F; margin-top: 48px; margin-bottom: 16px; letter-spacing: 0.2em; text-transform: uppercase; padding-bottom: 8px; border-bottom: 1px solid #e8e0d4; }
+    h3 { font-family: Arial, sans-serif; font-size: 15px; font-weight: 700; color: #16110d; margin: 26px 0 10px; }
+    h4 { font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; color: #4a7a62; text-transform: uppercase; letter-spacing: 0.1em; margin: 20px 0 8px; }
+    p { font-size: 14px; margin-bottom: 12px; }
+    ul { margin: 10px 0 14px 24px; font-size: 14px; }
+    li { margin-bottom: 6px; }
+    .context-box { background: #fdf6e8; border-left: 4px solid #C19B5F; padding: 18px 22px; margin: 24px 0; font-size: 14px; line-height: 1.7; }
+    .context-box strong { color: #16110d; }
+    .warn-block { background: #fdf0f0; border-left: 3px solid #c25555; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .warn-block .warn-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #c25555; font-weight: 700; margin-bottom: 6px; }
+    .success-block { background: #f0f7f3; border-left: 3px solid #4a7a62; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .success-block .suc-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #4a7a62; font-weight: 700; margin-bottom: 6px; }
+    code { font-family: 'Courier New', monospace; font-size: 12px; background: #f0ebe0; padding: 2px 6px; }
+    .priority-tag { font-family: Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; margin-left: 8px; }
+    .p1 { background: #fdf0f0; color: #c25555; }
+    .p2 { background: #fff5e0; color: #a06010; }
+    .p3 { background: #f0f7f3; color: #4a7a62; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 12px; }
+    th { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #fdf6e8; background: #16110d; text-align: left; padding: 8px 10px; }
+    td { padding: 8px 10px; border-bottom: 1px solid #e8e0d4; vertical-align: top; }
+    tr:nth-child(even) td { background: #fdf6e8; }
+    td.y { color: #4a7a62; font-weight: 700; }
+    td.n { color: #c25555; }
+    td.req { color: #c25555; font-weight: 700; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+    td.opt { color: #9a8d78; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .rec-block { border: 1px solid #e8e0d4; margin: 14px 0; }
+    .rec-header { background: #16110d; color: #fdf6e8; padding: 10px 18px; display: flex; align-items: baseline; gap: 12px; }
+    .rec-num { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C19B5F; flex-shrink: 0; }
+    .rec-title { font-size: 14px; font-weight: 400; }
+    .rec-body { padding: 14px 20px; font-size: 13px; }
+    .rec-body .label { font-family: Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #C19B5F; margin-top: 10px; margin-bottom: 4px; display: block; }
+    .rec-body p { margin-bottom: 8px; font-size: 13px; }
+    .rec-body p:first-child { margin-top: 0; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="cover">
+    <div class="label">Claude Code — Architecture Audit</div>
+    <h1>KALLOS SCHEMA AUDIT</h1>
+    <div class="sub">Task 1 output — field inventory, duplicate detection, GROQ trace, recommendations</div>
+    <div class="date">April 23, 2026 — Read-and-report. No schema or code changes made.</div>
+  </div>
+
+  <div class="context-box">
+    <strong>What this document is:</strong> A full map of KALLOS's Sanity schema architecture, the fields that are entered in the Studio, the GROQ queries that pull them, and what the app actually renders. Where the three diverge, there is a bug, a dead field, or an editorial trap. This audit documents all three.
+    <br><br>
+    <strong>What it isn't:</strong> A plan to fix anything. All recommendations are labeled and prioritized, but nothing in the schema or code was modified during this session. Approve recommendations in a separate working session before any change is implemented.
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>Executive Summary</h2>
+
+  <p>The schema is in <strong>mid-migration state</strong>. The new KALLOS schemas (<code>theme</code>, <code>contentItem</code>, <code>journey</code>, <code>dailyPrompt</code>) are live and carry all production content. The old schemas (<code>episode</code>, the unregistered <code>artwork.ts</code> file) linger with migration helpers still in place. <code>contentItem</code> itself still carries seven "legacy" fields kept for backward compat. This is expected during migration, but the debt is now structural and worth addressing before companion journeys expand the schema surface.</p>
+
+  <h3>The five most important findings</h3>
+
+  <ol>
+    <li><strong><code>journeyDay</code> is not a standalone schema.</strong> It is an inline <code>object</code> type inside <code>journey.days[]</code>. You cannot query <code>*[_type == "journeyDay"]</code>. Every day is addressable only via its parent journey. CLAUDE.md's Schema Status table implies otherwise.</li>
+    <li><strong>The brief's premise is not literally true.</strong> <code>contentItem</code> and <code>journeyDay</code> do not share field names for <code>curatorialNote</code>, <code>context</code>, or <code>encounterNote</code>. The overlap is conceptual (parallel slots under different names), not identical. The real editorial trap is that Journey Day stacks three overlapping prose fields on the same screen (<code>content.curatorNote</code> + <code>content.context</code> + <code>day.encounterNote</code>), with no schema guard against duplication.</li>
+    <li><strong>Two live rendering bugs.</strong> (a) <code>contentItem.curatorNote</code> is fetched but never rendered on the Pause &amp; Ponder page — the app only shows <code>dailyPrompt.curatorNote</code>. So if an editor puts the hook on the content item instead of the prompt, it vanishes. (b) <code>traditionalPrayerSource</code> is rendered by the Visio Divina Pray step but never projected by the GROQ query — it will always be undefined.</li>
+    <li><strong>Near-duplicate field names are a typo waiting to happen.</strong> <code>reflectionQuestions</code> (contentItem) and <code>reflectQuestions</code> (journeyDay) live one letter apart. Both are in live use.</li>
+    <li><strong>Dead code is accumulating.</strong> <code>sanity/schemaTypes/artwork.ts</code> is orphaned (not in <code>index.ts</code>). <code>episode</code> is registered but no GROQ query reads it. Seven legacy fields on <code>contentItem</code> are hidden but still on disk. Zero risk today; increasing confusion as the schema grows.</li>
+  </ol>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>1a. Field Inventory — All Schemas</h2>
+
+  <p>Fields grouped by schema. Required/optional from the Sanity schema definition. "In GROQ?" = whether any named query in <code>lib/sanity.ts</code> projects this field. "Rendered?" = whether any component actually displays it.</p>
+
+  <h3>theme <span class="priority-tag p3">Document</span></h3>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Req?</th><th>In GROQ?</th><th>Rendered?</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>title</code></td><td>string</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td>Theme name, e.g. "Light"</td></tr>
+      <tr><td><code>slug</code></td><td>slug</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td>URL-safe identifier</td></tr>
+      <tr><td><code>question</code></td><td>string</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td>Central question</td></tr>
+      <tr><td><code>description</code></td><td>text</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td>2–3 sentence blurb</td></tr>
+      <tr><td><code>color</code></td><td>string (hex)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Used for pills/cards</td></tr>
+      <tr><td><code>order</code></td><td>number</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Display sort</td></tr>
+      <tr><td><code>image</code></td><td>image</td><td class="opt">Opt</td><td class="y">Yes</td><td>?</td><td>Theme hero image — rendered in Explore cards but usage varies</td></tr>
+    </tbody>
+  </table>
+
+  <h3>contentItem <span class="priority-tag p3">Document</span></h3>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Req?</th><th>In GROQ?</th><th>Rendered?</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>contentType</code></td><td>string (enum, radio)</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td>8 values: sacred-art, thinker, literature, music, food-wine, landscape, watch-listen, math-science</td></tr>
+      <tr><td><code>title</code></td><td>string</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td>Also appears on journey, theme, splashPage, traditionReflection, episode</td></tr>
+      <tr><td><code>artist</code></td><td>string</td><td class="opt">Opt (conditional)</td><td class="y">Yes</td><td class="y">Yes</td><td>Shown only for contentType=sacred-art</td></tr>
+      <tr><td><code>thinkerName</code></td><td>string</td><td class="opt">Required for thinker</td><td class="y">Yes</td><td class="y">Yes</td><td>Custom validation: required when contentType=thinker</td></tr>
+      <tr><td><code>author</code></td><td>string</td><td class="opt">Required for literature</td><td class="y">Yes</td><td class="y">Yes</td><td>Custom validation</td></tr>
+      <tr><td><code>composer</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Shown for music</td></tr>
+      <tr><td><code>themes</code></td><td>array of refs → theme</td><td class="req">Req (min 1)</td><td class="y">Yes</td><td class="y">Yes</td><td>Duplicate field name with <code>traditionReflection.themes</code></td></tr>
+      <tr><td><code>description</code></td><td>text (3 rows)</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td>Also on journey, theme, splashPage</td></tr>
+      <tr><td><code>context</code></td><td>text (6 rows)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Rendered on P&amp;P, Journey Encounter, Visio Divina</td></tr>
+      <tr><td><code>contextAudio</code></td><td>file</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>TTS-candidate audio for context field</td></tr>
+      <tr><td><code>image</code></td><td>image</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td>Every content item must have one</td></tr>
+      <tr><td><code>year</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Sacred art only (hidden on other types)</td></tr>
+      <tr><td><code>medium</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Sacred art only. Free text — no enum.</td></tr>
+      <tr><td><code>scripturePairing</code></td><td>object (verse, reference)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Sacred art only</td></tr>
+      <tr><td><code>quote</code></td><td>object (text, source, attribution)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Thinker only. Has legacy <code>attribution</code> field alongside <code>source</code>.</td></tr>
+      <tr><td><code>era</code></td><td>string (enum, dropdown)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Thinker only. 6 values: ancient, patristic, medieval, renaissance, modern, contemporary. Different vocabulary from <code>traditionReflection.era</code>.</td></tr>
+      <tr><td><code>tradition</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td>?</td><td>Thinker only. Free text. Usage in UI unclear.</td></tr>
+      <tr><td><code>workTitle</code></td><td>string</td><td class="opt">Required for literature</td><td class="y">Yes</td><td class="y">Yes</td><td>Literature only</td></tr>
+      <tr><td><code>literaryForm</code></td><td>string (enum)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Literature only. 6 values.</td></tr>
+      <tr><td><code>excerpt</code></td><td>text (8 rows)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Literature only</td></tr>
+      <tr><td><code>performer</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Music only</td></tr>
+      <tr><td><code>durationMinutes</code></td><td>number</td><td class="opt">Opt</td><td class="y">Yes</td><td>?</td><td>Music and watch-listen</td></tr>
+      <tr><td><code>audioSource</code></td><td>object (audioFile, audioUrl, externalUrl)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Consolidated audio object. Intended to replace legacy fields.</td></tr>
+      <tr><td><code>craftTradition</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td>?</td><td>food-wine only</td></tr>
+      <tr><td><code>pointsToward</code></td><td>text</td><td class="opt">Opt</td><td class="y">Yes</td><td>?</td><td>food-wine only</td></tr>
+      <tr><td><code>creationTheology</code></td><td>text</td><td class="opt">Opt</td><td class="y">Yes</td><td>?</td><td>landscape only</td></tr>
+      <tr><td><code>mediaType</code></td><td>string (enum)</td><td class="opt">Required for watch-listen</td><td class="y">Yes</td><td class="y">Yes</td><td>video, podcast, documentary, lecture</td></tr>
+      <tr><td><code>mediaUrl</code></td><td>url</td><td class="opt">Required for watch-listen</td><td class="y">Yes</td><td class="y">Yes</td><td>External link</td></tr>
+      <tr><td><code>series</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td>?</td><td>watch-listen only</td></tr>
+      <tr><td><code>discipline</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td>?</td><td>math-science only. Free text.</td></tr>
+      <tr><td><code>principle</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td>?</td><td>math-science only. Free text.</td></tr>
+      <tr><td><code>beautyConnection</code></td><td>text</td><td class="opt">Opt</td><td class="y">Yes</td><td>?</td><td>math-science only</td></tr>
+      <tr><td><code>reflectionQuestions</code></td><td>array of string</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td><strong>Near-duplicate of journeyDay.reflectQuestions.</strong> Singular/plural split.</td></tr>
+      <tr><td><code>curatorNote</code></td><td>text (3 rows)</td><td class="opt">Opt</td><td class="y">Yes</td><td>Partial</td><td><strong>Rendering bug:</strong> rendered on Journey Day; <em>fetched but not rendered</em> on Pause &amp; Ponder.</td></tr>
+      <tr><td><code>curatorNoteAudio</code></td><td>file</td><td class="opt">Opt</td><td class="y">Yes</td><td>Partial</td><td>Same rendering asymmetry as curatorNote</td></tr>
+      <tr><td><code>traditionalPrayer</code></td><td>text (6 rows)</td><td class="opt">Opt</td><td class="y">Yes (via getArtworkById only)</td><td class="y">Yes</td><td>Visio Divina Pray step</td></tr>
+      <tr><td><code>traditionalPrayerSource</code></td><td>string</td><td class="opt">Opt</td><td class="n">No</td><td class="y">Yes</td><td><strong>BUG:</strong> Rendered at <code>app/pray/[artworkId]/page.tsx:486</code> but missing from <code>getArtworkById</code> GROQ projection. Will always be undefined.</td></tr>
+      <tr><td><code>traditionReflections</code></td><td>array of refs → traditionReflection</td><td class="opt">Opt</td><td>Partial</td><td class="y">Yes (Visio Divina only)</td><td>Only pulled by <code>getArtworkById</code>. Not in main <code>CONTENT_ITEM_FIELDS</code> fragment, so not available on Journey or P&amp;P.</td></tr>
+      <tr><td><code>locationName</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Explore map</td></tr>
+      <tr><td><code>city</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Explore map</td></tr>
+      <tr><td><code>country</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Explore map</td></tr>
+      <tr><td><code>coordinates</code></td><td>object (lat, lng)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Explore map</td></tr>
+      <tr><td><code>locationType</code></td><td>string (hidden)</td><td class="opt">Legacy</td><td class="n">No</td><td class="n">No</td><td><strong>Legacy.</strong> Replaced by contentType. Still on disk for old records.</td></tr>
+      <tr><td><code>historicalSummary</code></td><td>text (hidden)</td><td class="opt">Legacy</td><td>Partial (getArtworkById)</td><td>?</td><td><strong>Legacy.</strong> Replaced by context. Still projected by Visio Divina query for backward compat.</td></tr>
+      <tr><td><code>order</code></td><td>number (hidden)</td><td class="opt">Legacy</td><td class="n">No</td><td class="n">No</td><td><strong>Dead.</strong> Hidden in Studio, not in any GROQ query, not rendered. Candidate for removal.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>journey <span class="priority-tag p3">Document</span></h3>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Req?</th><th>In GROQ?</th><th>Rendered?</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>title</code></td><td>string</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>slug</code></td><td>slug</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>theme</code></td><td>reference → theme</td><td class="req">Req</td><td class="y">Yes</td><td>?</td><td>Theme pill removed from journey cards per April 13 update; still queried.</td></tr>
+      <tr><td><code>description</code></td><td>text (4 rows)</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>heroImage</code></td><td>image</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td>Convention: = Day 1 artwork</td></tr>
+      <tr><td><code>estimatedMinutesPerDay</code></td><td>number</td><td class="opt">Opt (default 10)</td><td class="y">Yes</td><td>?</td><td>Queried but I did not verify it is rendered anywhere</td></tr>
+      <tr><td><code>isPublished</code></td><td>boolean</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Filter in <code>getJourneys</code> (<code>isPublished == true</code>)</td></tr>
+      <tr><td><code>order</code></td><td>number</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Sort order on Journeys tab</td></tr>
+      <tr><td><code>days[]</code></td><td>array of inline object <code>journeyDay</code></td><td class="req">Req (min 1, max 9)</td><td class="y">Yes</td><td class="y">Yes</td><td>See journeyDay table below</td></tr>
+      <tr><td><code>plannedDays[]</code></td><td>array of inline object <code>plannedDay</code></td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Greyed-out future-day placeholders</td></tr>
+      <tr><td><code>totalDays</code></td><td>number</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Added April 13. Falls back to <code>count(days)</code> via coalesce.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>journeyDay <span class="priority-tag p1">Inline object (not a document)</span></h3>
+  <div class="warn-block">
+    <div class="warn-label">Architectural note</div>
+    <code>journeyDay</code> is not registered in <code>schemaTypes/index.ts</code>. It is an inline <code>object</code> inside <code>journey.days[]</code>. Implications: no stable <code>_id</code>, cannot query <code>*[_type == "journeyDay"]</code>, cannot be referenced from other documents, cannot be deep-linked except via the <code>?day=N</code> URL param on the parent journey.
+  </div>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Req?</th><th>In GROQ?</th><th>Rendered?</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>dayNumber</code></td><td>number (1–9)</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>dayTitle</code></td><td>string</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>openImage</code></td><td>image</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td>Day 1 step hero</td></tr>
+      <tr><td><code>openText</code></td><td>text (3 rows)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>openTextAudio</code></td><td>file</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>TTS-candidate</td></tr>
+      <tr><td><code>encounterContent</code></td><td>reference → contentItem</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>encounterGuidance</code></td><td>text (3 rows)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>encounterNote</code></td><td>text (5 rows)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Rendered as "Look Closer"</td></tr>
+      <tr><td><code>encounterNoteAudio</code></td><td>file</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>TTS-candidate</td></tr>
+      <tr><td><code>auditio</code></td><td>object (6 subfields)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Subfields: title, composer, licensingNote, audioFile, audioUrl, externalUrl. <strong>Different shape from dailyPrompt.auditio.</strong></td></tr>
+      <tr><td><code>lectio</code></td><td>object (5 subfields)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Subfields: philosophyQuote, philosophySource, scriptureVerse, scriptureReference, connectionNote. <strong>Different subfield names from dailyPrompt.lectio</strong> (philosophyText, philosophyAttribution, text, attribution).</td></tr>
+      <tr><td><code>reflectQuestions</code></td><td>array of string</td><td class="req">Req (min 1, max 2)</td><td class="y">Yes</td><td class="y">Yes</td><td><strong>Near-duplicate of contentItem.reflectionQuestions.</strong></td></tr>
+      <tr><td><code>connectThread</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>goDeeper</code></td><td>array of refs → traditionReflection</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+    </tbody>
+  </table>
+
+  <h3>dailyPrompt <span class="priority-tag p3">Document</span></h3>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Req?</th><th>In GROQ?</th><th>Rendered?</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>date</code></td><td>date</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>content</code></td><td>reference → contentItem</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>promptQuestion</code></td><td>text (2 rows)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>curatorNote</code></td><td>text (3 rows)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td><strong>Same name as contentItem.curatorNote.</strong> Both exist. Both are queried for the P&amp;P page; only this one renders.</td></tr>
+      <tr><td><code>curatorNoteAudio</code></td><td>file</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Same duplication as above</td></tr>
+      <tr><td><code>lectio</code></td><td>object (4 subfields)</td><td class="opt">Opt (text required)</td><td class="y">Yes</td><td class="y">Yes</td><td>Subfields: philosophyText, philosophyAttribution, text, attribution. Subfield <code>text</code> is required but the parent object is optional.</td></tr>
+      <tr><td><code>auditio</code></td><td>object (6 subfields)</td><td class="opt">Opt (title required)</td><td class="y">Yes</td><td class="y">Yes</td><td>Subfields: title, artist, audioUrl (nested object!), url, verbaOriginal. The nested <code>audioUrl</code> is confusing — it is an object containing <code>audioFile</code> (file) + <code>audioUrl</code> (string).</td></tr>
+      <tr><td><code>actio</code></td><td>text (3 rows)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>relatedJourney</code></td><td>reference → journey</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>Quiet CTA at bottom of P&amp;P</td></tr>
+      <tr><td><code>theme</code></td><td>reference → theme</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+    </tbody>
+  </table>
+
+  <h3>traditionReflection <span class="priority-tag p3">Document</span></h3>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Req?</th><th>In GROQ?</th><th>Rendered?</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>authorType</code></td><td>string (enum, radio)</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td>7 values: church-father, saint, pope, doctor, theologian, mystic, philosopher. <strong>CLAUDE.md manual task 36 is stale — these values already exist.</strong> Radio layout means single-select only.</td></tr>
+      <tr><td><code>title</code></td><td>string</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>summary</code></td><td>text (4 rows)</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>reflectionAudio</code></td><td>file</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>TTS-candidate</td></tr>
+      <tr><td><code>shortQuote</code></td><td>string</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>source</code></td><td>string</td><td class="req">Req</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>themes</code></td><td>array of refs → theme</td><td class="opt">Opt</td><td>Partial</td><td class="y">Yes</td><td>Pulled in <code>getTraditionReflections</code>, NOT in <code>getArtworkById.traditionReflections</code> or <code>getJourney.goDeeper</code>. Inconsistent.</td></tr>
+      <tr><td><code>theme</code></td><td>string (hidden, legacy)</td><td class="opt">Legacy</td><td class="y">Yes</td><td class="n">No</td><td><strong>Legacy.</strong> Still queried by <code>getTraditionReflections</code>. Replaced by <code>themes</code> array.</td></tr>
+      <tr><td><code>order</code></td><td>number</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td/></tr>
+      <tr><td><code>era</code></td><td>string (enum)</td><td class="opt">Opt</td><td class="y">Yes</td><td class="y">Yes</td><td>3 values: fathers, medieval, modern. <strong>Missing "ancient" — CLAUDE.md manual task 37 is valid.</strong> Also: different vocabulary from <code>contentItem.era</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>splashPage <span class="priority-tag p3">Document</span></h3>
+  <p>Used by the older splash/onboarding flow. 19 fields, all used by <code>getSplashPages</code> and rendered by splash components. No duplication concerns, no known bugs. Healthy.</p>
+
+  <h3>episode <span class="priority-tag p2">Document (deprecated, hidden)</span></h3>
+  <p>15 fields including <code>ewtnPlusUrl</code>, <code>youtubeUrl</code>, <code>artworks[]</code>. <strong>No GROQ query in <code>lib/sanity.ts</code> reads <code>_type == "episode"</code>.</strong> Existing episode documents in Sanity are orphaned from the app entirely. The schema is registered so the documents are not lost, but nothing surfaces them.</p>
+
+  <h3>Unregistered file: <code>artwork.ts</code> <span class="priority-tag p2">Dead code</span></h3>
+  <p>The file <code>sanity/schemaTypes/artwork.ts</code> exists but is not imported or exported from <code>index.ts</code>. It is not loaded into the Studio. However, two GROQ queries in <code>lib/sanity.ts</code> (<code>getContentItemById</code>, <code>getArtworkById</code>) still include <code>_type in ["contentItem", "artwork"]</code> to support legacy records — so if any documents with <code>_type: "artwork"</code> exist in Sanity, they are readable but no longer editable in the Studio. This is a latent data hazard.</p>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>1b. Cross-Schema Duplicate Detection</h2>
+
+  <h3>Fields with the exact same name across multiple schemas</h3>
+  <table>
+    <thead><tr><th>Field name</th><th>Schemas</th><th>Duplicate type</th><th>Concern?</th></tr></thead>
+    <tbody>
+      <tr><td><code>title</code></td><td>contentItem, journey, theme, splashPage, traditionReflection, episode</td><td>Ubiquitous</td><td>No — scoped to document, standard</td></tr>
+      <tr><td><code>description</code></td><td>contentItem, journey, theme, splashPage</td><td>Ubiquitous</td><td>No — scoped, standard</td></tr>
+      <tr><td><code>order</code></td><td>contentItem (legacy/hidden), journey, theme, traditionReflection</td><td>Ubiquitous</td><td>No — scoped display sort</td></tr>
+      <tr><td><code>slug</code></td><td>journey, theme</td><td>Ubiquitous</td><td>No</td></tr>
+      <tr><td><code>curatorNote</code></td><td>contentItem, dailyPrompt</td><td><strong>Real duplicate</strong></td><td><strong>YES</strong> — editorial trap. Same concept, two places. contentItem's is fetched but not rendered on P&amp;P.</td></tr>
+      <tr><td><code>curatorNoteAudio</code></td><td>contentItem, dailyPrompt</td><td><strong>Real duplicate</strong></td><td>Same as above</td></tr>
+      <tr><td><code>themes</code></td><td>contentItem, traditionReflection</td><td>Identical shape + purpose</td><td>Low — both used consistently; good standardization</td></tr>
+      <tr><td><code>theme</code> (reference)</td><td>journey, dailyPrompt</td><td>Identical shape + purpose</td><td>Low</td></tr>
+      <tr><td><code>theme</code> (string, legacy)</td><td>traditionReflection</td><td>Legacy field, same name as the reference above</td><td>Low (hidden) but confusing — two fields share the name across schemas</td></tr>
+      <tr><td><code>era</code></td><td>contentItem, traditionReflection</td><td><strong>Same name, different vocabularies</strong></td><td>Medium — contentItem has 6 values (ancient, patristic, medieval, renaissance, modern, contemporary); traditionReflection has 3 (fathers, medieval, modern). Reports asking for "Renaissance" thinkers and "Renaissance" reflections can't unify.</td></tr>
+      <tr><td><code>auditio</code></td><td>journeyDay, dailyPrompt</td><td><strong>Same name, different shapes</strong></td><td><strong>HIGH</strong> — one dashboard/export/TTS script cannot treat them uniformly. See detail below.</td></tr>
+      <tr><td><code>lectio</code></td><td>journeyDay, dailyPrompt</td><td><strong>Same name, different subfield names</strong></td><td><strong>HIGH</strong> — see detail below</td></tr>
+      <tr><td><code>quote</code></td><td>contentItem (object), splashPage (text)</td><td>Same name, different types</td><td>Low — splashPage is a rendering-only config doc</td></tr>
+      <tr><td><code>heroImage</code></td><td>journey, splashPage, episode</td><td>Same shape, different contexts</td><td>Low</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Near-duplicate names (one letter apart)</h3>
+  <table>
+    <thead><tr><th>Fields</th><th>Schemas</th><th>Concern</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>reflectionQuestions</code> vs <code>reflectQuestions</code></td>
+        <td>contentItem vs journeyDay</td>
+        <td><strong>Typo hazard.</strong> Identical purpose (1–2 reflection questions), parallel screens, but the singular/plural split is invisible in the Studio. A migration script writing <code>reflectionQuestions</code> on a journey day (or vice versa) would silently fail.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Parallel slots across <code>contentItem</code> and <code>journeyDay</code></h3>
+  <p>This is the editorial trap the brief is pointing at. Same conceptual content, different field names, both rendered together on the Journey Day screen.</p>
+  <table>
+    <thead><tr><th>contentItem slot</th><th>journeyDay slot</th><th>Rendered together?</th><th>What goes wrong</th></tr></thead>
+    <tbody>
+      <tr><td><code>image</code></td><td><code>openImage</code></td><td>No (openImage on Step 1, image on Step 2)</td><td>Editor may upload the same image to both. Low cost.</td></tr>
+      <tr><td><code>curatorNote</code></td><td><code>openText</code> + <code>encounterGuidance</code></td><td>Yes — all three render on the Encounter step</td><td>Editor hook written in openText bleeds into encounterGuidance bleeds into curatorNote. User reads the same framing three times.</td></tr>
+      <tr><td><code>context</code></td><td><code>encounterNote</code></td><td><strong>Yes — both render on Encounter step, stacked</strong></td><td>The "history / why this matters" on the content item repeats under "Look Closer" on the day. This is the biggest editorial risk.</td></tr>
+      <tr><td><code>reflectionQuestions</code></td><td><code>reflectQuestions</code></td><td>Only one of the two renders in the Journey Day UI (verify which — <code>reflectQuestions</code> is the one defined on the day)</td><td>Questions entered on the content item do not appear on that day's Reflect step. Silent.</td></tr>
+      <tr><td><code>traditionReflections</code></td><td><code>goDeeper</code></td><td>Partial — Visio Divina reads content.traditionReflections; Journey reads day.goDeeper</td><td>Editor adds TRs to the content item expecting them to appear in Journey Go Deeper. They don't.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Detail: lectio shape divergence</h3>
+  <table>
+    <thead><tr><th>Subfield intent</th><th>journeyDay.lectio</th><th>dailyPrompt.lectio</th></tr></thead>
+    <tbody>
+      <tr><td>Philosophy quote</td><td><code>philosophyQuote</code></td><td><code>philosophyText</code></td></tr>
+      <tr><td>Philosophy attribution</td><td><code>philosophySource</code></td><td><code>philosophyAttribution</code></td></tr>
+      <tr><td>Scripture quote</td><td><code>scriptureVerse</code></td><td><code>text</code> (required)</td></tr>
+      <tr><td>Scripture attribution</td><td><code>scriptureReference</code></td><td><code>attribution</code></td></tr>
+      <tr><td>Editorial connection note</td><td><code>connectionNote</code></td><td>—</td></tr>
+    </tbody>
+  </table>
+  <p>Same concept, five different subfield names, one extra field on journeyDay. A dashboard that wants to inventory "all lectio pairings" must special-case both shapes.</p>
+
+  <h3>Detail: auditio shape divergence</h3>
+  <table>
+    <thead><tr><th>Subfield intent</th><th>journeyDay.auditio</th><th>dailyPrompt.auditio</th></tr></thead>
+    <tbody>
+      <tr><td>Title</td><td><code>title</code></td><td><code>title</code> (required)</td></tr>
+      <tr><td>Composer / artist</td><td><code>composer</code></td><td><code>artist</code></td></tr>
+      <tr><td>Licensing note</td><td><code>licensingNote</code></td><td>—</td></tr>
+      <tr><td>Audio file</td><td><code>audioFile</code> (file)</td><td><code>audioUrl.audioFile</code> (nested!)</td></tr>
+      <tr><td>Direct URL</td><td><code>audioUrl</code> (string)</td><td><code>audioUrl.audioUrl</code> (nested!)</td></tr>
+      <tr><td>External link</td><td><code>externalUrl</code></td><td><code>url</code></td></tr>
+      <tr><td>Verba / lyrics</td><td>—</td><td><code>verbaOriginal</code></td></tr>
+    </tbody>
+  </table>
+  <p>The <code>dailyPrompt.auditio.audioUrl</code> is an object named "audioUrl" that contains an <code>audioUrl</code> string inside it. Documented in the GROQ query. Confusing to reason about; one path change breaks the whole pipeline.</p>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>1c. GROQ Query Trace</h2>
+
+  <p>For each shared or suspicious field, this table shows which query reads it and which UI actually renders it.</p>
+
+  <table>
+    <thead><tr><th>Field</th><th>Owning schema</th><th>Fetched by</th><th>Rendered at</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td><code>curatorNote</code></td><td>contentItem</td><td><code>CONTENT_ITEM_FIELDS</code> (used by everything)</td><td>Journey Day: <code>components/JourneyDaySteps.tsx:456</code>. Visio Divina: NOT rendered. P&amp;P: NOT rendered.</td><td><strong>Rendering asymmetry.</strong> Same field, same query, shown on Journey Day only.</td></tr>
+      <tr><td><code>curatorNote</code></td><td>dailyPrompt</td><td><code>DAILY_PROMPT_FIELDS</code></td><td>P&amp;P: <code>app/prompt/PromptClient.tsx:418</code></td><td>Displayed. This is the one users see on P&amp;P.</td></tr>
+      <tr><td><code>context</code></td><td>contentItem</td><td><code>CONTENT_ITEM_FIELDS</code></td><td>Journey Day: line 473. P&amp;P: line 459. Visio Divina: line unknown but pulled.</td><td>Consistent.</td></tr>
+      <tr><td><code>encounterNote</code></td><td>journeyDay (inline)</td><td><code>getJourney</code></td><td>Journey Day: <code>JourneyDaySteps.tsx:536</code></td><td>Only pulled/rendered on Journey.</td></tr>
+      <tr><td><code>reflectionQuestions</code></td><td>contentItem</td><td><code>CONTENT_ITEM_FIELDS</code>, <code>getArtworkById</code></td><td>Visio Divina only (Reflect step)</td><td>NOT rendered on Journey Day reflect step (that uses <code>reflectQuestions</code>).</td></tr>
+      <tr><td><code>reflectQuestions</code></td><td>journeyDay (inline)</td><td><code>getJourney</code></td><td>Journey Day reflect step</td><td>OK — different render path from reflectionQuestions.</td></tr>
+      <tr><td><code>traditionalPrayer</code></td><td>contentItem</td><td><code>getArtworkById</code> ONLY</td><td>Visio Divina Pray step</td><td>Works.</td></tr>
+      <tr><td><code>traditionalPrayerSource</code></td><td>contentItem</td><td><strong>NOT projected anywhere</strong></td><td>Visio Divina Pray step: <code>app/pray/[artworkId]/page.tsx:486</code></td><td><strong>BUG.</strong> Rendered but never fetched — always undefined.</td></tr>
+      <tr><td><code>traditionReflections</code></td><td>contentItem (array of refs)</td><td><code>getArtworkById</code> only</td><td>Visio Divina Go Deeper</td><td>Not available on Journey/P&amp;P — Journey uses its own <code>day.goDeeper</code>.</td></tr>
+      <tr><td><code>lectio</code></td><td>journeyDay (inline)</td><td><code>getJourney</code> (5 subfields projected)</td><td>Journey Day Lectio layer</td><td>Works.</td></tr>
+      <tr><td><code>lectio</code></td><td>dailyPrompt</td><td><code>DAILY_PROMPT_FIELDS</code> (projected as whole object)</td><td>P&amp;P Lectio section</td><td>Works.</td></tr>
+      <tr><td><code>auditio</code></td><td>journeyDay (inline)</td><td><code>getJourney</code></td><td>Journey Day audio player</td><td>Works.</td></tr>
+      <tr><td><code>auditio</code></td><td>dailyPrompt</td><td><code>DAILY_PROMPT_FIELDS</code></td><td>P&amp;P audio player</td><td>Works.</td></tr>
+      <tr><td><code>themes</code></td><td>contentItem</td><td><code>CONTENT_ITEM_FIELDS</code></td><td>Explore filter</td><td>Works.</td></tr>
+      <tr><td><code>themes</code></td><td>traditionReflection</td><td><code>getTraditionReflections</code> ONLY</td><td>Go Deeper filter (theme-based)</td><td>NOT pulled by Journey <code>goDeeper</code> or Visio Divina TR projections — so TR theme filter only works in standalone list context.</td></tr>
+      <tr><td><code>theme</code> (legacy string)</td><td>traditionReflection</td><td><code>getTraditionReflections</code></td><td>Not rendered</td><td>Dead. Pulled but unused.</td></tr>
+      <tr><td><code>audioSource</code></td><td>contentItem (object)</td><td><code>CONTENT_ITEM_FIELDS</code> (3 subfields aliased out)</td><td>Music content item player</td><td>Works.</td></tr>
+      <tr><td>Legacy <code>musicUrl</code>, <code>audioFile</code></td><td>contentItem (not in current schema file — left over)</td><td><code>CONTENT_ITEM_FIELDS</code> projects them</td><td>Music player fallback</td><td>Kept for backward compat. Schema file no longer defines them; they exist only in older documents.</td></tr>
+      <tr><td><code>historicalSummary</code></td><td>contentItem (legacy, hidden)</td><td><code>getArtworkById</code></td><td>Visio Divina fallback</td><td>Kept for legacy documents. Candidate for cleanup after data migration.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>1d. Dead Fields</h2>
+
+  <p>Fields defined in the schema that are never pulled by any GROQ query in <code>lib/sanity.ts</code>. Grouped by severity.</p>
+
+  <h3>Active bugs — rendered by UI but not fetched <span class="priority-tag p1">Priority 1</span></h3>
+  <ul>
+    <li><code>contentItem.traditionalPrayerSource</code> — rendered at <code>app/pray/[artworkId]/page.tsx:486</code>. Missing from <code>getArtworkById</code> GROQ projection. The attribution will never appear.</li>
+  </ul>
+
+  <h3>Fields defined but not projected or rendered <span class="priority-tag p2">Priority 2</span></h3>
+  <ul>
+    <li><code>contentItem.order</code> — hidden, no query, no render. Candidate for removal.</li>
+    <li><code>contentItem.locationType</code> — legacy, hidden, no query, no render. Candidate for removal once legacy data migrated.</li>
+    <li><code>contentItem.historicalSummary</code> — legacy, hidden, only used by <code>getArtworkById</code>. Candidate for removal once Visio Divina doesn't need the fallback.</li>
+    <li><code>traditionReflection.theme</code> (legacy string) — still pulled by <code>getTraditionReflections</code> but the field is hidden in Studio and replaced by <code>themes</code>. Remove from query or remove field.</li>
+  </ul>
+
+  <h3>Fields projected inconsistently <span class="priority-tag p2">Priority 2</span></h3>
+  <ul>
+    <li><code>traditionReflection.themes</code> — pulled in <code>getTraditionReflections</code> but NOT in the <code>goDeeper</code> projection of <code>getJourney</code> or the <code>traditionReflections</code> projection of <code>getArtworkById</code>. Any dashboard or UI that wants to group TRs by theme from those contexts will get empty arrays.</li>
+    <li><code>contentItem.traditionReflections</code> — pulled only in <code>getArtworkById</code>. Not in <code>CONTENT_ITEM_FIELDS</code>. So Journey content cannot expose content-level Go Deeper references; only Visio Divina can.</li>
+    <li><code>contentItem.era</code>, <code>tradition</code>, <code>discipline</code>, <code>principle</code>, <code>series</code>, <code>craftTradition</code>, <code>pointsToward</code>, <code>creationTheology</code>, <code>beautyConnection</code>, <code>durationMinutes</code> — all projected by <code>CONTENT_ITEM_FIELDS</code> but I did not verify their render paths in the UI audit. They may be displayed only on certain content types; worth spot-checking during content inventory.</li>
+  </ul>
+
+  <h3>Schemas and files with no usage <span class="priority-tag p2">Priority 2</span></h3>
+  <ul>
+    <li><code>sanity/schemaTypes/artwork.ts</code> — file exists, not registered in <code>index.ts</code>. Pure dead code. Recommend: delete.</li>
+    <li><code>episode</code> schema — registered in <code>index.ts</code> but no GROQ query reads it. Studio still shows existing documents; the app ignores them. Recommend: either migrate episode data to <code>contentItem</code> records or unregister the schema.</li>
+  </ul>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>1e. Recommendations</h2>
+
+  <p>Grouped by priority. Nothing in this section has been implemented. Each recommendation includes what to change, why, and what breaks if it is left alone.</p>
+
+  <h3 style="color:#c25555;">Must fix before companion journeys are built (Priority 1)</h3>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R1</span><span class="rec-title">Decide the canonical location for <code>curatorNote</code> and fix the rendering asymmetry</span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Either (a) delete <code>contentItem.curatorNote</code> and <code>contentItem.curatorNoteAudio</code> and make <code>dailyPrompt.curatorNote</code> + per-day curator voice the only home for today's editorial framing, OR (b) render <code>content.curatorNote</code> on P&amp;P when <code>prompt.curatorNote</code> is absent (fallback chain), so the field has a predictable meaning regardless of where it is entered.</p>
+      <span class="label">Why</span>
+      <p>Editors don't know that <code>contentItem.curatorNote</code> is silently ignored on P&amp;P. The CLAUDE.md rule "Curator Note = the hook, lives here and ONLY here" implies one slot; the schema has two. Companion journeys will multiply this drift.</p>
+      <span class="label">Risk if untouched</span>
+      <p>Content authored on the content item appears on Journey but not on the same item's P&amp;P day. The Lectio standard depends on editors being able to predict where the hook shows up. They can't, today.</p>
+    </div>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R2</span><span class="rec-title">Fix <code>traditionalPrayerSource</code> — add to GROQ projection</span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Add <code>traditionalPrayerSource</code> to the <code>getArtworkById</code> projection in <code>lib/sanity.ts</code>. Three-line fix. Sheri should still approve the change first.</p>
+      <span class="label">Why</span>
+      <p>The UI renders it. The schema defines it. The query does not fetch it. Silent bug.</p>
+      <span class="label">Risk if untouched</span>
+      <p>Traditional prayer attributions never appear on the Visio Divina Pray step, even when entered in Sanity.</p>
+    </div>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R3</span><span class="rec-title">Unify <code>lectio</code> shape across <code>journeyDay</code> and <code>dailyPrompt</code></span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Pick one subfield vocabulary and apply it to both. Recommended: dailyPrompt's (<code>philosophyText</code>, <code>philosophyAttribution</code>, <code>text</code>, <code>attribution</code>) since CLAUDE.md documents it as the Lectio pairing structure. Add <code>connectionNote</code> to dailyPrompt.lectio if the editorial team wants that field there too. Migrate existing journey data. Journey content doc authors will still need a pairing doc explaining the schema.</p>
+      <span class="label">Why</span>
+      <p>Companion journeys will inherit the journey schema. If Lectio is going to be a first-class editorial concept across P&amp;P, Journey, and companion content, its schema should be the same shape in every place. A single GROQ function can then report on all Lectio pairings.</p>
+      <span class="label">Risk if untouched</span>
+      <p>Every dashboard, export, and analysis script must special-case both shapes. The schema documents drift further each time a field is added on one side.</p>
+    </div>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R4</span><span class="rec-title">Unify <code>auditio</code> shape across <code>journeyDay</code> and <code>dailyPrompt</code>, and flatten the nested <code>audioUrl</code></span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Same subfield names on both schemas. Recommended: flat shape <code>{ title, composer, licensingNote, audioFile, audioUrl, externalUrl, verbaOriginal }</code> — taking the clearer parts from each. Eliminate the confusing <code>dailyPrompt.auditio.audioUrl</code> object-with-an-audioUrl-string-inside.</p>
+      <span class="label">Why</span>
+      <p>TTS audits, content inventories, and any future audio-only dashboards need one query path. The nested <code>audioUrl</code> object is a bug magnet.</p>
+      <span class="label">Risk if untouched</span>
+      <p>Same as R3, plus increased risk of query typos during the companion journey build.</p>
+    </div>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R5</span><span class="rec-title">Decide whether <code>journeyDay</code> should become a standalone document schema</span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Currently <code>journeyDay</code> is an inline object. Promote it to a document schema with its own <code>_id</code>, add a <code>journey</code> reference field, and change <code>journey.days</code> to an array of references. This is a schema migration with real data rewrite cost — not a quick fix.</p>
+      <span class="label">Why</span>
+      <p>As a document, days would (a) be queryable independently (<code>*[_type == "journeyDay"]</code>), (b) have stable IDs for deep-linking and analytics, (c) allow content items to reference back to days they appear on, (d) support cross-journey reuse of a day, (e) make Sanity Studio navigation and reuse much stronger. Dashboard Section 1 in Task 3 would be cleaner and faster.</p>
+      <span class="label">Against</span>
+      <p>Migration costs time and has some risk. The current inline design is simpler to author (you see the whole journey in one Studio document). Some teams prefer the nested structure. No rush if companion journeys don't need cross-journey day references.</p>
+      <span class="label">Recommendation</span>
+      <p>Decide in the post-audit working session. If companion journeys will reuse days or need per-day analytics, promote. If companion journeys are fully self-contained, leave as is. Document the decision in CLAUDE.md either way.</p>
+    </div>
+  </div>
+
+  <h3 style="color:#a06010;">Should fix soon (Priority 2)</h3>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R6</span><span class="rec-title">Rename <code>reflectQuestions</code> to <code>reflectionQuestions</code> on <code>journeyDay</code></span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Align the field names. Requires schema change + data migration + component update + seed script updates.</p>
+      <span class="label">Why</span>
+      <p>The one-letter-apart split is a pure typo hazard. No editorial or UX justification for the difference.</p>
+      <span class="label">Risk if untouched</span>
+      <p>Every new content doc, seed script, and dashboard is a chance to ship a bug.</p>
+    </div>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R7</span><span class="rec-title">Align <code>era</code> vocabulary across <code>contentItem</code> and <code>traditionReflection</code></span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Pick one list. Recommended superset: ancient, patristic/fathers (unified under one label), medieval, renaissance, modern, contemporary. Apply to both schemas. Add "ancient" to <code>traditionReflection.era</code> (CLAUDE.md manual task 37 already notes this).</p>
+      <span class="label">Why</span>
+      <p>The Go Deeper editorial rule says every journey day should include "one ancient / patristic, one medieval, one modern" voice. Unified vocab makes this reportable; currently it is not.</p>
+      <span class="label">Risk if untouched</span>
+      <p>Dashboard era breakdowns will have gaps. Content diversity rules can't be enforced automatically.</p>
+    </div>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R8</span><span class="rec-title">Change <code>traditionReflection.authorType</code> to multi-select</span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Schema currently uses <code>layout: 'radio'</code> (single-select). Change to array-of-string with checkbox layout, preserving the 7 values. Migrate existing records to array-of-one.</p>
+      <span class="label">Why</span>
+      <p>Aquinas is a saint AND a Doctor of the Church. Augustine is a Church Father AND a Doctor. CLAUDE.md Schema Status table flags this. Multi-select supports the reality.</p>
+      <span class="label">Risk if untouched</span>
+      <p>Content authors have to pick one label and lose the other. Dashboards under-count roles.</p>
+    </div>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R9</span><span class="rec-title">Project <code>themes</code> consistently across all tradition reflection queries</span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Add <code>"themes": themes[]->{...}</code> to the <code>goDeeper</code> projection in <code>getJourney</code> and to the <code>traditionReflections</code> projection in <code>getArtworkById</code>. Matches the shape used by <code>getTraditionReflections</code>.</p>
+      <span class="label">Why</span>
+      <p>The theme badge/filter mechanism works in one list context but not in any nested context. Dashboards and any "thinker tagged with theme X" view need this.</p>
+    </div>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R10</span><span class="rec-title">Decide fate of <code>episode</code> schema</span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Either (a) migrate existing episode documents to <code>contentItem</code> with <code>contentType = "watch-listen"</code> and unregister the schema, or (b) keep the schema registered only as a data lifeboat but add a comment saying no app surface reads it.</p>
+      <span class="label">Why</span>
+      <p>Dead schema with live documents is confusing in the Studio sidebar. Either finish the migration or formally accept the data is archival.</p>
+    </div>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R11</span><span class="rec-title">Delete <code>sanity/schemaTypes/artwork.ts</code></span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Remove the file. Keep the <code>_type in ["contentItem", "artwork"]</code> fallback in GROQ for one more release cycle in case legacy artwork documents still exist, then remove that fallback once verified empty.</p>
+      <span class="label">Why</span>
+      <p>Pure dead code. Confusing.</p>
+    </div>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R12</span><span class="rec-title">Document the parallel-slots trap in <code>CLAUDE.md</code></span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Add a section to CLAUDE.md (or CONTENT-RULES.md) that spells out, field by field, where each piece of prose lives: "Hook = <code>dailyPrompt.curatorNote</code> on P&amp;P days, <code>contentItem.curatorNote</code> on Journey days. Historical context = <code>contentItem.context</code>. Look-closer symbolism = <code>journeyDay.encounterNote</code>." Include what NOT to repeat.</p>
+      <span class="label">Why</span>
+      <p>Until the schema is unified, the rule set is the only thing preventing editorial duplication. It should be written down.</p>
+    </div>
+  </div>
+
+  <h3 style="color:#4a7a62;">Can wait (Priority 3)</h3>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R13</span><span class="rec-title">Remove legacy <code>contentItem</code> fields after data migration</span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Audit every published document for non-empty <code>locationType</code>, <code>historicalSummary</code>, <code>order</code>, <code>quote.attribution</code> (legacy subfield), <code>musicUrl</code>, <code>audioFile</code> (top-level legacy). Migrate content forward. Remove fields from schema.</p>
+      <span class="label">Why</span>
+      <p>Reduces schema surface area and Studio clutter. Low risk; no immediate harm if left.</p>
+    </div>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R14</span><span class="rec-title">Remove legacy <code>traditionReflection.theme</code> string field</span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>Remove the hidden legacy field and drop it from <code>getTraditionReflections</code>.</p>
+      <span class="label">Why</span>
+      <p>Replaced by <code>themes</code> array. Still projected in a query, still on disk.</p>
+    </div>
+  </div>
+
+  <div class="rec-block">
+    <div class="rec-header"><span class="rec-num">R15</span><span class="rec-title">Refactor <code>contentItem</code> into type-specific subdocuments (long term)</span></div>
+    <div class="rec-body">
+      <span class="label">What</span>
+      <p>The current single <code>contentItem</code> schema holds fields for all 8 content types with <code>hidden</code> conditionals. Consider splitting into per-type schemas (<code>sacredArtItem</code>, <code>thinkerItem</code>, <code>musicItem</code>, …) with a shared base.</p>
+      <span class="label">Why</span>
+      <p>Reduces field count per document (~40 now), removes the need for conditional-required validations, and lets each type have its own Studio UI. Photography (pending manual task 36) could be added as a ninth type cleanly.</p>
+      <span class="label">Against</span>
+      <p>Large refactor. Breaks existing queries. Explore's unified content feed would need type-fanout. Not urgent.</p>
+      <span class="label">Recommendation</span>
+      <p>Defer. Revisit after companion journeys ship or if the unified model starts producing bugs.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <h2>Open Questions for Sheri</h2>
+  <ul>
+    <li>R1 — which direction for <code>curatorNote</code>? (Single home on dailyPrompt, or fallback chain?) This decides a rename and a UI change.</li>
+    <li>R5 — promote <code>journeyDay</code> to a document, or accept inline permanently? This decides how Task 3's dashboard is built.</li>
+    <li>R10 — keep or retire <code>episode</code>?</li>
+    <li>R15 — is the 8-in-1 <code>contentItem</code> schema causing pain now, or only theoretical? (Leaves the recommendation as defer-by-default.)</li>
+  </ul>
+
+  <div class="success-block">
+    <div class="suc-label">Next session</div>
+    Review this audit. Pick which recommendations to implement. Each is scoped as an independent working session — most are 30–60 minutes with an <code>npm run build</code> between every step per CLAUDE.md's rules. R5 is the biggest and should be scheduled deliberately.
+  </div>
+
+  <p style="margin-top:32px; font-size:11px; color:#8a7a6a; font-style:italic;">Audit conducted April 23, 2026. Read-and-report only. No schema, code, or Sanity data was modified during this session.</p>
+
+</div>
+</body>
+</html>

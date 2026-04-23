@@ -54,6 +54,10 @@ Never delete rewrites. Keep the original in a collapsed/hidden block with a labe
 - **"(paraphrased)" is a red flag.** If a quote needs to be labeled paraphrased in published copy, it should not appear as a quote. Either find the real quote, or summarize it in prose without quotation marks.
 - When in doubt, cite the source document (book, speech, interview) so it can be verified.
 
+## Cross-Reference Rule
+
+**When editing any sentence, verify impact on all other fields before saving.** A sentence rarely exists in isolation. Check: does another field reference this fact, date, name, or idea? Does removing it leave a reference hanging? Does changing it contradict something downstream? The Melencolia I/II case is the pattern: removing "he never made Melencolia II" from the curator note left "In 1514, the same year he made Melencolia I, his mother died" without the context that gave the "I" its meaning. Before any edit is confirmed, read the other fields with the change in mind.
+
 ## Specificity Rules
 
 - **Never use vague references.** "A monk in the 13th century" is not acceptable if you can name the monk. Name the person, or give enough context that the reader can understand without needing to know who you mean. Vague references ask for trust that hasn't been built yet.
@@ -82,8 +86,28 @@ The app has text-to-speech. Users can listen rather than read. This changes the 
 
 **ElevenLabs pacing controls:**
 - Comma: natural breath beat. Use for a short pause mid-sentence.
+- Em dash (—): medium pause, slightly shorter than a period. Also adjusts tone — less final than a period, more of a held beat. **Approved for TTS audio fields only.** Em dashes are banned in visible copy (AI-text tell) but are a valid pacing tool when Sheri is editing audio scripts. Never use in fields the user reads.
 - Ellipsis (...): trailing pause with trailing-off quality. Longer than a comma but softer. Avoid if the copy needs to land firmly — use a period instead.
+- Period: full stop. Longest, most final pause. Use when the sentence needs to land and close.
 - SSML break tag: precise control. `<break time="300ms"/>` inserts an exact pause. Use when neither a comma nor an ellipsis gives the right weight (e.g., a two-word phrase that needs a beat after it without trailing off).
+
+**ElevenLabs pronunciation fixes (confirmed in v2):**
+- "blessed" → reads as "bless-ed" (two syllables). Replace with "blest" in audio fields.
+- "Jesus's" → reads as "Jesuses". Use "Jesus'" (no second s) in audio fields.
+
+**When to pause — the principle behind the punctuation:**
+
+Punctuation paces both the reading eye and the listening ear. The question is not which mark to use — it is whether this moment needs a beat before moving on.
+
+Pause after a short sentence that carries weight. "He never made Melencolia II." is complete. Don't soften it with a comma into the next thought.
+
+Pause inside a long sentence when detail is stacking. "Imagine prisoners who have been chained since birth facing a wall, watching shadows cast by a fire burning behind them, shadows of objects carried past by people they cannot see, or the people who pass along that walkway carrying figures of animals and men." Read it aloud. The listener gets lost before the sentence ends. A comma after "cannot see" gives them back their footing.
+
+Pause before a shift in register. "You can follow beauty. You can follow truth. Goodness works differently." The third sentence changes direction. It needs its own space to land before the story begins.
+
+Pause after a turn. "That is what goodness actually is. Not an achievement. A recognition." Each fragment is doing its own work. Run them together and none of them land.
+
+The test: read the passage aloud slowly. Where you naturally want to breathe, the copy should give you permission to breathe. If the punctuation doesn't match the breath, fix the punctuation.
 
 ## Field-by-Field Rules — The Most Important Section
 
@@ -100,10 +124,50 @@ The major "turn" or connection lands exactly **once**, in the field where it hit
 | **Encounter Note** | 2-3 sentences. Point at one specific thing. Give a fact that lets them feel a connection without being told what to feel. | Explaining the significance. Restating the opening text. |
 | **Encounter Guidance** | One sentence. Tell the user exactly where to look. | Explanation. More than one instruction. |
 | **Lectio Connection Note** | Where the major "turn" lands if held back from the opening text. Short. Let the scripture speak. | Over-explanation. Connections already made in another field. |
-| **Reflect** | Single personal question tied to the emotional core. | Theological framing. Restating the hook as a question. |
+| **Reflect** | Single personal question tied to the emotional core. Short and to the point — the simpler the better. | Theological framing. Restating the hook as a question. Long or multi-part questions. |
 | **Connect Thread** | 2-3 sentences bridging to the next day. Story-first. | Summarizing what just happened. Explaining why today mattered. |
 
+**Connect Thread — what it is and what it is not:**
+
+The Connect Thread carries the journey arc forward, not the artwork backward. It is about where the user is going next in the philosophical or emotional progression — not about the content item they just encountered.
+
+The failure mode: writing a Connect Thread that is about the day's artwork or artist. "Cameron spent her life following the feeling that ordinary things were carrying more than they knew how to say. Four centuries earlier, a German engraver named Albrecht Dürer had the same feeling. He drew it." — this makes the connection between two artists, not between two stages of the arc. It belongs nowhere.
+
+The working version of the same day: "Every beautiful thing is pointing at something. Tomorrow, find out what Augustine of Hippo discovered about where it points." — this carries the arc (beauty points toward truth), names the next step specifically, and creates a reason to continue. The artwork is not mentioned.
+
+The test: could you swap the Connect Thread from one day into any other day without it reading wrong? If yes, it is not doing its job. A Connect Thread should only work for the specific arc move it is bridging.
+
+For multi-day journeys: the Connect Threads across all days should read like a sequence. Each one advances the same through-line. Read them together before finalizing any single one.
+
 **The repetition test:** Read all fields in sequence. Every time the same beat appears twice, cut it from the weaker field. A connection that lands four times lands zero times.
+
+**The read-through test (for content repeat):**
+
+Before finalizing any day, read all fields in sequence as the user will encounter them: Opening Text → Brief Description → Context → Encounter Note → Encounter Guidance → Lectio → Reflect → Connect Thread.
+
+At each field, ask: does the reader already know this? If a fact, image detail, or argument has appeared in any earlier field, it must not appear again unless it is doing new work — arriving at a new angle, a new application, a new emotional register. Restating is not deepening.
+
+The most common repeat offenders: Encounter Note re-explaining what Context established. Connect Thread summarizing what just happened instead of bridging forward. Curator Note retelling the Opening Text.
+
+## The Context Field Standard
+
+The Context field looks like "background information" so it defaults to art history — movement names, technique descriptions, exhibition records, museum collections. This is the museum label failure mode and it is the most common error in KALLOS content writing.
+
+**The benchmark is the Myth Journey Day 1 Context (Eleusinian Mysteries).** That text drops the reader into an ancient world: rites conducted over nine days, the best-kept secret of the ancient world, Cicero's quote, the Church Fathers wrestling with what the pagan rites meant. By the time the reader reaches the artwork, they feel they have entered something real and alive. Every BTG and subsequent journey Context should be written to that standard.
+
+**The museum label test:** Read the Context field aloud. If it sounds like a museum placard, a Wikipedia article, or an art history survey chapter, rewrite it. If it reads like a world the reader has entered, it passes.
+
+**What Context must do:**
+- Give the reader the world the artwork came from: cultural, religious, historical, philosophical
+- Name what was at stake when this was created — the argument, the crisis, the question
+- Connect to the day's theme without over-explaining the connection (let the reader arrive at it)
+
+**What Context must not do:**
+- Summarize technique or medium (unless the technique IS the theological argument — Cameron's blur is an exception because her refusal to correct blur was itself a philosophical claim about beauty)
+- List museum provenance or collection information (this belongs in image sourcing notes only)
+- Read like an encyclopedia entry or art history survey
+
+**Important caveat:** These are defaults, not absolutes. The right approach for a given journey day is Sheri's call only. Some journeys or content types may call for a different register. Journey type categories are being developed — they are not yet named or defined. Until that framework exists, the Myth Journey standard applies unless there is a specific documented reason to depart from it.
 
 ## Lectio Pairing Standard
 
