@@ -7,6 +7,9 @@ import {
   getDashboardAudioStatus,
   getDashboardTTSAudit,
 } from "@/lib/sanity";
+import TRTableClient from "./TRTableClient";
+import ContentItemsClient from "./ContentItemsClient";
+import AudioTableClient from "./AudioTableClient";
 
 // KALLOS content dashboard.
 // Server-rendered, revalidated every 60s, gated by DASHBOARD_ENABLED env var.
@@ -237,13 +240,7 @@ export default async function DashboardPage() {
   // ─── Section 1 data prep ─────────────────────────────────────────────
   const journeysSorted = [...journeys].sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
 
-  // ─── Section 2 data prep — group by type ─────────────────────────────
-  const byContentType: Record<string, ContentItemRow[]> = {};
-  contentItems.forEach((c) => {
-    const k = c.contentType || "(no type)";
-    (byContentType[k] ||= []).push(c);
-  });
-  const contentTypeKeys = Object.keys(byContentType).sort();
+  // Section 2 is now handled client-side by ContentItemsClient (filter/sort).
 
   // ─── Section 3 data prep — thinker map + type breakdown ──────────────
   const trList = trData.list;
@@ -486,7 +483,7 @@ export default async function DashboardPage() {
         })}
 
         {/* ═══ Section 2 — Content Item Library ═══ */}
-        <SectionHeading num={2} title="Content Item Library" note="Grouped by content type. Image and ≥1 theme are required. Red = one or more missing." />
+        <SectionHeading num={2} title="Content Item Library" note="Filter by type, theme, or review status. Click column headers to sort. Image and ≥1 theme are required — red = one or more missing. Amber = REVIEW pending rewrite." />
         {reviewItems.length > 0 && (
           <div className="bg-[#fff5e0] border-l-2 border-[#a06010] p-3 mb-4 text-xs">
             <div className="flex items-baseline gap-3 flex-wrap">
@@ -494,68 +491,12 @@ export default async function DashboardPage() {
                 {reviewItems.length} artworkHook{reviewItems.length === 1 ? "" : "s"} pending rewrite
               </strong>
               <span className="text-[#5a5048]">
-                These content items still hold legacy curator-note text that was flagged REVIEW in the April 24 audit. Rewrite the hook at the artwork level (piece-specific, safe anywhere) and paste into the Artwork Hook field; the legacy curatorNote will clear automatically.
+                These content items still hold legacy curator-note text that was flagged REVIEW in the April 24 audit. Use the &ldquo;REVIEW only&rdquo; filter below to isolate them. Rewrite the hook at the artwork level and paste into the Artwork Hook field; the legacy curatorNote will clear automatically.
               </span>
             </div>
-            <ul className="mt-2 ml-4 list-disc space-y-0.5">
-              {reviewItems.map((c) => (
-                <li key={c._id}>
-                  <span className="text-[#16110d]">{c.title}</span>
-                  <span className="text-[#5a5048]"> — {c.contentType}</span>
-                  {c.journeyTitles && c.journeyTitles.length > 0 && (
-                    <span className="text-[#5a5048]"> · {c.journeyTitles.join(", ")}</span>
-                  )}
-                </li>
-              ))}
-            </ul>
           </div>
         )}
-        {contentTypeKeys.map((t) => (
-          <div key={t} className="mb-5">
-            <div className="bg-[#16110d] text-[#fdf6e8] px-4 py-2 flex items-baseline gap-4">
-              <span className="font-sans text-base">{t}</span>
-              <span className="font-sans text-[11px] text-[#C19B5F] tracking-wider">{byContentType[t].length} items</span>
-            </div>
-            <div className="overflow-x-auto border border-t-0 border-[#e8e0d4]">
-              <table className="w-full text-[11px]">
-                <thead className="bg-[#fdf6e8]">
-                  <tr>
-                    <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Title</th>
-                    <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Byline</th>
-                    <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Era / Year</th>
-                    <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Medium</th>
-                    <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Journey</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Img</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">ArtworkHook</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Context</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Themes</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Audio</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {byContentType[t].map((c) => {
-                    const red = !c.hasImage || c.themeCount === 0;
-                    const byline = c.artist || c.thinkerName || c.author || c.composer || "";
-                    return (
-                      <tr key={c._id} className={`border-b border-[#e8e0d4] ${red ? "bg-[#fdf0f0]" : ""}`}>
-                        <td className="px-2 py-1">{c.title}</td>
-                        <td className="px-2 py-1 text-[#5a5048]">{byline}</td>
-                        <td className="px-2 py-1 text-[#5a5048]">{c.era || c.year || "—"}</td>
-                        <td className="px-2 py-1 text-[#5a5048]">{c.medium || "—"}</td>
-                        <td className="px-2 py-1 text-[#5a5048]">{(c.journeyTitles || []).join(", ") || "—"}</td>
-                        <td className="px-2 py-1 text-center"><Yes value={c.hasImage} /></td>
-                        <td className="px-2 py-1 text-center"><Yes value={c.hasArtworkHook} /></td>
-                        <td className="px-2 py-1 text-center"><Yes value={c.hasContext} /></td>
-                        <td className="px-2 py-1 text-right">{c.themeCount}</td>
-                        <td className="px-2 py-1 text-center"><Yes value={c.hasAudioFile} /></td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        ))}
+        <ContentItemsClient items={contentItems} />
 
         {/* ═══ Section 3 — Tradition Reflection Tracker ═══ */}
         <SectionHeading num={3} title="Go Deeper / Tradition Reflection Tracker" />
@@ -646,42 +587,7 @@ export default async function DashboardPage() {
           ))}
         </div>
 
-        <details className="mt-4 border border-[#e8e0d4]">
-          <summary className="bg-[#fdf6e8] text-[#16110d] px-4 py-2 cursor-pointer font-sans text-sm">Full tradition reflection list ({trList.length})</summary>
-          <div className="p-3 overflow-x-auto">
-            <table className="w-full text-[11px]">
-              <thead className="bg-[#16110d] text-[#fdf6e8]">
-                <tr>
-                  <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Type</th>
-                  <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Era</th>
-                  <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Title</th>
-                  <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Source</th>
-                  <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Summary</th>
-                  <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Audio</th>
-                  <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Themes</th>
-                  <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Journeys</th>
-                </tr>
-              </thead>
-              <tbody>
-                {trList.map((tr) => {
-                  const red = tr.themeCount === 0 || !tr.era;
-                  return (
-                    <tr key={tr._id} className={`border-b border-[#e8e0d4] ${red ? "bg-[#fdf0f0]" : ""}`}>
-                      <td className="px-2 py-1">{tr.authorType || "—"}</td>
-                      <td className="px-2 py-1">{tr.era || <span className="text-[#c25555]">unset</span>}</td>
-                      <td className="px-2 py-1">{tr.title}</td>
-                      <td className="px-2 py-1 text-[#5a5048] max-w-xs truncate">{tr.source || "—"}</td>
-                      <td className="px-2 py-1 text-center"><Yes value={tr.hasSummary} /></td>
-                      <td className="px-2 py-1 text-center"><Yes value={tr.hasAudio} /></td>
-                      <td className="px-2 py-1 text-[#5a5048]">{(tr.themeNames || []).join(", ") || "—"}</td>
-                      <td className="px-2 py-1 text-[#5a5048]">{(tr.journeyTitles || []).join(", ") || "—"}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </details>
+        <TRTableClient trList={trList} />
 
         {/* ═══ Section 4 — Audio Status ═══ */}
         <SectionHeading num={4} title="Audio Status" />
@@ -728,72 +634,9 @@ export default async function DashboardPage() {
 
         <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">Journey day audio</h3>
         <p className="text-[11px] text-[#7a7062] italic mb-2">
-          Six narration slots per day. <code className="text-[10px] bg-[#f0ebe0] px-1">artworkHook</code> and <code className="text-[10px] bg-[#f0ebe0] px-1">context</code> live on the linked content item and reflect that piece&rsquo;s artwork-level narration. <code className="text-[10px] bg-[#f0ebe0] px-1">goDeeper</code> = number of tradition reflections with audio / total linked.
+          Six narration slots per day. <code className="text-[10px] bg-[#f0ebe0] px-1">artworkHook</code> and <code className="text-[10px] bg-[#f0ebe0] px-1">context</code> live on the linked content item. <code className="text-[10px] bg-[#f0ebe0] px-1">goDeeper</code> = count of tradition reflections with audio / total linked. Use the filters to isolate what still needs recording.
         </p>
-        {audioStatus.journeys.map((j) => (
-          <div key={j.slug} className="border border-[#e8e0d4] mb-3">
-            <div className="bg-[#16110d] text-[#fdf6e8] px-4 py-2 font-sans text-sm">{j.title}</div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-[11px]">
-                <thead className="bg-[#fdf6e8]">
-                  <tr>
-                    <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Day</th>
-                    <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Title</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">openText</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">encNote</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">artworkHook</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">context</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">reflectQ</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">auditio</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">goDeeper</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(j.days || []).map((d) => {
-                    const narrationSlots = [
-                      d.hasOpenTextAudio,
-                      d.hasEncNoteAudio,
-                      d.hasArtworkHookAudio,
-                      d.hasContextAudio,
-                      d.hasReflectionQuestionsAudio,
-                    ];
-                    const narrationMissing = narrationSlots.every((v) => !v);
-                    const red = narrationMissing && !d.hasAuditio && (d.goDeeperWithAudio === 0);
-                    const goDeeperCell =
-                      d.goDeeperTotal === 0 ? (
-                        <span className="text-[#9a8d78]">—</span>
-                      ) : (
-                        <span
-                          className={
-                            d.goDeeperWithAudio === d.goDeeperTotal
-                              ? "text-[#4a7a62]"
-                              : d.goDeeperWithAudio === 0
-                              ? "text-[#c25555]"
-                              : "text-[#a06010]"
-                          }
-                        >
-                          {d.goDeeperWithAudio}/{d.goDeeperTotal}
-                        </span>
-                      );
-                    return (
-                      <tr key={d._id ?? d.dayNumber} className={`border-b border-[#e8e0d4] ${red ? "bg-[#fdf0f0]" : ""}`}>
-                        <td className="px-2 py-1 text-right">{d.dayNumber}</td>
-                        <td className="px-2 py-1">{d.dayTitle || "(no title)"}</td>
-                        <td className="px-2 py-1 text-center"><Yes value={d.hasOpenTextAudio} /></td>
-                        <td className="px-2 py-1 text-center"><Yes value={d.hasEncNoteAudio} /></td>
-                        <td className="px-2 py-1 text-center"><Yes value={d.hasArtworkHookAudio} /></td>
-                        <td className="px-2 py-1 text-center"><Yes value={d.hasContextAudio} /></td>
-                        <td className="px-2 py-1 text-center"><Yes value={d.hasReflectionQuestionsAudio} /></td>
-                        <td className="px-2 py-1 text-center"><Yes value={d.hasAuditio} /></td>
-                        <td className="px-2 py-1 text-center font-bold">{goDeeperCell}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        ))}
+        <AudioTableClient journeys={audioStatus.journeys} />
 
         <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">Daily prompt audio</h3>
         <div className="overflow-x-auto border border-[#e8e0d4]">
