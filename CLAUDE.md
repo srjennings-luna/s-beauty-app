@@ -182,6 +182,53 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ Task 5 — dashboard rewritten for post-R5 structure: `getDashboardJourneyCompletion` and `getDashboardAudioStatus` now query `journeyDay` documents directly via `journey._ref`. TR-to-journey traversal updated through the new journeyDay layer. Each day row in Section 1 links directly to its journeyDay Studio document. Genre distribution view added to Section 4 (flags any genre > 40% of total). REVIEW-items banner added to Section 2, automatically detected from data state (items still holding legacy curatorNote). SCHEMA_HEALTH block updated — R1, R5, R6 marked RESOLVED; R3/R4 still open.
 - ✅ Studio deployed twice during the session (intermediate + final). App build passes clean.
 
+## ⏸️ Paused mid-session — Sanity Presentation preview debugging (April 24, 2026 — evening)
+
+**Status at pause:** Preview fully works for **P&P drafts**. Preview for **published** documents of every other type should work after latest deploy but was not confirmed before pause. Draft preview for non-P&P types (journey, journeyDay, contentItem, splashPage) is NOT wired — still shows published content in the iframe.
+
+### What to test first when resuming (5 min check)
+
+Hard-refresh Studio (Cmd+Shift+R), then verify:
+
+1. **P&P draft (known working)** — paste `https://s-beauty-app.vercel.app/prompt/2026-04-30` into Presentation's iframe URL bar. Should show Raphael School of Athens + "Step into a sunlit hall…" curator note + amber PREVIEW MODE banner. Right panel: "Documents on this page" lists the April 30 doc.
+2. **Published journey day** — in Structure open any published journey day (e.g. Bosch Day 5). Wait for "Resolving locations…" to complete. Two links should appear: day-level + journey-level. Click the day link → iframe navigates to `/journeys/[slug]/day/[N]` and renders the day stepper preselected.
+3. **Published contentItem (sacred-art)** — open any sacred-art content item. Link should appear → iframe navigates to `/pray/[id]`.
+
+If any of the above fails, the next step is looking at the browser console inside the iframe for JS errors + checking `mainDocuments` match via Vision tab.
+
+### The debugging that ate the session
+
+Preview plumbing required five separate fixes stacked in sequence:
+1. `@sanity/visual-editing` + `<VisualEditing />` mounted in root layout (via `components/VisualEditingClient.tsx`) — without this, Presentation's postMessage handshake throws "Unable to connect".
+2. CSP `frame-ancestors` expanded to include `https://sanity.io` and `https://*.sanity.io` (not just `*.sanity.studio`) — the hosted workspace serves from `sanity.io`. Deprecated `X-Frame-Options: ALLOW-FROM` removed (some browsers treat it as DENY).
+3. Path-based route `/prompt/[date]` created because Presentation URL-encodes `?` into `%3F` when navigating the iframe. `PromptClient` accepts an `initialDate` prop that forces preview mode.
+4. `perspective: 'previewDrafts'` → `'drafts'` in `previewClient` (Sanity renamed; old name silently returns published-only on apiVersion 2024-01-01+).
+5. `NEXT_PUBLIC_SANITY_TOKEN` in Vercel env vars was **truncated** at ~88 characters — paste the full token from `.env.local`. The truncated token returned 401, client swallowed it silently, fell back to published-only → April 12 instead of April 30.
+
+Latest commit: `de4aa605` — adds path-based `/journeys/[slug]/day/[dayNumber]` alias + updates Presentation `mainDocuments` and `locations` to use path-based URLs everywhere. Studio already redeployed.
+
+### Parked work for next Presentation session
+
+**Full draft-mode wiring for non-P&P types** — the right path to make draft content render live for journey days, content items, and splash pages. Foundation is in place:
+- `@sanity/preview-url-secret` installed
+- `app/api/draft/route.ts` uses canonical `validatePreviewUrl` (not the manually-rolled secret I originally tried, which doesn't work)
+- But the route is currently **orphaned** — Presentation isn't told to call it yet
+
+To flip the switch:
+1. Add `previewMode: { enable: '/api/draft' }` back into `presentationTool` config in `sanity/sanity.config.ts`.
+2. Make the journey `page.tsx` read `(await draftMode()).isEnabled` and call a new `getJourneyPreview(slug)` helper (use `previewClient` not `sanityClient`).
+3. Convert `app/pray/[artworkId]/page.tsx` from its current all-client form into a server wrapper (server reads draftMode, fetches, passes to client). Significant refactor — the page uses `useParams` + its own fetch today.
+4. Same for `app/splash/page.tsx` (lower priority).
+5. Redeploy Studio; test Enable Drafts button flow.
+
+Estimated scope: ~45 min focused session for journey + pray; splash deferrable further.
+
+### Security reminder before launch
+
+`NEXT_PUBLIC_SANITY_TOKEN` is bundled into client JS (visible in any visitor's browser network tab). Before broad release: rotate to a **read-only / viewer-role** token via Sanity manage.sanity.io → API → Tokens, save the new value to Vercel + `.env.local`.
+
+---
+
 ### Phase 2 Work Done (April 24, 2026 — Dashboard Enhancement)
 - ✅ Schema additions (all additive, no migration): `photography` added to `contentItem.contentType` as the 9th option (after `sacred-art`); `ancient` added to `traditionReflection.era` as the first option (before `fathers`); new `reflectionQuestionsAudio` file field on `journeyDay` for Reflect-step narration. Closes Manual Tasks #36 and #37.
 - ✅ Dashboard Section 4 — Journey Day Audio now shows all six narration slots per day (openText, encNote, artworkHook, context, reflectQ, auditio) plus a `goDeeper` column showing count of tradition reflections with audio / total linked. `artworkHook` and `context` audio are pulled from the linked contentItem via ref traversal in GROQ.
