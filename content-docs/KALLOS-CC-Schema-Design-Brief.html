@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KALLOS — Schema Design & Migration Brief</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Georgia', serif; line-height: 1.8; color: #2C2C2C; background: #FFFFFF; }
+    .container { max-width: 900px; margin: 0 auto; padding: 60px 40px 120px; }
+    .cover { background: #16110d; color: #fdf6e8; text-align: center; padding: 60px 40px 48px; margin: -60px -40px 52px; }
+    .cover .label { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #C19B5F; margin-bottom: 16px; }
+    .cover h1 { font-size: 28px; font-weight: 300; letter-spacing: 3px; color: #fdf6e8; margin-bottom: 8px; }
+    .cover .sub { font-size: 14px; color: #bfb8aa; font-style: italic; }
+    .cover .date { font-size: 11px; color: #7a7062; margin-top: 12px; }
+    h2 { font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; color: #C19B5F; margin-top: 48px; margin-bottom: 16px; letter-spacing: 0.2em; text-transform: uppercase; padding-bottom: 8px; border-bottom: 1px solid #e8e0d4; }
+    h3 { font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; color: #16110d; margin: 24px 0 10px; }
+    p { font-size: 14px; margin-bottom: 12px; }
+    ul, ol { margin: 8px 0 14px 24px; font-size: 14px; }
+    li { margin-bottom: 6px; }
+    .context-box { background: #fdf6e8; border-left: 4px solid #C19B5F; padding: 18px 22px; margin: 28px 0; font-size: 14px; line-height: 1.8; }
+    .context-box strong { color: #16110d; }
+    .task-block { border: 1px solid #e8e0d4; margin: 24px 0; }
+    .task-header { background: #16110d; color: #fdf6e8; padding: 12px 20px; display: flex; align-items: baseline; gap: 14px; }
+    .task-num { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C19B5F; flex-shrink: 0; }
+    .task-title { font-size: 16px; font-weight: 300; }
+    .task-body { padding: 18px 22px; }
+    .task-body p { font-size: 14px; margin-bottom: 10px; }
+    .task-body ul, .task-body ol { margin: 8px 0 14px 22px; }
+    .task-body li { font-size: 14px; margin-bottom: 6px; }
+    .output-block { background: #f5f0e8; border-left: 3px solid #C19B5F; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .output-block .out-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #C19B5F; font-weight: 700; margin-bottom: 6px; }
+    .warn-block { background: #fdf0f0; border-left: 3px solid #c25555; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .warn-block .warn-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #c25555; font-weight: 700; margin-bottom: 6px; }
+    .success-block { background: #f0f7f3; border-left: 3px solid #4a7a62; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .success-block .suc-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #4a7a62; font-weight: 700; margin-bottom: 6px; }
+    .decision-box { background: #16110d; color: #fdf6e8; padding: 16px 20px; margin: 16px 0; font-size: 14px; line-height: 1.8; border-left: 4px solid #C19B5F; }
+    .decision-box strong { color: #C19B5F; }
+    code { font-family: 'Courier New', monospace; font-size: 12px; background: #f0ebe0; padding: 2px 6px; }
+    .priority-tag { font-family: Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; margin-left: 8px; }
+    .p1 { background: #fdf0f0; color: #c25555; }
+    .p2 { background: #fff5e0; color: #a06010; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+    th { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #fdf6e8; background: #16110d; text-align: left; padding: 8px 12px; }
+    td { padding: 8px 12px; border-bottom: 1px solid #e8e0d4; vertical-align: top; }
+    tr:nth-child(even) td { background: #fdf6e8; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="cover">
+    <div class="label">Claude Code — Working Brief</div>
+    <h1>KALLOS SCHEMA DESIGN & MIGRATION</h1>
+    <div class="sub">R1 + R5 implementation, field renames, new fields, dashboard update</div>
+    <div class="date">April 2026 — Read CLAUDE.md and KALLOS-CC-Audit-Brief.html before starting</div>
+  </div>
+
+  <div class="context-box">
+    <strong>Prerequisite reading:</strong> Read <code>CLAUDE.md</code> and <code>content-docs/KALLOS-Schema-Audit.html</code> before starting. The schema audit (April 23, 2026) identified all issues this brief addresses. The decisions below were made by Sheri in a Cowork session immediately following the audit. Do not relitigate them — implement them.
+    <br><br>
+    <strong>What this session does:</strong> Four schema changes, one data migration, one field audit with Sheri, and a dashboard update. All changes are interdependent and should be done in the order specified. Do not skip ahead.
+  </div>
+
+  <div class="warn-block">
+    <div class="warn-label">Model</div>
+    Use <strong>Claude Opus 4.6</strong> for this session. This is architecture and data migration work. Use Opus, not Sonnet.
+  </div>
+
+  <div class="context-box">
+    <strong>Working style:</strong> Surface findings and diffs as you go. After each task, show Sheri what changed before proceeding. Pause for her input on the curatorNote audit in Task 2 — that step requires her judgment on each content item. If she does not respond within a couple of minutes on a non-critical point, add it to a flag list and continue.
+  </div>
+
+  <div class="warn-block">
+    <div class="warn-label">Before you start — git commit</div>
+    Run <code>git add -A && git commit -m "Pre-schema-migration checkpoint"</code> before making any changes. This creates a clean rollback point. Confirm the commit succeeded before proceeding.
+  </div>
+
+
+  <!-- ═══════════════════════════════ DECISIONS ═══════════════════════════════ -->
+  <h2>Decisions Made — Do Not Relitigate</h2>
+
+  <div class="decision-box">
+    <strong>R5 — journeyDay promotion:</strong> Promote <code>journeyDay</code> from inline object to standalone document schema. Migrate now while there are only 25 days across 5 journeys. Rationale: removes an architectural ceiling at low cost. If cross-journey day reuse is never needed, nothing is lost. If it is needed, it is already supported.
+  </div>
+
+  <div class="decision-box">
+    <strong>R1 — Three fields, three jobs (Option C):</strong> Rename <code>contentItem.curatorNote</code> to <code>contentItem.artworkHook</code>. Each field has one job and one context:
+    <br><br>
+    <code>contentItem.artworkHook</code> — surprising fact about this specific artwork or piece. Safe to display anywhere the content item appears (Journey, Explore, Library, P&amp;P). Never journey-specific.<br>
+    <code>dailyPrompt.curatorNote</code> — the hook for this specific P&amp;P day. Shown only on P&amp;P. Can differ entirely from the artwork hook.<br>
+    <code>journeyDay.encounterNote</code> — the journey-specific interpretive layer. Shown only in Journey context. Already well-named, no change needed.
+  </div>
+
+
+  <!-- ═══════════════════════════════ ORDER ═══════════════════════════════════ -->
+  <h2>Order of Operations</h2>
+
+  <table>
+    <thead><tr><th>Step</th><th>Task</th><th>Why this order</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>Git checkpoint commit</td><td>Clean rollback point before any changes</td></tr>
+      <tr><td>1</td><td>Task 1 — Promote journeyDay to document</td><td>All subsequent GROQ changes depend on the new structure</td></tr>
+      <tr><td>2</td><td>Task 2 — Rename curatorNote → artworkHook + audit</td><td>Schema is already open; audit while migration is fresh</td></tr>
+      <tr><td>3</td><td>Task 3 — Add new fields (genre, split audio source)</td><td>Additive only — lower risk, fits in the same schema session</td></tr>
+      <tr><td>4</td><td>Task 4 — R6 + rendering bug fixes</td><td>Quick cleanup while schema is in motion</td></tr>
+      <tr><td>5</td><td>Task 5 — Update dashboard for new journeyDay structure</td><td>Dashboard Section 1 needs rewrite post-R5</td></tr>
+      <tr><td>6</td><td>Build, verify, commit, deploy</td><td>Single clean deploy after all changes</td></tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══════════════════════════════ TASK 1 ═══════════════════════════════════ -->
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 1</span>
+      <span class="task-title">Promote journeyDay to standalone document schema <span class="priority-tag p1">R5</span></span>
+    </div>
+    <div class="task-body">
+      <p>Currently <code>journeyDay</code> is an inline object inside <code>journey.days[]</code>. This task promotes it to a first-class document with its own <code>_id</code>, makes it independently queryable, and migrates the 25 existing inline day objects to standalone documents.</p>
+
+      <h3>1a. Create the new journeyDay schema</h3>
+      <p>In <code>sanity/schemaTypes/journeyDay.ts</code> (new file): define <code>journeyDay</code> as a document type with all existing inline fields preserved exactly — no field renames here, just the type promotion. Add one new field: <code>journey</code> (reference to <code>journey</code> document, required). Register in <code>sanity/schemaTypes/index.ts</code>.</p>
+
+      <h3>1b. Update journey schema</h3>
+      <p>In <code>sanity/schemaTypes/journey.ts</code>: change <code>days</code> from <code>array of journeyDay objects</code> to <code>array of references to journeyDay documents</code>. Keep the field name <code>days</code>.</p>
+
+      <h3>1c. Write and run the data migration script</h3>
+      <p>Write a migration script at <code>scripts/migrate-journeydays-to-documents.ts</code>. For each journey, for each inline day object in <code>journey.days[]</code>:</p>
+      <ol>
+        <li>Create a new <code>journeyDay</code> document with all field values copied from the inline object</li>
+        <li>Set the new document's <code>journey</code> reference to the parent journey's <code>_id</code></li>
+        <li>Replace the inline object in <code>journey.days[]</code> with a reference to the new document's <code>_id</code></li>
+      </ol>
+      <p>Run against the production dataset. Verify: after migration, <code>*[_type == "journeyDay"]</code> should return 25 documents. Each parent journey's <code>days</code> array should contain 25 total references across all journeys.</p>
+
+      <h3>1d. Update GROQ queries</h3>
+      <p>In <code>lib/sanity.ts</code>: update every query that accesses journey days. The traversal pattern changes from inline projection (<code>days[]{ ... }</code>) to reference resolution (<code>days[]->{ ... }</code>). Update all 5 named query functions that touch journey day fields. Test each query returns the same shape as before.</p>
+
+      <h3>1e. Update TypeScript types</h3>
+      <p>In <code>lib/types.ts</code>: <code>JourneyDay</code> gains <code>_id: string</code> and <code>journey: { _ref: string }</code>. No other type changes needed for this task.</p>
+
+      <h3>1f. Update seed scripts</h3>
+      <p>Check all files in <code>scripts/</code> that create journey or journey day records. Update to use the new document creation pattern rather than inline object insertion.</p>
+
+      <div class="warn-block">
+        <div class="warn-label">Migration risk</div>
+        Show Sheri the migration plan (which journeys, how many days, what the before/after document structure looks like) before running it. This is the highest-risk step. Pause here.
+      </div>
+
+      <div class="output-block">
+        <div class="out-label">Verify before proceeding to Task 2</div>
+        <ul>
+          <li><code>*[_type == "journeyDay"]</code> returns 25 documents in Sanity</li>
+          <li>All 5 journeys still render correctly in the app locally</li>
+          <li>Dashboard Section 1 still loads (may show degraded data until Task 5)</li>
+          <li><code>npx tsc --noEmit</code> passes clean</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════ TASK 2 ═══════════════════════════════════ -->
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 2</span>
+      <span class="task-title">Rename curatorNote → artworkHook + field audit <span class="priority-tag p1">R1</span></span>
+    </div>
+    <div class="task-body">
+      <p>This task has two parts: the schema/code rename, and an interactive audit of existing content to determine what to do with the 47 records that have content in the old field.</p>
+
+      <h3>2a. Schema rename</h3>
+      <p>In <code>sanity/schemaTypes/contentItem.ts</code>:</p>
+      <ul>
+        <li>Rename field <code>curatorNote</code> → <code>artworkHook</code></li>
+        <li>Rename field <code>curatorNoteAudio</code> → <code>artworkHookAudio</code></li>
+        <li>Update the field title and description in the Studio so it reads: "Artwork Hook — The surprising fact about this specific piece. Safe to show anywhere this piece appears. Must be about the artwork itself, not a journey or day context."</li>
+      </ul>
+      <p>In <code>lib/sanity.ts</code>: update all GROQ projections that reference <code>curatorNote</code> or <code>curatorNoteAudio</code> on contentItem. In <code>lib/types.ts</code>: rename the field on the <code>ContentItem</code> type. In all components: update any reference to <code>content.curatorNote</code>.</p>
+
+      <h3>2b. Interactive content audit — pause here and work with Sheri</h3>
+      <p>Query all 47 content items that have a non-empty <code>curatorNote</code> (now renamed <code>artworkHook</code> in schema, but still old data). For each, display:</p>
+      <ul>
+        <li>Content item title and type</li>
+        <li>First 150 characters of the curator note content</li>
+        <li>Which journey(s) it appears in</li>
+      </ul>
+      <p>Present this list to Sheri 5 items at a time. For each item, ask: <strong>"Is this about the artwork itself (keep as artworkHook), or was it written for a specific journey context (flag for rewrite)?"</strong></p>
+      <p>Tag each record as one of:</p>
+      <ul>
+        <li><strong>KEEP</strong> — artwork-specific, safe as artworkHook</li>
+        <li><strong>REVIEW</strong> — journey-specific or unclear, flag for Sheri to rewrite later</li>
+      </ul>
+      <p>Do not delete or overwrite any content. REVIEW-tagged items keep their current content but get a Sanity Studio note added. Produce a summary list of all KEEP / REVIEW decisions at the end.</p>
+
+      <div class="output-block">
+        <div class="out-label">Output</div>
+        <p>Schema updated. GROQ, types, and components updated. Content audit complete with KEEP/REVIEW list saved to <code>content-docs/KALLOS-artworkHook-Audit.html</code>. No content deleted.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════ TASK 3 ═══════════════════════════════════ -->
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 3</span>
+      <span class="task-title">Add new fields — auditio genre + split audio source</span>
+    </div>
+    <div class="task-body">
+      <p>Additive schema changes only. No data migration required — existing records simply have these fields empty until Sheri fills them in Sanity.</p>
+
+      <h3>3a. Auditio genre field</h3>
+      <p>Add a <code>genre</code> field to the <code>auditio</code> object in both <code>dailyPrompt.ts</code> and the new <code>journeyDay.ts</code> schema. Type: string with a predefined list of options (single-select). Options:</p>
+      <ul>
+        <li>gregorian-chant</li>
+        <li>sacred-polyphony</li>
+        <li>classical-orchestral</li>
+        <li>contemporary-sacred</li>
+        <li>ambient-meditation</li>
+        <li>folk</li>
+        <li>world-music</li>
+        <li>jazz</li>
+        <li>secular</li>
+      </ul>
+      <p>Field title in Studio: "Genre" with description "Select the closest genre. Used to track variety across journeys and prevent over-reliance on any single register."</p>
+
+      <h3>3b. Split audio source fields</h3>
+      <p>The current <code>contentItem.audioSource</code> pattern combines composer/artist and work title in a single string. Add two new optional fields to the auditio object on both <code>dailyPrompt</code> and <code>journeyDay</code> schemas:</p>
+      <ul>
+        <li><code>composerArtist</code> (string) — the composer or performing artist name only</li>
+        <li><code>workTitle</code> (string) — the specific piece, track, or work title only</li>
+      </ul>
+      <p>Keep the existing source/attribution string field — do not remove it. These two new fields are additive. Existing records keep their single string; new entries use the split fields. The dashboard and future content intelligence queries will prefer the split fields when present.</p>
+
+      <h3>3c. Update TypeScript types and GROQ</h3>
+      <p>Add <code>genre?: string</code>, <code>composerArtist?: string</code>, <code>workTitle?: string</code> to the relevant TypeScript types. Add to the auditio projection in GROQ queries. No component changes required — these fields are dashboard/audit use only for now.</p>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════ TASK 4 ═══════════════════════════════════ -->
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 4</span>
+      <span class="task-title">Quick cleanup — R6 + two rendering bugs</span>
+    </div>
+    <div class="task-body">
+      <p>Three small fixes while the schema is already in motion. Low risk, high value.</p>
+
+      <h3>4a. R6 — Rename reflectQuestions → reflectionQuestions on journeyDay</h3>
+      <p>In the new <code>journeyDay.ts</code> schema (already created in Task 1), rename <code>reflectQuestions</code> to <code>reflectionQuestions</code> to match <code>contentItem.reflectionQuestions</code>. Update the GROQ projection and TypeScript type. Run a data migration to rename the field key on existing journeyDay documents in Sanity. Test that reflection questions still render on all journey day steps.</p>
+
+      <h3>4b. Fix: traditionalPrayerSource rendered but never queried</h3>
+      <p>The Visio Divina Pray step renders <code>traditionalPrayerSource</code> but no GROQ query projects it. Add <code>traditionalPrayerSource</code> to the <code>getArtworkById</code> query projection in <code>lib/sanity.ts</code>. Verify it renders correctly on the Pray page.</p>
+
+      <h3>4c. Fix: contentItem.artworkHook (formerly curatorNote) not rendered on P&P</h3>
+      <p>Now that R1 is resolved via Option C (three fields, three jobs), this bug is addressed by the rule — <code>artworkHook</code> is not meant to show on P&P, so it is correct that it does not. No code change needed. However: add a comment in the P&P rendering component noting this is intentional — <code>artworkHook</code> is content-item-level, <code>dailyPrompt.curatorNote</code> is the P&P hook. Document the rule so future developers understand the design.</p>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════ TASK 5 ═══════════════════════════════════ -->
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 5</span>
+      <span class="task-title">Update dashboard for new journeyDay structure</span>
+    </div>
+    <div class="task-body">
+      <p>Post-R5, journeyDays are standalone documents. The dashboard Section 1 (Journey Completion Status) was built to traverse from journey to inline days. Update it to query journeyDays directly.</p>
+
+      <h3>5a. Update getJourneyCompletionStatus query</h3>
+      <p>Replace the inline traversal with a direct journeyDay query: <code>*[_type == "journeyDay"]</code> grouped by <code>journey._ref</code>. This is faster and cleaner than the original. Update the named function in <code>lib/sanity.ts</code> and any types it returns.</p>
+
+      <h3>5b. Add genre distribution to dashboard Section 4</h3>
+      <p>Now that the <code>genre</code> field exists on auditio (Task 3), add a genre distribution view to dashboard Section 4 (Audio Status). Show: count of records per genre across all journey days and P&P prompts. Flag any genre that represents more than 40% of all auditio selections.</p>
+
+      <h3>5c. Add artworkHook audit flag to dashboard</h3>
+      <p>Add a small indicator in the Content Item section of the dashboard: how many content items have been tagged REVIEW in the artworkHook audit (from Task 2b). This gives Sheri a reminder that there are items needing rewrite without requiring her to remember.</p>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════ FINAL ═══════════════════════════════════ -->
+  <h2>Final Steps</h2>
+
+  <ol>
+    <li>Run <code>npx tsc --noEmit</code> — must pass clean</li>
+    <li>Run <code>npm run build</code> locally — must pass clean</li>
+    <li>Deploy Sanity Studio schema: <code>cd sanity && npm run deploy</code></li>
+    <li>Commit all changes: <code>git add -A && git commit -m "Schema migration: journeyDay document, artworkHook rename, genre field, R6 cleanup"</code></li>
+    <li>Push to trigger Vercel deploy: <code>git push</code></li>
+    <li>Update CLAUDE.md: Schema Status table (journeyDay now Document), content docs table (add KALLOS-artworkHook-Audit.html), Phase 2 Work Done</li>
+  </ol>
+
+  <div class="success-block">
+    <div class="suc-label">Success criteria</div>
+    <ul>
+      <li>All 5 journeys render correctly in production</li>
+      <li><code>*[_type == "journeyDay"]</code> returns 25 documents in Sanity</li>
+      <li>Dashboard Section 1 loads and shows correct completion data</li>
+      <li>No content was deleted — only renamed, migrated, or flagged</li>
+      <li>artworkHook audit list saved and visible in dashboard</li>
+      <li>CLAUDE.md updated with new schema status</li>
+    </ul>
+  </div>
+
+  <p style="margin-top:32px; font-size:13px; color:#8a7a6a; font-style:italic;">Brief created April 2026. Decisions documented in Cowork session following audit. Reference: KALLOS-CC-Audit-Brief.html and KALLOS-Schema-Audit.html for full context.</p>
+
+</div>
+</body>
+</html>

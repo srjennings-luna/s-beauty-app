@@ -55,7 +55,8 @@ Read this at the start of every session. It contains all key product decisions, 
 | `content-docs/KALLOS-Myth-Journey-Arc.html` | **In repo** — Myth Journey arc planning doc |
 | `content-docs/KALLOS-Content-Usage-Log.html` | **In repo** — content usage log (tracks audio, quotes, scripture used across all content) |
 | `content-docs/CONTENT-RULES.md` | **In repo** — condensed content rules reference |
-| `content-docs/KALLOS-CC-Audit-Brief.html` | **In repo** — Claude Code audit brief. READ THIS before any architecture or schema work. Three tasks: schema audit, full content inventory (including Go Deeper tracker), and regenerable content dashboard. No code changes during the audit session — query and report only. |
+| `content-docs/KALLOS-CC-Audit-Brief.html` | **In repo** — Claude Code audit brief. READ THIS before any architecture or schema work. |
+| `content-docs/KALLOS-CC-Schema-Design-Brief.html` | **In repo** — Claude Code schema design and migration brief. Implements R1 (artworkHook rename) and R5 (journeyDay promotion), adds genre + split audio source fields, fixes R6 and two rendering bugs, updates dashboard. Run AFTER reading the audit brief. Opus 4.6 required. READ THIS before any architecture or schema work. Three tasks: schema audit, full content inventory (including Go Deeper tracker), and regenerable content dashboard. No code changes during the audit session — query and report only. |
 | `content-docs/KALLOS-Schema-Audit.html` | **In repo** — Task 1 output from audit (April 23, 2026). Full schema field inventory, cross-schema duplicate detection, GROQ trace, dead-field analysis, 15 prioritized recommendations (R1–R15). Read before any schema or data migration work. |
 | `content-docs/KALLOS-Content-Inventory.html` | **In repo** — Task 2 output from audit (April 23, 2026). Full Sanity content inventory snapshot: 53 content items, 27 P&P prompts, 28 tradition reflections, 5 journeys. Field-by-field completeness, TTS coverage (70,017 char gap), consolidated red list. GROQ queries embedded at bottom for reuse. |
 | `KALLOS-Intro-Journey-Beauty-Truth-Goodness.html` | Intro journey — 7 days, all fields, ready for Sanity |
@@ -168,6 +169,14 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ session-close skill created — approval-gated session documentation tool. Available in Documents folder.
 - ✅ skills-tracker skill created — PM resume/skills evidence tracker. Available in Documents folder.
 - ✅ Bosch journey + Bosch Sanity entry guide added to CLAUDE.md content docs table
+
+### Phase 2 Work Done (April 23, 2026)
+- ✅ Full architecture audit complete (Claude Code, Opus 4.6) — schema field inventory, GROQ trace, dead field detection, 15 recommendations (R1-R15), 4 open questions. Output: `content-docs/KALLOS-Schema-Audit.html`.
+- ✅ Full content inventory complete — 53 content items, 27 P&P prompts, 28 tradition reflections, 5 journeys, TTS gap of 70,017 characters identified. Output: `content-docs/KALLOS-Content-Inventory.html`.
+- ✅ Live content dashboard built and deployed at `/dashboard` — server-rendered Next.js page, 7 sections, revalidate 60s, gated by `DASHBOARD_ENABLED=true` env var. 5 new named GROQ query functions in `lib/sanity.ts`.
+- ✅ Schema design brief written — R1 (artworkHook rename) and R5 (journeyDay promotion) decisions made and documented. Ready for next CC session. See `content-docs/KALLOS-CC-Schema-Design-Brief.html`.
+- ✅ Pitch research expanded — CTS Corporate Travel Services, Elizabeth Lev (Liz Lev Tours), and PAVM added to KALLOS-Pitch-Research.html. Companion journey types mapped against pitch list.
+- ✅ Companion journey framework designed — four formats (PRE/DURING/POST/SUSTAINED), voice framework (Story/Companion/Curator/Contemplative), three demo journeys identified (Seeking Beauty Ep1, CTS Rome, Elizabeth Lev Pio Cristiano).
 
 ### Phase 2 Work Done (April 22, 2026)
 - ✅ When Myth Became Fact Day 4 content complete and entered in Sanity — all fields revised: Curator Note (Mythopoeia/Philomythus to Misomythus hook), Opening Text (thirst metaphor removed, paragraph break added), Context (em dashes fixed, Whipsnade quote confirmed), Go Deeper (Tertullian "anima naturaliter Christiana" replaces Tolkien subcreation repeat), Auditio (Scarborough Fair piano, NowoArt, Pixabay, confirmed uploaded). Hero image: addisons-walk-bw-warm.jpg (real Flickr photo, converted to warm duotone).
@@ -388,6 +397,8 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 | `journey` | ✅ New — 7-day structure. Added `totalDays` number field (April 13, 2026) — editors set intended arc length independently of built days. |
 | `dailyPrompt` | ✅ New — "Pause & Ponder" daily feature on Today tab. Auditio object includes `verbaOriginal` (optional text field for lyrics, shown in collapsible VERBA panel in app) |
 | `splashPage` | ✅ Kept unchanged |
+| `journeyDay` | ⚠️ **Pending migration** — currently inline object inside `journey.days[]`. Decision made April 23, 2026: promote to standalone document schema. Migration brief in `content-docs/KALLOS-CC-Schema-Design-Brief.html`. Do not build companion journeys until this migration is complete. |
+| `contentItem` | ⚠️ **Pending rename** — `curatorNote` field to be renamed `artworkHook`. Decision made April 23, 2026. 47 existing records need audit (artwork-specific vs. journey-specific content). See Schema Design Brief. |
 | `traditionReflection` | ✅ Updated — themes ref array added. ⚠️ **Schema change needed:** `authorType` currently only allows `church-father`, `saint`, `pope`. Need to add 3 new values: `theologian`, `mystic`, `church-doctor`. Also change field to allow **multiple selections** (some figures are both saint + doctor, etc.). **Known mismatches:** Jean-Pierre de Caussade (Jesuit priest, not a saint — currently tagged as `saint` as placeholder until new categories exist). |
 | `episode` | ⚠️ Deprecated — kept to preserve data, hidden from sidebar |
 
@@ -511,6 +522,29 @@ The Lectio is a philosophy + scripture pairing — two voices arriving at the sa
 A section titled "REVISION HISTORY" at the very bottom. Each entry: Day X / Field / Date / Reason / Original text.
 
 This rule applies to all Journey content docs, P&P docs, entry guides, and content audit docs. It does not apply to CLAUDE.md itself or technical/code docs.
+
+### artworkHook Rule (April 23, 2026)
+`contentItem.artworkHook` (formerly `curatorNote`) must be about the specific artwork or piece itself — a surprising fact safe to display anywhere the content item appears (Journey, Explore, Library, P&P). It must never be written for a specific journey context or day. Journey-specific hooks belong on `dailyPrompt.curatorNote` (P&P hook) or `journeyDay.encounterNote` (journey layer). Three fields, three distinct jobs, no overlap. See Schema Design Brief for migration details.
+
+### Companion Journey Voice Framework (April 23, 2026)
+Four voice registers for companion journeys. User selects preference at onboarding (expressed as a natural question, not a settings toggle):
+- **Story** — narrative-led, immersive, third-person. Use for PRE (preparation journeys) and POST (episode/lecture companions).
+- **Companion** — question-led, Socratic, second-person. Use for DURING (at-site) and SUSTAINED. Gets out of the way, directs attention without explaining.
+- **Curator** — fact-rich, specific, accessible. The AI Q&A layer voice. For users who want information without full contemplation.
+- **Contemplative** — slow, spacious, minimal content. For users who are already formed. Closest to current Visio Divina.
+
+### Companion Journey Format Framework (April 23, 2026)
+Four companion journey formats, each with different UX requirements:
+- **Format D (PRE)** — Multi-week preparation before a pilgrimage, episode, or lecture. Story voice. Daily habit format (like P&P). Ends when the physical experience begins. The most distinctive and highest-value format — nothing like it exists in the market.
+- **Format B (DURING)** — At-site companion for someone physically present. Companion voice. Maximum 90 seconds of screen time. One prompt, then phone down. Designed to get users back to the real thing, not deeper into the app.
+- **Formats A/C (POST)** — After consuming video/lecture content. Story bridge from the content into a contemplative journey. Gaze step needs reframing (not a cold encounter). Pray step optional/gentle for non-devotional audiences.
+- **Format E (SUSTAINED)** — After the experience, weeks later. Companion or Contemplative voice. "You've been there now — what do you see that you couldn't see before?" P&P daily format already serves this.
+
+### Content Repeat Intelligence (April 23, 2026)
+Three distinct types of content repetition to track in the dashboard:
+1. **Work-level repeat** — same specific work used twice (e.g., Spiegel im Spiegel twice) vs. same composer twice (acceptable). Requires `composerArtist` + `workTitle` as separate fields on auditio records.
+2. **Source concentration** — if any single author/thinker exceeds ~30% of all TRs or auditio selections, flag it. Show % distribution in dashboard.
+3. **Cross-field concept repetition** — "allegory of the cave" referenced in passing in Curator Note AND told in full in a TR. Requires concept tagging across all field types. Approach: free-form tagging first (learning phase), then consolidate to controlled vocabulary. Do not build the full tagging system until the natural categories emerge from actual content.
 
 ### Go Deeper Standard
 Go Deeper tradition reflections must add genuinely new content not already present in the Encounter Note. If the Go Deeper summary covers the same argument as the Encounter Note in different words, it fails. The test: could this TR appear in any journey day, or is it specific to this one?
@@ -708,6 +742,11 @@ These can't be done in code — Sheri does them in dashboards:
 35. **Verify before Day 1 Sanity entry:** (a) Simone Weil quote exact wording — *Waiting for God*, chapter on beauty. (b) JPII Letter to Artists paragraph number for "Beauty is a key to the mystery." (c) Psalm 27:4 RSV-2CE exact wording (already in item 30 above — confirm against RSV-2CE text).
 36. **Schema: Add Photography as content type** — Content type selector in Sanity does not currently include Photography. Add `photography` as an option alongside sacred-art, thinker, literature, music, landscape, food-wine, math-science, watch-listen. Needed before any Pictorialist photography content item can be entered (e.g., Cameron "English Blossoms" Day 1).
 37. **Schema: Add "Ancient" as Era option in Go Deeper (Tradition Reflections)** — The Era dropdown for TR entries does not currently include Ancient. Add it as an option. Needed for BTG Day 2 TR1 (Aristotle, 384-322 BCE) and any other pre-Medieval thinkers.
+40. **Schema design CC session** — Run `content-docs/KALLOS-CC-Schema-Design-Brief.html` with Opus 4.6. Implements R1 (artworkHook rename + 47-record audit), R5 (journeyDay promotion + migration), genre field, split audio source, R6 cleanup, rendering bug fixes, dashboard update. Must complete before companion journey content is built.
+41. **Set DASHBOARD_ENABLED=true in Vercel** — ✅ Done April 23, 2026. Dashboard live at /dashboard.
+42. **Dashboard enhancements (separate CC session after schema design)** — Add filter/sort to TR table, work-level repeat detection (flag same work title not just same author), source concentration % view, cross-field concept repetition with expandable text previews, genre distribution in audio section.
+43. **Review 4 open questions from Schema Audit** — See `content-docs/KALLOS-Schema-Audit.html` bottom section. Review before schema design CC session.
+44. **Companion journey mapping session (Cowork)** — Map three demo companion journeys (Seeking Beauty Ep1, CTS Rome Pilgrimage, Elizabeth Lev Pio Cristiano) before building any content. Requires schema design session to be complete first.
 39. **Claude Code task — Sanity Go Deeper content inventory:** Query Sanity for all entered Tradition Reflection (Go Deeper) content across all journeys and output as a content list doc. Purpose: prevent duplicate voices across journeys as content scales. Pending until after Days 5-7 Myth Journey Sanity entry.
 38. **Schema: Add "Fresco" as Medium option** — The Medium dropdown does not include Fresco. Add it alongside Oil on canvas, Oil on panel, Engraving, Marble relief, etc. Needed for Raphael's School of Athens (Myth Journey Day 3) and any future fresco content. Enter as custom text in Sanity for now.
 
