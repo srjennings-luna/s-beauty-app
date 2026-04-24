@@ -90,9 +90,6 @@ export default defineConfig({
       title: 'Preview',
       previewUrl: {
         origin: APP_PREVIEW_URL,
-        previewMode: {
-          enable: '/api/draft',
-        },
       },
       resolve: {
         locations: {
