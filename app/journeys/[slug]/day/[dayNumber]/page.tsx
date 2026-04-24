@@ -1,7 +1,17 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { getJourney } from "@/lib/sanity";
+import { draftMode } from "next/headers";
+import { getJourney, getJourneyPreview } from "@/lib/sanity";
 import JourneyDetailClient from "../../JourneyDetailClient";
+
+async function fetchJourney(slug: string) {
+  const isDraft = (await draftMode()).isEnabled;
+  if (isDraft) {
+    const draft = await getJourneyPreview(slug).catch(() => null);
+    if (draft) return draft;
+  }
+  return getJourney(slug);
+}
 
 /**
  * Path-based alias for journey-day deep-links:
@@ -23,7 +33,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string; dayNumber: string }>;
 }): Promise<Metadata> {
   const { slug, dayNumber } = await params;
-  const journey = await getJourney(slug);
+  const journey = await fetchJourney(slug);
   if (!journey) return { title: "Journey — KALLOS" };
 
   const dayNum = parseInt(dayNumber, 10);
@@ -53,7 +63,7 @@ export default async function JourneyDayPage({
   params: Promise<{ slug: string; dayNumber: string }>;
 }) {
   const { slug, dayNumber } = await params;
-  const journey = await getJourney(slug);
+  const journey = await fetchJourney(slug);
 
   if (!journey) {
     return (

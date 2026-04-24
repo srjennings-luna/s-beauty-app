@@ -1,7 +1,24 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { getJourney } from "@/lib/sanity";
+import { draftMode } from "next/headers";
+import { getJourney, getJourneyPreview } from "@/lib/sanity";
 import JourneyDetailClient from "./JourneyDetailClient";
+
+/**
+ * Pick between published and draft-reading fetch based on Next.js draft
+ * mode. Draft mode is enabled via /api/draft when Sanity Presentation
+ * calls it with a valid preview secret. If the preview fetch returns
+ * null (no drafts yet), fall back to the published version so the iframe
+ * doesn't show "Not found" mid-edit.
+ */
+async function fetchJourney(slug: string) {
+  const isDraft = (await draftMode()).isEnabled;
+  if (isDraft) {
+    const draft = await getJourneyPreview(slug).catch(() => null);
+    if (draft) return draft;
+  }
+  return getJourney(slug);
+}
 
 // ── Metadata ─────────────────────────────────────────────────────────────────
 
@@ -14,7 +31,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const { day: dayParam } = await searchParams;
-  const journey = await getJourney(slug);
+  const journey = await fetchJourney(slug);
 
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://kallos.app";
@@ -92,7 +109,7 @@ export default async function JourneyDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const journey = await getJourney(slug);
+  const journey = await fetchJourney(slug);
 
   if (!journey) {
     return (

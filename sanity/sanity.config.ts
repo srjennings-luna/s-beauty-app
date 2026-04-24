@@ -97,6 +97,15 @@ export default defineConfig({
       title: 'Preview',
       previewUrl: {
         origin: APP_PREVIEW_URL,
+        // Tells Presentation which route on the app enables Next.js
+        // draftMode. Presentation calls this with a preview-secret query
+        // param; app/api/draft/route.ts validates it via
+        // @sanity/preview-url-secret and sets the draftMode cookie. Pages
+        // read (await draftMode()).isEnabled to swap between published
+        // and preview Sanity clients. Wired April 24, 2026.
+        previewMode: {
+          enable: '/api/draft',
+        },
       },
       resolve: {
         // URL → document (forward mapping). Populates the "Documents on this

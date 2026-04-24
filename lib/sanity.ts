@@ -170,69 +170,79 @@ export async function getJourneys() {
   `)
 }
 
-export async function getJourney(slug: string) {
-  return sanityClient.fetch(
-    `*[_type == "journey" && slug.current == $slug][0] {
-      _id,
+// Shared GROQ projection for a single journey. Reused by published +
+// preview fetches so the shape stays identical and one edit updates both.
+const JOURNEY_QUERY = `*[_type == "journey" && slug.current == $slug][0] {
+  _id,
+  title,
+  slug,
+  "theme": theme->{${THEME_FIELDS}},
+  description,
+  "heroImageUrl": heroImage.asset->url,
+  estimatedMinutesPerDay,
+  isPublished,
+  order,
+  "totalDays": coalesce(totalDays, count(days)),
+  "days": days[]-> {
+    dayNumber,
+    dayTitle,
+    "openImageUrl": openImage.asset->url,
+    openText,
+    "openTextAudioUrl": openTextAudio.asset->url,
+    "encounterContent": encounterContent->{${CONTENT_ITEM_FIELDS}},
+    encounterGuidance,
+    encounterNote,
+    "encounterNoteAudioUrl": encounterNoteAudio.asset->url,
+    "lectio": lectio {
+      philosophyQuote,
+      philosophySource,
+      scriptureVerse,
+      scriptureReference,
+      connectionNote
+    },
+    "auditio": auditio {
       title,
-      slug,
-      "theme": theme->{${THEME_FIELDS}},
-      description,
-      "heroImageUrl": heroImage.asset->url,
-      estimatedMinutesPerDay,
-      isPublished,
+      composer,
+      composerArtist,
+      workTitle,
+      genre,
+      licensingNote,
+      "audioFileUrl": audioFile.asset->url,
+      audioUrl,
+      externalUrl
+    },
+    reflectionQuestions,
+    "reflectionQuestionsAudioUrl": reflectionQuestionsAudio.asset->url,
+    connectThread,
+    "goDeeper": goDeeper[]->{
+      _id,
+      authorType,
+      title,
+      summary,
+      shortQuote,
+      source,
       order,
-      "totalDays": coalesce(totalDays, count(days)),
-      "days": days[]-> {
-        dayNumber,
-        dayTitle,
-        "openImageUrl": openImage.asset->url,
-        openText,
-        "openTextAudioUrl": openTextAudio.asset->url,
-        "encounterContent": encounterContent->{${CONTENT_ITEM_FIELDS}},
-        encounterGuidance,
-        encounterNote,
-        "encounterNoteAudioUrl": encounterNoteAudio.asset->url,
-        "lectio": lectio {
-          philosophyQuote,
-          philosophySource,
-          scriptureVerse,
-          scriptureReference,
-          connectionNote
-        },
-        "auditio": auditio {
-          title,
-          composer,
-          composerArtist,
-          workTitle,
-          genre,
-          licensingNote,
-          "audioFileUrl": audioFile.asset->url,
-          audioUrl,
-          externalUrl
-        },
-        reflectionQuestions,
-        "reflectionQuestionsAudioUrl": reflectionQuestionsAudio.asset->url,
-        connectThread,
-        "goDeeper": goDeeper[]->{
-          _id,
-          authorType,
-          title,
-          summary,
-          shortQuote,
-          source,
-          order,
-          era,
-          "reflectionAudioUrl": reflectionAudio.asset->url
-        }
-      } | order(dayNumber asc),
-      "plannedDays": plannedDays[] {
-        dayNumber,
-        dayTitle
-      } | order(dayNumber asc)
-    }`,
-    { slug }
-  )
+      era,
+      "reflectionAudioUrl": reflectionAudio.asset->url
+    }
+  } | order(dayNumber asc),
+  "plannedDays": plannedDays[] {
+    dayNumber,
+    dayTitle
+  } | order(dayNumber asc)
+}`
+
+export async function getJourney(slug: string) {
+  return sanityClient.fetch(JOURNEY_QUERY, { slug })
+}
+
+/**
+ * Preview variant — reads drafts via the preview client (`drafts` perspective).
+ * Use from server components guarded by `(await draftMode()).isEnabled`,
+ * with a fallback to `getJourney` when the preview fetch fails or returns null.
+ */
+export async function getJourneyPreview(slug: string) {
+  return previewClient.fetch(JOURNEY_QUERY, { slug })
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -357,71 +367,82 @@ export async function getTraditionReflections(themeId?: string) {
 // Splash Pages
 // ─────────────────────────────────────────────────────────────────────────────
 
+const SPLASH_QUERY = `*[_type == "splashPage"] | order(pageNumber asc) {
+  _id,
+  pageNumber,
+  pageType,
+  "heroImageUrl": heroImage.asset->url,
+  quote,
+  quoteAttribution,
+  title,
+  description,
+  buttonText,
+  quoteColor,
+  quoteFont,
+  attributionColor,
+  bottomBackgroundColor,
+  titleColor,
+  titleSize,
+  descriptionColor,
+  buttonBackgroundColor,
+  buttonTextColor,
+  backgroundGradientStart,
+  backgroundGradientEnd
+}`
+
 export async function getSplashPages() {
-  return sanityClient.fetch(`
-    *[_type == "splashPage"] | order(pageNumber asc) {
-      _id,
-      pageNumber,
-      pageType,
-      "heroImageUrl": heroImage.asset->url,
-      quote,
-      quoteAttribution,
-      title,
-      description,
-      buttonText,
-      quoteColor,
-      quoteFont,
-      attributionColor,
-      bottomBackgroundColor,
-      titleColor,
-      titleSize,
-      descriptionColor,
-      buttonBackgroundColor,
-      buttonTextColor,
-      backgroundGradientStart,
-      backgroundGradientEnd
-    }
-  `)
+  return sanityClient.fetch(SPLASH_QUERY)
+}
+
+export async function getSplashPagesPreview() {
+  return previewClient.fetch(SPLASH_QUERY)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Visio Divina — prayer page (queries both artwork and contentItem)
 // ─────────────────────────────────────────────────────────────────────────────
 
+const ARTWORK_QUERY = `*[_id == $id && _type in ["contentItem", "artwork"]][0] {
+  _id,
+  title,
+  artist,
+  year,
+  "imageUrl": image.asset->url,
+  description,
+  context,
+  historicalSummary,
+  scripturePairing,
+  quote,
+  contentType,
+  locationType,
+  reflectionQuestions,
+  locationName,
+  city,
+  country,
+  coordinates,
+  traditionalPrayer,
+  traditionalPrayerSource,
+  "traditionReflections": traditionReflections[]->{
+    _id,
+    title,
+    summary,
+    shortQuote,
+    source,
+    authorType,
+    order,
+  }
+}`
+
 export async function getArtworkById(id: string) {
-  return sanityClient.fetch(
-    `*[_id == $id && _type in ["contentItem", "artwork"]][0] {
-      _id,
-      title,
-      artist,
-      year,
-      "imageUrl": image.asset->url,
-      description,
-      context,
-      historicalSummary,
-      scripturePairing,
-      quote,
-      contentType,
-      locationType,
-      reflectionQuestions,
-      locationName,
-      city,
-      country,
-      coordinates,
-      traditionalPrayer,
-      traditionalPrayerSource,
-      "traditionReflections": traditionReflections[]->{
-        _id,
-        title,
-        summary,
-        shortQuote,
-        source,
-        authorType,
-        order,
-      }
-    }`,
-    { id }
-  )
+  return sanityClient.fetch(ARTWORK_QUERY, { id })
+}
+
+/**
+ * Preview variant for the /pray/[id] (Visio Divina) page. Reads drafts
+ * via the preview client. Pair with draftMode() in a server component.
+ */
+export async function getArtworkByIdPreview(id: string) {
+  return previewClient.fetch(ARTWORK_QUERY, { id })
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
