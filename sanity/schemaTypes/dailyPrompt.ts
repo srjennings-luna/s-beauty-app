@@ -97,6 +97,38 @@ export default defineType({
           type: 'string',
         }),
         defineField({
+          name: 'composerArtist',
+          title: 'Composer / Artist (structured)',
+          type: 'string',
+          description: 'Just the name, e.g., "Gregorio Allegri" or "Arvo Pärt". Used for dedup and content-repeat analysis.',
+        }),
+        defineField({
+          name: 'workTitle',
+          title: 'Work Title (structured)',
+          type: 'string',
+          description: 'Just the piece, e.g., "Miserere Mei, Deus". Used for dedup — same composer twice is fine; same work twice is repetition.',
+        }),
+        defineField({
+          name: 'genre',
+          title: 'Genre',
+          type: 'string',
+          description: 'Select the closest genre. Used to track variety across journeys and prevent over-reliance on any single register.',
+          options: {
+            list: [
+              { title: 'Gregorian chant', value: 'gregorian-chant' },
+              { title: 'Sacred polyphony', value: 'sacred-polyphony' },
+              { title: 'Classical / orchestral', value: 'classical-orchestral' },
+              { title: 'Contemporary sacred', value: 'contemporary-sacred' },
+              { title: 'Ambient / meditation', value: 'ambient-meditation' },
+              { title: 'Folk', value: 'folk' },
+              { title: 'World music', value: 'world-music' },
+              { title: 'Jazz', value: 'jazz' },
+              { title: 'Secular', value: 'secular' },
+            ],
+            layout: 'dropdown',
+          },
+        }),
+        defineField({
           name: 'audioUrl',
           title: 'Audio Source (in-app playback)',
           type: 'object',

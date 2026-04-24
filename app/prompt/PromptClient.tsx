@@ -414,7 +414,14 @@ function DailyPromptPageInner() {
         {/* ── Content body ─────────────────────────────────────────────────── */}
         <div className="px-6 mt-4 space-y-12">
 
-          {/* ── Curator note — dark box, p-8, subtle border ─────────────── */}
+          {/* ── Curator note — dark box, p-8, subtle border ───────────────
+             The P&P curator note is the hook for THIS prompt-day. It is a
+             separate field (dailyPrompt.curatorNote) from the content item's
+             artworkHook. We render only the prompt-day's curator note here.
+             The content item's artworkHook is intentionally NOT shown on P&P;
+             it belongs on Journey / Explore / Library where the piece appears
+             standalone. Rule: three fields, three jobs (R1, April 24 2026).
+          */}
           {prompt.curatorNote && (
             <div
               className="p-8"

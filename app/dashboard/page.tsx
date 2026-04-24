@@ -17,12 +17,12 @@ export const metadata = { title: "KALLOS — Content Dashboard", robots: "noinde
 
 // Schema audit manually maintained — see Task 1 output for underlying detail.
 const SCHEMA_HEALTH = {
-  lastAudited: "2026-04-23",
+  lastAudited: "2026-04-24",
   overall: "yellow" as "green" | "yellow" | "red",
   topIssues: [
-    "R1 — contentItem.curatorNote is rendered on Journey Day but invisible on P&P (queried, not rendered). Decide canonical home.",
-    "R2 — traditionalPrayerSource rendered by Visio Divina Pray step but missing from GROQ projection. Always undefined.",
-    "R3/R4 — lectio and auditio objects have different shapes on journeyDay vs dailyPrompt. One dashboard cannot treat them uniformly.",
+    "R1 — RESOLVED. contentItem.curatorNote renamed to artworkHook with distinct job (artwork-specific, safe anywhere the piece appears). dailyPrompt.curatorNote and journeyDay.encounterNote keep their distinct roles.",
+    "R5 — RESOLVED. journeyDay promoted from inline object to standalone document schema. 25 days migrated April 24, 2026.",
+    "R3/R4 — lectio and auditio objects have different shapes on journeyDay vs dailyPrompt. One dashboard cannot treat them uniformly. Still open.",
   ],
   updateInstructions:
     "After any schema audit session, update SCHEMA_HEALTH in app/dashboard/page.tsx: change lastAudited to today, overall traffic light (green=all fixed, yellow=some open, red=blocking), and top 3 open issues by recommendation ID from KALLOS-Schema-Audit.html.",
@@ -30,6 +30,7 @@ const SCHEMA_HEALTH = {
 
 // ─── Type shapes ──────────────────────────────────────────────────────────
 type JourneyDaySummary = {
+  _id?: string;
   dayNumber: number;
   dayTitle?: string;
   hasOpenImage: boolean;
@@ -40,6 +41,9 @@ type JourneyDaySummary = {
   hasEncNoteAudio: boolean;
   hasAuditio: boolean;
   hasAuditioFile: boolean;
+  auditioGenre?: string;
+  auditioComposerArtist?: string;
+  auditioWorkTitle?: string;
   hasLectio: boolean;
   reflectCount: number;
   hasConnect: boolean;
@@ -73,12 +77,13 @@ type ContentItemRow = {
   medium?: string;
   era?: string;
   hasImage: boolean;
-  hasCurator: boolean;
+  hasArtworkHook: boolean;
   hasContext: boolean;
   hasAudioFile: boolean;
   themeCount: number;
   themeNames?: string[];
   journeyTitles?: string[];
+  needsArtworkHookReview?: boolean;
 };
 
 type TRRow = {
@@ -114,11 +119,13 @@ type AudioPrompt = {
   hasAuditioUrl: boolean;
   hasAuditioExt: boolean;
 };
+type GenreTally = { journeyDay: Array<{ genre?: string }>; dailyPrompt: Array<{ genre?: string }> };
+type AudioStatusResult = { journeys: AudioJourney[]; prompts: AudioPrompt[]; genres?: GenreTally };
 
 type TTSRecord = { chars: number; hasAudio: boolean };
 type TTSResult = {
   journeyDayTTS: Array<{ title: string; days?: Array<{ dayNumber: number; dayTitle?: string; openTextChars: number; openTextHasAudio: boolean; encounterNoteChars: number; encounterNoteHasAudio: boolean }> }>;
-  contentItemTTS: Array<{ _id: string; title: string; contentType: string; curatorChars: number; curatorHasAudio: boolean; contextChars: number; contextHasAudio: boolean }>;
+  contentItemTTS: Array<{ _id: string; title: string; contentType: string; artworkHookChars: number; artworkHookHasAudio: boolean; contextChars: number; contextHasAudio: boolean }>;
   dailyPromptTTS: Array<{ _id: string; date: string; contentTitle?: string; curatorChars: number; curatorHasAudio: boolean }>;
   traditionReflectionTTS: Array<{ _id: string; title: string; authorType?: string; summaryChars: number; summaryHasAudio: boolean }>;
 };
@@ -171,7 +178,7 @@ export default async function DashboardPage() {
     getDashboardJourneyCompletion() as Promise<(JourneyCompletionRow | null)[] | null>,
     getDashboardContentItems() as Promise<(ContentItemRow | null)[] | null>,
     getDashboardTraditionReflections() as Promise<{ list: (TRRow | null)[] | null; byJourney: (TRByJourney | null)[] | null } | null>,
-    getDashboardAudioStatus() as Promise<{ journeys: (AudioJourney | null)[] | null; prompts: (AudioPrompt | null)[] | null } | null>,
+    getDashboardAudioStatus() as Promise<(AudioStatusResult & { journeys: (AudioJourney | null)[] | null; prompts: (AudioPrompt | null)[] | null }) | null>,
     getDashboardTTSAudit() as Promise<TTSResult | null>,
   ]);
 
@@ -194,12 +201,16 @@ export default async function DashboardPage() {
       trRefs: (j.trRefs ?? []).filter(notNull),
     })),
   };
-  const audioStatus: { journeys: AudioJourney[]; prompts: AudioPrompt[] } = {
+  const audioStatus: { journeys: AudioJourney[]; prompts: AudioPrompt[]; genres: GenreTally } = {
     journeys: (rawAudioStatus?.journeys ?? []).filter(notNull).map((j) => ({
       ...j,
       days: (j.days ?? []).filter(notNull),
     })),
     prompts: (rawAudioStatus?.prompts ?? []).filter(notNull),
+    genres: {
+      journeyDay: (rawAudioStatus?.genres?.journeyDay ?? []).filter(notNull),
+      dailyPrompt: (rawAudioStatus?.genres?.dailyPrompt ?? []).filter(notNull),
+    },
   };
   const tts: TTSResult = {
     journeyDayTTS: (rawTTS?.journeyDayTTS ?? []).filter(notNull).map((j) => ({
@@ -289,12 +300,12 @@ export default async function DashboardPage() {
     });
   });
   tts.contentItemTTS.forEach((ci) => {
-    if (ci.curatorChars > 0) {
+    if (ci.artworkHookChars > 0) {
       ttsByType.contentItem.recs++;
-      if (ci.curatorHasAudio) ttsByType.contentItem.withAudio++;
+      if (ci.artworkHookHasAudio) ttsByType.contentItem.withAudio++;
       else {
         ttsByType.contentItem.missingAudio++;
-        ttsByType.contentItem.missingChars += ci.curatorChars;
+        ttsByType.contentItem.missingChars += ci.artworkHookChars;
       }
     }
     if (ci.contextChars > 0) {
@@ -335,6 +346,29 @@ export default async function DashboardPage() {
     (p) => !p.hasAuditioFile && !p.hasAuditioUrl && !p.hasAuditioExt
   ).length;
   const promptCuratorAudioMissing = audioStatus.prompts.filter((p) => !p.hasCuratorAudio).length;
+
+  // Genre distribution (Section 4). Flag any genre >40% of total.
+  const genreEntries = [
+    ...audioStatus.genres.journeyDay.map((g) => g.genre).filter((g): g is string => !!g),
+    ...audioStatus.genres.dailyPrompt.map((g) => g.genre).filter((g): g is string => !!g),
+  ];
+  const genreTotals = genreEntries.reduce<Record<string, number>>((acc, g) => {
+    acc[g] = (acc[g] || 0) + 1;
+    return acc;
+  }, {});
+  const genreRows = Object.entries(genreTotals)
+    .map(([genre, count]) => ({
+      genre,
+      count,
+      pct: genreEntries.length ? Math.round((100 * count) / genreEntries.length) : 0,
+    }))
+    .sort((a, b) => b.count - a.count);
+  const genreFlagged = genreRows.filter((r) => r.pct > 40);
+
+  // REVIEW indicator for Section 2. Detected from data state: REVIEW items
+  // are content items that still hold legacy curatorNote text (the April 24
+  // migration unset curatorNote on KEEP items only).
+  const reviewItems = contentItems.filter((c) => c.needsArtworkHookReview);
 
   return (
     <div className="min-h-screen bg-[#fdf6e8] text-[#2C2C2C] pb-32">
@@ -396,11 +430,15 @@ export default async function DashboardPage() {
                     {(j.days || []).map((d) => {
                       const status = dayTrafficLight(d);
                       return (
-                        <tr key={d.dayNumber} className="border-b border-[#e8e0d4]">
+                        <tr key={d._id ?? d.dayNumber} className="border-b border-[#e8e0d4]">
                           <td className="px-2 py-1 text-right">{d.dayNumber}</td>
                           <td className="px-2 py-1">
                             <a
-                              href={`https://seeking-beauty.sanity.studio/structure/journey;${j._id}`}
+                              href={
+                                d._id
+                                  ? `https://seeking-beauty.sanity.studio/structure/journeyDay;${d._id}`
+                                  : `https://seeking-beauty.sanity.studio/structure/journey;${j._id}`
+                              }
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-[#16110d] hover:text-[#C19B5F] underline decoration-transparent hover:decoration-[#C19B5F]"
@@ -437,6 +475,29 @@ export default async function DashboardPage() {
 
         {/* ═══ Section 2 — Content Item Library ═══ */}
         <SectionHeading num={2} title="Content Item Library" note="Grouped by content type. Image and ≥1 theme are required. Red = one or more missing." />
+        {reviewItems.length > 0 && (
+          <div className="bg-[#fff5e0] border-l-2 border-[#a06010] p-3 mb-4 text-xs">
+            <div className="flex items-baseline gap-3 flex-wrap">
+              <strong className="text-[#a06010] uppercase tracking-widest text-[10px]">
+                {reviewItems.length} artworkHook{reviewItems.length === 1 ? "" : "s"} pending rewrite
+              </strong>
+              <span className="text-[#5a5048]">
+                These content items still hold legacy curator-note text that was flagged REVIEW in the April 24 audit. Rewrite the hook at the artwork level (piece-specific, safe anywhere) and paste into the Artwork Hook field; the legacy curatorNote will clear automatically.
+              </span>
+            </div>
+            <ul className="mt-2 ml-4 list-disc space-y-0.5">
+              {reviewItems.map((c) => (
+                <li key={c._id}>
+                  <span className="text-[#16110d]">{c.title}</span>
+                  <span className="text-[#5a5048]"> — {c.contentType}</span>
+                  {c.journeyTitles && c.journeyTitles.length > 0 && (
+                    <span className="text-[#5a5048]"> · {c.journeyTitles.join(", ")}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         {contentTypeKeys.map((t) => (
           <div key={t} className="mb-5">
             <div className="bg-[#16110d] text-[#fdf6e8] px-4 py-2 flex items-baseline gap-4">
@@ -453,7 +514,7 @@ export default async function DashboardPage() {
                     <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Medium</th>
                     <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Journey</th>
                     <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Img</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Curator</th>
+                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">ArtworkHook</th>
                     <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Context</th>
                     <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Themes</th>
                     <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Audio</th>
@@ -471,7 +532,7 @@ export default async function DashboardPage() {
                         <td className="px-2 py-1 text-[#5a5048]">{c.medium || "—"}</td>
                         <td className="px-2 py-1 text-[#5a5048]">{(c.journeyTitles || []).join(", ") || "—"}</td>
                         <td className="px-2 py-1 text-center"><Yes value={c.hasImage} /></td>
-                        <td className="px-2 py-1 text-center"><Yes value={c.hasCurator} /></td>
+                        <td className="px-2 py-1 text-center"><Yes value={c.hasArtworkHook} /></td>
                         <td className="px-2 py-1 text-center"><Yes value={c.hasContext} /></td>
                         <td className="px-2 py-1 text-right">{c.themeCount}</td>
                         <td className="px-2 py-1 text-center"><Yes value={c.hasAudioFile} /></td>
@@ -616,6 +677,42 @@ export default async function DashboardPage() {
           <StatCard label="P&P records missing all audio" value={promptAudioMissing} sub={`${audioStatus.prompts.length} prompts total`} />
           <StatCard label="P&P records missing curator audio" value={promptCuratorAudioMissing} sub="Narration for the daily hook" />
         </div>
+
+        <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">Genre distribution (auditio)</h3>
+        {genreEntries.length === 0 ? (
+          <p className="text-[11px] text-[#7a7062] italic mb-3">
+            No genre values entered yet. Populate <code className="text-[10px] bg-[#f0ebe0] px-1">auditio.genre</code> in Sanity Studio on each journey day and P&P to start tracking variety.
+          </p>
+        ) : (
+          <>
+            {genreFlagged.length > 0 && (
+              <div className="bg-[#fff5e0] border-l-2 border-[#a06010] p-2 mb-2 text-xs">
+                <strong className="text-[#a06010] uppercase tracking-widest text-[10px]">Over-concentration:</strong>{" "}
+                {genreFlagged.map((g) => `${g.genre} (${g.pct}%)`).join(", ")} — exceed 40% of all genre-tagged auditio selections.
+              </div>
+            )}
+            <div className="overflow-x-auto border border-[#e8e0d4] mb-4">
+              <table className="w-full text-[11px]">
+                <thead className="bg-[#16110d] text-[#fdf6e8]">
+                  <tr>
+                    <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Genre</th>
+                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Count</th>
+                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">%</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {genreRows.map((r) => (
+                    <tr key={r.genre} className={`border-b border-[#e8e0d4] ${r.pct > 40 ? "bg-[#fff5e0]" : ""}`}>
+                      <td className="px-2 py-1"><code className="text-[10px] bg-[#f0ebe0] px-1">{r.genre}</code></td>
+                      <td className="px-2 py-1 text-right">{r.count}</td>
+                      <td className="px-2 py-1 text-right">{r.pct}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
 
         <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">Journey day audio</h3>
         {audioStatus.journeys.map((j) => (

@@ -317,27 +317,32 @@ async function main() {
     console.log(`\n${'─'.repeat(40)}`);
     console.log(`Linking reflections to Light journey...\n`);
 
-    const updatedDays = journeyDoc.days.map((day: any) => {
-      const dayNum = day.dayNumber;
+    // ⚠️ April 24, 2026 — journey.days is now a ref array to journeyDay documents.
+    // This block updates goDeeper on each linked journeyDay doc directly, then
+    // leaves journey.days untouched (refs already point at the correct docs).
+    for (const ref of journeyDoc.days ?? []) {
+      if (!ref?._ref) continue;
+      const dayDoc = await client.getDocument(ref._ref);
+      if (!dayDoc) continue;
+      const dayNum = (dayDoc as { dayNumber?: number }).dayNumber;
+      if (dayNum == null) continue;
       const refIds = reflectionsByDay[dayNum];
-      if (refIds) {
-        day.goDeeper = refIds.map((id: string) => ({
-          _type: 'reference',
-          _ref: id,
-          _key: id,
-        }));
+      if (!refIds) continue;
+      const goDeeper = refIds.map((id: string) => ({
+        _type: 'reference' as const,
+        _ref: id,
+        _key: id,
+      }));
+      try {
+        await client.patch(ref._ref).set({ goDeeper }).commit();
         console.log(`  Day ${dayNum}: linked ${refIds.length} reflections`);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error(`  Day ${dayNum}: patch failed — ${msg}`);
       }
-      return day;
-    });
-
-    try {
-      await client.patch(journeyDoc._id).set({ days: updatedDays }).commit();
-      console.log(`\n  ✅ Light journey updated with Go Deeper links`);
-    } catch (err: any) {
-      console.error(`\n  ❌ Error updating journey: ${err.message}`);
-      console.log(`  You may need to link reflections manually in Sanity Studio.`);
     }
+
+    console.log(`\n  ✅ Light journey updated with Go Deeper links`);
   }
 
   console.log(`\n${'='.repeat(60)}`);

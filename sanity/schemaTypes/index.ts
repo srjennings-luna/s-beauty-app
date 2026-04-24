@@ -4,6 +4,7 @@ import traditionReflection from './traditionReflection'
 import theme from './theme'
 import contentItem from './contentItem'
 import journey from './journey'
+import journeyDay from './journeyDay'
 import dailyPrompt from './dailyPrompt'
 
 export const schemaTypes = [
@@ -11,6 +12,7 @@ export const schemaTypes = [
   theme,
   contentItem,
   journey,
+  journeyDay,
   dailyPrompt,
   // Kept schemas
   splashPage,

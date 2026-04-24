@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KALLOS — artworkHook Audit</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: Georgia, serif; line-height: 1.7; color: #2C2C2C; background: #FFFFFF; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 60px 40px 120px; }
+  .cover { background: #16110d; color: #fdf6e8; text-align: center; padding: 56px 40px 44px; margin: -60px -40px 48px; }
+  .cover .label { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #C19B5F; margin-bottom: 14px; }
+  .cover h1 { font-size: 26px; font-weight: 300; letter-spacing: 3px; color: #fdf6e8; margin-bottom: 8px; }
+  .cover .sub { font-size: 13px; color: #bfb8aa; font-style: italic; }
+  .cover .date { font-size: 10px; color: #7a7062; margin-top: 10px; }
+  h2 { font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; color: #C19B5F; margin-top: 44px; margin-bottom: 14px; letter-spacing: 0.2em; text-transform: uppercase; padding-bottom: 8px; border-bottom: 1px solid #e8e0d4; }
+  h3 { font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; color: #16110d; margin: 22px 0 10px; }
+  p { font-size: 14px; margin-bottom: 12px; }
+  .context-box { background: #fdf6e8; border-left: 4px solid #C19B5F; padding: 16px 22px; margin: 22px 0; font-size: 13.5px; line-height: 1.75; }
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0; }
+  .stat-card { border: 1px solid #e8e0d4; padding: 14px 18px; background: #fdfaf2; }
+  .stat-num { font-family: Georgia, serif; font-size: 32px; color: #16110d; line-height: 1; }
+  .stat-label { font-family: Arial, sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #C19B5F; margin-top: 8px; }
+  .warn { background: #fff5e0; border-left: 3px solid #a06010; padding: 12px 18px; margin: 12px 0; font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 11.5px; }
+  th { font-family: Arial, sans-serif; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: #fdf6e8; background: #16110d; text-align: left; padding: 7px 9px; }
+  td { padding: 7px 9px; border-bottom: 1px solid #e8e0d4; vertical-align: top; }
+  tr:nth-child(even) td { background: #fdf6e8; }
+  .review-row td { background: #fdf0f0 !important; }
+  td.preview { font-family: Georgia, serif; color: #5a5048; line-height: 1.55; }
+  code { font-family: 'Courier New', monospace; font-size: 11px; background: #f0ebe0; padding: 1px 5px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="cover">
+  <div class="label">Claude Code — Schema Design Session</div>
+  <h1>ARTWORKHOOK AUDIT</h1>
+  <div class="sub">R1 (Option C) interactive audit — 47 contentItem curator notes reviewed</div>
+  <div class="date">April 24, 2026 · em44j9m8 production · Opus 4.7</div>
+</div>
+
+<div class="context-box">
+  <strong>What this is:</strong> A per-item record of the April 24, 2026 interactive audit of every published <code>contentItem</code> with a non-empty legacy <code>curatorNote</code>. Each item was classified as <strong>KEEP</strong> (the text works as an artwork hook that can appear anywhere the piece does — Journey, Explore, Library, P&amp;P) or <strong>REVIEW</strong> (the text was written assuming a specific journey/day context and needs to be rewritten at piece level).
+  <br><br>
+  <strong>What changed in the data:</strong> For the 41 KEEP items, the content moved from <code>curatorNote</code> → <code>artworkHook</code> (and <code>curatorNoteAudio</code> → <code>artworkHookAudio</code> where present); the legacy fields were unset. For the 6 REVIEW items, the content stayed under the legacy <code>curatorNote</code> field unchanged. Nothing was deleted. The app reads both via a legacy GROQ alias during the rewrite window.
+</div>
+
+<h2>Counts</h2>
+<div class="stat-grid">
+  <div class="stat-card"><div class="stat-num">47</div><div class="stat-label">Items audited</div></div>
+  <div class="stat-card"><div class="stat-num" style="color:#4a7a62">41</div><div class="stat-label">KEEP — migrated</div></div>
+  <div class="stat-card"><div class="stat-num" style="color:#c25555">6</div><div class="stat-label">REVIEW — pending rewrite</div></div>
+</div>
+
+<h2>REVIEW Items — Need Rewrite</h2>
+<div class="warn">
+  These 6 items have curator-note text that is journey-specific or assumes context the user does not have when meeting the piece standalone. Sheri rewrites each in a separate editorial pass. New text goes into <code>artworkHook</code>; the old text in <code>curatorNote</code> can be deleted once the new hook is in place. Full current text is shown below for reference during rewrite.
+</div>
+<table>
+<thead><tr><th>Type</th><th>Title</th><th>Journey</th><th>P&amp;P date</th><th>Current text</th></tr></thead>
+<tbody>
+<tr class="review-row">
+  <td>landscape</td>
+  <td><strong>Addison's Walk</strong></td>
+  <td>When Myth Became Fact</td>
+  <td>—</td>
+  <td class="preview">Before Tolkien arrived at Addison's Walk, he had already written the argument in verse. A poem addressed to Lewis by name, subtitled Philomythus to Misomythus: Lover of Myth to Hater of Myth. Lewis had spent years calling myths "lies breathed through silver." Tolkien had spent the same years building Middle-earth. He took Lewis's phrase and made it the opening line of a 170-line poem arguing the other side. The man he addressed as the Hater of Myth went on to write The Chronicles of Narnia.</td>
+</tr><tr class="review-row">
+  <td>sacred-art</td>
+  <td><strong>Easter Sunday</strong></td>
+  <td>—</td>
+  <td>2026-04-05</td>
+  <td class="preview">Around 150 AD, with Christians being killed across the Empire, a philosopher named Justin Martyr walked into the Roman Emperor's court. Not to beg, but to argue. He named the gods who descend into death and return: Dionysus, Heracles, Perseus. Your own myths have been telling this story for three thousand years. We are saying it finally happened.</td>
+</tr><tr class="review-row">
+  <td>sacred-art</td>
+  <td><strong>Holy Saturday</strong></td>
+  <td>—</td>
+  <td>2026-04-04</td>
+  <td class="preview">Holy Saturday is the only day in the entire liturgical calendar with no morning Mass. No Eucharist. The tabernacle is empty. The Eastern tradition has a name for what Christ was doing while the disciples hid: the Harrowing of Hell. He went to get everyone who had been waiting.</td>
+</tr><tr class="review-row">
+  <td>thinker</td>
+  <td><strong>The Art of Being Moved</strong></td>
+  <td>Beauty, Truth &amp; Goodness</td>
+  <td>—</td>
+  <td class="preview">C.S. Lewis called it "joy",not happiness, but a kind of longing that comes when beauty touches us. It's the feeling you get when a song unexpectedly moves you to tears. When you're in a place and time stops. When you read a line someone wrote centuries ago and feel completely understood. This feeling is not sentimental. It is one of the most real things we experience. And it tells you something crucial: you are capable of encountering something beyond yourself.</td>
+</tr><tr class="review-row">
+  <td>sacred-art</td>
+  <td><strong>The Calling of Saint Matthew</strong></td>
+  <td>Light</td>
+  <td>2026-03-06</td>
+  <td class="preview">The light doesn't illuminate everything — it chooses. Caravaggio spent his life in darkness and painted light like a man who knew exactly what it cost. There is no better opening for a Journey about what light reveals.</td>
+</tr><tr class="review-row">
+  <td>sacred-art</td>
+  <td><strong>The Calling of Saint Matthew</strong></td>
+  <td>Beauty, Truth &amp; Goodness</td>
+  <td>—</td>
+  <td class="preview">Thomas Aquinas defined truth this simply: it is the correspondence between the mind and reality. This painting is beautiful because it corresponds to something real about calling, about light, about transformation. It's not making something up. It's showing us what is actually true about how love works. And Aquinas understood something crucial: all genuine beauty is a form of truth. When something is truly beautiful, it is because it reveals something real.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>KEEP Items — Migrated to artworkHook</h2>
+<p>These 41 items had their data moved from <code>curatorNote</code> → <code>artworkHook</code> on April 24, 2026. No user-visible UX change. Preview column shows the first ~140 characters of the (unchanged) content.</p>
+<table>
+<thead><tr><th>Type</th><th>Title</th><th>Journey</th><th>P&amp;P date</th><th>Preview</th></tr></thead>
+<tbody>
+<tr>
+  <td>sacred-art</td>
+  <td>Adoration of the Magi — Exterior (Grisaille Passion Panels)</td>
+  <td>Hieronymus Bosch </td>
+  <td>—</td>
+  <td class="preview">Most people who know this painting have never seen the other one. When the triptych is closed, Bosch painted seven scenes of Christ's Passio…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>Christ in Gethsemane (Agony in the Garden)</td>
+  <td>—</td>
+  <td>2026-03-21</td>
+  <td class="preview">El Greco painted this scene more than once, and each time, the gap between Christ and the sleeping disciples gets wider. That distance is th…</td>
+</tr><tr>
+  <td>food-wine</td>
+  <td>Cistercian Honey from Umbria</td>
+  <td>Light</td>
+  <td>—</td>
+  <td class="preview">Honey is photosynthesis you can taste. That sentence sounds like chemistry but it is also theology. Bonaventure wasn't using metaphors when …</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>English Blossoms</td>
+  <td>Beauty, Truth &amp; Goodness II</td>
+  <td>—</td>
+  <td class="preview">Julia Margaret Cameron became one of the most important photographers of the Victorian era and one of the most controversial. The Photograph…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>God separating Light from Darkness</td>
+  <td>Light</td>
+  <td>—</td>
+  <td class="preview">Michelangelo painted this looking upward for four years. He wrote a sonnet complaining that his neck ached and his eyes were going bad. The …</td>
+</tr><tr>
+  <td>literature</td>
+  <td>God's Grandeur</td>
+  <td>Light</td>
+  <td>—</td>
+  <td class="preview">Hopkins invented his own grammar because ordinary language wasn't strange enough to hold what he saw. "Like shining from shook foil" — it's …</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>Good Friday</td>
+  <td>—</td>
+  <td>2026-04-03</td>
+  <td class="preview">Every painter of his era put someone at the foot of the cross. Mary. A soldier. The beloved disciple. Velázquez put no one. Black background…</td>
+</tr><tr>
+  <td>thinker</td>
+  <td>Light as a Name of God</td>
+  <td>Light</td>
+  <td>—</td>
+  <td class="preview">Nobody knows who Pseudo-Dionysius actually was. He wrote under a pseudonym, borrowing the authority of a name from Acts 17. Aquinas cited hi…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>Melencolia I</td>
+  <td>Beauty, Truth &amp; Goodness II</td>
+  <td>—</td>
+  <td class="preview">In the upper right corner of the engraving, there is a magic square: a four-by-four grid of numbers where every row, column, and diagonal ad…</td>
+</tr><tr>
+  <td>music</td>
+  <td>Missa Papae Marcelli</td>
+  <td>—</td>
+  <td>2026-03-20</td>
+  <td class="preview">Listen to the six voices singing together. Not competing but complimenting each other so beautifully you almost forget they’re separate peop…</td>
+</tr><tr>
+  <td>watch-listen</td>
+  <td>My Octopus Teacher</td>
+  <td>—</td>
+  <td>2026-04-08</td>
+  <td class="preview">A man visits one octopus every day for a year. That's it. That's the whole movie. And somehow it became one of the most watched documentarie…</td>
+</tr><tr>
+  <td>thinker</td>
+  <td>Our Heart is Restless</td>
+  <td>—</td>
+  <td>—</td>
+  <td class="preview">Augustine is the patron saint of the curious seeker. He wasn't born Catholic. He was brilliant, restless, and unsatisfied — and he followed …</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>Palm Sunday</td>
+  <td>—</td>
+  <td>2026-03-29</td>
+  <td class="preview">The same crowd that shouts "Hosanna!" on Sunday will shout "Crucify him!" on Friday. Same city. Same week. Possibly some of the same people.…</td>
+</tr><tr>
+  <td>literature</td>
+  <td>Pied Beauty</td>
+  <td>—</td>
+  <td>2026-03-27</td>
+  <td class="preview">Hopkins invented a whole new way of seeing. He looked at a trout and saw theology. He looked at a chestnut and saw fire. This poem is basica…</td>
+</tr><tr>
+  <td>thinker</td>
+  <td>Roger Scruton on the Sacred and the Beautiful</td>
+  <td>—</td>
+  <td>2026-04-07</td>
+  <td class="preview">Scruton spent his whole career saying one thing: beauty matters. Not as decoration, not as opinion, but as a fundamental human need. In a wo…</td>
+</tr><tr>
+  <td>landscape</td>
+  <td>Skógafoss Waterfall, Iceland</td>
+  <td>—</td>
+  <td>2026-03-26</td>
+  <td class="preview">You don't visit Skógafoss. It visits you. The sound alone will rearrange your priorities. There's a reason every culture puts something sacr…</td>
+</tr><tr>
+  <td>music</td>
+  <td>Spiegel im Spiegel</td>
+  <td>Light</td>
+  <td>—</td>
+  <td class="preview">Pärt wrote this during a period of creative silence in which he stripped everything away — complexity, ego, ambition — until only the essent…</td>
+</tr><tr>
+  <td>music</td>
+  <td>Spiegel im Spiegel</td>
+  <td>—</td>
+  <td>2026-04-06</td>
+  <td class="preview">Pärt wrote this right before leaving his home country for good. Two instruments, one scale, almost no movement. It's the sound of someone de…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>Spy Wednesday</td>
+  <td>—</td>
+  <td>2026-04-01</td>
+  <td class="preview">Judas was paid 30 pieces of silver, the exact price set in Mosaic law for a slave who had been gored by an ox. The lowest legal compensation…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The Adoration of the Magi (Triptych)</td>
+  <td>Hieronymus Bosch </td>
+  <td>—</td>
+  <td class="preview">Bosch packed the side panels with Old Testament scenes that function as theological commentary on the central Nativity. In the left panel ba…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The Adoration of the Magi (Triptych)</td>
+  <td>—</td>
+  <td>2026-03-18, 2026-03-18</td>
+  <td class="preview">Bosch packed the side panels with Old Testament scenes that function as theological commentary on the central Nativity. In the left panel ba…</td>
+</tr><tr>
+  <td>food-wine</td>
+  <td>The Bread Ovens of Tuscany</td>
+  <td>—</td>
+  <td>2026-03-24</td>
+  <td class="preview">This isn't a cooking story. It's about what happens when a whole village shares one oven for six hundred years. The bread is just the eviden…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The Conjurer (The Magician)</td>
+  <td>Hieronymus Bosch </td>
+  <td>—</td>
+  <td class="preview">The trick isn't the trick. In The Conjurer, a street magician performs a shell game while the crowd leans in. But look at the back of the cr…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The Coronation of the Virgin</td>
+  <td>Light</td>
+  <td>—</td>
+  <td class="preview">Fra Angelico chose not to use shadows in his paradise paintings. Not because he didn't know how — Masaccio, his contemporary, was inventing …</td>
+</tr><tr>
+  <td>math-science</td>
+  <td>The Double Helix: Code Written Before Language</td>
+  <td>—</td>
+  <td>2026-03-23</td>
+  <td class="preview">Four letters. That's it. Every living thing on Earth — every oak tree, every octopus, every person you've ever loved — is written in a four-…</td>
+</tr><tr>
+  <td>math-science</td>
+  <td>The Fibonacci Spiral: Mathematics the Eye Already Knows</td>
+  <td>—</td>
+  <td>2026-03-28</td>
+  <td class="preview">Math isn't cold. Math is the part of creation that can't help showing its work. The Fibonacci spiral is everywhere — sunflowers, seashells, …</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The Garden of Earthly Delights - Full Triptych</td>
+  <td>Hieronymus Bosch </td>
+  <td>—</td>
+  <td class="preview">Bosch was 60 years old when he finished this painting. He had spent most of his adult life in the same town, in the same house, painting the…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The Garden of Earthly Delights - Hell Panel</td>
+  <td>Hieronymus Bosch </td>
+  <td>—</td>
+  <td class="preview">In Bosch's Hell, the musical instruments aren't background decoration - they're the torture devices. A man is crucified on a harp. Someone e…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The Garden of Earthly Delights — Central Panel</td>
+  <td>Hieronymus Bosch </td>
+  <td>—</td>
+  <td class="preview">Early critics didn't call this "The Garden of Earthly Delights." They called it "The Strawberry Plant." The entire central panel with hundre…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The Great Eleusinian Relief</td>
+  <td>When Myth Became Fact</td>
+  <td>—</td>
+  <td class="preview">The Eleusinian Mysteries were the most important religious rites in the ancient world. For over 1,500 years, every philosopher, general, and…</td>
+</tr><tr>
+  <td>landscape</td>
+  <td>The Hills That Held Him</td>
+  <td>—</td>
+  <td>2026-03-17</td>
+  <td class="preview">The Slemish landscape is deceptively simple: just hills, moorland, and vast Irish sky. But it held a person long enough to change what he wa…</td>
+</tr><tr>
+  <td>literature</td>
+  <td>The Lake Isle of Innisfree</td>
+  <td>—</td>
+  <td>2026-04-09</td>
+  <td class="preview">Yeats wrote this on a London street at 23, homesick for a tiny island he'd never actually lived on. That's the thing about longing — it does…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The Return of the Prodigal Son</td>
+  <td>—</td>
+  <td>2026-04-11</td>
+  <td class="preview">Rembrandt painted this broke, grieving, and near the end of his life. He was the prodigal son. He was also the father. That's why the painti…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The School of Athens</td>
+  <td>When Myth Became Fact</td>
+  <td>—</td>
+  <td class="preview">Raphael painted The School of Athens to face the wall directly across from it, which he also painted: the Disputation of the Holy Sacrament.…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The Supper at Emmaus</td>
+  <td>Beauty, Truth &amp; Goodness II</td>
+  <td>—</td>
+  <td class="preview">Rembrandt painted the Emmaus road story five times. The 1648 version, now in the Louvre, is the one that holds still. The earlier versions a…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The Supper at Emmaus</td>
+  <td>Beauty, Truth &amp; Goodness</td>
+  <td>—</td>
+  <td class="preview">In the basket of fruit at the front of this table, two stray strands of wicker form the outline of a fish. The shadow the basket casts on th…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The Temptation of Saint Anthony - Central Panel</td>
+  <td>Hieronymus Bosch </td>
+  <td>—</td>
+  <td class="preview">Saint Anthony of Egypt spent 20 years in total solitude in the desert and reportedly lived to 105. Bosch painted his temptation at least thr…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>The Trinity (Troitsa)</td>
+  <td>—</td>
+  <td>2026-03-25</td>
+  <td class="preview">The most radical thing about this icon isn't the theology — it's the empty seat. Rublev left a space at the table, and for 600 years, people…</td>
+</tr><tr>
+  <td>thinker</td>
+  <td>They Were Early</td>
+  <td>—</td>
+  <td>2026-04-12</td>
+  <td class="preview">In the 2nd century, most people assumed the new Christian faith and Greco-Roman philosophy were enemies. Justin Martyr wrote directly to Emp…</td>
+</tr><tr>
+  <td>sacred-art</td>
+  <td>Venus Mourning the Death of Adonis</td>
+  <td>When Myth Became Fact</td>
+  <td>—</td>
+  <td class="preview">Francesco Furini painted this in Florence in 1626. He was 23 years old and already on his way to becoming a Catholic priest. Art historians …</td>
+</tr><tr>
+  <td>math-science</td>
+  <td>Webb's First Deep Field: 13 Billion Years of Light</td>
+  <td>—</td>
+  <td>2026-04-10</td>
+  <td class="preview">Hold a grain of sand at arm's length against the night sky. Behind that grain of sand, the Webb telescope found thousands of galaxies. Each …</td>
+</tr>
+</tbody>
+</table>
+
+<p style="margin-top:32px; font-size:11px; color:#8a7a6a; font-style:italic;">Generated April 24, 2026. Audit decisions saved to /tmp/audit_decisions.json during the session. Migration script: <code>scripts/migrate-artwork-hook-rename.ts</code>. Pre-migration backup of all 47 items: <code>scripts/backups/contentItems-pre-artworkHook-*.json</code>.</p>
+
+</div>
+</body>
+</html>

@@ -375,17 +375,18 @@ export default defineType({
       description: '1–3 questions for contemplation.',
     }),
     defineField({
-      name: 'curatorNote',
-      title: 'Curator Note',
+      name: 'artworkHook',
+      title: 'Artwork Hook',
       type: 'text',
       rows: 3,
-      description: 'Why this was chosen. The human voice behind the curation.',
+      description:
+        'The surprising fact about this specific piece. Safe to show anywhere this piece appears (Journey, Explore, Library, P&P). Must be about the artwork itself, not a journey or day context. Journey-specific hooks live on dailyPrompt.curatorNote or journeyDay.encounterNote.',
     }),
     defineField({
-      name: 'curatorNoteAudio',
-      title: 'Curator Note — Narration Audio',
+      name: 'artworkHookAudio',
+      title: 'Artwork Hook — Narration Audio',
       type: 'file',
-      description: 'Optional MP3 narration of the curator note. Adds a small listen button.',
+      description: 'Optional MP3 narration of the artwork hook. Adds a small listen button.',
       options: {accept: 'audio/*'},
     }),
 

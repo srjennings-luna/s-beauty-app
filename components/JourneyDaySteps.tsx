@@ -452,18 +452,20 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           )}
         </div>
 
-        {/* Curator Note — the hook. First thing the user reads. */}
-        {content.curatorNote && (
+        {/* Artwork Hook — the surprising fact about this piece. First thing the user reads.
+            Renamed from curatorNote on 2026-04-24 (R1). legacyCuratorNote fallback is for
+            the short migration window and can be removed once all data has been backfilled. */}
+        {(content.artworkHook ?? content.legacyCuratorNote) && (
           <div>
-            <NarrationButton audioUrl={content.curatorNoteAudioUrl} />
+            <NarrationButton audioUrl={content.artworkHookAudioUrl ?? content.legacyCuratorNoteAudioUrl} />
             <p className="text-sm leading-relaxed mt-2" style={{ color: C.cream, lineHeight: "1.75" }}>
-              {content.curatorNote}
+              {content.artworkHook ?? content.legacyCuratorNote}
             </p>
           </div>
         )}
 
-        {/* Description — brief card text, shown only if no curator note, or as fallback */}
-        {!content.curatorNote && (
+        {/* Description — brief card text, shown only if no artwork hook, or as fallback */}
+        {!(content.artworkHook ?? content.legacyCuratorNote) && (
           <p className="text-sm leading-relaxed" style={{ color: C.cream }}>
             {content.description}
           </p>
@@ -730,7 +732,7 @@ function StepReflect({
   questionIndex: number;
   onNextQuestion: () => void;
 }) {
-  const questions = day.reflectQuestions ?? [];
+  const questions = day.reflectionQuestions ?? [];
   const total = questions.length;
   const current = Math.min(questionIndex, total - 1);
   const isLast = current >= total - 1;

@@ -663,18 +663,18 @@
       },
       {
         "rows": 3,
-        "description": "Why this was chosen. The human voice behind the curation.",
-        "name": "curatorNote",
+        "description": "The surprising fact about this specific piece. Safe to show anywhere this piece appears (Journey, Explore, Library, P&P). Must be about the artwork itself, not a journey or day context. Journey-specific hooks live on dailyPrompt.curatorNote or journeyDay.encounterNote.",
+        "name": "artworkHook",
         "type": "text"
       },
       {
         "options": {
           "accept": "audio/*"
         },
-        "description": "Optional MP3 narration of the curator note. Adds a small listen button.",
-        "name": "curatorNoteAudio",
+        "description": "Optional MP3 narration of the artwork hook. Adds a small listen button.",
+        "name": "artworkHookAudio",
         "type": "file",
-        "title": "Curator Note — Narration Audio"
+        "title": "Artwork Hook — Narration Audio"
       },
       {
         "rows": 6,
@@ -902,284 +902,16 @@
             "level": "error"
           }
         ],
-        "description": "Up to 9 days. Each follows: Open → Encounter → Reflect → Connect → Go Deeper.",
+        "description": "References to journeyDay documents. Add existing journeyDay docs or create new ones. Each day follows: Open → Encounter → Reflect → Connect → Go Deeper.",
         "of": [
           {
-            "fields": [
+            "to": [
               {
-                "validation": [
-                  {
-                    "rules": [
-                      {
-                        "flag": "presence",
-                        "constraint": "required"
-                      },
-                      {
-                        "flag": "min",
-                        "constraint": 1
-                      },
-                      {
-                        "flag": "max",
-                        "constraint": 9
-                      }
-                    ],
-                    "level": "error"
-                  }
-                ],
-                "description": "1–7",
-                "name": "dayNumber",
-                "type": "number"
-              },
-              {
-                "validation": [
-                  {
-                    "rules": [
-                      {
-                        "flag": "presence",
-                        "constraint": "required"
-                      }
-                    ],
-                    "level": "error"
-                  }
-                ],
-                "description": "e.g., \"The First Light\" or \"What Darkness Teaches\"",
-                "name": "dayTitle",
-                "type": "string"
-              },
-              {
-                "options": {
-                  "hotspot": true
-                },
-                "validation": [
-                  {
-                    "rules": [
-                      {
-                        "flag": "presence",
-                        "constraint": "required"
-                      }
-                    ],
-                    "level": "error"
-                  }
-                ],
-                "description": "ALWAYS required. The visual anchor for the day. Min 1200px.",
-                "name": "openImage",
-                "type": "image",
-                "title": "Opening Image"
-              },
-              {
-                "rows": 3,
-                "description": "Brief opening text (~1 min read). Sets the day's frame.",
-                "name": "openText",
-                "type": "text",
-                "title": "Opening Text"
-              },
-              {
-                "options": {
-                  "accept": "audio/*"
-                },
-                "description": "Optional MP3 narration of the opening text. Adds a small listen button.",
-                "name": "openTextAudio",
-                "type": "file",
-                "title": "Opening Text — Narration Audio"
-              },
-              {
-                "validation": [
-                  {
-                    "rules": [
-                      {
-                        "flag": "presence",
-                        "constraint": "required"
-                      }
-                    ],
-                    "level": "error"
-                  }
-                ],
-                "description": "The primary content for this day (3–5 min encounter).",
-                "to": [
-                  {
-                    "type": "contentItem"
-                  }
-                ],
-                "name": "encounterContent",
-                "type": "reference"
-              },
-              {
-                "rows": 3,
-                "description": "Optional editorial guidance. e.g., \"Listen with your eyes closed for the first minute.\"",
-                "name": "encounterGuidance",
-                "type": "text"
-              },
-              {
-                "rows": 5,
-                "description": "Interpretive layer specific to this day's content type. Sacred art → symbolism/iconography. Literature → close reading. Music → listening guide. Landscape → ecological/geological insight. Thinkers → intellectual context. Pattern & Proof → plain-language explanation. Watch & Listen → viewing guide. Food & Wine → craft tradition.",
-                "name": "encounterNote",
-                "type": "text",
-                "title": "Encounter Note (Look Closer)"
-              },
-              {
-                "options": {
-                  "accept": "audio/*"
-                },
-                "description": "Optional MP3 narration of the Look Closer text. Adds a Listen button at the top of the Look Closer section.",
-                "name": "encounterNoteAudio",
-                "type": "file",
-                "title": "Encounter Note — Narration Audio"
-              },
-              {
-                "description": "Optional audio pairing for this day. Use file upload for in-app playback; URL for direct MP3 links; external link for YouTube/Spotify (opens outside app).",
-                "fields": [
-                  {
-                    "description": "e.g., \"Allegri — Miserere Mei, Deus\"",
-                    "name": "title",
-                    "type": "string"
-                  },
-                  {
-                    "description": "e.g., \"Gregorio Allegri\"",
-                    "name": "composer",
-                    "type": "string",
-                    "title": "Composer / Artist"
-                  },
-                  {
-                    "description": "e.g., \"Public domain — multiple recordings on Musopen and Internet Archive\"",
-                    "name": "licensingNote",
-                    "type": "string"
-                  },
-                  {
-                    "options": {
-                      "accept": "audio/*"
-                    },
-                    "description": "Upload an MP3 — plays directly in KALLOS.",
-                    "name": "audioFile",
-                    "type": "file",
-                    "title": "Audio File (in-app playback)"
-                  },
-                  {
-                    "description": "Direct MP3 link (e.g. archive.org) — plays in-app.",
-                    "name": "audioUrl",
-                    "type": "string",
-                    "title": "Audio URL (in-app playback)"
-                  },
-                  {
-                    "validation": [
-                      {
-                        "rules": [
-                          {
-                            "flag": "uri",
-                            "constraint": {
-                              "options": {
-                                "scheme": [
-                                  "/^http$/",
-                                  "/^https$/"
-                                ],
-                                "allowRelative": false,
-                                "relativeOnly": false,
-                                "allowCredentials": false
-                              }
-                            }
-                          }
-                        ],
-                        "level": "error"
-                      }
-                    ],
-                    "description": "YouTube, Spotify, or Apple Music. Opens outside the app.",
-                    "name": "externalUrl",
-                    "type": "url",
-                    "title": "External Link (reference only)"
-                  }
-                ],
-                "name": "auditio",
-                "type": "object",
-                "title": "Auditio (Audio Suggestion)"
-              },
-              {
-                "description": "Optional philosophy + scripture pairing for this day. Connects the encounter to broader intellectual and spiritual tradition.",
-                "fields": [
-                  {
-                    "rows": 3,
-                    "description": "A quote from a philosopher, thinker, or writer (may be secular). e.g., Plato, Bergson, Socrates.",
-                    "name": "philosophyQuote",
-                    "type": "text"
-                  },
-                  {
-                    "description": "Full attribution. e.g., \"Plato, Republic (Allegory of the Cave)\"",
-                    "name": "philosophySource",
-                    "type": "string"
-                  },
-                  {
-                    "rows": 3,
-                    "description": "Scripture pairing for this day.",
-                    "name": "scriptureVerse",
-                    "type": "text"
-                  },
-                  {
-                    "description": "e.g., \"1 Corinthians 13:12\"",
-                    "name": "scriptureReference",
-                    "type": "string"
-                  },
-                  {
-                    "rows": 3,
-                    "description": "Why this pairing works. How the philosophy and scripture echo each other and connect to the day's encounter.",
-                    "name": "connectionNote",
-                    "type": "text"
-                  }
-                ],
-                "name": "lectio",
-                "type": "object"
-              },
-              {
-                "validation": [
-                  {
-                    "rules": [
-                      {
-                        "flag": "presence",
-                        "constraint": "required"
-                      },
-                      {
-                        "flag": "min",
-                        "constraint": 1
-                      },
-                      {
-                        "flag": "max",
-                        "constraint": 2
-                      }
-                    ],
-                    "level": "error"
-                  }
-                ],
-                "description": "Journey-specific questions for this day (1–2).",
-                "of": [
-                  {
-                    "type": "string"
-                  }
-                ],
-                "name": "reflectQuestions",
-                "type": "array",
-                "title": "Reflection Questions"
-              },
-              {
-                "description": "One sentence threading to tomorrow. e.g., \"Tomorrow: what happens when the light goes away?\"",
-                "name": "connectThread",
-                "type": "string"
-              },
-              {
-                "description": "Optional tradition reflections for this day.",
-                "of": [
-                  {
-                    "to": [
-                      {
-                        "type": "traditionReflection"
-                      }
-                    ],
-                    "type": "reference",
-                    "title": "Reference to tradition reflection (church fathers, saints & popes)"
-                  }
-                ],
-                "name": "goDeeper",
-                "type": "array"
+                "type": "journeyDay"
               }
             ],
-            "type": "object",
-            "name": "journeyDay"
+            "type": "reference",
+            "title": "Reference to journey day"
           }
         ],
         "name": "days",
@@ -1262,6 +994,361 @@
       }
     ],
     "name": "journey",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The journey this day belongs to.",
+        "to": [
+          {
+            "type": "journey"
+          }
+        ],
+        "name": "journey",
+        "type": "reference"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 9
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "1–9",
+        "name": "dayNumber",
+        "type": "number"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "e.g., \"The First Light\" or \"What Darkness Teaches\"",
+        "name": "dayTitle",
+        "type": "string"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "ALWAYS required. The visual anchor for the day. Min 1200px.",
+        "name": "openImage",
+        "type": "image",
+        "title": "Opening Image"
+      },
+      {
+        "rows": 3,
+        "description": "Brief opening text (~1 min read). Sets the day's frame.",
+        "name": "openText",
+        "type": "text",
+        "title": "Opening Text"
+      },
+      {
+        "options": {
+          "accept": "audio/*"
+        },
+        "description": "Optional MP3 narration of the opening text. Adds a small listen button.",
+        "name": "openTextAudio",
+        "type": "file",
+        "title": "Opening Text — Narration Audio"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The primary content for this day (3–5 min encounter).",
+        "to": [
+          {
+            "type": "contentItem"
+          }
+        ],
+        "name": "encounterContent",
+        "type": "reference"
+      },
+      {
+        "rows": 3,
+        "description": "Optional editorial guidance. e.g., \"Listen with your eyes closed for the first minute.\"",
+        "name": "encounterGuidance",
+        "type": "text"
+      },
+      {
+        "rows": 5,
+        "description": "Interpretive layer specific to this day's content type. Sacred art → symbolism/iconography. Literature → close reading. Music → listening guide. Landscape → ecological/geological insight. Thinkers → intellectual context. Pattern & Proof → plain-language explanation. Watch & Listen → viewing guide. Food & Wine → craft tradition.",
+        "name": "encounterNote",
+        "type": "text",
+        "title": "Encounter Note (Look Closer)"
+      },
+      {
+        "options": {
+          "accept": "audio/*"
+        },
+        "description": "Optional MP3 narration of the Look Closer text. Adds a Listen button at the top of the Look Closer section.",
+        "name": "encounterNoteAudio",
+        "type": "file",
+        "title": "Encounter Note — Narration Audio"
+      },
+      {
+        "description": "Optional audio pairing for this day. Use file upload for in-app playback; URL for direct MP3 links; external link for YouTube/Spotify (opens outside app).",
+        "fields": [
+          {
+            "description": "e.g., \"Allegri — Miserere Mei, Deus\"",
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "description": "e.g., \"Gregorio Allegri\"",
+            "name": "composer",
+            "type": "string",
+            "title": "Composer / Artist"
+          },
+          {
+            "description": "Just the name, e.g., \"Gregorio Allegri\" or \"Arvo Pärt\". Used for dedup and content-repeat analysis.",
+            "name": "composerArtist",
+            "type": "string",
+            "title": "Composer / Artist (structured)"
+          },
+          {
+            "description": "Just the piece, e.g., \"Miserere Mei, Deus\". Used for dedup — same composer twice is fine; same work twice is repetition.",
+            "name": "workTitle",
+            "type": "string",
+            "title": "Work Title (structured)"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Gregorian chant",
+                  "value": "gregorian-chant"
+                },
+                {
+                  "title": "Sacred polyphony",
+                  "value": "sacred-polyphony"
+                },
+                {
+                  "title": "Classical / orchestral",
+                  "value": "classical-orchestral"
+                },
+                {
+                  "title": "Contemporary sacred",
+                  "value": "contemporary-sacred"
+                },
+                {
+                  "title": "Ambient / meditation",
+                  "value": "ambient-meditation"
+                },
+                {
+                  "title": "Folk",
+                  "value": "folk"
+                },
+                {
+                  "title": "World music",
+                  "value": "world-music"
+                },
+                {
+                  "title": "Jazz",
+                  "value": "jazz"
+                },
+                {
+                  "title": "Secular",
+                  "value": "secular"
+                }
+              ],
+              "layout": "dropdown"
+            },
+            "description": "Select the closest genre. Used to track variety across journeys and prevent over-reliance on any single register.",
+            "name": "genre",
+            "type": "string"
+          },
+          {
+            "description": "e.g., \"Public domain — multiple recordings on Musopen and Internet Archive\"",
+            "name": "licensingNote",
+            "type": "string"
+          },
+          {
+            "options": {
+              "accept": "audio/*"
+            },
+            "description": "Upload an MP3 — plays directly in KALLOS.",
+            "name": "audioFile",
+            "type": "file",
+            "title": "Audio File (in-app playback)"
+          },
+          {
+            "description": "Direct MP3 link (e.g. archive.org) — plays in-app.",
+            "name": "audioUrl",
+            "type": "string",
+            "title": "Audio URL (in-app playback)"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "YouTube, Spotify, or Apple Music. Opens outside the app.",
+            "name": "externalUrl",
+            "type": "url",
+            "title": "External Link (reference only)"
+          }
+        ],
+        "name": "auditio",
+        "type": "object",
+        "title": "Auditio (Audio Suggestion)"
+      },
+      {
+        "description": "Optional philosophy + scripture pairing for this day. Connects the encounter to broader intellectual and spiritual tradition.",
+        "fields": [
+          {
+            "rows": 3,
+            "description": "A quote from a philosopher, thinker, or writer (may be secular). e.g., Plato, Bergson, Socrates.",
+            "name": "philosophyQuote",
+            "type": "text"
+          },
+          {
+            "description": "Full attribution. e.g., \"Plato, Republic (Allegory of the Cave)\"",
+            "name": "philosophySource",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "description": "Scripture pairing for this day.",
+            "name": "scriptureVerse",
+            "type": "text"
+          },
+          {
+            "description": "e.g., \"1 Corinthians 13:12\"",
+            "name": "scriptureReference",
+            "type": "string"
+          },
+          {
+            "rows": 3,
+            "description": "Why this pairing works. How the philosophy and scripture echo each other and connect to the day's encounter.",
+            "name": "connectionNote",
+            "type": "text"
+          }
+        ],
+        "name": "lectio",
+        "type": "object"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 2
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Journey-specific questions for this day (1–2).",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "reflectionQuestions",
+        "type": "array"
+      },
+      {
+        "description": "One sentence threading to tomorrow. e.g., \"Tomorrow: what happens when the light goes away?\"",
+        "name": "connectThread",
+        "type": "string"
+      },
+      {
+        "description": "Optional tradition reflections for this day.",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "traditionReflection"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to tradition reflection (church fathers, saints & popes)"
+          }
+        ],
+        "name": "goDeeper",
+        "type": "array"
+      }
+    ],
+    "name": "journeyDay",
     "type": "document"
   },
   {
@@ -1394,6 +1481,64 @@
             "name": "artist",
             "type": "string",
             "title": "Artist / Composer"
+          },
+          {
+            "description": "Just the name, e.g., \"Gregorio Allegri\" or \"Arvo Pärt\". Used for dedup and content-repeat analysis.",
+            "name": "composerArtist",
+            "type": "string",
+            "title": "Composer / Artist (structured)"
+          },
+          {
+            "description": "Just the piece, e.g., \"Miserere Mei, Deus\". Used for dedup — same composer twice is fine; same work twice is repetition.",
+            "name": "workTitle",
+            "type": "string",
+            "title": "Work Title (structured)"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Gregorian chant",
+                  "value": "gregorian-chant"
+                },
+                {
+                  "title": "Sacred polyphony",
+                  "value": "sacred-polyphony"
+                },
+                {
+                  "title": "Classical / orchestral",
+                  "value": "classical-orchestral"
+                },
+                {
+                  "title": "Contemporary sacred",
+                  "value": "contemporary-sacred"
+                },
+                {
+                  "title": "Ambient / meditation",
+                  "value": "ambient-meditation"
+                },
+                {
+                  "title": "Folk",
+                  "value": "folk"
+                },
+                {
+                  "title": "World music",
+                  "value": "world-music"
+                },
+                {
+                  "title": "Jazz",
+                  "value": "jazz"
+                },
+                {
+                  "title": "Secular",
+                  "value": "secular"
+                }
+              ],
+              "layout": "dropdown"
+            },
+            "description": "Select the closest genre. Used to track variety across journeys and prevent over-reliance on any single register.",
+            "name": "genre",
+            "type": "string"
           },
           {
             "description": "Use either the file upload or the URL — not both.",

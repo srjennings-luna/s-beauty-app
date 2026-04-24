@@ -36,8 +36,12 @@ export type ContentItem = {
   context?: string;
   themes: Theme[];
   reflectionQuestions?: string[];
-  curatorNote?: string;
-  curatorNoteAudioUrl?: string;
+  artworkHook?: string;
+  artworkHookAudioUrl?: string;
+  /** @deprecated — use artworkHook; temporary read-through during R1 migration (April 2026). */
+  legacyCuratorNote?: string;
+  /** @deprecated — use artworkHookAudioUrl; temporary read-through during R1 migration. */
+  legacyCuratorNoteAudioUrl?: string;
   contextAudioUrl?: string;
   // Location (optional for non-place content)
   locationName?: string;
@@ -108,6 +112,9 @@ export type JourneyDayLectio = {
 export type JourneyDayAuditio = {
   title?: string;
   composer?: string;
+  composerArtist?: string; // Structured composer/artist name — for dedup / content-repeat
+  workTitle?: string;      // Structured work title — for dedup
+  genre?: string;          // Enum — see auditio genre list in schema
   licensingNote?: string;
   audioFileUrl?: string; // Resolved from audioFile.asset->url — plays in-app
   audioUrl?: string;     // Direct MP3 URL — plays in-app
@@ -115,6 +122,7 @@ export type JourneyDayAuditio = {
 };
 
 export type JourneyDay = {
+  _id?: string;
   dayNumber: number;
   dayTitle: string;
   openImageUrl: string;
@@ -126,7 +134,7 @@ export type JourneyDay = {
   encounterNoteAudioUrl?: string;
   lectio?: JourneyDayLectio;
   auditio?: JourneyDayAuditio;
-  reflectQuestions: string[];
+  reflectionQuestions: string[];
   connectThread?: string;
   goDeeper?: TraditionReflection[];
 };
@@ -163,6 +171,9 @@ export type DailyPromptLectio = {
 export type DailyPromptAuditio = {
   title: string;
   artist?: string;
+  composerArtist?: string;  // Structured composer/artist name — for dedup
+  workTitle?: string;       // Structured work title — for dedup
+  genre?: string;           // Enum — see auditio genre list in schema
   audioFileUrl?: string;    // Sanity-hosted file — resolved asset URL, plays in-app
   audioUrl?: string;        // External URL string — plays in-app
   url?: string;             // External link (YouTube, Spotify, etc.) — fallback only

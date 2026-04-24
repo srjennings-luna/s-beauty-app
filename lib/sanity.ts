@@ -51,9 +51,12 @@ const CONTENT_ITEM_FIELDS = `
   context,
   "themes": themes[]->{${THEME_FIELDS}},
   reflectionQuestions,
-  curatorNote,
-  "curatorNoteAudioUrl": curatorNoteAudio.asset->url,
+  artworkHook,
+  "artworkHookAudioUrl": artworkHookAudio.asset->url,
   "contextAudioUrl": contextAudio.asset->url,
+  // Legacy — pulled for data-migration window only; remove after backfill verified
+  "legacyCuratorNote": curatorNote,
+  "legacyCuratorNoteAudioUrl": curatorNoteAudio.asset->url,
   locationName,
   city,
   country,
@@ -178,7 +181,7 @@ export async function getJourney(slug: string) {
       isPublished,
       order,
       "totalDays": coalesce(totalDays, count(days)),
-      "days": days[] {
+      "days": days[]-> {
         dayNumber,
         dayTitle,
         "openImageUrl": openImage.asset->url,
@@ -198,12 +201,15 @@ export async function getJourney(slug: string) {
         "auditio": auditio {
           title,
           composer,
+          composerArtist,
+          workTitle,
+          genre,
           licensingNote,
           "audioFileUrl": audioFile.asset->url,
           audioUrl,
           externalUrl
         },
-        reflectQuestions,
+        reflectionQuestions,
         connectThread,
         "goDeeper": goDeeper[]->{
           _id,
@@ -241,6 +247,9 @@ const DAILY_PROMPT_FIELDS = `
   "auditio": auditio {
     title,
     artist,
+    composerArtist,
+    workTitle,
+    genre,
     url,
     "audioFileUrl": audioUrl.audioFile.asset->url,
     "audioUrl": audioUrl.audioUrl,
@@ -397,6 +406,7 @@ export async function getArtworkById(id: string) {
       country,
       coordinates,
       traditionalPrayer,
+      traditionalPrayerSource,
       "traditionReflections": traditionReflections[]->{
         _id,
         title,
@@ -417,16 +427,18 @@ export async function getArtworkById(id: string) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function getDashboardJourneyCompletion() {
+  // Post-R5: queries journeyDay documents directly, groups by journey._ref.
+  // Faster and cleaner than traversing the ref array from the journey side.
   return sanityClient.fetch(`
-    *[_type == "journey"] | order(order asc) {
+    *[_type == "journey" && !string::startsWith(_id, "drafts.")] | order(order asc) {
       _id, title, "slug": slug.current, description, order, isPublished,
       "totalDays": coalesce(totalDays, count(days)),
-      "daysBuilt": count(days),
+      "daysBuilt": count(*[_type == "journeyDay" && journey._ref == ^._id && !string::startsWith(_id, "drafts.")]),
       "plannedCount": count(plannedDays),
       estimatedMinutesPerDay,
       "themeName": theme->title,
-      "days": days[] | order(dayNumber asc) {
-        dayNumber, dayTitle,
+      "days": *[_type == "journeyDay" && journey._ref == ^._id && !string::startsWith(_id, "drafts.")] | order(dayNumber asc) {
+        _id, dayNumber, dayTitle,
         "hasOpenImage": defined(openImage),
         "openTextLen": length(coalesce(openText, "")),
         "hasOpenTextAudio": defined(openTextAudio.asset),
@@ -435,8 +447,11 @@ export async function getDashboardJourneyCompletion() {
         "hasEncNoteAudio": defined(encounterNoteAudio.asset),
         "hasAuditio": defined(auditio.title),
         "hasAuditioFile": defined(auditio.audioFile.asset),
+        "auditioGenre": auditio.genre,
+        "auditioComposerArtist": auditio.composerArtist,
+        "auditioWorkTitle": auditio.workTitle,
         "hasLectio": length(coalesce(lectio.scriptureVerse, "")) > 0,
-        "reflectCount": count(reflectQuestions),
+        "reflectCount": count(reflectionQuestions),
         "hasConnect": length(coalesce(connectThread, "")) > 0,
         "goDeeperCount": count(goDeeper)
       }
@@ -445,16 +460,22 @@ export async function getDashboardJourneyCompletion() {
 }
 
 export async function getDashboardContentItems() {
+  // The `needsArtworkHookReview` flag detects REVIEW items from the April 24
+  // audit by data state alone — KEEP items had curatorNote unset during the
+  // rename migration, so any content item still holding legacy curatorNote
+  // text is awaiting rewrite into the artwork-level hook.
   return sanityClient.fetch(`
     *[_type == "contentItem" && !string::startsWith(_id, "drafts.")] | order(contentType asc, title asc) {
       _id, contentType, title, artist, thinkerName, author, composer, year, medium, era,
       "hasImage": defined(image.asset),
-      "hasCurator": length(coalesce(curatorNote, "")) > 0,
+      "hasArtworkHook": length(coalesce(artworkHook, "")) > 0,
       "hasContext": length(coalesce(context, "")) > 0,
       "hasAudioFile": defined(audioSource.audioFile.asset) || defined(audioFile.asset),
       "themeCount": count(themes),
       "themeNames": themes[]->title,
-      "journeyTitles": *[_type=="journey" && references(^._id)].title
+      "needsArtworkHookReview": defined(curatorNote) && length(curatorNote) > 0,
+      // Post-R5: content items are referenced by journeyDay, not journey.
+      "journeyTitles": array::unique(*[_type == "journeyDay" && encounterContent._ref == ^._id]{ "t": journey->title }.t)
     }
   `)
 }
@@ -468,13 +489,15 @@ export async function getDashboardTraditionReflections() {
         "hasAudio": defined(reflectionAudio.asset),
         "themeCount": count(themes),
         "themeNames": themes[]->title,
-        "journeyCount": count(*[_type=="journey" && references(^._id)]),
-        "journeyTitles": *[_type=="journey" && references(^._id)].title
+        // Post-R5: TRs are referenced by journeyDay, not journey. Find
+        // journeys by traversing the journeyDay → journey ref.
+        "journeyTitles": array::unique(*[_type == "journeyDay" && references(^._id)]{ "t": journey->title }.t),
+        "journeyCount": count(array::unique(*[_type == "journeyDay" && references(^._id)]{ "t": journey->title }.t))
       },
-      "byJourney": *[_type == "journey"] | order(order asc) {
+      "byJourney": *[_type == "journey" && !string::startsWith(_id, "drafts.")] | order(order asc) {
         _id, title, "slug": slug.current,
-        "daysBuilt": count(days),
-        "trRefs": days[].goDeeper[]->{ _id, title, source, authorType, era }
+        "daysBuilt": count(*[_type == "journeyDay" && journey._ref == ^._id && !string::startsWith(_id, "drafts.")]),
+        "trRefs": *[_type == "journeyDay" && journey._ref == ^._id && !string::startsWith(_id, "drafts.")].goDeeper[]->{ _id, title, source, authorType, era }
       }
     }
   `)
@@ -483,9 +506,9 @@ export async function getDashboardTraditionReflections() {
 export async function getDashboardAudioStatus() {
   return sanityClient.fetch(`
     {
-      "journeys": *[_type == "journey"] | order(order asc) {
+      "journeys": *[_type == "journey" && !string::startsWith(_id, "drafts.")] | order(order asc) {
         title, "slug": slug.current,
-        "days": days[] | order(dayNumber asc) {
+        "days": *[_type == "journeyDay" && journey._ref == ^._id && !string::startsWith(_id, "drafts.")] | order(dayNumber asc) {
           dayNumber, dayTitle,
           "hasOpenTextAudio": defined(openTextAudio.asset),
           "hasEncNoteAudio": defined(encounterNoteAudio.asset),
@@ -499,6 +522,10 @@ export async function getDashboardAudioStatus() {
         "hasAuditioFile": defined(auditio.audioUrl.audioFile.asset),
         "hasAuditioUrl": defined(auditio.audioUrl.audioUrl),
         "hasAuditioExt": defined(auditio.url)
+      },
+      "genres": {
+        "journeyDay": *[_type == "journeyDay" && !string::startsWith(_id, "drafts.") && defined(auditio.genre)]{ "genre": auditio.genre },
+        "dailyPrompt": *[_type == "dailyPrompt" && !string::startsWith(_id, "drafts.") && defined(auditio.genre)]{ "genre": auditio.genre }
       }
     }
   `)
@@ -507,9 +534,9 @@ export async function getDashboardAudioStatus() {
 export async function getDashboardTTSAudit() {
   return sanityClient.fetch(`
     {
-      "journeyDayTTS": *[_type=="journey"]{
+      "journeyDayTTS": *[_type == "journey" && !string::startsWith(_id, "drafts.")]{
         title,
-        "days": days[]{
+        "days": *[_type == "journeyDay" && journey._ref == ^._id && !string::startsWith(_id, "drafts.")] | order(dayNumber asc) {
           dayNumber, dayTitle,
           "openTextChars": length(coalesce(openText, "")),
           "openTextHasAudio": defined(openTextAudio.asset),
@@ -519,8 +546,8 @@ export async function getDashboardTTSAudit() {
       },
       "contentItemTTS": *[_type=="contentItem" && !string::startsWith(_id, "drafts.")]{
         _id, title, contentType,
-        "curatorChars": length(coalesce(curatorNote, "")),
-        "curatorHasAudio": defined(curatorNoteAudio.asset),
+        "artworkHookChars": length(coalesce(artworkHook, coalesce(curatorNote, ""))),
+        "artworkHookHasAudio": defined(artworkHookAudio.asset) || defined(curatorNoteAudio.asset),
         "contextChars": length(coalesce(context, "")),
         "contextHasAudio": defined(contextAudio.asset)
       },

@@ -1,4 +1,11 @@
 /**
+ * ⚠️  DEPRECATED April 24, 2026 — journey.days is now an array of references
+ *     to standalone journeyDay documents, not inline objects. This script
+ *     still writes the old inline shape (see line ~367) and will break the
+ *     schema if re-run. Rewrite to create journeyDay docs first (see
+ *     scripts/migrate-journey-days-to-documents.ts for the pattern), then
+ *     patch journey.days with references. Do not re-run until updated.
+ *
  * KALLOS — Seed "Beauty, Truth & Goodness" Intro Journey into Sanity
  *
  * This script creates:
