@@ -5,13 +5,14 @@ const nextConfig: NextConfig = {
     return [
       {
         // Allow Sanity Studio to embed the app in the Presentation preview iframe.
-        // Restricts framing to Sanity Studio domains only — not open to all origins.
+        // CSP frame-ancestors restricts embedding to Sanity Studio subdomains only.
+        // X-Frame-Options is intentionally omitted — `ALLOW-FROM` is deprecated
+        // and several browsers treat an unknown value as `DENY`, blocking the
+        // iframe even when CSP allows it. Per spec, frame-ancestors supersedes
+        // X-Frame-Options when both are present, so omitting it is the correct
+        // choice for a Presentation-embeddable app.
         source: '/(.*)',
         headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'ALLOW-FROM https://seeking-beauty.sanity.studio',
-          },
           {
             key: 'Content-Security-Policy',
             value: "frame-ancestors 'self' https://*.sanity.studio",
