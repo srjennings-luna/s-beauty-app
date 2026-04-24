@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KALLOS — Dashboard Enhancement & Schema Additions Brief</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Georgia', serif; line-height: 1.8; color: #2C2C2C; background: #FFFFFF; }
+    .container { max-width: 900px; margin: 0 auto; padding: 60px 40px 120px; }
+    .cover { background: #16110d; color: #fdf6e8; text-align: center; padding: 60px 40px 48px; margin: -60px -40px 52px; }
+    .cover .label { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #C19B5F; margin-bottom: 16px; }
+    .cover h1 { font-size: 28px; font-weight: 300; letter-spacing: 3px; color: #fdf6e8; margin-bottom: 8px; }
+    .cover .sub { font-size: 14px; color: #bfb8aa; font-style: italic; }
+    .cover .date { font-size: 11px; color: #7a7062; margin-top: 12px; }
+    h2 { font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; color: #C19B5F; margin-top: 48px; margin-bottom: 16px; letter-spacing: 0.2em; text-transform: uppercase; padding-bottom: 8px; border-bottom: 1px solid #e8e0d4; }
+    h3 { font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; color: #16110d; margin: 24px 0 10px; }
+    p { font-size: 14px; margin-bottom: 12px; }
+    ul, ol { margin: 8px 0 14px 24px; font-size: 14px; }
+    li { margin-bottom: 6px; }
+    .context-box { background: #fdf6e8; border-left: 4px solid #C19B5F; padding: 18px 22px; margin: 28px 0; font-size: 14px; line-height: 1.8; }
+    .context-box strong { color: #16110d; }
+    .task-block { border: 1px solid #e8e0d4; margin: 24px 0; }
+    .task-header { background: #16110d; color: #fdf6e8; padding: 12px 20px; display: flex; align-items: baseline; gap: 14px; }
+    .task-num { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C19B5F; flex-shrink: 0; }
+    .task-title { font-size: 16px; font-weight: 300; }
+    .task-body { padding: 18px 22px; }
+    .task-body p { font-size: 14px; margin-bottom: 10px; }
+    .task-body ul, .task-body ol { margin: 8px 0 14px 22px; }
+    .task-body li { font-size: 14px; margin-bottom: 6px; }
+    .output-block { background: #f5f0e8; border-left: 3px solid #C19B5F; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .output-block .out-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #C19B5F; font-weight: 700; margin-bottom: 6px; }
+    .warn-block { background: #fdf0f0; border-left: 3px solid #c25555; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .warn-block .warn-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #c25555; font-weight: 700; margin-bottom: 6px; }
+    .success-block { background: #f0f7f3; border-left: 3px solid #4a7a62; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .success-block .suc-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #4a7a62; font-weight: 700; margin-bottom: 6px; }
+    .stretch-block { background: #f0f0ff; border-left: 3px solid #7070c0; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .stretch-block .stretch-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #7070c0; font-weight: 700; margin-bottom: 6px; }
+    code { font-family: 'Courier New', monospace; font-size: 12px; background: #f0ebe0; padding: 2px 6px; }
+    .priority-tag { font-family: Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; margin-left: 8px; }
+    .p1 { background: #fdf0f0; color: #c25555; }
+    .p2 { background: #fff5e0; color: #a06010; }
+    .p3 { background: #f0f7f3; color: #4a7a62; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+    th { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #fdf6e8; background: #16110d; text-align: left; padding: 8px 12px; }
+    td { padding: 8px 12px; border-bottom: 1px solid #e8e0d4; vertical-align: top; }
+    tr:nth-child(even) td { background: #fdf6e8; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="cover">
+    <div class="label">Claude Code — Working Brief</div>
+    <h1>DASHBOARD ENHANCEMENTS<br>& SCHEMA ADDITIONS</h1>
+    <div class="sub">TTS columns, filter/sort, schema dropdowns, audio field, Presentation plugin</div>
+    <div class="date">April 2026 — Read CLAUDE.md before starting</div>
+  </div>
+
+  <div class="context-box">
+    <strong>Context:</strong> The content dashboard at <code>/dashboard</code> was built and deployed April 23, 2026 (see Phase 2 Work Done in CLAUDE.md). This session adds missing TTS audio columns, filter/sort interactivity, two schema dropdown options, a new audio field, and installs the Sanity Presentation plugin for real-time live preview while editing.
+    <br><br>
+    <strong>Prerequisite:</strong> Read <code>CLAUDE.md</code> — specifically Schema Status, Phase 2 Work Done (April 23), and the dashboard section. The schema migration (journeyDay promotion, artworkHook rename) from the previous CC session is already complete.
+  </div>
+
+  <div class="warn-block">
+    <div class="warn-label">Model</div>
+    Use <strong>Claude Opus 4.6</strong>.
+  </div>
+
+  <div class="context-box">
+    <strong>Working style:</strong> Surface work as you go. Commit after each task so there is a clean rollback per task if anything breaks. Do not bundle all changes into a single commit at the end.
+  </div>
+
+  <h2>Order of Operations</h2>
+  <table>
+    <thead><tr><th>Task</th><th>What</th><th>Risk</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Schema additions — photography content type + ancient era option + reflectionQuestionsAudio field</td><td>Low — additive only</td></tr>
+      <tr><td>2</td><td>Dashboard — add 3 missing TTS audio columns</td><td>Low — query + display change</td></tr>
+      <tr><td>3</td><td>Dashboard — filter/sort via client component refactor</td><td>Medium — architectural change to dashboard</td></tr>
+      <tr><td>4</td><td>Dashboard — work-level repeat detection</td><td>Low — new query + display</td></tr>
+      <tr><td>5 (stretch)</td><td>Sanity Presentation plugin — live preview while editing</td><td>Medium — new package, config change</td></tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══ TASK 1 ═══ -->
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 1</span>
+      <span class="task-title">Schema additions <span class="priority-tag p1">Must do</span></span>
+    </div>
+    <div class="task-body">
+      <p>Three additive schema changes. No data migration. No existing records affected.</p>
+
+      <h3>1a. Photography as content type</h3>
+      <p>In <code>sanity/schemaTypes/contentItem.ts</code>, add <code>photography</code> to the <code>contentType</code> field options list. Place it after <code>sacred-art</code> in the list order. Title: "Photography". This is KALLOS Manual Task #36.</p>
+
+      <h3>1b. Ancient as Era option</h3>
+      <p>In <code>sanity/schemaTypes/traditionReflection.ts</code>, add <code>ancient</code> to the <code>era</code> field options list. Place it before <code>fathers</code> (it predates the Church Fathers). Title: "Ancient". This covers pre-Christian thinkers like Aristotle (384-322 BCE) and Plato. This is KALLOS Manual Task #37.</p>
+
+      <h3>1c. reflectionQuestionsAudio field</h3>
+      <p>In <code>sanity/schemaTypes/journeyDay.ts</code>, add an optional <code>reflectionQuestionsAudio</code> field of type <code>file</code> (accept audio, same pattern as <code>openTextAudio</code> and <code>encounterNoteAudio</code>). Place it immediately after <code>reflectQuestions</code> (now <code>reflectionQuestions</code> after the R6 rename). This pairs the reflection questions text with its TTS audio file. Update TypeScript types in <code>lib/types.ts</code>. Add to the journeyDay GROQ projection in <code>lib/sanity.ts</code>.</p>
+
+      <div class="output-block">
+        <div class="out-label">After Task 1</div>
+        Deploy Sanity Studio: <code>cd sanity && npm run deploy</code>. Commit: <code>git commit -m "Schema: photography type, ancient era, reflectionQuestionsAudio field"</code>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ TASK 2 ═══ -->
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 2</span>
+      <span class="task-title">Dashboard — add missing TTS audio columns <span class="priority-tag p1">Must do</span></span>
+    </div>
+    <div class="task-body">
+      <p>The current dashboard audio section (Section 4) shows only <code>openTextAudio</code>, <code>encounterNoteAudio</code>, and auditio music per journey day. The actual TTS workflow has 6 fields per day. Add the 3 missing ones.</p>
+
+      <h3>Missing columns to add</h3>
+      <ul>
+        <li><strong>artworkHookAudio</strong> — from the linked <code>contentItem</code> (accessed via <code>encounterContent->artworkHookAudio</code>). The artwork hook audio lives on the content item, not the journey day.</li>
+        <li><strong>contextAudio</strong> — also from the linked <code>contentItem</code> (accessed via <code>encounterContent->contextAudio</code>).</li>
+        <li><strong>reflectionQuestionsAudio</strong> — now exists on <code>journeyDay</code> after Task 1c. Direct field.</li>
+      </ul>
+      <p>Add a 4th row to the per-journey audio table for tradition reflection audio — show count of TRs with <code>reflectionAudio</code> vs missing, grouped by journey day.</p>
+
+      <h3>Update the GROQ query</h3>
+      <p>Update <code>getAudioStatus</code> in <code>lib/sanity.ts</code> to project the two content item audio fields via reference traversal: <code>encounterContent->{ artworkHookAudio, contextAudio }</code>. Add <code>reflectionQuestionsAudio</code> as a direct field.</p>
+
+      <h3>Column headers</h3>
+      <p>Use short labels that fit the table: <code>openText</code> / <code>encNote</code> / <code>artworkHook</code> / <code>context</code> / <code>reflectQ</code> / <code>auditio</code>. Six columns total per journey day row.</p>
+
+      <div class="output-block">
+        <div class="out-label">After Task 2</div>
+        Commit: <code>git commit -m "Dashboard: add artworkHook, context, reflectionQ audio columns"</code>. Push to trigger redeploy and verify at /dashboard.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ TASK 3 ═══ -->
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 3</span>
+      <span class="task-title">Dashboard — filter and sort <span class="priority-tag p1">Must do</span></span>
+    </div>
+    <div class="task-body">
+      <p>The dashboard is currently a server component. Server components cannot handle interactive state. Filter and sort require client-side interactivity. The solution is to extract the sections that need filtering into client component wrappers that receive already-fetched data as props — the same pattern used elsewhere in the app (e.g. <code>app/prompt/PromptClient.tsx</code>).</p>
+
+      <h3>Architecture</h3>
+      <p><code>app/dashboard/page.tsx</code> remains a server component and fetches all data. It passes data as props to new client components:</p>
+      <ul>
+        <li><code>app/dashboard/TRTableClient.tsx</code> — handles the tradition reflection table with filters and sort</li>
+        <li><code>app/dashboard/AudioTableClient.tsx</code> — handles the audio status table with filters</li>
+        <li><code>app/dashboard/ContentItemsClient.tsx</code> — handles content item table with filters</li>
+      </ul>
+
+      <h3>Filters per section</h3>
+      <p><strong>TR table:</strong> Filter by journey / by type (church-father, philosopher, etc.) / by era / by theme / has audio or missing audio / KEEP or REVIEW (artworkHook audit status)</p>
+      <p><strong>Audio table:</strong> Filter by journey / show missing only (most useful — "show me everything that still needs recording")</p>
+      <p><strong>Content items:</strong> Filter by content type / by theme / missing artworkHook / missing audio</p>
+
+      <h3>Sort</h3>
+      <p>All table columns should be sortable by clicking the column header. Clicking again reverses sort direction. Show a sort indicator (arrow) on the active sort column.</p>
+
+      <h3>Implementation notes</h3>
+      <p>Use React <code>useState</code> for active filter values and sort state. No URL params needed for now — in-memory state is sufficient. Filters reset on page refresh, which is acceptable for a dashboard tool.</p>
+
+      <div class="output-block">
+        <div class="out-label">After Task 3</div>
+        Commit: <code>git commit -m "Dashboard: filter and sort on TR, audio, and content item tables"</code>. Push and verify at /dashboard — all three tables should have working filter controls and sortable column headers.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ TASK 4 ═══ -->
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 4</span>
+      <span class="task-title">Dashboard — work-level repeat detection <span class="priority-tag p2">Should do</span></span>
+    </div>
+    <div class="task-body">
+      <p>The current TR table shows author names. Sheri needs to see two types of repetition — not just same author, but same specific work used twice across journeys.</p>
+
+      <h3>Two repeat flags to add</h3>
+      <p><strong>Author repeat:</strong> Already partially visible (same author name across multiple rows). Make it explicit — highlight in amber any author that appears in more than one journey. Add a summary line above the TR table: "X authors appear in more than one journey."</p>
+
+      <p><strong>Work-level repeat:</strong> Using the new <code>composerArtist</code> + <code>workTitle</code> fields added in the schema migration session, flag in amber any specific work title that appears more than once across all auditio records. This is distinct from the author flag — two uses of Arvo Pärt is fine; two uses of Spiegel im Spiegel is a flag. Add this view to the audio section.</p>
+
+      <h3>Source concentration</h3>
+      <p>Add a small summary bar above the TR table showing percentage breakdown by author type: Church Fathers X% / Philosophers X% / Saints X% / Modern X% / Other X%. Flag any single category that exceeds 50% of all TRs.</p>
+
+      <div class="output-block">
+        <div class="out-label">After Task 4</div>
+        Commit: <code>git commit -m "Dashboard: work-level repeat detection and source concentration"</code>. Push and verify.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ TASK 5 STRETCH ═══ -->
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 5</span>
+      <span class="task-title">Sanity Presentation plugin — live preview while editing <span class="priority-tag p3">Stretch</span></span>
+    </div>
+    <div class="task-body">
+      <div class="stretch-block">
+        <div class="stretch-label">Stretch goal</div>
+        Only attempt Task 5 if Tasks 1-4 are complete and committed. If time is short, stop at Task 4 and carry Task 5 to the next session.
+      </div>
+
+      <p>Currently, Sanity Studio has click-to-open preview URLs (configured April 13, 2026 via <code>resolvePreviewUrl()</code> in <code>sanity/sanity.config.ts</code>). This task upgrades to an inline real-time preview pane — while editing a journey day or daily prompt on the left, the rendered app view updates live on the right as you type.</p>
+
+      <h3>What this enables</h3>
+      <p>Sheri sees exactly how the content item, journey day, or P&P prompt looks in the app in real-time while editing — solving the problem that "content input should mirror the UX screens for the content type being created." No more guessing whether a curator note is too long or whether the context field renders correctly.</p>
+
+      <h3>Implementation</h3>
+      <ol>
+        <li>Install: <code>cd sanity && npm install @sanity/presentation</code></li>
+        <li>Add the <code>presentationTool()</code> plugin to <code>sanity/sanity.config.ts</code>, configured with the existing <code>resolvePreviewUrl()</code> helper already in place</li>
+        <li>Add a <code>SANITY_PREVIEW_SECRET</code> to <code>.env.local</code> and Vercel environment variables</li>
+        <li>Add a Next.js draft mode route handler at <code>app/api/draft/route.ts</code> that validates the preview secret and enables draft mode</li>
+        <li>Update the Sanity client in <code>lib/sanity.ts</code> to support a <code>previewDrafts</code> perspective when draft mode is active</li>
+        <li>Test: open a journey day in Sanity Studio, verify the Presentation panel shows the live rendered app view updating as fields are edited</li>
+      </ol>
+
+      <h3>Scope</h3>
+      <p>Configure live preview for: <code>journeyDay</code>, <code>dailyPrompt</code>, <code>contentItem</code>. These are the three document types Sheri edits most frequently. The existing <code>resolvePreviewUrl()</code> helper already maps these to the correct app routes — extend it to support the Presentation plugin's requirements.</p>
+
+      <div class="output-block">
+        <div class="out-label">After Task 5</div>
+        Deploy Sanity Studio: <code>cd sanity && npm run deploy</code>. Commit and push app changes. Add <code>SANITY_PREVIEW_SECRET</code> to Vercel env vars. Verify live preview works in Studio for at least one journey day and one daily prompt.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ FINAL ═══ -->
+  <h2>Final Steps (after all tasks)</h2>
+  <ol>
+    <li><code>npx tsc --noEmit</code> — must pass clean</li>
+    <li><code>npm run build</code> — must pass clean</li>
+    <li>Push final commit — Vercel autodeploys</li>
+    <li>Update CLAUDE.md: Phase 2 Work Done, Schema Status (photography, ancient era, reflectionQuestionsAudio), Manual Tasks (#36 and #37 mark complete)</li>
+  </ol>
+
+  <div class="success-block">
+    <div class="suc-label">Success criteria</div>
+    <ul>
+      <li>Photography appears in contentType dropdown in Sanity Studio</li>
+      <li>Ancient appears in era dropdown on tradition reflection records</li>
+      <li>reflectionQuestionsAudio field visible on journey day records in Studio</li>
+      <li>/dashboard shows 6 audio columns per journey day (all TTS fields visible)</li>
+      <li>TR table, audio table, and content items table all have working filter controls and sortable columns</li>
+      <li>Author repeat and work-level repeat flags visible in dashboard</li>
+      <li>Source concentration % bar visible above TR table</li>
+      <li>(Stretch) Sanity Studio Presentation panel shows live app preview while editing journey days and P&P prompts</li>
+    </ul>
+  </div>
+
+  <p style="margin-top:32px; font-size:13px; color:#8a7a6a; font-style:italic;">Brief created April 2026. Follows the schema migration session (KALLOS-CC-Schema-Design-Brief.html). Read CLAUDE.md Phase 2 Work Done (April 23) for full context on what was built in the previous CC session.</p>
+
+</div>
+</body>
+</html>
