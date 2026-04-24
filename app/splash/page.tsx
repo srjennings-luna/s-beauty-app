@@ -18,8 +18,9 @@ export default function SplashPage() {
   const next = () => setCurrent((c) => Math.min(c + 1, TOTAL - 1));
   const prev = () => setCurrent((c) => Math.max(c - 1, 0));
 
-  // Mark session so Today tab doesn't re-trigger mid-session
-  const markSession = () => sessionStorage.setItem("kallos-session", "true");
+  // Mark onboarding complete. Persisted across sessions so returning
+  // users skip splash after their first visit.
+  const markSession = () => localStorage.setItem("kallos-onboarded", "true");
 
   const skipToToday = () => {
     markSession();

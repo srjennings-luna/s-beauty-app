@@ -19,14 +19,16 @@ export default function TodayPage() {
   const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
-    // Beta: show onboarding every new browser session.
-    // sessionStorage clears when the browser/tab is closed, so users see
-    // onboarding again on each fresh launch — but not mid-session when
-    // navigating back to the Today tab.
-    // TODO: After beta, restore localStorage check:
-    //   if (!localStorage.getItem("kallos-onboarded")) router.push("/splash");
-    const sessionSeen = sessionStorage.getItem("kallos-session");
-    if (!sessionSeen) {
+    // Never run the onboarding gate inside an iframe (Sanity Presentation
+    // preview). Without this, every preview session starts with no
+    // localStorage and bounces to /splash, hijacking the iframe.
+    const inIframe = typeof window !== "undefined" && window.self !== window.top;
+    if (inIframe) {
+      setHasOnboarded(true);
+      return;
+    }
+    const onboarded = localStorage.getItem("kallos-onboarded");
+    if (!onboarded) {
       router.push("/splash");
     } else {
       setHasOnboarded(true);
