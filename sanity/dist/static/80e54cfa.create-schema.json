@@ -109,6 +109,10 @@
               "value": "sacred-art"
             },
             {
+              "title": "Photography",
+              "value": "photography"
+            },
+            {
               "title": "Thinkers & Quotes",
               "value": "thinker"
             },
@@ -147,6 +151,7 @@
                 "flag": "valid",
                 "constraint": [
                   "sacred-art",
+                  "photography",
                   "thinker",
                   "literature",
                   "music",
@@ -1327,6 +1332,15 @@
         "type": "array"
       },
       {
+        "options": {
+          "accept": "audio/*"
+        },
+        "description": "Optional MP3 narration of the reflection questions. Adds a Listen button on the Reflect step.",
+        "name": "reflectionQuestionsAudio",
+        "type": "file",
+        "title": "Reflection Questions — Narration Audio"
+      },
+      {
         "description": "One sentence threading to tomorrow. e.g., \"Tomorrow: what happens when the light goes away?\"",
         "name": "connectThread",
         "type": "string"
@@ -2010,6 +2024,10 @@
         "options": {
           "list": [
             {
+              "title": "Ancient",
+              "value": "ancient"
+            },
+            {
               "title": "Early Church / Fathers",
               "value": "fathers"
             },
@@ -2024,7 +2042,7 @@
           ],
           "layout": "dropdown"
         },
-        "description": "e.g. \"Early Church\", \"Medieval\", \"Modern\" – for future use or labels",
+        "description": "e.g. \"Ancient\", \"Early Church\", \"Medieval\", \"Modern\" – for future use or labels",
         "name": "era",
         "type": "string",
         "title": "Era (optional)"

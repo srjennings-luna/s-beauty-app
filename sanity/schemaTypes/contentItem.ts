@@ -26,6 +26,7 @@ export default defineType({
       options: {
         list: [
           {title: 'Sacred Art & Architecture', value: 'sacred-art'},
+          {title: 'Photography', value: 'photography'},
           {title: 'Thinkers & Quotes', value: 'thinker'},
           {title: 'Literature & Poetry', value: 'literature'},
           {title: 'Music', value: 'music'},
@@ -506,6 +507,7 @@ export default defineType({
     }) {
       const typeIcons: Record<string, string> = {
         'sacred-art': '🎨',
+        'photography': '📷',
         'thinker': '📖',
         'literature': '✍️',
         'music': '🎵',

@@ -210,6 +210,7 @@ export async function getJourney(slug: string) {
           externalUrl
         },
         reflectionQuestions,
+        "reflectionQuestionsAudioUrl": reflectionQuestionsAudio.asset->url,
         connectThread,
         "goDeeper": goDeeper[]->{
           _id,

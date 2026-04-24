@@ -10,6 +10,7 @@ import PageTransition from "@/components/ui/PageTransition";
 
 const CONTENT_TYPE_TO_LOCATION: Record<ContentType, LocationType> = {
   "sacred-art": "sacred-art",
+  "photography": "cultural",
   "thinker": "architecture",
   "literature": "cultural",
   "music": "workshop",

@@ -218,6 +218,13 @@ export default defineType({
       validation: (Rule) => Rule.required().min(1).max(2),
     }),
     defineField({
+      name: 'reflectionQuestionsAudio',
+      title: 'Reflection Questions — Narration Audio',
+      type: 'file',
+      description: 'Optional MP3 narration of the reflection questions. Adds a Listen button on the Reflect step.',
+      options: {accept: 'audio/*'},
+    }),
+    defineField({
       name: 'connectThread',
       title: 'Connect Thread',
       type: 'string',

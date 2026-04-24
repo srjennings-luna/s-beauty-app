@@ -100,9 +100,10 @@ export default defineType({
       name: 'era',
       title: 'Era (optional)',
       type: 'string',
-      description: 'e.g. "Early Church", "Medieval", "Modern" – for future use or labels',
+      description: 'e.g. "Ancient", "Early Church", "Medieval", "Modern" – for future use or labels',
       options: {
         list: [
+          {title: 'Ancient', value: 'ancient'},
           {title: 'Early Church / Fathers', value: 'fathers'},
           {title: 'Medieval', value: 'medieval'},
           {title: 'Modern', value: 'modern'},

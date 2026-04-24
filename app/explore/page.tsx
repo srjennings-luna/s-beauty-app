@@ -22,6 +22,7 @@ const GlobalMap = dynamic(() => import("@/components/GlobalMap"), {
 
 const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
   "sacred-art": "Sacred Art",
+  "photography": "Photography",
   "thinker": "Thinkers",
   "literature": "Literature",
   "music": "Music",
@@ -33,6 +34,7 @@ const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
 
 const CONTENT_TYPE_TO_LOCATION: Record<ContentType, LocationType> = {
   "sacred-art": "sacred-art",
+  "photography": "cultural",
   "thinker": "architecture",
   "literature": "cultural",
   "music": "workshop",

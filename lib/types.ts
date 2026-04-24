@@ -19,6 +19,7 @@ export type Theme = {
 
 export type ContentType =
   | 'sacred-art'
+  | 'photography'
   | 'thinker'
   | 'literature'
   | 'music'
@@ -135,6 +136,7 @@ export type JourneyDay = {
   lectio?: JourneyDayLectio;
   auditio?: JourneyDayAuditio;
   reflectionQuestions: string[];
+  reflectionQuestionsAudioUrl?: string;
   connectThread?: string;
   goDeeper?: TraditionReflection[];
 };
