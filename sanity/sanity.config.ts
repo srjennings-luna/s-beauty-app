@@ -1,6 +1,6 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
-import {presentationTool, defineLocations} from 'sanity/presentation'
+import {presentationTool, defineLocations, defineDocuments} from 'sanity/presentation'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 
@@ -97,6 +97,35 @@ export default defineConfig({
         origin: APP_PREVIEW_URL,
       },
       resolve: {
+        // URL → document (forward mapping). Populates the "Documents on this
+        // page" panel when the iframe URL matches one of these routes, and
+        // lets clicking a document in Structure navigate the iframe to its
+        // preview URL.
+        mainDocuments: defineDocuments([
+          {
+            route: '/prompt',
+            filter: `_type == "dailyPrompt" && date == $date`,
+          },
+          {
+            route: '/journeys/:slug',
+            filter: `_type == "journey" && slug.current == $slug`,
+          },
+          {
+            // Matches /journeys/<slug>?day=N — $day comes from the query param
+            route: '/journeys/:slug/day/:day',
+            filter: `_type == "journeyDay" && journey->slug.current == $slug && dayNumber == $day`,
+          },
+          {
+            route: '/pray/:id',
+            filter: `_type == "contentItem" && _id == $id`,
+          },
+          {
+            route: '/splash',
+            filter: `_type == "splashPage"`,
+          },
+        ]),
+        // Document → URL (reverse mapping). Used by Sanity Studio's
+        // document-level "Open in Preview" actions.
         locations: {
           dailyPrompt: defineLocations({
             select: {date: 'date', title: 'promptQuestion'},
