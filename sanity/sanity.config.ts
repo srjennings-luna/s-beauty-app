@@ -1,5 +1,6 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
+import {presentationTool, defineLocations} from 'sanity/presentation'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 
@@ -78,6 +79,87 @@ export default defineConfig({
               (listItem) => !['episode'].includes(listItem.getId() ?? ''),
             ),
           ),
+    }),
+    // Presentation tool — side-by-side live preview of the app while editing.
+    // The app iframe opens at the per-document route returned by `locations`
+    // below. Draft-mode enable is wired to /api/draft in the Next.js app;
+    // actual draft rendering is only implemented on the P&P page today
+    // (see app/prompt/PromptClient.tsx) — other routes show published
+    // content side-by-side. Fuller draft-mode wiring is a follow-up.
+    presentationTool({
+      title: 'Preview',
+      previewUrl: {
+        origin: APP_PREVIEW_URL,
+        previewMode: {
+          enable: '/api/draft',
+        },
+      },
+      resolve: {
+        locations: {
+          dailyPrompt: defineLocations({
+            select: {date: 'date', title: 'promptQuestion'},
+            resolve: (doc) =>
+              doc?.date
+                ? {
+                    locations: [
+                      {title: `P&P — ${doc.date}`, href: `/prompt?date=${doc.date}&preview=1`},
+                    ],
+                  }
+                : undefined,
+          }),
+          journey: defineLocations({
+            select: {slug: 'slug.current', title: 'title'},
+            resolve: (doc) =>
+              doc?.slug
+                ? {
+                    locations: [
+                      {title: doc.title ?? 'Journey', href: `/journeys/${doc.slug}?preview=1`},
+                    ],
+                  }
+                : undefined,
+          }),
+          journeyDay: defineLocations({
+            select: {
+              dayNumber: 'dayNumber',
+              dayTitle: 'dayTitle',
+              journeySlug: 'journey->slug.current',
+              journeyTitle: 'journey->title',
+            },
+            resolve: (doc) => {
+              if (!doc?.journeySlug || typeof doc.dayNumber !== 'number') return undefined
+              return {
+                locations: [
+                  {
+                    title: `Day ${doc.dayNumber}: ${doc.dayTitle ?? ''}`.trim(),
+                    href: `/journeys/${doc.journeySlug}?day=${doc.dayNumber}&preview=1`,
+                  },
+                  {
+                    title: `Journey: ${doc.journeyTitle ?? doc.journeySlug}`,
+                    href: `/journeys/${doc.journeySlug}?preview=1`,
+                  },
+                ],
+              }
+            },
+          }),
+          contentItem: defineLocations({
+            select: {id: '_id', contentType: 'contentType', title: 'title'},
+            resolve: (doc) => {
+              if (!doc?.id) return undefined
+              if (doc.contentType !== 'sacred-art') return undefined
+              const cleanId = String(doc.id).replace(/^drafts\./, '')
+              return {
+                locations: [
+                  {title: doc.title ?? 'Visio Divina', href: `/pray/${cleanId}?preview=1`},
+                ],
+              }
+            },
+          }),
+          splashPage: defineLocations({
+            select: {title: 'title'},
+            resolve: () => ({locations: [{title: 'Splash', href: `/splash?preview=1`}]}),
+          }),
+        },
+      },
     }),
     visionTool(),
   ],

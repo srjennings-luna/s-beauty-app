@@ -182,6 +182,12 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ Task 5 — dashboard rewritten for post-R5 structure: `getDashboardJourneyCompletion` and `getDashboardAudioStatus` now query `journeyDay` documents directly via `journey._ref`. TR-to-journey traversal updated through the new journeyDay layer. Each day row in Section 1 links directly to its journeyDay Studio document. Genre distribution view added to Section 4 (flags any genre > 40% of total). REVIEW-items banner added to Section 2, automatically detected from data state (items still holding legacy curatorNote). SCHEMA_HEALTH block updated — R1, R5, R6 marked RESOLVED; R3/R4 still open.
 - ✅ Studio deployed twice during the session (intermediate + final). App build passes clean.
 
+### Phase 2 Work Done (April 23, 2026 — continued)
+- ✅ Schema design CC session complete — R1 (artworkHook rename, 41 KEEP / 6 REVIEW), R5 (journeyDay promoted to document, 25 docs migrated), genre + composerArtist + workTitle fields added, R6 (reflectionQuestions rename), rendering bugs fixed, dashboard updated. Commit 649262f6.
+- ✅ R10 decision: Hold — episode schema and 6 Seeking Beauty documents kept as-is. No migration. Verify watch-listen links when convenient.
+- ✅ R15 decision: Defer — 8-in-1 contentItem schema manageable. Revisit after companion journeys ship.
+- ✅ Dashboard enhancement brief created — KALLOS-CC-Dashboard-Enhancement-Brief.html. CC session in progress.
+
 ### Phase 2 Work Done (April 23, 2026)
 - ✅ Full architecture audit complete (Claude Code, Opus 4.6) — schema field inventory, GROQ trace, dead field detection, 15 recommendations (R1-R15), 4 open questions. Output: `content-docs/KALLOS-Schema-Audit.html`.
 - ✅ Full content inventory complete — 53 content items, 27 P&P prompts, 28 tradition reflections, 5 journeys, TTS gap of 70,017 characters identified. Output: `content-docs/KALLOS-Content-Inventory.html`.
