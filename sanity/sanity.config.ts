@@ -81,11 +81,16 @@ export default defineConfig({
           ),
     }),
     // Presentation tool — side-by-side live preview of the app while editing.
-    // The app iframe opens at the per-document route returned by `locations`
-    // below. Draft-mode enable is wired to /api/draft in the Next.js app;
-    // actual draft rendering is only implemented on the P&P page today
-    // (see app/prompt/PromptClient.tsx) — other routes show published
-    // content side-by-side. Fuller draft-mode wiring is a follow-up.
+    // The iframe opens at the per-document app route returned by `locations`
+    // below (no draft-mode enable step — `previewMode` is intentionally
+    // omitted). Today only the P&P page reads drafts, via its existing
+    // `?preview=1` URL param + NEXT_PUBLIC_SANITY_TOKEN path (see
+    // lib/sanity.ts `previewClient`). Other routes render published content
+    // in the iframe; extending those to read drafts via `draftMode()` is
+    // Manual Task 65. Once that lands, add
+    //   previewMode: { enable: '/api/draft' }
+    // here and wire the handler with @sanity/preview-url-secret — Sanity
+    // manages the secret server-side (do not roll a custom one).
     presentationTool({
       title: 'Preview',
       previewUrl: {
