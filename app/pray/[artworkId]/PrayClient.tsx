@@ -181,7 +181,10 @@ export default function PrayClient({
     if (actionNote.trim()) {
       localStorage.setItem(`kallos-visio-note-${artwork?._id}`, actionNote);
     }
-    router.back();
+    // Explicit nav to Library (where Visio Divina history lives) instead of
+    // router.back() — back() silently fails when there's no history, e.g.
+    // arriving from a share link or inside Sanity Presentation's iframe.
+    router.push("/library");
   };
 
   if (loading) {

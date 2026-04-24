@@ -182,46 +182,27 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ Task 5 — dashboard rewritten for post-R5 structure: `getDashboardJourneyCompletion` and `getDashboardAudioStatus` now query `journeyDay` documents directly via `journey._ref`. TR-to-journey traversal updated through the new journeyDay layer. Each day row in Section 1 links directly to its journeyDay Studio document. Genre distribution view added to Section 4 (flags any genre > 40% of total). REVIEW-items banner added to Section 2, automatically detected from data state (items still holding legacy curatorNote). SCHEMA_HEALTH block updated — R1, R5, R6 marked RESOLVED; R3/R4 still open.
 - ✅ Studio deployed twice during the session (intermediate + final). App build passes clean.
 
-## ⏸️ Paused mid-session — Sanity Presentation preview debugging (April 24, 2026 — evening)
+### Phase 2 Work Done (April 24, 2026 — evening, Presentation drafts)
+- ✅ Full draft-mode preview wired and confirmed live for **journey**, **journeyDay**, and **contentItem** (Visio Divina). Closes Manual Task 65.
+  - `previewMode: { enable: '/api/draft' }` added to `presentationTool` in `sanity/sanity.config.ts`.
+  - `app/api/draft/route.ts` validates via `@sanity/preview-url-secret` (Sanity-managed secret, not hand-rolled) and flips `draftMode()` on before redirecting back.
+  - Server-side routes now branch on `(await draftMode()).isEnabled`:
+    - `app/journeys/[slug]/page.tsx` → `getJourneyPreview(slug)` with published fallback on null.
+    - `app/journeys/[slug]/day/[dayNumber]/page.tsx` → same pattern.
+    - `app/pray/[artworkId]/page.tsx` → refactored from all-client to server wrapper; `PrayClient` now receives pre-fetched `initialArtwork`.
+  - All three tested end-to-end: edit in Presentation's right pane → draft edit shows on iframe after ↻ refresh.
+- ✅ Onboarding gate hardened for iframe context. `app/page.tsx` now skips the splash redirect entirely when inside an iframe (`window.self !== window.top`). Storage upgraded from `sessionStorage` (every-session re-show) to `localStorage` (show once per install). Prevents Presentation's iframe from being hijacked to `/splash` on cold load. See Onboarding Framework below.
+- ✅ Splash refactor to Sanity-driven content added to Parking Lot (hardcoded copy in `app/splash/page.tsx` → `splashPage.screens[]` array). Keep layout intact.
 
-**Status at pause:** Preview fully works for **P&P drafts**. Preview for **published** documents of every other type should work after latest deploy but was not confirmed before pause. Draft preview for non-P&P types (journey, journeyDay, contentItem, splashPage) is NOT wired — still shows published content in the iframe.
+**Presentation workflow quirk to remember:** typing into the iframe URL bar updates the URL and matches `mainDocuments` on the right, but the iframe doesn't always navigate. **Always click ↻ refresh** after changing the iframe URL or making a doc edit — forces re-hydration and pulls current draft state. Auto-refresh isn't magic.
 
-### What to test first when resuming (5 min check)
-
-Hard-refresh Studio (Cmd+Shift+R), then verify:
-
-1. **P&P draft (known working)** — paste `https://s-beauty-app.vercel.app/prompt/2026-04-30` into Presentation's iframe URL bar. Should show Raphael School of Athens + "Step into a sunlit hall…" curator note + amber PREVIEW MODE banner. Right panel: "Documents on this page" lists the April 30 doc.
-2. **Published journey day** — in Structure open any published journey day (e.g. Bosch Day 5). Wait for "Resolving locations…" to complete. Two links should appear: day-level + journey-level. Click the day link → iframe navigates to `/journeys/[slug]/day/[N]` and renders the day stepper preselected.
-3. **Published contentItem (sacred-art)** — open any sacred-art content item. Link should appear → iframe navigates to `/pray/[id]`.
-
-If any of the above fails, the next step is looking at the browser console inside the iframe for JS errors + checking `mainDocuments` match via Vision tab.
-
-### The debugging that ate the session
-
-Preview plumbing required five separate fixes stacked in sequence:
-1. `@sanity/visual-editing` + `<VisualEditing />` mounted in root layout (via `components/VisualEditingClient.tsx`) — without this, Presentation's postMessage handshake throws "Unable to connect".
-2. CSP `frame-ancestors` expanded to include `https://sanity.io` and `https://*.sanity.io` (not just `*.sanity.studio`) — the hosted workspace serves from `sanity.io`. Deprecated `X-Frame-Options: ALLOW-FROM` removed (some browsers treat it as DENY).
-3. Path-based route `/prompt/[date]` created because Presentation URL-encodes `?` into `%3F` when navigating the iframe. `PromptClient` accepts an `initialDate` prop that forces preview mode.
-4. `perspective: 'previewDrafts'` → `'drafts'` in `previewClient` (Sanity renamed; old name silently returns published-only on apiVersion 2024-01-01+).
-5. `NEXT_PUBLIC_SANITY_TOKEN` in Vercel env vars was **truncated** at ~88 characters — paste the full token from `.env.local`. The truncated token returned 401, client swallowed it silently, fell back to published-only → April 12 instead of April 30.
-
-Latest commit: `de4aa605` — adds path-based `/journeys/[slug]/day/[dayNumber]` alias + updates Presentation `mainDocuments` and `locations` to use path-based URLs everywhere. Studio already redeployed.
-
-### Parked work for next Presentation session
-
-**Full draft-mode wiring for non-P&P types** — the right path to make draft content render live for journey days, content items, and splash pages. Foundation is in place:
-- `@sanity/preview-url-secret` installed
-- `app/api/draft/route.ts` uses canonical `validatePreviewUrl` (not the manually-rolled secret I originally tried, which doesn't work)
-- But the route is currently **orphaned** — Presentation isn't told to call it yet
-
-To flip the switch:
-1. Add `previewMode: { enable: '/api/draft' }` back into `presentationTool` config in `sanity/sanity.config.ts`.
-2. Make the journey `page.tsx` read `(await draftMode()).isEnabled` and call a new `getJourneyPreview(slug)` helper (use `previewClient` not `sanityClient`).
-3. Convert `app/pray/[artworkId]/page.tsx` from its current all-client form into a server wrapper (server reads draftMode, fetches, passes to client). Significant refactor — the page uses `useParams` + its own fetch today.
-4. Same for `app/splash/page.tsx` (lower priority).
-5. Redeploy Studio; test Enable Drafts button flow.
-
-Estimated scope: ~45 min focused session for journey + pray; splash deferrable further.
+**Stacked fixes that made Presentation work** (kept for reference, in order required):
+1. `@sanity/visual-editing` + `<VisualEditing />` mounted in root layout (`components/VisualEditingClient.tsx`) — without this, postMessage handshake throws "Unable to connect".
+2. CSP `frame-ancestors` includes `https://sanity.io` and `https://*.sanity.io` (not just `*.sanity.studio`). Deprecated `X-Frame-Options` removed.
+3. Path-based routes for iframe compatibility: `/prompt/[date]` and `/journeys/[slug]/day/[dayNumber]` (Presentation URL-encodes `?` so query strings 404 in the iframe).
+4. `perspective: 'drafts'` in `previewClient` (was `'previewDrafts'`; renamed in newer Sanity API versions).
+5. `NEXT_PUBLIC_SANITY_TOKEN` in Vercel must be the **full** token (was truncated ~88 chars, silently returned 401 → drafts fell back to published).
+6. `previewMode: { enable: '/api/draft' }` + per-route `draftMode()` branching (evening session).
 
 ### Security reminder before launch
 
@@ -737,6 +718,17 @@ Replaced with Stories-style thin progress bar at top + swipe navigation. No foot
 
 ### ~~Breath Interaction~~ ✅ RESOLVED
 Built as dedicated Breathe page (Step 3). Full-bleed image with 8x zoom, pulsing dot animation (CSS keyframe, `scale(1)→scale(4)`, 8s infinite loop), helper text "Sit with this image and let your eyes explore." Cormorant Garamond italic.
+
+### Splash / Onboarding — Move to Sanity (April 24, 2026)
+Splash screen copy and images are currently hardcoded in `app/splash/page.tsx` (5 screens of Montserrat/Cormorant headlines + body copy, all inline). Sheri is OK **deleting the hardcoded content and recreating it in Sanity** as long as the layout is preserved (Stories-style progress bar, swipe, pulsing nav button, 5-screen structure, skip-to-P&P + start-BTG CTAs — all per the Onboarding Framework section above).
+
+Approach when picked up:
+- Extend `splashPage` schema from a single doc to an array of `splashScreen` objects (headline, body, image, CTA label per screen; optional per-screen style flags if needed).
+- Convert `app/splash/page.tsx` from a purely-client component with hardcoded copy into a server fetch of `splashPage` → render screens from the array → client component handles swipe/animation/state only.
+- Verify Presentation preview works on `/splash` after the refactor — the `splashPage` location is already defined in `sanity.config.ts`.
+- Sheri then enters copy once and edits in Studio from that point on.
+
+Estimated scope: ~1 hour. Do after draft-preview testing is fully green.
 
 ### Journey Day Stepper — Share This Day placement (April 21, 2026)
 Share This Day currently lives on the day list row only. In-stepper placement was explored and deferred: left header felt wrong for a content app; bottom share bar conflicts with copy-heavy steps (Day 1 opening text fills the screen); Connect step is a candidate but needs intentional design alongside Share This Journey. Revisit when there is dedicated design time. The day list row share covers the content-review and pre-experience use cases for now.
