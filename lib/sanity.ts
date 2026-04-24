@@ -534,6 +534,30 @@ export async function getDashboardAudioStatus() {
       "genres": {
         "journeyDay": *[_type == "journeyDay" && !string::startsWith(_id, "drafts.") && defined(auditio.genre)]{ "genre": auditio.genre },
         "dailyPrompt": *[_type == "dailyPrompt" && !string::startsWith(_id, "drafts.") && defined(auditio.genre)]{ "genre": auditio.genre }
+      },
+      // Auditio works inventory — for work-level + composer-level repeat
+      // detection. Prefers the structured composerArtist/workTitle fields;
+      // falls back to the legacy free-text title/composer/artist so pre-
+      // migration records are still surfaced.
+      "works": {
+        "journeyDay": *[_type == "journeyDay" && !string::startsWith(_id, "drafts.") && (defined(auditio.workTitle) || defined(auditio.title))]{
+          _id,
+          "origin": "journeyDay",
+          "journeyTitle": journey->title,
+          dayNumber,
+          dayTitle,
+          "workTitle": coalesce(auditio.workTitle, auditio.title),
+          "composerArtist": coalesce(auditio.composerArtist, auditio.composer),
+          "isStructured": defined(auditio.workTitle)
+        },
+        "dailyPrompt": *[_type == "dailyPrompt" && !string::startsWith(_id, "drafts.") && (defined(auditio.workTitle) || defined(auditio.title))]{
+          _id,
+          "origin": "dailyPrompt",
+          date,
+          "workTitle": coalesce(auditio.workTitle, auditio.title),
+          "composerArtist": coalesce(auditio.composerArtist, auditio.artist),
+          "isStructured": defined(auditio.workTitle)
+        }
       }
     }
   `)

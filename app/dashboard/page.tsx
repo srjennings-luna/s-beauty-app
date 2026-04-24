@@ -135,7 +135,24 @@ type AudioPrompt = {
   hasAuditioExt: boolean;
 };
 type GenreTally = { journeyDay: Array<{ genre?: string }>; dailyPrompt: Array<{ genre?: string }> };
-type AudioStatusResult = { journeys: AudioJourney[]; prompts: AudioPrompt[]; genres?: GenreTally };
+type AudioWork = {
+  _id: string;
+  origin: "journeyDay" | "dailyPrompt";
+  journeyTitle?: string;
+  dayNumber?: number;
+  dayTitle?: string;
+  date?: string;
+  workTitle?: string;
+  composerArtist?: string;
+  isStructured?: boolean;
+};
+type WorksTally = { journeyDay: AudioWork[]; dailyPrompt: AudioWork[] };
+type AudioStatusResult = {
+  journeys: AudioJourney[];
+  prompts: AudioPrompt[];
+  genres?: GenreTally;
+  works?: WorksTally;
+};
 
 type TTSRecord = { chars: number; hasAudio: boolean };
 type TTSResult = {
@@ -216,7 +233,12 @@ export default async function DashboardPage() {
       trRefs: (j.trRefs ?? []).filter(notNull),
     })),
   };
-  const audioStatus: { journeys: AudioJourney[]; prompts: AudioPrompt[]; genres: GenreTally } = {
+  const audioStatus: {
+    journeys: AudioJourney[];
+    prompts: AudioPrompt[];
+    genres: GenreTally;
+    works: WorksTally;
+  } = {
     journeys: (rawAudioStatus?.journeys ?? []).filter(notNull).map((j) => ({
       ...j,
       days: (j.days ?? []).filter(notNull),
@@ -225,6 +247,10 @@ export default async function DashboardPage() {
     genres: {
       journeyDay: (rawAudioStatus?.genres?.journeyDay ?? []).filter(notNull),
       dailyPrompt: (rawAudioStatus?.genres?.dailyPrompt ?? []).filter(notNull),
+    },
+    works: {
+      journeyDay: (rawAudioStatus?.works?.journeyDay ?? []).filter(notNull),
+      dailyPrompt: (rawAudioStatus?.works?.dailyPrompt ?? []).filter(notNull),
     },
   };
   const tts: TTSResult = {
@@ -256,6 +282,7 @@ export default async function DashboardPage() {
   const authorsInMultipleJourneys = Array.from(authorCountsAcrossJourneys.entries())
     .filter(([, js]) => js.size > 1)
     .map(([a, js]) => ({ author: a, journeys: Array.from(js) }));
+  const repeatedAuthorSet = new Set(authorsInMultipleJourneys.map((a) => a.author));
 
   const typeCounts = trList.reduce<Record<string, number>>((acc, tr) => {
     const k = tr.authorType || "(unset)";
@@ -268,6 +295,29 @@ export default async function DashboardPage() {
     const pct = trList.length ? Math.round((100 * count) / trList.length) : 0;
     return { type: t, count, pct };
   });
+
+  // Source concentration — flag any single authorType at >50% of all TRs.
+  const concentrationFlag = typeRows.find((r) => r.pct > 50);
+
+  // Roll up authorType % with "Other" catch-all for anything outside the
+  // named bucket set (e.g. unset).
+  const KNOWN_TYPES = new Set(["church-father", "saint", "pope", "doctor", "theologian", "mystic", "philosopher"]);
+  const otherCount = trList.reduce(
+    (n, tr) => n + (tr.authorType && KNOWN_TYPES.has(tr.authorType) ? 0 : 1),
+    0
+  );
+  const concentrationRows = [
+    ...typeRows.filter((r) => r.count > 0),
+    ...(otherCount > 0
+      ? [
+          {
+            type: "other / unset",
+            count: otherCount,
+            pct: trList.length ? Math.round((100 * otherCount) / trList.length) : 0,
+          },
+        ]
+      : []),
+  ];
 
   const daysWithZeroTR = trData.byJourney.flatMap((j) => {
     const refs = j.trRefs || [];
@@ -378,6 +428,30 @@ export default async function DashboardPage() {
   // are content items that still hold legacy curatorNote text (the April 24
   // migration unset curatorNote on KEEP items only).
   const reviewItems = contentItems.filter((c) => c.needsArtworkHookReview);
+
+  // Work-level repeat detection. Prefers structured workTitle (post-April-24
+  // schema); falls back to legacy auditio.title. Grouped case-insensitively
+  // on trimmed whitespace so "Miserere Mei, Deus" and "miserere mei, deus "
+  // collapse. A repeat = same workTitle appears more than once across all
+  // auditio records (journeyDay + dailyPrompt combined).
+  const allWorks: AudioWork[] = [
+    ...audioStatus.works.journeyDay,
+    ...audioStatus.works.dailyPrompt,
+  ];
+  const workBuckets = new Map<string, AudioWork[]>();
+  for (const w of allWorks) {
+    const title = (w.workTitle ?? "").trim().toLowerCase();
+    if (!title) continue;
+    if (!workBuckets.has(title)) workBuckets.set(title, []);
+    workBuckets.get(title)!.push(w);
+  }
+  const repeatedWorks = Array.from(workBuckets.entries())
+    .filter(([, uses]) => uses.length > 1)
+    .map(([titleKey, uses]) => ({
+      titleKey,
+      displayTitle: uses[0].workTitle ?? titleKey,
+      uses,
+    }));
 
   return (
     <div className="min-h-screen bg-[#fdf6e8] text-[#2C2C2C] pb-32">
@@ -510,7 +584,9 @@ export default async function DashboardPage() {
 
         {authorsInMultipleJourneys.length > 0 ? (
           <div className="bg-[#fff5e0] border-l-2 border-[#a06010] text-xs p-3 mb-4">
-            <strong className="text-[#a06010] uppercase tracking-widest text-[10px]">Authors appearing in more than one journey:</strong>
+            <strong className="text-[#a06010] uppercase tracking-widest text-[10px]">
+              {authorsInMultipleJourneys.length} author{authorsInMultipleJourneys.length === 1 ? "" : "s"} appear in more than one journey:
+            </strong>
             <ul className="mt-1 ml-4 list-disc">
               {authorsInMultipleJourneys.map((a) => (
                 <li key={a.author}>
@@ -518,12 +594,57 @@ export default async function DashboardPage() {
                 </li>
               ))}
             </ul>
+            <p className="mt-1 text-[11px] text-[#5a5048] italic">
+              These authors are highlighted in amber in the full TR list below.
+            </p>
           </div>
         ) : (
           <div className="bg-[#f0f7f3] border-l-2 border-[#4a7a62] text-xs p-3 mb-4">
             <strong className="text-[#4a7a62] uppercase tracking-widest text-[10px]">No cross-journey author repeats.</strong>
           </div>
         )}
+
+        {/* Source concentration — % breakdown, flag any single type >50% */}
+        <h3 className="font-sans text-sm font-bold text-[#16110d] mt-5 mb-2">Source concentration</h3>
+        {concentrationFlag && (
+          <div className="bg-[#fff5e0] border-l-2 border-[#a06010] text-xs p-2 mb-2">
+            <strong className="text-[#a06010] uppercase tracking-widest text-[10px]">Over-concentration:</strong>{" "}
+            <code className="text-[10px] bg-[#f0ebe0] px-1">{concentrationFlag.type}</code> is{" "}
+            {concentrationFlag.pct}% of all {trList.length} tradition reflections — more than half. Consider diversifying the source mix.
+          </div>
+        )}
+        <div className="flex overflow-hidden border border-[#e8e0d4] mb-2 h-6">
+          {concentrationRows.map((r, idx) => {
+            const palette = ["#16110d", "#4a7a62", "#C19B5F", "#a06010", "#7070c0", "#c25555", "#5a5048", "#9a8d78"];
+            const color = palette[idx % palette.length];
+            if (r.pct === 0) return null;
+            return (
+              <div
+                key={r.type}
+                style={{ width: `${r.pct}%`, backgroundColor: color }}
+                className="flex items-center justify-center text-[9px] font-sans tracking-wider text-[#fdf6e8] overflow-hidden whitespace-nowrap"
+                title={`${r.type}: ${r.count} (${r.pct}%)`}
+              >
+                {r.pct >= 8 ? `${r.pct}%` : ""}
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex flex-wrap gap-3 text-[10px] text-[#5a5048] mb-3">
+          {concentrationRows.map((r, idx) => {
+            const palette = ["#16110d", "#4a7a62", "#C19B5F", "#a06010", "#7070c0", "#c25555", "#5a5048", "#9a8d78"];
+            const color = palette[idx % palette.length];
+            return (
+              <span key={r.type} className="flex items-center gap-1">
+                <span className="inline-block w-2 h-2" style={{ backgroundColor: color }} />
+                <code className="text-[10px] bg-[#f0ebe0] px-1">{r.type}</code>
+                <span>
+                  {r.count} · {r.pct}%
+                </span>
+              </span>
+            );
+          })}
+        </div>
 
         <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">AuthorType breakdown</h3>
         <div className="overflow-x-auto">
@@ -587,7 +708,7 @@ export default async function DashboardPage() {
           ))}
         </div>
 
-        <TRTableClient trList={trList} />
+        <TRTableClient trList={trList} repeatedAuthors={Array.from(repeatedAuthorSet)} />
 
         {/* ═══ Section 4 — Audio Status ═══ */}
         <SectionHeading num={4} title="Audio Status" />
@@ -624,6 +745,67 @@ export default async function DashboardPage() {
                       <td className="px-2 py-1"><code className="text-[10px] bg-[#f0ebe0] px-1">{r.genre}</code></td>
                       <td className="px-2 py-1 text-right">{r.count}</td>
                       <td className="px-2 py-1 text-right">{r.pct}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+
+        <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">Work-level repeat detection</h3>
+        {allWorks.length === 0 ? (
+          <p className="text-[11px] text-[#7a7062] italic mb-3">
+            No auditio records have a title yet. Populate{" "}
+            <code className="text-[10px] bg-[#f0ebe0] px-1">auditio.workTitle</code> (plus{" "}
+            <code className="text-[10px] bg-[#f0ebe0] px-1">auditio.composerArtist</code>) in Sanity
+            Studio so the dashboard can distinguish two uses of the same composer (fine) from two
+            uses of the same work (flag).
+          </p>
+        ) : repeatedWorks.length === 0 ? (
+          <div className="bg-[#f0f7f3] border-l-2 border-[#4a7a62] text-xs p-2 mb-3">
+            <strong className="text-[#4a7a62] uppercase tracking-widest text-[10px]">
+              No work repeats detected
+            </strong>{" "}
+            across {allWorks.length} auditio record{allWorks.length === 1 ? "" : "s"}.
+          </div>
+        ) : (
+          <>
+            <div className="bg-[#fff5e0] border-l-2 border-[#a06010] text-xs p-2 mb-2">
+              <strong className="text-[#a06010] uppercase tracking-widest text-[10px]">
+                {repeatedWorks.length} work{repeatedWorks.length === 1 ? "" : "s"} used more than once
+              </strong>{" "}
+              — same specific piece across multiple auditio selections. Two uses of the same
+              composer is fine; two uses of the same work is an editorial flag.
+            </div>
+            <div className="overflow-x-auto border border-[#e8e0d4] mb-3">
+              <table className="w-full text-[11px]">
+                <thead className="bg-[#16110d] text-[#fdf6e8]">
+                  <tr>
+                    <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Work</th>
+                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Uses</th>
+                    <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Where</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {repeatedWorks.map((w) => (
+                    <tr key={w.titleKey} className="border-b border-[#e8e0d4] bg-[#fff5e0]">
+                      <td className="px-2 py-1">
+                        <strong>{w.displayTitle}</strong>
+                        {w.uses[0].composerArtist && (
+                          <span className="text-[#5a5048]"> — {w.uses[0].composerArtist}</span>
+                        )}
+                      </td>
+                      <td className="px-2 py-1 text-right">{w.uses.length}</td>
+                      <td className="px-2 py-1 text-[#5a5048]">
+                        {w.uses
+                          .map((u) =>
+                            u.origin === "journeyDay"
+                              ? `${u.journeyTitle ?? "?"} Day ${u.dayNumber ?? "?"}`
+                              : `P&P ${u.date ?? "?"}`
+                          )
+                          .join(" · ")}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

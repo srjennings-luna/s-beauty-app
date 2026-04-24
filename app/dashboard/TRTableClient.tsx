@@ -43,7 +43,19 @@ function cmpStr(a?: string, b?: string) {
   return (a ?? "").localeCompare(b ?? "");
 }
 
-export default function TRTableClient({ trList }: { trList: TRRow[] }) {
+export default function TRTableClient({
+  trList,
+  repeatedAuthors = [],
+}: {
+  trList: TRRow[];
+  repeatedAuthors?: string[];
+}) {
+  const repeatedAuthorSet = useMemo(() => new Set(repeatedAuthors), [repeatedAuthors]);
+
+  const isRepeatedAuthor = (tr: TRRow) => {
+    const author = (tr.source || "").split(",")[0].split("(")[0].trim();
+    return author && repeatedAuthorSet.has(author);
+  };
   const [filterJourney, setFilterJourney] = useState<string>("");
   const [filterAuthorType, setFilterAuthorType] = useState<string>("");
   const [filterEra, setFilterEra] = useState<string>("");
@@ -227,8 +239,10 @@ export default function TRTableClient({ trList }: { trList: TRRow[] }) {
           <tbody>
             {sorted.map((tr) => {
               const red = tr.themeCount === 0 || !tr.era;
+              const amber = !red && isRepeatedAuthor(tr);
+              const rowCls = red ? "bg-[#fdf0f0]" : amber ? "bg-[#fff5e0]" : "";
               return (
-                <tr key={tr._id} className={`border-b border-[#e8e0d4] ${red ? "bg-[#fdf0f0]" : ""}`}>
+                <tr key={tr._id} className={`border-b border-[#e8e0d4] ${rowCls}`}>
                   <td className="px-2 py-1">{tr.authorType || "—"}</td>
                   <td className="px-2 py-1">
                     {tr.era || <span className="text-[#c25555]">unset</span>}
