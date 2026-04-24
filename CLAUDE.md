@@ -323,17 +323,16 @@ Read this at the start of every session. It contains all key product decisions, 
 
 **Secondary option:** Skip to Today (P&P) or Browse Journeys — always available.
 
-**Beta behavior — always show onboarding:**
-- Do NOT suppress onboarding after first view. Every time the app opens, onboarding shows.
-- "Skip" = skip for now. Not a permanent dismissal.
-- Rationale: beta testers may return days later and need the context. A user who skips on first open and comes back should still see the intro.
-- Code implemented: `sessionStorage` flag (`kallos-session`) — set on skip or CTA tap, checked on Today page load. Shows once per browser session, resets when tab is closed.
-- ⚠️ **Revisit after beta.** When the app goes live, onboarding should show once per install/account, not every session. This is a deliberate beta-only choice.
+**Onboarding gate — show once per install, skip in iframes:**
+- `localStorage` flag `kallos-onboarded` — set on skip or CTA tap, checked on Today page load. Once set, splash never shows again for that install/browser.
+- Iframe guard: if `window.self !== window.top` (Sanity Presentation preview context), the gate is bypassed entirely and the Today page renders directly. Prevents Presentation iframes being hijacked to `/splash` on cold load.
+- Changed April 24, 2026 from `sessionStorage` (every session) to `localStorage` (once per install). Earlier beta-only "show every session" rule retired — it was hijacking preview iframes and wasn't serving real beta testers (who rarely closed the tab).
+- Reverting to every-session behavior would require: swap `localStorage` → `sessionStorage` in `app/page.tsx` gate + `app/splash/page.tsx` `markSession`. Not recommended.
 
 **Skip behavior:**
 - Skip button visible at all times on all screens.
 - Skip routes to Today page (P&P / current daily prompt).
-- On return: onboarding shows again (beta behavior above).
+- On return: splash does NOT show again (localStorage persists). To force-re-view, clear site data in DevTools or delete the `kallos-onboarded` key in localStorage.
 
 **Navigation:** Same Stories-style thin progress bar + swipe as Journey steps. No back button needed. Skip always visible top-right.
 
