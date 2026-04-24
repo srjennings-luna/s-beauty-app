@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Montserrat, Open_Sans, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/ui/Navigation";
+import VisualEditingClient from "@/components/VisualEditingClient";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -50,6 +51,14 @@ export default function RootLayout({
       <body className="antialiased min-h-screen pb-20">
         <main>{children}</main>
         <Navigation />
+        {/*
+          Visual Editing bridge for Sanity Studio's Presentation tool.
+          Self-detects whether the page is rendered inside a Studio iframe
+          and only activates the postMessage channel in that case, so the
+          script is a near no-op for regular visitors. Without this the
+          iframe loads but Presentation throws "Unable to connect".
+        */}
+        <VisualEditingClient />
       </body>
     </html>
   );
