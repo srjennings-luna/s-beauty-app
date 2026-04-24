@@ -146,9 +146,17 @@ function LockedDayRow({ planned }: { planned: PlannedDay }) {
 export default function JourneyDetailClient({
   journey,
   slug,
+  initialDayNumber,
 }: {
   journey: Journey;
   slug: string;
+  /**
+   * Optional: when present (from the /journeys/[slug]/day/[n] path alias used
+   * by Sanity Presentation), preselect that day on mount. Takes precedence
+   * over ?day=N query param. Presentation can't carry query strings cleanly
+   * through its iframe — path segments are the safe form.
+   */
+  initialDayNumber?: number;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -161,13 +169,13 @@ export default function JourneyDetailClient({
     const loaded = loadProgress(slug);
     setCompletedDays(loaded);
 
-    const dayParam = searchParams.get("day");
-    if (dayParam) {
-      const dayNum = parseInt(dayParam, 10);
-      const day = journey.days?.find((d) => d.dayNumber === dayNum) ?? null;
+    const dayNumFromPath = initialDayNumber;
+    const dayParam = dayNumFromPath ?? parseInt(searchParams.get("day") ?? "", 10);
+    if (Number.isFinite(dayParam)) {
+      const day = journey.days?.find((d) => d.dayNumber === dayParam) ?? null;
       if (day) setActiveDay(day);
     }
-  }, [slug, journey.days, searchParams]);
+  }, [slug, journey.days, searchParams, initialDayNumber]);
 
   const openDay = useCallback(
     (day: JourneyDay) => {

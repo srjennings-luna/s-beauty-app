@@ -117,6 +117,13 @@ export default defineConfig({
             filter: `_type == "journey" && slug.current == $slug`,
           },
           {
+            // Path-based journey-day alias (query-string `?day=N` equivalent
+            // for share URLs). Presentation navigates here; the app preselects
+            // the day via initialDayNumber.
+            route: '/journeys/:slug/day/:dayNumber',
+            filter: `_type == "journeyDay" && journey->slug.current == $slug && string(dayNumber) == $dayNumber`,
+          },
+          {
             route: '/pray/:id',
             filter: `_type == "contentItem" && _id == $id`,
           },
@@ -145,7 +152,7 @@ export default defineConfig({
               doc?.slug
                 ? {
                     locations: [
-                      {title: doc.title ?? 'Journey', href: `/journeys/${doc.slug}?preview=1`},
+                      {title: doc.title ?? 'Journey', href: `/journeys/${doc.slug}`},
                     ],
                   }
                 : undefined,
@@ -163,11 +170,12 @@ export default defineConfig({
                 locations: [
                   {
                     title: `Day ${doc.dayNumber}: ${doc.dayTitle ?? ''}`.trim(),
-                    href: `/journeys/${doc.journeySlug}?day=${doc.dayNumber}&preview=1`,
+                    // Path-based route for Presentation iframe compatibility.
+                    href: `/journeys/${doc.journeySlug}/day/${doc.dayNumber}`,
                   },
                   {
                     title: `Journey: ${doc.journeyTitle ?? doc.journeySlug}`,
-                    href: `/journeys/${doc.journeySlug}?preview=1`,
+                    href: `/journeys/${doc.journeySlug}`,
                   },
                 ],
               }
@@ -181,14 +189,14 @@ export default defineConfig({
               const cleanId = String(doc.id).replace(/^drafts\./, '')
               return {
                 locations: [
-                  {title: doc.title ?? 'Visio Divina', href: `/pray/${cleanId}?preview=1`},
+                  {title: doc.title ?? 'Visio Divina', href: `/pray/${cleanId}`},
                 ],
               }
             },
           }),
           splashPage: defineLocations({
             select: {title: 'title'},
-            resolve: () => ({locations: [{title: 'Splash', href: `/splash?preview=1`}]}),
+            resolve: () => ({locations: [{title: 'Splash', href: `/splash`}]}),
           }),
         },
       },
