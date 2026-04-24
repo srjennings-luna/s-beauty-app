@@ -95,11 +95,16 @@ function toggleFavorite(id: string): boolean {
 const MUSIC_CHANT   = "/music/nickpanek-ave-maria-latin-catholic-gregorian-chant-218251.mp3";
 const MUSIC_AMBIENT = "/music/natureseye-piano-dreamcloud-meditation-179215.mp3";
 
-function DailyPromptPageInner() {
+function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const dateParam = searchParams.get("date") ?? undefined; // e.g. "2026-03-17" from Library favorites
-  const isPreview = searchParams.get("preview") === "1"; // opened from Sanity Studio preview button
+  // Prefer an explicit path-param date (from /prompt/[date]) over the query
+  // string (/prompt?date=X), since Sanity Presentation can only construct
+  // path-based iframe URLs cleanly — query strings get URL-encoded into the
+  // pathname and 404.
+  const dateParam = initialDate ?? searchParams.get("date") ?? undefined;
+  // Preview mode is always on for the path-based alias (only Presentation uses it).
+  const isPreview = !!initialDate || searchParams.get("preview") === "1";
   const [prompt, setPrompt]               = useState<DailyPrompt | null>(null);
   const [loading, setLoading]             = useState(true);
   const [favorited, setFavorited]         = useState(false);
@@ -856,10 +861,10 @@ function DailyPromptPageInner() {
 }
 
 // useSearchParams() requires a Suspense boundary in Next.js App Router
-export default function PromptClient() {
+export default function PromptClient({ initialDate }: { initialDate?: string } = {}) {
   return (
     <Suspense>
-      <DailyPromptPageInner />
+      <DailyPromptPageInner initialDate={initialDate} />
     </Suspense>
   );
 }

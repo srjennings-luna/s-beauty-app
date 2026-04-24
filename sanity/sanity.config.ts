@@ -18,7 +18,9 @@ function resolvePreviewUrl(
     case 'dailyPrompt': {
       const date = doc?.date as string | undefined
       if (!date) return {error: 'Save the document with a date first, then use Preview in app.'}
-      return {url: `${APP_PREVIEW_URL}/prompt?date=${date}&preview=1`}
+      // Use path-based route for Presentation compatibility (query strings
+      // get URL-encoded and 404 in the iframe).
+      return {url: `${APP_PREVIEW_URL}/prompt/${date}`}
     }
     case 'journey': {
       const slug = doc?.slug?.current as string | undefined
@@ -103,17 +105,16 @@ export default defineConfig({
         // preview URL.
         mainDocuments: defineDocuments([
           {
-            route: '/prompt',
+            // Path-based alias used only by Presentation. The public route
+            // /prompt?date=X still works for share URLs; the Presentation
+            // iframe navigates /prompt/:date because its filter params come
+            // from path segments only (not query strings).
+            route: '/prompt/:date',
             filter: `_type == "dailyPrompt" && date == $date`,
           },
           {
             route: '/journeys/:slug',
             filter: `_type == "journey" && slug.current == $slug`,
-          },
-          {
-            // Matches /journeys/<slug>?day=N — $day comes from the query param
-            route: '/journeys/:slug/day/:day',
-            filter: `_type == "journeyDay" && journey->slug.current == $slug && dayNumber == $day`,
           },
           {
             route: '/pray/:id',
@@ -133,7 +134,7 @@ export default defineConfig({
               doc?.date
                 ? {
                     locations: [
-                      {title: `P&P — ${doc.date}`, href: `/prompt?date=${doc.date}&preview=1`},
+                      {title: `P&P — ${doc.date}`, href: `/prompt/${doc.date}`},
                     ],
                   }
                 : undefined,
