@@ -8,15 +8,17 @@ export const sanityClient = createClient({
   useCdn: false, // Disable CDN to ensure fresh data
 })
 
-// Preview client: fetches draft (unpublished) content for Studio preview
-// Uses NEXT_PUBLIC_SANITY_TOKEN + previewDrafts perspective
+// Preview client: fetches draft (unpublished) content for Studio preview.
+// Uses NEXT_PUBLIC_SANITY_TOKEN + 'drafts' perspective.
+// The older 'previewDrafts' name is deprecated and silently returns
+// published-only data on apiVersion 2024-01-01+ — confirmed 2026-04-24.
 export const previewClient = createClient({
   projectId: 'em44j9m8',
   dataset: 'production',
   apiVersion: '2024-01-01',
   useCdn: false,
   token: process.env.NEXT_PUBLIC_SANITY_TOKEN,
-  perspective: 'previewDrafts',
+  perspective: 'drafts',
 })
 
 // Image URL builder
