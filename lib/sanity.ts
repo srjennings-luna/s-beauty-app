@@ -510,10 +510,17 @@ export async function getDashboardAudioStatus() {
       "journeys": *[_type == "journey" && !string::startsWith(_id, "drafts.")] | order(order asc) {
         title, "slug": slug.current,
         "days": *[_type == "journeyDay" && journey._ref == ^._id && !string::startsWith(_id, "drafts.")] | order(dayNumber asc) {
-          dayNumber, dayTitle,
+          _id, dayNumber, dayTitle,
           "hasOpenTextAudio": defined(openTextAudio.asset),
           "hasEncNoteAudio": defined(encounterNoteAudio.asset),
-          "hasAuditio": defined(auditio.audioFile.asset)
+          // artworkHook + context audio live on the linked contentItem.
+          "hasArtworkHookAudio": defined(encounterContent->artworkHookAudio.asset),
+          "hasContextAudio": defined(encounterContent->contextAudio.asset),
+          "hasReflectionQuestionsAudio": defined(reflectionQuestionsAudio.asset),
+          "hasAuditio": defined(auditio.audioFile.asset),
+          // Tradition-reflection audio coverage for this day's Go Deeper refs.
+          "goDeeperTotal": count(goDeeper),
+          "goDeeperWithAudio": count(goDeeper[]->[defined(reflectionAudio.asset)])
         }
       },
       "prompts": *[_type == "dailyPrompt" && !string::startsWith(_id, "drafts.")] | order(date desc) {

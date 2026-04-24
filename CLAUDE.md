@@ -535,6 +535,9 @@ A section titled "REVISION HISTORY" at the very bottom. Each entry: Day X / Fiel
 
 This rule applies to all Journey content docs, P&P docs, entry guides, and content audit docs. It does not apply to CLAUDE.md itself or technical/code docs.
 
+### Content Type Check Rule (April 23, 2026)
+Before writing, auditing, or suggesting content for any `contentItem` record, always check the `contentType` field first. Each type has different relevant fields — a landscape has no artist name; a thinker has no medium; a music item has no location. Do not default to sacred-art field conventions when working with other content types. This applies in all Cowork content sessions.
+
 ### artworkHook Rule (April 23, 2026)
 `contentItem.artworkHook` (formerly `curatorNote`) must be about the specific artwork or piece itself — a surprising fact safe to display anywhere the content item appears (Journey, Explore, Library, P&P). It must never be written for a specific journey context or day. Journey-specific hooks belong on `dailyPrompt.curatorNote` (P&P hook) or `journeyDay.encounterNote` (journey layer). Three fields, three distinct jobs, no overlap. See Schema Design Brief for migration details.
 

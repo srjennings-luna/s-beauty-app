@@ -108,7 +108,19 @@ type TRByJourney = {
   trRefs?: Array<{ _id: string; title: string; source: string; authorType: string; era?: string }>;
 };
 
-type AudioDay = { dayNumber: number; dayTitle?: string; hasOpenTextAudio: boolean; hasEncNoteAudio: boolean; hasAuditio: boolean };
+type AudioDay = {
+  _id?: string;
+  dayNumber: number;
+  dayTitle?: string;
+  hasOpenTextAudio: boolean;
+  hasEncNoteAudio: boolean;
+  hasArtworkHookAudio: boolean;
+  hasContextAudio: boolean;
+  hasReflectionQuestionsAudio: boolean;
+  hasAuditio: boolean;
+  goDeeperTotal: number;
+  goDeeperWithAudio: number;
+};
 type AudioJourney = { title: string; slug: string; days?: AudioDay[] };
 type AudioPrompt = {
   _id: string;
@@ -715,6 +727,9 @@ export default async function DashboardPage() {
         )}
 
         <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">Journey day audio</h3>
+        <p className="text-[11px] text-[#7a7062] italic mb-2">
+          Six narration slots per day. <code className="text-[10px] bg-[#f0ebe0] px-1">artworkHook</code> and <code className="text-[10px] bg-[#f0ebe0] px-1">context</code> live on the linked content item and reflect that piece&rsquo;s artwork-level narration. <code className="text-[10px] bg-[#f0ebe0] px-1">goDeeper</code> = number of tradition reflections with audio / total linked.
+        </p>
         {audioStatus.journeys.map((j) => (
           <div key={j.slug} className="border border-[#e8e0d4] mb-3">
             <div className="bg-[#16110d] text-[#fdf6e8] px-4 py-2 font-sans text-sm">{j.title}</div>
@@ -724,21 +739,53 @@ export default async function DashboardPage() {
                   <tr>
                     <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Day</th>
                     <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Title</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">openTextAudio</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">encounterNoteAudio</th>
-                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">auditio music</th>
+                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">openText</th>
+                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">encNote</th>
+                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">artworkHook</th>
+                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">context</th>
+                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">reflectQ</th>
+                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">auditio</th>
+                    <th className="px-2 py-1 font-sans text-[9px] tracking-wider">goDeeper</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(j.days || []).map((d) => {
-                    const red = !d.hasOpenTextAudio && !d.hasEncNoteAudio && !d.hasAuditio;
+                    const narrationSlots = [
+                      d.hasOpenTextAudio,
+                      d.hasEncNoteAudio,
+                      d.hasArtworkHookAudio,
+                      d.hasContextAudio,
+                      d.hasReflectionQuestionsAudio,
+                    ];
+                    const narrationMissing = narrationSlots.every((v) => !v);
+                    const red = narrationMissing && !d.hasAuditio && (d.goDeeperWithAudio === 0);
+                    const goDeeperCell =
+                      d.goDeeperTotal === 0 ? (
+                        <span className="text-[#9a8d78]">—</span>
+                      ) : (
+                        <span
+                          className={
+                            d.goDeeperWithAudio === d.goDeeperTotal
+                              ? "text-[#4a7a62]"
+                              : d.goDeeperWithAudio === 0
+                              ? "text-[#c25555]"
+                              : "text-[#a06010]"
+                          }
+                        >
+                          {d.goDeeperWithAudio}/{d.goDeeperTotal}
+                        </span>
+                      );
                     return (
-                      <tr key={d.dayNumber} className={`border-b border-[#e8e0d4] ${red ? "bg-[#fdf0f0]" : ""}`}>
+                      <tr key={d._id ?? d.dayNumber} className={`border-b border-[#e8e0d4] ${red ? "bg-[#fdf0f0]" : ""}`}>
                         <td className="px-2 py-1 text-right">{d.dayNumber}</td>
                         <td className="px-2 py-1">{d.dayTitle || "(no title)"}</td>
                         <td className="px-2 py-1 text-center"><Yes value={d.hasOpenTextAudio} /></td>
                         <td className="px-2 py-1 text-center"><Yes value={d.hasEncNoteAudio} /></td>
+                        <td className="px-2 py-1 text-center"><Yes value={d.hasArtworkHookAudio} /></td>
+                        <td className="px-2 py-1 text-center"><Yes value={d.hasContextAudio} /></td>
+                        <td className="px-2 py-1 text-center"><Yes value={d.hasReflectionQuestionsAudio} /></td>
                         <td className="px-2 py-1 text-center"><Yes value={d.hasAuditio} /></td>
+                        <td className="px-2 py-1 text-center font-bold">{goDeeperCell}</td>
                       </tr>
                     );
                   })}
