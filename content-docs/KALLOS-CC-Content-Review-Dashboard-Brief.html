@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KALLOS — Content Review Dashboard Brief</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Georgia', serif; line-height: 1.8; color: #2C2C2C; background: #FFFFFF; }
+    .container { max-width: 900px; margin: 0 auto; padding: 60px 40px 120px; }
+    .cover { background: #16110d; color: #fdf6e8; text-align: center; padding: 60px 40px 48px; margin: -60px -40px 52px; }
+    .cover .label { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #C19B5F; margin-bottom: 16px; }
+    .cover h1 { font-size: 28px; font-weight: 300; letter-spacing: 3px; color: #fdf6e8; margin-bottom: 8px; }
+    .cover .sub { font-size: 14px; color: #bfb8aa; font-style: italic; }
+    .cover .date { font-size: 11px; color: #7a7062; margin-top: 12px; }
+    h2 { font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; color: #C19B5F; margin-top: 48px; margin-bottom: 16px; letter-spacing: 0.2em; text-transform: uppercase; padding-bottom: 8px; border-bottom: 1px solid #e8e0d4; }
+    h3 { font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; color: #16110d; margin: 24px 0 10px; }
+    p { font-size: 14px; margin-bottom: 12px; }
+    ul, ol { margin: 8px 0 14px 24px; font-size: 14px; }
+    li { margin-bottom: 6px; }
+    .context-box { background: #fdf6e8; border-left: 4px solid #C19B5F; padding: 18px 22px; margin: 28px 0; font-size: 14px; line-height: 1.8; }
+    .context-box strong { color: #16110d; }
+    .question-block { border: 1px solid #e8e0d4; margin: 24px 0; }
+    .question-header { background: #16110d; color: #fdf6e8; padding: 12px 20px; display: flex; align-items: baseline; gap: 14px; }
+    .question-num { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C19B5F; flex-shrink: 0; }
+    .question-title { font-size: 16px; font-weight: 300; }
+    .question-body { padding: 18px 22px; }
+    .question-body p { font-size: 14px; margin-bottom: 10px; }
+    .question-body ul, .question-body ol { margin: 8px 0 14px 22px; }
+    .question-body li { font-size: 14px; margin-bottom: 6px; }
+    .decision-box { background: #f0f7f3; border-left: 3px solid #4a7a62; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .decision-box .dec-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #4a7a62; font-weight: 700; margin-bottom: 6px; }
+    .open-box { background: #fff5e0; border-left: 3px solid #a06010; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .open-box .open-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #a06010; font-weight: 700; margin-bottom: 6px; }
+    .defer-box { background: #f5f5f5; border-left: 3px solid #999; padding: 14px 18px; margin: 14px 0; font-size: 13px; color: #555; }
+    .defer-box .defer-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #999; font-weight: 700; margin-bottom: 6px; }
+    .warn-block { background: #fdf0f0; border-left: 3px solid #c25555; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .warn-block .warn-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #c25555; font-weight: 700; margin-bottom: 6px; }
+    code { font-family: 'Courier New', monospace; font-size: 12px; background: #f0ebe0; padding: 2px 6px; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+    th { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #fdf6e8; background: #16110d; text-align: left; padding: 8px 12px; }
+    td { padding: 8px 12px; border-bottom: 1px solid #e8e0d4; vertical-align: top; }
+    tr:nth-child(even) td { background: #fdf6e8; }
+    .field-tag { font-family: Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; background: #f0ebe0; color: #7a6a54; display: inline-block; margin: 2px; }
+    .view-block { border: 1px solid #e8e0d4; border-radius: 0; padding: 16px 20px; margin: 14px 0; }
+    .view-name { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #C19B5F; font-weight: 700; margin-bottom: 6px; }
+    .view-body { font-size: 13px; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="cover">
+    <div class="label">Claude Code — Working Brief</div>
+    <h1>CONTENT REVIEW DASHBOARD</h1>
+    <div class="sub">Architecture input requested before build begins</div>
+    <div class="date">April 2026 — Read CLAUDE.md before starting</div>
+  </div>
+
+  <div class="context-box">
+    <strong>Purpose of this brief.</strong> This is a design discussion document, not a build brief yet. The content review dashboard is a new capability being planned for KALLOS. Sheri and Claude (Cowork) have developed the concept through conversation; this brief captures those decisions and surfaces the open architectural questions. Opus is being asked to review the architecture options and recommend a path before any build begins. Do not start implementing. Read, reason, and respond with a recommendation.
+  </div>
+
+
+  <h2>Background — What Exists Today</h2>
+
+  <p>KALLOS has a live operational dashboard at <code>/dashboard</code> in the Next.js app (deployed to Vercel, gated by <code>DASHBOARD_ENABLED=true</code> env var). It is a server-rendered page with seven sections covering journey completion status, content library, tradition reflections, audio gaps, schema health, TTS coverage, and companion journey placeholders. It is read-only, uses named GROQ query functions in <code>lib/sanity.ts</code>, and revalidates every 60 seconds. See <code>app/dashboard/page.tsx</code> for full implementation.</p>
+
+  <p>The current dashboard is an <strong>operational tool</strong>: it surfaces what is missing, what is duplicated, what has audio gaps, what needs attention. It does not evaluate content quality or allow editorial comparison across records.</p>
+
+  <p>The content types relevant to this brief are <code>dailyPrompt</code> (Pause and Ponder daily prompts, currently 27 records) and <code>journeyDay</code> (standalone documents, 25 records across 5 journeys, promoted from inline objects in April 2026). Both schemas share the Auditio object structure. See CLAUDE.md Schema Status section for full field inventory.</p>
+
+
+  <h2>The Editorial Problem</h2>
+
+  <p>KALLOS has a set of editorial principles defined in CLAUDE.md and two content guides (P&P and Journey). These exist as prose rules. There is currently no way to look at actual content across records and say "this example follows principle 3 and 6, this one doesn't, here is why." Standards are defined but not demonstrated. Quality is evaluated one record at a time inside Sanity Studio, not comparatively.</p>
+
+  <p>As content scales toward hundreds of records, Sheri needs a tool that lets her:</p>
+  <ul>
+    <li>See content fields in the sequence the user experiences them (not in the Sanity document form order)</li>
+    <li>Compare the same field across many records at once to identify what good looks like</li>
+    <li>Look at a full journey arc to evaluate whether content develops across 7 days or repeats itself</li>
+    <li>Control the view precisely: show only the fields relevant to the current audit, hide the rest</li>
+  </ul>
+
+  <p>This is distinct from the operational dashboard. That tool asks "what is missing?" This tool asks "is what is there good?"</p>
+
+
+  <h2>What We Researched</h2>
+
+  <p>Before designing a custom build, Sanity's native ecosystem was surveyed. Summary of findings:</p>
+
+  <table>
+    <tr><th>Option</th><th>What it does</th><th>Gap</th></tr>
+    <tr>
+      <td>Sanity document comparison tool (native, Spring 2025)</td>
+      <td>Side-by-side view of two versions of the same document</td>
+      <td>Version history only, not cross-record comparison</td>
+    </tr>
+    <tr>
+      <td>Bulk Actions Table plugin (contentwrap, actively maintained)</td>
+      <td>Table view of one document type with column show/hide, sort, search, bulk publish/unpublish</td>
+      <td>One document type at a time; no cross-type rows; no sequential content flow; no export</td>
+    </tr>
+    <tr>
+      <td>CSV export (GUI)</td>
+      <td>Does not exist</td>
+      <td>Still an open feature request (GitHub issue 4660, no milestone). CLI + jq workaround is developer-only.</td>
+    </tr>
+    <tr>
+      <td>Sanity Dashboard / Insights (Spring 2025)</td>
+      <td>Operational metrics: drafts, publishing velocity, stalled content</td>
+      <td>No field-level content review capability</td>
+    </tr>
+    <tr>
+      <td>Sanity App SDK (Spring 2025)</td>
+      <td>React hooks toolkit for building custom apps inside Studio, with live data, built-in auth, caching</td>
+      <td>Not a ready-made tool; a build platform. Promising for a Studio-embedded version of this feature.</td>
+    </tr>
+    <tr>
+      <td>Agent Actions / Content Agent (Spring 2025)</td>
+      <td>AI-driven content audit, field-level updates, automated gap detection</td>
+      <td>Automation tool, not a human review interface</td>
+    </tr>
+  </table>
+
+  <p>Conclusion: no off-the-shelf solution covers this use case. Custom build is required.</p>
+
+
+  <h2>Interaction Model — What Sheri Decided</h2>
+
+  <p>The following interaction model was established in the design discussion. This is the spec for what needs to be built. Architecture decisions are open (see next section).</p>
+
+  <h3>Core model: configurable grid</h3>
+  <p>Rows are records (journeyDays, dailyPrompts, or both). Columns are fields. All fields are accessible; none are eliminated by design. Sheri controls what is visible through column and row toggles. This means the named "views" below are not separate screens; they are saved column/row configurations on a single grid.</p>
+
+  <h3>Row controls</h3>
+  <ul>
+    <li>Filter by document type (journeyDay / dailyPrompt / both)</li>
+    <li>Filter by journey (BTG, Myth, Light, Bosch, etc.)</li>
+    <li>Filter by date range (for dailyPrompts)</li>
+    <li>Filter by completeness (days with missing fields)</li>
+    <li>Select specific rows to pin for focused comparison; hide unselected rows</li>
+    <li>Sort by any column (ascending / descending)</li>
+  </ul>
+
+  <h3>Column controls</h3>
+  <p>Every text-content field should be available as a column. All toggled on by default; any can be turned off. Fields include (but are not limited to):</p>
+  <div>
+    <span class="field-tag">openText</span>
+    <span class="field-tag">artworkHook / curatorNote</span>
+    <span class="field-tag">context</span>
+    <span class="field-tag">promptQuestion</span>
+    <span class="field-tag">encounterNote</span>
+    <span class="field-tag">lectio (philosophy)</span>
+    <span class="field-tag">lectio (scripture)</span>
+    <span class="field-tag">auditio title + artist</span>
+    <span class="field-tag">reflectionQuestions</span>
+    <span class="field-tag">connectThread</span>
+    <span class="field-tag">goDeeper (titles)</span>
+    <span class="field-tag">actio</span>
+    <span class="field-tag">image thumbnail</span>
+    <span class="field-tag">dayNumber</span>
+    <span class="field-tag">date</span>
+  </div>
+
+  <h3>Long text handling</h3>
+  <p>Most content fields are long text that will not fit in a grid cell. Two modes are needed: a truncated cell view (2-3 lines, expand toggle per cell) for scanning, and a detail panel for reading. The detail panel opens when a row is selected and shows all fields for that record in the sequence the user experiences them. This is the "record view" and "full read-through" in one place.</p>
+
+  <h3>Named preset views (column/row configurations, not separate screens)</h3>
+
+  <div class="view-block">
+    <div class="view-name">Record view</div>
+    <div class="view-body">One row selected, all columns visible, detail panel open. Shows the complete sequential experience for a single P&P or journey day. Primary use: approve content before publishing, or audit an existing record as a unit.</div>
+  </div>
+
+  <div class="view-block">
+    <div class="view-name">Field comparison view</div>
+    <div class="view-body">All rows, one or two columns visible. For example: all curator notes across all P&Ps, or all opening texts across all journey days. Primary use: standard-setting, identifying what good looks like for a specific field across many records.</div>
+  </div>
+
+  <div class="view-block">
+    <div class="view-name">Journey arc view</div>
+    <div class="view-body">One journey filtered (all 7 days), structural columns visible (openText, connectThread, auditio title). Primary use: evaluate whether the emotional arc develops across the week, whether music changes register, whether connect threads actually build or just repeat.</div>
+  </div>
+
+  <div class="view-block">
+    <div class="view-name">Parallel entry point view</div>
+    <div class="view-body">Day 1 rows filtered across multiple journeys, key columns visible. Primary use: verify that all journey entry points are distinct in tone and approach.</div>
+  </div>
+
+  <div class="view-block">
+    <div class="view-name">Content pairing view</div>
+    <div class="view-body">Custom column selection: for example, lectio (philosophy) + lectio (scripture) + auditio title together, or reflectionQuestions + connectThread + image. Primary use: evaluate how specific fields work as pairs or groups, not in isolation.</div>
+  </div>
+
+  <h3>TTS view (future, not Phase 1)</h3>
+  <p>Sheri named a fifth future view she called "really listen": playing the TTS audio for each field in sequence, experiencing the content as audio rather than text. This is time-based and fundamentally different from the grid. Defer entirely. No architecture decisions needed now.</p>
+
+  <h3>Comments / annotations (future, not Phase 1)</h3>
+  <p>Annotation was discussed and deferred deliberately. The core problem: a comment written while comparing 20 curator notes means something different than the same comment written on a record in isolation. Capturing that context is non-trivial. Phase 1 is read-only. The architecture should not preclude comments being added later, but no design or data model decisions are needed now.</p>
+
+  <h3>Editorial tagging (future, not Phase 1)</h3>
+  <p>Sheri's longer-term goal is to tag records with which editorial principles they exemplify ("this opening text demonstrates principles 1, 4, and 6"), and eventually to have automated similarity detection surface candidates for her to accept, reject, or relabel. Phase 1 does not include any tagging or write capability. The architecture should not preclude it. See "Future features to plan around" section below.</p>
+
+
+  <h2>Architecture Questions for Opus</h2>
+
+  <p>The following questions are open. Sheri and Cowork have not resolved them. Opus is being asked to recommend an approach for each, with reasoning.</p>
+
+  <div class="question-block">
+    <div class="question-header">
+      <span class="question-num">Q1</span>
+      <span class="question-title">Where should this live: extend the existing /dashboard, or build as a Sanity App SDK tool?</span>
+    </div>
+    <div class="question-body">
+      <p>The existing <code>/dashboard</code> in the Next.js app is half-built: it has GROQ queries, Sanity client access, and is already deployed. Extending it is lower effort. But it lives outside Studio, which means a context switch for Sheri (editing in Studio, reviewing in a separate Vercel URL).</p>
+      <p>Sanity's App SDK (Spring 2025) allows building custom React apps that run inside Studio as embedded tools. They have built-in authentication, live data with caching, and React hooks for querying content. Building there would mean the comparison view lives alongside the editing experience, in the same window.</p>
+      <p>Considerations Opus should weigh:</p>
+      <ul>
+        <li>The App SDK is relatively new (Spring 2025). How mature is it? Is it stable enough for a production tool, or is it still moving fast?</li>
+        <li>How much harder is the App SDK build vs. extending the Next.js dashboard? The existing dashboard is a known quantity.</li>
+        <li>Is a hybrid sensible: build in Next.js first, then migrate the comparison view into the App SDK once the design is stable?</li>
+        <li>The Presentation plugin is already installed and working. Does the App SDK interact with or conflict with the Presentation setup?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="question-block">
+    <div class="question-header">
+      <span class="question-num">Q2</span>
+      <span class="question-title">How do you handle cross-document-type rows in a single grid?</span>
+    </div>
+    <div class="question-body">
+      <p><code>journeyDay</code> and <code>dailyPrompt</code> have overlapping but not identical schemas. A <code>journeyDay</code> has <code>openText</code>, <code>encounterNote</code>, <code>connectThread</code>; a <code>dailyPrompt</code> has <code>promptQuestion</code>, <code>curatorNote</code>, <code>actio</code>. They share <code>lectio</code>, <code>auditio</code>, and image structure.</p>
+      <p>When both types appear as rows in the same grid, some columns will be empty for some rows. That is acceptable and by design (Sheri wants all fields accessible, empty is fine). But the GROQ query strategy and the TypeScript type for a "row" need to handle this gracefully.</p>
+      <p>Questions for Opus:</p>
+      <ul>
+        <li>What is the cleanest GROQ strategy for fetching a unified row set across two document types with partial schema overlap?</li>
+        <li>Should the row type be a union type, a merged type with all fields optional, or something else?</li>
+        <li>Are there field name collisions to handle? (<code>curatorNote</code> on <code>dailyPrompt</code> vs. <code>artworkHook</code> on <code>contentItem</code> are different things with similar names. Mapping needs to be explicit.)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="question-block">
+    <div class="question-header">
+      <span class="question-num">Q3</span>
+      <span class="question-title">Where does the "record view" detail panel live, and how is it triggered?</span>
+    </div>
+    <div class="question-body">
+      <p>The detail panel shows all fields for one record in sequential order (the order the user experiences them in the app, not the Sanity form order). It needs to open from the grid without navigating away, and it needs to display fields in a specific sequence that is different from the schema order.</p>
+      <p>Questions for Opus:</p>
+      <ul>
+        <li>Slide-over panel, modal, or expandable row? What works best for long-form content review?</li>
+        <li>The sequential order for journeyDay is: image, openText, artworkHook (from linked contentItem), context (from linked contentItem), lectio, auditio, reflectionQuestions, connectThread, goDeeper titles. Several of these require traversing a reference (the linked contentItem). Does this create a second GROQ fetch, or should the main grid query pre-join these via projection?</li>
+        <li>What is the right GROQ projection to pre-fetch contentItem fields for journeyDay rows without over-fetching?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="question-block">
+    <div class="question-header">
+      <span class="question-num">Q4</span>
+      <span class="question-title">How should preset views be saved and restored?</span>
+    </div>
+    <div class="question-body">
+      <p>The named views (record view, field comparison view, arc view, etc.) are column/row configurations that should be quickly accessible. Sheri should be able to switch between them without re-configuring each time.</p>
+      <p>Questions for Opus:</p>
+      <ul>
+        <li>URL params, localStorage, or hardcoded named presets as buttons? Each has tradeoffs. URL params are shareable and bookmarkable. localStorage persists without a server. Hardcoded presets are zero-config but inflexible.</li>
+        <li>Should the user be able to save custom presets, or are the named presets above sufficient for Phase 1?</li>
+        <li>How does this interact with the filter state (which journey is selected, which rows are pinned)?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="question-block">
+    <div class="question-header">
+      <span class="question-num">Q5</span>
+      <span class="question-title">What is the right data fetching strategy for a configurable grid at this content volume?</span>
+    </div>
+    <div class="question-body">
+      <p>Current content volume: 25 journeyDay documents, 27 dailyPrompt documents. Growing toward hundreds of records over the next 12 months. All fields per record. Some fields require ref traversal (journeyDay references contentItem for artworkHook, context, image).</p>
+      <p>Questions for Opus:</p>
+      <ul>
+        <li>Is it practical to fetch all records with all fields in a single GROQ query with projections, or is the payload too large?</li>
+        <li>Should the grid load all rows eagerly, or paginate / virtualize?</li>
+        <li>Does the existing <code>revalidate: 60</code> strategy work for this view, or does the comparison use case need live updates?</li>
+        <li>The existing dashboard uses server components with named GROQ functions in <code>lib/sanity.ts</code>. Should the comparison view follow the same pattern, or does the interactive filtering require client-side data with a different fetch approach?</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <h2>Future Features to Plan Around (Not Phase 1)</h2>
+
+  <p>These are not being built now, but the Phase 1 architecture should not accidentally prevent them. Opus should flag any Phase 1 decision that would create technical debt against these future features.</p>
+
+  <h3>Editorial tagging</h3>
+  <p>Sheri's intention: tag records in the grid with which editorial principles they exemplify. First pass is manual (she applies tags). Second pass introduces automated detection with an accept/reject/modify workflow. The tags need to persist somewhere. Options discussed: back into Sanity as fields on records, a separate annotation store (JSON in the repo), or dashboard-only state. No decision made yet. The Phase 1 architecture should not assume tags will not exist.</p>
+
+  <h3>Accept/reject/modify for automated similarity detection</h3>
+  <p>The current operational dashboard already does work-level repeat detection (same composerArtist + workTitle used twice). The longer-term vision is semantic similarity detection across content fields: two pieces exploring the same theological territory, two opening texts using the same structural move. The human review workflow is: system surfaces a candidate, Sheri accepts the tag, rejects it, or renames it. Where do those decisions persist? The Phase 1 architecture should not foreclose a lightweight annotation layer.</p>
+
+  <h3>CSV / spreadsheet export</h3>
+  <p>Sanity does not have a native GUI export. A "Download this view as CSV" button on the comparison grid would let Sheri work with content in Numbers or Excel for ad hoc analysis. This is a natural extension of the grid once the data model is established. Plan for it; do not build it yet.</p>
+
+  <h3>TTS "really listen" view</h3>
+  <p>A separate time-based view that plays TTS audio for all fields in sequence, simulating the in-app experience as audio. Entirely separate from the grid. Defer; no architecture decisions needed now.</p>
+
+
+  <h2>Constraints</h2>
+
+  <ul>
+    <li>Sheri does not write code. The tool must work in a browser, with no terminal interaction required.</li>
+    <li>Phase 1 is read-only. No editing, no saving, no write operations of any kind.</li>
+    <li>The existing operational dashboard at <code>/dashboard</code> must continue working. Any new build is additive, not a replacement.</li>
+    <li>No em dashes in any content or code comments. This rule applies everywhere in KALLOS.</li>
+    <li>Build verification: <code>npx tsc --noEmit</code> from repo root (SWC binary not available on Cowork VM). Commit after every significant step.</li>
+    <li>The comparison view will be used during content sessions alongside Sanity Studio. It needs to be fast enough not to interrupt the editing workflow.</li>
+  </ul>
+
+
+  <h2>What Opus Is Being Asked To Do</h2>
+
+  <div class="warn-block">
+    <div class="warn-label">Do not build yet</div>
+    This brief is a design discussion document. Do not start implementing. Read the brief, reason through the five architecture questions, and return a written recommendation for each. If any question has a clear best answer, say so. If a question is genuinely a tradeoff with no right answer, lay out the options and ask Sheri to decide. Flag any Phase 1 decision that would create technical debt against the future features listed above.
+  </div>
+
+  <p>The output of this conversation should be a short architecture decision record: for each of the five questions, one or two paragraphs stating the recommended approach and why. Once Sheri approves the decisions, a separate build brief will be written with specific tasks.</p>
+
+  <p>If Opus sees a simpler way to achieve the same editorial outcome that has not been considered, say so. The goal is the right tool for Sheri, not adherence to the design as written.</p>
+
+
+</div>
+</body>
+</html>

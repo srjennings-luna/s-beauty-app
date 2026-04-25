@@ -57,7 +57,10 @@ Read this at the start of every session. It contains all key product decisions, 
 | `content-docs/CONTENT-RULES.md` | **In repo** — condensed content rules reference |
 | `content-docs/KALLOS-CC-Audit-Brief.html` | **In repo** — Claude Code audit brief. READ THIS before any architecture or schema work. |
 | `content-docs/KALLOS-CC-Schema-Design-Brief.html` | **In repo** — Claude Code schema design and migration brief. ✅ Complete April 23, 2026. |
-| `content-docs/KALLOS-CC-Dashboard-Enhancement-Brief.html` | **In repo** — Claude Code dashboard enhancements brief. ✅ Complete April 24, 2026. Tasks 1–5 all shipped: photography content type, ancient era, reflectionQuestionsAudio, dashboard TTS columns, filter/sort client components, work-level repeat detection + source concentration, Sanity Presentation plugin. |
+| `content-docs/KALLOS-CC-Dashboard-Enhancement-Brief.html` | **In repo** — Claude Code dashboard enhancements brief. ✅ Complete April 24, 2026.
+| `content-docs/KALLOS-CC-Content-Review-Dashboard-Brief.html` | **In repo** — Content Review Dashboard design brief. Architecture input requested from Opus before any build begins. Five open questions: where to build (Next.js vs App SDK), cross-type row model, detail panel strategy, preset view persistence, data fetching approach.
+| `content-docs/KALLOS-CC-Content-Review-Dashboard-ADR.html` | **In repo** — Architecture Decision Record from Opus. Answers all five Q1-Q5 questions. Sheri amended: slide modal becomes inline cell expansion; field prefixing keeps journey days grouped in sort order.
+| `content-docs/KALLOS-CC-Content-Review-Dashboard-Build.html` | **In repo** — Build brief. Five tasks: data layer, grid foundation, presets + URL state, cell expansion + record view, CSV export + voice scanner. Reference all three docs (Brief + ADR + Build) when starting the CC session. Answers all five Q1-Q5 questions from the brief. Sheri amended: slide modal (not slide-over) for detail panel; field prefixing to keep journey days grouped in sort order. ADR phase-1 scope bullets map directly to build-brief tasks. Reference both this and the brief when writing the build brief. Tasks 1–5 all shipped: photography content type, ancient era, reflectionQuestionsAudio, dashboard TTS columns, filter/sort client components, work-level repeat detection + source concentration, Sanity Presentation plugin. |
 | `content-docs/KALLOS-Schema-Audit.html` | **In repo** — Task 1 output from audit (April 23, 2026). Full schema field inventory, cross-schema duplicate detection, GROQ trace, dead-field analysis, 15 prioritized recommendations (R1–R15). Read before any schema or data migration work. |
 | `content-docs/KALLOS-artworkHook-Audit.html` | **In repo** — April 24, 2026 audit of all 47 populated contentItem.curatorNote records. KEEP/REVIEW decision per item. 41 KEEP (migrated to artworkHook), 6 REVIEW (still under legacy curatorNote, pending rewrite). Rewrite the REVIEW items first; the dashboard shows a live count in Section 2. |
 | `content-docs/KALLOS-Content-Inventory.html` | **In repo** — Task 2 output from audit (April 23, 2026). Full Sanity content inventory snapshot: 53 content items, 27 P&P prompts, 28 tradition reflections, 5 journeys. Field-by-field completeness, TTS coverage (70,017 char gap), consolidated red list. GROQ queries embedded at bottom for reuse. |
@@ -193,6 +196,7 @@ Read this at the start of every session. It contains all key product decisions, 
   - All three tested end-to-end: edit in Presentation's right pane → draft edit shows on iframe after ↻ refresh.
 - ✅ Onboarding gate hardened for iframe context. `app/page.tsx` now skips the splash redirect entirely when inside an iframe (`window.self !== window.top`). Storage upgraded from `sessionStorage` (every-session re-show) to `localStorage` (show once per install). Prevents Presentation's iframe from being hijacked to `/splash` on cold load. See Onboarding Framework below.
 - ✅ Splash refactor to Sanity-driven content added to Parking Lot (hardcoded copy in `app/splash/page.tsx` → `splashPage.screens[]` array). Keep layout intact.
+- ✅ Visio Divina Finish button fixed: routes to `/library` via `router.push("/library")` instead of `router.back()`. The `back()` call failed silently when there was no browser history (e.g., arrival from a share link or inside Sanity Presentation's iframe).
 
 **Presentation workflow quirk to remember:** typing into the iframe URL bar updates the URL and matches `mainDocuments` on the right, but the iframe doesn't always navigate. **Always click ↻ refresh** after changing the iframe URL or making a doc edit — forces re-hydration and pulls current draft state. Auto-refresh isn't magic.
 
@@ -492,7 +496,7 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 - **Context collapse** — Encounter step collapses `context` field to ~2-3 sentences with expand
 - **Inline audio player** — Sanity-hosted `audioFile` plays via native `<audio>` element
 - **Daily Prompt fallback** — Shows most recent prompt if exact date match fails
-- **Visio Divina** (`/pray/[artworkId]`) — 5-step prayer: Gaze → Meditate → Pray → Contemplate → Action
+- **Visio Divina** (`/pray/[artworkId]`) — 5-step prayer: Gaze → Meditate → Pray → Contemplate → Action. Finish button routes to `/library` (not `router.back()` — safe from any entry point including share links and Presentation iframes).
 - **Go Deeper** — Tradition reflections (Church Fathers, Saints, Popes) expandable bar
 - **8x pinch-to-zoom** — On Breathe page (Journey), content detail (Explore), and P&P hero image
 - **P&P page** — No Begin state. Layout: Image → Title/date → Curator Note → Prompt Question → Context teaser → Lectio → Auditio → Actio. Typography: Cormorant for prompt question and lectio quotes (both, always, at 1.3rem+). Open Sans italic for auditio title. Open Sans regular for everything else.
@@ -609,6 +613,24 @@ Go Deeper tradition reflections must add genuinely new content not already prese
 Voices must come from tradition: Church Fathers, philosophers, historical thinkers — with specific quotes and verifiable sources. Summaries should name what is surprising or new in the source, not describe the book's cover. "Lewis's own account of his conversion" is not sufficient — name what specifically in the account earns reading it.
 
 Each journey day should use a different voice. Before proposing a TR, check who has already been used in the journey. Do not repeat Church Fathers across adjacent days.
+
+### Nine Layers of Depth — Discussion Note (April 24, 2026)
+
+From Elizabeth Lev's *How Catholic Art Saved the Faith*. A framework for thinking about how much depth a given artwork can carry across nine layers. Useful when evaluating whether a piece can sustain a full journey day, or whether it will run out of material by Day 3. Not a scoring checklist yet — treat as a lens for content selection conversations.
+
+Nine layers, each scored 0-3 (0 = absent, 3 = richly present), max 27:
+
+1. **Visual Symbol Decoding:** embedded symbols with specific theological or historical meaning
+2. **Typological Resonance:** Old/New Testament pairings, prefigurements and fulfillments
+3. **Heresy Response:** a rebuttal to a theological error or controversy of the era. Can be visual (one painting answering another tradition's visual argument) not just textual or polemical
+4. **Gestural Threads:** figures whose posture, gaze, or gesture form a narrative across the composition
+5. **Ecclesial Commission Context:** who ordered it, for what liturgical or civic purpose, and how that shapes meaning
+6. **Primary Source Grounding:** patristic texts, scripture, liturgy, or philosophy the image draws on directly (not just thematically)
+7. **Political/Cultural Turmoil:** the historical crisis the work was produced inside and responds to
+8. **Patron's Story:** the patron's identity, faith, and agenda as interpretive layer
+9. **The Faithful's Experience:** how ordinary people in the original context would have encountered and received it (procession, pilgrimage, Mass, devotional practice)
+
+Not yet formalized into a scoring rubric. Revisit after applying informally to 2-3 existing journey days to see if the framework holds.
 
 ### TTS Pronunciation Flag
 When a proper noun has a non-obvious pronunciation, add a TTS sanity-note to the field in the content doc. Format: "TTS note: [word] is pronounced [phonetic] — not [common mispronunciation]."
@@ -846,8 +868,8 @@ Full detail in `content-docs/KALLOS-Schema-Audit.html` and `content-docs/KALLOS-
 61. **Rewrite the 6 REVIEW artworkHook items** — Sheri, editorial pass. The April 24 audit flagged these for rewrite because the existing curator-note text was journey-specific or lacked piece-level grounding: Addison's Walk, The Art of Being Moved, Easter Sunday, Holy Saturday, The Calling of Saint Matthew (×2 — two duplicate content items, will also need dedup). New hook goes into `artworkHook` in Sanity Studio. Once saved, unset the legacy `curatorNote` on that document (Sanity: open document, click the ⋮ on the Curator Note field → "Clear"). Dashboard Section 2 shows a live count. Full decision detail + current text: `content-docs/KALLOS-artworkHook-Audit.html`.
 62. **Populate auditio structured fields** — New in April 24: `auditio.composerArtist`, `auditio.workTitle`, `auditio.genre` on journeyDay and dailyPrompt. Existing records have them empty. When content-editing in Studio, fill in these three alongside the existing free-text `title`/`composer`/`artist` fields so the dashboard can track work-level repeats and genre variety. See Content Repeat Intelligence section above.
 63. **Re-populate `totalDays` if missing** — Light and Bosch had null `totalDays` at audit time. Re-check in Studio; enter 7 and 8 respectively if still null.
-64. **Add `SANITY_PREVIEW_SECRET` env var** — Sheri: generate a random string (`openssl rand -hex 32`) and add it to `.env.local` AND Vercel environment variables. Required for Sanity Studio's Presentation panel to enable draft-mode preview; without it, the "Enable Drafts" button on the preview panel returns 500. Side-by-side published-content preview works without the secret.
-65. **(Follow-up) Extend draft-mode reading to remaining routes** — Today only `app/prompt/PromptClient.tsx` reads drafts via the existing `?preview=1` shortcut. To show unsaved journey-day / contentItem edits live in Presentation, those pages' data fetches need to honor `draftMode()` from `next/headers` and swap to the `previewDrafts` perspective on the Sanity client. Scope per page: journey detail, pray page, splash. Follow-up CC session.
+~~64. **Add `SANITY_PREVIEW_SECRET` env var**~~ NOT NEEDED. Sanity auto-provisions the preview secret via `@sanity/preview-url-secret`. No manual secret required. The `app/api/draft/route.ts` handler calls `validatePreviewUrl()` with Sanity's client and Sanity manages secret rotation automatically. Confirmed working April 24, 2026.
+~~65. **(Follow-up) Extend draft-mode reading to remaining routes**~~ ✅ DONE April 24, 2026. Journey detail, journeyDay, and pray pages all honor `draftMode()` and swap to the preview client. See Phase 2 Work Done (April 24 evening, Presentation drafts).
 66. **(Follow-up) Re-tag existing Pictorialist content as `photography`** — Cameron "English Blossoms" (BTG II Day 1) is entered as `sacred-art` because `photography` did not exist at the time. Now that it does (Manual Task #36 complete), re-tag in Sanity Studio.
 
 ### New app surface

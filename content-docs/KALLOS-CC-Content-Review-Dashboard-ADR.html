@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KALLOS — Content Review Dashboard ADR</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Georgia', serif; line-height: 1.8; color: #2C2C2C; background: #FFFFFF; }
+    .container { max-width: 900px; margin: 0 auto; padding: 60px 40px 120px; }
+    .cover { background: #16110d; color: #fdf6e8; text-align: center; padding: 60px 40px 48px; margin: -60px -40px 52px; }
+    .cover .label { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #C19B5F; margin-bottom: 16px; }
+    .cover h1 { font-size: 28px; font-weight: 300; letter-spacing: 3px; color: #fdf6e8; margin-bottom: 8px; }
+    .cover .sub { font-size: 14px; color: #bfb8aa; font-style: italic; }
+    .cover .date { font-size: 11px; color: #7a7062; margin-top: 12px; }
+    h2 { font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; color: #C19B5F; margin-top: 48px; margin-bottom: 16px; letter-spacing: 0.2em; text-transform: uppercase; padding-bottom: 8px; border-bottom: 1px solid #e8e0d4; }
+    h3 { font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; color: #16110d; margin: 24px 0 10px; }
+    p { font-size: 14px; margin-bottom: 12px; }
+    ul, ol { margin: 8px 0 14px 24px; font-size: 14px; }
+    li { margin-bottom: 6px; }
+    .summary-box { background: #fdf6e8; border-left: 4px solid #C19B5F; padding: 18px 22px; margin: 28px 0; font-size: 14px; line-height: 1.8; }
+    .summary-box strong { color: #16110d; }
+    .decision-row { border: 1px solid #e8e0d4; margin: 24px 0; }
+    .decision-head { background: #16110d; color: #fdf6e8; padding: 12px 20px; display: flex; align-items: baseline; gap: 14px; }
+    .decision-num { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C19B5F; flex-shrink: 0; }
+    .decision-title { font-size: 15px; font-weight: 400; }
+    .decision-body { padding: 18px 22px; }
+    .decision-body p { font-size: 14px; margin-bottom: 10px; }
+    .verdict { background: #f0f7f3; border-left: 3px solid #4a7a62; padding: 12px 16px; margin: 12px 0 18px; font-size: 13px; }
+    .verdict .v-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #4a7a62; font-weight: 700; margin-bottom: 5px; }
+    .verdict strong { color: #16110d; }
+    code { font-family: 'Courier New', monospace; font-size: 12px; background: #f0ebe0; padding: 2px 6px; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+    th { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #fdf6e8; background: #16110d; text-align: left; padding: 8px 12px; }
+    td { padding: 10px 12px; border-bottom: 1px solid #e8e0d4; vertical-align: top; }
+    tr:nth-child(even) td { background: #fdf6e8; }
+    .scope-block { border: 1px solid #e8e0d4; padding: 16px 20px; margin: 14px 0; }
+    .scope-block h4 { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #7a6a54; font-weight: 700; margin-bottom: 10px; }
+    .scope-block ul { margin-left: 18px; }
+    .warn-block { background: #fdf0f0; border-left: 3px solid #c25555; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .warn-block .warn-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #c25555; font-weight: 700; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="cover">
+    <div class="label">Claude Code — Architecture Decision Record</div>
+    <h1>CONTENT REVIEW DASHBOARD</h1>
+    <div class="sub">Decisions on the five open questions from the brief</div>
+    <div class="date">April 24, 2026 — Pairs with KALLOS-CC-Content-Review-Dashboard-Brief.html</div>
+  </div>
+
+  <div class="summary-box">
+    <strong>What this document is.</strong> The brief posed five open architecture questions and asked for recommendations before build. This record captures the decisions reached in conversation, the reasoning behind each, and the implications for Phase 1 scope. Once Sheri approves, a separate build brief translates these decisions into specific tasks. Nothing here has been implemented.
+  </div>
+
+
+  <h2>Summary at a glance</h2>
+
+  <table>
+    <tr><th>Question</th><th>Decision</th></tr>
+    <tr><td>Q1. Where to live</td><td>Extend <code>/dashboard</code> in Next.js. Skip Sanity App SDK for Phase 1.</td></tr>
+    <tr><td>Q2. Cross-type rows</td><td>Single GROQ query unioning two projections. TypeScript row type is a discriminated union on <code>_type</code>.</td></tr>
+    <tr><td>Q3. Detail / long content</td><td>Inline cell expansion in the grid. Record view is its own URL, reached by clicking the first-column link.</td></tr>
+    <tr><td>Q4. Preset persistence</td><td>URL params are the source of truth. Five named presets are buttons that populate URL parameters.</td></tr>
+    <tr><td>Q5. Data fetching</td><td>Server-component eager fetch, client-side filter and sort. No pagination at current scale.</td></tr>
+  </table>
+
+  <p>A sixth cross-cutting principle emerged: <strong>presets are parameterized, not static.</strong> Each preset pre-selects its column set and exposes one to three parameters for the user (which journey, which field, which day). This collapses "five dashboards" into one grid with five saved configurations.</p>
+
+
+  <h2>Cross-cutting principle — parameterized presets</h2>
+
+  <p>What might feel like five separate dashboards are five preset configurations on a single grid. Each preset decides the opinionated starting point (which columns to show, which identifiers are locked on the left). The user picks one parameter from a dropdown to define the slice, and from there adds or removes columns as needed.</p>
+
+  <table>
+    <tr><th>Preset</th><th>Default columns</th><th>Parameter</th></tr>
+    <tr><td>Record view</td><td>All fields, sequential order</td><td>Which record</td></tr>
+    <tr><td>Field comparison</td><td>2 identifiers + 1 focus field</td><td>Which field, which record type</td></tr>
+    <tr><td>Journey arc</td><td>2 identifiers + structural fields</td><td>Which journey</td></tr>
+    <tr><td>Parallel entry point</td><td>2 identifiers + tone fields</td><td>Which day number</td></tr>
+    <tr><td>Content pairing</td><td>2 identifiers + chosen field pair</td><td>Which pair of fields</td></tr>
+  </table>
+
+  <p>Identifiers are always pinned on the left and always present in every preset's default columns. For <code>journeyDay</code>: <strong>Journey Title</strong> plus <strong>Day label</strong> (formatted as "Day N: {dayTitle}", e.g. "Day 5: They saw dimly"). For <code>dailyPrompt</code>: <strong>Date</strong> plus <strong>Artwork Title</strong>. The first identifier column is a link that navigates to record view.</p>
+
+  <p><strong>Default sort groups rows by container.</strong> <code>journeyDay</code> rows sort by Journey Title ascending, then Day Number ascending, so all 7 Myth days appear in sequence, then all 8 Bosch days, and so on. <code>dailyPrompt</code> rows sort by Date descending. This keeps the grid readable as content grows past dozens of records. User-selected sort overrides the default.</p>
+
+  <p>A sixth button labeled <strong>Custom</strong> sits alongside the five presets. All columns off by default, all filters available, no preselection. For the unusual session that does not match a preset.</p>
+
+
+  <h2>The five decisions</h2>
+
+
+  <div class="decision-row">
+    <div class="decision-head">
+      <span class="decision-num">Q1</span>
+      <span class="decision-title">Where to live</span>
+    </div>
+    <div class="decision-body">
+      <div class="verdict">
+        <div class="v-label">Decision</div>
+        Build inside the existing Next.js app, under a new route (e.g. <code>/dashboard/review</code>). Do not use the Sanity App SDK for Phase 1.
+      </div>
+      <p><strong>Why.</strong> The App SDK is less than a year old. New platforms on new APIs are moving targets, and this is a tool you use during real content sessions. The existing dashboard is known-good infrastructure: GROQ queries in <code>lib/sanity.ts</code>, server components, <code>revalidate: 60</code>, the <code>DASHBOARD_ENABLED</code> gate, all proven. The "alongside Studio" intuition is overstated. Studio itself is a split layout; cramming a cross-record review tool into a side panel inside it is probably worse than a dedicated full-viewport view on its own tab.</p>
+      <p><strong>Migration path.</strong> If the App SDK matures and the tool's design stabilizes, the GROQ queries transfer with no rework. Moving later is low-cost. Committing to App SDK now is high-cost if the API shifts.</p>
+      <p><strong>No conflict with Presentation plugin.</strong> Both can coexist in Studio; the review tool simply does not live inside Studio at all in Phase 1.</p>
+    </div>
+  </div>
+
+
+  <div class="decision-row">
+    <div class="decision-head">
+      <span class="decision-num">Q2</span>
+      <span class="decision-title">Cross-document-type rows</span>
+    </div>
+    <div class="decision-body">
+      <div class="verdict">
+        <div class="v-label">Decision</div>
+        Single GROQ query that unions two typed projections. TypeScript row type is a discriminated union keyed on <code>_type</code>.
+      </div>
+      <p><strong>Query shape.</strong> One round-trip, two projections concatenated server-side:</p>
+      <p><code>[...*[_type == "journeyDay" && filter]{...journeyDayFields}, ...*[_type == "dailyPrompt" && filter]{...dailyPromptFields}]</code></p>
+      <p><strong>Type shape.</strong> <code>GridRow = JourneyDayRow | DailyPromptRow</code>. Each variant carries only its own fields. Renderers branch on <code>_type</code>. Do not use a merged type with all fields optional; it silently allows rendering <code>promptQuestion</code> on a <code>journeyDay</code> row.</p>
+      <p><strong>Name-collision policy.</strong> <code>dailyPrompt.curatorNote</code>, <code>contentItem.artworkHook</code>, and <code>journeyDay.encounterNote</code> are three distinct jobs (per R1 Option C, already documented in CLAUDE.md). In the grid they appear as three separate columns with labels that state which type the field belongs to. Never merged.</p>
+    </div>
+  </div>
+
+
+  <div class="decision-row">
+    <div class="decision-head">
+      <span class="decision-num">Q3</span>
+      <span class="decision-title">Long content handling and the detail surface</span>
+    </div>
+    <div class="decision-body">
+      <div class="verdict">
+        <div class="v-label">Decision</div>
+        Inline cell expansion in the grid (single click to expand, double click to revert, drag-to-resize column headers). Record view is its own URL at <code>/dashboard/review/record/[id]</code>, reached by clicking the first identifier column.
+      </div>
+      <p><strong>Why inline over slide-over or modal.</strong> Field comparison requires reading 5 to 10 cells of the same field at the same time. A slide-over or modal blocks the grid and forces one-at-a-time reading, which defeats the comparison workflow. Sheri's reference dashboard (quarterly reporting with narrative Story column) handles this correctly with the taller-cell plus click-to-expand model. Inline expansion is the right pattern for all four comparison-oriented presets.</p>
+      <p><strong>Why record view lives at its own URL.</strong> Reading one record as a full sequential experience is a different layout, not a different grid state. A dedicated page lets the fields render top-to-bottom in user-sequence order (image, openText, artworkHook, context, lectio, auditio, reflectionQuestions, connectThread, goDeeper), full viewport, bookmarkable, shareable, print-friendly. It also allows the operational <code>/dashboard</code> to link into record view for audit-flagged records, which costs nothing and adds a direct path from "what is missing" to "read the whole thing."</p>
+      <p><strong>Ref traversal.</strong> Pre-join referenced fields in the grid query via projection. Never a second fetch on click. For <code>journeyDay</code> rows, project <code>encounterContent->artworkHook</code>, <code>encounterContent->context</code>, and <code>encounterContent->image.asset->url</code> as part of the initial payload. Detail panel reads from the row object the grid already has.</p>
+      <p><strong>Cell expansion state.</strong> Serialized in URL as <code>&expanded=rowId:colKey,rowId:colKey</code>. Column widths serialize similarly if persistence is wanted. Aligns with Q4 URL-first commitment.</p>
+    </div>
+  </div>
+
+
+  <div class="decision-row">
+    <div class="decision-head">
+      <span class="decision-num">Q4</span>
+      <span class="decision-title">Preset persistence and URL state</span>
+    </div>
+    <div class="decision-body">
+      <div class="verdict">
+        <div class="v-label">Decision</div>
+        URL params are the source of truth for preset, parameter, column toggles, active filters, pinned rows, and cell expansion state. Presets are hardcoded in a small registry. No user-saved presets in Phase 1.
+      </div>
+      <p><strong>Why URL over localStorage.</strong> Shareable ("send me the view you are looking at"), bookmarkable, survives incognito, works across devices, browser back and forward navigate between views for free. localStorage breaks all of these and adds a persistence layer that complicates the read-only promise.</p>
+      <p><strong>Preset registry.</strong> A small config file lists the five presets with their default columns and parameter schemas. Adding a preset is a code change. Saving custom views is a bookmark.</p>
+      <p><strong>URL shape example.</strong> <code>?preset=arc&journey=bosch&cols=openText,connectThread,auditio</code>. Preset change = navigate to new URL. Parameter change = URL update, client-side refilter. Column toggle = additive override on top of preset defaults, serialized into URL.</p>
+      <p><strong>Technical debt avoided.</strong> The only real Phase 1 debt risk is storing filter or column state in <code>useState</code> instead of URL. Commit to URL from day one. Retrofitting URL sync later is painful; building it in from the start costs nothing.</p>
+    </div>
+  </div>
+
+
+  <div class="decision-row">
+    <div class="decision-head">
+      <span class="decision-num">Q5</span>
+      <span class="decision-title">Data fetching strategy</span>
+    </div>
+    <div class="decision-body">
+      <div class="verdict">
+        <div class="v-label">Decision</div>
+        Follow the existing <code>/dashboard</code> pattern. Named GROQ function in <code>lib/sanity.ts</code>, server component fetches all rows eagerly with all projections, passes to a client component that handles filter, sort, column toggle, and cell expansion entirely in memory. <code>revalidate: 60</code> unchanged.
+      </div>
+      <p><strong>Why eager fetch at current scale.</strong> 52 rows today, projected 250 by year-end. Full payload per row with projected ref fields is roughly 1 to 2 MB worst case. One page load, every interaction after that is instant client-side JavaScript over already-loaded data. No pagination, no virtualization.</p>
+      <p><strong>Why not live updates.</strong> Editorial review is not operational monitoring. If Sheri just published an edit, she refreshes the page. Live sync would add websockets or polling complexity for no user-visible benefit at this scale.</p>
+      <p><strong>Scale pivot point.</strong> If rows cross roughly 1,000 and pages start feeling slow, switch to row virtualization (<code>react-virtuoso</code> or equivalent) before paginating. Pagination breaks cross-record comparison by definition. This is 12+ months out at current velocity and not a Phase 1 concern.</p>
+    </div>
+  </div>
+
+
+  <h2>Future-feature foreclosure check</h2>
+
+  <p>Phase 1 is read-only. The brief asked to flag any decision that would paint future features into a corner. None of the above does.</p>
+
+  <ul>
+    <li><strong>Editorial tagging:</strong> when it lands, add an <code>editorialPrinciples</code> ref array or inline array to <code>journeyDay</code> and <code>dailyPrompt</code> schemas. Do not build a separate annotation store. The Sanity fields become the source of truth; the grid reads them as any other column. URL-param preset architecture accommodates a "filter by principle" parameter with zero rework.</li>
+    <li><strong>Accept, reject, or modify for similarity detection:</strong> write functionality, a different architecture (Next.js server actions plus Sanity mutations with a write token). Phase 1 read-only does not foreclose it. Treat it as a new subsystem when it lands.</li>
+    <li><strong>CSV export:</strong> trivial to add. A <code>/dashboard/review/export</code> route that re-runs the grid query with the same URL parameters and returns CSV. Recommend shipping this in Phase 1 release (small addition, high leverage as an escape hatch for anything the grid does not cover).</li>
+    <li><strong>TTS "really listen" view:</strong> entirely separate surface, time-based. No data-model overlap. Not allowed to influence grid decisions.</li>
+    <li><strong>Comments and annotations:</strong> deferred per the brief. No Phase 1 impact.</li>
+  </ul>
+
+
+  <h2>Phase 1 scope</h2>
+
+  <div class="scope-block">
+    <h4>In Phase 1</h4>
+    <ul>
+      <li>New route: <code>/dashboard/review</code> (grid) and <code>/dashboard/review/record/[id]</code> (record view).</li>
+      <li>Single GROQ query unioning <code>journeyDay</code> and <code>dailyPrompt</code>, with ref projections for <code>contentItem</code> fields.</li>
+      <li>Five named presets plus Custom, each with parameter dropdown.</li>
+      <li>Column toggle menu, drag-to-resize column widths, inline cell expand / revert, row pin, filter controls.</li>
+      <li>All state serialized in URL parameters.</li>
+      <li>Record view page: full viewport, fields in user-sequence order, "Back to grid" preserves URL state.</li>
+      <li>Link into record view from relevant <code>/dashboard</code> audit tables (small "Review" link per row).</li>
+      <li>CSV export route that reuses the same query plus URL parameters.</li>
+      <li><strong>Voice-rule scanner (QA layer):</strong> text cells are scanned against a config list of banned patterns from the KALLOS voice rules. Cells with matches get a small indicator badge; hovering reveals which pattern tripped it. Quick-filter chip at the top of the grid labeled "Voice flags" narrows the grid to just offending rows. Banned patterns for Phase 1 (all from CLAUDE.md editorial rules):
+        <ul style="margin-top: 6px; margin-bottom: 0;">
+          <li><strong>Em dash</strong> (<code>—</code>) — telltale AI-generated text, banned everywhere in KALLOS.</li>
+          <li><strong>Banned voice words</strong>: "journey" (as noun), "sacred", "profound", "transformative", "spiritual practice", "invitation to".</li>
+          <li><strong>"Shaft"</strong> when describing light — use "ray" or "stream" instead.</li>
+        </ul>
+        Architecture: single config array of <code>{ pattern, label, severity, suggestion }</code> objects. Each cell runs all patterns on render; matches aggregate into one badge per cell. Adding a new banned pattern is a one-line config change (no code edits elsewhere). Supports future expansion to generic AI-tell detectors ("delve", "tapestry", "moreover", "at the heart of", etc.) without structural rework.
+      </li>
+      <li>Gated by existing <code>DASHBOARD_ENABLED</code> env flag. <code>noindex, nofollow</code>.</li>
+    </ul>
+  </div>
+
+  <div class="scope-block">
+    <h4>Out of Phase 1</h4>
+    <ul>
+      <li>No tagging, no write operations, no comments, no annotations.</li>
+      <li>No user-saved custom presets (bookmark the URL instead).</li>
+      <li>No similarity detection, no automated candidate surfacing.</li>
+      <li>No TTS or audio playback view.</li>
+      <li>No live updates or websocket sync.</li>
+      <li>No Sanity App SDK port.</li>
+    </ul>
+  </div>
+
+
+  <h2>Constraints carried forward</h2>
+
+  <ul>
+    <li>Sheri does not write code. The tool runs entirely in the browser.</li>
+    <li>Phase 1 is read-only. No editing, no saving, no writes.</li>
+    <li>Existing operational <code>/dashboard</code> continues working. The review tool is additive.</li>
+    <li>No em dashes in code comments or content, anywhere.</li>
+    <li>Build verification: <code>npm run build</code>; fall back to <code>npx tsc --noEmit</code> on Cowork VM. Commit after every significant step.</li>
+    <li>Must be fast enough to use alongside Sanity Studio during content sessions.</li>
+  </ul>
+
+
+  <h2>Next step</h2>
+
+  <div class="warn-block">
+    <div class="warn-label">What happens after approval</div>
+    Once Sheri approves this record, a separate build brief translates the decisions into specific tasks: schema of the preset registry, exact GROQ shape, file layout, component breakdown, test plan, and an incremental ship sequence (CSV-first milestone, grid second milestone, record view third). No build starts until the build brief exists.
+  </div>
+
+  <p>If any decision here does not match what Sheri pictured in the conversation, flag it before the build brief is written. Changing an ADR decision is cheap; changing it mid-build is not.</p>
+
+
+</div>
+</body>
+</html>

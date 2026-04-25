@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KALLOS — Content Review Dashboard Build Brief</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Georgia', serif; line-height: 1.8; color: #2C2C2C; background: #FFFFFF; }
+    .container { max-width: 900px; margin: 0 auto; padding: 60px 40px 120px; }
+    .cover { background: #16110d; color: #fdf6e8; text-align: center; padding: 60px 40px 48px; margin: -60px -40px 52px; }
+    .cover .label { font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #C19B5F; margin-bottom: 16px; }
+    .cover h1 { font-size: 28px; font-weight: 300; letter-spacing: 3px; color: #fdf6e8; margin-bottom: 8px; }
+    .cover .sub { font-size: 14px; color: #bfb8aa; font-style: italic; }
+    .cover .date { font-size: 11px; color: #7a7062; margin-top: 12px; }
+    h2 { font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; color: #C19B5F; margin-top: 48px; margin-bottom: 16px; letter-spacing: 0.2em; text-transform: uppercase; padding-bottom: 8px; border-bottom: 1px solid #e8e0d4; }
+    h3 { font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; color: #16110d; margin: 24px 0 10px; }
+    p { font-size: 14px; margin-bottom: 12px; }
+    ul, ol { margin: 8px 0 14px 24px; font-size: 14px; }
+    li { margin-bottom: 6px; }
+    .context-box { background: #fdf6e8; border-left: 4px solid #C19B5F; padding: 18px 22px; margin: 28px 0; font-size: 14px; line-height: 1.8; }
+    .context-box strong { color: #16110d; }
+    .task-block { border: 1px solid #e8e0d4; margin: 28px 0; }
+    .task-header { background: #16110d; color: #fdf6e8; padding: 12px 20px; display: flex; align-items: baseline; gap: 14px; }
+    .task-num { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C19B5F; flex-shrink: 0; }
+    .task-title { font-size: 16px; font-weight: 300; }
+    .task-body { padding: 18px 22px; }
+    .task-body p { font-size: 14px; margin-bottom: 10px; }
+    .task-body ul, .task-body ol { margin: 8px 0 14px 22px; }
+    .task-body li { font-size: 14px; margin-bottom: 6px; }
+    .output-block { background: #f5f0e8; border-left: 3px solid #C19B5F; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .output-block .out-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #C19B5F; font-weight: 700; margin-bottom: 6px; }
+    .warn-block { background: #fdf0f0; border-left: 3px solid #c25555; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .warn-block .warn-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #c25555; font-weight: 700; margin-bottom: 6px; }
+    .success-block { background: #f0f7f3; border-left: 3px solid #4a7a62; padding: 14px 18px; margin: 14px 0; font-size: 13px; }
+    .success-block .suc-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #4a7a62; font-weight: 700; margin-bottom: 6px; }
+    code { font-family: 'Courier New', monospace; font-size: 12px; background: #f0ebe0; padding: 2px 6px; }
+    pre { font-family: 'Courier New', monospace; font-size: 12px; background: #f0ebe0; padding: 14px 18px; margin: 12px 0; overflow-x: auto; line-height: 1.6; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+    th { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #fdf6e8; background: #16110d; text-align: left; padding: 8px 12px; }
+    td { padding: 8px 12px; border-bottom: 1px solid #e8e0d4; vertical-align: top; }
+    tr:nth-child(even) td { background: #fdf6e8; }
+    .ref-docs { background: #16110d; color: #fdf6e8; padding: 16px 22px; margin: 0 0 28px; font-size: 13px; }
+    .ref-docs .ref-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #C19B5F; margin-bottom: 8px; }
+    .ref-docs a { color: #C19B5F; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="cover">
+    <div class="label">Claude Code — Build Brief</div>
+    <h1>CONTENT REVIEW DASHBOARD</h1>
+    <div class="sub">Phase 1 — configurable grid, record view, CSV export, voice scanner</div>
+    <div class="date">April 2026 — Read CLAUDE.md before starting</div>
+  </div>
+
+  <div class="ref-docs">
+    <div class="ref-label">Required reading before starting</div>
+    Read these two documents in full before writing a single line of code:<br>
+    <code>content-docs/KALLOS-CC-Content-Review-Dashboard-Brief.html</code> — product problem, editorial context, full interaction model<br>
+    <code>content-docs/KALLOS-CC-Content-Review-Dashboard-ADR.html</code> — all five architecture decisions with reasoning
+  </div>
+
+  <div class="context-box">
+    <strong>What this is.</strong> A new read-only content review tool for Sheri, added as a subroute of the existing <code>/dashboard</code>. It lets her see KALLOS content fields in a configurable grid: all rows, all columns, all togglable. The interaction model is a configurable data grid with column show/hide, row filter and pin, cell expansion, and named preset views. This pattern comes from professional seed-stage analytics dashboards where non-technical users need to scan large content sets across many dimensions simultaneously and configure their view without developer help. Phase 1 is read-only. No editing, no writes, no annotations.
+  </div>
+
+
+  <h2>Visual reference — design precedent</h2>
+
+  <p>The grid interaction model is directly informed by a professional quarterly-reporting dashboard Sheri worked with at a seed-stage company. These screenshots were shared as the design reference during the build planning conversation. Match this interaction pattern precisely.</p>
+
+  <style>
+    .ref-image-block { margin: 20px 0; border: 1px solid #e8e0d4; }
+    .ref-image-label { font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #7a6a54; font-weight: 700; background: #fdf6e8; padding: 8px 14px; border-bottom: 1px solid #e8e0d4; }
+    .ref-image-block img { width: 100%; display: block; }
+    .ref-image-caption { font-size: 13px; color: #5a5048; padding: 10px 14px; background: #fafaf8; border-top: 1px solid #e8e0d4; font-style: italic; }
+  </style>
+
+  <div class="ref-image-block">
+    <div class="ref-image-label">Reference 1 — column toggle panel + quick filters</div>
+    <img src="review-dashboard-reference/ref-column-toggle.png" alt="Column toggle panel showing checkboxes per field, search bar at top, Reset at bottom. Quick filter chips: All / Mine / Pinned." onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <div style="display:none;padding:20px;background:#fdf0f0;font-size:13px;color:#c25555;">Image file missing. Save the screenshot as <code>review-dashboard-reference/ref-column-toggle.png</code> in the content-docs folder.</div>
+    <div class="ref-image-caption">Column toggle: checkboxes per field, Search at top, Reset at bottom. Active columns highlighted (green check). Columns not selected remain in the list but hidden from the table. Quick filter chips (All / Mine / Pinned) sit above the table header row.</div>
+  </div>
+
+  <div class="ref-image-block">
+    <div class="ref-image-label">Reference 2 — inline cell expansion (Story column)</div>
+    <img src="review-dashboard-reference/ref-cell-expansion.png" alt="Table row with Story column expanded inline to show full narrative text. Row grows vertically. Other rows remain in place." onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <div style="display:none;padding:20px;background:#fdf0f0;font-size:13px;color:#c25555;">Image file missing. Save the screenshot as <code>review-dashboard-reference/ref-cell-expansion.png</code> in the content-docs folder.</div>
+    <div class="ref-image-caption">Inline cell expansion: the row grows vertically to show the full text of the long-form "Story" field. Other rows stay in place. No modal, no slide-over. Multiple expanded cells can be read simultaneously, which is the whole point for cross-record comparison. This is the exact pattern for KALLOS opening texts, curator notes, and context fields.</div>
+  </div>
+
+  <p><strong>Key patterns to replicate from these screenshots:</strong></p>
+  <ul>
+    <li>Column toggle panel: a dropdown flyout with checkboxes, a search field at the top for filtering the column list, and a Reset button at the bottom. Selected columns highlighted in the accent color.</li>
+    <li>Quick filter chips (All / Mine / Pinned) as a horizontal chip row above the table. For KALLOS: All / journeyDay / dailyPrompt / Pinned / Voice flags.</li>
+    <li>Color-coded status badges (On-Time in green, Ahead in blue, Behind in red). KALLOS equivalent: draft/published indicator on each row.</li>
+    <li>Sortable column headers with directional arrows on active sort column.</li>
+    <li>Inline cell expansion: row grows in place, full text visible, surrounding rows undisturbed. Click to expand, click again or press Escape to revert.</li>
+  </ul>
+
+  <div class="warn-block">
+    <div class="warn-label">Do not break existing dashboard</div>
+    The existing <code>/dashboard</code> is live in production and actively used. Every task in this brief is additive. Do not modify <code>app/dashboard/page.tsx</code> except to add "Review" links in the audit tables. Run <code>npx tsc --noEmit</code> from the repo root after each task (SWC binary not available on Cowork VM). Commit after each task.
+  </div>
+
+
+  <h2>File layout — all new files</h2>
+
+  <table>
+    <tr><th>File</th><th>What it is</th></tr>
+    <tr><td><code>app/dashboard/review/page.tsx</code></td><td>Server component. Calls <code>getReviewGridRows()</code>, passes data to <code>ReviewGridClient</code>. Handles <code>DASHBOARD_ENABLED</code> gate and <code>noindex</code> metadata.</td></tr>
+    <tr><td><code>app/dashboard/review/ReviewGridClient.tsx</code></td><td>Client component. Full grid UI: preset buttons, column toggle panel, filter bar, sortable table, inline cell expand, row pin. All state in URL params via <code>useSearchParams</code> + <code>useRouter</code>.</td></tr>
+    <tr><td><code>app/dashboard/review/record/[id]/page.tsx</code></td><td>Server component. Fetches one row from the same GROQ function by <code>_id</code>. Renders all fields in user-sequence order, full viewport. "Back to grid" link preserves calling URL state.</td></tr>
+    <tr><td><code>app/dashboard/review/export/route.ts</code></td><td>Route handler. Re-runs the grid query, accepts the same URL params as filter inputs, returns a CSV file download.</td></tr>
+    <tr><td><code>app/dashboard/review/presets.ts</code></td><td>Preset registry. Typed config array listing the six presets (five named plus Custom) with their default column sets and parameter schema.</td></tr>
+    <tr><td><code>app/dashboard/review/voiceRules.ts</code></td><td>Voice rule scanner config. Array of banned pattern objects used to badge cells in the grid.</td></tr>
+    <tr><td><code>lib/sanity.ts</code> (modify)</td><td>Add <code>getReviewGridRows()</code> GROQ function. No other changes.</td></tr>
+    <tr><td><code>app/dashboard/page.tsx</code> (modify lightly)</td><td>Add a small "Review" link per row in the audit tables (artworkHook REVIEW banner and TR completeness table). Links to <code>/dashboard/review/record/[id]</code>. No other changes.</td></tr>
+  </table>
+
+
+  <h2>GROQ function spec</h2>
+
+  <p>Add to <code>lib/sanity.ts</code> under a new <code>// Review Grid</code> section comment. Returns a typed union of <code>journeyDay</code> and <code>dailyPrompt</code> rows with all text fields and pre-joined ref fields. One round-trip.</p>
+
+  <pre>
+export async function getReviewGridRows() {
+  return sanityClient.fetch(`{
+    "journeyDays": *[_type == "journeyDay"] | order(journey->title asc, dayNumber asc) {
+      _id,
+      _type,
+      dayNumber,
+      dayTitle,
+      "journeyTitle": journey->title,
+      "journeySlug": journey->slug.current,
+      openText,
+      "openTextAudioUrl": openTextAudio.asset->url,
+      encounterGuidance,
+      encounterNote,
+      "encounterNoteAudioUrl": encounterNoteAudio.asset->url,
+      "artworkTitle": encounterContent->title,
+      "artworkHook": encounterContent->artworkHook,
+      "artworkHookAudioUrl": encounterContent->artworkHookAudio.asset->url,
+      "context": encounterContent->context,
+      "contextAudioUrl": encounterContent->contextAudio.asset->url,
+      "imageUrl": encounterContent->image.asset->url,
+      lectio,
+      auditio,
+      reflectionQuestions,
+      "reflectionQuestionsAudioUrl": reflectionQuestionsAudio.asset->url,
+      connectThread,
+      "goDeeperTitles": goDeeper[]->{_id, title}
+    },
+    "dailyPrompts": *[_type == "dailyPrompt"] | order(date desc) {
+      _id,
+      _type,
+      date,
+      promptQuestion,
+      curatorNote,
+      "artworkTitle": contentItem->title,
+      "imageUrl": contentItem->image.asset->url,
+      context,
+      lectio,
+      auditio,
+      actio,
+      verbaOriginal
+    }
+  }`)
+}
+  </pre>
+
+  <p>Return shape is <code>{ journeyDays: JourneyDayRow[], dailyPrompts: DailyPromptRow[] }</code>. The client merges these into a single display array keyed on <code>_id</code> and branching on <code>_type</code>. TypeScript types: discriminated union <code>GridRow = JourneyDayRow | DailyPromptRow</code> with <code>_type</code> as the discriminant. Do not use a merged type with all fields optional.</p>
+
+
+  <h2>Preset registry spec</h2>
+
+  <p>File: <code>app/dashboard/review/presets.ts</code>. Each preset defines its default column set and the one to three parameters the user picks. Preset selection sets URL param <code>preset=id</code>. The user can override the column set by toggling columns after selecting a preset; overrides add to URL as <code>cols=</code>.</p>
+
+  <table>
+    <tr><th>id</th><th>label</th><th>defaultColumns</th><th>parameter</th></tr>
+    <tr><td><code>record</code></td><td>Record view</td><td>All fields, sequential order</td><td><code>id</code> (which record, populated by clicking identifier link)</td></tr>
+    <tr><td><code>field</code></td><td>Field comparison</td><td>identifiers + 1 focus field</td><td><code>focusField</code> (dropdown of all column keys), <code>docType</code> (journeyDay / dailyPrompt / both)</td></tr>
+    <tr><td><code>arc</code></td><td>Journey arc</td><td>identifiers + openText + connectThread + auditio title</td><td><code>journey</code> (dropdown of all journey slugs)</td></tr>
+    <tr><td><code>parallel</code></td><td>Parallel entry point</td><td>identifiers + openText + encounterNote + lectio philosophy</td><td><code>dayNumber</code> (1-8, shows that day across all journeys)</td></tr>
+    <tr><td><code>pairing</code></td><td>Content pairing</td><td>identifiers + two chosen fields</td><td><code>fieldA</code> and <code>fieldB</code> (two dropdowns from column key list)</td></tr>
+    <tr><td><code>custom</code></td><td>Custom</td><td>Identifiers only, all other columns off</td><td>None. User builds from blank.</td></tr>
+  </table>
+
+  <p><strong>Identifier columns are always present and always pinned left.</strong> They are never togglable off. For <code>journeyDay</code>: Journey Title + Day label (formatted "Day N: {dayTitle}"). For <code>dailyPrompt</code>: Date + Artwork Title. The identifier columns are visually distinct (slightly darker background). The first identifier column is a link to <code>/dashboard/review/record/[id]</code>.</p>
+
+  <p><strong>Default sort.</strong> <code>journeyDay</code> rows: Journey Title ascending, then Day Number ascending. <code>dailyPrompt</code> rows: Date descending. All <code>journeyDay</code> rows appear before all <code>dailyPrompt</code> rows in mixed views. User-selected column sort overrides this default; a reset button restores it.</p>
+
+
+  <h2>Voice rules config spec</h2>
+
+  <p>File: <code>app/dashboard/review/voiceRules.ts</code>. Each rule is checked against every text cell on render. Matching cells get a small warning badge (amber dot, count of matches on hover). A "Voice flags" quick-filter chip at the top of the grid narrows rows to those with at least one match.</p>
+
+  <pre>
+export type VoiceRule = {
+  id: string
+  pattern: RegExp
+  label: string
+  severity: 'error' | 'warn'
+  suggestion: string
+}
+
+export const VOICE_RULES: VoiceRule[] = [
+  {
+    id: 'em-dash',
+    pattern: /\u2014/g,
+    label: 'Em dash',
+    severity: 'error',
+    suggestion: 'Em dash found. Fix the surrounding punctuation in Sanity Studio before replacing — the correct substitute (comma, colon, or period) depends on the sentence. Do not auto-remove.'
+  },
+  {
+    id: 'word-journey',
+    pattern: /\bjourney\b/gi,
+    label: '"journey" (noun)',
+    severity: 'warn',
+    suggestion: 'Banned voice word in KALLOS content. Find a more specific noun.'
+  },
+  {
+    id: 'word-sacred',
+    pattern: /\bsacred\b/gi,
+    label: '"sacred"',
+    severity: 'warn',
+    suggestion: 'Banned voice word. Be specific about what it is instead.'
+  },
+  {
+    id: 'word-profound',
+    pattern: /\bprofound(ly)?\b/gi,
+    label: '"profound"',
+    severity: 'warn',
+    suggestion: 'Banned voice word. Show the depth; do not announce it.'
+  },
+  {
+    id: 'word-transformative',
+    pattern: /\btransformative\b/gi,
+    label: '"transformative"',
+    severity: 'warn',
+    suggestion: 'Banned voice word.'
+  },
+  {
+    id: 'phrase-spiritual-practice',
+    pattern: /spiritual practice/gi,
+    label: '"spiritual practice"',
+    severity: 'warn',
+    suggestion: 'Banned phrase. Describe the specific action instead.'
+  },
+  {
+    id: 'phrase-invitation-to',
+    pattern: /invitation to/gi,
+    label: '"invitation to"',
+    severity: 'warn',
+    suggestion: 'Banned phrase. Be direct about what the content offers.'
+  },
+  {
+    id: 'word-shaft',
+    pattern: /\bshaft\b/gi,
+    label: '"shaft" (describing light)',
+    severity: 'warn',
+    suggestion: 'Use "ray" or "stream" instead.'
+  }
+]
+  </pre>
+
+  <p>Architecture note: adding a new rule in future is a one-line addition to this array. No changes anywhere else. This is the correct place to grow the list as new banned patterns are identified (AI-tell words like "delve," "tapestry," "moreover," etc.).</p>
+
+
+  <h2>URL parameter schema</h2>
+
+  <table>
+    <tr><th>Param</th><th>Values</th><th>Notes</th></tr>
+    <tr><td><code>preset</code></td><td>record | field | arc | parallel | pairing | custom</td><td>Preset id. Defaults to <code>arc</code> on first load.</td></tr>
+    <tr><td><code>journey</code></td><td>journey slug string</td><td>Used by arc and parallel presets.</td></tr>
+    <tr><td><code>focusField</code></td><td>column key string</td><td>Used by field comparison preset.</td></tr>
+    <tr><td><code>dayNumber</code></td><td>integer 1-8</td><td>Used by parallel entry point preset.</td></tr>
+    <tr><td><code>fieldA</code> / <code>fieldB</code></td><td>column key strings</td><td>Used by content pairing preset.</td></tr>
+    <tr><td><code>docType</code></td><td>journeyDay | dailyPrompt | both</td><td>Row type filter. Defaults to <code>both</code>.</td></tr>
+    <tr><td><code>cols</code></td><td>comma-separated column key list</td><td>Column visibility override on top of preset defaults. Empty string means use preset defaults.</td></tr>
+    <tr><td><code>sort</code></td><td>columnKey:asc or columnKey:desc</td><td>Active sort. Empty means default sort.</td></tr>
+    <tr><td><code>pinned</code></td><td>comma-separated row <code>_id</code> list</td><td>Pinned rows float to top.</td></tr>
+    <tr><td><code>expanded</code></td><td>comma-separated rowId:colKey pairs</td><td>Which cells are in expanded state.</td></tr>
+    <tr><td><code>voiceFlags</code></td><td>1 | (absent)</td><td>When present, filters grid to rows with at least one voice rule match.</td></tr>
+  </table>
+
+
+  <h2>Task sequence</h2>
+
+  <p>Build in this order. Each task is one commit. Do not skip ahead. Verify after each before proceeding.</p>
+
+
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 1</span>
+      <span class="task-title">Data layer: GROQ function and TypeScript types</span>
+    </div>
+    <div class="task-body">
+      <p>Add <code>getReviewGridRows()</code> to <code>lib/sanity.ts</code> using the GROQ spec above. Add TypeScript types for <code>JourneyDayRow</code>, <code>DailyPromptRow</code>, and the discriminated union <code>GridRow</code>. These types live alongside the function, not in <code>lib/types.ts</code> (they are dashboard-only concerns).</p>
+      <p>Write a quick smoke test: call the function from a temporary script or Vision query in Sanity Studio. Confirm both projections return data in the expected shape. Confirm ref traversal fields (<code>artworkHook</code>, <code>context</code>, <code>imageUrl</code> from linked <code>contentItem</code>) are populated on at least one journeyDay row.</p>
+      <div class="output-block">
+        <div class="out-label">Output</div>
+        <code>getReviewGridRows()</code> added to <code>lib/sanity.ts</code>. TypeScript compiles clean. Smoke test confirms data shape.
+      </div>
+    </div>
+  </div>
+
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 2</span>
+      <span class="task-title">Grid foundation: table with identifier columns, column toggle, default sort</span>
+    </div>
+    <div class="task-body">
+      <p>Create <code>app/dashboard/review/page.tsx</code> (server component, same <code>DASHBOARD_ENABLED</code> gate and <code>noindex</code> as the existing dashboard). Create <code>app/dashboard/review/ReviewGridClient.tsx</code> (client component).</p>
+      <p>At this stage: render a table showing all rows with only the identifier columns visible. Identifier columns are always present and pinned left. Journey Title and Day label for <code>journeyDay</code> rows; Date and Artwork Title for <code>dailyPrompt</code> rows. Implement default sort: <code>journeyDay</code> rows first (Journey Title asc, Day Number asc), then <code>dailyPrompt</code> rows (Date desc).</p>
+      <p>Add the column toggle panel (a dropdown or flyout that lists all columns with checkboxes). Toggling a column adds or removes it from the table. Column visibility state lives in the URL <code>cols</code> param from day one. No <code>useState</code> for column visibility.</p>
+      <div class="output-block">
+        <div class="out-label">Output</div>
+        <code>/dashboard/review</code> loads. Table shows all rows. Identifier columns present and pinned. Column toggle panel works. URL updates when columns change.
+      </div>
+    </div>
+  </div>
+
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 3</span>
+      <span class="task-title">Presets, URL state, filters, row pin, and sort</span>
+    </div>
+    <div class="task-body">
+      <p>Create <code>app/dashboard/review/presets.ts</code> with the preset registry from the spec above. Add the six preset buttons at the top of the grid. Selecting a preset sets the <code>preset</code> URL param and updates the visible column set to that preset's defaults. The user's additional column toggles add to the preset defaults (they do not replace them).</p>
+      <p>Add parameter controls per preset: journey dropdown for arc preset, field dropdown for field comparison, day number selector for parallel entry point, two field dropdowns for content pairing. Parameters update URL params.</p>
+      <p>Add filter bar: document type filter (journeyDay / dailyPrompt / both). Add row pin: clicking a checkbox on a row adds its <code>_id</code> to the <code>pinned</code> URL param; pinned rows float to the top of the grid, visually highlighted. Add column header click-to-sort; sort state in URL <code>sort</code> param. Add sort-reset button.</p>
+      <div class="output-block">
+        <div class="out-label">Output</div>
+        All six presets load their default columns. Parameter dropdowns update the grid. Filters, pin, and sort all round-trip through URL params correctly. Browser back and forward navigates between grid states.
+      </div>
+    </div>
+  </div>
+
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 4</span>
+      <span class="task-title">Cell expansion and record view</span>
+    </div>
+    <div class="task-body">
+      <p>Add inline cell expansion to all content cells. Default state: truncated to 3 lines with a subtle "..." indicator. Single click expands the cell to full content height. Double-click or a close button reverts. Expanded state serialized as <code>rowId:colKey</code> pairs in the URL <code>expanded</code> param. Drag-to-resize column width handles added to column headers; widths serialize into URL similarly.</p>
+      <p>Create <code>app/dashboard/review/record/[id]/page.tsx</code>. This is a server component. It fetches the row from the same query by <code>_id</code> and renders all fields in user-sequence order, full viewport, no truncation. Field order by document type:</p>
+      <ul>
+        <li><strong>journeyDay sequence:</strong> image, openText, artworkHook (from linked contentItem), context (from linked contentItem), lectio philosophy + scripture, auditio, reflectionQuestions, connectThread, goDeeper titles and summaries.</li>
+        <li><strong>dailyPrompt sequence:</strong> image, promptQuestion, curatorNote, context, lectio philosophy + scripture, auditio, actio, verbaOriginal.</li>
+      </ul>
+      <p>"Back to grid" link at the top of the record view. It navigates back to <code>/dashboard/review</code> with the full calling URL state preserved (pass it as a <code>from</code> query param on the record view link; the back button reads and navigates to it).</p>
+      <p>Add "Review" link to the first identifier column in the grid. Also add small "Review" links in the relevant audit tables on the existing <code>/dashboard</code> page: the artworkHook REVIEW banner rows and the journey day completeness rows.</p>
+      <div class="output-block">
+        <div class="out-label">Output</div>
+        Cells expand and revert inline. Column widths resize and persist in URL. Record view renders all fields in sequence. Back to grid returns to correct URL state. Dashboard audit tables link into record view.
+      </div>
+    </div>
+  </div>
+
+  <div class="task-block">
+    <div class="task-header">
+      <span class="task-num">Task 5</span>
+      <span class="task-title">CSV export and voice rule scanner</span>
+    </div>
+    <div class="task-body">
+      <h3>CSV export</h3>
+      <p>Create <code>app/dashboard/review/export/route.ts</code>. The route handler accepts the same URL params as the grid (<code>preset</code>, <code>docType</code>, <code>journey</code>, <code>cols</code>, etc.), re-runs <code>getReviewGridRows()</code>, applies the same filter logic, and returns a UTF-8 CSV file download. Column headers match the column labels in the grid. Long text fields are quoted and newlines within cells are escaped. Add a "Download CSV" button to the grid toolbar that links to this route with current URL params appended.</p>
+
+      <h3>Voice rule scanner</h3>
+      <p>Create <code>app/dashboard/review/voiceRules.ts</code> with the config from the spec above. In <code>ReviewGridClient.tsx</code>, on render of each text cell, run all patterns against the cell content. If any match: show a small amber indicator badge on the cell (e.g. a dot with the match count). Hovering the badge shows a tooltip listing which rules matched and the suggestion for each.</p>
+      <p>Add a "Voice flags" quick-filter chip to the filter bar. When active (<code>voiceFlags=1</code> in URL), the grid shows only rows that have at least one voice rule match in any visible column. This lets Sheri run a full content audit for banned words and em dashes in one view.</p>
+      <div class="output-block">
+        <div class="out-label">Output</div>
+        "Download CSV" button downloads a well-formed CSV of the current grid view. Voice rule badges appear on matching cells. "Voice flags" filter narrows grid to flagged rows only. Em dash rule catches all Unicode em dashes (U+2014).
+      </div>
+
+      <div class="warn-block">
+        <div class="warn-label">Em dash test case</div>
+        Before shipping Task 5, manually verify the em dash scanner against at least one real record that contains an em dash in Sanity. If the existing Day 1 Connect Thread em dash (CLAUDE.md Manual Task 20) has not been fixed in Sanity, it will appear in the scan. That is correct behavior, not a bug.
+      </div>
+    </div>
+  </div>
+
+
+  <h2>Final verification before marking complete</h2>
+
+  <ul>
+    <li>All five tasks built and committed individually.</li>
+    <li><code>npx tsc --noEmit</code> passes clean.</li>
+    <li>Existing <code>/dashboard</code> loads and all sections display correctly (no regression).</li>
+    <li><code>/dashboard/review</code> loads with default arc preset.</li>
+    <li>All six presets load with correct default columns.</li>
+    <li>URL round-trip: change preset, close tab, reopen URL, same view appears.</li>
+    <li>Record view renders fields in correct sequence for one <code>journeyDay</code> and one <code>dailyPrompt</code>.</li>
+    <li>CSV download produces a valid file that opens in Numbers.</li>
+    <li>Voice scanner badges appear on at least one cell that contains a banned word or em dash in the real data.</li>
+    <li>No em dashes in any new code comments or string literals (they would trigger the scanner on themselves).</li>
+  </ul>
+
+
+  <h2>Constraints</h2>
+
+  <ul>
+    <li>Phase 1 is read-only. No editing, no saving, no Sanity write operations of any kind.</li>
+    <li>All interactive state lives in URL params. No <code>useState</code> for anything that should survive a page reload or be shareable.</li>
+    <li>No em dashes in code you write: not in code comments, not in string literals, not in JSX text. This rule applies to the code Claude produces, not to Sanity content data returned by GROQ queries. Do not modify, strip, or correct em dashes in content data. The voice scanner surfaces them for Sheri to fix in Sanity Studio; that is its entire job.</li>
+    <li>Build verification: <code>npx tsc --noEmit</code> from repo root after every task.</li>
+    <li>Commit after every task. Each commit message should name the task number.</li>
+    <li>Gated by <code>DASHBOARD_ENABLED=true</code> env var. <code>noindex, nofollow</code> metadata on both new routes.</li>
+  </ul>
+
+
+</div>
+</body>
+</html>
