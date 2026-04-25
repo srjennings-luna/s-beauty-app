@@ -86,13 +86,33 @@ interface ParentRecord {
 }
 
 // ── Dedup key ──────────────────────────────────────────────────────────────────
-// Two records with the same composer + work get the same auditio document.
+// Two records with the same composer + work title get the same auditio document.
+// Normalisation rules:
+//   - Strip diacritics (Pärt → part, Górecki → gorecki)
+//   - Strip performer credits after " — " or " - " or ", performed by" etc.
+//     e.g. "Arvo Pärt — Tasmin Little, Martin Roscoe" → "arvo part"
+//          "Samuel Barber -performed by Philadelphia Orchestra" → "samuel barber"
+//   - Fall back to `title` when `workTitle` is not set (most embedded records
+//     had only a free-text title, not the structured workTitle field)
+
+function normalise(s: string): string {
+  return s
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip diacritics
+    .toLowerCase()
+    .replace(/\s*(—|-+)\s*performed\s+by.*/i, '')    // "— performed by ..."
+    .replace(/\s*[—–-]\s*[A-Z][^|]*/g, '')           // "— Performer Name" (capital after dash)
+    .replace(/,\s*(performed|conducted|dir\.|arr\.).*/i, '') // ", performed by ..."
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 function dedupKey(a: EmbeddedAuditio): string | null {
-  const composer = (a.composerArtist ?? a.composer ?? a.artist ?? '').trim().toLowerCase();
-  const work = (a.workTitle ?? '').trim().toLowerCase();
+  const rawComposer = a.composerArtist ?? a.composer ?? a.artist ?? '';
+  const rawWork = a.workTitle ?? a.title ?? ''; // fall back to free-text title
+  const composer = normalise(rawComposer);
+  const work = normalise(rawWork);
   if (composer && work) return `${composer}|||${work}`;
-  return null; // no structured data — each gets its own doc
+  return null; // still no usable data — each gets its own doc
 }
 
 // ── Build the auditio document payload from embedded data ─────────────────────
