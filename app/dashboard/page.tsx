@@ -528,6 +528,15 @@ export default async function DashboardPage() {
                             >
                               {d.dayTitle || "(no title)"}
                             </a>
+                            {d._id && (
+                              <Link
+                                href={`/dashboard/review/record/${d._id}?from=${encodeURIComponent("/dashboard")}`}
+                                className="ml-2 text-[10px] uppercase tracking-widest text-[#7a7062] hover:text-[#C19B5F]"
+                                title="Open in Content Review"
+                              >
+                                Review →
+                              </Link>
+                            )}
                           </td>
                           <td className="px-2 py-1 text-center"><Yes value={d.hasOpenImage} /></td>
                           <td className="px-2 py-1 text-right text-[10px] text-[#5a5048]">{d.openTextLen}</td>

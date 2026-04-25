@@ -675,69 +675,96 @@ export type ReviewGridResponse = {
   dailyPrompts: DailyPromptRow[]
 }
 
+// Shared projections — used by both the bulk grid query and the per-id
+// record-view query so the row shape stays identical across surfaces.
+const REVIEW_JOURNEY_DAY_PROJECTION = `
+  _id,
+  _type,
+  dayNumber,
+  dayTitle,
+  "journeyTitle": journey->title,
+  "journeySlug": journey->slug.current,
+  openText,
+  "openTextAudioUrl": openTextAudio.asset->url,
+  encounterGuidance,
+  encounterNote,
+  "encounterNoteAudioUrl": encounterNoteAudio.asset->url,
+  "artworkTitle": encounterContent->title,
+  "artworkHook": encounterContent->artworkHook,
+  "artworkHookAudioUrl": encounterContent->artworkHookAudio.asset->url,
+  "context": encounterContent->context,
+  "contextAudioUrl": encounterContent->contextAudio.asset->url,
+  "imageUrl": encounterContent->image.asset->url,
+  "lectioPhilosophyText": lectio.philosophyQuote,
+  "lectioPhilosophySource": lectio.philosophySource,
+  "lectioScriptureText": lectio.scriptureVerse,
+  "lectioScriptureSource": lectio.scriptureReference,
+  "lectioConnectionNote": lectio.connectionNote,
+  "auditioTitle": auditio.title,
+  "auditioComposerArtist": coalesce(auditio.composerArtist, auditio.composer),
+  "auditioWorkTitle": auditio.workTitle,
+  "auditioGenre": auditio.genre,
+  "auditioAudioFileUrl": auditio.audioFile.asset->url,
+  "auditioAudioUrl": auditio.audioUrl,
+  "auditioExternalUrl": auditio.externalUrl,
+  reflectionQuestions,
+  "reflectionQuestionsAudioUrl": reflectionQuestionsAudio.asset->url,
+  connectThread,
+  "goDeeperTitles": goDeeper[]->{_id, title}
+`
+
+const REVIEW_DAILY_PROMPT_PROJECTION = `
+  _id,
+  _type,
+  date,
+  promptQuestion,
+  curatorNote,
+  "curatorNoteAudioUrl": curatorNoteAudio.asset->url,
+  "artworkTitle": content->title,
+  "imageUrl": content->image.asset->url,
+  "context": content->context,
+  "contextAudioUrl": content->contextAudio.asset->url,
+  "lectioPhilosophyText": lectio.philosophyText,
+  "lectioPhilosophySource": lectio.philosophyAttribution,
+  "lectioScriptureText": lectio.text,
+  "lectioScriptureSource": lectio.attribution,
+  "auditioTitle": auditio.title,
+  "auditioComposerArtist": coalesce(auditio.composerArtist, auditio.artist),
+  "auditioWorkTitle": auditio.workTitle,
+  "auditioGenre": auditio.genre,
+  "auditioAudioFileUrl": auditio.audioUrl.audioFile.asset->url,
+  "auditioAudioUrl": auditio.audioUrl.audioUrl,
+  "auditioExternalUrl": auditio.url,
+  "verbaOriginal": auditio.verbaOriginal,
+  actio
+`
+
 export async function getReviewGridRows(): Promise<ReviewGridResponse> {
   return sanityClient.fetch<ReviewGridResponse>(`{
     "journeyDays": *[_type == "journeyDay" && !string::startsWith(_id, "drafts.")] | order(journey->title asc, dayNumber asc) {
-      _id,
-      _type,
-      dayNumber,
-      dayTitle,
-      "journeyTitle": journey->title,
-      "journeySlug": journey->slug.current,
-      openText,
-      "openTextAudioUrl": openTextAudio.asset->url,
-      encounterGuidance,
-      encounterNote,
-      "encounterNoteAudioUrl": encounterNoteAudio.asset->url,
-      "artworkTitle": encounterContent->title,
-      "artworkHook": encounterContent->artworkHook,
-      "artworkHookAudioUrl": encounterContent->artworkHookAudio.asset->url,
-      "context": encounterContent->context,
-      "contextAudioUrl": encounterContent->contextAudio.asset->url,
-      "imageUrl": encounterContent->image.asset->url,
-      "lectioPhilosophyText": lectio.philosophyQuote,
-      "lectioPhilosophySource": lectio.philosophySource,
-      "lectioScriptureText": lectio.scriptureVerse,
-      "lectioScriptureSource": lectio.scriptureReference,
-      "lectioConnectionNote": lectio.connectionNote,
-      "auditioTitle": auditio.title,
-      "auditioComposerArtist": coalesce(auditio.composerArtist, auditio.composer),
-      "auditioWorkTitle": auditio.workTitle,
-      "auditioGenre": auditio.genre,
-      "auditioAudioFileUrl": auditio.audioFile.asset->url,
-      "auditioAudioUrl": auditio.audioUrl,
-      "auditioExternalUrl": auditio.externalUrl,
-      reflectionQuestions,
-      "reflectionQuestionsAudioUrl": reflectionQuestionsAudio.asset->url,
-      connectThread,
-      "goDeeperTitles": goDeeper[]->{_id, title}
+      ${REVIEW_JOURNEY_DAY_PROJECTION}
     },
     "dailyPrompts": *[_type == "dailyPrompt" && !string::startsWith(_id, "drafts.")] | order(date desc) {
-      _id,
-      _type,
-      date,
-      promptQuestion,
-      curatorNote,
-      "curatorNoteAudioUrl": curatorNoteAudio.asset->url,
-      "artworkTitle": content->title,
-      "imageUrl": content->image.asset->url,
-      "context": content->context,
-      "contextAudioUrl": content->contextAudio.asset->url,
-      "lectioPhilosophyText": lectio.philosophyText,
-      "lectioPhilosophySource": lectio.philosophyAttribution,
-      "lectioScriptureText": lectio.text,
-      "lectioScriptureSource": lectio.attribution,
-      "auditioTitle": auditio.title,
-      "auditioComposerArtist": coalesce(auditio.composerArtist, auditio.artist),
-      "auditioWorkTitle": auditio.workTitle,
-      "auditioGenre": auditio.genre,
-      "auditioAudioFileUrl": auditio.audioUrl.audioFile.asset->url,
-      "auditioAudioUrl": auditio.audioUrl.audioUrl,
-      "auditioExternalUrl": auditio.url,
-      "verbaOriginal": auditio.verbaOriginal,
-      actio
+      ${REVIEW_DAILY_PROMPT_PROJECTION}
     }
   }`)
+}
+
+// Single-row fetch for the record-view route. Runs both projections in
+// parallel; only the matching one returns a row. Shape matches the grid
+// query exactly, so renderers can be shared.
+export async function getReviewGridRowById(id: string): Promise<GridRow | null> {
+  const [jd, dp] = await Promise.all([
+    sanityClient.fetch<JourneyDayRow | null>(
+      `*[_id == $id && _type == "journeyDay"][0] {${REVIEW_JOURNEY_DAY_PROJECTION}}`,
+      { id }
+    ),
+    sanityClient.fetch<DailyPromptRow | null>(
+      `*[_id == $id && _type == "dailyPrompt"][0] {${REVIEW_DAILY_PROMPT_PROJECTION}}`,
+      { id }
+    ),
+  ])
+  return jd ?? dp ?? null
 }
 
 export async function getDashboardTTSAudit() {
