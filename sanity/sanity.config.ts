@@ -76,11 +76,39 @@ export default defineConfig({
       structure: (S) =>
         S.list()
           .title('Content')
-          .items(
-            S.documentTypeListItems().filter(
+          .items([
+            // ── Standard document types (auto-generated, minus internal types) ──
+            ...S.documentTypeListItems().filter(
               (listItem) => !['episode'].includes(listItem.getId() ?? ''),
             ),
-          ),
+
+            // ── Auditio quick-nav ─────────────────────────────────────────────
+            // Filtered views for editing auditio fields without hunting through
+            // every record. Opens the full document — scroll to the Auditio
+            // section. Sorted by journey+day (Journey Days) and date desc (P&P).
+            S.divider(),
+            S.listItem()
+              .title('Auditio — Journey Days')
+              .id('auditio-journey-days')
+              .child(
+                S.documentList()
+                  .title('Journey Days with Auditio')
+                  .filter('_type == "journeyDay" && defined(auditio)')
+                  .defaultOrdering([
+                    {field: 'journey->title', direction: 'asc'},
+                    {field: 'dayNumber', direction: 'asc'},
+                  ]),
+              ),
+            S.listItem()
+              .title('Auditio — Pause & Ponder')
+              .id('auditio-pause-ponder')
+              .child(
+                S.documentList()
+                  .title('P&P with Auditio')
+                  .filter('_type == "dailyPrompt" && defined(auditio)')
+                  .defaultOrdering([{field: 'date', direction: 'desc'}]),
+              ),
+          ]),
     }),
     // Presentation tool — side-by-side live preview of the app while editing.
     // The iframe opens at the per-document app route returned by `locations`
