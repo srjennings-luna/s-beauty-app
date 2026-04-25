@@ -514,7 +514,11 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           </div>
         )}
 
-        {content.scripturePairing?.verse && (
+        {/* Only show content-level scripture pairing if the journey day has no
+            lectio scripture — otherwise the Lectio step shows it and this would
+            duplicate. Days created before the lectio feature was added (pre-April
+            2026) may have only this field and no lectio. */}
+        {content.scripturePairing?.verse && !day.lectio?.scriptureVerse && (
           <div className="p-6" style={{ background: C.darkBox, border: `1px solid rgba(253,246,232,0.05)` }}>
             <p className="font-serif-elegant italic text-lg leading-relaxed mb-3" style={{ color: C.cream }}>
               {content.scripturePairing.verse}
