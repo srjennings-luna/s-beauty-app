@@ -53,10 +53,10 @@ export const COLUMNS: ColumnDef[] = [
   { key: "imageUrl",           label: "Image",              appliesTo: "both",         isImage: true },
   { key: "openText",           label: "Opening Text",       appliesTo: "journeyDay",   isLongText: true },
   // ── Artwork / Encounter ────────────────────────────────────────────────────
-  { key: "artworkHook",        label: "Artwork Hook",       appliesTo: "journeyDay",   isLongText: true },
+  { key: "artworkHook",        label: "Artwork Hook (Encounter - 1st text)", appliesTo: "journeyDay", isLongText: true },
   { key: "context",            label: "Context",            appliesTo: "both",         isLongText: true },
   { key: "encounterGuidance",  label: "Encounter Guidance", appliesTo: "journeyDay",   isLongText: true },
-  { key: "encounterNote",      label: "Encounter Note",     appliesTo: "journeyDay",   isLongText: true },
+  { key: "encounterNote",      label: "Encounter Note (Look Closer)", appliesTo: "journeyDay", isLongText: true },
   // ── Daily Prompt voice fields (appear at the equivalent point in P&P) ──────
   { key: "promptQuestion",     label: "Prompt Question",    appliesTo: "dailyPrompt",  isLongText: true },
   { key: "curatorNote",        label: "Curator Note",       appliesTo: "dailyPrompt",  isLongText: true },
