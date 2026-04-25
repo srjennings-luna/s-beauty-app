@@ -12,26 +12,76 @@ import {
   getIdentifier1,
   getIdentifier2,
 } from "./columns";
+import {
+  PRESETS,
+  DEFAULT_PRESET,
+  findPreset,
+  getPresetDefaultColumns,
+  type PresetId,
+} from "./presets";
 
-// Task 2 baseline: identifier columns + togglable content columns + URL-backed
-// `cols` param. Default sort comes from the GROQ query order (already
-// concatenated server-side). Presets, filters, row pin, sort headers, cell
-// expansion, voice scanner, and CSV export arrive in Tasks 3-5.
+// Task 3: preset buttons, parameter dropdowns, doc-type filter, row pin,
+// sortable headers + sort-reset, all serialized into URL params.
+//
+// State model (URL is source of truth — no useState for any of this):
+//   preset       active preset id (defaults to "arc")
+//   cols         comma list of column keys (overrides preset defaults)
+//   docType      "journeyDay" | "dailyPrompt" | "both" (default "both")
+//   journey      slug, used by arc preset
+//   dayNumber    integer 1-9, used by parallel preset
+//   focusField   column key, used by field-comparison preset
+//   fieldA       column key, used by content-pairing preset
+//   fieldB       column key, used by content-pairing preset
+//   sort         "<key>:asc" | "<key>:desc"
+//   pinned       comma list of row _id values (floats to top)
+//
+// useState here is reserved for transient UI state only (panel open/closed,
+// search input typing) which intentionally does not survive page reload.
+
+const ALL_COL_KEYS = new Set<ColumnKey>(COLUMNS.map((c) => c.key));
+
+type SortDir = "asc" | "desc";
+type SortState = { key: string; dir: SortDir } | null;
 
 export default function ReviewGridClient({ rows }: { rows: GridRow[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // URL is the source of truth for column visibility. useState below is
-  // only for transient UI (panel open/closed, search input) which should
-  // not survive page reload.
+  // URL parsers
+  const presetId = (searchParams.get("preset") as PresetId | null) ?? DEFAULT_PRESET;
+  const preset = findPreset(presetId);
+  const docType = searchParams.get("docType") ?? "both";
+  const journey = searchParams.get("journey");
+  const dayNumberStr = searchParams.get("dayNumber");
+  const dayNumber = dayNumberStr ? parseInt(dayNumberStr, 10) : null;
+  const focusField = searchParams.get("focusField");
+  const fieldA = searchParams.get("fieldA");
+  const fieldB = searchParams.get("fieldB");
+  const sort = parseSort(searchParams.get("sort"));
+  const pinned = useMemo(
+    () => new Set((searchParams.get("pinned") ?? "").split(",").filter(Boolean)),
+    [searchParams],
+  );
+
+  // Effective column visibility:
+  //   if cols param is present, use it verbatim
+  //   else fall back to the active preset's default columns
+  const presetDefaults = useMemo(
+    () => getPresetDefaultColumns(preset, { focusField, fieldA, fieldB }),
+    [preset, focusField, fieldA, fieldB],
+  );
   const visibleCols = useMemo<ColumnKey[]>(() => {
-    const colsParam = searchParams.get("cols") ?? "";
-    if (!colsParam) return [];
-    const valid = new Set(COLUMNS.map((c) => c.key));
-    return colsParam.split(",").filter((k): k is ColumnKey => valid.has(k as ColumnKey));
-  }, [searchParams]);
+    const colsParam = searchParams.get("cols");
+    if (colsParam !== null) {
+      // Empty string means "no columns" (different from absent).
+      if (colsParam === "") return [];
+      return colsParam
+        .split(",")
+        .filter((k): k is ColumnKey => ALL_COL_KEYS.has(k as ColumnKey));
+    }
+    return presetDefaults;
+  }, [searchParams, presetDefaults]);
 
   const [panelOpen, setPanelOpen] = useState(false);
   const [columnSearch, setColumnSearch] = useState("");
@@ -40,7 +90,7 @@ export default function ReviewGridClient({ rows }: { rows: GridRow[] }) {
     (updates: Record<string, string | null>) => {
       const next = new URLSearchParams(searchParams.toString());
       for (const [key, value] of Object.entries(updates)) {
-        if (value === null || value === "") next.delete(key);
+        if (value === null) next.delete(key);
         else next.set(key, value);
       }
       const qs = next.toString();
@@ -49,13 +99,29 @@ export default function ReviewGridClient({ rows }: { rows: GridRow[] }) {
     [pathname, router, searchParams],
   );
 
+  // Switching preset clears `cols` so the new preset's defaults take effect.
+  // Other params (journey, dayNumber, etc.) carry over — harmless if the
+  // new preset does not use them.
+  const selectPreset = useCallback(
+    (id: PresetId) => {
+      setURL({ preset: id, cols: null });
+    },
+    [setURL],
+  );
+
+  // Toggling a column writes the FULL new visible set into `cols` (overrides
+  // preset defaults from then on). To restore preset defaults, the user
+  // hits Reset which clears `cols`.
   const toggleColumn = useCallback(
     (key: ColumnKey) => {
       const set = new Set(visibleCols);
       if (set.has(key)) set.delete(key);
       else set.add(key);
-      const next = [...set].join(",");
-      setURL({ cols: next || null });
+      const next = [...set];
+      // Use empty string (not null) to distinguish "user cleared all" from
+      // "no override". Empty string = render zero columns. null = use
+      // preset defaults.
+      setURL({ cols: next.length === 0 ? "" : next.join(",") });
     },
     [setURL, visibleCols],
   );
@@ -63,6 +129,67 @@ export default function ReviewGridClient({ rows }: { rows: GridRow[] }) {
   const resetColumns = useCallback(() => {
     setURL({ cols: null });
   }, [setURL]);
+
+  const togglePin = useCallback(
+    (id: string) => {
+      const set = new Set(pinned);
+      if (set.has(id)) set.delete(id);
+      else set.add(id);
+      const next = [...set];
+      setURL({ pinned: next.length === 0 ? null : next.join(",") });
+    },
+    [pinned, setURL],
+  );
+
+  const setSort = useCallback(
+    (key: string) => {
+      // Click cycles: unsorted → asc → desc → unsorted.
+      if (!sort || sort.key !== key) {
+        setURL({ sort: `${key}:asc` });
+      } else if (sort.dir === "asc") {
+        setURL({ sort: `${key}:desc` });
+      } else {
+        setURL({ sort: null });
+      }
+    },
+    [setURL, sort],
+  );
+
+  const resetSort = useCallback(() => {
+    setURL({ sort: null });
+  }, [setURL]);
+
+  // Apply filters first, then sort, then pin-float.
+  const filteredRows = useMemo(() => {
+    return applyFilters(rows, { docType, preset: preset.id, journey, dayNumber });
+  }, [rows, docType, preset.id, journey, dayNumber]);
+
+  const sortedRows = useMemo(() => {
+    if (!sort) return filteredRows;
+    return [...filteredRows].sort((a, b) => compareRows(a, b, sort));
+  }, [filteredRows, sort]);
+
+  const orderedRows = useMemo(() => {
+    if (pinned.size === 0) return sortedRows;
+    const pinnedRows: GridRow[] = [];
+    const unpinnedRows: GridRow[] = [];
+    for (const r of sortedRows) {
+      if (pinned.has(r._id)) pinnedRows.push(r);
+      else unpinnedRows.push(r);
+    }
+    return [...pinnedRows, ...unpinnedRows];
+  }, [sortedRows, pinned]);
+
+  // Param dropdown options derived from row data
+  const journeyOptions = useMemo(() => {
+    const seen = new Map<string, string>();
+    for (const r of rows) {
+      if (r._type === "journeyDay" && r.journeySlug && r.journeyTitle) {
+        seen.set(r.journeySlug, r.journeyTitle);
+      }
+    }
+    return [...seen.entries()].sort((a, b) => a[1].localeCompare(b[1]));
+  }, [rows]);
 
   const filteredColumnDefs = useMemo(() => {
     const q = columnSearch.trim().toLowerCase();
@@ -78,9 +205,25 @@ export default function ReviewGridClient({ rows }: { rows: GridRow[] }) {
             Content Review
           </h1>
           <div className="text-xs italic text-[#7a7062] mt-1">
-            {rows.length} records loaded
+            {orderedRows.length} of {rows.length} records
+            {pinned.size > 0 ? ` · ${pinned.size} pinned` : ""}
           </div>
         </header>
+
+        <PresetBar activePreset={preset.id} onSelect={selectPreset} />
+
+        <ParameterBar
+          presetId={preset.id}
+          journey={journey}
+          dayNumber={dayNumber}
+          focusField={focusField}
+          fieldA={fieldA}
+          fieldB={fieldB}
+          journeyOptions={journeyOptions}
+          setURL={setURL}
+        />
+
+        <FilterBar docType={docType} setURL={setURL} />
 
         <Toolbar
           visibleColCount={visibleCols.length}
@@ -92,10 +235,185 @@ export default function ReviewGridClient({ rows }: { rows: GridRow[] }) {
           visibleCols={visibleCols}
           toggleColumn={toggleColumn}
           resetColumns={resetColumns}
+          sort={sort}
+          resetSort={resetSort}
         />
 
-        <GridTable rows={rows} visibleCols={visibleCols} />
+        <GridTable
+          rows={orderedRows}
+          visibleCols={visibleCols}
+          sort={sort}
+          setSort={setSort}
+          pinned={pinned}
+          togglePin={togglePin}
+        />
       </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Toolbar pieces
+// ─────────────────────────────────────────────────────────────────────────
+
+function PresetBar({
+  activePreset,
+  onSelect,
+}: {
+  activePreset: PresetId;
+  onSelect: (id: PresetId) => void;
+}) {
+  return (
+    <div className="flex flex-wrap items-center gap-2 mb-3">
+      <span className="text-[10px] uppercase tracking-widest text-[#7a7062] mr-2">
+        Preset
+      </span>
+      {PRESETS.map((p) => {
+        const active = p.id === activePreset;
+        return (
+          <button
+            key={p.id}
+            onClick={() => onSelect(p.id)}
+            title={p.description}
+            className={`px-3 py-1.5 text-[10px] uppercase tracking-widest border transition-colors ${
+              active
+                ? "bg-[#16110d] text-[#fdf6e8] border-[#16110d]"
+                : "bg-white text-[#16110d] border-[#16110d] hover:bg-[#16110d] hover:text-[#fdf6e8]"
+            }`}
+          >
+            {p.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function ParameterBar({
+  presetId,
+  journey,
+  dayNumber,
+  focusField,
+  fieldA,
+  fieldB,
+  journeyOptions,
+  setURL,
+}: {
+  presetId: PresetId;
+  journey: string | null;
+  dayNumber: number | null;
+  focusField: string | null;
+  fieldA: string | null;
+  fieldB: string | null;
+  journeyOptions: [string, string][];
+  setURL: (updates: Record<string, string | null>) => void;
+}) {
+  // Only render parameter controls relevant to the active preset.
+  if (presetId === "record" || presetId === "custom") return null;
+
+  return (
+    <div className="flex flex-wrap items-center gap-3 mb-3 px-3 py-2 bg-white border border-[#e8e0d4]">
+      <span className="text-[10px] uppercase tracking-widest text-[#7a7062]">
+        Parameter
+      </span>
+
+      {presetId === "arc" && (
+        <Dropdown
+          label="Journey"
+          value={journey}
+          onChange={(v) => setURL({ journey: v })}
+          placeholder="All journeys"
+          options={journeyOptions.map(([slug, title]) => ({ value: slug, label: title }))}
+        />
+      )}
+
+      {presetId === "parallel" && (
+        <Dropdown
+          label="Day"
+          value={dayNumber !== null ? String(dayNumber) : null}
+          onChange={(v) => setURL({ dayNumber: v })}
+          placeholder="Pick a day"
+          options={Array.from({ length: 9 }, (_, i) => ({
+            value: String(i + 1),
+            label: `Day ${i + 1}`,
+          }))}
+        />
+      )}
+
+      {presetId === "field" && (
+        <Dropdown
+          label="Focus field"
+          value={focusField}
+          onChange={(v) => setURL({ focusField: v })}
+          placeholder="Pick a field"
+          options={COLUMNS.filter((c) => !c.isImage).map((c) => ({
+            value: c.key,
+            label: c.label,
+          }))}
+        />
+      )}
+
+      {presetId === "pairing" && (
+        <>
+          <Dropdown
+            label="Field A"
+            value={fieldA}
+            onChange={(v) => setURL({ fieldA: v })}
+            placeholder="Pick field A"
+            options={COLUMNS.filter((c) => !c.isImage).map((c) => ({
+              value: c.key,
+              label: c.label,
+            }))}
+          />
+          <Dropdown
+            label="Field B"
+            value={fieldB}
+            onChange={(v) => setURL({ fieldB: v })}
+            placeholder="Pick field B"
+            options={COLUMNS.filter((c) => !c.isImage).map((c) => ({
+              value: c.key,
+              label: c.label,
+            }))}
+          />
+        </>
+      )}
+    </div>
+  );
+}
+
+function FilterBar({
+  docType,
+  setURL,
+}: {
+  docType: string;
+  setURL: (updates: Record<string, string | null>) => void;
+}) {
+  const choices: { id: string; label: string }[] = [
+    { id: "both", label: "All" },
+    { id: "journeyDay", label: "Journey Days" },
+    { id: "dailyPrompt", label: "Daily Prompts" },
+  ];
+  return (
+    <div className="flex items-center gap-2 mb-3">
+      <span className="text-[10px] uppercase tracking-widest text-[#7a7062] mr-1">
+        Filter
+      </span>
+      {choices.map((c) => {
+        const active = docType === c.id;
+        return (
+          <button
+            key={c.id}
+            onClick={() => setURL({ docType: c.id === "both" ? null : c.id })}
+            className={`px-3 py-1 text-[11px] tracking-wide border transition-colors ${
+              active
+                ? "bg-[#4a7a62] text-white border-[#4a7a62]"
+                : "bg-white text-[#16110d] border-[#e8e0d4] hover:border-[#4a7a62]"
+            }`}
+          >
+            {c.label}
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -110,6 +428,8 @@ function Toolbar({
   visibleCols,
   toggleColumn,
   resetColumns,
+  sort,
+  resetSort,
 }: {
   visibleColCount: number;
   panelOpen: boolean;
@@ -120,6 +440,8 @@ function Toolbar({
   visibleCols: ColumnKey[];
   toggleColumn: (key: ColumnKey) => void;
   resetColumns: () => void;
+  sort: SortState;
+  resetSort: () => void;
 }) {
   return (
     <div className="flex items-center gap-3 mb-4 relative">
@@ -129,6 +451,15 @@ function Toolbar({
       >
         Columns ({visibleColCount})
       </button>
+
+      {sort && (
+        <button
+          onClick={resetSort}
+          className="px-3 py-1.5 text-[10px] uppercase tracking-widest border border-[#7a7062] text-[#7a7062] hover:bg-[#7a7062] hover:text-white transition-colors"
+        >
+          Reset sort ({sort.key} {sort.dir})
+        </button>
+      )}
 
       {panelOpen && (
         <div
@@ -145,7 +476,9 @@ function Toolbar({
           />
           <div className="py-1">
             {filteredColumnDefs.length === 0 ? (
-              <div className="px-3 py-3 text-xs text-[#7a7062] italic">No columns match.</div>
+              <div className="px-3 py-3 text-xs text-[#7a7062] italic">
+                No columns match.
+              </div>
             ) : (
               filteredColumnDefs.map((col) => {
                 const checked = visibleCols.includes(col.key);
@@ -184,7 +517,7 @@ function Toolbar({
             onClick={resetColumns}
             className="w-full px-3 py-2 text-[10px] uppercase tracking-widest border-t border-[#e8e0d4] text-[#7a7062] hover:bg-[#fdf6e8]"
           >
-            Reset
+            Reset to preset defaults
           </button>
         </div>
       )}
@@ -192,59 +525,197 @@ function Toolbar({
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────
+// Grid + rows
+// ─────────────────────────────────────────────────────────────────────────
+
+function Dropdown({
+  label,
+  value,
+  onChange,
+  placeholder,
+  options,
+}: {
+  label: string;
+  value: string | null;
+  onChange: (v: string | null) => void;
+  placeholder: string;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <label className="flex items-center gap-2 text-[11px]">
+      <span className="text-[10px] uppercase tracking-widest text-[#7a7062]">
+        {label}
+      </span>
+      <select
+        value={value ?? ""}
+        onChange={(e) => onChange(e.target.value || null)}
+        className="px-2 py-1 text-[11px] border border-[#e8e0d4] bg-white focus:outline-none focus:border-[#4a7a62]"
+      >
+        <option value="">{placeholder}</option>
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 function GridTable({
   rows,
   visibleCols,
+  sort,
+  setSort,
+  pinned,
+  togglePin,
 }: {
   rows: GridRow[];
   visibleCols: ColumnKey[];
+  sort: SortState;
+  setSort: (key: string) => void;
+  pinned: Set<string>;
+  togglePin: (id: string) => void;
 }) {
   return (
     <div className="overflow-x-auto bg-white border border-[#e8e0d4]">
       <table className="w-full text-sm border-collapse">
         <thead className="bg-[#16110d] text-[#fdf6e8] text-[10px] uppercase tracking-widest">
           <tr>
-            <th
-              className="text-left px-3 py-2 sticky left-0 bg-[#16110d] z-10"
-              style={{ minWidth: 180 }}
-            >
-              Journey / Date
+            <th className="px-2 py-2" style={{ width: 40 }}>
+              {/* Pin column header — empty */}
             </th>
-            <th
-              className="text-left px-3 py-2 sticky bg-[#16110d] z-10"
-              style={{ minWidth: 240, left: 180 }}
-            >
-              Day / Artwork
-            </th>
+            <SortableHeader
+              label="Journey / Date"
+              sortKey="identifier1"
+              sort={sort}
+              onClick={setSort}
+              sticky
+              left={40}
+              minWidth={180}
+            />
+            <SortableHeader
+              label="Day / Artwork"
+              sortKey="identifier2"
+              sort={sort}
+              onClick={setSort}
+              sticky
+              left={220}
+              minWidth={240}
+            />
             {visibleCols.map((key) => {
               const col = findColumn(key);
               if (!col) return null;
               return (
-                <th key={key} className="text-left px-3 py-2 whitespace-nowrap">
-                  {col.label}
-                </th>
+                <SortableHeader
+                  key={key}
+                  label={col.label}
+                  sortKey={key}
+                  sort={sort}
+                  onClick={setSort}
+                />
               );
             })}
           </tr>
         </thead>
         <tbody>
-          {rows.map((row) => (
-            <RowView key={row._id} row={row} visibleCols={visibleCols} />
-          ))}
+          {rows.length === 0 ? (
+            <tr>
+              <td
+                colSpan={3 + visibleCols.length}
+                className="px-3 py-8 text-center text-[#7a7062] italic"
+              >
+                No rows match the current filters.
+              </td>
+            </tr>
+          ) : (
+            rows.map((row) => (
+              <RowView
+                key={row._id}
+                row={row}
+                visibleCols={visibleCols}
+                isPinned={pinned.has(row._id)}
+                onTogglePin={() => togglePin(row._id)}
+              />
+            ))
+          )}
         </tbody>
       </table>
     </div>
   );
 }
 
-function RowView({ row, visibleCols }: { row: GridRow; visibleCols: ColumnKey[] }) {
+function SortableHeader({
+  label,
+  sortKey,
+  sort,
+  onClick,
+  sticky = false,
+  left,
+  minWidth,
+}: {
+  label: string;
+  sortKey: string;
+  sort: SortState;
+  onClick: (key: string) => void;
+  sticky?: boolean;
+  left?: number;
+  minWidth?: number;
+}) {
+  const active = sort && sort.key === sortKey;
+  const indicator = active ? (sort.dir === "asc" ? "↑" : "↓") : "";
+  return (
+    <th
+      className={`text-left px-3 py-2 whitespace-nowrap cursor-pointer select-none ${
+        sticky ? "sticky bg-[#16110d] z-10" : ""
+      } hover:bg-[#2b2117]`}
+      style={{
+        ...(sticky && left !== undefined ? { left } : {}),
+        ...(minWidth ? { minWidth } : {}),
+      }}
+      onClick={() => onClick(sortKey)}
+    >
+      <span>{label}</span>
+      {indicator && <span className="ml-1 text-[#C19B5F]">{indicator}</span>}
+    </th>
+  );
+}
+
+function RowView({
+  row,
+  visibleCols,
+  isPinned,
+  onTogglePin,
+}: {
+  row: GridRow;
+  visibleCols: ColumnKey[];
+  isPinned: boolean;
+  onTogglePin: () => void;
+}) {
   const id1 = getIdentifier1(row);
   const id2 = getIdentifier2(row);
+  const rowBg = isPinned ? "bg-[#fff5e0]" : "bg-white";
   return (
-    <tr className="border-b border-[#e8e0d4] hover:bg-[#fdf6e8]/50">
+    <tr className={`border-b border-[#e8e0d4] hover:bg-[#fdf6e8]/60 ${rowBg}`}>
       <td
-        className="px-3 py-3 align-top sticky left-0 bg-white border-r border-[#e8e0d4]"
-        style={{ minWidth: 180 }}
+        className={`px-2 py-3 align-top text-center ${rowBg}`}
+        style={{ width: 40 }}
+      >
+        <button
+          onClick={onTogglePin}
+          aria-label={isPinned ? "Unpin row" : "Pin row"}
+          title={isPinned ? "Unpin row" : "Pin row"}
+          className={`w-5 h-5 inline-flex items-center justify-center text-sm ${
+            isPinned ? "text-[#C19B5F]" : "text-[#bfb8aa] hover:text-[#16110d]"
+          }`}
+        >
+          {isPinned ? "★" : "☆"}
+        </button>
+      </td>
+      <td
+        className={`px-3 py-3 align-top sticky border-r border-[#e8e0d4] ${rowBg}`}
+        style={{ minWidth: 180, left: 40 }}
       >
         <div className="text-xs font-medium text-[#16110d]">{id1}</div>
         <div className="text-[10px] uppercase tracking-wider text-[#7a7062] mt-0.5">
@@ -252,8 +723,8 @@ function RowView({ row, visibleCols }: { row: GridRow; visibleCols: ColumnKey[] 
         </div>
       </td>
       <td
-        className="px-3 py-3 align-top sticky bg-white border-r border-[#e8e0d4]"
-        style={{ minWidth: 240, left: 180 }}
+        className={`px-3 py-3 align-top sticky border-r border-[#e8e0d4] ${rowBg}`}
+        style={{ minWidth: 240, left: 220 }}
       >
         <div className="text-xs text-[#16110d]">{id2}</div>
       </td>
@@ -282,10 +753,6 @@ function CellRender({
   }
   if (col.isImage && typeof value === "string") {
     return (
-      // Plain img on purpose — Next/Image is overkill for thumbnails
-      // in a low-traffic internal tool, and it would require remote
-      // patterns config for sanity CDN (already configured but adds
-      // latency without benefit at this size).
       // eslint-disable-next-line @next/next/no-img-element
       <img
         src={value}
@@ -304,8 +771,6 @@ function CellRender({
       </ul>
     );
   }
-  // Long-form fields get truncated to 3 lines for scanning. Inline expand
-  // arrives in Task 4.
   if (col.isLongText) {
     return (
       <div className="text-xs leading-relaxed text-[#16110d] line-clamp-3 whitespace-pre-line">
@@ -314,4 +779,70 @@ function CellRender({
     );
   }
   return <div className="text-xs text-[#16110d]">{value}</div>;
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Pure helpers
+// ─────────────────────────────────────────────────────────────────────────
+
+function applyFilters(
+  rows: GridRow[],
+  opts: {
+    docType: string;
+    preset: PresetId;
+    journey: string | null;
+    dayNumber: number | null;
+  },
+): GridRow[] {
+  let filtered = rows;
+  if (opts.docType === "journeyDay") {
+    filtered = filtered.filter((r) => r._type === "journeyDay");
+  } else if (opts.docType === "dailyPrompt") {
+    filtered = filtered.filter((r) => r._type === "dailyPrompt");
+  }
+  if (opts.preset === "arc" && opts.journey) {
+    filtered = filtered.filter(
+      (r) => r._type === "journeyDay" && r.journeySlug === opts.journey,
+    );
+  }
+  if (opts.preset === "parallel" && opts.dayNumber !== null) {
+    filtered = filtered.filter(
+      (r) => r._type === "journeyDay" && r.dayNumber === opts.dayNumber,
+    );
+  }
+  return filtered;
+}
+
+function parseSort(s: string | null): SortState {
+  if (!s) return null;
+  const idx = s.lastIndexOf(":");
+  if (idx === -1) return null;
+  const key = s.slice(0, idx);
+  const dir = s.slice(idx + 1);
+  if (dir !== "asc" && dir !== "desc") return null;
+  if (!key) return null;
+  return { key, dir };
+}
+
+function sortValueForKey(row: GridRow, key: string): string | number | null {
+  if (key === "identifier1") return getIdentifier1(row);
+  if (key === "identifier2") return getIdentifier2(row);
+  const v = getCellValue(row, key as ColumnKey);
+  if (Array.isArray(v)) return v.join(", ") || null;
+  return v;
+}
+
+function compareRows(a: GridRow, b: GridRow, sort: NonNullable<SortState>): number {
+  const av = sortValueForKey(a, sort.key);
+  const bv = sortValueForKey(b, sort.key);
+  if (av === null && bv === null) return 0;
+  if (av === null) return 1;
+  if (bv === null) return -1;
+  let cmp: number;
+  if (typeof av === "string" && typeof bv === "string") {
+    cmp = av.localeCompare(bv);
+  } else {
+    cmp = Number(av) - Number(bv);
+  }
+  return sort.dir === "asc" ? cmp : -cmp;
 }
