@@ -586,6 +586,160 @@ export async function getDashboardAudioStatus() {
   `)
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Review Grid — /dashboard/review (Phase 1, April 25 2026)
+// Powers the configurable content-review grid. Returns a unified set of
+// journeyDay and dailyPrompt rows with all text fields and pre-joined ref
+// fields (artworkHook, context, imageUrl from contentItem). One round-trip,
+// no second fetch on row click.
+//
+// Types live in this file rather than lib/types.ts because they are
+// dashboard-only concerns (per Build Brief). Field-name normalization is
+// done in the GROQ projection so the grid uses consistent column keys
+// across both row types (lectioPhilosophyText, auditioComposerArtist, etc).
+// The actual schema field names differ between types (e.g. dailyPrompt's
+// lectio.philosophyText vs journeyDay's lectio.philosophyQuote); the
+// projection unifies them. The TypeScript discriminated union on _type
+// preserves type-only fields like connectThread (journeyDay only) and
+// actio (dailyPrompt only).
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type GoDeeperRef = { _id: string; title: string | null }
+
+export type JourneyDayRow = {
+  _id: string
+  _type: 'journeyDay'
+  dayNumber: number
+  dayTitle: string
+  journeyTitle: string | null
+  journeySlug: string | null
+  openText: string | null
+  openTextAudioUrl: string | null
+  encounterGuidance: string | null
+  encounterNote: string | null
+  encounterNoteAudioUrl: string | null
+  artworkTitle: string | null
+  artworkHook: string | null
+  artworkHookAudioUrl: string | null
+  context: string | null
+  contextAudioUrl: string | null
+  imageUrl: string | null
+  lectioPhilosophyText: string | null
+  lectioPhilosophySource: string | null
+  lectioScriptureText: string | null
+  lectioScriptureSource: string | null
+  lectioConnectionNote: string | null
+  auditioTitle: string | null
+  auditioComposerArtist: string | null
+  auditioWorkTitle: string | null
+  auditioGenre: string | null
+  auditioAudioFileUrl: string | null
+  auditioAudioUrl: string | null
+  auditioExternalUrl: string | null
+  reflectionQuestions: string[] | null
+  reflectionQuestionsAudioUrl: string | null
+  connectThread: string | null
+  goDeeperTitles: GoDeeperRef[] | null
+}
+
+export type DailyPromptRow = {
+  _id: string
+  _type: 'dailyPrompt'
+  date: string
+  promptQuestion: string | null
+  curatorNote: string | null
+  curatorNoteAudioUrl: string | null
+  artworkTitle: string | null
+  imageUrl: string | null
+  context: string | null
+  contextAudioUrl: string | null
+  lectioPhilosophyText: string | null
+  lectioPhilosophySource: string | null
+  lectioScriptureText: string | null
+  lectioScriptureSource: string | null
+  auditioTitle: string | null
+  auditioComposerArtist: string | null
+  auditioWorkTitle: string | null
+  auditioGenre: string | null
+  auditioAudioFileUrl: string | null
+  auditioAudioUrl: string | null
+  auditioExternalUrl: string | null
+  verbaOriginal: string | null
+  actio: string | null
+}
+
+export type GridRow = JourneyDayRow | DailyPromptRow
+
+export type ReviewGridResponse = {
+  journeyDays: JourneyDayRow[]
+  dailyPrompts: DailyPromptRow[]
+}
+
+export async function getReviewGridRows(): Promise<ReviewGridResponse> {
+  return sanityClient.fetch<ReviewGridResponse>(`{
+    "journeyDays": *[_type == "journeyDay" && !string::startsWith(_id, "drafts.")] | order(journey->title asc, dayNumber asc) {
+      _id,
+      _type,
+      dayNumber,
+      dayTitle,
+      "journeyTitle": journey->title,
+      "journeySlug": journey->slug.current,
+      openText,
+      "openTextAudioUrl": openTextAudio.asset->url,
+      encounterGuidance,
+      encounterNote,
+      "encounterNoteAudioUrl": encounterNoteAudio.asset->url,
+      "artworkTitle": encounterContent->title,
+      "artworkHook": encounterContent->artworkHook,
+      "artworkHookAudioUrl": encounterContent->artworkHookAudio.asset->url,
+      "context": encounterContent->context,
+      "contextAudioUrl": encounterContent->contextAudio.asset->url,
+      "imageUrl": encounterContent->image.asset->url,
+      "lectioPhilosophyText": lectio.philosophyQuote,
+      "lectioPhilosophySource": lectio.philosophySource,
+      "lectioScriptureText": lectio.scriptureVerse,
+      "lectioScriptureSource": lectio.scriptureReference,
+      "lectioConnectionNote": lectio.connectionNote,
+      "auditioTitle": auditio.title,
+      "auditioComposerArtist": coalesce(auditio.composerArtist, auditio.composer),
+      "auditioWorkTitle": auditio.workTitle,
+      "auditioGenre": auditio.genre,
+      "auditioAudioFileUrl": auditio.audioFile.asset->url,
+      "auditioAudioUrl": auditio.audioUrl,
+      "auditioExternalUrl": auditio.externalUrl,
+      reflectionQuestions,
+      "reflectionQuestionsAudioUrl": reflectionQuestionsAudio.asset->url,
+      connectThread,
+      "goDeeperTitles": goDeeper[]->{_id, title}
+    },
+    "dailyPrompts": *[_type == "dailyPrompt" && !string::startsWith(_id, "drafts.")] | order(date desc) {
+      _id,
+      _type,
+      date,
+      promptQuestion,
+      curatorNote,
+      "curatorNoteAudioUrl": curatorNoteAudio.asset->url,
+      "artworkTitle": content->title,
+      "imageUrl": content->image.asset->url,
+      "context": content->context,
+      "contextAudioUrl": content->contextAudio.asset->url,
+      "lectioPhilosophyText": lectio.philosophyText,
+      "lectioPhilosophySource": lectio.philosophyAttribution,
+      "lectioScriptureText": lectio.text,
+      "lectioScriptureSource": lectio.attribution,
+      "auditioTitle": auditio.title,
+      "auditioComposerArtist": coalesce(auditio.composerArtist, auditio.artist),
+      "auditioWorkTitle": auditio.workTitle,
+      "auditioGenre": auditio.genre,
+      "auditioAudioFileUrl": auditio.audioUrl.audioFile.asset->url,
+      "auditioAudioUrl": auditio.audioUrl.audioUrl,
+      "auditioExternalUrl": auditio.url,
+      "verbaOriginal": auditio.verbaOriginal,
+      actio
+    }
+  }`)
+}
+
 export async function getDashboardTTSAudit() {
   return sanityClient.fetch(`
     {
