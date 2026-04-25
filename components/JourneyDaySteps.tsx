@@ -400,7 +400,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
 
   // For the player display: prefer journey auditio metadata; fall back to content metadata
   const audioTitle = day.auditio?.title || (content.contentType === "music" ? content.title : undefined);
-  const audioSubtitle = day.auditio?.composer || content.composer || content.artist || undefined;
+  const audioSubtitle = day.auditio?.composerArtist || content.composer || content.artist || undefined;
   const audioExternalUrl =
     day.auditio?.externalUrl ||
     (content.contentType === "music" ? (content.externalMusicUrl || content.musicUrl) : undefined);

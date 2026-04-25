@@ -649,8 +649,8 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
                       <p className="italic truncate" style={{ color: C.cream, fontSize: "0.95rem" }}>
                         {prompt.auditio.title}
                       </p>
-                      {prompt.auditio.artist && (
-                        <p className="text-sm mt-1 truncate" style={{ color: C.creamFaint }}>{prompt.auditio.artist}</p>
+                      {prompt.auditio.composerArtist && (
+                        <p className="text-sm mt-1 truncate" style={{ color: C.creamFaint }}>{prompt.auditio.composerArtist}</p>
                       )}
                     </div>
                   </div>
@@ -686,18 +686,18 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
                     </div>
                   )}
                 </div>
-              ) : prompt.auditio.url ? (
+              ) : prompt.auditio.externalUrl ? (
                 /* ── External reference — no play button ── */
                 <div className="flex items-start gap-4">
                   <div className="flex-grow min-w-0">
                     <p className="italic" style={{ color: C.cream, fontSize: "0.95rem" }}>
                       {prompt.auditio.title}
                     </p>
-                    {prompt.auditio.artist && (
-                      <p className="text-sm mt-1" style={{ color: C.creamFaint }}>{prompt.auditio.artist}</p>
+                    {prompt.auditio.composerArtist && (
+                      <p className="text-sm mt-1" style={{ color: C.creamFaint }}>{prompt.auditio.composerArtist}</p>
                     )}
                     <a
-                      href={prompt.auditio.url}
+                      href={prompt.auditio.externalUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs mt-2 inline-block cta-inline-dark"
@@ -712,8 +712,8 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
                   <p className="italic" style={{ color: C.cream, fontSize: "0.95rem" }}>
                     {prompt.auditio.title}
                   </p>
-                  {prompt.auditio.artist && (
-                    <p className="text-sm mt-1" style={{ color: C.creamFaint }}>{prompt.auditio.artist}</p>
+                  {prompt.auditio.composerArtist && (
+                    <p className="text-sm mt-1" style={{ color: C.creamFaint }}>{prompt.auditio.composerArtist}</p>
                   )}
                 </div>
               )}

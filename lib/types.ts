@@ -110,17 +110,24 @@ export type JourneyDayLectio = {
   connectionNote?: string;
 };
 
-export type JourneyDayAuditio = {
+// Single Auditio type used by both JourneyDay and DailyPrompt.
+// Matches the standalone auditio document shape after R7 migration.
+export type Auditio = {
   title?: string;
-  composer?: string;
-  composerArtist?: string; // Structured composer/artist name — for dedup / content-repeat
+  composerArtist?: string; // Canonical structured name — for dedup / content-repeat
   workTitle?: string;      // Structured work title — for dedup
   genre?: string;          // Enum — see auditio genre list in schema
   licensingNote?: string;
-  audioFileUrl?: string; // Resolved from audioFile.asset->url — plays in-app
-  audioUrl?: string;     // Direct MP3 URL — plays in-app
-  externalUrl?: string;  // YouTube/Spotify — opens outside app
+  audioFileUrl?: string;   // Resolved from audioFile.asset->url — plays in-app
+  audioUrl?: string;       // Direct MP3 URL — plays in-app
+  externalUrl?: string;    // YouTube/Spotify — opens outside app
+  verbaOriginal?: string;  // Lyrics / text shown in VERBA panel (any format)
 };
+
+/** @deprecated Use Auditio instead */
+export type JourneyDayAuditio = Auditio;
+/** @deprecated Use Auditio instead */
+export type DailyPromptAuditio = Auditio;
 
 export type JourneyDay = {
   _id?: string;
@@ -134,7 +141,7 @@ export type JourneyDay = {
   encounterNote?: string;
   encounterNoteAudioUrl?: string;
   lectio?: JourneyDayLectio;
-  auditio?: JourneyDayAuditio;
+  auditio?: Auditio;
   reflectionQuestions: string[];
   reflectionQuestionsAudioUrl?: string;
   connectThread?: string;
@@ -170,18 +177,6 @@ export type DailyPromptLectio = {
   philosophyAttribution?: string;
 };
 
-export type DailyPromptAuditio = {
-  title: string;
-  artist?: string;
-  composerArtist?: string;  // Structured composer/artist name — for dedup
-  workTitle?: string;       // Structured work title — for dedup
-  genre?: string;           // Enum — see auditio genre list in schema
-  audioFileUrl?: string;    // Sanity-hosted file — resolved asset URL, plays in-app
-  audioUrl?: string;        // External URL string — plays in-app
-  url?: string;             // External link (YouTube, Spotify, etc.) — fallback only
-  verbaOriginal?: string;   // Lyrics / text shown in VERBA panel (any format)
-};
-
 export type DailyPrompt = {
   _id: string;
   date: string;
@@ -190,7 +185,7 @@ export type DailyPrompt = {
   curatorNote?: string;
   curatorNoteAudioUrl?: string;
   lectio?: DailyPromptLectio;
-  auditio?: DailyPromptAuditio;
+  auditio?: Auditio;
   actio?: string;
   relatedJourney?: Pick<Journey, '_id' | 'title' | 'slug' | 'heroImageUrl'>;
   theme?: Theme;

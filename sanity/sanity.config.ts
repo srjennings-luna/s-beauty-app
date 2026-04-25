@@ -82,32 +82,8 @@ export default defineConfig({
               (listItem) => !['episode'].includes(listItem.getId() ?? ''),
             ),
 
-            // ── Auditio quick-nav ─────────────────────────────────────────────
-            // Filtered views for editing auditio fields without hunting through
-            // every record. Opens the full document — scroll to the Auditio
-            // section. Sorted by journey+day (Journey Days) and date desc (P&P).
-            S.divider(),
-            S.listItem()
-              .title('Auditio — Journey Days')
-              .id('auditio-journey-days')
-              .child(
-                S.documentList()
-                  .title('Journey Days with Auditio')
-                  .filter('_type == "journeyDay" && defined(auditio)')
-                  .defaultOrdering([
-                    {field: 'journey->title', direction: 'asc'},
-                    {field: 'dayNumber', direction: 'asc'},
-                  ]),
-              ),
-            S.listItem()
-              .title('Auditio — Pause & Ponder')
-              .id('auditio-pause-ponder')
-              .child(
-                S.documentList()
-                  .title('P&P with Auditio')
-                  .filter('_type == "dailyPrompt" && defined(auditio)')
-                  .defaultOrdering([{field: 'date', direction: 'desc'}]),
-              ),
+            // Auditio is now a first-class document type — appears automatically
+            // in the list above. The old filtered quick-nav items are removed.
           ]),
     }),
     // Presentation tool — side-by-side live preview of the app while editing.

@@ -200,9 +200,8 @@ const JOURNEY_QUERY = `*[_type == "journey" && slug.current == $slug][0] {
       scriptureReference,
       connectionNote
     },
-    "auditio": auditio {
+    "auditio": auditio-> {
       title,
-      composer,
       composerArtist,
       workTitle,
       genre,
@@ -257,15 +256,14 @@ const DAILY_PROMPT_FIELDS = `
   curatorNote,
   "curatorNoteAudioUrl": curatorNoteAudio.asset->url,
   lectio,
-  "auditio": auditio {
+  "auditio": auditio-> {
     title,
-    artist,
     composerArtist,
     workTitle,
     genre,
-    url,
-    "audioFileUrl": audioUrl.audioFile.asset->url,
-    "audioUrl": audioUrl.audioUrl,
+    "audioFileUrl": audioFile.asset->url,
+    audioUrl,
+    externalUrl,
     verbaOriginal
   },
   actio,
@@ -469,11 +467,11 @@ export async function getDashboardJourneyCompletion() {
         "hasEncounterRef": defined(encounterContent._ref),
         "encNoteLen": length(coalesce(encounterNote, "")),
         "hasEncNoteAudio": defined(encounterNoteAudio.asset),
-        "hasAuditio": defined(auditio.title),
-        "hasAuditioFile": defined(auditio.audioFile.asset),
-        "auditioGenre": auditio.genre,
-        "auditioComposerArtist": auditio.composerArtist,
-        "auditioWorkTitle": auditio.workTitle,
+        "hasAuditio": defined(auditio._ref),
+        "hasAuditioFile": defined(auditio->audioFile.asset),
+        "auditioGenre": auditio->genre,
+        "auditioComposerArtist": auditio->composerArtist,
+        "auditioWorkTitle": auditio->workTitle,
         "hasLectio": length(coalesce(lectio.scriptureVerse, "")) > 0,
         "reflectCount": count(reflectionQuestions),
         "hasConnect": length(coalesce(connectThread, "")) > 0,
@@ -540,7 +538,7 @@ export async function getDashboardAudioStatus() {
           "hasArtworkHookAudio": defined(encounterContent->artworkHookAudio.asset),
           "hasContextAudio": defined(encounterContent->contextAudio.asset),
           "hasReflectionQuestionsAudio": defined(reflectionQuestionsAudio.asset),
-          "hasAuditio": defined(auditio.audioFile.asset),
+          "hasAuditio": defined(auditio._ref),
           // Tradition-reflection audio coverage for this day's Go Deeper refs.
           "goDeeperTotal": count(goDeeper),
           "goDeeperWithAudio": count(goDeeper[]->[defined(reflectionAudio.asset)])
@@ -550,36 +548,36 @@ export async function getDashboardAudioStatus() {
         _id, date,
         "contentTitle": content->title,
         "hasCuratorAudio": defined(curatorNoteAudio.asset),
-        "hasAuditioFile": defined(auditio.audioUrl.audioFile.asset),
-        "hasAuditioUrl": defined(auditio.audioUrl.audioUrl),
-        "hasAuditioExt": defined(auditio.url)
+        "hasAuditioFile": defined(auditio->audioFile.asset),
+        "hasAuditioUrl": defined(auditio->audioUrl),
+        "hasAuditioExt": defined(auditio->externalUrl)
       },
       "genres": {
-        "journeyDay": *[_type == "journeyDay" && !string::startsWith(_id, "drafts.") && defined(auditio.genre)]{ "genre": auditio.genre },
-        "dailyPrompt": *[_type == "dailyPrompt" && !string::startsWith(_id, "drafts.") && defined(auditio.genre)]{ "genre": auditio.genre }
+        "journeyDay": *[_type == "journeyDay" && !string::startsWith(_id, "drafts.") && defined(auditio._ref)]{ "genre": auditio->genre },
+        "dailyPrompt": *[_type == "dailyPrompt" && !string::startsWith(_id, "drafts.") && defined(auditio._ref)]{ "genre": auditio->genre }
       },
       // Auditio works inventory — for work-level + composer-level repeat
       // detection. Prefers the structured composerArtist/workTitle fields;
       // falls back to the legacy free-text title/composer/artist so pre-
       // migration records are still surfaced.
       "works": {
-        "journeyDay": *[_type == "journeyDay" && !string::startsWith(_id, "drafts.") && (defined(auditio.workTitle) || defined(auditio.title))]{
+        "journeyDay": *[_type == "journeyDay" && !string::startsWith(_id, "drafts.") && defined(auditio._ref)]{
           _id,
           "origin": "journeyDay",
           "journeyTitle": journey->title,
           dayNumber,
           dayTitle,
-          "workTitle": coalesce(auditio.workTitle, auditio.title),
-          "composerArtist": coalesce(auditio.composerArtist, auditio.composer),
-          "isStructured": defined(auditio.workTitle)
+          "workTitle": coalesce(auditio->workTitle, auditio->title),
+          "composerArtist": auditio->composerArtist,
+          "isStructured": defined(auditio->workTitle)
         },
-        "dailyPrompt": *[_type == "dailyPrompt" && !string::startsWith(_id, "drafts.") && (defined(auditio.workTitle) || defined(auditio.title))]{
+        "dailyPrompt": *[_type == "dailyPrompt" && !string::startsWith(_id, "drafts.") && defined(auditio._ref)]{
           _id,
           "origin": "dailyPrompt",
           date,
-          "workTitle": coalesce(auditio.workTitle, auditio.title),
-          "composerArtist": coalesce(auditio.composerArtist, auditio.artist),
-          "isStructured": defined(auditio.workTitle)
+          "workTitle": coalesce(auditio->workTitle, auditio->title),
+          "composerArtist": auditio->composerArtist,
+          "isStructured": defined(auditio->workTitle)
         }
       }
     }
@@ -700,13 +698,13 @@ const REVIEW_JOURNEY_DAY_PROJECTION = `
   "lectioScriptureText": lectio.scriptureVerse,
   "lectioScriptureSource": lectio.scriptureReference,
   "lectioConnectionNote": lectio.connectionNote,
-  "auditioTitle": auditio.title,
-  "auditioComposerArtist": coalesce(auditio.composerArtist, auditio.composer),
-  "auditioWorkTitle": auditio.workTitle,
-  "auditioGenre": auditio.genre,
-  "auditioAudioFileUrl": auditio.audioFile.asset->url,
-  "auditioAudioUrl": auditio.audioUrl,
-  "auditioExternalUrl": auditio.externalUrl,
+  "auditioTitle": auditio->title,
+  "auditioComposerArtist": auditio->composerArtist,
+  "auditioWorkTitle": auditio->workTitle,
+  "auditioGenre": auditio->genre,
+  "auditioAudioFileUrl": auditio->audioFile.asset->url,
+  "auditioAudioUrl": auditio->audioUrl,
+  "auditioExternalUrl": auditio->externalUrl,
   reflectionQuestions,
   "reflectionQuestionsAudioUrl": reflectionQuestionsAudio.asset->url,
   connectThread,
@@ -728,14 +726,14 @@ const REVIEW_DAILY_PROMPT_PROJECTION = `
   "lectioPhilosophySource": lectio.philosophyAttribution,
   "lectioScriptureText": lectio.text,
   "lectioScriptureSource": lectio.attribution,
-  "auditioTitle": auditio.title,
-  "auditioComposerArtist": coalesce(auditio.composerArtist, auditio.artist),
-  "auditioWorkTitle": auditio.workTitle,
-  "auditioGenre": auditio.genre,
-  "auditioAudioFileUrl": auditio.audioUrl.audioFile.asset->url,
-  "auditioAudioUrl": auditio.audioUrl.audioUrl,
-  "auditioExternalUrl": auditio.url,
-  "verbaOriginal": auditio.verbaOriginal,
+  "auditioTitle": auditio->title,
+  "auditioComposerArtist": auditio->composerArtist,
+  "auditioWorkTitle": auditio->workTitle,
+  "auditioGenre": auditio->genre,
+  "auditioAudioFileUrl": auditio->audioFile.asset->url,
+  "auditioAudioUrl": auditio->audioUrl,
+  "auditioExternalUrl": auditio->externalUrl,
+  "verbaOriginal": auditio->verbaOriginal,
   actio
 `
 
