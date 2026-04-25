@@ -40,43 +40,49 @@ export const PRESETS: PresetDef[] = [
     id: "overview",
     label: "All content",
     description:
-      "Every Journey Day and Daily Prompt with all content fields. Use the Filter bar to narrow by type. Default view.",
+      "Everything you've entered — all Journey Days and Daily Prompts with every field visible. Use the Filter bar to switch between Journey Days and Daily Prompts.",
     parameters: [],
   },
   {
     id: "arc",
-    label: "Journey arc",
-    description: "Key content fields for one journey across all its days.",
+    label: "One journey",
+    description:
+      "All days of a single journey with key content fields. Pick a journey from the dropdown to focus.",
     parameters: ["journey"],
   },
   {
     id: "parallel",
-    label: "Parallel days",
-    description: "A single day number across every journey. Verifies entry-point distinctiveness.",
+    label: "Same day, all journeys",
+    description:
+      "Pick a day number (e.g. Day 1) and see that day across every journey side by side. Good for checking that each journey's opening feels distinct.",
     parameters: ["dayNumber"],
   },
   {
     id: "field",
-    label: "Field comparison",
-    description: "One focus field across many records. Pick a field to compare.",
+    label: "One field, all records",
+    description:
+      "Pick a single field (e.g. Artwork Hook, Context, Actio) and scan it across all your content in one column. Good for QA-ing a specific field across everything.",
     parameters: ["focusField", "docType"],
   },
   {
     id: "pairing",
-    label: "Pairing",
-    description: "Two chosen fields side by side.",
+    label: "Two fields side by side",
+    description:
+      "Pick any two fields and see them next to each other across all records. Good for checking that two elements work together — e.g. Artwork Hook alongside Context.",
     parameters: ["fieldA", "fieldB"],
   },
   {
     id: "record",
-    label: "Record",
-    description: "One selected record, all fields in sequential order.",
+    label: "One full record",
+    description:
+      "See every field for a single Journey Day or Daily Prompt in order, top to bottom. Good for a deep review of one piece of content.",
     parameters: ["id"],
   },
   {
     id: "custom",
-    label: "Custom",
-    description: "Identifiers only. Build your own view from scratch.",
+    label: "Build my own",
+    description:
+      "Starts with just the identifier columns (Journey, Day). Use the Columns button to add exactly the fields you want.",
     parameters: [],
   },
 ];
