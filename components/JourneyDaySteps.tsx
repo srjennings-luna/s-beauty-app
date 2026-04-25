@@ -538,6 +538,15 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           </div>
         )}
 
+        {/* Divider: only shown when Context and Look Closer are directly adjacent
+            (no quote, scripture card, or excerpt sitting between them) */}
+        {content.context && day.encounterNote &&
+          !content.quote?.text &&
+          !(content.scripturePairing?.verse && !day.lectio?.scriptureVerse) &&
+          !content.excerpt && (
+            <hr style={{ borderColor: 'rgba(253,246,232,0.08)', margin: 0 }} />
+        )}
+
         {/* Encounter Note — interpretive layer (iconography, listening guide, etc.) */}
         {day.encounterNote && (
           <div className="pl-4" style={{ borderLeft: `1px solid ${C.divider}` }}>
