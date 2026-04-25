@@ -43,30 +43,41 @@ export type ColumnDef = {
   isImage?: boolean;
 };
 
+// Columns are ordered to match the sequence a user encounters content in the
+// app. Journey Day flow: Image → Opening Text → Artwork Hook → Context →
+// Encounter Guidance → Look Closer → Lectio → Auditio → Reflect → Connect →
+// Go Deeper. Daily Prompt fields (Prompt Question, Curator Note, Lyrics,
+// Actio) are inserted at the equivalent point in that flow.
 export const COLUMNS: ColumnDef[] = [
-  { key: "imageUrl", label: "Image", appliesTo: "both", isImage: true },
-  { key: "openText", label: "Open Text", appliesTo: "journeyDay", isLongText: true },
-  { key: "promptQuestion", label: "Prompt Question", appliesTo: "dailyPrompt", isLongText: true },
-  { key: "artworkHook", label: "Artwork Hook", appliesTo: "journeyDay", isLongText: true },
-  { key: "curatorNote", label: "Curator Note", appliesTo: "dailyPrompt", isLongText: true },
-  { key: "context", label: "Context", appliesTo: "both", isLongText: true },
-  { key: "encounterGuidance", label: "Encounter Guidance", appliesTo: "journeyDay", isLongText: true },
-  { key: "encounterNote", label: "Encounter Note", appliesTo: "journeyDay", isLongText: true },
-  { key: "lectioPhilosophyText", label: "Lectio Philosophy", appliesTo: "both", isLongText: true },
-  { key: "lectioPhilosophySource", label: "Lectio Philosophy Source", appliesTo: "both" },
-  { key: "lectioScriptureText", label: "Lectio Scripture", appliesTo: "both", isLongText: true },
-  { key: "lectioScriptureSource", label: "Lectio Scripture Source", appliesTo: "both" },
-  { key: "lectioConnectionNote", label: "Lectio Connection", appliesTo: "journeyDay", isLongText: true },
-  { key: "auditioTitle", label: "Auditio Title", appliesTo: "both" },
-  { key: "auditioComposerArtist", label: "Auditio Composer / Artist", appliesTo: "both" },
-  { key: "auditioWorkTitle", label: "Auditio Work Title", appliesTo: "both" },
-  { key: "auditioGenre", label: "Auditio Genre", appliesTo: "both" },
-  { key: "auditioExternalUrl", label: "Auditio External Link", appliesTo: "both" },
+  // ── Opening ────────────────────────────────────────────────────────────────
+  { key: "imageUrl",           label: "Image",              appliesTo: "both",         isImage: true },
+  { key: "openText",           label: "Opening Text",       appliesTo: "journeyDay",   isLongText: true },
+  // ── Artwork / Encounter ────────────────────────────────────────────────────
+  { key: "artworkHook",        label: "Artwork Hook",       appliesTo: "journeyDay",   isLongText: true },
+  { key: "context",            label: "Context",            appliesTo: "both",         isLongText: true },
+  { key: "encounterGuidance",  label: "Encounter Guidance", appliesTo: "journeyDay",   isLongText: true },
+  { key: "encounterNote",      label: "Look Closer",        appliesTo: "journeyDay",   isLongText: true },
+  // ── Daily Prompt voice fields (appear at the equivalent point in P&P) ──────
+  { key: "promptQuestion",     label: "Prompt Question",    appliesTo: "dailyPrompt",  isLongText: true },
+  { key: "curatorNote",        label: "Curator Note",       appliesTo: "dailyPrompt",  isLongText: true },
+  // ── Lectio ─────────────────────────────────────────────────────────────────
+  { key: "lectioPhilosophyText",   label: "Lectio · Philosophy",        appliesTo: "both",       isLongText: true },
+  { key: "lectioPhilosophySource", label: "Lectio · Philosophy Source", appliesTo: "both" },
+  { key: "lectioScriptureText",    label: "Lectio · Scripture",         appliesTo: "both",       isLongText: true },
+  { key: "lectioScriptureSource",  label: "Lectio · Scripture Source",  appliesTo: "both" },
+  { key: "lectioConnectionNote",   label: "Lectio · Connection",        appliesTo: "journeyDay", isLongText: true },
+  // ── Auditio ────────────────────────────────────────────────────────────────
+  { key: "auditioTitle",           label: "Auditio · Title",            appliesTo: "both" },
+  { key: "auditioComposerArtist",  label: "Auditio · Composer / Artist",appliesTo: "both" },
+  { key: "auditioWorkTitle",       label: "Auditio · Work Title",       appliesTo: "both" },
+  { key: "auditioGenre",           label: "Auditio · Genre",            appliesTo: "both" },
+  { key: "auditioExternalUrl",     label: "Auditio · External Link",    appliesTo: "both" },
+  { key: "verbaOriginal",          label: "Auditio · Lyrics (Verba)",   appliesTo: "dailyPrompt", isLongText: true },
+  // ── Closing ────────────────────────────────────────────────────────────────
   { key: "reflectionQuestions", label: "Reflection Questions", appliesTo: "journeyDay", isLongText: true },
-  { key: "connectThread", label: "Connect Thread", appliesTo: "journeyDay", isLongText: true },
-  { key: "goDeeperTitles", label: "Go Deeper Titles", appliesTo: "journeyDay" },
-  { key: "verbaOriginal", label: "Verba (Lyrics)", appliesTo: "dailyPrompt", isLongText: true },
-  { key: "actio", label: "Actio", appliesTo: "dailyPrompt", isLongText: true },
+  { key: "connectThread",       label: "Connect Thread",       appliesTo: "journeyDay", isLongText: true },
+  { key: "goDeeperTitles",      label: "Go Deeper",            appliesTo: "journeyDay" },
+  { key: "actio",               label: "Actio",                appliesTo: "dailyPrompt", isLongText: true },
 ];
 
 export function findColumn(key: ColumnKey): ColumnDef | undefined {
