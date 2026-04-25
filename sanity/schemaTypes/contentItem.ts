@@ -377,7 +377,7 @@ export default defineType({
     }),
     defineField({
       name: 'artworkHook',
-      title: 'Artwork Hook',
+      title: 'Artwork Hook (Encounter - 1st text)',
       type: 'text',
       rows: 3,
       description:

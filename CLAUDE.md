@@ -266,7 +266,7 @@ Read this at the start of every session. It contains all key product decisions, 
 - ✅ TTS workflow note added to CONTENT-RULES.md: every field entered in Sanity is also the TTS script. Read aloud before confirming.
 - ✅ Caravaggio factual error corrected in Day 2: "The Calling of Saint Matthew" was NOT rejected. The rejected painting was a different commission (Saint Matthew and the Angel, first version). Fixed in voice rewrite.
 - ✅ BTG Journey Description Card finalized: "Three things the philosophers kept returning to for centuries: beauty, truth, and goodness. They called them the transcendentals. Classical education was built on them. Cathedrals were built to embody them. Christian theology spent centuries on why all three point in the same direction. Follow the thread." Replaces original (too mysterious, Plato line factually wrong, Lewis named in user-facing copy).
-- ✅ Day 1 full content item audit added to BTG-3Day-Voice-Rewrite.html: Context rewrite, Encounter Note (N/A), Lectio (Simone Weil + Psalm 27:4, both need verification), Auditio direction (Psalm 27 chant), TR1 Plato (fixed misattribution + rewrite), TR2 Augustine (verify quote + rewrite), TR3 JPII (replace quote with Letter to Artists + rewrite).
+- ✅ Day 1 full content item audit added to BTG-3Day-Voice-Rewrite.html: Context rewrite, Encounter Note (Look Closer) (N/A), Lectio (Simone Weil + Psalm 27:4, both need verification), Auditio direction (Psalm 27 chant), TR1 Plato (fixed misattribution + rewrite), TR2 Augustine (verify quote + rewrite), TR3 JPII (replace quote with Letter to Artists + rewrite).
 - ✅ Day 1 Curator Note revised: removed duplicate with Context ("What he eventually understood: Joy was not pointing at any earthly thing. It was pointing past all of them."). Biscuit tin paragraph preserved. Context carries the conclusion; Curator Note carries the concrete arrivals.
 - ✅ Three new voice rules added to CLAUDE.md: Lewis as internal-only register test, opening text length follows content, BTG Day 1 artwork guidance.
 
@@ -609,7 +609,7 @@ Three distinct types of content repetition to track in the dashboard:
 3. **Cross-field concept repetition** — "allegory of the cave" referenced in passing in Curator Note AND told in full in a TR. Requires concept tagging across all field types. Approach: free-form tagging first (learning phase), then consolidate to controlled vocabulary. Do not build the full tagging system until the natural categories emerge from actual content.
 
 ### Go Deeper Standard
-Go Deeper tradition reflections must add genuinely new content not already present in the Encounter Note. If the Go Deeper summary covers the same argument as the Encounter Note in different words, it fails. The test: could this TR appear in any journey day, or is it specific to this one?
+Go Deeper tradition reflections must add genuinely new content not already present in the Encounter Note (Look Closer). If the Go Deeper summary covers the same argument as the Encounter Note (Look Closer) in different words, it fails. The test: could this TR appear in any journey day, or is it specific to this one?
 
 Voices must come from tradition: Church Fathers, philosophers, historical thinkers — with specific quotes and verifiable sources. Summaries should name what is surprising or new in the source, not describe the book's cover. "Lewis's own account of his conversion" is not sufficient — name what specifically in the account earns reading it.
 
