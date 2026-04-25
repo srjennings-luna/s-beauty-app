@@ -106,9 +106,28 @@ function normalise(s: string): string {
     .trim();
 }
 
+// Manual overrides for entries whose composer/title data was inconsistent.
+// Each entry maps a title+composer pattern to a canonical dedup key so
+// both records resolve to the same auditio document.
+const MANUAL_OVERRIDES: Array<{ title: RegExp; composer: RegExp; key: string }> = [
+  // "Kyrie Eleison" by "Missa Papae Marcelli (c. 1562)" and
+  // "Missa Papae Marcelli — Kyrie" by "Palestrina — Pro Cantione Antiqua"
+  // are the same movement. Work name was entered as composer in one record.
+  { title: /kyrie eleison/i,           composer: /missa papae marcelli/i, key: 'palestrina|||missa papae marcelli kyrie' },
+  { title: /missa papae marcelli.*kyrie/i, composer: /palestrina/i,       key: 'palestrina|||missa papae marcelli kyrie' },
+];
+
 function dedupKey(a: EmbeddedAuditio): string | null {
   const rawComposer = a.composerArtist ?? a.composer ?? a.artist ?? '';
   const rawWork = a.workTitle ?? a.title ?? ''; // fall back to free-text title
+
+  // Check manual overrides first
+  for (const override of MANUAL_OVERRIDES) {
+    if (override.title.test(rawWork) && override.composer.test(rawComposer)) {
+      return override.key;
+    }
+  }
+
   const composer = normalise(rawComposer);
   const work = normalise(rawWork);
   if (composer && work) return `${composer}|||${work}`;
