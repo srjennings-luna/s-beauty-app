@@ -1,7 +1,7 @@
 import type { GridRow } from "@/lib/sanity";
 
 // All available content columns in the review grid.
-// Identifiers (Journey/Date and Day/Artwork) are NOT in this registry —
+// Identifiers (Journey/Date and Day/Artwork) are NOT in this registry.
 // they are hard-pinned in ReviewGridClient and never togglable.
 //
 // `appliesTo` declares which row types the column applies to. A column with
@@ -73,7 +73,7 @@ export function findColumn(key: ColumnKey): ColumnDef | undefined {
   return COLUMNS.find((c) => c.key === key);
 }
 
-// Cell value lookup — switch on the key so TypeScript narrows the row type
+// Cell value lookup.switch on the key so TypeScript narrows the row type
 // per branch. journeyDay-only fields return null on dailyPrompt rows and
 // vice versa; that becomes an em-dash placeholder in the rendered cell.
 export function getCellValue(row: GridRow, key: ColumnKey): string | string[] | null {
@@ -132,13 +132,13 @@ export function getCellValue(row: GridRow, key: ColumnKey): string | string[] | 
   }
 }
 
-// First identifier — the primary container value. Becomes the link to record view.
+// First identifier.the primary container value. Becomes the link to record view.
 // journeyDay: Journey Title. dailyPrompt: Date.
 export function getIdentifier1(row: GridRow): string {
   return row._type === "journeyDay" ? (row.journeyTitle ?? "Untitled journey") : row.date;
 }
 
-// Second identifier — the specific item within the container.
+// Second identifier.the specific item within the container.
 // journeyDay: "Day N: {dayTitle}". dailyPrompt: Artwork title.
 export function getIdentifier2(row: GridRow): string {
   if (row._type === "journeyDay") {

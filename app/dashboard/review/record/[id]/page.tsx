@@ -10,7 +10,7 @@ import { getReviewGridRowById, type GridRow } from "@/lib/sanity";
 
 export const revalidate = 60;
 export const metadata = {
-  title: "KALLOS — Content Review · Record",
+  title: "KALLOS · Content Review · Record",
   robots: "noindex, nofollow",
 };
 
@@ -209,7 +209,7 @@ function Field({
         </div>
       ) : null}
       {source ? (
-        <div className="text-xs italic text-[#7a7062] mt-1">— {source}</div>
+        <div className="text-xs italic text-[#7a7062] mt-1">{source}</div>
       ) : null}
     </div>
   );

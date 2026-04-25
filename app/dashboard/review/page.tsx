@@ -10,7 +10,7 @@ import ReviewGridClient from "./ReviewGridClient";
 
 export const revalidate = 60;
 export const metadata = {
-  title: "KALLOS — Content Review",
+  title: "KALLOS · Content Review",
   robots: "noindex, nofollow",
 };
 

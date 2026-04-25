@@ -20,12 +20,13 @@ import {
   getPresetDefaultColumns,
   type PresetId,
 } from "./presets";
+import { scanText, type VoiceRuleMatch } from "./voiceRules";
 
 // Task 4 added: inline cell expansion (URL-backed), per-content-column drag
 // resize (URL-backed), first-identifier column links to record view with
 // `from` param preserving full grid state.
 //
-// State model (URL is source of truth — no useState for any of this):
+// State model (URL is source of truth; no useState for any of this):
 //   preset       active preset id
 //   cols         column visibility override
 //   docType      row-type filter
@@ -74,6 +75,7 @@ export default function ReviewGridClient({ rows }: { rows: GridRow[] }) {
     [searchParams],
   );
   const widths = useMemo(() => parseWidths(searchParams.get("widths")), [searchParams]);
+  const voiceFlagsActive = searchParams.get("voiceFlags") === "1";
 
   const presetDefaults = useMemo(
     () => getPresetDefaultColumns(preset, { focusField, fieldA, fieldB }),
@@ -183,10 +185,13 @@ export default function ReviewGridClient({ rows }: { rows: GridRow[] }) {
     return qs ? `${pathname}?${qs}` : pathname;
   }, [pathname, searchParams]);
 
-  const filteredRows = useMemo(
-    () => applyFilters(rows, { docType, preset: preset.id, journey, dayNumber }),
-    [rows, docType, preset.id, journey, dayNumber],
-  );
+  const filteredRows = useMemo(() => {
+    let r = applyFilters(rows, { docType, preset: preset.id, journey, dayNumber });
+    if (voiceFlagsActive) {
+      r = r.filter((row) => rowHasVoiceFlag(row, visibleCols));
+    }
+    return r;
+  }, [rows, docType, preset.id, journey, dayNumber, voiceFlagsActive, visibleCols]);
 
   const sortedRows = useMemo(() => {
     if (!sort) return filteredRows;
@@ -220,6 +225,11 @@ export default function ReviewGridClient({ rows }: { rows: GridRow[] }) {
     return COLUMNS.filter((c) => c.label.toLowerCase().includes(q));
   }, [columnSearch]);
 
+  const csvHref = useMemo(() => {
+    const qs = searchParams.toString();
+    return qs ? `/dashboard/review/export?${qs}` : "/dashboard/review/export";
+  }, [searchParams]);
+
   return (
     <div className="min-h-screen bg-[#f0e9d8] p-6">
       <div className="max-w-[1800px] mx-auto">
@@ -246,7 +256,11 @@ export default function ReviewGridClient({ rows }: { rows: GridRow[] }) {
           setURL={setURL}
         />
 
-        <FilterBar docType={docType} setURL={setURL} />
+        <FilterBar
+          docType={docType}
+          voiceFlagsActive={voiceFlagsActive}
+          setURL={setURL}
+        />
 
         <Toolbar
           visibleColCount={visibleCols.length}
@@ -260,6 +274,7 @@ export default function ReviewGridClient({ rows }: { rows: GridRow[] }) {
           resetColumns={resetColumns}
           sort={sort}
           resetSort={resetSort}
+          csvHref={csvHref}
         />
 
         <GridTable
@@ -410,9 +425,11 @@ function ParameterBar({
 
 function FilterBar({
   docType,
+  voiceFlagsActive,
   setURL,
 }: {
   docType: string;
+  voiceFlagsActive: boolean;
   setURL: (updates: Record<string, string | null>) => void;
 }) {
   const choices: { id: string; label: string }[] = [
@@ -421,7 +438,7 @@ function FilterBar({
     { id: "dailyPrompt", label: "Daily Prompts" },
   ];
   return (
-    <div className="flex items-center gap-2 mb-3">
+    <div className="flex items-center gap-2 mb-3 flex-wrap">
       <span className="text-[10px] uppercase tracking-widest text-[#7a7062] mr-1">
         Filter
       </span>
@@ -441,6 +458,18 @@ function FilterBar({
           </button>
         );
       })}
+      <span className="mx-2 text-[#bfb8aa]">·</span>
+      <button
+        onClick={() => setURL({ voiceFlags: voiceFlagsActive ? null : "1" })}
+        className={`px-3 py-1 text-[11px] tracking-wide border transition-colors ${
+          voiceFlagsActive
+            ? "bg-[#a06010] text-white border-[#a06010]"
+            : "bg-white text-[#a06010] border-[#a06010] hover:bg-[#fff5e0]"
+        }`}
+        title="Show only rows with at least one voice-rule match in a visible column"
+      >
+        Voice flags{voiceFlagsActive ? " ✓" : ""}
+      </button>
     </div>
   );
 }
@@ -457,6 +486,7 @@ function Toolbar({
   resetColumns,
   sort,
   resetSort,
+  csvHref,
 }: {
   visibleColCount: number;
   panelOpen: boolean;
@@ -469,9 +499,10 @@ function Toolbar({
   resetColumns: () => void;
   sort: SortState;
   resetSort: () => void;
+  csvHref: string;
 }) {
   return (
-    <div className="flex items-center gap-3 mb-4 relative">
+    <div className="flex items-center gap-3 mb-4 relative flex-wrap">
       <button
         onClick={() => setPanelOpen(!panelOpen)}
         className="px-3 py-1.5 text-[10px] uppercase tracking-widest border border-[#16110d] text-[#16110d] hover:bg-[#16110d] hover:text-[#fdf6e8] transition-colors"
@@ -487,6 +518,15 @@ function Toolbar({
           Reset sort ({sort.key} {sort.dir})
         </button>
       )}
+
+      <a
+        href={csvHref}
+        download
+        className="px-3 py-1.5 text-[10px] uppercase tracking-widest border border-[#4a7a62] text-[#4a7a62] hover:bg-[#4a7a62] hover:text-white transition-colors"
+        title="Download current view as CSV"
+      >
+        Download CSV
+      </a>
 
       {panelOpen && (
         <div
@@ -903,7 +943,7 @@ function CellRender({
   onToggle: () => void;
 }) {
   if (value === null || value === undefined || value === "") {
-    return <span className="text-[#bfb8aa]">—</span>;
+    return <span className="text-[#bfb8aa]">·</span>;
   }
   if (col.isImage && typeof value === "string") {
     return (
@@ -916,30 +956,68 @@ function CellRender({
       />
     );
   }
+
+  // Voice scan applies to text content (string or array of strings).
+  // Non-text cells (image already handled above) are unaffected.
+  const matches = scanText(value);
+
   if (Array.isArray(value)) {
     return (
-      <ul className="list-disc ml-4 text-xs space-y-0.5 text-[#16110d]">
-        {value.map((v, i) => (
-          <li key={i}>{v}</li>
-        ))}
-      </ul>
+      <div className="relative pr-5">
+        <ul className="list-disc ml-4 text-xs space-y-0.5 text-[#16110d]">
+          {value.map((v, i) => (
+            <li key={i}>{v}</li>
+          ))}
+        </ul>
+        <VoiceBadge matches={matches} />
+      </div>
     );
   }
   if (col.isLongText) {
     return (
-      <div
-        onClick={onToggle}
-        onDoubleClick={() => isExpanded && onToggle()}
-        title={isExpanded ? "Click to collapse" : "Click to expand"}
-        className={`text-xs leading-relaxed text-[#16110d] whitespace-pre-line cursor-pointer ${
-          isExpanded ? "" : "line-clamp-3"
-        }`}
-      >
-        {value}
+      <div className="relative pr-5">
+        <div
+          onClick={onToggle}
+          onDoubleClick={() => isExpanded && onToggle()}
+          title={isExpanded ? "Click to collapse" : "Click to expand"}
+          className={`text-xs leading-relaxed text-[#16110d] whitespace-pre-line cursor-pointer ${
+            isExpanded ? "" : "line-clamp-3"
+          }`}
+        >
+          {value}
+        </div>
+        <VoiceBadge matches={matches} />
       </div>
     );
   }
-  return <div className="text-xs text-[#16110d]">{value}</div>;
+  return (
+    <div className="relative pr-5">
+      <div className="text-xs text-[#16110d]">{value}</div>
+      <VoiceBadge matches={matches} />
+    </div>
+  );
+}
+
+function VoiceBadge({ matches }: { matches: VoiceRuleMatch[] }) {
+  if (matches.length === 0) return null;
+  // Build a tooltip listing each rule + suggestion. The amber dot is small
+  // enough not to disrupt scanning. Hover reveals the why.
+  const tooltip = matches
+    .map((m) => `${m.rule.label} (${m.count}): ${m.rule.suggestion}`)
+    .join("\n\n");
+  const totalCount = matches.reduce((sum, m) => sum + m.count, 0);
+  // Error severity (em dash) gets red; warn severity (banned words) gets amber.
+  const hasError = matches.some((m) => m.rule.severity === "error");
+  const bg = hasError ? "bg-[#c25555]" : "bg-[#a06010]";
+  return (
+    <span
+      className={`absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 ${bg} text-white text-[9px] font-bold rounded-full leading-none`}
+      title={tooltip}
+      aria-label={`${matches.length} voice rule match${matches.length === 1 ? "" : "es"}: ${matches.map((m) => m.rule.label).join(", ")}`}
+    >
+      {totalCount > 9 ? "9+" : totalCount}
+    </span>
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -1006,6 +1084,17 @@ function compareRows(a: GridRow, b: GridRow, sort: NonNullable<SortState>): numb
     cmp = Number(av) - Number(bv);
   }
   return sort.dir === "asc" ? cmp : -cmp;
+}
+
+function rowHasVoiceFlag(row: GridRow, visibleCols: ColumnKey[]): boolean {
+  // Match the brief: only visible content columns count for the filter.
+  // Identifiers are not scanned (titles/dates are unlikely to need it).
+  for (const key of visibleCols) {
+    const v = getCellValue(row, key);
+    if (v === null || v === undefined) continue;
+    if (scanText(v).length > 0) return true;
+  }
+  return false;
 }
 
 function parseWidths(s: string | null): Record<string, number> {

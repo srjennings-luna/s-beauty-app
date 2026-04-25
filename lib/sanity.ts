@@ -587,7 +587,7 @@ export async function getDashboardAudioStatus() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Review Grid — /dashboard/review (Phase 1, April 25 2026)
+// Review Grid (Phase 1, April 25 2026) /dashboard/review
 // Powers the configurable content-review grid. Returns a unified set of
 // journeyDay and dailyPrompt rows with all text fields and pre-joined ref
 // fields (artworkHook, context, imageUrl from contentItem). One round-trip,
@@ -675,7 +675,7 @@ export type ReviewGridResponse = {
   dailyPrompts: DailyPromptRow[]
 }
 
-// Shared projections — used by both the bulk grid query and the per-id
+// Shared projections used by both the bulk grid query and the per-id
 // record-view query so the row shape stays identical across surfaces.
 const REVIEW_JOURNEY_DAY_PROJECTION = `
   _id,
