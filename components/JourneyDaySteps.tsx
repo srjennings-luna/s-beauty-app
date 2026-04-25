@@ -544,7 +544,9 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           !content.quote?.text &&
           !(content.scripturePairing?.verse && !day.lectio?.scriptureVerse) &&
           !content.excerpt && (
-            <hr style={{ borderColor: 'rgba(253,246,232,0.08)', margin: 0 }} />
+            <div style={{ paddingBottom: '10px' }}>
+              <hr style={{ borderColor: 'rgba(253,246,232,0.08)', margin: 0 }} />
+            </div>
         )}
 
         {/* Encounter Note — interpretive layer (iconography, listening guide, etc.) */}
