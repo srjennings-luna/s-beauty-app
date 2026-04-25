@@ -1,12 +1,17 @@
 import { COLUMNS, type ColumnKey } from "./columns";
 
 // Preset registry. Each preset defines a default column set and exposes a
-// small set of URL parameters that the user picks (journey, focusField,
-// dayNumber, fieldA/fieldB). Selecting a preset clears the user's `cols`
-// override so the grid falls back to the preset defaults; toggling
-// columns afterward writes a fresh `cols` URL param.
+// small set of URL parameters the user can pick. Selecting a preset clears
+// the `cols` URL override so the grid falls back to preset defaults;
+// toggling columns afterward writes a fresh `cols` param.
+//
+// "overview" is the default: all content columns, all row types. The user
+// uses the Filter bar (All / Journey Days / Daily Prompts) to narrow the
+// type, and the Columns panel to hide fields they don't need right now.
+// The other presets are editorial comparison tools for deeper work.
 
 export type PresetId =
+  | "overview"
   | "record"
   | "field"
   | "arc"
@@ -32,10 +37,23 @@ export type PresetDef = {
 
 export const PRESETS: PresetDef[] = [
   {
-    id: "record",
-    label: "Record",
-    description: "One selected record, all fields in sequential order.",
-    parameters: ["id"],
+    id: "overview",
+    label: "All content",
+    description:
+      "Every Journey Day and Daily Prompt with all content fields. Use the Filter bar to narrow by type. Default view.",
+    parameters: [],
+  },
+  {
+    id: "arc",
+    label: "Journey arc",
+    description: "Key content fields for one journey across all its days.",
+    parameters: ["journey"],
+  },
+  {
+    id: "parallel",
+    label: "Parallel days",
+    description: "A single day number across every journey. Verifies entry-point distinctiveness.",
+    parameters: ["dayNumber"],
   },
   {
     id: "field",
@@ -44,22 +62,16 @@ export const PRESETS: PresetDef[] = [
     parameters: ["focusField", "docType"],
   },
   {
-    id: "arc",
-    label: "Journey arc",
-    description: "Structural columns for one journey across all its days.",
-    parameters: ["journey"],
-  },
-  {
-    id: "parallel",
-    label: "Parallel entry point",
-    description: "A single day number across every journey. Verifies entry-point distinctiveness.",
-    parameters: ["dayNumber"],
-  },
-  {
     id: "pairing",
-    label: "Content pairing",
+    label: "Pairing",
     description: "Two chosen fields side by side.",
     parameters: ["fieldA", "fieldB"],
+  },
+  {
+    id: "record",
+    label: "Record",
+    description: "One selected record, all fields in sequential order.",
+    parameters: ["id"],
   },
   {
     id: "custom",
@@ -69,7 +81,7 @@ export const PRESETS: PresetDef[] = [
   },
 ];
 
-export const DEFAULT_PRESET: PresetId = "arc";
+export const DEFAULT_PRESET: PresetId = "overview";
 
 export function findPreset(id: string | null | undefined): PresetDef {
   const found = PRESETS.find((p) => p.id === id);
@@ -78,14 +90,17 @@ export function findPreset(id: string | null | undefined): PresetDef {
 }
 
 // Compute the effective default column set for a preset given current URL
-// params. Field-comparison and content-pairing use parameter values to
-// derive their column lists; the others have static defaults.
+// params. "overview" shows every column so nothing is hidden on first load.
+// Field-comparison and content-pairing use parameter values to derive their
+// lists; the others have curated static defaults.
 export function getPresetDefaultColumns(
   preset: PresetDef,
   params: { focusField?: string | null; fieldA?: string | null; fieldB?: string | null },
 ): ColumnKey[] {
   const allKeys = COLUMNS.map((c) => c.key);
   switch (preset.id) {
+    case "overview":
+      return allKeys;
     case "record":
       return allKeys;
     case "field": {
@@ -93,9 +108,9 @@ export function getPresetDefaultColumns(
       return f && allKeys.includes(f) ? [f] : [];
     }
     case "arc":
-      return ["openText", "connectThread", "auditioTitle"];
+      return ["imageUrl", "artworkHook", "context", "openText", "encounterNote", "lectioPhilosophyText", "lectioScriptureText", "reflectionQuestions", "connectThread"];
     case "parallel":
-      return ["openText", "encounterNote", "lectioPhilosophyText"];
+      return ["imageUrl", "openText", "artworkHook", "encounterNote", "lectioPhilosophyText"];
     case "pairing": {
       const a = params.fieldA as ColumnKey | null | undefined;
       const b = params.fieldB as ColumnKey | null | undefined;

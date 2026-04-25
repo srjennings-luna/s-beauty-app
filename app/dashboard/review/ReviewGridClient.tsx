@@ -240,6 +240,8 @@ export default function ReviewGridClient({ rows }: { rows: GridRow[] }) {
           <div className="text-xs italic text-[#7a7062] mt-1">
             {orderedRows.length} of {rows.length} records
             {pinned.size > 0 ? ` · ${pinned.size} pinned` : ""}
+            {" · "}Use <strong className="font-semibold not-italic">Filter</strong> to switch between Journey Days and Daily Prompts
+            {" · "}Use <strong className="font-semibold not-italic">Columns</strong> to show or hide fields
           </div>
         </header>
 
@@ -1039,11 +1041,19 @@ function applyFilters(
   } else if (opts.docType === "dailyPrompt") {
     filtered = filtered.filter((r) => r._type === "dailyPrompt");
   }
-  if (opts.preset === "arc" && opts.journey) {
-    filtered = filtered.filter(
-      (r) => r._type === "journeyDay" && r.journeySlug === opts.journey,
-    );
+  // Arc is journey-only — always restrict to journeyDay rows so dailyPrompt
+  // rows don't flood the grid with empty "·" cells in JD-only columns.
+  // Optionally narrow to one journey when the journey param is set.
+  if (opts.preset === "arc") {
+    filtered = filtered.filter((r) => r._type === "journeyDay");
+    if (opts.journey) {
+      filtered = filtered.filter(
+        (r) => r._type === "journeyDay" && r.journeySlug === opts.journey,
+      );
+    }
   }
+  // Overview shows everything; row-type filtering is handled by the docType
+  // filter bar above, not by the preset.
   if (opts.preset === "parallel" && opts.dayNumber !== null) {
     filtered = filtered.filter(
       (r) => r._type === "journeyDay" && r.dayNumber === opts.dayNumber,
