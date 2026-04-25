@@ -78,7 +78,7 @@ type Confidence = 'HIGH' | 'MEDIUM' | 'LOW' | 'UNKNOWN';
 // Order matters: more specific entries first.
 const COMPOSER_MAP: Array<{ fragments: string[]; genre: GenreValue }> = [
   // Gregorian chant — monophonic, usually anonymous or specific chant ensembles
-  { fragments: ['gregorian', 'schola cantorum', 'monks of', 'benedictine', 'anonymous chant', 'choirmonks'], genre: 'gregorian-chant' },
+  { fragments: ['gregorian', 'schola cantorum', 'monks of', 'benedictine', 'anonymous chant', 'choirmonks', 'schola sanctae', 'st. cecilia', "st cecilia's abbey", 'coral vértice', 'coral vertice'], genre: 'gregorian-chant' },
 
   // Sacred polyphony — Renaissance / early Baroque choral
   { fragments: ['allegri', 'palestrina', 'victoria', 'byrd', 'tallis', 'lasso', 'di lasso', 'josquin', 'des prez', 'gesualdo', 'morales', 'guerrero', 'lobo', 'cardoso', 'ockeghem', 'dufay', 'binchois', 'dunstaple', 'compère', 'obrecht', 'gombert', 'willaert', 'lassus', 'marenzio', 'weelkes', 'gibbons', 'tomkins', 'victoria'], genre: 'sacred-polyphony' },
@@ -86,6 +86,8 @@ const COMPOSER_MAP: Array<{ fragments: string[]; genre: GenreValue }> = [
   { fragments: ['monteverdi'], genre: 'sacred-polyphony' },
 
   // Contemporary sacred — 20th/21st century tonal/spiritual
+  { fragments: ['matt maher', 'maher'], genre: 'contemporary-sacred' },
+  { fragments: ["porter's gate", 'porters gate'], genre: 'contemporary-sacred' },
   { fragments: ['pärt', 'part', 'arvo'], genre: 'contemporary-sacred' },
   { fragments: ['tavener', 'taverner john'], genre: 'contemporary-sacred' },
   { fragments: ['górecki', 'gorecki'], genre: 'contemporary-sacred' },
@@ -100,6 +102,10 @@ const COMPOSER_MAP: Array<{ fragments: string[]; genre: GenreValue }> = [
   { fragments: ['gubaidulina'], genre: 'contemporary-sacred' },
 
   // Ambient / meditation
+  { fragments: ['harumachimusic', 'harumachimusic - pixaby', 'harumachimusic - pixabay'], genre: 'ambient-meditation' },
+  { fragments: ['zengon'], genre: 'ambient-meditation' },
+  { fragments: ['pixelpond'], genre: 'ambient-meditation' },
+  { fragments: ['family memories'], genre: 'ambient-meditation' },
   { fragments: ['brian eno', 'eno'], genre: 'ambient-meditation' },
   { fragments: ['max richter', 'richter'], genre: 'ambient-meditation' },
   { fragments: ['ólafur arnalds', 'olafur arnalds', 'arnalds'], genre: 'ambient-meditation' },
@@ -108,7 +114,9 @@ const COMPOSER_MAP: Array<{ fragments: string[]; genre: GenreValue }> = [
   { fragments: ['peter broderick', 'broderick'], genre: 'ambient-meditation' },
   { fragments: ['william basinski', 'basinski'], genre: 'ambient-meditation' },
 
-  // Classical / orchestral — Baroque through late Romantic
+  // Classical / orchestral — Baroque through late Romantic + 20th century American
+  { fragments: ['satie', 'erik satie'], genre: 'classical-orchestral' },
+  { fragments: ['samuel barber', 'barber'], genre: 'classical-orchestral' },
   { fragments: ['bach', 'j.s. bach', 'j. s. bach', 'johann sebastian'], genre: 'classical-orchestral' },
   { fragments: ['handel', 'georg friedrich'], genre: 'classical-orchestral' },
   { fragments: ['vivaldi', 'antonio vivaldi'], genre: 'classical-orchestral' },
@@ -152,6 +160,10 @@ const COMPOSER_MAP: Array<{ fragments: string[]; genre: GenreValue }> = [
   { fragments: ['rameau', 'jean-philippe rameau'], genre: 'classical-orchestral' },
   { fragments: ['scarlatti', 'domenico scarlatti', 'alessandro scarlatti'], genre: 'classical-orchestral' },
 
+  // Secular / modern production
+  { fragments: ['onesevenbeats', 'onesevenbeatxs'], genre: 'secular' },
+  { fragments: ['alana jordan'], genre: 'secular' },
+
   // Jazz
   { fragments: ['coltrane', 'john coltrane'], genre: 'jazz' },
   { fragments: ['miles davis', 'davis'], genre: 'jazz' },
@@ -189,6 +201,16 @@ const TITLE_RULES: Array<{ patterns: RegExp[]; genre: GenreValue; note: string }
     patterns: [/\b(antiphon|responsory|introit|gradual|offertory|communion)\b/i],
     genre: 'gregorian-chant',
     note: 'Liturgical chant form',
+  },
+  {
+    patterns: [/exsultet/i, /adoro te devote/i, /veni creator/i, /salve regina/i, /ave maria/i, /pange lingua/i],
+    genre: 'gregorian-chant',
+    note: 'Specific Gregorian chant title',
+  },
+  {
+    patterns: [/scarborough fair/i],
+    genre: 'folk',
+    note: 'Traditional folk ballad',
   },
   {
     patterns: [/\b(motet|madrigal)\b/i],
