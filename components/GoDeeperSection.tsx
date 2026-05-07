@@ -133,10 +133,24 @@ export default function GoDeeperSection({ reflections: propReflections }: GoDeep
                     &ldquo;{currentReflection.shortQuote}&rdquo;
                   </p>
                 )}
-                <p className="text-white/88 text-sm leading-relaxed mb-2">
+                {/*
+                  Use inline rgba to match the C.cream baseline used by
+                  context/lectio/openText (rgba(253,246,232,0.88)). Tailwind's
+                  /88 opacity value isn't in the default scale and may not
+                  generate, leaving the previous text-white/70 behavior.
+                  Inline style guarantees the right value lands. Source byline
+                  stays a step below body to preserve hierarchy.
+                */}
+                <p
+                  className="text-sm leading-relaxed mb-2"
+                  style={{ color: "rgba(253,246,232,0.88)" }}
+                >
                   {currentReflection.summary}
                 </p>
-                <p className="text-white/65 text-xs">
+                <p
+                  className="text-xs"
+                  style={{ color: "rgba(253,246,232,0.65)" }}
+                >
                   — {currentReflection.source}
                 </p>
                 <div className="mt-3">
