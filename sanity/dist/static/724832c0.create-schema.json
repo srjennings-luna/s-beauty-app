@@ -670,7 +670,8 @@
         "rows": 3,
         "description": "The surprising fact about this specific piece. Safe to show anywhere this piece appears (Journey, Explore, Library, P&P). Must be about the artwork itself, not a journey or day context. Journey-specific hooks live on dailyPrompt.curatorNote or journeyDay.encounterNote.",
         "name": "artworkHook",
-        "type": "text"
+        "type": "text",
+        "title": "Artwork Hook (Encounter - 1st text)"
       },
       {
         "options": {
@@ -768,6 +769,360 @@
       }
     ],
     "name": "contentItem",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Church Father",
+              "value": "church-father"
+            },
+            {
+              "title": "Saint",
+              "value": "saint"
+            },
+            {
+              "title": "Pope",
+              "value": "pope"
+            },
+            {
+              "title": "Doctor of the Church",
+              "value": "doctor"
+            },
+            {
+              "title": "Theologian",
+              "value": "theologian"
+            },
+            {
+              "title": "Mystic",
+              "value": "mystic"
+            },
+            {
+              "title": "Philosopher",
+              "value": "philosopher"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "church-father",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "church-father",
+                  "saint",
+                  "pope",
+                  "doctor",
+                  "theologian",
+                  "mystic",
+                  "philosopher"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Category of the source",
+        "name": "authorType",
+        "type": "string",
+        "title": "Author type"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Short label, e.g. \"Beauty as a path to God\"",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "rows": 4,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "2–4 sentences in plain language (the reflection, not necessarily a direct quote)",
+        "name": "summary",
+        "type": "text"
+      },
+      {
+        "options": {
+          "accept": "audio/*"
+        },
+        "description": "Optional MP3 narration of the full reflection. Adds a small listen button when expanded.",
+        "name": "reflectionAudio",
+        "type": "file",
+        "title": "Reflection — Narration Audio"
+      },
+      {
+        "description": "One memorable line to show above the summary, if desired",
+        "name": "shortQuote",
+        "type": "string",
+        "title": "Short quote (optional)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Attribution, e.g. \"St. Augustine, On True Religion\" or \"Benedict XVI, Address to Artists\"",
+        "name": "source",
+        "type": "string"
+      },
+      {
+        "description": "Which KALLOS themes this reflection connects to. Replaces the legacy theme dropdown.",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "theme"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to theme"
+          }
+        ],
+        "name": "themes",
+        "type": "array"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Beauty",
+              "value": "beauty"
+            },
+            {
+              "title": "Truth",
+              "value": "truth"
+            },
+            {
+              "title": "Beauty and truth",
+              "value": "beauty-and-truth"
+            },
+            {
+              "title": "Contemplation",
+              "value": "contemplation"
+            },
+            {
+              "title": "Encounter with God",
+              "value": "encounter"
+            },
+            {
+              "title": "Action / living it out",
+              "value": "action"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "description": "Kept for migration. Use the Themes field above going forward.",
+        "hidden": true,
+        "name": "theme",
+        "type": "string",
+        "title": "Theme (legacy — use Themes above)"
+      },
+      {
+        "initialValue": 0,
+        "description": "Lower numbers appear first when showing multiple reflections",
+        "name": "order",
+        "type": "number",
+        "title": "Display order"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Ancient",
+              "value": "ancient"
+            },
+            {
+              "title": "Early Church / Fathers",
+              "value": "fathers"
+            },
+            {
+              "title": "Medieval",
+              "value": "medieval"
+            },
+            {
+              "title": "Modern",
+              "value": "modern"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "description": "e.g. \"Ancient\", \"Early Church\", \"Medieval\", \"Modern\" – for future use or labels",
+        "name": "era",
+        "type": "string",
+        "title": "Era (optional)"
+      }
+    ],
+    "name": "traditionReflection",
+    "type": "document",
+    "title": "Tradition Reflection (Church Fathers, Saints & Popes)"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Name of the piece, e.g. \"Miserere Mei, Deus\" or \"Gymnopédies No. 1\".",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "description": "Just the name, e.g. \"Gregorio Allegri\" or \"Arvo Pärt\". Used for dedup and content-repeat analysis.",
+        "name": "composerArtist",
+        "type": "string",
+        "title": "Composer / Artist"
+      },
+      {
+        "description": "Just the piece title, e.g. \"Miserere Mei, Deus\". Used for dedup — same composer twice is fine; same work twice is repetition.",
+        "name": "workTitle",
+        "type": "string",
+        "title": "Work Title (structured)"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Gregorian Chant",
+              "value": "gregorian-chant"
+            },
+            {
+              "title": "Sacred Polyphony",
+              "value": "sacred-polyphony"
+            },
+            {
+              "title": "Classical / Orchestral",
+              "value": "classical-orchestral"
+            },
+            {
+              "title": "Contemporary Sacred",
+              "value": "contemporary-sacred"
+            },
+            {
+              "title": "Ambient / Meditation",
+              "value": "ambient-meditation"
+            },
+            {
+              "title": "Folk",
+              "value": "folk"
+            },
+            {
+              "title": "World Music",
+              "value": "world-music"
+            },
+            {
+              "title": "Jazz",
+              "value": "jazz"
+            },
+            {
+              "title": "Secular",
+              "value": "secular"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "description": "Select the closest genre. Used to track variety and prevent over-reliance on any single register.",
+        "name": "genre",
+        "type": "string"
+      },
+      {
+        "description": "e.g. \"Public domain — multiple recordings on Musopen and Internet Archive\"",
+        "name": "licensingNote",
+        "type": "string"
+      },
+      {
+        "options": {
+          "accept": "audio/*"
+        },
+        "description": "Upload an MP3 — plays directly in KALLOS.",
+        "name": "audioFile",
+        "type": "file",
+        "title": "Audio File (in-app playback)"
+      },
+      {
+        "description": "Direct MP3 link (e.g. archive.org) — plays in-app. Use this OR the file upload, not both.",
+        "name": "audioUrl",
+        "type": "string",
+        "title": "Audio URL (in-app playback)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "YouTube, Spotify, or Apple Music. Only use if no Audio File or Audio URL is provided above. Opens outside KALLOS and breaks the in-app experience.",
+        "name": "externalUrl",
+        "type": "url",
+        "title": "External Link (reference only — opens outside app)"
+      },
+      {
+        "rows": 10,
+        "description": "Optional. Paste lyrics or text here in any format — Latin only, English only, or both together (interleaved or stacked). Shown in a scrollable expandable panel below the audio player, labelled VERBA.",
+        "name": "verbaOriginal",
+        "type": "text",
+        "title": "Verba — Text"
+      }
+    ],
+    "name": "auditio",
     "type": "document"
   },
   {
@@ -1144,127 +1499,14 @@
         "title": "Encounter Note — Narration Audio"
       },
       {
-        "description": "Optional audio pairing for this day. Use file upload for in-app playback; URL for direct MP3 links; external link for YouTube/Spotify (opens outside app).",
-        "fields": [
+        "description": "Optional audio pairing for this day. Create the Auditio document first, then reference it here.",
+        "to": [
           {
-            "description": "e.g., \"Allegri — Miserere Mei, Deus\"",
-            "name": "title",
-            "type": "string"
-          },
-          {
-            "description": "e.g., \"Gregorio Allegri\"",
-            "name": "composer",
-            "type": "string",
-            "title": "Composer / Artist"
-          },
-          {
-            "description": "Just the name, e.g., \"Gregorio Allegri\" or \"Arvo Pärt\". Used for dedup and content-repeat analysis.",
-            "name": "composerArtist",
-            "type": "string",
-            "title": "Composer / Artist (structured)"
-          },
-          {
-            "description": "Just the piece, e.g., \"Miserere Mei, Deus\". Used for dedup — same composer twice is fine; same work twice is repetition.",
-            "name": "workTitle",
-            "type": "string",
-            "title": "Work Title (structured)"
-          },
-          {
-            "options": {
-              "list": [
-                {
-                  "title": "Gregorian chant",
-                  "value": "gregorian-chant"
-                },
-                {
-                  "title": "Sacred polyphony",
-                  "value": "sacred-polyphony"
-                },
-                {
-                  "title": "Classical / orchestral",
-                  "value": "classical-orchestral"
-                },
-                {
-                  "title": "Contemporary sacred",
-                  "value": "contemporary-sacred"
-                },
-                {
-                  "title": "Ambient / meditation",
-                  "value": "ambient-meditation"
-                },
-                {
-                  "title": "Folk",
-                  "value": "folk"
-                },
-                {
-                  "title": "World music",
-                  "value": "world-music"
-                },
-                {
-                  "title": "Jazz",
-                  "value": "jazz"
-                },
-                {
-                  "title": "Secular",
-                  "value": "secular"
-                }
-              ],
-              "layout": "dropdown"
-            },
-            "description": "Select the closest genre. Used to track variety across journeys and prevent over-reliance on any single register.",
-            "name": "genre",
-            "type": "string"
-          },
-          {
-            "description": "e.g., \"Public domain — multiple recordings on Musopen and Internet Archive\"",
-            "name": "licensingNote",
-            "type": "string"
-          },
-          {
-            "options": {
-              "accept": "audio/*"
-            },
-            "description": "Upload an MP3 — plays directly in KALLOS.",
-            "name": "audioFile",
-            "type": "file",
-            "title": "Audio File (in-app playback)"
-          },
-          {
-            "description": "Direct MP3 link (e.g. archive.org) — plays in-app.",
-            "name": "audioUrl",
-            "type": "string",
-            "title": "Audio URL (in-app playback)"
-          },
-          {
-            "validation": [
-              {
-                "rules": [
-                  {
-                    "flag": "uri",
-                    "constraint": {
-                      "options": {
-                        "scheme": [
-                          "/^http$/",
-                          "/^https$/"
-                        ],
-                        "allowRelative": false,
-                        "relativeOnly": false,
-                        "allowCredentials": false
-                      }
-                    }
-                  }
-                ],
-                "level": "error"
-              }
-            ],
-            "description": "YouTube, Spotify, or Apple Music. Opens outside the app.",
-            "name": "externalUrl",
-            "type": "url",
-            "title": "External Link (reference only)"
+            "type": "auditio"
           }
         ],
         "name": "auditio",
-        "type": "object",
+        "type": "reference",
         "title": "Auditio (Audio Suggestion)"
       },
       {
@@ -1473,146 +1715,14 @@
         "title": "Reading (Lectio)"
       },
       {
-        "description": "Optional: a piece of music to accompany the practice.",
-        "fields": [
+        "description": "Optional audio pairing for this practice. Create the Auditio document first, then reference it here.",
+        "to": [
           {
-            "validation": [
-              {
-                "rules": [
-                  {
-                    "flag": "presence",
-                    "constraint": "required"
-                  }
-                ],
-                "level": "error"
-              }
-            ],
-            "description": "Name of the piece, e.g. \"Kommt, ihr Töchter, helft mir klagen\"",
-            "name": "title",
-            "type": "string"
-          },
-          {
-            "name": "artist",
-            "type": "string",
-            "title": "Artist / Composer"
-          },
-          {
-            "description": "Just the name, e.g., \"Gregorio Allegri\" or \"Arvo Pärt\". Used for dedup and content-repeat analysis.",
-            "name": "composerArtist",
-            "type": "string",
-            "title": "Composer / Artist (structured)"
-          },
-          {
-            "description": "Just the piece, e.g., \"Miserere Mei, Deus\". Used for dedup — same composer twice is fine; same work twice is repetition.",
-            "name": "workTitle",
-            "type": "string",
-            "title": "Work Title (structured)"
-          },
-          {
-            "options": {
-              "list": [
-                {
-                  "title": "Gregorian chant",
-                  "value": "gregorian-chant"
-                },
-                {
-                  "title": "Sacred polyphony",
-                  "value": "sacred-polyphony"
-                },
-                {
-                  "title": "Classical / orchestral",
-                  "value": "classical-orchestral"
-                },
-                {
-                  "title": "Contemporary sacred",
-                  "value": "contemporary-sacred"
-                },
-                {
-                  "title": "Ambient / meditation",
-                  "value": "ambient-meditation"
-                },
-                {
-                  "title": "Folk",
-                  "value": "folk"
-                },
-                {
-                  "title": "World music",
-                  "value": "world-music"
-                },
-                {
-                  "title": "Jazz",
-                  "value": "jazz"
-                },
-                {
-                  "title": "Secular",
-                  "value": "secular"
-                }
-              ],
-              "layout": "dropdown"
-            },
-            "description": "Select the closest genre. Used to track variety across journeys and prevent over-reliance on any single register.",
-            "name": "genre",
-            "type": "string"
-          },
-          {
-            "description": "Use either the file upload or the URL — not both.",
-            "fields": [
-              {
-                "options": {
-                  "accept": "audio/*"
-                },
-                "name": "audioFile",
-                "type": "file",
-                "title": "Audio File Upload"
-              },
-              {
-                "description": "Direct MP3 link for in-app playback — use archive.org or another hosted source.",
-                "name": "audioUrl",
-                "type": "string",
-                "title": "Audio URL"
-              }
-            ],
-            "name": "audioUrl",
-            "type": "object",
-            "title": "Audio Source (in-app playback)"
-          },
-          {
-            "validation": [
-              {
-                "rules": [
-                  {
-                    "flag": "uri",
-                    "constraint": {
-                      "options": {
-                        "scheme": [
-                          "/^http$/",
-                          "/^https$/"
-                        ],
-                        "allowRelative": false,
-                        "relativeOnly": false,
-                        "allowCredentials": false
-                      }
-                    }
-                  }
-                ],
-                "level": "error"
-              }
-            ],
-            "description": "YouTube, Spotify, or Apple Music. Only use if no Audio File or Audio URL is provided above. This opens outside KALLOS and breaks the in-app experience.",
-            "name": "url",
-            "type": "url",
-            "title": "External Link (reference only — opens outside app)"
-          },
-          {
-            "rows": 10,
-            "description": "Optional. Paste lyrics or text here in any format — Latin only, English only, or both together (interleaved or stacked). Shown in a scrollable expandable panel below the audio player, labelled VERBA.",
-            "name": "verbaOriginal",
-            "type": "text",
-            "title": "Verba — Text"
+            "type": "auditio"
           }
         ],
         "name": "auditio",
-        "type": "object",
+        "type": "reference",
         "title": "Music (Auditio)"
       },
       {
@@ -1831,226 +1941,6 @@
     ],
     "name": "splashPage",
     "type": "document"
-  },
-  {
-    "fields": [
-      {
-        "options": {
-          "list": [
-            {
-              "title": "Church Father",
-              "value": "church-father"
-            },
-            {
-              "title": "Saint",
-              "value": "saint"
-            },
-            {
-              "title": "Pope",
-              "value": "pope"
-            },
-            {
-              "title": "Doctor of the Church",
-              "value": "doctor"
-            },
-            {
-              "title": "Theologian",
-              "value": "theologian"
-            },
-            {
-              "title": "Mystic",
-              "value": "mystic"
-            },
-            {
-              "title": "Philosopher",
-              "value": "philosopher"
-            }
-          ],
-          "layout": "radio"
-        },
-        "initialValue": "church-father",
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "valid",
-                "constraint": [
-                  "church-father",
-                  "saint",
-                  "pope",
-                  "doctor",
-                  "theologian",
-                  "mystic",
-                  "philosopher"
-                ]
-              },
-              {
-                "flag": "presence",
-                "constraint": "required"
-              }
-            ],
-            "level": "error"
-          }
-        ],
-        "description": "Category of the source",
-        "name": "authorType",
-        "type": "string",
-        "title": "Author type"
-      },
-      {
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "presence",
-                "constraint": "required"
-              }
-            ],
-            "level": "error"
-          }
-        ],
-        "description": "Short label, e.g. \"Beauty as a path to God\"",
-        "name": "title",
-        "type": "string"
-      },
-      {
-        "rows": 4,
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "presence",
-                "constraint": "required"
-              }
-            ],
-            "level": "error"
-          }
-        ],
-        "description": "2–4 sentences in plain language (the reflection, not necessarily a direct quote)",
-        "name": "summary",
-        "type": "text"
-      },
-      {
-        "options": {
-          "accept": "audio/*"
-        },
-        "description": "Optional MP3 narration of the full reflection. Adds a small listen button when expanded.",
-        "name": "reflectionAudio",
-        "type": "file",
-        "title": "Reflection — Narration Audio"
-      },
-      {
-        "description": "One memorable line to show above the summary, if desired",
-        "name": "shortQuote",
-        "type": "string",
-        "title": "Short quote (optional)"
-      },
-      {
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "presence",
-                "constraint": "required"
-              }
-            ],
-            "level": "error"
-          }
-        ],
-        "description": "Attribution, e.g. \"St. Augustine, On True Religion\" or \"Benedict XVI, Address to Artists\"",
-        "name": "source",
-        "type": "string"
-      },
-      {
-        "description": "Which KALLOS themes this reflection connects to. Replaces the legacy theme dropdown.",
-        "of": [
-          {
-            "to": [
-              {
-                "type": "theme"
-              }
-            ],
-            "type": "reference",
-            "title": "Reference to theme"
-          }
-        ],
-        "name": "themes",
-        "type": "array"
-      },
-      {
-        "options": {
-          "list": [
-            {
-              "title": "Beauty",
-              "value": "beauty"
-            },
-            {
-              "title": "Truth",
-              "value": "truth"
-            },
-            {
-              "title": "Beauty and truth",
-              "value": "beauty-and-truth"
-            },
-            {
-              "title": "Contemplation",
-              "value": "contemplation"
-            },
-            {
-              "title": "Encounter with God",
-              "value": "encounter"
-            },
-            {
-              "title": "Action / living it out",
-              "value": "action"
-            }
-          ],
-          "layout": "dropdown"
-        },
-        "description": "Kept for migration. Use the Themes field above going forward.",
-        "hidden": true,
-        "name": "theme",
-        "type": "string",
-        "title": "Theme (legacy — use Themes above)"
-      },
-      {
-        "initialValue": 0,
-        "description": "Lower numbers appear first when showing multiple reflections",
-        "name": "order",
-        "type": "number",
-        "title": "Display order"
-      },
-      {
-        "options": {
-          "list": [
-            {
-              "title": "Ancient",
-              "value": "ancient"
-            },
-            {
-              "title": "Early Church / Fathers",
-              "value": "fathers"
-            },
-            {
-              "title": "Medieval",
-              "value": "medieval"
-            },
-            {
-              "title": "Modern",
-              "value": "modern"
-            }
-          ],
-          "layout": "dropdown"
-        },
-        "description": "e.g. \"Ancient\", \"Early Church\", \"Medieval\", \"Modern\" – for future use or labels",
-        "name": "era",
-        "type": "string",
-        "title": "Era (optional)"
-      }
-    ],
-    "name": "traditionReflection",
-    "type": "document",
-    "title": "Tradition Reflection (Church Fathers, Saints & Popes)"
   },
   {
     "fields": [

@@ -155,14 +155,14 @@ function StepOpen({ day }: { day: JourneyDay }) {
           {day.openText ? (
             <p
               className="italic leading-relaxed"
-              style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.75" }}
+              style={{ color: C.cream, fontSize: "0.95rem", lineHeight: "1.75" }}
             >
               {day.openText}
             </p>
           ) : (
             <p
               className="italic leading-relaxed"
-              style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.75" }}
+              style={{ color: C.cream, fontSize: "0.95rem", lineHeight: "1.75" }}
             >
               Sit with this image. Let your eyes explore without reaching for meaning. What do you notice first?
             </p>

@@ -133,10 +133,10 @@ export default function GoDeeperSection({ reflections: propReflections }: GoDeep
                     &ldquo;{currentReflection.shortQuote}&rdquo;
                   </p>
                 )}
-                <p className="text-white/70 text-sm leading-relaxed mb-2">
+                <p className="text-white/88 text-sm leading-relaxed mb-2">
                   {currentReflection.summary}
                 </p>
-                <p className="text-white/40 text-xs">
+                <p className="text-white/65 text-xs">
                   — {currentReflection.source}
                 </p>
                 <div className="mt-3">

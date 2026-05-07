@@ -805,7 +805,9 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
                       <span
                         className="leading-relaxed flex-1"
                         style={{
-                          color: checkedItems[i] ? C.creamFaint : C.creamDim,
+                          // Active items match context/lectio readability baseline (C.cream).
+                          // Checked items dim to creamFaint as a "done" cue, intentional.
+                          color: checkedItems[i] ? C.creamFaint : C.cream,
                           fontSize: "0.95rem",
                           lineHeight: "1.65",
                           textDecoration: checkedItems[i] ? "line-through" : "none",
@@ -822,7 +824,7 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
             ) : (
               <p
                 className="leading-relaxed"
-                style={{ color: C.creamDim, fontSize: "0.95rem", lineHeight: "1.65" }}
+                style={{ color: C.cream, fontSize: "0.95rem", lineHeight: "1.65" }}
               >
                 {defaultActio}
               </p>
