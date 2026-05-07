@@ -731,61 +731,24 @@ The Auditio is a music pairing for P&P and Journey days. Apply these rules when 
 
 ---
 
-## Parking Lot — Future Design Work
+## Parking Lot — see UX Backlog
 
-These are deferred decisions to revisit with more content and real user testing:
+**Active deferred UX/design/bug items now live in `~/Documents/Kallos-UX-Backlog.html`** as the single source of truth. CLAUDE.md no longer duplicates that list. When you log a new UX issue, add it to the UX Backlog with an ID, severity badge, file location, and date entered. When Claude Code resolves an item, move it to the Done section of the UX Backlog with a resolved date.
 
-### ~~Journey Day Steps — Progress Indicator~~ ✅ RESOLVED
+CLAUDE.md retains: phase work history, settled architectural decisions, editorial principles, design system reference, and the Manual Tasks list (Sheri's Sanity content entry tasks, which are different scope from UX issues).
+
+### Resolved decisions (kept for historical context)
+
+These items are no longer pending but are kept here because they explain WHY current app state exists. New work that touches these areas should respect the resolution rather than re-litigate.
+
+#### ~~Journey Day Steps — Progress Indicator~~ ✅ RESOLVED
 Replaced with Stories-style thin progress bar at top + swipe navigation. No footer, no Continue button.
 
-### ~~Breath Interaction~~ ✅ RESOLVED
+#### ~~Breath Interaction~~ ✅ RESOLVED
 Built as dedicated Breathe page (Step 3). Full-bleed image with 8x zoom, pulsing dot animation (CSS keyframe, `scale(1)→scale(4)`, 8s infinite loop), helper text "Sit with this image and let your eyes explore." Cormorant Garamond italic.
 
-### Splash / Onboarding — Move to Sanity (April 24, 2026)
-Splash screen copy and images are currently hardcoded in `app/splash/page.tsx` (5 screens of Montserrat/Cormorant headlines + body copy, all inline). Sheri is OK **deleting the hardcoded content and recreating it in Sanity** as long as the layout is preserved (Stories-style progress bar, swipe, pulsing nav button, 5-screen structure, skip-to-P&P + start-BTG CTAs — all per the Onboarding Framework section above).
-
-Approach when picked up:
-- Extend `splashPage` schema from a single doc to an array of `splashScreen` objects (headline, body, image, CTA label per screen; optional per-screen style flags if needed).
-- Convert `app/splash/page.tsx` from a purely-client component with hardcoded copy into a server fetch of `splashPage` → render screens from the array → client component handles swipe/animation/state only.
-- Verify Presentation preview works on `/splash` after the refactor — the `splashPage` location is already defined in `sanity.config.ts`.
-- Sheri then enters copy once and edits in Studio from that point on.
-
-Estimated scope: ~1 hour. Do after draft-preview testing is fully green.
-
-### Journey Day Stepper — Share This Day placement (April 21, 2026)
-Share This Day currently lives on the day list row only. In-stepper placement was explored and deferred: left header felt wrong for a content app; bottom share bar conflicts with copy-heavy steps (Day 1 opening text fills the screen); Connect step is a candidate but needs intentional design alongside Share This Journey. Revisit when there is dedicated design time. The day list row share covers the content-review and pre-experience use cases for now.
-
-### Journey Day Steps — Connect Step (Step 5)
-Current: Dark background with next-day image drift animation. Simple.
-Open question: What's the right visual treatment for the "sneak peek" of the next day's image?
-Sheri to brainstorm. Options: letterbox strip, partial reveal from bottom, full-bleed dark with a peek edge.
-
-### Explore Page — ✅ REDESIGNED (March 30, 2026)
-Replaced dual filter rows (content type + theme) with a theme-cards landing page. Five theme cards are the entry point. Tapping a card filters the full content feed to that theme. Empty themes (no content yet) sort to the bottom, grayed out at 35% opacity with grayscale, non-tappable. No dead-end "Coming soon" screen. Map toggle preserved throughout. Design principle settled: "Explore surfaces content items, not features or sub-fields. The richness is discovered, not advertised." Each tab does one thing: Today = P&P, Journeys = journeys, Explore = browse by theme, Library = saved.
-
-Future Explore work (deferred until more content is seeded): larger goal is editorial voice and direction. Content voice audit needed once real images and content density are in place.
-
-### Today Tab — Redesign Pending (Next after Holy Week)
-**Decision (March 30, 2026):** Remove the tap-to-begin card on the Today tab. Make Today = full P&P experience as the landing state, no second gate. Sheri: "I'm leaning towards full page pause and ponder." Rationale: now that Journeys and Explore are their own tabs, Today doesn't need to route anywhere else — it IS the P&P. The BEGIN button on the Today card was the original entry point before dedicated tabs existed; it is now redundant. **Do not build until Holy Week content entry is complete.**
-
-### Explore — Content Item Card UI Cleanup
-Flagged from screenshot (March 2026). Issues to address:
-- Portrait images letterbox with black bars — consider `object-position` or allowing full portrait crop instead of forced aspect ratio
-- Empty space below "Pray with this image →" link
-- Book icon (top-right of info panel) — purpose unclear, may need label or removal
-Revisit once more content is seeded and real images are in place.
-
-### Visio Divina Entry Points
-Visio Divina removed from Journey steps. Currently accessible from Explore content detail and Library. Open question: should there be a more prominent entry point on the Today tab or Explore landing?
-
-### Background Music Player — Journey Steps (Needs Restore) ⚠️
-The chant/ambient background music player (Gregorian chant + piano options) was removed when the Stories-style navigation replaced the old footer nav. It still works on Visio Divina (`/pray/[artworkId]`) and the P&P prompt page (`/prompt`). **It needs to be restored for Journey steps.** The music player needs a new home — footer is gone, so options are: small floating button (top-right or bottom-right), integrate into the step header, or add to a slide-up controls panel. Discuss with Sheri before implementing. Music files are already in `/public/music/`.
-
-### Background Music for Visio Divina — Preserve
-The chant/ambient player on Visio Divina is working and intentional. Do not remove it. Consider whether it should also be available on the Breathe step of Journey (currently no music on Breathe).
-
-### Encounter Page — Two-Page Split (Future)
-Sheri proposed splitting Encounter into two sub-pages: Page 1 = content info (no zoom), Page 2 = full image + zoom + breathe. Currently implemented as separate steps (Encounter + Breathe). Revisit if user testing shows friction with the 6-step count.
+#### ~~Explore Page redesign~~ ✅ RESOLVED (March 30, 2026)
+Replaced dual filter rows (content type + theme) with a theme-cards landing page. Five theme cards are the entry point. Tapping a card filters the full content feed to that theme. Empty themes sort to the bottom, grayed out at 35% opacity with grayscale, non-tappable. No dead-end "Coming soon" screen. Map toggle preserved. Design principle settled: "Explore surfaces content items, not features or sub-fields. The richness is discovered, not advertised." Each tab does one thing: Today = P&P, Journeys = journeys, Explore = browse by theme, Library = saved.
 
 ---
 
