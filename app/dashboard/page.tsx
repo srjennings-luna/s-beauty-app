@@ -823,6 +823,48 @@ export default async function DashboardPage() {
           </>
         )}
 
+        {/* Full Auditio Library — collapsible, for pre-proposal checking */}
+        {allWorks.length > 0 && (() => {
+          const sorted = [...allWorks].sort((a, b) => {
+            const ca = (a.composerArtist ?? "").toLowerCase();
+            const cb = (b.composerArtist ?? "").toLowerCase();
+            if (ca !== cb) return ca.localeCompare(cb);
+            return (a.workTitle ?? "").toLowerCase().localeCompare((b.workTitle ?? "").toLowerCase());
+          });
+          return (
+            <details className="mb-3 border border-[#e8e0d4]">
+              <summary className="bg-[#fdf6e8] px-4 py-2 cursor-pointer font-sans text-[11px] font-bold text-[#16110d] select-none flex items-center justify-between">
+                <span>Full Auditio library ({allWorks.length} piece{allWorks.length === 1 ? "" : "s"}) — expand to check before proposing new audio</span>
+                <span className="text-[#C19B5F] text-[10px] tracking-wider uppercase">expand / collapse</span>
+              </summary>
+              <div className="overflow-x-auto">
+                <table className="w-full text-[11px]">
+                  <thead className="bg-[#16110d] text-[#fdf6e8]">
+                    <tr>
+                      <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Composer / Artist</th>
+                      <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Work Title</th>
+                      <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Used In</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sorted.map((w, i) => (
+                      <tr key={w._id} className={`border-b border-[#e8e0d4] ${i % 2 === 0 ? "bg-white" : "bg-[#fffbf2]"}`}>
+                        <td className="px-2 py-1 text-[#5a5048]">{w.composerArtist ?? <span className="italic text-[#9a8d78]">—</span>}</td>
+                        <td className="px-2 py-1 font-medium">{w.workTitle ?? <span className="italic text-[#9a8d78]">untitled</span>}</td>
+                        <td className="px-2 py-1 text-[#5a5048]">
+                          {w.origin === "journeyDay"
+                            ? `${w.journeyTitle ?? "?"} · Day ${w.dayNumber ?? "?"}`
+                            : `P&P ${w.date ?? "?"}`}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
+          );
+        })()}
+
         <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">Journey day audio</h3>
         <p className="text-[11px] text-[#7a7062] italic mb-2">
           Six narration slots per day. <code className="text-[10px] bg-[#f0ebe0] px-1">artworkHook</code> and <code className="text-[10px] bg-[#f0ebe0] px-1">context</code> live on the linked content item. <code className="text-[10px] bg-[#f0ebe0] px-1">goDeeper</code> = count of tradition reflections with audio / total linked. Use the filters to isolate what still needs recording.
