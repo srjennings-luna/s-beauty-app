@@ -1,25 +1,46 @@
 /**
  * KALLOS — Seed Seeking Beauty Episode 1: Vatican City companion journey.
  *
- * Creates three Sanity DRAFT documents (no publish):
+ * Creates three Sanity PUBLISHED documents (no draft prefix):
  *   1. contentItem (sacred-art) — Casino of Pius IV
- *   2. journey (companion) — Vatican City
+ *   2. journey (companion) — Vatican City  (isPublished: false → stays
+ *      hidden from /journeys list until Sheri toggles it on in Studio)
  *   3. journeyDay — Day 1: The garden (refs the journey + contentItem)
  *
  * Source: content-docs/KALLOS-SeekingBeauty-Ep1-Companion.html (Day 1).
  * All text fields read verbatim from the source doc; no paraphrasing.
  *
- * Sheri publishes from Studio after uploading images for the journey
- * heroImage and the journeyDay openImage. The contentItem.image is also
- * left blank for Sheri to upload.
+ * Why published, not draft. The first version of this script created
+ * drafts with _strengthenOnPublish refs in both directions. Sanity Studio
+ * cannot resolve a circular cross-draft publish (journey requires day,
+ * day requires journey). The atomic-create-as-published pattern matches
+ * what scripts/migrate-journey-days-to-documents.ts uses and avoids the
+ * deadlock entirely. The journey's isPublished flag (separate from
+ * Sanity's draft/published state) keeps it off the live site until Sheri
+ * is ready.
+ *
+ * Workflow for Sheri after this runs:
+ *   1. Open each document in Studio. The doc is published but missing
+ *      its required image (heroImage / image / openImage). Editing the
+ *      document creates a Studio draft over the published version.
+ *   2. Upload heroImage on the journey, image on the contentItem,
+ *      openImage on Day 1.
+ *   3. Optionally create the Auditio doc and reference it from Day 1.
+ *   4. Publish each Studio draft to overwrite the placeholder published
+ *      version with the real (image-equipped) one. No circular ref now
+ *      because both targets already exist as published.
+ *   5. Toggle journey.isPublished to true when ready to go live on
+ *      /journeys.
  *
  * Usage:
  *   npx tsx scripts/seed-sb-ep1-companion.ts --dry-run
  *   npx tsx scripts/seed-sb-ep1-companion.ts
+ *   npx tsx scripts/seed-sb-ep1-companion.ts --reset   (delete existing
+ *     drafts and published copies before recreating; safe to run after
+ *     an aborted seed)
  *
- * Idempotent: uses createIfNotExists, so re-runs are no-ops if drafts
- * already exist. To re-seed from scratch, delete the drafts in Studio
- * first (or change the _ids below).
+ * Idempotent in normal mode (createIfNotExists). --reset wipes both
+ * draft and published copies of the three target _ids before creating.
  */
 
 import { createClient } from '@sanity/client';
@@ -27,6 +48,7 @@ import { readFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
 
 const DRY_RUN = process.argv.includes('--dry-run');
+const RESET = process.argv.includes('--reset');
 
 // Load .env.local manually (Node does not read it by default).
 function loadEnvLocal() {
@@ -62,49 +84,33 @@ const client = createClient({
 });
 
 // ─── Deterministic _ids ─────────────────────────────────────────────────────
-//
-// References between drafts use the base _id BUT include `_strengthenOnPublish`
-// + `_weak: true`. Sanity's reference validator otherwise rejects refs to docs
-// whose base _id does not yet exist (only the draft.X form exists). On publish
-// of the parent doc, Sanity auto-resolves the ref to the now-published target
-// and drops the strengthen flag. Pattern matches what Sanity Studio writes
-// natively when you build cross-draft references in the UI.
 
 const CONTENT_ITEM_ID = 'contentItem-sb-ep1-casino-pius-iv';
 const JOURNEY_ID = 'journey-sb-ep1-vatican-city';
 const JOURNEY_DAY_ID = 'journeyDay-sb-ep1-day-1';
 
-function draftRef(id: string, type: string, key?: string) {
-  const ref: Record<string, unknown> = {
-    _type: 'reference',
-    _ref: id,
-    _weak: true,
-    _strengthenOnPublish: { type },
-  };
-  if (key) ref._key = key;
-  return ref;
-}
-
 // Beauty, Truth & Goodness theme — verified against live Sanity dataset.
 const THEME_BTG_ID = 'f6bd480e-b5f9-41fb-b145-1aae0df0bc5c';
 
-// ─── Document drafts ────────────────────────────────────────────────────────
+// Standard reference (no draft strengthen — both target and source live as
+// published docs after this script).
+function ref(id: string, key?: string) {
+  const r: Record<string, unknown> = { _type: 'reference', _ref: id };
+  if (key) r._key = key;
+  return r;
+}
+
+// ─── Document content ───────────────────────────────────────────────────────
 
 // 1. ContentItem — Casino of Pius IV
 const contentItem = {
-  _id: `drafts.${CONTENT_ITEM_ID}`,
+  _id: CONTENT_ITEM_ID,
   _type: 'contentItem',
   contentType: 'sacred-art',
   title: 'Casino of Pius IV',
   artist: 'Pirro Ligorio',
   year: '1558–1562',
-  themes: [
-    {
-      _type: 'reference',
-      _ref: THEME_BTG_ID,
-      _key: 'theme-btg',
-    },
-  ],
+  themes: [{ ...ref(THEME_BTG_ID), _key: 'theme-btg' }],
   description:
     'A small Renaissance villa tucked inside the Vatican Gardens, invisible from the main streets of the complex. The exterior is covered entirely in stucco figures from the ancient world. The oval courtyard at the center opens to the sky.',
   context:
@@ -115,16 +121,16 @@ const contentItem = {
   // image: Sheri uploads from Studio.
 };
 
-// 2. Journey — Vatican City (companion)
+// 2. Journey — Vatican City (companion). isPublished: false keeps the
+// journey hidden from the live /journeys list (the GROQ query filters
+// `isPublished == true`), even though the doc itself is "published"
+// in Sanity's sense.
 const journey = {
-  _id: `drafts.${JOURNEY_ID}`,
+  _id: JOURNEY_ID,
   _type: 'journey',
   title: 'Vatican City',
   slug: { _type: 'slug', current: 'seeking-beauty-ep1-vatican-city' },
-  theme: {
-    _type: 'reference',
-    _ref: THEME_BTG_ID,
-  },
+  theme: ref(THEME_BTG_ID),
   journeyType: 'companion',
   showName: 'Seeking Beauty',
   episodeLabel: 'Episode 1',
@@ -134,21 +140,21 @@ const journey = {
   totalDays: 4,
   isPublished: false,
   order: 100,
-  days: [draftRef(JOURNEY_DAY_ID, 'journeyDay', 'day-1-ref')],
+  days: [{ ...ref(JOURNEY_DAY_ID), _key: 'day-1-ref' }],
   // heroImage: Sheri uploads from Studio.
 };
 
 // 3. JourneyDay — Day 1: The garden
 const journeyDay = {
-  _id: `drafts.${JOURNEY_DAY_ID}`,
+  _id: JOURNEY_DAY_ID,
   _type: 'journeyDay',
-  journey: draftRef(JOURNEY_ID, 'journey'),
+  journey: ref(JOURNEY_ID),
   dayNumber: 1,
   dayTitle: 'The garden',
   // openImage: Sheri uploads from Studio.
   openText:
     'Charles Borromeo was one of the most productive men in 16th-century Rome.\n\nAs Cardinal-Secretary of State to his uncle Pope Pius IV, he ran the committees of the Council of Trent during its final sessions. The Counter-Reformation was a bureaucratic project as much as a theological one: new decrees on doctrine, new standards for seminaries, new guidelines for liturgy, new expectations for bishops. Borromeo, in his mid-twenties, administered much of it.\n\nHe worked all day.\n\nAt night, he wanted to feed his soul.\n\nPius IV built his nephew a small villa in the Vatican Gardens. Not a palace. Not a residence. A place to think, to walk in the gardens with people he trusted and talk about beauty and philosophy and about God. The design was given to Pirro Ligorio, who was simultaneously serving as architect of St. Peter’s Basilica. The building was completed in 1562. Its name, in Italian, means simply: the little house.\n\nThis is where the companion journey begins. Elizabeth Lev stood here with David Henrie at the opening of the episode and said something easy to miss: beauty is not the destination. It is the calibration. A way of adjusting the eye so that what you could not see before becomes visible. Borromeo did not come to the Casino to rest from the committees. He came here to remember what the committees were for. The beauty was the reminder.',
-  encounterContent: draftRef(CONTENT_ITEM_ID, 'contentItem'),
+  encounterContent: ref(CONTENT_ITEM_ID),
   encounterGuidance:
     'Find one classical figure on the exterior. Then step inside and look at what Ligorio put on the walls.',
   encounterNote:
@@ -176,43 +182,89 @@ const journeyDay = {
   // goDeeper: tradition reflections come in a separate seeding pass.
 };
 
+// ─── Reset (optional) ───────────────────────────────────────────────────────
+
+async function reset() {
+  console.log('— Reset: deleting any existing draft + published copies —\n');
+  const ids = [CONTENT_ITEM_ID, JOURNEY_ID, JOURNEY_DAY_ID];
+  const allTargets = ids.flatMap((id) => [id, `drafts.${id}`]);
+  for (const id of allTargets) {
+    if (DRY_RUN) {
+      console.log(`  (dry run) would delete: ${id}`);
+      continue;
+    }
+    try {
+      await client.delete(id);
+      console.log(`  ✓ Deleted: ${id}`);
+    } catch (err: unknown) {
+      // 404 is fine — doc just did not exist.
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes('404') || msg.toLowerCase().includes('not found')) {
+        console.log(`  · (not present): ${id}`);
+      } else {
+        console.warn(`  ! Could not delete ${id}: ${msg}`);
+      }
+    }
+  }
+  console.log('');
+}
+
 // ─── Main ───────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log(`\n=== Seed SB Ep1: Vatican City companion ${DRY_RUN ? '(DRY RUN)' : '(LIVE)'} ===\n`);
+  console.log(
+    `\n=== Seed SB Ep1: Vatican City companion ${DRY_RUN ? '(DRY RUN)' : '(LIVE)'}${RESET ? ' [reset]' : ''} ===\n`
+  );
+
+  if (RESET) {
+    await reset();
+  }
 
   const docs: Array<{ label: string; doc: Record<string, unknown> }> = [
     { label: 'contentItem · Casino of Pius IV', doc: contentItem },
-    { label: 'journey · Vatican City', doc: journey },
+    { label: 'journey · Vatican City (isPublished: false)', doc: journey },
     { label: 'journeyDay · Day 1 (The garden)', doc: journeyDay },
   ];
 
   for (const { label, doc } of docs) {
-    console.log(`[${label}]`);
-    console.log(`  _id: ${doc._id}`);
-    if (DRY_RUN) {
-      console.log('  (dry run — no write)\n');
-      continue;
-    }
+    console.log(`[${label}]   _id: ${doc._id}`);
+  }
+  console.log('');
+
+  if (DRY_RUN) {
+    console.log('  (dry run — no write)\n');
+  } else {
+    // Atomic transaction: all three docs land at the same instant, so the
+    // cross-references between journey ⇄ journeyDay and journeyDay → contentItem
+    // resolve as part of the same mutation. Sequential createIfNotExists fails
+    // because Sanity validates each ref against existing documents at the moment
+    // each individual mutation runs.
     try {
-      const result = await client.createIfNotExists(
-        doc as Parameters<typeof client.createIfNotExists>[0]
-      );
-      console.log(`  ✓ Created (or already existed): ${result._id}\n`);
+      const tx = client.transaction();
+      for (const { doc } of docs) {
+        tx.createIfNotExists(doc as Parameters<typeof tx.createIfNotExists>[0]);
+      }
+      const result = await tx.commit();
+      console.log(`✓ Transaction committed (transactionId: ${result.transactionId})`);
+      for (const { label } of docs) {
+        console.log(`  ✓ ${label}`);
+      }
+      console.log('');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
-      console.error(`  ✗ Failed: ${msg}\n`);
+      console.error(`✗ Transaction failed: ${msg}\n`);
       throw err;
     }
   }
 
   console.log('=== Done ===');
   console.log('\nNext steps for Sheri (in Sanity Studio):');
-  console.log('  1. Open the Vatican City journey draft, upload heroImage, set order/sort if needed.');
-  console.log('  2. Open the Casino of Pius IV contentItem draft, upload image.');
-  console.log('  3. Open the Day 1 journeyDay draft, upload openImage.');
+  console.log('  1. Open the Vatican City journey, upload heroImage.');
+  console.log('  2. Open the Casino of Pius IV contentItem, upload image.');
+  console.log('  3. Open the Day 1 journeyDay, upload openImage.');
   console.log('  4. Optionally create the Auditio doc (Arvo Pärt "Für Alina") and reference it from the journeyDay.');
-  console.log('  5. Publish in this order: contentItem → journeyDay → journey.\n');
+  console.log('  5. Publish each Studio draft (one-doc publish, no circular ref).');
+  console.log('  6. When ready to go live, toggle journey.isPublished to true. Until then the journey is hidden from /journeys.\n');
 }
 
 main().catch((err) => {
