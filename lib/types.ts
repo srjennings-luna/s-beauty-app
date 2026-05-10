@@ -166,6 +166,13 @@ export type Journey = {
   days: JourneyDay[];
   plannedDays?: PlannedDay[];
   totalDays?: number;
+  // Section assignment on the Journeys page. May be undefined on legacy
+  // documents; treat undefined as 'standard'.
+  journeyType?: 'standard' | 'intro' | 'companion';
+  // Companion journey only. Show/series name and episode label rendered
+  // on the companion card teal strip.
+  showName?: string;
+  episodeLabel?: string;
 };
 
 // ─── Daily Prompt ─────────────────────────────────────────────────────────────

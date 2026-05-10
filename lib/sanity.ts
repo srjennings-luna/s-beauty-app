@@ -165,7 +165,10 @@ export async function getJourneys() {
       estimatedMinutesPerDay,
       isPublished,
       order,
-      "totalDays": coalesce(totalDays, count(days))
+      "totalDays": coalesce(totalDays, count(days)),
+      journeyType,
+      showName,
+      episodeLabel
     }
   `)
 }
