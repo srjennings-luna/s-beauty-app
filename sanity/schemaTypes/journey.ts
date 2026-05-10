@@ -32,6 +32,39 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'journeyType',
+      title: 'Journey Type',
+      type: 'string',
+      description:
+        'Controls which section this journey appears in on the Journeys page. Standard goes in "Journeys"; Intro goes in "Where to Begin" with a START HERE badge; Companion goes in "Episode Companions" with companion card treatment.',
+      options: {
+        list: [
+          {title: 'Standard', value: 'standard'},
+          {title: 'Intro (Where to Begin)', value: 'intro'},
+          {title: 'Companion (Episode Companions)', value: 'companion'},
+        ],
+      },
+      initialValue: 'standard',
+    }),
+    defineField({
+      name: 'showName',
+      title: 'Show Name',
+      type: 'string',
+      description:
+        'Companion journeys only. The name of the show or series this journey pairs with. Example: "Seeking Beauty". Appears in the dark teal strip at the top of the companion card.',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      hidden: ({document}: {document?: any}) => document?.journeyType !== 'companion',
+    }),
+    defineField({
+      name: 'episodeLabel',
+      title: 'Episode Label',
+      type: 'string',
+      description:
+        'Companion journeys only. The episode identifier shown on the companion card strip. Example: "Episode 1".',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      hidden: ({document}: {document?: any}) => document?.journeyType !== 'companion',
+    }),
+    defineField({
       name: 'description',
       title: 'Description',
       type: 'text',

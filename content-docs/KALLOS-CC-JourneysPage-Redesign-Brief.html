@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KALLOS CC Build Brief — Journeys Page Redesign + Companion Journey Support</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #fdf6e8; color: #2c2418; line-height: 1.75; padding: 48px 24px; max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 1.7rem; font-weight: 700; color: #16110d; margin-bottom: 6px; }
+  .meta { font-size: 0.8rem; color: #9a9488; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 32px; }
+  .priority { background: #c25555; color: #fff; padding: 14px 20px; margin: 0 0 32px; font-size: 0.92rem; font-weight: 700; }
+  h2 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #C19B5F; margin: 44px 0 14px; border-bottom: 1px solid #e8dfc8; padding-bottom: 8px; }
+  h3 { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #7a6a5a; margin: 24px 0 8px; }
+  p { margin-bottom: 12px; font-size: 0.92rem; }
+  .task {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-left: 4px solid #C19B5F;
+    padding: 16px 20px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+  }
+  .task .task-label {
+    font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.12em; color: #C19B5F; margin-bottom: 8px;
+  }
+  .task code {
+    background: #f0ebe0; padding: 1px 6px; font-size: 0.83rem;
+    border-radius: 2px; font-family: monospace;
+  }
+  .schema-field {
+    background: #fff;
+    border: 1px solid #e8dfc8;
+    border-left: 4px solid #4a7a62;
+    padding: 14px 18px;
+    margin: 8px 0;
+    font-size: 0.88rem;
+  }
+  .schema-field .fname { font-weight: 700; color: #16110d; font-family: monospace; font-size: 0.9rem; }
+  .schema-field .ftype { color: #4a7a62; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-left: 8px; }
+  .schema-field .fdesc { color: #7a6a5a; font-size: 0.83rem; margin-top: 4px; }
+  .design-spec {
+    background: #f5f0e8;
+    border: 1px solid #d8cfc0;
+    padding: 16px 20px;
+    margin: 10px 0;
+    font-size: 0.88rem;
+  }
+  .design-spec .spec-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #7a6a5a; margin-bottom: 8px; }
+  ul { padding-left: 20px; margin-bottom: 12px; }
+  ul li { font-size: 0.9rem; margin-bottom: 4px; }
+  .warn { background: #fffbf0; border: 1px solid #e8d89a; border-left: 4px solid #C19B5F; padding: 12px 16px; margin: 12px 0; font-size: 0.88rem; }
+  .commit-note { background: #16110d; color: #fdf6e8; padding: 12px 18px; margin: 10px 0; font-size: 0.85rem; }
+  .commit-note code { color: #C19B5F; }
+</style>
+</head>
+<body>
+
+<h1>Journeys Page Redesign + Companion Journey Support</h1>
+<p class="meta">Claude Code Build Brief &nbsp;|&nbsp; KALLOS &nbsp;|&nbsp; May 2026 &nbsp;|&nbsp; Priority: Ship today</p>
+
+<div class="priority">TIME-SENSITIVE: Interview tomorrow. This must be live and verified today.</div>
+
+<h2>What This Brief Covers</h2>
+
+<p>Two connected tasks that must ship together:</p>
+<ul>
+  <li><strong>Task 1 — Schema:</strong> Add three new fields to the Sanity <code>journey</code> schema to support journey type classification and companion journey metadata.</li>
+  <li><strong>Task 2 — UI:</strong> Redesign the Journeys page (<code>/journeys</code>) to display three labeled sections (Where to Begin / Journeys / Episode Companions) with distinct card treatments per type.</li>
+</ul>
+<p>Read CLAUDE.md before starting. Run <code>npm run build</code> after each task. Commit after each task.</p>
+
+<h2>Task 1 — Sanity Schema: Journey Type Fields</h2>
+
+<p>Add three new fields to the <code>journey</code> schema in Sanity. These are purely additive — no migration required. Existing journeys will have empty values and default to the "standard" section.</p>
+
+<div class="schema-field">
+  <span class="fname">journeyType</span><span class="ftype">string — dropdown</span>
+  <div class="fdesc">Controls which section this journey appears in on the Journeys page. Options: <code>standard</code> (default, goes in "Journeys" section), <code>intro</code> (goes in "Where to Begin" section, gets Start Here badge), <code>companion</code> (goes in "Episode Companions" section, gets companion card treatment). Make this a Sanity <code>list</code> with these three options. Default: <code>standard</code>.</div>
+</div>
+
+<div class="schema-field">
+  <span class="fname">showName</span><span class="ftype">string — optional</span>
+  <div class="fdesc">For companion journeys only. The name of the show or series this journey pairs with. Example: "Seeking Beauty". Appears in the teal strip at the top of companion cards. Leave blank for non-companion journeys.</div>
+</div>
+
+<div class="schema-field">
+  <span class="fname">episodeLabel</span><span class="ftype">string — optional</span>
+  <div class="fdesc">For companion journeys only. The episode identifier shown on the companion card strip. Example: "Episode 1". Appears on the right side of the companion card teal strip alongside showName. Leave blank for non-companion journeys.</div>
+</div>
+
+<div class="task">
+  <div class="task-label">After schema update</div>
+  Deploy Sanity Studio: <code>cd sanity && npx sanity deploy</code>. Confirm the three new fields appear in Studio on the journey document type before proceeding to Task 2.
+</div>
+
+<div class="commit-note">Commit after Task 1: <code>feat: add journeyType, showName, episodeLabel fields to journey schema</code></div>
+
+<h2>Task 2 — Journeys Page UI Redesign</h2>
+
+<p>The current Journeys page (<code>/journeys</code>) shows a flat list of all journeys. Redesign it to show three labeled sections based on the <code>journeyType</code> field. All cards remain visible — no collapse, no "show more".</p>
+
+<h3>Section structure</h3>
+
+<div class="design-spec">
+  <div class="spec-label">Section 1 — Where to Begin</div>
+  Journeys where <code>journeyType === 'intro'</code>. Section label: "WHERE TO BEGIN" in gold small caps. Cards in this section display a "START HERE" badge overlaid on the top-right corner of the artwork image area. Badge styling: small gold pill, text "START HERE", positioned absolute top-right over the hero image.
+</div>
+
+<div class="design-spec">
+  <div class="spec-label">Section 2 — Journeys</div>
+  Journeys where <code>journeyType === 'standard'</code> OR journeyType is null/undefined (default fallback). Section label: "JOURNEYS" in gold small caps. Standard card treatment — no badge, no special styling. This is the existing card design.
+</div>
+
+<div class="design-spec">
+  <div class="spec-label">Section 3 — Episode Companions</div>
+  Journeys where <code>journeyType === 'companion'</code>. Section label: "EPISODE COMPANIONS" in gold small caps. Companion card treatment — see full spec below. Only render this section if at least one companion journey exists.
+</div>
+
+<h3>Section dividers</h3>
+<p>Separate sections with a thin horizontal rule (<code>1px solid</code>, muted espresso tone, e.g. <code>rgba(42,32,21,0.4)</code>) with the section label immediately below the rule. Match the existing KALLOS label style used elsewhere in the app (small caps, gold, Montserrat or equivalent).</p>
+
+<h3>Companion card design spec</h3>
+
+<div class="design-spec">
+  <div class="spec-label">Companion card — full spec</div>
+  <p>The companion card shares the same base structure as the standard card (artwork image, title, day count, description) but adds the following:</p>
+  <ul>
+    <li><strong>Show strip at top:</strong> A slim horizontal band above the artwork image area. Background: dark teal (<code>#0d1a12</code>). Left side: <code>showName</code> in small caps, teal-light color (<code>#5fa87a</code>), ~9px, letter-spacing 0.16em. Right side: <code>episodeLabel</code> in same small caps, slightly more muted teal (<code>#4a7a62</code>), ~10px. Strip height approximately 32px with 7px vertical padding.</li>
+    <li><strong>Card border:</strong> Replace the standard card border with a teal-tinted border: <code>1px solid #1e3028</code>.</li>
+    <li><strong>Tag color:</strong> The "COMPANION" tag uses teal background (<code>rgba(74,122,98,0.2)</code>) and teal text (<code>#5fa87a</code>) instead of the standard gold. The day count tag remains gold as usual.</li>
+    <li><strong>Watch cue:</strong> Below the description text, add a small italic line: "Watch the episode before beginning" in a muted teal tone (<code>#4a7a62</code>), approximately 11px, using the serif font (Cormorant Garamond or equivalent). This is a static string — not from Sanity.</li>
+    <li><strong>Artwork area:</strong> Retain the artwork image at the same height as standard cards. The show strip sits above it, not over it.</li>
+  </ul>
+</div>
+
+<h3>GROQ query update</h3>
+<p>Update the GROQ query that fetches journeys for the Journeys page to include the three new fields:</p>
+<div class="task">
+  <div class="task-label">Fields to add to the journey list query</div>
+  Add <code>journeyType</code>, <code>showName</code>, and <code>episodeLabel</code> to whatever GROQ projection currently fetches journey list data. These should be included alongside title, slug, description, totalDays, and the hero image.
+</div>
+
+<h3>TypeScript</h3>
+<p>Update the Journey type in <code>lib/types.ts</code> to include the three new optional fields: <code>journeyType?: 'standard' | 'intro' | 'companion'</code>, <code>showName?: string</code>, <code>episodeLabel?: string</code>.</p>
+
+<h3>Rendering logic</h3>
+<p>On the Journeys page, split the fetched journeys array into three groups based on <code>journeyType</code>. Render each group under its labeled section. Group order: intro first, then standard, then companion. If a group is empty, skip the section header and render nothing for that section. Do not render an empty "Episode Companions" section before the companion journey is entered in Sanity.</p>
+
+<div class="warn">
+  <strong>Do not hardcode journey slugs.</strong> The section assignment must come from the <code>journeyType</code> field in Sanity — not from a list of known slugs in code. Sheri will set <code>journeyType</code> in Studio for each journey.
+</div>
+
+<div class="commit-note">Commit after Task 2: <code>feat: redesign Journeys page with three sections and companion card treatment</code></div>
+
+<h2>Verification Checklist</h2>
+
+<div class="task">
+  <div class="task-label">Before calling done</div>
+  <ul>
+    <li>Run <code>npm run build</code> — must pass clean</li>
+    <li>Open Sanity Studio, go to a journey document, confirm <code>journeyType</code> dropdown, <code>showName</code>, and <code>episodeLabel</code> fields are present</li>
+    <li>Set one journey to <code>intro</code> in Studio — confirm it moves to "Where to Begin" section in app with START HERE badge</li>
+    <li>Set one journey to <code>companion</code> with showName = "Test Show" and episodeLabel = "Episode 1" — confirm companion card renders with teal strip, teal border, Companion tag, and watch cue</li>
+    <li>Confirm journeys with no <code>journeyType</code> set (null) still appear in the "Journeys" section (fallback behavior)</li>
+    <li>Confirm "Episode Companions" section is hidden when no companion journeys exist in Sanity</li>
+    <li>Deploy to Vercel and confirm on live URL</li>
+  </ul>
+</div>
+
+<h2>What This Does Not Include</h2>
+<p>This brief covers the Journeys listing page only. The journey day experience (what happens after a user taps into a companion journey) is unchanged — companion journeys use the same 6-step journey day UI as all other journeys. A future brief will address any companion-specific UI inside the journey day experience.</p>
+
+<p style="margin-top: 40px; font-size: 0.8rem; color: #9a9488;">Brief written May 2026. Reference CLAUDE.md for build verification rules and design system. Reference CLAUDE_REFERENCE.md for color tokens and typography.</p>
+
+</body>
+</html>
