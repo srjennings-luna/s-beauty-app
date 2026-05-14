@@ -1,220 +1,240 @@
-import {defineField, defineType} from 'sanity'
+import {defineField, defineType, defineArrayMember} from 'sanity'
+
+// Block-based splash schema. Each splashPage document is ONE screen.
+// `blocks[]` is an ordered array of polymorphic block objects rendered
+// top-to-bottom by app/splash/SplashClient.tsx. Brand colors and fonts
+// live in the component, not here. Editors choose which blocks appear
+// and in what order; visual treatment is a fixed function of block type.
 
 export default defineType({
   name: 'splashPage',
-  title: 'Splash Page',
+  title: 'Splash Screen',
   type: 'document',
-  groups: [
-    {name: 'content', title: 'Content', default: true},
-    {name: 'styling', title: 'Styling'},
-  ],
   fields: [
-    // === CONTENT GROUP ===
     defineField({
-      name: 'pageNumber',
-      title: 'Page Number',
+      name: 'screenNumber',
+      title: 'Screen Number',
       type: 'number',
-      description: 'Order of the splash page (1, 2, etc.)',
-      validation: (Rule) => Rule.required().min(1),
-      group: 'content',
+      description: 'Order in the splash sequence (1, 2, 3…). Lower numbers shown first.',
+      validation: (Rule) => Rule.required().min(1).integer(),
     }),
     defineField({
-      name: 'pageType',
-      title: 'Page Type',
+      name: 'screenTitle',
+      title: 'Screen Title (admin only)',
       type: 'string',
-      options: {
-        list: [
-          {title: 'Image with Quote', value: 'image-quote'},
-          {title: 'Text Content', value: 'text-content'},
-        ],
-        layout: 'radio',
-      },
-      initialValue: 'image-quote',
-      group: 'content',
-    }),
-    // For Image with Quote pages (Page 1 style)
-    defineField({
-      name: 'heroImage',
-      title: 'Hero Image',
-      type: 'image',
-      description: 'Full-width promo image (top 2/3 of screen)',
-      options: {
-        hotspot: true,
-      },
-      hidden: ({document}) => document?.pageType !== 'image-quote',
-      group: 'content',
+      description: 'A short label for this screen in Studio (e.g. "Brand Identity"). Not shown to users.',
     }),
     defineField({
-      name: 'quote',
-      title: 'Quote',
-      type: 'text',
-      rows: 2,
-      description: 'e.g., "Beauty will save the world"',
-      hidden: ({document}) => document?.pageType !== 'image-quote',
-      group: 'content',
-    }),
-    defineField({
-      name: 'quoteAttribution',
-      title: 'Quote Attribution',
-      type: 'string',
-      description: 'e.g., "Fyodor Dostoevsky"',
-      hidden: ({document}) => document?.pageType !== 'image-quote',
-      group: 'content',
-    }),
-    // For Text Content pages (Page 2 style)
-    defineField({
-      name: 'title',
-      title: 'Title',
-      type: 'string',
-      description: 'e.g., "Your Companion for Contemplation"',
-      hidden: ({document}) => document?.pageType !== 'text-content',
-      group: 'content',
-    }),
-    defineField({
-      name: 'description',
-      title: 'Description',
-      type: 'text',
-      rows: 4,
-      description: 'Main description paragraph',
-      hidden: ({document}) => document?.pageType !== 'text-content',
-      group: 'content',
-    }),
-    defineField({
-      name: 'buttonText',
-      title: 'Button Text',
-      type: 'string',
-      description: 'e.g., "Let\'s explore"',
-      hidden: ({document}) => document?.pageType !== 'text-content',
-      group: 'content',
-    }),
-
-    // === STYLING GROUP ===
-    // Image with Quote styling
-    defineField({
-      name: 'quoteColor',
-      title: 'Quote Text Color',
-      type: 'string',
-      description: 'Hex color (e.g., #FFFFFF). Default: white at 70% opacity',
-      hidden: ({document}) => document?.pageType !== 'image-quote',
-      group: 'styling',
-    }),
-    defineField({
-      name: 'quoteFont',
-      title: 'Quote Font Style',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Italic (default)', value: 'italic'},
-          {title: 'Normal', value: 'normal'},
-        ],
-        layout: 'radio',
-      },
-      initialValue: 'italic',
-      hidden: ({document}) => document?.pageType !== 'image-quote',
-      group: 'styling',
-    }),
-    defineField({
-      name: 'attributionColor',
-      title: 'Attribution Text Color',
-      type: 'string',
-      description: 'Hex color. Default: white at 40% opacity',
-      hidden: ({document}) => document?.pageType !== 'image-quote',
-      group: 'styling',
-    }),
-    defineField({
-      name: 'bottomBackgroundColor',
-      title: 'Bottom Section Background',
-      type: 'string',
-      description: 'Hex color. Default: #16110d (espresso)',
-      hidden: ({document}) => document?.pageType !== 'image-quote',
-      group: 'styling',
-    }),
-
-    // Text Content styling
-    defineField({
-      name: 'titleColor',
-      title: 'Title Color',
-      type: 'string',
-      description: 'Hex color. Default: white at 90% opacity',
-      hidden: ({document}) => document?.pageType !== 'text-content',
-      group: 'styling',
-    }),
-    defineField({
-      name: 'titleSize',
-      title: 'Title Size',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Small', value: 'text-xl'},
-          {title: 'Medium (default)', value: 'text-2xl'},
-          {title: 'Large', value: 'text-3xl'},
-        ],
-        layout: 'radio',
-      },
-      initialValue: 'text-2xl',
-      hidden: ({document}) => document?.pageType !== 'text-content',
-      group: 'styling',
-    }),
-    defineField({
-      name: 'descriptionColor',
-      title: 'Description Color',
-      type: 'string',
-      description: 'Hex color. Default: white at 50% opacity',
-      hidden: ({document}) => document?.pageType !== 'text-content',
-      group: 'styling',
-    }),
-    defineField({
-      name: 'buttonBackgroundColor',
-      title: 'Button Background Color',
-      type: 'string',
-      description: 'Hex color. Default: #C19B5F (gold)',
-      hidden: ({document}) => document?.pageType !== 'text-content',
-      group: 'styling',
-    }),
-    defineField({
-      name: 'buttonTextColor',
-      title: 'Button Text Color',
-      type: 'string',
-      description: 'Hex color. Default: #FFFFFF (white)',
-      hidden: ({document}) => document?.pageType !== 'text-content',
-      group: 'styling',
-    }),
-    defineField({
-      name: 'backgroundGradientStart',
-      title: 'Background Gradient Start',
-      type: 'string',
-      description: 'Hex color for top-left. Default: #4C3759 (purple)',
-      hidden: ({document}) => document?.pageType !== 'text-content',
-      group: 'styling',
-    }),
-    defineField({
-      name: 'backgroundGradientEnd',
-      title: 'Background Gradient End',
-      type: 'string',
-      description: 'Hex color for bottom-right. Default: #16110d (espresso)',
-      hidden: ({document}) => document?.pageType !== 'text-content',
-      group: 'styling',
+      name: 'blocks',
+      title: 'Blocks',
+      type: 'array',
+      description:
+        'Content blocks rendered top-to-bottom. Choose one block per piece of content; visual treatment is fixed by block type.',
+      of: [
+        defineArrayMember({
+          name: 'wordmark',
+          title: 'Wordmark',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'text',
+              title: 'Text',
+              type: 'string',
+              description: 'Brand wordmark, e.g. "KALLOS". Rendered in Montserrat uppercase, wide tracking.',
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+          preview: {select: {title: 'text'}, prepare: ({title}) => ({title: `Wordmark — ${title ?? ''}`})},
+        }),
+        defineArrayMember({
+          name: 'pronunciation',
+          title: 'Pronunciation',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'text',
+              title: 'Text',
+              type: 'string',
+              description: 'Pronunciation guide, e.g. "kal · os". Rendered in Cormorant italic, small.',
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+          preview: {select: {title: 'text'}, prepare: ({title}) => ({title: `Pronunciation — ${title ?? ''}`})},
+        }),
+        defineArrayMember({
+          name: 'goldRule',
+          title: 'Gold Rule',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'note',
+              title: 'Note (admin only)',
+              type: 'string',
+              description: 'Optional note for editors. Not displayed.',
+            }),
+          ],
+          preview: {prepare: () => ({title: 'Gold Rule —'})},
+        }),
+        defineArrayMember({
+          name: 'quote',
+          title: 'Quote',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'text',
+              title: 'Text',
+              type: 'text',
+              rows: 2,
+              description: 'Display quote. Rendered in Cormorant italic, large. Quotation marks are added automatically.',
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+          preview: {select: {title: 'text'}, prepare: ({title}) => ({title: `Quote — ${(title ?? '').slice(0, 50)}`})},
+        }),
+        defineArrayMember({
+          name: 'heading',
+          title: 'Heading',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'text',
+              title: 'Text',
+              type: 'string',
+              description: 'Screen heading. Rendered in Cormorant italic, large.',
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+          preview: {select: {title: 'text'}, prepare: ({title}) => ({title: `Heading — ${title ?? ''}`})},
+        }),
+        defineArrayMember({
+          name: 'body',
+          title: 'Body',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'text',
+              title: 'Text',
+              type: 'text',
+              rows: 4,
+              description: 'Body paragraph. Rendered in Open Sans light, line height 1.8.',
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+          preview: {select: {title: 'text'}, prepare: ({title}) => ({title: `Body — ${(title ?? '').slice(0, 60)}`})},
+        }),
+        defineArrayMember({
+          name: 'tagline',
+          title: 'Tagline',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'text',
+              title: 'Text',
+              type: 'string',
+              description: 'Short closing line. Rendered in Montserrat gold, small.',
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+          preview: {select: {title: 'text'}, prepare: ({title}) => ({title: `Tagline — ${title ?? ''}`})},
+        }),
+        defineArrayMember({
+          name: 'featureCard',
+          title: 'Feature Card',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'label',
+              title: 'Label',
+              type: 'string',
+              description: 'Small caps label at the top of the card (e.g. "Pause & Ponder").',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'body',
+              title: 'Body',
+              type: 'text',
+              rows: 2,
+              description: 'One-sentence description for the card.',
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+          preview: {
+            select: {title: 'label', subtitle: 'body'},
+            prepare: ({title, subtitle}) => ({title: `Card — ${title ?? ''}`, subtitle: subtitle ?? ''}),
+          },
+        }),
+        defineArrayMember({
+          name: 'primaryCta',
+          title: 'Primary CTA',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'label',
+              title: 'Button Label',
+              type: 'string',
+              description: 'e.g. "Start here →". Rendered as a gold filled button.',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'linkPath',
+              title: 'Link Path',
+              type: 'string',
+              description:
+                'App route to navigate to (e.g. /journeys/beauty-truth-and-goodness or /prompt). When tapped, marks onboarding complete.',
+              validation: (Rule) => Rule.required().regex(/^\//, {name: 'leading slash'}),
+            }),
+          ],
+          preview: {select: {title: 'label', subtitle: 'linkPath'}, prepare: ({title, subtitle}) => ({title: `Primary CTA — ${title ?? ''}`, subtitle: subtitle ?? ''})},
+        }),
+        defineArrayMember({
+          name: 'secondaryCta',
+          title: 'Secondary CTA',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'label',
+              title: 'Button Label',
+              type: 'string',
+              description: 'e.g. "See today\'s Pause & Ponder →". Rendered as a small text link.',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'linkPath',
+              title: 'Link Path',
+              type: 'string',
+              description: 'App route to navigate to. When tapped, marks onboarding complete.',
+              validation: (Rule) => Rule.required().regex(/^\//, {name: 'leading slash'}),
+            }),
+          ],
+          preview: {select: {title: 'label', subtitle: 'linkPath'}, prepare: ({title, subtitle}) => ({title: `Secondary CTA — ${title ?? ''}`, subtitle: subtitle ?? ''})},
+        }),
+      ],
+      validation: (Rule) => Rule.min(1),
     }),
   ],
   preview: {
     select: {
-      pageNumber: 'pageNumber',
-      pageType: 'pageType',
-      title: 'title',
-      quote: 'quote',
+      screenNumber: 'screenNumber',
+      screenTitle: 'screenTitle',
+      blocks: 'blocks',
     },
-    prepare({pageNumber, pageType, title, quote}) {
+    prepare({screenNumber, screenTitle, blocks}) {
+      // Surface the first text-carrying block so the list row has a useful subtitle.
+      const arr = (blocks as Array<{_type: string; text?: string; label?: string}> | undefined) ?? []
+      const firstTextBlock = arr.find((b) => typeof b?.text === 'string' && b.text.length > 0)
+      const fallbackLabel = arr.find((b) => typeof b?.label === 'string' && b.label.length > 0)?.label
+      const subtitle = (firstTextBlock?.text ?? fallbackLabel ?? '').slice(0, 60)
       return {
-        title: `Splash Page ${pageNumber}`,
-        subtitle: pageType === 'text-content' ? title : quote?.substring(0, 40) + '...',
+        title: `Screen ${screenNumber ?? '?'}${screenTitle ? ` — ${screenTitle}` : ''}`,
+        subtitle,
       }
     },
   },
   orderings: [
     {
-      title: 'Page Order',
-      name: 'pageOrder',
-      by: [{field: 'pageNumber', direction: 'asc'}],
+      title: 'Screen Order',
+      name: 'screenOrder',
+      by: [{field: 'screenNumber', direction: 'asc'}],
     },
   ],
 })

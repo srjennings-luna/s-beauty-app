@@ -368,27 +368,18 @@ export async function getTraditionReflections(themeId?: string) {
 // Splash Pages
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SPLASH_QUERY = `*[_type == "splashPage"] | order(pageNumber asc) {
+// Block-based splash. Each document is one screen; `blocks` is an ordered
+// polymorphic array. The `...` spread inside each block selection pulls
+// every field the block type defines (text, label, body, linkPath, etc.).
+const SPLASH_QUERY = `*[_type == "splashPage"] | order(screenNumber asc) {
   _id,
-  pageNumber,
-  pageType,
-  "heroImageUrl": heroImage.asset->url,
-  quote,
-  quoteAttribution,
-  title,
-  description,
-  buttonText,
-  quoteColor,
-  quoteFont,
-  attributionColor,
-  bottomBackgroundColor,
-  titleColor,
-  titleSize,
-  descriptionColor,
-  buttonBackgroundColor,
-  buttonTextColor,
-  backgroundGradientStart,
-  backgroundGradientEnd
+  screenNumber,
+  screenTitle,
+  blocks[] {
+    _type,
+    _key,
+    ...
+  }
 }`
 
 export async function getSplashPages() {
