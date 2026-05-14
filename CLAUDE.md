@@ -97,6 +97,16 @@ Read this at the start of every session. It contains all key product decisions, 
 - `data/episodes.ts` deleted
 - Build passes clean — deployed to Vercel
 
+### Phase 2 Work Done (May 14, 2026)
+- ✅ Splash refactor to Sanity-driven content complete. Closes the April 24 Parking Lot item and Manual Task #5.
+  - New `splashPage` schema: one document per screen, ordered `blocks[]` polymorphic array with 10 block types (`wordmark`, `pronunciation`, `goldRule`, `quote`, `heading`, `body`, `tagline`, `featureCard`, `primaryCta`, `secondaryCta`). Visual treatment (colors, fonts, spacing) is fixed per block type in the renderer — Studio controls content and order only. Brand colors stay in code per the non-negotiable design system.
+  - `app/splash/page.tsx` converted to a server component that fetches via `getSplashPages()` (honors `?preview=1` for Studio Preview). Falls back to the original hardcoded 5 screens in `app/splash/fallback.ts` if Sanity returns empty so a failed query never breaks first-launch.
+  - New client renderer `app/splash/SplashClient.tsx` preserves the Stories progress bar, swipe nav, fade animations, and `kallos-onboarded` localStorage gate. Auto nav button on screens without CTAs; on the last screen with no CTA, falls back to `/prompt` + mark session so users can never get trapped.
+  - `scripts/seed-splash-pages.ts` rewritten for the new schema with deterministic IDs (`kallos-splash-1`..`5`), idempotent (deletes old + drafts before recreating in one transaction), `--dry-run` flag. Seeded the 5 current screens.
+  - Stale `sanity/create-splash-pages.mjs` removed (referenced the dropped `pageType`/`pageNumber` fields).
+  - localStorage onboarding gate left as-is by Sheri's call — flagged for the broader localStorage cleanup work (favorites, journey progress, streak, Visio notes). No auth, so the realistic alternatives are cookie or always-show-dismissible.
+  - **Token rotation lesson:** an editor-role Sanity token was briefly exposed in screenshot/chat and revoked immediately. Future seed scripts: never paste tokens into chat; rotate immediately if exposed. Studio token panel: https://www.sanity.io/manage/personal/project/em44j9m8/api
+
 ### Phase 2 Work Done (March 7, 2026)
 - ✅ Journey Day UI fully built — 6-step experience (see Journey Framework below)
 - ✅ Breathe page added — dedicated contemplative pause with full-bleed image, 8x zoom, breathing animation
@@ -196,7 +206,7 @@ Read this at the start of every session. It contains all key product decisions, 
     - `app/pray/[artworkId]/page.tsx` → refactored from all-client to server wrapper; `PrayClient` now receives pre-fetched `initialArtwork`.
   - All three tested end-to-end: edit in Presentation's right pane → draft edit shows on iframe after ↻ refresh.
 - ✅ Onboarding gate hardened for iframe context. `app/page.tsx` now skips the splash redirect entirely when inside an iframe (`window.self !== window.top`). Storage upgraded from `sessionStorage` (every-session re-show) to `localStorage` (show once per install). Prevents Presentation's iframe from being hijacked to `/splash` on cold load. See Onboarding Framework below.
-- ✅ Splash refactor to Sanity-driven content added to Parking Lot (hardcoded copy in `app/splash/page.tsx` → `splashPage.screens[]` array). Keep layout intact.
+- ✅ Splash refactor to Sanity-driven content added to Parking Lot (hardcoded copy in `app/splash/page.tsx` → `splashPage.screens[]` array). Keep layout intact. **[Resolved May 14, 2026 — see Phase 2 Work Done (May 14).]**
 - ✅ Visio Divina Finish button fixed: routes to `/library` via `router.push("/library")` instead of `router.back()`. The `back()` call failed silently when there was no browser history (e.g., arrival from a share link or inside Sanity Presentation's iframe).
 
 **Presentation workflow quirk to remember:** typing into the iframe URL bar updates the URL and matches `mainDocuments` on the right, but the iframe doesn't always navigate. **Always click ↻ refresh** after changing the iframe URL or making a doc edit — forces re-hydration and pulls current draft state. Auto-refresh isn't magic.
@@ -759,7 +769,7 @@ These can't be done in code — Sheri does them in dashboards:
 2. ~~Rename Vercel project → `kallos-app`~~ ✅ Done
 3. Rename Sanity Studio URL → `kallos.sanity.studio`
 4. ~~Rename local folder in Finder → `kallos-app`~~ ✅ Done
-5. Update splash page content in Sanity Studio with KALLOS copy
+5. ~~Update splash page content in Sanity Studio with KALLOS copy~~ ✅ Done May 14, 2026. Splash schema migrated to block-based and seeded with the current 5 screens. Edit in Studio under "Splash Screen".
 6. Seed Intro to Beauty, Truth & Goodness journey into Sanity (content doc ready)
 7. ~~Seed Pause & Ponder daily prompts into Sanity~~ ✅ Done via script (Days 2–18). Day 1 manually entered. **Pending: Days 4–8 rewrites + Lectio additions — see `KALLOS-PP-Audit-Days4-8.html`**
 8. **Day 2 Bosch — manual Sanity updates needed:**

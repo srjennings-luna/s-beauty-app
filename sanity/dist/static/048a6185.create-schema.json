@@ -1809,172 +1809,319 @@
             "level": "error"
           }
         ],
-        "description": "Order of the splash page (1, 2, etc.)",
-        "name": "pageNumber",
+        "description": "Order in the splash sequence (1, 2, 3…). Lower numbers shown first.",
+        "name": "screenNumber",
         "type": "number"
       },
       {
-        "options": {
-          "list": [
-            {
-              "title": "Image with Quote",
-              "value": "image-quote"
-            },
-            {
-              "title": "Text Content",
-              "value": "text-content"
-            }
-          ],
-          "layout": "radio"
-        },
-        "initialValue": "image-quote",
-        "name": "pageType",
-        "type": "string"
-      },
-      {
-        "options": {
-          "hotspot": true
-        },
-        "description": "Full-width promo image (top 2/3 of screen)",
-        "hidden": "conditional",
-        "name": "heroImage",
-        "type": "image"
-      },
-      {
-        "rows": 2,
-        "description": "e.g., \"Beauty will save the world\"",
-        "hidden": "conditional",
-        "name": "quote",
-        "type": "text"
-      },
-      {
-        "description": "e.g., \"Fyodor Dostoevsky\"",
-        "hidden": "conditional",
-        "name": "quoteAttribution",
-        "type": "string"
-      },
-      {
-        "description": "e.g., \"Your Companion for Contemplation\"",
-        "hidden": "conditional",
-        "name": "title",
-        "type": "string"
-      },
-      {
-        "rows": 4,
-        "description": "Main description paragraph",
-        "hidden": "conditional",
-        "name": "description",
-        "type": "text"
-      },
-      {
-        "description": "e.g., \"Let's explore\"",
-        "hidden": "conditional",
-        "name": "buttonText",
-        "type": "string"
-      },
-      {
-        "description": "Hex color (e.g., #FFFFFF). Default: white at 70% opacity",
-        "hidden": "conditional",
-        "name": "quoteColor",
+        "description": "A short label for this screen in Studio (e.g. \"Brand Identity\"). Not shown to users.",
+        "name": "screenTitle",
         "type": "string",
-        "title": "Quote Text Color"
+        "title": "Screen Title (admin only)"
       },
       {
-        "options": {
-          "list": [
-            {
-              "title": "Italic (default)",
-              "value": "italic"
-            },
-            {
-              "title": "Normal",
-              "value": "normal"
-            }
-          ],
-          "layout": "radio"
-        },
-        "initialValue": "italic",
-        "hidden": "conditional",
-        "name": "quoteFont",
-        "type": "string",
-        "title": "Quote Font Style"
-      },
-      {
-        "description": "Hex color. Default: white at 40% opacity",
-        "hidden": "conditional",
-        "name": "attributionColor",
-        "type": "string",
-        "title": "Attribution Text Color"
-      },
-      {
-        "description": "Hex color. Default: #16110d (espresso)",
-        "hidden": "conditional",
-        "name": "bottomBackgroundColor",
-        "type": "string",
-        "title": "Bottom Section Background"
-      },
-      {
-        "description": "Hex color. Default: white at 90% opacity",
-        "hidden": "conditional",
-        "name": "titleColor",
-        "type": "string"
-      },
-      {
-        "options": {
-          "list": [
-            {
-              "title": "Small",
-              "value": "text-xl"
-            },
-            {
-              "title": "Medium (default)",
-              "value": "text-2xl"
-            },
-            {
-              "title": "Large",
-              "value": "text-3xl"
-            }
-          ],
-          "layout": "radio"
-        },
-        "initialValue": "text-2xl",
-        "hidden": "conditional",
-        "name": "titleSize",
-        "type": "string"
-      },
-      {
-        "description": "Hex color. Default: white at 50% opacity",
-        "hidden": "conditional",
-        "name": "descriptionColor",
-        "type": "string"
-      },
-      {
-        "description": "Hex color. Default: #C19B5F (gold)",
-        "hidden": "conditional",
-        "name": "buttonBackgroundColor",
-        "type": "string"
-      },
-      {
-        "description": "Hex color. Default: #FFFFFF (white)",
-        "hidden": "conditional",
-        "name": "buttonTextColor",
-        "type": "string"
-      },
-      {
-        "description": "Hex color for top-left. Default: #4C3759 (purple)",
-        "hidden": "conditional",
-        "name": "backgroundGradientStart",
-        "type": "string"
-      },
-      {
-        "description": "Hex color for bottom-right. Default: #16110d (espresso)",
-        "hidden": "conditional",
-        "name": "backgroundGradientEnd",
-        "type": "string"
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Content blocks rendered top-to-bottom. Choose one block per piece of content; visual treatment is fixed by block type.",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Brand wordmark, e.g. \"KALLOS\". Rendered in Montserrat uppercase, wide tracking.",
+                "name": "text",
+                "type": "string"
+              }
+            ],
+            "type": "object",
+            "name": "wordmark"
+          },
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Pronunciation guide, e.g. \"kal · os\". Rendered in Cormorant italic, small.",
+                "name": "text",
+                "type": "string"
+              }
+            ],
+            "type": "object",
+            "name": "pronunciation"
+          },
+          {
+            "fields": [
+              {
+                "description": "Optional note for editors. Not displayed.",
+                "name": "note",
+                "type": "string",
+                "title": "Note (admin only)"
+              }
+            ],
+            "type": "object",
+            "name": "goldRule"
+          },
+          {
+            "fields": [
+              {
+                "rows": 2,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Display quote. Rendered in Cormorant italic, large. Quotation marks are added automatically.",
+                "name": "text",
+                "type": "text"
+              }
+            ],
+            "type": "object",
+            "name": "quote"
+          },
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Screen heading. Rendered in Cormorant italic, large.",
+                "name": "text",
+                "type": "string"
+              }
+            ],
+            "type": "object",
+            "name": "heading"
+          },
+          {
+            "fields": [
+              {
+                "rows": 4,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Body paragraph. Rendered in Open Sans light, line height 1.8.",
+                "name": "text",
+                "type": "text"
+              }
+            ],
+            "type": "object",
+            "name": "body"
+          },
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Short closing line. Rendered in Montserrat gold, small.",
+                "name": "text",
+                "type": "string"
+              }
+            ],
+            "type": "object",
+            "name": "tagline"
+          },
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Small caps label at the top of the card (e.g. \"Pause & Ponder\").",
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "rows": 2,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "One-sentence description for the card.",
+                "name": "body",
+                "type": "text"
+              }
+            ],
+            "type": "object",
+            "name": "featureCard"
+          },
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "e.g. \"Start here →\". Rendered as a gold filled button.",
+                "name": "label",
+                "type": "string",
+                "title": "Button Label"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "regex",
+                        "constraint": {
+                          "pattern": "/^\\//",
+                          "name": "leading slash",
+                          "invert": false
+                        }
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "App route to navigate to (e.g. /journeys/beauty-truth-and-goodness or /prompt). When tapped, marks onboarding complete.",
+                "name": "linkPath",
+                "type": "string"
+              }
+            ],
+            "type": "object",
+            "name": "primaryCta",
+            "title": "Primary CTA"
+          },
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "e.g. \"See today's Pause & Ponder →\". Rendered as a small text link.",
+                "name": "label",
+                "type": "string",
+                "title": "Button Label"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "regex",
+                        "constraint": {
+                          "pattern": "/^\\//",
+                          "name": "leading slash",
+                          "invert": false
+                        }
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "App route to navigate to. When tapped, marks onboarding complete.",
+                "name": "linkPath",
+                "type": "string"
+              }
+            ],
+            "type": "object",
+            "name": "secondaryCta",
+            "title": "Secondary CTA"
+          }
+        ],
+        "name": "blocks",
+        "type": "array"
       }
     ],
     "name": "splashPage",
-    "type": "document"
+    "type": "document",
+    "title": "Splash Screen"
   },
   {
     "fields": [
