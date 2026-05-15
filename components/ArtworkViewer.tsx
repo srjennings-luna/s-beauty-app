@@ -5,6 +5,7 @@ import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Artwork } from "@/lib/types";
 import FavoriteButton from "./ui/FavoriteButton";
+import { WHISPER_GRADIENT } from "@/lib/design-tokens";
 
 interface ArtworkViewerProps {
   artwork: Artwork;
@@ -23,7 +24,7 @@ export default function ArtworkViewer({ artwork, onClose }: ArtworkViewerProps) 
   const isSacredArt = !artwork.locationType || artwork.locationType === 'sacred-art' || artwork.locationType === 'architecture';
 
   return (
-    <div className="fixed inset-0 z-[60] flex flex-col" style={{ background: "#16110d" }}>
+    <div className="fixed inset-0 z-[60] flex flex-col" style={{ background: WHISPER_GRADIENT }}>
       {/* Header - fixed at top */}
       <div className="flex items-center justify-between p-4 flex-shrink-0">
         <button

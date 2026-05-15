@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import type { JourneyDay } from "@/lib/types";
 import NarrationButton, { NARRATION_START_EVENT, NARRATION_END_EVENT } from "@/components/NarrationButton";
+import { WHISPER_GRADIENT } from "@/lib/design-tokens";
 
 function formatTime(s: number): string {
   const m = Math.floor(s / 60);
@@ -72,6 +73,7 @@ function truncateToSentences(text: string, maxChars = 220): string {
 // ── KALLOS espresso palette ───────────────────────────────────────────────────
 const C = {
   bg: "#16110d",
+  bgGradient: WHISPER_GRADIENT,
   cream: "rgba(253,246,232,0.88)",
   creamDim: "rgba(253,246,232,0.5)",
   creamFaint: "rgba(253,246,232,0.25)",
@@ -670,7 +672,8 @@ function StepBreathe({ day }: { day: JourneyDay }) {
   const imageUrl = content?.imageUrl;
 
   return (
-    <div className="h-full overflow-hidden" style={{ backgroundColor: C.bg }}>
+    <div className="h-full overflow-hidden">
+      {/* Transparent — Whisper gradient from the outer modal shows through. */}
       {/* Full-screen image with 8x zoom */}
       {imageUrl && (
         <div className="absolute inset-0">
@@ -821,7 +824,8 @@ function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete, journeyTit
   };
 
   return (
-    <div className="h-full flex flex-col" style={{ background: C.bg }}>
+    <div className="h-full flex flex-col">
+      {/* Transparent — Whisper gradient from the outer modal shows through. */}
 
       {/* Spacer for header */}
       <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)", flexShrink: 0 }} />
@@ -1112,7 +1116,7 @@ export default function JourneyDaySteps({
 
   return (
     <>
-      <div className="fixed inset-0 z-[60]" style={{ height: "100dvh", backgroundColor: C.bg }}>
+      <div className="fixed inset-0 z-[60]" style={{ height: "100dvh", background: C.bgGradient }}>
         {/* Slide container — swipe left/right to navigate */}
         {/* touch-action: pan-y tells the browser to handle vertical scroll natively
             and pass horizontal gestures to JS — prevents off-center artifacts on iOS.

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import GoDeeperSection from "@/components/GoDeeperSection";
 import PageTransition from "@/components/ui/PageTransition";
+import { WHISPER_GRADIENT } from "@/lib/design-tokens";
 type SanityArtwork = {
   _id: string;
   title: string;
@@ -48,9 +49,10 @@ Glory be to the Father, and to the Son, and to the Holy Spirit.
 As it was in the beginning, is now, and ever shall be,
 world without end. Amen.`;
 
-// Espresso color palette — immersive mode
+// Espresso color palette — immersive mode.
+// `bg` is the shared Whisper gradient applied to all page-level surfaces.
 const C = {
-  bg: "linear-gradient(180deg, #1e1410 0%, #16110d 30%, #16110d 70%, #0d0a07 100%)",
+  bg: WHISPER_GRADIENT,
   header: "rgba(22,17,13,0.97)",
   cream: "rgba(253,246,232,0.88)",
   creamDim: "rgba(253,246,232,0.5)",

@@ -9,6 +9,7 @@ import type { DailyPrompt } from "@/lib/types";
 import { addFavorite, removeFavorite, isFavorite } from "@/lib/favorites";
 import PageTransition from "@/components/ui/PageTransition";
 import NarrationButton, { NARRATION_START_EVENT, NARRATION_END_EVENT } from "@/components/NarrationButton";
+import { WHISPER_GRADIENT } from "@/lib/design-tokens";
 
 function formatTime(s: number): string {
   const m = Math.floor(s / 60);
@@ -16,9 +17,10 @@ function formatTime(s: number): string {
 }
 
 // ── Espresso palette ──────────────────────────────────────────────────────────
+// bgGradient is the shared Whisper gradient from lib/design-tokens.
 const C = {
   bg: "#16110d",
-  bgGradient: "linear-gradient(180deg, #1e1410 0%, #16110d 30%, #16110d 70%, #0d0a07 100%)",
+  bgGradient: WHISPER_GRADIENT,
   header: "rgba(22,17,13,0.97)",
   cream: "rgba(253,246,232,0.88)",
   creamDim: "rgba(253,246,232,0.5)",

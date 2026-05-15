@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { WHISPER_GRADIENT } from "@/lib/design-tokens";
 
 export type SplashBlock =
   | { _type: "wordmark"; _key: string; text: string }
@@ -35,7 +36,8 @@ const G = "#B89238"; // aged gilt — the splash gold thread (replaces #C19B5F h
 const G_RGB = "184,146,56"; // RGB tuple for opacity uses below
 const VERDIGRIS = "#5F7A6B"; // gold-rule color; brand-anchor cousin of sage #4a7a62
 const CTA_GRADIENT = `linear-gradient(135deg, ${VERDIGRIS} 0%, ${G} 100%)`;
-const WHISPER_GRADIENT = `linear-gradient(180deg, #3A2D2E 0%, ${E} 50%)`;
+// WHISPER_GRADIENT is imported from lib/design-tokens — shared with the
+// immersive screens (P&P, Journey day, Visio Divina, ArtworkViewer).
 const CREAM = "rgba(253,246,232,0.9)";
 const CREAM_DIM = "rgba(253,246,232,0.52)";
 const montserrat = "Montserrat, sans-serif";
