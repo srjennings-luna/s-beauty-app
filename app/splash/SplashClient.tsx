@@ -24,8 +24,18 @@ export type SplashScreen = {
 
 // Brand constants stay in code — colors, fonts, and the design system are
 // non-negotiable per CLAUDE.md. Sanity controls content and ordering only.
+//
+// Splash uses an aged-gilt + verdigris register that differentiates from the
+// rest of the app's sacred-gold accent. The splash is the brand-impression
+// moment; aged gilt + verdigris signal "fresco / museum" rather than
+// "wellness / meditation." The rest of the app still runs sacred gold
+// #C19B5F via tailwind --accent-gold; that's the daily-use functional palette.
 const E = "#16110d";
-const G = "#C19B5F";
+const G = "#B89238"; // aged gilt — the splash gold thread (replaces #C19B5F here)
+const G_RGB = "184,146,56"; // RGB tuple for opacity uses below
+const VERDIGRIS = "#5F7A6B"; // gold-rule color; brand-anchor cousin of sage #4a7a62
+const CTA_GRADIENT = `linear-gradient(135deg, ${VERDIGRIS} 0%, ${G} 100%)`;
+const WHISPER_GRADIENT = `linear-gradient(180deg, #3A2D2E 0%, ${E} 50%)`;
 const CREAM = "rgba(253,246,232,0.9)";
 const CREAM_DIM = "rgba(253,246,232,0.52)";
 const montserrat = "Montserrat, sans-serif";
@@ -122,7 +132,7 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
             position: "absolute",
             inset: -8,
             borderRadius: "50%",
-            border: "1px solid rgba(193,155,95,0.45)",
+            border: `1px solid rgba(${G_RGB},0.45)`,
             pointerEvents: "none",
           }}
         />
@@ -131,7 +141,7 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
             width: 56,
             height: 56,
             borderRadius: "50%",
-            border: "1px solid rgba(193,155,95,0.55)",
+            border: `1px solid rgba(${G_RGB},0.55)`,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -142,7 +152,7 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
             height="18"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="rgba(193,155,95,0.85)"
+            stroke={`rgba(${G_RGB},0.85)`}
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -164,11 +174,11 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
             key={block._key}
             style={{
               fontFamily: montserrat,
-              fontSize: "1.75rem",
-              letterSpacing: "0.3em",
+              fontSize: "1.5rem",
+              letterSpacing: "0.42em",
               textTransform: "uppercase",
               color: CREAM,
-              fontWeight: 600,
+              fontWeight: 400,
               ...style,
             }}
           >
@@ -196,7 +206,7 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
         return (
           <div
             key={block._key}
-            style={{ height: 1, width: 48, backgroundColor: G, marginTop: 48, marginBottom: 48, ...style }}
+            style={{ height: 1, width: 48, backgroundColor: VERDIGRIS, marginTop: 48, marginBottom: 48, ...style }}
           />
         );
       case "quote":
@@ -273,7 +283,7 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
           <div
             key={block._key}
             style={{
-              border: `1px solid rgba(193,155,95,0.25)`,
+              border: `1px solid rgba(${G_RGB},0.25)`,
               padding: "22px 20px",
               marginTop: blockIdx === 0 ? 0 : 16,
               ...style,
@@ -319,7 +329,7 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
       onClick={() => handleCta(block.linkPath)}
       className="w-full active:scale-95"
       style={{
-        backgroundColor: G,
+        background: CTA_GRADIENT,
         color: E,
         fontFamily: montserrat,
         fontSize: "0.75rem",
@@ -347,7 +357,7 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
       style={{
         fontFamily: montserrat,
         fontSize: "0.65rem",
-        color: "rgba(193,155,95,0.45)",
+        color: `rgba(${G_RGB},0.55)`,
         letterSpacing: "0.1em",
         textTransform: "uppercase",
         ...animStyle(screenIdx, blockIdx),
@@ -360,7 +370,7 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
   return (
     <div
       className={`fixed inset-0 overflow-hidden transition-opacity duration-700 ${visible ? "opacity-100" : "opacity-0"}`}
-      style={{ backgroundColor: E }}
+      style={{ background: WHISPER_GRADIENT }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -383,7 +393,7 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
             className="flex-1 transition-colors duration-300"
             style={{
               height: 2,
-              backgroundColor: i <= current ? "rgba(193,155,95,0.9)" : "rgba(255,255,255,0.18)",
+              backgroundColor: i <= current ? `rgba(${G_RGB},0.9)` : "rgba(255,255,255,0.18)",
             }}
           />
         ))}
@@ -431,7 +441,7 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
               key={screen._id}
               className={`min-w-full h-full flex flex-col ${padX}`}
               style={{
-                backgroundColor: E,
+                // Transparent so the outer Whisper gradient shows through every screen.
                 paddingTop: "calc(env(safe-area-inset-top, 0px) + 110px)",
                 paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 88px)",
               }}
