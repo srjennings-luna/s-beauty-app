@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KALLOS — Fresco Pigments on Current Backgrounds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Open+Sans:wght@300;400;600&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --doc-bg: #F4ECDB;
+    --ink: #1F1812;
+    --ink-soft: #58493A;
+    --rule: #C8A04A;
+    --hairline: rgba(31, 24, 18, 0.12);
+
+    /* Current KALLOS surfaces (locked) */
+    --kallos-espresso: #16110D;
+    --kallos-parchment: #FDF6E8;
+    --kallos-cream: rgba(253,246,232,0.92);
+    --kallos-cream-dim: rgba(253,246,232,0.55);
+
+    /* Active fresco pigments */
+    --umber: #7B5536;
+    --mauve: #8E6E7B;
+    --vermilion: #C8543C;
+    --saffron: #D69A2D;
+    --verdigris: #5F7A6B;
+    --marian: #7B9BC4;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--doc-bg);
+    color: var(--ink);
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    padding: 56px 32px 96px;
+  }
+  .doc { max-width: 1200px; margin: 0 auto; }
+
+  h1 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 2.4rem;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .lede {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    max-width: 740px;
+    margin: 0 0 8px;
+  }
+  .meta-note {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    max-width: 740px;
+    margin: 0 0 4px;
+  }
+  .meta-note s { opacity: 0.5; }
+  .gold-rule {
+    width: 48px; height: 1px;
+    background: var(--rule);
+    margin: 28px 0;
+  }
+  h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 8px;
+  }
+  .section-title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.6rem;
+    margin: 4px 0 24px;
+  }
+
+  /* ── Pigment surface-test grid ──────────────────────────── */
+  .grid-head {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 24px;
+    align-items: end;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 20px;
+  }
+  .grid-head .col-label {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .grid-head .col-label .hex {
+    font-family: "Menlo", monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-transform: none;
+    margin-left: 10px;
+    opacity: 0.8;
+  }
+
+  .pigment-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .pigment-info { display: flex; flex-direction: column; gap: 4px; padding-top: 14px; }
+  .pigment-info .chip {
+    width: 100%; height: 28px;
+    border: 1px solid var(--hairline);
+    margin-bottom: 8px;
+  }
+  .pigment-info .name {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    margin: 0;
+    line-height: 1.15;
+  }
+  .pigment-info .hex {
+    font-family: "Menlo", monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+  }
+
+  .surface {
+    padding: 22px 22px 24px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .surface.espresso {
+    background: var(--kallos-espresso);
+    color: var(--kallos-cream);
+  }
+  .surface.parchment {
+    background: var(--kallos-parchment);
+    color: var(--ink);
+  }
+  .surface .row {
+    display: grid;
+    grid-template-columns: 28px auto 1fr auto;
+    gap: 14px;
+    align-items: center;
+  }
+  .surface .pig-rule { height: 1px; }
+  .surface .pig-badge {
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.46rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    color: #FFF;
+    justify-self: start;
+  }
+  .surface .pig-quote {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.25;
+    margin: 0;
+  }
+  .surface.espresso .pig-quote { color: rgba(253,246,232,0.92); }
+  .surface .pig-cta {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 0.5rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    justify-self: start;
+  }
+  .surface .pig-accent {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 0.95rem;
+  }
+
+  /* ── Full mockups ───────────────────────────────────────── */
+  .mockup-block { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 28px; }
+
+  .phone {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 9 / 19;
+    border: 1px solid var(--hairline);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+  .phone .notch {
+    position: absolute; top: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 56px; height: 5px;
+    background: rgba(0,0,0,0.55);
+  }
+  .phone .top-pad { height: 32px; flex-shrink: 0; }
+  .phone .header {
+    padding: 10px 18px 12px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .phone .wordmark {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.56rem;
+    letter-spacing: 0.32em;
+  }
+  .phone .daycount {
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.46rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .phone .hero {
+    margin: 0 18px 6px;
+    height: 36%;
+    padding: 2px;
+    border: 1px solid var(--saffron);
+    background:
+      radial-gradient(ellipse at 30% 35%, #C9A77A 0%, transparent 55%),
+      radial-gradient(ellipse at 70% 70%, #2E2218 0%, transparent 60%),
+      linear-gradient(135deg, #6E4828 0%, #2E2218 100%);
+  }
+  .phone .hero-cap {
+    margin: 0 18px 12px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.06em;
+    font-style: italic;
+  }
+  .phone .title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    margin: 0 18px 6px;
+    line-height: 1.2;
+  }
+  .phone .rule {
+    width: 24px; height: 1px;
+    background: var(--mauve);
+    margin: 10px 18px;
+  }
+  .phone .lines { margin: 0 18px; }
+  .phone .line { height: 4px; margin-bottom: 5px; }
+  .phone .line.short { width: 65%; }
+  .phone .badge {
+    display: inline-block;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.42rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    margin: 10px 18px 0;
+  }
+  .phone .flex { flex: 1; }
+  .phone .cta {
+    margin: 0 18px 10px;
+    height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 0.5rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .phone .tabbar {
+    height: 38px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    justify-items: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .phone .tab { width: 14px; height: 14px; }
+  .phone .tab.active { background: var(--marian); }
+
+  /* Espresso mockup */
+  .phone.on-espresso {
+    background: var(--kallos-espresso);
+    color: var(--kallos-cream);
+  }
+  .phone.on-espresso .daycount { color: var(--kallos-cream-dim); }
+  .phone.on-espresso .hero-cap { color: var(--kallos-cream-dim); }
+  .phone.on-espresso .line { background: rgba(253,246,232,0.22); }
+  .phone.on-espresso .badge { background: var(--verdigris); color: #FFF; }
+  .phone.on-espresso .cta { background: var(--vermilion); color: #FFF; }
+  .phone.on-espresso .tab { background: rgba(253,246,232,0.3); }
+  .phone.on-espresso .tabbar { border-top-color: rgba(253,246,232,0.08); }
+
+  /* Parchment mockup */
+  .phone.on-parchment {
+    background: var(--kallos-parchment);
+    color: var(--ink);
+  }
+  .phone.on-parchment .daycount { color: rgba(31,24,18,0.55); }
+  .phone.on-parchment .hero-cap { color: rgba(31,24,18,0.55); }
+  .phone.on-parchment .line { background: rgba(31,24,18,0.22); }
+  .phone.on-parchment .badge { background: var(--verdigris); color: #FFF; }
+  .phone.on-parchment .cta { background: var(--umber); color: var(--kallos-parchment); }
+  .phone.on-parchment .tab { background: rgba(31,24,18,0.2); }
+  .phone.on-parchment .tabbar { border-top-color: rgba(31,24,18,0.1); }
+
+  .caption {
+    text-align: center;
+    margin-top: 14px;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1rem;
+  }
+
+  .notes {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--hairline);
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+    max-width: 880px;
+  }
+  .notes p { margin: 0 0 10px; }
+  .notes strong { color: var(--ink); font-weight: 600; }
+
+  @media (max-width: 900px) {
+    .grid-head, .pigment-row { grid-template-columns: 1fr; }
+    .mockup-block { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <h1>Fresco Pigments on KALLOS Surfaces</h1>
+  <p class="lede">Each pigment shown as it actually behaves on the two locked KALLOS backgrounds — espresso (immersive) and parchment (browse).</p>
+  <p class="meta-note">Active palette: Umber, Marian powder blue, Vermilion, Saffron, Mauve, Verdigris. <s>Sistine ultramarine</s> dropped.</p>
+
+  <div class="gold-rule"></div>
+
+  <!-- ─── PIGMENT × SURFACE GRID ───────────────────────────── -->
+  <h2>Pigment × Surface</h2>
+  <div class="section-title">How each fresco color reads on espresso vs. parchment</div>
+
+  <div class="grid-head">
+    <div class="col-label">Pigment</div>
+    <div class="col-label">On Espresso <span class="hex">#16110D</span></div>
+    <div class="col-label">On Parchment <span class="hex">#FDF6E8</span></div>
+  </div>
+
+  <!-- UMBER -->
+  <div class="pigment-row">
+    <div class="pigment-info">
+      <div class="chip" style="background:#7B5536"></div>
+      <p class="name">Fresco Brown / Umber</p>
+      <span class="hex">#7B5536</span>
+    </div>
+    <div class="surface espresso">
+      <div class="row">
+        <div class="pig-rule" style="background:#7B5536"></div>
+        <span class="pig-badge" style="background:#7B5536">Day 2 of 7</span>
+        <p class="pig-accent" style="color:#A6824D">Earth that holds the picture.</p>
+        <span class="pig-cta" style="background:#7B5536;color:#FFF">Continue →</span>
+      </div>
+    </div>
+    <div class="surface parchment">
+      <div class="row">
+        <div class="pig-rule" style="background:#7B5536"></div>
+        <span class="pig-badge" style="background:#7B5536">Day 2 of 7</span>
+        <p class="pig-accent" style="color:#5E3F22">Earth that holds the picture.</p>
+        <span class="pig-cta" style="background:#7B5536;color:#FDF6E8">Continue →</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARIAN POWDER BLUE -->
+  <div class="pigment-row">
+    <div class="pigment-info">
+      <div class="chip" style="background:#7B9BC4"></div>
+      <p class="name">Marian Powder Blue</p>
+      <span class="hex">#7B9BC4</span>
+    </div>
+    <div class="surface espresso">
+      <div class="row">
+        <div class="pig-rule" style="background:#7B9BC4"></div>
+        <span class="pig-badge" style="background:#7B9BC4">Day 2 of 7</span>
+        <p class="pig-accent" style="color:#9AB4D2">The cloak, the morning sky.</p>
+        <span class="pig-cta" style="background:#7B9BC4;color:#16110D">Continue →</span>
+      </div>
+    </div>
+    <div class="surface parchment">
+      <div class="row">
+        <div class="pig-rule" style="background:#7B9BC4"></div>
+        <span class="pig-badge" style="background:#7B9BC4">Day 2 of 7</span>
+        <p class="pig-accent" style="color:#4E6E96">The cloak, the morning sky.</p>
+        <span class="pig-cta" style="background:#5C7FA8;color:#FDF6E8">Continue →</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERMILION -->
+  <div class="pigment-row">
+    <div class="pigment-info">
+      <div class="chip" style="background:#C8543C"></div>
+      <p class="name">Vermilion</p>
+      <span class="hex">#C8543C</span>
+    </div>
+    <div class="surface espresso">
+      <div class="row">
+        <div class="pig-rule" style="background:#C8543C"></div>
+        <span class="pig-badge" style="background:#C8543C">Day 2 of 7</span>
+        <p class="pig-accent" style="color:#D77963">Burning bush. Bloodline.</p>
+        <span class="pig-cta" style="background:#C8543C;color:#FFF">Continue →</span>
+      </div>
+    </div>
+    <div class="surface parchment">
+      <div class="row">
+        <div class="pig-rule" style="background:#C8543C"></div>
+        <span class="pig-badge" style="background:#C8543C">Day 2 of 7</span>
+        <p class="pig-accent" style="color:#A03A26">Burning bush. Bloodline.</p>
+        <span class="pig-cta" style="background:#C8543C;color:#FFF">Continue →</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAFFRON -->
+  <div class="pigment-row">
+    <div class="pigment-info">
+      <div class="chip" style="background:#D69A2D"></div>
+      <p class="name">Saffron / Lead-Tin Yellow</p>
+      <span class="hex">#D69A2D</span>
+    </div>
+    <div class="surface espresso">
+      <div class="row">
+        <div class="pig-rule" style="background:#D69A2D"></div>
+        <span class="pig-badge" style="background:#D69A2D;color:#16110D">Day 2 of 7</span>
+        <p class="pig-accent" style="color:#E1AE4D">Halo, gilt edge, marigold.</p>
+        <span class="pig-cta" style="background:#D69A2D;color:#16110D">Continue →</span>
+      </div>
+    </div>
+    <div class="surface parchment">
+      <div class="row">
+        <div class="pig-rule" style="background:#D69A2D"></div>
+        <span class="pig-badge" style="background:#D69A2D;color:#1F1812">Day 2 of 7</span>
+        <p class="pig-accent" style="color:#8E6418">Halo, gilt edge, marigold.</p>
+        <span class="pig-cta" style="background:#B4801F;color:#FDF6E8">Continue →</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAUVE -->
+  <div class="pigment-row">
+    <div class="pigment-info">
+      <div class="chip" style="background:#8E6E7B"></div>
+      <p class="name">Mauve / Dusty Plum</p>
+      <span class="hex">#8E6E7B</span>
+    </div>
+    <div class="surface espresso">
+      <div class="row">
+        <div class="pig-rule" style="background:#8E6E7B"></div>
+        <span class="pig-badge" style="background:#8E6E7B">Day 2 of 7</span>
+        <p class="pig-accent" style="color:#B08A95">Drapery in shadow.</p>
+        <span class="pig-cta" style="background:#8E6E7B;color:#FFF">Continue →</span>
+      </div>
+    </div>
+    <div class="surface parchment">
+      <div class="row">
+        <div class="pig-rule" style="background:#8E6E7B"></div>
+        <span class="pig-badge" style="background:#8E6E7B">Day 2 of 7</span>
+        <p class="pig-accent" style="color:#6E5260">Drapery in shadow.</p>
+        <span class="pig-cta" style="background:#6E5260;color:#FDF6E8">Continue →</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERDIGRIS -->
+  <div class="pigment-row">
+    <div class="pigment-info">
+      <div class="chip" style="background:#5F7A6B"></div>
+      <p class="name">Verdigris</p>
+      <span class="hex">#5F7A6B</span>
+    </div>
+    <div class="surface espresso">
+      <div class="row">
+        <div class="pig-rule" style="background:#5F7A6B"></div>
+        <span class="pig-badge" style="background:#5F7A6B">Day 2 of 7</span>
+        <p class="pig-accent" style="color:#83A092">Aged copper. Olive grove.</p>
+        <span class="pig-cta" style="background:#5F7A6B;color:#FFF">Continue →</span>
+      </div>
+    </div>
+    <div class="surface parchment">
+      <div class="row">
+        <div class="pig-rule" style="background:#5F7A6B"></div>
+        <span class="pig-badge" style="background:#5F7A6B">Day 2 of 7</span>
+        <p class="pig-accent" style="color:#3F5B4C">Aged copper. Olive grove.</p>
+        <span class="pig-cta" style="background:#5F7A6B;color:#FDF6E8">Continue →</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="gold-rule" style="margin-top:48px"></div>
+
+  <!-- ─── FULL MOCKUPS ─────────────────────────────────────── -->
+  <h2 style="margin-top:48px">In Context</h2>
+  <div class="section-title">A Journey Day rendered on each surface</div>
+
+  <div class="mockup-block">
+
+    <!-- ESPRESSO -->
+    <div>
+      <div class="phone on-espresso">
+        <div class="notch"></div>
+        <div class="top-pad"></div>
+        <div class="header">
+          <span class="wordmark">KALLOS</span>
+          <span class="daycount">Day 2 of 7</span>
+        </div>
+        <div class="hero"></div>
+        <div class="hero-cap">Caravaggio · 1601</div>
+        <div class="title">The Inconsolable Longing</div>
+        <div class="rule"></div>
+        <div class="lines">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line short"></div>
+        </div>
+        <span class="badge">Pause &amp; Ponder</span>
+        <div class="flex"></div>
+        <div class="cta">Begin →</div>
+        <div class="tabbar">
+          <div class="tab active"></div>
+          <div class="tab"></div>
+          <div class="tab"></div>
+          <div class="tab"></div>
+        </div>
+      </div>
+      <div class="caption">On espresso <span style="font-family:Menlo,monospace;font-size:0.75rem;color:var(--ink-soft);">#16110D</span></div>
+    </div>
+
+    <!-- PARCHMENT -->
+    <div>
+      <div class="phone on-parchment">
+        <div class="notch"></div>
+        <div class="top-pad"></div>
+        <div class="header">
+          <span class="wordmark">KALLOS</span>
+          <span class="daycount">Day 2 of 7</span>
+        </div>
+        <div class="hero"></div>
+        <div class="hero-cap">Caravaggio · 1601</div>
+        <div class="title">The Inconsolable Longing</div>
+        <div class="rule"></div>
+        <div class="lines">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line short"></div>
+        </div>
+        <span class="badge">Pause &amp; Ponder</span>
+        <div class="flex"></div>
+        <div class="cta">Begin →</div>
+        <div class="tabbar">
+          <div class="tab active"></div>
+          <div class="tab"></div>
+          <div class="tab"></div>
+          <div class="tab"></div>
+        </div>
+      </div>
+      <div class="caption">On parchment <span style="font-family:Menlo,monospace;font-size:0.75rem;color:var(--ink-soft);">#FDF6E8</span></div>
+    </div>
+
+  </div>
+
+  <!-- ─── NOTES ─────────────────────────────────────────────── -->
+  <div class="notes">
+    <p><strong>Mockup roles (both surfaces, identical):</strong> saffron gallery hairline frames the artwork; mauve thin rule under the title; verdigris badge; vermilion CTA on espresso, umber CTA on parchment; Marian powder blue as the active tab dot.</p>
+    <p><strong>What works on espresso:</strong> all six pigments hold up. Saffron, vermilion, and Marian read brightest; mauve, umber, verdigris read deeper. Cream text on bright pigments (saffron) needs <em>espresso</em> ink, not white.</p>
+    <p><strong>What needs care on parchment:</strong> saffron and Marian powder blue are too light for CTAs against cream text — for buttons on parchment, drop to a deeper variant (saffron → <code>#B4801F</code>, Marian → <code>#5C7FA8</code>). Used as rules, badges, and active dots they're fine at full strength.</p>
+    <p><strong>Why Marian beats Sistine here:</strong> Sistine ultramarine <code>#34468C</code> reads as <em>institution</em> on parchment (bank/airline). Marian powder blue <code>#7B9BC4</code> reads as <em>fresco sky</em> — softer, more pictorial, more contemplative. Better fit for the register KALLOS wants.</p>
+  </div>
+
+</div>
+</body>
+</html>

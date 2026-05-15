@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KALLOS — Mauve vs. Verdigris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Open+Sans:wght@300;400;600&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --doc-bg: #F4ECDB;
+    --ink: #1F1812;
+    --ink-soft: #58493A;
+    --hairline: rgba(31, 24, 18, 0.12);
+    --espresso: #16110D;
+    --whisper-top: #3A2D2E;
+    --cream: rgba(253,246,232,0.92);
+    --cream-soft: rgba(253,246,232,0.55);
+    --gold-aged: #B89238;
+    --mauve: #8E6E7B;
+    --verdigris: #5F7A6B;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--doc-bg);
+    color: var(--ink);
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    padding: 48px 32px 80px;
+  }
+  .doc { max-width: 1240px; margin: 0 auto; }
+  h1 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 2.2rem;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+  }
+  .lede {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    max-width: 720px;
+    margin: 0 0 8px;
+  }
+  .gold-rule {
+    width: 48px; height: 1px;
+    background: var(--gold-aged);
+    margin: 32px 0;
+  }
+  h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+
+  /* Phone */
+  .phones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .phone-wrap { display: flex; flex-direction: column; align-items: center; }
+  .phone {
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 9 / 19;
+    border: 1px solid var(--hairline);
+    overflow: hidden;
+    position: relative;
+    display: flex; flex-direction: column;
+    background: linear-gradient(180deg, var(--whisper-top) 0%, var(--espresso) 50%);
+    color: var(--cream);
+  }
+  .phone .notch {
+    position: absolute; top: 10px; left: 50%;
+    transform: translateX(-50%);
+    width: 68px; height: 6px;
+    background: rgba(0,0,0,0.55);
+  }
+  .phone .progress {
+    position: absolute; top: 28px; left: 16px; right: 16px;
+    display: flex; gap: 3px;
+  }
+  .phone .progress .seg { flex: 1; height: 2px; background: rgba(255,255,255,0.18); }
+  .phone .progress .seg.on { background: rgba(184,146,56,0.85); }
+  .phone .skip {
+    position: absolute; top: 42px; right: 20px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+  .phone .content {
+    flex: 1;
+    display: flex; flex-direction: column;
+    padding: 96px 40px 56px;
+  }
+  .heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--cream);
+    line-height: 1.2;
+    margin: 0;
+  }
+  .rule { width: 48px; height: 1px; margin: 40px 0; }
+  .rule.mauve { background: var(--mauve); }
+  .rule.verdigris { background: var(--verdigris); }
+  .body {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--cream-soft);
+    margin: 0;
+  }
+  .spacer { flex: 1; }
+  .cta {
+    color: var(--espresso);
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    text-align: center;
+    width: 100%;
+    display: block;
+  }
+  .cta.rose-gilt {
+    background: linear-gradient(135deg, #A47783 0%, #B89238 100%);
+  }
+  .cta.verdigris-gilt {
+    background: linear-gradient(135deg, #5F7A6B 0%, #B89238 100%);
+  }
+  .secondary {
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(184,146,56,0.55);
+    padding: 8px 0 0;
+  }
+
+  .caption {
+    text-align: center;
+    margin-top: 16px;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--ink);
+  }
+  .caption-meta {
+    text-align: center;
+    margin-top: 4px;
+    font-family: "Menlo", "Courier New", monospace;
+    font-size: 0.7rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+
+  /* Button close-up strip */
+  .strip {
+    margin-top: 56px;
+    background: var(--espresso);
+    padding: 56px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    border: 1px solid var(--hairline);
+  }
+  .strip .item { display: flex; flex-direction: column; gap: 12px; }
+  .strip .item .label {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cream-soft);
+    text-align: center;
+  }
+  .strip .btn {
+    color: var(--espresso);
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 22px 24px;
+    text-align: center;
+  }
+  .strip .btn.rose-gilt { background: linear-gradient(135deg, #A47783 0%, #B89238 100%); }
+  .strip .btn.verdigris-gilt { background: linear-gradient(135deg, #5F7A6B 0%, #B89238 100%); }
+
+  .notes {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--hairline);
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    max-width: 920px;
+  }
+  .notes p { margin: 0 0 10px; }
+  .notes strong { color: var(--ink); font-weight: 600; }
+
+  @media (max-width: 920px) {
+    .phones, .strip { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <h1>Mauve vs. Verdigris</h1>
+  <p class="lede">Same splash structure, same Whisper gradient, same wordmark, same gilt tagline. Only the rule and the CTA pigment change.</p>
+  <div class="gold-rule"></div>
+
+  <h2>Splash Screen 5 — side by side</h2>
+  <div class="phones">
+
+    <!-- ── Mauve treatment ─────────────────────── -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="progress">
+          <div class="seg on"></div><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div>
+        </div>
+        <div class="skip">Skip</div>
+        <div class="content">
+          <p class="heading">Start where you are.</p>
+          <div class="rule mauve"></div>
+          <p class="body">No preparation needed. No right way to begin. Start a 3-day journey into beauty, truth and goodness. Something new every day.</p>
+          <div class="spacer"></div>
+          <div class="cta rose-gilt">Start here →</div>
+          <div class="secondary">See today&rsquo;s Pause &amp; Ponder →</div>
+        </div>
+      </div>
+      <div class="caption">Mauve</div>
+      <div class="caption-meta">rule #8E6E7B · CTA rose → gilt</div>
+    </div>
+
+    <!-- ── Verdigris treatment ─────────────────── -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="progress">
+          <div class="seg on"></div><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div>
+        </div>
+        <div class="skip">Skip</div>
+        <div class="content">
+          <p class="heading">Start where you are.</p>
+          <div class="rule verdigris"></div>
+          <p class="body">No preparation needed. No right way to begin. Start a 3-day journey into beauty, truth and goodness. Something new every day.</p>
+          <div class="spacer"></div>
+          <div class="cta verdigris-gilt">Start here →</div>
+          <div class="secondary">See today&rsquo;s Pause &amp; Ponder →</div>
+        </div>
+      </div>
+      <div class="caption">Verdigris</div>
+      <div class="caption-meta">rule #5F7A6B · CTA verdigris → gilt</div>
+    </div>
+
+  </div>
+
+  <div class="gold-rule" style="margin-top:64px"></div>
+
+  <!-- ── Button close-ups ─────────────────────── -->
+  <h2>Buttons on espresso, full scale</h2>
+  <div class="strip">
+    <div class="item">
+      <div class="btn rose-gilt">Start here →</div>
+      <p class="label">Mauve · rose → gilt</p>
+    </div>
+    <div class="item">
+      <div class="btn verdigris-gilt">Start here →</div>
+      <p class="label">Verdigris · verdigris → gilt</p>
+    </div>
+  </div>
+
+  <div class="notes">
+    <p><strong>What each pigment says.</strong> Mauve reads as <em>dusk, drapery, Sehnsucht</em> — the longing register of Beauty. Verdigris reads as <em>aged copper, olive grove, patina</em> — the time-and-tradition register of Truth and Suffering.</p>
+    <p><strong>Reference fit.</strong> Verdigris pairs with ochre/gilt in the Variant &ldquo;Verdigris &amp; Ochre&rdquo; reference you pulled (Vatican Stanze drapery). That pairing is one of the most documented Renaissance fresco combinations — actual copper-acetate pigment used alongside earth yellows for centuries.</p>
+    <p><strong>Differentiation.</strong> Both move firmly away from sacred gold flat. Mauve is the warmer, more devotional register; verdigris is the cooler, more art-historical register. Neither resembles any current AI-meditation app.</p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KALLOS — App-Wide Calibration (Real P&amp;P Layout)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Open+Sans:wght@300;400;600&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --doc-bg: #F4ECDB;
+    --ink: #1F1812;
+    --ink-soft: #58493A;
+    --hairline: rgba(31, 24, 18, 0.12);
+
+    --espresso: #16110D;
+    --whisper-top: #3A2D2E;
+    --cream: rgba(253,246,232,0.92);
+    --cream-soft: rgba(253,246,232,0.55);
+    --cream-dim: rgba(253,246,232,0.4);
+
+    --sacred-gold: #C19B5F;
+    --aged-gilt: #B89238;
+    --verdigris: #5F7A6B;
+    --sage: #4a7a62;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--doc-bg);
+    color: var(--ink);
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    padding: 48px 32px 80px;
+  }
+  .doc { max-width: 1320px; margin: 0 auto; }
+  h1 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 2.2rem;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+  }
+  .lede {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    max-width: 760px;
+    margin: 0 0 8px;
+  }
+  .gold-rule { width: 48px; height: 1px; background: var(--aged-gilt); margin: 32px 0; }
+  h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+
+  /* Four-change strip */
+  .moves {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+  .moves .move {
+    padding: 14px 16px;
+    border-left: 2px solid var(--verdigris);
+    background: rgba(95,122,107,0.06);
+  }
+  .moves .move b {
+    display: block;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  /* Two phones side-by-side */
+  .phones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .phone-wrap { display: flex; flex-direction: column; align-items: center; }
+
+  .phone {
+    width: 100%;
+    max-width: 360px;
+    border: 1px solid var(--hairline);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    color: var(--cream);
+  }
+  .phone.current { background: var(--espresso); }
+  .phone.proposed { background: linear-gradient(180deg, var(--whisper-top) 0%, var(--espresso) 50%); }
+
+  /* Top toolbar */
+  .topbar {
+    padding: 18px 16px 14px;
+    display: grid;
+    grid-template-columns: 24px 1fr 24px 24px auto;
+    gap: 12px;
+    align-items: center;
+    border-bottom: 1px solid rgba(253,246,232,0.06);
+  }
+  .topbar .back { color: var(--cream); font-size: 1rem; line-height: 1; }
+  .topbar .ttl {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .phone.current .topbar .ttl { color: var(--sacred-gold); }
+  .phone.proposed .topbar .ttl { color: var(--aged-gilt); }
+  .topbar .icon {
+    width: 16px; height: 16px;
+    background: rgba(253,246,232,0.55);
+  }
+  .topbar .music-pill {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .phone.current .topbar .music-pill { color: var(--sacred-gold); }
+  .phone.proposed .topbar .music-pill { color: var(--aged-gilt); }
+
+  /* Hero */
+  .hero {
+    height: 220px;
+    background:
+      radial-gradient(ellipse at 25% 30%, #C9A77A 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 75%, #1A100A 0%, transparent 60%),
+      linear-gradient(135deg, #5C3924 0%, #150C06 100%);
+  }
+  .hint {
+    text-align: right;
+    padding: 10px 18px 0;
+    font-family: "Open Sans", sans-serif;
+    font-style: italic;
+    font-size: 0.62rem;
+    color: var(--cream-dim);
+  }
+
+  /* Title block */
+  .titlewrap {
+    padding: 6px 18px 12px;
+  }
+  .titlewrap .date {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin: 8px 0 4px;
+    color: var(--cream-soft);
+  }
+  .titlewrap .day-title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--cream);
+    margin: 0;
+  }
+
+  /* Curator-note box (boxed/bordered) */
+  .curator {
+    margin: 14px 18px 20px;
+    padding: 18px 16px;
+    background: rgba(0,0,0,0.25);
+    border-left: 2px solid;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: var(--cream-soft);
+  }
+  .phone.current .curator { border-color: var(--sacred-gold); }
+  .phone.proposed .curator { border-color: var(--verdigris); }
+
+  /* Prompt question */
+  .question {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.35rem;
+    line-height: 1.3;
+    color: var(--cream);
+    margin: 4px 18px 18px;
+  }
+
+  /* Context body */
+  .context {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    font-size: 0.78rem;
+    line-height: 1.75;
+    color: var(--cream-soft);
+    margin: 0 18px 14px;
+  }
+
+  /* Read more / Listen mini-CTAs */
+  .mini-ctas {
+    display: flex;
+    gap: 20px;
+    margin: 0 18px 28px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .phone.current .mini-ctas { color: var(--sacred-gold); }
+  .phone.proposed .mini-ctas { color: var(--aged-gilt); }
+
+  /* Section label (READING / MUSIC / ACTION / VERBA / GO DEEPER) */
+  .sec-label {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.55rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin: 0 18px 14px;
+  }
+  .phone.current .sec-label { color: var(--sacred-gold); }
+  .phone.proposed .sec-label { color: var(--aged-gilt); }
+  .sec-label .light {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    margin-left: 6px;
+    opacity: 0.7;
+  }
+
+  /* Hairline rule between sections */
+  .hairline {
+    height: 1px;
+    margin: 14px 18px 18px;
+  }
+  .phone.current .hairline { background: rgba(193,155,95,0.35); }
+  .phone.proposed .hairline { background: rgba(95,122,107,0.5); }
+
+  /* Lectio quotes */
+  .lectio {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--cream);
+    margin: 0 18px 4px;
+  }
+  .attrib {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.5rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin: 0 18px 18px;
+  }
+  .phone.current .attrib { color: var(--sacred-gold); }
+  .phone.proposed .attrib { color: var(--aged-gilt); }
+
+  /* Auditio audio player */
+  .audio-row {
+    display: flex; gap: 14px;
+    align-items: center;
+    margin: 0 18px 18px;
+  }
+  .play-circle {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: rgba(253,246,232,0.95);
+    color: var(--espresso);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .audio-meta { display: flex; flex-direction: column; gap: 2px; }
+  .audio-title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--cream);
+  }
+  .audio-perf {
+    font-family: "Open Sans", sans-serif;
+    font-size: 0.7rem;
+    color: var(--cream-dim);
+    font-style: italic;
+  }
+
+  /* VERBA expandable */
+  .verba {
+    margin: 0 18px 22px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.55rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .phone.current .verba { color: var(--sacred-gold); }
+  .phone.proposed .verba { color: var(--aged-gilt); }
+
+  /* Actio */
+  .actio-row {
+    display: flex; gap: 10px;
+    margin: 0 18px 12px;
+  }
+  .checkbox {
+    width: 14px; height: 14px;
+    border: 1px solid;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .phone.current .checkbox { border-color: var(--sacred-gold); }
+  .phone.proposed .checkbox { border-color: var(--aged-gilt); }
+  .actio-text {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: var(--cream-soft);
+  }
+  .closing {
+    margin: 0 18px 24px;
+    font-family: "Open Sans", sans-serif;
+    font-style: italic;
+    font-size: 0.72rem;
+    color: var(--cream-dim);
+  }
+
+  /* Go Deeper card */
+  .go-deeper {
+    margin: 0 18px 22px;
+    padding: 16px 18px;
+    background: rgba(0,0,0,0.28);
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .phone.current .go-deeper { border-color: rgba(193,155,95,0.4); }
+  .phone.proposed .go-deeper { border-color: rgba(95,122,107,0.5); }
+  .go-deeper-label {
+    display: block;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.5rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .phone.current .go-deeper-label { color: var(--sacred-gold); }
+  .phone.proposed .go-deeper-label { color: var(--aged-gilt); }
+  .go-deeper-title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--cream);
+  }
+  .gd-cta {
+    color: var(--espresso);
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    flex-shrink: 0;
+  }
+  .phone.current .gd-cta { background: var(--sacred-gold); }
+  .phone.proposed .gd-cta {
+    background: linear-gradient(135deg, var(--verdigris) 0%, var(--aged-gilt) 100%);
+  }
+
+  /* Bottom tab bar */
+  .tabbar {
+    height: 64px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    justify-items: center;
+    border-top: 1px solid rgba(253,246,232,0.08);
+    background: rgba(0,0,0,0.3);
+    padding-bottom: 12px;
+  }
+  .tab { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .tab .glyph { width: 18px; height: 18px; background: rgba(253,246,232,0.45); }
+  .tab .name {
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.5rem;
+    color: rgba(253,246,232,0.5);
+    letter-spacing: 0.06em;
+  }
+  .tab.active .glyph { background: var(--sage); }
+  .tab.active .name { color: var(--cream); }
+
+  .caption {
+    text-align: center;
+    margin-top: 16px;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--ink);
+  }
+
+  .notes {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--hairline);
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    max-width: 960px;
+  }
+  .notes p { margin: 0 0 10px; }
+  .notes strong { color: var(--ink); font-weight: 600; }
+
+  @media (max-width: 920px) {
+    .phones, .moves { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <h1>App-Wide Calibration</h1>
+  <p class="lede">Real P&amp;P layout rendered in current tokens vs. proposed. Affects every espresso/immersive screen: Today P&amp;P, Journey Encounter, Visio Divina, Breathe.</p>
+
+  <div class="moves">
+    <div class="move">
+      <b>Background</b>
+      Flat espresso <code>#16110D</code> → Whisper gradient <code>180deg, #3A2D2E → #16110D 50%</code>.
+    </div>
+    <div class="move">
+      <b>Section Labels</b>
+      Sacred gold <code>#C19B5F</code> → aged gilt <code>#B89238</code>. DAILY PROMPT, Music, READ MORE, LISTEN, READING, MUSIC, ACTION, VERBA, GO DEEPER, attributions, dates.
+    </div>
+    <div class="move">
+      <b>Rules &amp; Borders</b>
+      Sacred gold rules and box borders → verdigris <code>#5F7A6B</code>. Curator-note left bar, section hairlines, GO DEEPER card borders.
+    </div>
+    <div class="move">
+      <b>Primary CTAs</b>
+      Flat gold → painterly gradient <code>135deg, #5F7A6B → #B89238</code>. GO DEEPER &ldquo;BEGIN&rdquo; button.
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <h2>Today / P&amp;P — Current vs. Proposed</h2>
+  <div class="phones">
+
+    <!-- ── CURRENT ─────────────────────────────── -->
+    <div class="phone-wrap">
+      <div class="phone current">
+        <div class="topbar">
+          <span class="back">‹</span>
+          <span class="ttl">Daily Prompt</span>
+          <div class="icon"></div>
+          <div class="icon"></div>
+          <span class="music-pill">Music</span>
+        </div>
+        <div class="hero"></div>
+        <div class="hint">pinch to explore image</div>
+        <div class="titlewrap">
+          <p class="date">Sunday, April 12</p>
+          <h3 class="day-title">They Were Early</h3>
+        </div>
+        <div class="curator">
+          In the 2nd century, most people assumed the new Christian faith and Greco-Roman philosophy were enemies. Justin Martyr wrote directly to Emperor Antoninus Pius and argued the opposite: the Greek philosophers had not been wrong. They were early.
+        </div>
+        <p class="question">What is the most surprising thing you have ever discovered was true?</p>
+        <p class="context">In Rome around 150 AD, you could be tried and executed for being a Christian. The rumors about what happened at their secret gatherings had been spreading for years.</p>
+        <div class="mini-ctas">
+          <span>Read More ↓</span>
+          <span>🎧 Listen</span>
+        </div>
+        <div class="hairline"></div>
+        <p class="sec-label">Reading <span class="light">(Lectio)</span></p>
+        <p class="lectio">&ldquo;The Logos is common to all.&rdquo;</p>
+        <p class="attrib">— Heraclitus, Fragment 2 (c. 500 BC)</p>
+        <p class="lectio">&ldquo;In the beginning was the Word, and the Word was with God…&rdquo;</p>
+        <p class="attrib">— John 1:1, 14 (RSV-2CE)</p>
+        <div class="hairline"></div>
+        <p class="sec-label">Music <span class="light">(Auditio)</span></p>
+        <div class="audio-row">
+          <div class="play-circle">▶</div>
+          <div class="audio-meta">
+            <span class="audio-title">Veni Creator Spiritus</span>
+            <span class="audio-perf">Portuguese vocal ensemble Coral Vér…</span>
+          </div>
+        </div>
+        <div class="verba"><span>Verba</span> <span>↓</span></div>
+        <div class="hairline"></div>
+        <p class="sec-label">Action <span class="light">(Actio)</span></p>
+        <div class="actio-row">
+          <div class="checkbox"></div>
+          <p class="actio-text">Read the Lectio pairing again slowly. Heraclitus wrote his fragment around 500 BC. John&rsquo;s Gospel was written around 90 AD.</p>
+        </div>
+        <p class="closing">You showed up today.</p>
+        <div class="go-deeper">
+          <div>
+            <span class="go-deeper-label">Go Deeper</span>
+            <span class="go-deeper-title">When Myth Became Fact</span>
+          </div>
+          <div class="gd-cta">Begin →</div>
+        </div>
+        <div class="tabbar">
+          <div class="tab active"><div class="glyph"></div><span class="name">Today</span></div>
+          <div class="tab"><div class="glyph"></div><span class="name">Explore</span></div>
+          <div class="tab"><div class="glyph"></div><span class="name">Journeys</span></div>
+          <div class="tab"><div class="glyph"></div><span class="name">Library</span></div>
+        </div>
+      </div>
+      <div class="caption">A · Current</div>
+    </div>
+
+    <!-- ── PROPOSED ─────────────────────────────── -->
+    <div class="phone-wrap">
+      <div class="phone proposed">
+        <div class="topbar">
+          <span class="back">‹</span>
+          <span class="ttl">Daily Prompt</span>
+          <div class="icon"></div>
+          <div class="icon"></div>
+          <span class="music-pill">Music</span>
+        </div>
+        <div class="hero"></div>
+        <div class="hint">pinch to explore image</div>
+        <div class="titlewrap">
+          <p class="date">Sunday, April 12</p>
+          <h3 class="day-title">They Were Early</h3>
+        </div>
+        <div class="curator">
+          In the 2nd century, most people assumed the new Christian faith and Greco-Roman philosophy were enemies. Justin Martyr wrote directly to Emperor Antoninus Pius and argued the opposite: the Greek philosophers had not been wrong. They were early.
+        </div>
+        <p class="question">What is the most surprising thing you have ever discovered was true?</p>
+        <p class="context">In Rome around 150 AD, you could be tried and executed for being a Christian. The rumors about what happened at their secret gatherings had been spreading for years.</p>
+        <div class="mini-ctas">
+          <span>Read More ↓</span>
+          <span>🎧 Listen</span>
+        </div>
+        <div class="hairline"></div>
+        <p class="sec-label">Reading <span class="light">(Lectio)</span></p>
+        <p class="lectio">&ldquo;The Logos is common to all.&rdquo;</p>
+        <p class="attrib">— Heraclitus, Fragment 2 (c. 500 BC)</p>
+        <p class="lectio">&ldquo;In the beginning was the Word, and the Word was with God…&rdquo;</p>
+        <p class="attrib">— John 1:1, 14 (RSV-2CE)</p>
+        <div class="hairline"></div>
+        <p class="sec-label">Music <span class="light">(Auditio)</span></p>
+        <div class="audio-row">
+          <div class="play-circle">▶</div>
+          <div class="audio-meta">
+            <span class="audio-title">Veni Creator Spiritus</span>
+            <span class="audio-perf">Portuguese vocal ensemble Coral Vér…</span>
+          </div>
+        </div>
+        <div class="verba"><span>Verba</span> <span>↓</span></div>
+        <div class="hairline"></div>
+        <p class="sec-label">Action <span class="light">(Actio)</span></p>
+        <div class="actio-row">
+          <div class="checkbox"></div>
+          <p class="actio-text">Read the Lectio pairing again slowly. Heraclitus wrote his fragment around 500 BC. John&rsquo;s Gospel was written around 90 AD.</p>
+        </div>
+        <p class="closing">You showed up today.</p>
+        <div class="go-deeper">
+          <div>
+            <span class="go-deeper-label">Go Deeper</span>
+            <span class="go-deeper-title">When Myth Became Fact</span>
+          </div>
+          <div class="gd-cta">Begin →</div>
+        </div>
+        <div class="tabbar">
+          <div class="tab active"><div class="glyph"></div><span class="name">Today</span></div>
+          <div class="tab"><div class="glyph"></div><span class="name">Explore</span></div>
+          <div class="tab"><div class="glyph"></div><span class="name">Journeys</span></div>
+          <div class="tab"><div class="glyph"></div><span class="name">Library</span></div>
+        </div>
+      </div>
+      <div class="caption">B · Proposed</div>
+    </div>
+
+  </div>
+
+  <div class="notes">
+    <p><strong>What's the same in both.</strong> Body text (cream-dim Open Sans), prompt question (cream Cormorant italic), Lectio quotes (cream Cormorant italic), the audio play-circle (cream with espresso glyph), the bottom-nav active state (sage), the hero image, and all type sizes/weights. Layout is identical.</p>
+    <p><strong>What changes — five spots, one rule each.</strong> Section labels (DAILY PROMPT, READING, MUSIC, ACTION, VERBA, GO DEEPER, attributions, dates, Music pill, READ MORE, LISTEN) shift sacred gold → aged gilt. Hairline rules and box borders shift sacred gold → verdigris. The Curator-Note left bar shifts to verdigris. The BEGIN button shifts from flat gold to the verdigris→gilt gradient. The page background shifts from flat espresso to the Whisper gradient.</p>
+    <p><strong>Active tab stays sage.</strong> Functional UI state, not brand decoration.</p>
+    <p><strong>Parchment screens (Explore, Journeys list, Library) still flat.</strong> Whisper is the espresso-mode treatment. Parchment is the reading-surface mode; flatness is its job. Separate decision if you want a parallel light treatment.</p>
+  </div>
+
+</div>
+</body>
+</html>

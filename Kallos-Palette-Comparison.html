@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KALLOS — Palette Comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Open+Sans:wght@300;400;600&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Doc chrome — neutral parchment study */
+    --bg: #F4ECDB;
+    --ink: #1F1812;
+    --ink-soft: #58493A;
+    --rule: #C8A04A;
+    --hairline: rgba(31, 24, 18, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    line-height: 1.65;
+    padding: 64px 32px 96px;
+  }
+
+  .doc { max-width: 1080px; margin: 0 auto; }
+
+  /* Typography */
+  h1 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 2.75rem;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+  h3 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 1.5rem;
+    margin: 0 0 18px;
+  }
+  .lede {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--ink-soft);
+    max-width: 640px;
+    margin: 0 0 12px;
+  }
+  .gold-rule {
+    width: 48px;
+    height: 1px;
+    background: var(--rule);
+    margin: 32px 0;
+  }
+
+  /* Palette grid */
+  .palette {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin: 48px 0 24px;
+  }
+  .column { min-width: 0; }
+  .swatch {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 20px;
+    align-items: stretch;
+    margin-bottom: 18px;
+  }
+  .chip {
+    height: 88px;
+    border: 1px solid var(--hairline);
+  }
+  .meta { padding: 4px 0; }
+  .meta .name {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.2;
+  }
+  .meta .hex {
+    font-family: "Menlo", "Courier New", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    margin: 2px 0 6px;
+  }
+  .meta .desc {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* Mockups */
+  .mockups {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+    margin-top: 32px;
+  }
+  .phone {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    aspect-ratio: 9 / 19;
+    border: 1px solid var(--hairline);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .phone .notch {
+    position: absolute;
+    top: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 64px; height: 6px;
+    background: rgba(0,0,0,0.55);
+  }
+  .phone .top-pad { height: 36px; flex-shrink: 0; }
+  .phone .header {
+    padding: 14px 22px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .phone .wordmark {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.62rem;
+    letter-spacing: 0.32em;
+  }
+  .phone .skip {
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+  .phone .hero {
+    margin: 0 22px 18px;
+    height: 38%;
+  }
+  .phone .title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    margin: 0 22px 8px;
+    line-height: 1.2;
+  }
+  .phone .lines { margin: 0 22px; }
+  .phone .line {
+    height: 5px;
+    margin-bottom: 6px;
+  }
+  .phone .rule-wrap { margin: 14px 22px; }
+  .phone .rule { width: 28px; height: 1px; }
+  .phone .badge {
+    display: inline-block;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.46rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    margin: 0 22px 10px;
+  }
+  .phone .flex { flex: 1; }
+  .phone .cta {
+    margin: 0 22px 12px;
+    height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .phone .secondary {
+    margin: 0 22px 16px;
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+  .phone .tabbar {
+    height: 48px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    justify-items: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .phone .tab {
+    width: 18px; height: 18px;
+    opacity: 0.55;
+  }
+  .phone .tab.active { opacity: 1; }
+
+  /* Mockup theme — CURRENT (espresso splash style) */
+  .phone.current {
+    background: #16110d;
+    color: rgba(253,246,232,0.9);
+  }
+  .phone.current .hero { background: rgba(255,255,255,0.04); border: 1px solid rgba(193,155,95,0.18); }
+  .phone.current .line { background: rgba(253,246,232,0.18); }
+  .phone.current .line.short { width: 70%; }
+  .phone.current .rule { background: #C19B5F; }
+  .phone.current .badge { color: #C19B5F; border: 1px solid rgba(193,155,95,0.4); }
+  .phone.current .cta { background: #C19B5F; color: #16110d; }
+  .phone.current .secondary { color: rgba(193,155,95,0.45); }
+  .phone.current .tabbar { background: rgba(0,0,0,0.4); border-top-color: rgba(193,155,95,0.15); }
+  .phone.current .tab { background: rgba(253,246,232,0.5); }
+  .phone.current .tab.active { background: #4a7a62; }
+
+  /* Mockup theme — PROPOSED (Michelangelo/Raphael) */
+  .phone.proposed {
+    background: #EFE2C4;
+    color: #2C1F12;
+  }
+  .phone.proposed .hero { background: #34468C; }
+  .phone.proposed .line { background: rgba(44,31,18,0.22); }
+  .phone.proposed .line.short { width: 65%; }
+  .phone.proposed .rule { background: #C8A04A; }
+  .phone.proposed .badge { color: #fff; background: #B23A2E; }
+  .phone.proposed .cta { background: #34468C; color: #EFE2C4; }
+  .phone.proposed .secondary { color: rgba(44,31,18,0.55); }
+  .phone.proposed .tabbar { background: #7B5536; border-top-color: rgba(0,0,0,0.1); }
+  .phone.proposed .tab { background: rgba(239,226,196,0.55); }
+  .phone.proposed .tab.active { background: #C8A04A; }
+  .phone.proposed .skip { color: rgba(44,31,18,0.55); }
+
+  .caption {
+    text-align: center;
+    margin-top: 16px;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink-soft);
+  }
+
+  .notes {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--hairline);
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  .notes p { margin: 0 0 10px; }
+  .notes a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (max-width: 760px) {
+    .palette, .mockups { grid-template-columns: 1fr; gap: 32px; }
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <h1>Palette Comparison</h1>
+  <p class="lede">KALLOS, current vs. a Michelangelo &amp; Raphael-inspired alternative. Side by side, for evaluation only.</p>
+
+  <div class="gold-rule"></div>
+
+  <!-- ─── PALETTE GRID ──────────────────────────────────────────────── -->
+  <div class="palette">
+
+    <!-- CURRENT -->
+    <div class="column">
+      <h2>Current Palette</h2>
+
+      <div class="swatch">
+        <div class="chip" style="background:#fdf6e8"></div>
+        <div class="meta">
+          <p class="name">Parchment</p>
+          <p class="hex">#FDF6E8</p>
+          <p class="desc">Browse-mode background — warm ivory, near-white.</p>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip" style="background:#16110d"></div>
+        <div class="meta">
+          <p class="name">Espresso</p>
+          <p class="hex">#16110D</p>
+          <p class="desc">Immersive-mode background — near-black warm brown.</p>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip" style="background:#C19B5F"></div>
+        <div class="meta">
+          <p class="name">Sacred Gold</p>
+          <p class="hex">#C19B5F</p>
+          <p class="desc">All CTAs, accents, separator lines, active states.</p>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip" style="background:#4a7a62"></div>
+        <div class="meta">
+          <p class="name">Sage</p>
+          <p class="hex">#4A7A62</p>
+          <p class="desc">Active step indicator and interactive moments.</p>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip" style="background:#8aacb8"></div>
+        <div class="meta">
+          <p class="name">Blue Mist</p>
+          <p class="hex">#8AACB8</p>
+          <p class="desc">Supporting tone — rarely surfaced today.</p>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip" style="background:#7a9a8a"></div>
+        <div class="meta">
+          <p class="name">Sage Muted</p>
+          <p class="hex">#7A9A8A</p>
+          <p class="desc">Quieter sage variant for de-emphasized states.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div class="column">
+      <h2>Proposed — Michelangelo &amp; Raphael</h2>
+
+      <div class="swatch">
+        <div class="chip" style="background:#7B5536"></div>
+        <div class="meta">
+          <p class="name">Fresco Brown</p>
+          <p class="hex">#7B5536</p>
+          <p class="desc">Base. Medium-deep umber/ochre — the wall of an aged fresco.</p>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip" style="background:#EFE2C4"></div>
+        <div class="meta">
+          <p class="name">Parchment</p>
+          <p class="hex">#EFE2C4</p>
+          <p class="desc">Surface. Warm ivory of old manuscript paper and plaster.</p>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip" style="background:#34468C"></div>
+        <div class="meta">
+          <p class="name">Sistine Blue</p>
+          <p class="hex">#34468C</p>
+          <p class="desc">Primary. Rich ultramarine — Marian cloaks, Renaissance skies.</p>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip" style="background:#B23A2E"></div>
+        <div class="meta">
+          <p class="name">Raphael Red</p>
+          <p class="hex">#B23A2E</p>
+          <p class="desc">Secondary. Soft but rich vermilion/brick. Used sparingly.</p>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip" style="background:#C8A04A"></div>
+        <div class="meta">
+          <p class="name">Halo Gold</p>
+          <p class="hex">#C8A04A</p>
+          <p class="desc">Accent. Muted lead-tin yellow — thin rules, halos, gilt edges.</p>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip" style="background:#5F7A6B"></div>
+        <div class="meta">
+          <p class="name">Verdigris</p>
+          <p class="hex">#5F7A6B</p>
+          <p class="desc">Optional support. Aged copper green. Gentle, sparing use.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <h2 style="margin-top:48px">In Context</h2>
+
+  <!-- ─── MOCKUPS ───────────────────────────────────────────────────── -->
+  <div class="mockups">
+
+    <!-- CURRENT MOCKUP -->
+    <div>
+      <div class="phone current">
+        <div class="notch"></div>
+        <div class="top-pad"></div>
+        <div class="header">
+          <span class="wordmark">KALLOS</span>
+          <span class="skip">Skip</span>
+        </div>
+        <div class="hero"></div>
+        <div class="title">Beauty. Truth. Goodness.</div>
+        <div class="rule-wrap"><div class="rule"></div></div>
+        <div class="lines">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line short"></div>
+        </div>
+        <span class="badge">Pause &amp; Ponder</span>
+        <div class="flex"></div>
+        <div class="cta">Start here →</div>
+        <div class="secondary">See today's Pause &amp; Ponder →</div>
+        <div class="tabbar">
+          <div class="tab active"></div>
+          <div class="tab"></div>
+          <div class="tab"></div>
+          <div class="tab"></div>
+        </div>
+      </div>
+      <div class="caption">Current</div>
+    </div>
+
+    <!-- PROPOSED MOCKUP -->
+    <div>
+      <div class="phone proposed">
+        <div class="notch"></div>
+        <div class="top-pad"></div>
+        <div class="header">
+          <span class="wordmark">KALLOS</span>
+          <span class="skip">Skip</span>
+        </div>
+        <div class="hero"></div>
+        <div class="title">Beauty. Truth. Goodness.</div>
+        <div class="rule-wrap"><div class="rule"></div></div>
+        <div class="lines">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line short"></div>
+        </div>
+        <span class="badge">Pause &amp; Ponder</span>
+        <div class="flex"></div>
+        <div class="cta">Start here →</div>
+        <div class="secondary">See today's Pause &amp; Ponder →</div>
+        <div class="tabbar">
+          <div class="tab active"></div>
+          <div class="tab"></div>
+          <div class="tab"></div>
+          <div class="tab"></div>
+        </div>
+      </div>
+      <div class="caption">Proposed — Michelangelo &amp; Raphael</div>
+    </div>
+
+  </div>
+
+  <!-- ─── NOTES ─────────────────────────────────────────────────────── -->
+  <div class="notes">
+    <p><strong>Notes.</strong> Proposed hex values are inferred from the pigment references below — adjust to taste. Both mockups use the same layout and copy so the only variable is color. No rounded corners on either, per KALLOS design system. Sage and Blue Mist are not represented in the proposed palette; Verdigris is offered as a quiet supporting green if a non-warm tone is wanted.</p>
+    <p><strong>References.</strong>
+      <a href="https://www.naturalpigments.com/artist-materials/raphael-palette" target="_blank" rel="noopener">Raphael's pigment palette (Natural Pigments)</a> ·
+      <a href="https://russell-collection.com/what-colors-did-michelangelo-use/" target="_blank" rel="noopener">Michelangelo's Sistine palette (Russell Collection)</a>
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gradient — Mauve to Espresso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Open+Sans:wght@300;400;600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    background: #16110D;
+    color: rgba(253,246,232,0.9);
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 32px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    height: calc(100vh - 64px);
+  }
+  .panel {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 32px;
+    border: 1px solid rgba(253,246,232,0.08);
+  }
+  .panel .label {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.6rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(253,246,232,0.85);
+    margin-bottom: 8px;
+  }
+  .panel .title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: rgba(253,246,232,0.96);
+    margin: 0 0 14px;
+    line-height: 1.15;
+  }
+  .panel .css {
+    font-family: "Menlo", "Courier New", monospace;
+    font-size: 0.65rem;
+    color: rgba(253,246,232,0.65);
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    padding: 10px 12px;
+    background: rgba(0,0,0,0.35);
+    border-left: 2px solid #8E6E7B;
+    max-width: 100%;
+    word-break: break-all;
+  }
+  .panel .note {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    color: rgba(253,246,232,0.75);
+    font-size: 0.95rem;
+    margin: 0 0 18px;
+    max-width: 26ch;
+  }
+
+  /* ── 1. Whisper — mauve-tinted espresso, no full mauve ── */
+  .panel.one {
+    background: linear-gradient(180deg, #3A2D2E 0%, #16110D 50%);
+  }
+
+  /* ── 2. Dawn band — full mauve in top 20% only ──────────── */
+  .panel.two {
+    background: linear-gradient(180deg, #8E6E7B 0%, #16110D 22%);
+  }
+
+  /* ── 3. Soft wash — half-strength mauve, slow fade ─────── */
+  .panel.three {
+    background: linear-gradient(180deg, #523F44 0%, #2A1F22 35%, #16110D 75%);
+  }
+
+  @media (max-width: 1000px) {
+    .grid { grid-template-columns: 1fr; height: auto; gap: 16px; }
+    .panel { min-height: 320px; }
+  }
+</style>
+</head>
+<body>
+<div class="grid">
+
+  <div class="panel one">
+    <p class="label">Option 1 · Whisper</p>
+    <h2 class="title">Mauve-tinted espresso</h2>
+    <p class="note">No full mauve anywhere. The top is espresso with a 30% mauve undertone, fading to pure espresso by mid-screen. Reads as espresso with warmth — a hint, not a wash.</p>
+    <div class="css">background: linear-gradient(180deg, #3A2D2E 0%, #16110D 50%);</div>
+  </div>
+
+  <div class="panel two">
+    <p class="label">Option 2 · Dawn band</p>
+    <h2 class="title">Full mauve, top fifth only</h2>
+    <p class="note">Keeps the saturation of the original but compresses it into the top 20%. Below that, pure espresso. Like a dawn band above a dark wall.</p>
+    <div class="css">background: linear-gradient(180deg, #8E6E7B 0%, #16110D 22%);</div>
+  </div>
+
+  <div class="panel three">
+    <p class="label">Option 3 · Soft wash</p>
+    <h2 class="title">Half-strength mauve, slow fade</h2>
+    <p class="note">Half-strength mauve at top, gentle transition through a deeper mid-tone, settling into espresso by three-quarters down. More even than Option 2, more present than Option 1.</p>
+    <div class="css">background: linear-gradient(180deg, #523F44 0%, #2A1F22 35%, #16110D 75%);</div>
+  </div>
+
+</div>
+</body>
+</html>

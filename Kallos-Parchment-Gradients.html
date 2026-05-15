@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KALLOS — Parchment Gradient Studies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Open+Sans:wght@300;400;600&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --doc-bg: #2A1F1A;
+    --doc-ink: rgba(253,246,232,0.92);
+    --doc-ink-soft: rgba(253,246,232,0.55);
+    --hairline: rgba(253,246,232,0.12);
+
+    --parchment: #FDF6E8;
+    --ink: #1F1812;
+    --ink-soft: #58493A;
+    --ink-dim: rgba(31,24,18,0.45);
+    --sacred-gold: #C19B5F;
+    --aged-gilt: #B89238;
+    --verdigris: #5F7A6B;
+    --sage: #4a7a62;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    /* Dark doc background to make pale parchment gradients pop */
+    background: var(--doc-bg);
+    color: var(--doc-ink);
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    padding: 48px 32px 80px;
+  }
+  .doc { max-width: 1320px; margin: 0 auto; }
+  h1 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 2.2rem;
+    color: var(--doc-ink);
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+  }
+  .lede {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--doc-ink-soft);
+    max-width: 760px;
+    margin: 0 0 8px;
+  }
+  .gold-rule { width: 48px; height: 1px; background: var(--aged-gilt); margin: 32px 0; }
+  h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--doc-ink-soft);
+    margin: 0 0 24px;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+  .opt-wrap { display: flex; flex-direction: column; align-items: center; }
+
+  /* Phone — parchment mode */
+  .phone {
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 9 / 19;
+    border: 1px solid var(--hairline);
+    overflow: hidden;
+    position: relative;
+    display: flex; flex-direction: column;
+    color: var(--ink);
+  }
+  /* Each option sets its own --p-top — dialed up for visible presence */
+  .phone.plaster   { background: linear-gradient(180deg, #E3D6C4 0%, var(--parchment) 45%); }
+  .phone.verdigris { background: linear-gradient(180deg, #E5E3D5 0%, var(--parchment) 45%); }
+  .phone.manuscript{ background: linear-gradient(180deg, #F6E5C6 0%, var(--parchment) 50%); }
+
+  .phone .notch {
+    position: absolute; top: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 60px; height: 5px;
+    background: rgba(0,0,0,0.55);
+  }
+
+  /* Top header */
+  .topbar {
+    padding: 50px 20px 8px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .wordmark {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.62rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .icon { width: 14px; height: 14px; background: var(--ink-soft); }
+
+  /* Page heading */
+  .page-head { padding: 12px 20px 6px; }
+  .page-title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.7rem;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.15;
+  }
+  .page-sub {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.5rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--sacred-gold);
+    margin: 6px 0 0;
+  }
+
+  /* Journey card */
+  .j-card {
+    margin: 14px 20px 0;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(31,24,18,0.08);
+  }
+  .j-card:last-of-type { border-bottom: none; }
+  .j-hero {
+    height: 78px;
+    margin-bottom: 8px;
+    background:
+      radial-gradient(ellipse at 30% 35%, #C9A77A 0%, transparent 55%),
+      radial-gradient(ellipse at 70% 70%, #2E2218 0%, transparent 60%),
+      linear-gradient(135deg, #6E4828 0%, #2E2218 100%);
+  }
+  .j-hero.alt {
+    background:
+      radial-gradient(ellipse at 25% 30%, #B89BD3 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 75%, #1A1027 0%, transparent 60%),
+      linear-gradient(135deg, #5B4276 0%, #221635 100%);
+  }
+  .j-title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink);
+    line-height: 1.2;
+    margin: 0;
+  }
+  .j-meta {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.46rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 4px 0 0;
+  }
+  .j-body {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    font-size: 0.7rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 4px 0 0;
+  }
+  .badge {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 0.42rem;
+    letter-spacing: 0.16em;
+    padding: 2px 6px;
+    background: var(--sacred-gold);
+    color: var(--parchment);
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+  }
+
+  .spacer { flex: 1; }
+
+  /* Bottom tabbar */
+  .tabbar {
+    height: 50px;
+    background: var(--ink);
+    color: var(--parchment);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    justify-items: center;
+  }
+  .tab { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .tab .glyph { width: 14px; height: 14px; background: rgba(253,246,232,0.45); }
+  .tab .name {
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.42rem;
+    letter-spacing: 0.06em;
+    color: rgba(253,246,232,0.5);
+  }
+  .tab.active .glyph { background: var(--sage); }
+  .tab.active .name { color: var(--parchment); }
+
+  /* Caption */
+  .caption {
+    text-align: center;
+    margin-top: 16px;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--doc-ink);
+  }
+  .caption-sub {
+    text-align: center;
+    margin-top: 2px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 0.8rem;
+    color: var(--doc-ink-soft);
+  }
+  .caption-css {
+    text-align: center;
+    margin-top: 10px;
+    font-family: "Menlo", "Courier New", monospace;
+    font-size: 0.62rem;
+    color: var(--doc-ink-soft);
+    line-height: 1.5;
+    max-width: 300px;
+  }
+
+  /* Plain swatch comparison band — pure gradient blocks, no content */
+  .gradient-strip {
+    margin-top: 64px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .gradient-strip .swatch {
+    height: 220px;
+    border: 1px solid var(--hairline);
+  }
+  .gradient-strip .swatch.plaster   { background: linear-gradient(180deg, #E3D6C4 0%, var(--parchment) 75%); }
+  .gradient-strip .swatch.verdigris { background: linear-gradient(180deg, #E5E3D5 0%, var(--parchment) 75%); }
+  .gradient-strip .swatch.manuscript{ background: linear-gradient(180deg, #F6E5C6 0%, var(--parchment) 75%); }
+  .gradient-strip .label {
+    text-align: center;
+    margin-top: 10px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--doc-ink-soft);
+  }
+
+  .notes {
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid var(--hairline);
+    font-size: 0.88rem;
+    color: var(--doc-ink-soft);
+    max-width: 920px;
+  }
+  .notes p { margin: 0 0 10px; }
+  .notes strong { color: var(--doc-ink); font-weight: 600; }
+
+  @media (max-width: 1000px) { .options, .gradient-strip { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <h1>Parchment Gradient — Three Whispers</h1>
+  <p class="lede">Same logic as the espresso Whisper: very subtle tint at top, fading to pure parchment by 30%. Reading surfaces should never carry strong gradients; the top &ldquo;atmosphere&rdquo; is just a hint.</p>
+  <div class="gold-rule"></div>
+
+  <h2>On a Journeys-list screen</h2>
+  <div class="options">
+
+    <!-- Plaster — warm umber breath -->
+    <div class="opt-wrap">
+      <div class="phone plaster">
+        <div class="notch"></div>
+        <div class="topbar">
+          <span class="wordmark">KALLOS</span>
+          <div class="icon"></div>
+        </div>
+        <div class="page-head">
+          <h3 class="page-title">Journeys</h3>
+          <p class="page-sub">Begin Here</p>
+        </div>
+        <div class="j-card">
+          <div class="j-hero"></div>
+          <h4 class="j-title">Beauty, Truth &amp; Goodness <span class="badge">3 Days</span></h4>
+          <p class="j-body">Three things the philosophers kept returning to.</p>
+        </div>
+        <div class="j-card">
+          <div class="j-hero alt"></div>
+          <h4 class="j-title">When Myth Became Fact</h4>
+          <p class="j-meta">7 days · Day 4 of 7</p>
+          <p class="j-body">A philologist&rsquo;s long argument with himself.</p>
+        </div>
+        <div class="spacer"></div>
+        <div class="tabbar">
+          <div class="tab"><div class="glyph"></div><span class="name">Today</span></div>
+          <div class="tab"><div class="glyph"></div><span class="name">Explore</span></div>
+          <div class="tab active"><div class="glyph"></div><span class="name">Journeys</span></div>
+          <div class="tab"><div class="glyph"></div><span class="name">Library</span></div>
+        </div>
+      </div>
+      <div class="caption">Plaster</div>
+      <div class="caption-sub">warm umber breath</div>
+      <div class="caption-css">linear-gradient(180deg, #F0E6D6 0%, #FDF6E8 30%)</div>
+    </div>
+
+    <!-- Verdigris breath — cool cast, system-coherent -->
+    <div class="opt-wrap">
+      <div class="phone verdigris">
+        <div class="notch"></div>
+        <div class="topbar">
+          <span class="wordmark">KALLOS</span>
+          <div class="icon"></div>
+        </div>
+        <div class="page-head">
+          <h3 class="page-title">Journeys</h3>
+          <p class="page-sub">Begin Here</p>
+        </div>
+        <div class="j-card">
+          <div class="j-hero"></div>
+          <h4 class="j-title">Beauty, Truth &amp; Goodness <span class="badge">3 Days</span></h4>
+          <p class="j-body">Three things the philosophers kept returning to.</p>
+        </div>
+        <div class="j-card">
+          <div class="j-hero alt"></div>
+          <h4 class="j-title">When Myth Became Fact</h4>
+          <p class="j-meta">7 days · Day 4 of 7</p>
+          <p class="j-body">A philologist&rsquo;s long argument with himself.</p>
+        </div>
+        <div class="spacer"></div>
+        <div class="tabbar">
+          <div class="tab"><div class="glyph"></div><span class="name">Today</span></div>
+          <div class="tab"><div class="glyph"></div><span class="name">Explore</span></div>
+          <div class="tab active"><div class="glyph"></div><span class="name">Journeys</span></div>
+          <div class="tab"><div class="glyph"></div><span class="name">Library</span></div>
+        </div>
+      </div>
+      <div class="caption">Verdigris Breath</div>
+      <div class="caption-sub">cool patina cast</div>
+      <div class="caption-css">linear-gradient(180deg, #F0ECDE 0%, #FDF6E8 30%)</div>
+    </div>
+
+    <!-- Manuscript — aged paper -->
+    <div class="opt-wrap">
+      <div class="phone manuscript">
+        <div class="notch"></div>
+        <div class="topbar">
+          <span class="wordmark">KALLOS</span>
+          <div class="icon"></div>
+        </div>
+        <div class="page-head">
+          <h3 class="page-title">Journeys</h3>
+          <p class="page-sub">Begin Here</p>
+        </div>
+        <div class="j-card">
+          <div class="j-hero"></div>
+          <h4 class="j-title">Beauty, Truth &amp; Goodness <span class="badge">3 Days</span></h4>
+          <p class="j-body">Three things the philosophers kept returning to.</p>
+        </div>
+        <div class="j-card">
+          <div class="j-hero alt"></div>
+          <h4 class="j-title">When Myth Became Fact</h4>
+          <p class="j-meta">7 days · Day 4 of 7</p>
+          <p class="j-body">A philologist&rsquo;s long argument with himself.</p>
+        </div>
+        <div class="spacer"></div>
+        <div class="tabbar">
+          <div class="tab"><div class="glyph"></div><span class="name">Today</span></div>
+          <div class="tab"><div class="glyph"></div><span class="name">Explore</span></div>
+          <div class="tab active"><div class="glyph"></div><span class="name">Journeys</span></div>
+          <div class="tab"><div class="glyph"></div><span class="name">Library</span></div>
+        </div>
+      </div>
+      <div class="caption">Manuscript</div>
+      <div class="caption-sub">aged vellum / saffron</div>
+      <div class="caption-css">linear-gradient(180deg, #FAEFD9 0%, #FDF6E8 35%)</div>
+    </div>
+
+  </div>
+
+  <h2 style="margin-top:72px">Just the gradient — content removed</h2>
+  <div class="gradient-strip">
+    <div>
+      <div class="swatch plaster"></div>
+      <div class="label">Plaster · warm umber</div>
+    </div>
+    <div>
+      <div class="swatch verdigris"></div>
+      <div class="label">Verdigris breath · cool</div>
+    </div>
+    <div>
+      <div class="swatch manuscript"></div>
+      <div class="label">Manuscript · saffron</div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <p><strong>What each says.</strong> <em>Plaster</em> reads as fresco wall — warmest, most architectural; pairs visually with the espresso Whisper&rsquo;s mauve top because both are dusky earth-tones. <em>Verdigris breath</em> reads as patinaed stone — coolest; carries the verdigris brand pigment through to parchment surfaces so the splash → daily-app verdigris thread becomes consistent. <em>Manuscript</em> reads as aged paper — warmest and brightest; closest to the &ldquo;old book&rdquo; or &ldquo;archive&rdquo; register.</p>
+    <p><strong>My read.</strong> <em>Verdigris breath</em> is the strongest move for system coherence — it makes verdigris the through-line on both surfaces (rules + CTA gradient on espresso splash, atmospheric tint on parchment screens). Without it, parchment screens feel disconnected from the splash. But it&rsquo;s the most subtle, and could read as &ldquo;just slightly off-cream&rdquo; rather than &ldquo;intentional patina&rdquo;.</p>
+    <p><strong>If you want more presence, dial up.</strong> Each gradient can hold a stronger start color (e.g. <code>#E8E3CC</code> for plaster, <code>#E8E8D5</code> for verdigris, <code>#F4E5BC</code> for manuscript) without breaking readability. Tell me which direction reads right and I&rsquo;ll tune the saturation.</p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KALLOS — Splash, High-End Calibration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Open+Sans:wght@300;400;600&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ── Document chrome ───────────────────────────────────── */
+  :root {
+    --doc-bg: #F4ECDB;
+    --ink: #1F1812;
+    --ink-soft: #58493A;
+    --hairline: rgba(31, 24, 18, 0.12);
+
+    /* KALLOS surfaces */
+    --espresso: #16110D;
+    --whisper-top: #3A2D2E;  /* mauve-tinted espresso */
+
+    /* Type tones */
+    --cream: rgba(253,246,232,0.92);
+    --cream-soft: rgba(253,246,232,0.55);
+    --cream-dim: rgba(253,246,232,0.35);
+
+    /* Gold candidates */
+    --gold-current: #C19B5F;
+    --gold-aged: #B89238;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--doc-bg);
+    color: var(--ink);
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    padding: 48px 32px 80px;
+  }
+  .doc { max-width: 1240px; margin: 0 auto; }
+  h1 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 2.4rem;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+  }
+  .lede {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    max-width: 720px;
+    margin: 0 0 8px;
+  }
+  .moves {
+    display: flex; gap: 24px;
+    margin: 20px 0 0;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+  .moves .move {
+    flex: 1; padding: 14px 16px;
+    border-left: 2px solid var(--gold-aged);
+    background: rgba(184,146,56,0.06);
+  }
+  .moves .move b {
+    display: block;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .gold-rule {
+    width: 48px; height: 1px;
+    background: var(--gold-aged);
+    margin: 40px 0;
+  }
+  h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+
+  /* ── Phone mockups ─────────────────────────────────────── */
+  .phones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: start;
+    margin-top: 8px;
+  }
+  .phone {
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 9 / 19;
+    border: 1px solid var(--hairline);
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    /* The Whisper gradient — same on every splash screen */
+    background: linear-gradient(180deg, var(--whisper-top) 0%, var(--espresso) 50%);
+    color: var(--cream);
+  }
+  .phone .notch {
+    position: absolute; top: 10px; left: 50%;
+    transform: translateX(-50%);
+    width: 72px; height: 6px;
+    background: rgba(0,0,0,0.55);
+  }
+
+  /* Top progress bar — 5 segments */
+  .phone .progress {
+    position: absolute;
+    top: 28px; left: 16px; right: 16px;
+    display: flex; gap: 3px;
+    z-index: 2;
+  }
+  .phone .progress .seg {
+    flex: 1; height: 2px;
+    background: rgba(255,255,255,0.18);
+  }
+  .phone .progress .seg.on { background: rgba(184,146,56,0.9); }
+
+  /* Top skip */
+  .phone .skip {
+    position: absolute;
+    top: 42px; right: 20px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    z-index: 2;
+  }
+
+  /* Content block — 8px grid spacing */
+  .phone .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 96px 40px 56px;  /* 8px grid */
+  }
+  .phone .content.tight { padding-left: 32px; padding-right: 32px; }
+
+  /* Wordmark — REFINED: weight 400, 0.42em tracking */
+  .phone .wordmark {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--cream);
+    margin: 0;
+    /* compensate for tracking eating the right edge */
+    padding-left: 4px;
+  }
+  .phone .pronunciation {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: rgba(253,246,232,0.5);
+    letter-spacing: 0.04em;
+    margin: 8px 0 0;
+  }
+
+  .phone .rule {
+    width: 48px; height: 1px;
+    background: #8E6E7B;  /* mauve — second home for the rose pigment */
+    margin: 48px 0;
+  }
+
+  .phone .quote {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--cream);
+    line-height: 1.2;
+    margin: 0;
+  }
+  .phone .body {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--cream-soft);
+    margin: 40px 0 0;
+  }
+  .phone .tagline {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold-aged);
+    margin: 56px 0 0;
+  }
+  .phone .heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--cream);
+    line-height: 1.2;
+    margin: 0;
+  }
+  .phone .spacer { flex: 1; }
+  .phone .cta {
+    /* Rose → gilt painterly gradient. Rose leads, gilt finishes. */
+    background: linear-gradient(135deg, #A47783 0%, #B89238 100%);
+    color: var(--espresso);
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    text-align: center;
+    width: 100%;
+    display: block;
+  }
+  .phone .secondary {
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(184,146,56,0.55);
+    padding: 12px 0 0;
+  }
+
+  /* Nav button (Screen 1) */
+  .phone .nav {
+    align-self: flex-end;
+    position: relative;
+    width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .phone .nav .ring {
+    position: absolute; inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(184,146,56,0.45);
+    animation: breathe 3.5s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .phone .nav .circle {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: 1px solid rgba(184,146,56,0.55);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .phone .nav svg { stroke: rgba(184,146,56,0.85); }
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 0.45; }
+    50% { transform: scale(1.55); opacity: 0; }
+  }
+
+  .caption {
+    text-align: center;
+    margin-top: 16px;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .caption-meta {
+    text-align: center;
+    font-family: "Menlo", "Courier New", monospace;
+    font-size: 0.7rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+
+  /* ── Wordmark before/after ──────────────────────────────── */
+  .wordmark-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 24px;
+  }
+  .wordmark-card {
+    background: var(--espresso);
+    color: var(--cream);
+    padding: 64px 48px;
+    border: 1px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .wordmark-card .label {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cream-soft);
+  }
+  .wordmark-card .specs {
+    font-family: "Menlo", "Courier New", monospace;
+    font-size: 0.7rem;
+    color: var(--cream-soft);
+    margin-top: 8px;
+    letter-spacing: 0;
+  }
+  .wm-current {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 1.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+  .wm-refined {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--cream);
+    padding-left: 4px;
+  }
+
+  @media (max-width: 920px) {
+    .phones { grid-template-columns: 1fr; }
+    .wordmark-compare { grid-template-columns: 1fr; }
+    .moves { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <h1>Splash — High-End Calibration</h1>
+  <p class="lede">Whisper gradient · mauve rule · refined wordmark · rose-to-gilt CTA. Gold becomes a thread, no longer the loudest element.</p>
+
+  <div class="moves">
+    <div class="move">
+      <b>Gradient</b>
+      Whisper. Mauve-tinted espresso at top fading to pure espresso by mid-screen. <code>180deg, #3A2D2E 0% → #16110D 50%</code>
+    </div>
+    <div class="move">
+      <b>Mauve Rule</b>
+      Aged gilt <code>#B89238</code> → mauve <code>#8E6E7B</code>. Gives rose pigment a second home; quiets the gold thread without removing it.
+    </div>
+    <div class="move">
+      <b>Wordmark</b>
+      Montserrat 600 → 400. Letter-spacing 0.30em → 0.42em. Size 1.75rem → 1.5rem. Reads as engraved, not stamped.
+    </div>
+    <div class="move">
+      <b>CTA — Rose to Gilt</b>
+      Flat gilt → painterly gradient. <code>135deg, #A47783 → #B89238</code>. Rose leads, gilt finishes. Pulls gold out of the loudest element.
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+  <h2>Splash on the Whisper gradient</h2>
+
+  <div class="phones">
+
+    <!-- ── SCREEN 1: Brand Identity ── -->
+    <div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="progress">
+          <div class="seg on"></div>
+          <div class="seg"></div>
+          <div class="seg"></div>
+          <div class="seg"></div>
+          <div class="seg"></div>
+        </div>
+        <div class="skip">Skip</div>
+
+        <div class="content">
+          <p class="wordmark">KALLOS</p>
+          <p class="pronunciation">kal · os</p>
+          <div class="rule"></div>
+          <p class="quote">&ldquo;Beauty will save the world.&rdquo;</p>
+          <p class="body">Rediscover beauty, truth and goodness through tradition. The Greeks called it KALLOS, and they believed the three were inseparable.</p>
+          <p class="tagline">Your daily dose of what is beautiful. true. good.</p>
+          <div class="spacer"></div>
+          <div class="nav">
+            <div class="ring"></div>
+            <div class="circle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption">Screen 1 — Brand Identity</div>
+      <div class="caption-meta">wordmark · pronunciation · quote · body · tagline</div>
+    </div>
+
+    <!-- ── SCREEN 5: Invitation ── -->
+    <div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="progress">
+          <div class="seg on"></div>
+          <div class="seg on"></div>
+          <div class="seg on"></div>
+          <div class="seg on"></div>
+          <div class="seg on"></div>
+        </div>
+        <div class="skip">Skip</div>
+
+        <div class="content tight">
+          <p class="heading">Start where you are.</p>
+          <div class="rule"></div>
+          <p class="body" style="margin-top:0">No preparation needed. No right way to begin. Start a 3-day journey into beauty, truth and goodness. Something new every day.</p>
+          <div class="spacer"></div>
+          <div class="cta">Start here →</div>
+          <div class="secondary">See today&rsquo;s Pause &amp; Ponder →</div>
+        </div>
+      </div>
+      <div class="caption">Screen 5 — Invitation</div>
+      <div class="caption-meta">heading · body · primary CTA · secondary</div>
+    </div>
+
+  </div>
+
+  <div class="gold-rule" style="margin-top:64px"></div>
+
+  <!-- ── Wordmark before/after ─────────────────────────────── -->
+  <h2>Wordmark — current vs. refined</h2>
+  <div class="wordmark-compare">
+    <div class="wordmark-card">
+      <p class="label">Current</p>
+      <p class="wm-current">KALLOS</p>
+      <p class="specs">Montserrat 600 · 1.75rem · 0.30em</p>
+    </div>
+    <div class="wordmark-card">
+      <p class="label">Refined</p>
+      <p class="wm-refined">KALLOS</p>
+      <p class="specs">Montserrat 400 · 1.5rem · 0.42em</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KALLOS — CTA Gradient Studies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Open+Sans:wght@300;400;600&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --doc-bg: #F4ECDB;
+    --ink: #1F1812;
+    --ink-soft: #58493A;
+    --hairline: rgba(31, 24, 18, 0.12);
+
+    --espresso: #16110D;
+    --whisper-top: #3A2D2E;
+    --cream: rgba(253,246,232,0.92);
+    --cream-soft: rgba(253,246,232,0.55);
+    --gold-aged: #B89238;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--doc-bg);
+    color: var(--ink);
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    padding: 48px 32px 80px;
+  }
+  .doc { max-width: 1280px; margin: 0 auto; }
+
+  h1 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 2.2rem;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+  }
+  .lede {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    max-width: 740px;
+    margin: 0 0 12px;
+  }
+  .gold-rule {
+    width: 48px; height: 1px;
+    background: var(--gold-aged);
+    margin: 32px 0;
+  }
+  h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+
+  /* Mockup row */
+  .phones {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+  .phone-wrap { display: flex; flex-direction: column; align-items: center; }
+  .phone {
+    width: 100%;
+    max-width: 300px;
+    aspect-ratio: 9 / 19;
+    border: 1px solid var(--hairline);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, var(--whisper-top) 0%, var(--espresso) 50%);
+    color: var(--cream);
+  }
+  .phone .notch {
+    position: absolute; top: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 60px; height: 5px;
+    background: rgba(0,0,0,0.55);
+  }
+  .phone .progress {
+    position: absolute;
+    top: 24px; left: 14px; right: 14px;
+    display: flex; gap: 3px;
+  }
+  .phone .progress .seg { flex: 1; height: 2px; background: rgba(255,255,255,0.18); }
+  .phone .progress .seg.on { background: rgba(184,146,56,0.85); }
+  .phone .skip {
+    position: absolute; top: 38px; right: 18px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 0.5rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+  .phone .content {
+    flex: 1;
+    display: flex; flex-direction: column;
+    padding: 88px 32px 48px;
+  }
+  .heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.7rem;
+    color: var(--cream);
+    line-height: 1.2;
+    margin: 0;
+  }
+  .rule {
+    width: 40px; height: 1px;
+    background: var(--gold-aged);
+    margin: 40px 0;
+  }
+  .body {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    font-size: 0.82rem;
+    line-height: 1.85;
+    color: var(--cream-soft);
+    margin: 0;
+  }
+  .spacer { flex: 1; }
+  .cta {
+    color: var(--espresso);
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    text-align: center;
+    width: 100%;
+    display: block;
+  }
+  .secondary {
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(184,146,56,0.55);
+    padding: 8px 0 0;
+  }
+
+  /* ── CTA gradients ─────────────────────────────────────── */
+  /* A — Subtle: gilt with a dusty rose drift at one end */
+  .cta.a {
+    background: linear-gradient(135deg, #B89238 0%, #A47783 100%);
+  }
+  /* B — Painterly: rose-led, gilt corner */
+  .cta.b {
+    background: linear-gradient(135deg, #A47783 0%, #B89238 100%);
+  }
+  /* C — Most fresco: terracotta to saffron, two warm pigments */
+  .cta.c {
+    background: linear-gradient(135deg, #BE5E3C 0%, #D69A2D 100%);
+  }
+
+  /* Caption */
+  .caption {
+    text-align: center;
+    margin-top: 18px;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--ink);
+  }
+  .caption-pigments {
+    text-align: center;
+    margin-top: 2px;
+    font-family: "Menlo", "Courier New", monospace;
+    font-size: 0.7rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+  .caption-css {
+    text-align: center;
+    margin-top: 10px;
+    font-family: "Menlo", "Courier New", monospace;
+    font-size: 0.62rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    max-width: 280px;
+  }
+
+  /* ── Standalone button strip ───────────────────────────── */
+  .strip {
+    margin-top: 56px;
+    background: var(--espresso);
+    padding: 56px 48px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    border: 1px solid var(--hairline);
+  }
+  .strip .item {
+    display: flex; flex-direction: column; align-items: stretch;
+    gap: 12px;
+  }
+  .strip .item .label {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cream-soft);
+    text-align: center;
+  }
+  .strip .btn {
+    color: var(--espresso);
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 22px 24px;
+    text-align: center;
+  }
+  .strip .btn.a { background: linear-gradient(135deg, #B89238 0%, #A47783 100%); }
+  .strip .btn.b { background: linear-gradient(135deg, #A47783 0%, #B89238 100%); }
+  .strip .btn.c { background: linear-gradient(135deg, #BE5E3C 0%, #D69A2D 100%); }
+
+  @media (max-width: 920px) {
+    .phones, .strip { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <h1>CTA Gradient Studies</h1>
+  <p class="lede">Pulling away from flat gilt. Three painterly button treatments, escalating from gold-led to pigment-led.</p>
+  <div class="gold-rule"></div>
+
+  <!-- ── Phones (Screen 5 with each CTA) ─────────────────── -->
+  <h2>In context — Splash Screen 5</h2>
+  <div class="phones">
+
+    <!-- A — Subtle -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="progress"><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div></div>
+        <div class="skip">Skip</div>
+        <div class="content">
+          <p class="heading">Start where you are.</p>
+          <div class="rule"></div>
+          <p class="body">No preparation needed. No right way to begin. Start a 3-day journey into beauty, truth and goodness.</p>
+          <div class="spacer"></div>
+          <div class="cta a">Start here →</div>
+          <div class="secondary">See today&rsquo;s Pause &amp; Ponder →</div>
+        </div>
+      </div>
+      <div class="caption">A · Subtle</div>
+      <div class="caption-pigments">gilt → dusty rose</div>
+      <div class="caption-css">linear-gradient(135deg, #B89238, #A47783)</div>
+    </div>
+
+    <!-- B — Painterly -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="progress"><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div></div>
+        <div class="skip">Skip</div>
+        <div class="content">
+          <p class="heading">Start where you are.</p>
+          <div class="rule"></div>
+          <p class="body">No preparation needed. No right way to begin. Start a 3-day journey into beauty, truth and goodness.</p>
+          <div class="spacer"></div>
+          <div class="cta b">Start here →</div>
+          <div class="secondary">See today&rsquo;s Pause &amp; Ponder →</div>
+        </div>
+      </div>
+      <div class="caption">B · Painterly</div>
+      <div class="caption-pigments">rose-led, gilt corner</div>
+      <div class="caption-css">linear-gradient(135deg, #A47783, #B89238)</div>
+    </div>
+
+    <!-- C — Most fresco -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="progress"><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div></div>
+        <div class="skip">Skip</div>
+        <div class="content">
+          <p class="heading">Start where you are.</p>
+          <div class="rule"></div>
+          <p class="body">No preparation needed. No right way to begin. Start a 3-day journey into beauty, truth and goodness.</p>
+          <div class="spacer"></div>
+          <div class="cta c">Start here →</div>
+          <div class="secondary">See today&rsquo;s Pause &amp; Ponder →</div>
+        </div>
+      </div>
+      <div class="caption">C · Most Fresco</div>
+      <div class="caption-pigments">terracotta → saffron</div>
+      <div class="caption-css">linear-gradient(135deg, #BE5E3C, #D69A2D)</div>
+    </div>
+
+  </div>
+
+  <div class="gold-rule" style="margin-top:64px"></div>
+
+  <!-- ── Standalone close-ups ─────────────────────────────── -->
+  <h2>Button close-ups on espresso</h2>
+  <div class="strip">
+    <div class="item">
+      <div class="btn a">Start here →</div>
+      <p class="label">A — Subtle</p>
+    </div>
+    <div class="item">
+      <div class="btn b">Start here →</div>
+      <p class="label">B — Painterly</p>
+    </div>
+    <div class="item">
+      <div class="btn c">Start here →</div>
+      <p class="label">C — Most Fresco</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

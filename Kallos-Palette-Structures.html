@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KALLOS — Palette Structure Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Open+Sans:wght@300;400;600&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F4ECDB;
+    --ink: #1F1812;
+    --ink-soft: #58493A;
+    --rule: #C8A04A;
+    --hairline: rgba(31, 24, 18, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    line-height: 1.65;
+    padding: 56px 32px 96px;
+  }
+
+  .doc { max-width: 1240px; margin: 0 auto; }
+
+  h1 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 2.6rem;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .lede {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+    max-width: 720px;
+    margin: 0 0 12px;
+  }
+  .gold-rule {
+    width: 48px; height: 1px;
+    background: var(--rule);
+    margin: 28px 0;
+  }
+  h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 8px;
+  }
+  .section-title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.8rem;
+    margin: 4px 0 8px;
+  }
+  .section-sub {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    max-width: 720px;
+    margin: 0 0 28px;
+  }
+
+  .section { margin-top: 64px; }
+
+  /* Phone */
+  .phone {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 9 / 19;
+    border: 1px solid var(--hairline);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    /* themed via inline CSS vars below */
+    --p-bg: #EFE2C4;
+    --p-ink: #2C1F12;
+    --p-ink-soft: rgba(44,31,18,0.6);
+    --p-art-1: #6E4828;
+    --p-art-2: #C9A77A;
+    --p-art-3: #2E2218;
+    --p-frame: rgba(31,24,18,0.18);
+    --p-rule: #C8A04A;
+    --p-badge-bg: #B23A2E;
+    --p-badge-ink: #FFF;
+    --p-cta-bg: #34468C;
+    --p-cta-ink: #EFE2C4;
+    --p-tab-active: #C8A04A;
+    --p-line: rgba(44,31,18,0.22);
+    --p-caption: rgba(44,31,18,0.5);
+    background: var(--p-bg);
+    color: var(--p-ink);
+  }
+  .phone .notch {
+    position: absolute; top: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 56px; height: 5px;
+    background: rgba(0,0,0,0.55);
+  }
+  .phone .top-pad { height: 32px; flex-shrink: 0; }
+  .phone .header {
+    padding: 10px 18px 12px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .phone .wordmark {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.56rem;
+    letter-spacing: 0.32em;
+  }
+  .phone .daycount {
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.46rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--p-ink-soft);
+  }
+  /* Artwork hero — painterly gradient placeholder standing in for a real
+     image. The thin frame around it is the jewel-tone "gallery hairline." */
+  .phone .hero {
+    margin: 0 18px 6px;
+    height: 36%;
+    padding: 2px;
+    border: 1px solid var(--p-frame);
+    background:
+      radial-gradient(ellipse at 30% 35%, var(--p-art-2) 0%, transparent 55%),
+      radial-gradient(ellipse at 70% 70%, var(--p-art-3) 0%, transparent 60%),
+      linear-gradient(135deg, var(--p-art-1) 0%, var(--p-art-3) 100%);
+  }
+  .phone .hero-cap {
+    margin: 0 18px 12px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.06em;
+    color: var(--p-caption);
+    font-style: italic;
+  }
+  .phone .title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    margin: 0 18px 6px;
+    line-height: 1.2;
+  }
+  .phone .rule {
+    width: 24px; height: 1px;
+    background: var(--p-rule);
+    margin: 10px 18px;
+  }
+  .phone .lines { margin: 0 18px; }
+  .phone .line {
+    height: 4px;
+    margin-bottom: 5px;
+    background: var(--p-line);
+  }
+  .phone .line.short { width: 65%; }
+  .phone .badge {
+    display: inline-block;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.42rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    margin: 10px 18px 0;
+    background: var(--p-badge-bg);
+    color: var(--p-badge-ink);
+  }
+  .phone .flex { flex: 1; }
+  .phone .cta {
+    margin: 0 18px 10px;
+    height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 0.5rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: var(--p-cta-bg);
+    color: var(--p-cta-ink);
+  }
+  .phone .tabbar {
+    height: 38px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    justify-items: center;
+    border-top: 1px solid rgba(31, 24, 18, 0.08);
+  }
+  .phone .tab { width: 14px; height: 14px; background: rgba(31,24,18,0.25); }
+  .phone .tab.active { background: var(--p-tab-active); }
+
+  .caption {
+    text-align: center;
+    margin-top: 14px;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .caption-meta {
+    text-align: center;
+    margin-top: 2px;
+    font-family: "Menlo", "Courier New", monospace;
+    font-size: 0.68rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+  }
+
+  /* Option A — single screen, all jewels */
+  .option-a {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .option-a .ledger {
+    border-left: 1px solid var(--hairline);
+    padding-left: 24px;
+  }
+  .option-a .ledger h3 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+  }
+  .option-a .ledger ul { list-style: none; padding: 0; margin: 0 0 20px; }
+  .option-a .ledger li {
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 0.85rem;
+  }
+  .option-a .ledger li .swatch {
+    width: 16px; height: 16px;
+    border: 1px solid var(--hairline);
+  }
+
+  /* Option B — four phones */
+  .option-b {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  /* Notes */
+  .notes {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--hairline);
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    max-width: 880px;
+  }
+  .notes p { margin: 0 0 12px; }
+  .notes strong { color: var(--ink); }
+
+  @media (max-width: 900px) {
+    .option-a { grid-template-columns: 1fr; }
+    .option-b { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 520px) {
+    .option-b { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <h1>Palette Structure — Two Paths</h1>
+  <p class="lede">Same six fresco pigments, two ways to organize them. The structural choice matters more than the colors themselves.</p>
+  <div class="gold-rule"></div>
+
+  <!-- ──────────────── OPTION A ──────────────── -->
+  <div class="section">
+    <h2>Option A</h2>
+    <div class="section-title">Single polychromatic palette</div>
+    <p class="section-sub">All six jewel tones available on every screen. Heroes are always artwork; jewels live in the <em>frame</em> around the art — gallery hairline, rule below title, badge, primary CTA, active tab. Reading surfaces stay parchment + ink. The product has one consistent visual identity that pulls from the full fresco.</p>
+
+    <div class="option-a">
+      <!-- One phone showing all jewels coexisting in the frame around the artwork -->
+      <div>
+        <div class="phone" style="
+          --p-bg:#EFE2C4;
+          --p-ink:#2C1F12;
+          --p-ink-soft:rgba(44,31,18,0.6);
+          --p-art-1:#6E4828;
+          --p-art-2:#C9A77A;
+          --p-art-3:#2E2218;
+          --p-frame:#D69A2D;
+          --p-rule:#8E6E7B;
+          --p-badge-bg:#7A8E7A;
+          --p-badge-ink:#FFF;
+          --p-cta-bg:#C8543C;
+          --p-cta-ink:#FFF;
+          --p-tab-active:#34468C;
+          --p-line:rgba(44,31,18,0.22);
+          --p-caption:rgba(44,31,18,0.5);
+        ">
+          <div class="notch"></div>
+          <div class="top-pad"></div>
+          <div class="header">
+            <span class="wordmark">KALLOS</span>
+            <span class="daycount">Day 2 of 7</span>
+          </div>
+          <div class="hero"></div>
+          <div class="hero-cap">Caravaggio · 1601</div>
+          <div class="title">The Inconsolable Longing</div>
+          <div class="rule"></div>
+          <div class="lines">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line short"></div>
+          </div>
+          <span class="badge">Pause &amp; Ponder</span>
+          <div class="flex"></div>
+          <div class="cta">Start here →</div>
+          <div class="tabbar">
+            <div class="tab active"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+          </div>
+        </div>
+        <div class="caption">One screen, all six pigments — in the frame, not the artwork</div>
+      </div>
+
+      <!-- Where each color shows up -->
+      <div class="ledger">
+        <h3>Roles on one screen</h3>
+        <ul>
+          <li><span class="swatch" style="background:#D69A2D"></span> Saffron — gallery hairline (frame around art)</li>
+          <li><span class="swatch" style="background:#8E6E7B"></span> Mauve — gold rule below title</li>
+          <li><span class="swatch" style="background:#7A8E7A"></span> Verdigris — badge</li>
+          <li><span class="swatch" style="background:#C8543C"></span> Vermilion — primary CTA</li>
+          <li><span class="swatch" style="background:#34468C"></span> Sistine blue — active tab</li>
+          <li><span class="swatch" style="background:#EFE2C4"></span> Parchment — reading surface</li>
+        </ul>
+        <h3>Trade-off</h3>
+        <p style="font-size:0.85rem;color:var(--ink-soft);margin:0;">Cohesive identity across the whole product — the artwork stays the focus, jewels frame it. Risk: still busy if all six show on every screen. Strict discipline required: each color has one job, never two.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="gold-rule" style="margin-top:88px"></div>
+
+  <!-- ──────────────── OPTION B ──────────────── -->
+  <div class="section">
+    <h2>Option B</h2>
+    <div class="section-title">Theme-driven accent groups</div>
+    <p class="section-sub">Each Journey inherits its own 2–3 fresco pigments as its visual identity. Reading surface stays parchment + ink across the whole app; the jewels change by content. Content variety becomes a visual feature.</p>
+
+    <div class="option-b">
+
+      <!-- Beauty — saffron frame · mauve rule -->
+      <div>
+        <div class="phone" style="
+          --p-bg:#EFE2C4;
+          --p-ink:#2C1F12;
+          --p-ink-soft:rgba(44,31,18,0.6);
+          --p-art-1:#B4855F;
+          --p-art-2:#E8D2A8;
+          --p-art-3:#5F3E25;
+          --p-frame:#D69A2D;
+          --p-rule:#8E6E7B;
+          --p-badge-bg:#D69A2D;
+          --p-badge-ink:#2C1F12;
+          --p-cta-bg:#6E4F5A;
+          --p-cta-ink:#EFE2C4;
+          --p-tab-active:#8E6E7B;
+          --p-line:rgba(44,31,18,0.22);
+          --p-caption:rgba(44,31,18,0.5);
+        ">
+          <div class="notch"></div>
+          <div class="top-pad"></div>
+          <div class="header">
+            <span class="wordmark">KALLOS</span>
+            <span class="daycount">Beauty</span>
+          </div>
+          <div class="hero"></div>
+          <div class="hero-cap">Cameron · 1866</div>
+          <div class="title">The Inconsolable Longing</div>
+          <div class="rule"></div>
+          <div class="lines">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line short"></div>
+          </div>
+          <span class="badge">Day 1 of 3</span>
+          <div class="flex"></div>
+          <div class="cta">Begin →</div>
+          <div class="tabbar">
+            <div class="tab active"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+          </div>
+        </div>
+        <div class="caption">Beauty</div>
+        <div class="caption-meta">saffron frame · mauve</div>
+      </div>
+
+      <!-- Truth — vermilion frame · ultramarine -->
+      <div>
+        <div class="phone" style="
+          --p-bg:#EFE2C4;
+          --p-ink:#2C1F12;
+          --p-ink-soft:rgba(44,31,18,0.6);
+          --p-art-1:#7E7257;
+          --p-art-2:#C2B58E;
+          --p-art-3:#3A3526;
+          --p-frame:#C8543C;
+          --p-rule:#34468C;
+          --p-badge-bg:#C8543C;
+          --p-badge-ink:#FFF;
+          --p-cta-bg:#34468C;
+          --p-cta-ink:#EFE2C4;
+          --p-tab-active:#34468C;
+          --p-line:rgba(44,31,18,0.22);
+          --p-caption:rgba(44,31,18,0.5);
+        ">
+          <div class="notch"></div>
+          <div class="top-pad"></div>
+          <div class="header">
+            <span class="wordmark">KALLOS</span>
+            <span class="daycount">Truth</span>
+          </div>
+          <div class="hero"></div>
+          <div class="hero-cap">Raphael · 1509</div>
+          <div class="title">When Myth Became Fact</div>
+          <div class="rule"></div>
+          <div class="lines">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line short"></div>
+          </div>
+          <span class="badge">Day 2 of 7</span>
+          <div class="flex"></div>
+          <div class="cta">Continue →</div>
+          <div class="tabbar">
+            <div class="tab active"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+          </div>
+        </div>
+        <div class="caption">Truth</div>
+        <div class="caption-meta">vermilion frame · ultramarine</div>
+      </div>
+
+      <!-- Suffering & Beauty — umber frame · verdigris + rose -->
+      <div>
+        <div class="phone" style="
+          --p-bg:#EAD9B8;
+          --p-ink:#1F1812;
+          --p-ink-soft:rgba(31,24,18,0.6);
+          --p-art-1:#3E2A1A;
+          --p-art-2:#8E6A42;
+          --p-art-3:#150C06;
+          --p-frame:#7B5536;
+          --p-rule:#5F7A6B;
+          --p-badge-bg:#A47783;
+          --p-badge-ink:#FFF;
+          --p-cta-bg:#7B5536;
+          --p-cta-ink:#EFE2C4;
+          --p-tab-active:#5F7A6B;
+          --p-line:rgba(31,24,18,0.22);
+          --p-caption:rgba(31,24,18,0.5);
+        ">
+          <div class="notch"></div>
+          <div class="top-pad"></div>
+          <div class="header">
+            <span class="wordmark">KALLOS</span>
+            <span class="daycount">Suffering</span>
+          </div>
+          <div class="hero"></div>
+          <div class="hero-cap">Caravaggio · 1602</div>
+          <div class="title">The Hours Before Dawn</div>
+          <div class="rule"></div>
+          <div class="lines">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line short"></div>
+          </div>
+          <span class="badge">Day 4 of 7</span>
+          <div class="flex"></div>
+          <div class="cta">Open →</div>
+          <div class="tabbar">
+            <div class="tab active"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+          </div>
+        </div>
+        <div class="caption">Suffering &amp; Beauty</div>
+        <div class="caption-meta">umber frame · verdigris · rose</div>
+      </div>
+
+      <!-- Light — powder blue frame · saffron -->
+      <div>
+        <div class="phone" style="
+          --p-bg:#F2E4BD;
+          --p-ink:#2C1F12;
+          --p-ink-soft:rgba(44,31,18,0.6);
+          --p-art-1:#D6A845;
+          --p-art-2:#F2DDA0;
+          --p-art-3:#8A5A1E;
+          --p-frame:#7B9BC4;
+          --p-rule:#D69A2D;
+          --p-badge-bg:#7B9BC4;
+          --p-badge-ink:#FFF;
+          --p-cta-bg:#B6802A;
+          --p-cta-ink:#FFF;
+          --p-tab-active:#D69A2D;
+          --p-line:rgba(44,31,18,0.22);
+          --p-caption:rgba(44,31,18,0.5);
+        ">
+          <div class="notch"></div>
+          <div class="top-pad"></div>
+          <div class="header">
+            <span class="wordmark">KALLOS</span>
+            <span class="daycount">Light</span>
+          </div>
+          <div class="hero"></div>
+          <div class="hero-cap">Turner · 1840</div>
+          <div class="title">First Morning</div>
+          <div class="rule"></div>
+          <div class="lines">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line short"></div>
+          </div>
+          <span class="badge">Day 1 of 7</span>
+          <div class="flex"></div>
+          <div class="cta">Step in →</div>
+          <div class="tabbar">
+            <div class="tab active"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+          </div>
+        </div>
+        <div class="caption">Light</div>
+        <div class="caption-meta">powder blue frame · saffron</div>
+      </div>
+
+    </div>
+
+    <p class="section-sub" style="margin-top:32px">
+      <strong style="color:var(--ink);font-weight:600;">Trade-off:</strong> No single &ldquo;KALLOS color&rdquo; — the brand becomes the fresco grammar (parchment surface + jewel-tone moment per Journey) rather than one specific hue. Risk: requires editorial discipline to assign pigments per Journey at content time. Upside: the app feels like a museum where each room has its own light.
+    </p>
+  </div>
+
+  <!-- ──────────────── NOTES ──────────────── -->
+  <div class="notes">
+    <p><strong>The pigments in both options.</strong> Mauve <code>#8E6E7B</code>, Saffron <code>#D69A2D</code>, Sistine blue <code>#34468C</code>, Powder blue <code>#7B9BC4</code>, Vermilion <code>#C8543C</code>, Verdigris <code>#5F7A6B</code>, Raw umber <code>#7B5536</code>, Parchment <code>#EFE2C4</code>. Hexes drawn from the colors you circled in the School of Athens.</p>
+    <p><strong>Reading-surface rule (both options).</strong> Page background is always parchment. Body text is always ink. Jewels live only in: hero blocks, gold rules, badges, primary CTAs, and active state indicators. Saturated color on a long reading surface kills readability — and breaks the &ldquo;contemplative&rdquo; register.</p>
+    <p><strong>The differentiation from AI-meditation apps.</strong> Headspace, Calm, Aro, Opal, Insight Timer all use earth-tone surface + one accent (gold or sage). Both options here use parchment + <em>multiple</em> saturated jewels. That polychromatic grammar is what reads as <em>art</em> rather than <em>wellness</em>.</p>
+  </div>
+
+</div>
+</body>
+</html>
