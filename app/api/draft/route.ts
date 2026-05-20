@@ -9,9 +9,9 @@ import type { NextRequest } from "next/server";
  *
  * Presentation calls this route with a `?sanity-preview-secret=<secret>` that
  * it auto-provisions in the dataset. `validatePreviewUrl` checks the secret
- * against that document. No manually-rolled secret — Sanity manages the
- * rotation. The token on the Sanity client must have draft-read permission
- * (NEXT_PUBLIC_SANITY_TOKEN does today).
+ * against that document. No manually-rolled secret, Sanity manages the
+ * rotation. The token on the Sanity client must have draft-read permission;
+ * use server-only SANITY_TOKEN (never NEXT_PUBLIC_*, which leaks to client JS).
  *
  * Once draft mode is on, pages that read `draftMode()` from next/headers
  * can swap to the preview client / drafts perspective. See:
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   try {
     const { isValid, redirectTo = "/" } = await validatePreviewUrl(
       sanityClient.withConfig({
-        token: process.env.NEXT_PUBLIC_SANITY_TOKEN,
+        token: process.env.SANITY_TOKEN,
       }),
       request.url,
     );
