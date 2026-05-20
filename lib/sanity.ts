@@ -9,15 +9,17 @@ export const sanityClient = createClient({
 })
 
 // Preview client: fetches draft (unpublished) content for Studio preview.
-// Uses NEXT_PUBLIC_SANITY_TOKEN + 'drafts' perspective.
+// Uses SANITY_TOKEN (server-only, never bundled to client) + 'drafts' perspective.
+// Previously read NEXT_PUBLIC_SANITY_TOKEN, which leaked the token into client JS.
+// previewClient is only called from server functions (page.tsx, route handlers).
 // The older 'previewDrafts' name is deprecated and silently returns
-// published-only data on apiVersion 2024-01-01+ — confirmed 2026-04-24.
+// published-only data on apiVersion 2024-01-01+, confirmed 2026-04-24.
 export const previewClient = createClient({
   projectId: 'em44j9m8',
   dataset: 'production',
   apiVersion: '2024-01-01',
   useCdn: false,
-  token: process.env.NEXT_PUBLIC_SANITY_TOKEN,
+  token: process.env.SANITY_TOKEN,
   perspective: 'drafts',
 })
 
