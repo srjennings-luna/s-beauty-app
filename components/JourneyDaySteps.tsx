@@ -473,29 +473,43 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           </p>
         )}
 
-        {/* Context — collapsed by default, expandable */}
+        {/* Context — gradient glow panel, sage colorway (cool / historical).
+            Replaces the old left-bordered text block. Visual treatment now
+            carries the section differentiation; no new content fields needed.
+            Closes UX backlog PL-01 layout intent for Context. */}
         {content.context && (
-          <div className="pl-4" style={{ borderLeft: `1px solid ${C.divider}` }}>
-            <div className="flex items-center gap-2 mb-2">
+          <div
+            className="px-6 py-6"
+            style={{
+              background: `
+                radial-gradient(ellipse 90% 55% at 50% 0%, rgba(74,122,98,0.22), transparent 72%),
+                radial-gradient(ellipse 90% 55% at 50% 100%, rgba(74,122,98,0.14), transparent 72%),
+                #24201d
+              `,
+              border: `1px solid rgba(74,122,98,0.42)`,
+              boxShadow: `inset 0 0 60px rgba(74,122,98,0.08), 0 0 24px rgba(74,122,98,0.12)`,
+            }}
+          >
+            <div className="flex items-center gap-2 mb-3">
               <button
                 onClick={() => setCtxExpanded(!ctxExpanded)}
                 className="flex items-center gap-2 text-left"
               >
-                <p className="text-xs tracking-widest uppercase" style={{ color: C.creamFaint }}>Context</p>
-                <span className="text-xs" style={{ color: C.creamFaint, transition: "transform 0.2s", display: "inline-block", transform: ctxExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
+                <p className="text-xs tracking-widest uppercase" style={{ color: '#a8c4b3' }}>Context</p>
+                <span className="text-xs" style={{ color: '#a8c4b3', transition: "transform 0.2s", display: "inline-block", transform: ctxExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
               </button>
               <NarrationButton audioUrl={content.contextAudioUrl} />
             </div>
             {ctxExpanded && (
-              <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>{content.context}</p>
+              <p className="text-sm leading-relaxed" style={{ color: C.cream }}>{content.context}</p>
             )}
             {!ctxExpanded && (
-              <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>{ctxTruncated}</p>
+              <p className="text-sm leading-relaxed" style={{ color: C.cream }}>{ctxTruncated}</p>
             )}
             {ctxNeedsExpand && !ctxExpanded && (
               <button
                 onClick={() => setCtxExpanded(true)}
-                className="mt-1 text-xs tracking-widest uppercase"
+                className="mt-2 text-xs tracking-widest uppercase"
                 style={{ color: C.sageMuted }}
               >
                 Read more ↓
@@ -540,40 +554,44 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           </div>
         )}
 
-        {/* Divider: only shown when Context and Look Closer are directly adjacent
-            (no quote, scripture card, or excerpt sitting between them) */}
-        {content.context && day.encounterNote &&
-          !content.quote?.text &&
-          !(content.scripturePairing?.verse && !day.lectio?.scriptureVerse) &&
-          !content.excerpt && (
-            <div style={{ paddingBottom: '10px' }}>
-              <hr style={{ borderColor: 'rgba(253,246,232,0.08)', margin: 0 }} />
-            </div>
-        )}
-
-        {/* Encounter Note — interpretive layer (iconography, listening guide, etc.) */}
+        {/* Look Closer — gradient glow panel, gold colorway (warm / interpretive).
+            Mirrors the Context treatment with a different colorway so the two
+            sections are visually differentiated without needing new content fields.
+            The HR divider that previously sat between Context and Look Closer
+            is gone; the panels themselves carry the visual rhythm. */}
         {day.encounterNote && (
-          <div className="pl-4" style={{ borderLeft: `1px solid ${C.divider}` }}>
-            <div className="flex items-center gap-3 mb-2">
+          <div
+            className="px-6 py-6"
+            style={{
+              background: `
+                radial-gradient(ellipse 90% 55% at 50% 0%, rgba(193,155,95,0.22), transparent 72%),
+                radial-gradient(ellipse 90% 55% at 50% 100%, rgba(193,155,95,0.14), transparent 72%),
+                #24201d
+              `,
+              border: `1px solid rgba(193,155,95,0.42)`,
+              boxShadow: `inset 0 0 60px rgba(193,155,95,0.08), 0 0 24px rgba(193,155,95,0.14)`,
+            }}
+          >
+            <div className="flex items-center gap-3 mb-3">
               <button
                 onClick={() => setNoteExpanded(!noteExpanded)}
                 className="flex items-center gap-2 text-left"
               >
-                <p className="text-xs tracking-widest uppercase" style={{ color: C.creamFaint }}>Look Closer</p>
-                <span className="text-xs" style={{ color: C.creamFaint, transition: "transform 0.2s", display: "inline-block", transform: noteExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
+                <p className="text-xs tracking-widest uppercase" style={{ color: '#d4b885' }}>Look Closer</p>
+                <span className="text-xs" style={{ color: '#d4b885', transition: "transform 0.2s", display: "inline-block", transform: noteExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
               </button>
               <NarrationButton audioUrl={day.encounterNoteAudioUrl} />
             </div>
             {noteExpanded && (
-              <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>{day.encounterNote}</p>
+              <p className="text-sm leading-relaxed" style={{ color: C.cream }}>{day.encounterNote}</p>
             )}
             {!noteExpanded && (
-              <p className="text-sm leading-relaxed" style={{ color: C.creamDim }}>{noteTruncated}</p>
+              <p className="text-sm leading-relaxed" style={{ color: C.cream }}>{noteTruncated}</p>
             )}
             {noteNeedsExpand && !noteExpanded && (
               <button
                 onClick={() => setNoteExpanded(true)}
-                className="mt-1 text-xs tracking-widest uppercase"
+                className="mt-2 text-xs tracking-widest uppercase"
                 style={{ color: C.sageMuted }}
               >
                 Read more ↓
