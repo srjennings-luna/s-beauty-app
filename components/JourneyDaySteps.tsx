@@ -13,46 +13,49 @@ import { WHISPER_GRADIENT } from "@/lib/design-tokens";
 // picks a direction, the unused palette can be removed.
 const ENCOUNTER_PALETTES = {
   default: {
-    // Sage / gold — first pass
+    // Plum / gold — the chosen pairing.
+    // Plum (Context, Lectio philosophy) reads as the older/philosophical
+    // thread. Gold (Look Closer, Lectio scripture) reads as the
+    // interpretive/scriptural thread. Two colors, two roles, page-wide.
     context: {
       base: "#24201d",
-      glow1: "rgba(74,122,98,0.22)",
-      glow2: "rgba(74,122,98,0.14)",
-      border: "rgba(74,122,98,0.42)",
-      innerGlow: "rgba(74,122,98,0.08)",
-      outerGlow: "rgba(74,122,98,0.12)",
-      labelColor: "#a8c4b3",
+      glow1: "rgba(155,122,149,0.24)",
+      glow2: "rgba(155,122,149,0.16)",
+      innerGlow: "rgba(155,122,149,0.09)",
+      outerGlow: "rgba(155,122,149,0.14)",
+      labelColor: "#c0a6bb",
+      accentSolid: "#9b7a95", // for solid borders (Lectio philosophy line)
     },
     note: {
       base: "#24201d",
       glow1: "rgba(193,155,95,0.22)",
       glow2: "rgba(193,155,95,0.14)",
-      border: "rgba(193,155,95,0.42)",
       innerGlow: "rgba(193,155,95,0.08)",
       outerGlow: "rgba(193,155,95,0.14)",
       labelColor: "#d4b885",
+      accentSolid: "#C19B5F", // for solid borders (Lectio scripture line)
     },
   },
-  fresco: {
-    // Dusty plum / terracotta-amber — Renaissance fresco palette
-    // (Raphael School of Athens reference)
+  // Kept for comparison only. ?palette=alt swaps in the sage version of
+  // Context for A/B if Sheri wants to revisit the original cool color.
+  alt: {
     context: {
       base: "#24201d",
-      glow1: "rgba(155,122,149,0.24)",
-      glow2: "rgba(155,122,149,0.16)",
-      border: "rgba(155,122,149,0.45)",
-      innerGlow: "rgba(155,122,149,0.09)",
-      outerGlow: "rgba(155,122,149,0.14)",
-      labelColor: "#c0a6bb",
+      glow1: "rgba(74,122,98,0.22)",
+      glow2: "rgba(74,122,98,0.14)",
+      innerGlow: "rgba(74,122,98,0.08)",
+      outerGlow: "rgba(74,122,98,0.12)",
+      labelColor: "#a8c4b3",
+      accentSolid: "#7a9a8a",
     },
     note: {
       base: "#24201d",
-      glow1: "rgba(200,145,75,0.26)",
-      glow2: "rgba(200,145,75,0.17)",
-      border: "rgba(200,145,75,0.48)",
-      innerGlow: "rgba(200,145,75,0.10)",
-      outerGlow: "rgba(200,145,75,0.18)",
-      labelColor: "#e2bb8c",
+      glow1: "rgba(193,155,95,0.22)",
+      glow2: "rgba(193,155,95,0.14)",
+      innerGlow: "rgba(193,155,95,0.08)",
+      outerGlow: "rgba(193,155,95,0.14)",
+      labelColor: "#d4b885",
+      accentSolid: "#C19B5F",
     },
   },
 } as const;
@@ -426,10 +429,10 @@ function StepEncounter({ day }: { day: JourneyDay }) {
   const [ctxExpanded, setCtxExpanded] = useState(false);
   const [noteExpanded, setNoteExpanded] = useState(false);
 
-  // Encounter panel palette toggle. ?palette=fresco swaps sage+gold for
-  // dusty-plum + terracotta-amber (Renaissance fresco reference).
+  // Encounter palette. Default is plum+gold (page-wide unified pair).
+  // ?palette=alt swaps Context to sage for A/B comparison if needed.
   const searchParams = useSearchParams();
-  const paletteName = searchParams?.get("palette") === "fresco" ? "fresco" : "default";
+  const paletteName = searchParams?.get("palette") === "alt" ? "alt" : "default";
   const palette = ENCOUNTER_PALETTES[paletteName];
 
   if (!content) {
@@ -543,7 +546,6 @@ function StepEncounter({ day }: { day: JourneyDay }) {
                 radial-gradient(ellipse 90% 55% at 50% 100%, ${palette.context.glow2}, transparent 72%),
                 ${palette.context.base}
               `,
-              border: `1px solid ${palette.context.border}`,
               boxShadow: `inset 0 0 60px ${palette.context.innerGlow}, 0 0 24px ${palette.context.outerGlow}`,
             }}
           >
@@ -626,7 +628,6 @@ function StepEncounter({ day }: { day: JourneyDay }) {
                 radial-gradient(ellipse 90% 55% at 50% 100%, ${palette.note.glow2}, transparent 72%),
                 ${palette.note.base}
               `,
-              border: `1px solid ${palette.note.border}`,
               boxShadow: `inset 0 0 60px ${palette.note.innerGlow}, 0 0 24px ${palette.note.outerGlow}`,
             }}
           >
@@ -687,12 +688,12 @@ function StepEncounter({ day }: { day: JourneyDay }) {
         {/* Lectio — philosophy + scripture pairing */}
         {(day.lectio?.philosophyQuote || day.lectio?.scriptureVerse) && (
           <div style={{ borderTop: `1px solid ${C.divider}`, paddingTop: "24px" }}>
-            <p className="text-xs tracking-widest uppercase mb-5" style={{ color: C.sageMuted, letterSpacing: "0.2em" }}>
+            <p className="text-xs tracking-widest uppercase mb-5" style={{ color: C.creamFaint, letterSpacing: "0.2em" }}>
               Lectio
             </p>
 
             {day.lectio?.philosophyQuote && (
-              <div className="mb-4" style={{ borderLeft: `2px solid ${C.sageMuted}`, paddingLeft: "16px" }}>
+              <div className="mb-4" style={{ borderLeft: `2px solid ${palette.context.accentSolid}`, paddingLeft: "16px" }}>
                 <p
                   className="italic"
                   style={{
@@ -713,7 +714,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
             )}
 
             {day.lectio?.scriptureVerse && (
-              <div style={{ borderLeft: `2px solid ${C.gold}`, paddingLeft: "16px" }}>
+              <div style={{ borderLeft: `2px solid ${palette.note.accentSolid}`, paddingLeft: "16px" }}>
                 <p
                   className="italic"
                   style={{
