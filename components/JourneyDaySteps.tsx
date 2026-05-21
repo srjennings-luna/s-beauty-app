@@ -1,10 +1,61 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import type { JourneyDay } from "@/lib/types";
 import NarrationButton, { NARRATION_START_EVENT, NARRATION_END_EVENT } from "@/components/NarrationButton";
 import { WHISPER_GRADIENT } from "@/lib/design-tokens";
+
+// Encounter-panel palettes for the gradient-glow treatment on Context and
+// Look Closer. Toggle via URL param ?palette=fresco for comparison. Default
+// is the sage/gold first pass shipped May 21, 2026. Mockup only; once Sheri
+// picks a direction, the unused palette can be removed.
+const ENCOUNTER_PALETTES = {
+  default: {
+    // Sage / gold — first pass
+    context: {
+      base: "#24201d",
+      glow1: "rgba(74,122,98,0.22)",
+      glow2: "rgba(74,122,98,0.14)",
+      border: "rgba(74,122,98,0.42)",
+      innerGlow: "rgba(74,122,98,0.08)",
+      outerGlow: "rgba(74,122,98,0.12)",
+      labelColor: "#a8c4b3",
+    },
+    note: {
+      base: "#24201d",
+      glow1: "rgba(193,155,95,0.22)",
+      glow2: "rgba(193,155,95,0.14)",
+      border: "rgba(193,155,95,0.42)",
+      innerGlow: "rgba(193,155,95,0.08)",
+      outerGlow: "rgba(193,155,95,0.14)",
+      labelColor: "#d4b885",
+    },
+  },
+  fresco: {
+    // Dusty plum / terracotta-amber — Renaissance fresco palette
+    // (Raphael School of Athens reference)
+    context: {
+      base: "#24201d",
+      glow1: "rgba(155,122,149,0.24)",
+      glow2: "rgba(155,122,149,0.16)",
+      border: "rgba(155,122,149,0.45)",
+      innerGlow: "rgba(155,122,149,0.09)",
+      outerGlow: "rgba(155,122,149,0.14)",
+      labelColor: "#c0a6bb",
+    },
+    note: {
+      base: "#24201d",
+      glow1: "rgba(200,145,75,0.26)",
+      glow2: "rgba(200,145,75,0.17)",
+      border: "rgba(200,145,75,0.48)",
+      innerGlow: "rgba(200,145,75,0.10)",
+      outerGlow: "rgba(200,145,75,0.18)",
+      labelColor: "#e2bb8c",
+    },
+  },
+} as const;
 
 function formatTime(s: number): string {
   const m = Math.floor(s / 60);
@@ -375,6 +426,12 @@ function StepEncounter({ day }: { day: JourneyDay }) {
   const [ctxExpanded, setCtxExpanded] = useState(false);
   const [noteExpanded, setNoteExpanded] = useState(false);
 
+  // Encounter panel palette toggle. ?palette=fresco swaps sage+gold for
+  // dusty-plum + terracotta-amber (Renaissance fresco reference).
+  const searchParams = useSearchParams();
+  const paletteName = searchParams?.get("palette") === "fresco" ? "fresco" : "default";
+  const palette = ENCOUNTER_PALETTES[paletteName];
+
   if (!content) {
     return (
       <div className="flex items-center justify-center h-full px-6">
@@ -473,21 +530,21 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           </p>
         )}
 
-        {/* Context — gradient glow panel, sage colorway (cool / historical).
-            Replaces the old left-bordered text block. Visual treatment now
-            carries the section differentiation; no new content fields needed.
-            Closes UX backlog PL-01 layout intent for Context. */}
+        {/* Context — gradient glow panel. Colorway from ENCOUNTER_PALETTES.
+            Default: sage. ?palette=fresco: dusty plum (Renaissance reference).
+            Visual treatment carries the section differentiation; no new
+            content fields needed. Closes UX backlog PL-01 layout intent. */}
         {content.context && (
           <div
             className="px-6 py-6"
             style={{
               background: `
-                radial-gradient(ellipse 90% 55% at 50% 0%, rgba(74,122,98,0.22), transparent 72%),
-                radial-gradient(ellipse 90% 55% at 50% 100%, rgba(74,122,98,0.14), transparent 72%),
-                #24201d
+                radial-gradient(ellipse 90% 55% at 50% 0%, ${palette.context.glow1}, transparent 72%),
+                radial-gradient(ellipse 90% 55% at 50% 100%, ${palette.context.glow2}, transparent 72%),
+                ${palette.context.base}
               `,
-              border: `1px solid rgba(74,122,98,0.42)`,
-              boxShadow: `inset 0 0 60px rgba(74,122,98,0.08), 0 0 24px rgba(74,122,98,0.12)`,
+              border: `1px solid ${palette.context.border}`,
+              boxShadow: `inset 0 0 60px ${palette.context.innerGlow}, 0 0 24px ${palette.context.outerGlow}`,
             }}
           >
             <div className="flex items-center gap-2 mb-3">
@@ -495,8 +552,8 @@ function StepEncounter({ day }: { day: JourneyDay }) {
                 onClick={() => setCtxExpanded(!ctxExpanded)}
                 className="flex items-center gap-2 text-left"
               >
-                <p className="text-xs tracking-widest uppercase" style={{ color: '#a8c4b3' }}>Context</p>
-                <span className="text-xs" style={{ color: '#a8c4b3', transition: "transform 0.2s", display: "inline-block", transform: ctxExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
+                <p className="text-xs tracking-widest uppercase" style={{ color: palette.context.labelColor }}>Context</p>
+                <span className="text-xs" style={{ color: palette.context.labelColor, transition: "transform 0.2s", display: "inline-block", transform: ctxExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
               </button>
               <NarrationButton audioUrl={content.contextAudioUrl} />
             </div>
@@ -554,22 +611,23 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           </div>
         )}
 
-        {/* Look Closer — gradient glow panel, gold colorway (warm / interpretive).
-            Mirrors the Context treatment with a different colorway so the two
-            sections are visually differentiated without needing new content fields.
-            The HR divider that previously sat between Context and Look Closer
-            is gone; the panels themselves carry the visual rhythm. */}
+        {/* Look Closer — gradient glow panel. Colorway from ENCOUNTER_PALETTES.
+            Default: gold. ?palette=fresco: terracotta-amber (Renaissance ref).
+            Mirrors Context treatment with a different colorway so the two
+            sections are visually differentiated without needing new content
+            fields. The HR divider that previously sat between Context and
+            Look Closer is gone; the panels themselves carry the rhythm. */}
         {day.encounterNote && (
           <div
             className="px-6 py-6"
             style={{
               background: `
-                radial-gradient(ellipse 90% 55% at 50% 0%, rgba(193,155,95,0.22), transparent 72%),
-                radial-gradient(ellipse 90% 55% at 50% 100%, rgba(193,155,95,0.14), transparent 72%),
-                #24201d
+                radial-gradient(ellipse 90% 55% at 50% 0%, ${palette.note.glow1}, transparent 72%),
+                radial-gradient(ellipse 90% 55% at 50% 100%, ${palette.note.glow2}, transparent 72%),
+                ${palette.note.base}
               `,
-              border: `1px solid rgba(193,155,95,0.42)`,
-              boxShadow: `inset 0 0 60px rgba(193,155,95,0.08), 0 0 24px rgba(193,155,95,0.14)`,
+              border: `1px solid ${palette.note.border}`,
+              boxShadow: `inset 0 0 60px ${palette.note.innerGlow}, 0 0 24px ${palette.note.outerGlow}`,
             }}
           >
             <div className="flex items-center gap-3 mb-3">
@@ -577,8 +635,8 @@ function StepEncounter({ day }: { day: JourneyDay }) {
                 onClick={() => setNoteExpanded(!noteExpanded)}
                 className="flex items-center gap-2 text-left"
               >
-                <p className="text-xs tracking-widest uppercase" style={{ color: '#d4b885' }}>Look Closer</p>
-                <span className="text-xs" style={{ color: '#d4b885', transition: "transform 0.2s", display: "inline-block", transform: noteExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
+                <p className="text-xs tracking-widest uppercase" style={{ color: palette.note.labelColor }}>Look Closer</p>
+                <span className="text-xs" style={{ color: palette.note.labelColor, transition: "transform 0.2s", display: "inline-block", transform: noteExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
               </button>
               <NarrationButton audioUrl={day.encounterNoteAudioUrl} />
             </div>
