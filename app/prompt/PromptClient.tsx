@@ -843,7 +843,7 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
           {prompt.relatedJourney && (
             <section>
               <div className="py-4 px-5" style={{ border: `1px solid ${C.divider}` }}>
-                <p className="text-xs tracking-widest uppercase mb-2" style={{ color: C.creamFaint }}>Go deeper</p>
+                <p className="text-xs tracking-widest uppercase mb-2" style={{ color: C.creamFaint }}>Related Journey</p>
                 <Link
                   href={`/journeys/${prompt.relatedJourney.slug.current}`}
                   className="flex items-center justify-between group"
