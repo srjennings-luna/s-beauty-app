@@ -19,12 +19,16 @@ const ENCOUNTER_PALETTES = {
     // interpretive/scriptural thread. Two colors, two roles, page-wide.
     context: {
       base: "#24201d",
-      glow1: "rgba(155,122,149,0.24)",
-      glow2: "rgba(155,122,149,0.16)",
-      innerGlow: "rgba(155,122,149,0.09)",
-      outerGlow: "rgba(155,122,149,0.14)",
+      // glow1: primary directional light from above (stronger).
+      // glow2: counter-light from below (~2/3 the alpha of glow1) so the
+      // panel reads as contained on both ends while keeping the asymmetric
+      // "light from above" feel. outerGlow feathers the edge into the page.
+      glow1: "rgba(155,122,149,0.30)",
+      glow2: "rgba(155,122,149,0.20)",
+      innerGlow: "rgba(155,122,149,0.06)",
+      outerGlow: "rgba(155,122,149,0.10)",
       labelColor: "#c0a6bb",
-      accentSolid: "#9b7a95", // for solid borders (Lectio philosophy line)
+      accentSolid: "rgba(155,122,149,0.5)", // muted line for Lectio philosophy
     },
     note: {
       base: "#24201d",
@@ -33,7 +37,7 @@ const ENCOUNTER_PALETTES = {
       innerGlow: "rgba(193,155,95,0.08)",
       outerGlow: "rgba(193,155,95,0.14)",
       labelColor: "#d4b885",
-      accentSolid: "#C19B5F", // for solid borders (Lectio scripture line)
+      accentSolid: "rgba(193,155,95,0.5)", // muted line for Lectio scripture
     },
   },
   // Kept for comparison only. ?palette=alt swaps in the sage version of
@@ -41,17 +45,16 @@ const ENCOUNTER_PALETTES = {
   alt: {
     context: {
       base: "#24201d",
-      glow1: "rgba(74,122,98,0.22)",
-      glow2: "rgba(74,122,98,0.14)",
-      innerGlow: "rgba(74,122,98,0.08)",
-      outerGlow: "rgba(74,122,98,0.12)",
+      glow1: "rgba(74,122,98,0.28)",
+      glow2: "rgba(74,122,98,0.18)",
+      innerGlow: "rgba(74,122,98,0.06)",
+      outerGlow: "rgba(74,122,98,0.08)",
       labelColor: "#a8c4b3",
       accentSolid: "#7a9a8a",
     },
     note: {
       base: "#24201d",
       glow1: "rgba(193,155,95,0.22)",
-      glow2: "rgba(193,155,95,0.14)",
       innerGlow: "rgba(193,155,95,0.08)",
       outerGlow: "rgba(193,155,95,0.14)",
       labelColor: "#d4b885",
@@ -539,40 +542,60 @@ function StepEncounter({ day }: { day: JourneyDay }) {
             content fields needed. Closes UX backlog PL-01 layout intent. */}
         {content.context && (
           <div
-            className="px-6 py-6"
+            className="-mx-6 px-6 py-10"
             style={{
+              // Full-bleed gradient panel: extends to viewport edges via
+              // negative margin (-mx-6), matches parent's px-6 padding
+              // internally so the text column aligns with the surrounding
+              // hook text. Layer 1: directional light glow from above
+              // (primary). Layer 2: counter-glow from below (~2/3 intensity)
+              // that contains the panel on both ends while keeping the
+              // light-from-above feel. Layer 3: panel base fading to
+              // transparent at edges so there's no hard rectangle.
               background: `
-                radial-gradient(ellipse 90% 55% at 50% 0%, ${palette.context.glow1}, transparent 72%),
-                radial-gradient(ellipse 90% 55% at 50% 100%, ${palette.context.glow2}, transparent 72%),
-                ${palette.context.base}
+                radial-gradient(ellipse 110% 80% at 50% -10%, ${palette.context.glow1}, transparent 75%),
+                radial-gradient(ellipse 110% 70% at 50% 110%, ${palette.context.glow2}, transparent 75%),
+                radial-gradient(ellipse 130% 95% at 50% 50%, ${palette.context.base}, transparent 95%)
               `,
-              boxShadow: `inset 0 0 60px ${palette.context.innerGlow}, 0 0 24px ${palette.context.outerGlow}`,
+              boxShadow: `0 0 100px ${palette.context.outerGlow}`,
             }}
           >
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-3 mb-4">
               <button
                 onClick={() => setCtxExpanded(!ctxExpanded)}
-                className="flex items-center gap-2 text-left"
+                className="flex items-center gap-2.5 text-left"
+                style={{ color: C.creamFaint }}
+                aria-expanded={ctxExpanded}
+                aria-label={ctxExpanded ? "Collapse Context" : "Expand Context"}
               >
-                <p className="text-xs tracking-widest uppercase" style={{ color: palette.context.labelColor }}>Context</p>
-                <span className="text-xs" style={{ color: palette.context.labelColor, transition: "transform 0.2s", display: "inline-block", transform: ctxExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
+                <p
+                  className="italic"
+                  style={{
+                    color: C.creamFaint,
+                    fontFamily: "var(--font-cormorant)",
+                    fontSize: "1.5rem",
+                    lineHeight: "1.2",
+                  }}
+                >
+                  Context
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className={`w-5 h-5 transition-transform ${ctxExpanded ? "rotate-180" : ""}`}
+                >
+                  <path fillRule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clipRule="evenodd" />
+                </svg>
               </button>
               <NarrationButton audioUrl={content.contextAudioUrl} />
             </div>
-            {ctxExpanded && (
-              <p className="text-sm leading-relaxed" style={{ color: C.cream }}>{content.context}</p>
-            )}
-            {!ctxExpanded && (
-              <p className="text-sm leading-relaxed" style={{ color: C.cream }}>{ctxTruncated}</p>
-            )}
-            {ctxNeedsExpand && !ctxExpanded && (
-              <button
-                onClick={() => setCtxExpanded(true)}
-                className="mt-2 text-xs tracking-widest uppercase"
-                style={{ color: C.sageMuted }}
-              >
-                Read more ↓
-              </button>
+            {ctxExpanded ? (
+              <p className="text-base leading-[1.85]" style={{ color: C.cream }}>{content.context}</p>
+            ) : (
+              <p className="text-base leading-[1.85]" style={{ color: C.cream }}>
+                {ctxTruncated}{ctxNeedsExpand ? "..." : ""}
+              </p>
             )}
           </div>
         )}
@@ -613,48 +636,39 @@ function StepEncounter({ day }: { day: JourneyDay }) {
           </div>
         )}
 
-        {/* Look Closer — gradient glow panel. Colorway from ENCOUNTER_PALETTES.
-            Default: gold. ?palette=fresco: terracotta-amber (Renaissance ref).
-            Mirrors Context treatment with a different colorway so the two
-            sections are visually differentiated without needing new content
-            fields. The HR divider that previously sat between Context and
-            Look Closer is gone; the panels themselves carry the rhythm. */}
+        {/* Look Closer — plain block, text aligns flush with hook text
+            (no pl-4 indent). Label + small chevron differentiate the
+            section; the gradient-less Context comparison creates the
+            visual hierarchy (Context = feature, Look Closer = supporting
+            note). Body text at C.cream opacity for readability. */}
         {day.encounterNote && (
-          <div
-            className="px-6 py-6"
-            style={{
-              background: `
-                radial-gradient(ellipse 90% 55% at 50% 0%, ${palette.note.glow1}, transparent 72%),
-                radial-gradient(ellipse 90% 55% at 50% 100%, ${palette.note.glow2}, transparent 72%),
-                ${palette.note.base}
-              `,
-              boxShadow: `inset 0 0 60px ${palette.note.innerGlow}, 0 0 24px ${palette.note.outerGlow}`,
-            }}
-          >
-            <div className="flex items-center gap-3 mb-3">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
               <button
                 onClick={() => setNoteExpanded(!noteExpanded)}
                 className="flex items-center gap-2 text-left"
+                style={{ color: C.creamFaint }}
+                aria-expanded={noteExpanded}
+                aria-label={noteExpanded ? "Collapse Look Closer" : "Expand Look Closer"}
               >
-                <p className="text-xs tracking-widest uppercase" style={{ color: palette.note.labelColor }}>Look Closer</p>
-                <span className="text-xs" style={{ color: palette.note.labelColor, transition: "transform 0.2s", display: "inline-block", transform: noteExpanded ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
+                <p className="text-xs tracking-widest uppercase" style={{ color: C.creamFaint }}>Look Closer</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className={`w-3.5 h-3.5 transition-transform ${noteExpanded ? "rotate-180" : ""}`}
+                >
+                  <path fillRule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clipRule="evenodd" />
+                </svg>
               </button>
               <NarrationButton audioUrl={day.encounterNoteAudioUrl} />
             </div>
-            {noteExpanded && (
+            {noteExpanded ? (
               <p className="text-sm leading-relaxed" style={{ color: C.cream }}>{day.encounterNote}</p>
-            )}
-            {!noteExpanded && (
-              <p className="text-sm leading-relaxed" style={{ color: C.cream }}>{noteTruncated}</p>
-            )}
-            {noteNeedsExpand && !noteExpanded && (
-              <button
-                onClick={() => setNoteExpanded(true)}
-                className="mt-2 text-xs tracking-widest uppercase"
-                style={{ color: C.sageMuted }}
-              >
-                Read more ↓
-              </button>
+            ) : (
+              <p className="text-sm leading-relaxed" style={{ color: C.cream }}>
+                {noteTruncated}{noteNeedsExpand ? "..." : ""}
+              </p>
             )}
           </div>
         )}
@@ -693,7 +707,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
             </p>
 
             {day.lectio?.philosophyQuote && (
-              <div className="mb-4" style={{ borderLeft: `2px solid ${palette.context.accentSolid}`, paddingLeft: "16px" }}>
+              <div className="mb-4" style={{ borderLeft: `1px solid ${palette.context.accentSolid}`, paddingLeft: "16px" }}>
                 <p
                   className="italic"
                   style={{
@@ -714,7 +728,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
             )}
 
             {day.lectio?.scriptureVerse && (
-              <div style={{ borderLeft: `2px solid ${palette.note.accentSolid}`, paddingLeft: "16px" }}>
+              <div style={{ borderLeft: `1px solid ${palette.note.accentSolid}`, paddingLeft: "16px" }}>
                 <p
                   className="italic"
                   style={{
