@@ -41,7 +41,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#fdf6e8",
+  // Mirror --color-parchment in app/globals.css (browser meta accepts only literal hex)
+  themeColor: "#fdf6e9",
 };
 
 export default function RootLayout({

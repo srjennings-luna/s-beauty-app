@@ -120,9 +120,9 @@ export default function TRTableClient({
   };
   const sortArrow = (k: SortKey) => (sortKey === k ? (sortDir === "asc" ? " ▲" : " ▼") : "");
   const headerCls =
-    "px-2 py-1 text-left font-sans text-[9px] tracking-wider cursor-pointer select-none hover:text-[#C19B5F]";
+    "px-2 py-1 text-left font-sans text-[9px] tracking-wider cursor-pointer select-none hover:text-sacred-gold";
   const numHeaderCls =
-    "px-2 py-1 font-sans text-[9px] tracking-wider cursor-pointer select-none hover:text-[#C19B5F]";
+    "px-2 py-1 font-sans text-[9px] tracking-wider cursor-pointer select-none hover:text-sacred-gold";
 
   const anyFilter =
     !!filterJourney || !!filterAuthorType || !!filterEra || !!filterTheme || filterAudio !== "all";
@@ -136,7 +136,7 @@ export default function TRTableClient({
 
   return (
     <div className="mt-4 border border-[#e8e0d4]">
-      <div className="bg-[#fdf6e8] text-[#16110d] px-4 py-2 flex items-center flex-wrap gap-2 text-[11px]">
+      <div className="bg-parchment text-espresso px-4 py-2 flex items-center flex-wrap gap-2 text-[11px]">
         <span className="font-sans text-sm font-bold">Full TR list</span>
         <span className="font-sans text-[10px] text-[#7a7062]">
           {sorted.length} of {trList.length} shown
@@ -202,7 +202,7 @@ export default function TRTableClient({
           {anyFilter && (
             <button
               onClick={clear}
-              className="border border-[#C19B5F] text-[#C19B5F] px-2 py-1 text-[10px] font-sans uppercase tracking-wider hover:bg-[#C19B5F] hover:text-white"
+              className="border border-sacred-gold text-sacred-gold px-2 py-1 text-[10px] font-sans uppercase tracking-wider hover:bg-sacred-gold hover:text-white"
             >
               Clear
             </button>
@@ -211,7 +211,7 @@ export default function TRTableClient({
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-[11px]">
-          <thead className="bg-[#16110d] text-[#fdf6e8]">
+          <thead className="bg-espresso text-parchment">
             <tr>
               <th className={headerCls} onClick={() => toggleSort("authorType")}>
                 Type{sortArrow("authorType")}
@@ -251,7 +251,7 @@ export default function TRTableClient({
                   <td className="px-2 py-1 text-[#5a5048] max-w-xs truncate">{tr.source || "—"}</td>
                   <td className="px-2 py-1 text-center">
                     {tr.hasAudio ? (
-                      <span className="text-[#4a7a62] font-bold">Y</span>
+                      <span className="text-sage font-bold">Y</span>
                     ) : (
                       <span className="text-[#c25555]">—</span>
                     )}

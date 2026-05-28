@@ -31,7 +31,7 @@ export type SplashScreen = {
 // moment; aged gilt + verdigris signal "fresco / museum" rather than
 // "wellness / meditation." The rest of the app still runs sacred gold
 // #C19B5F via tailwind --accent-gold; that's the daily-use functional palette.
-const E = "#16110d";
+const E = "var(--color-espresso)";
 const G = "#B89238"; // aged gilt — the splash gold thread (replaces #C19B5F here)
 const G_RGB = "184,146,56"; // RGB tuple for opacity uses below
 const VERDIGRIS = "#5F7A6B"; // gold-rule color; brand-anchor cousin of sage #4a7a62
@@ -40,9 +40,6 @@ const CTA_GRADIENT = `linear-gradient(135deg, ${VERDIGRIS} 0%, ${G} 100%)`;
 // immersive screens (P&P, Journey day, Visio Divina, ArtworkViewer).
 const CREAM = "rgba(253,246,232,0.9)";
 const CREAM_DIM = "rgba(253,246,232,0.52)";
-const montserrat = "Montserrat, sans-serif";
-const cormorant = "Cormorant Garamond, Georgia, serif";
-const openSans = "Open Sans, sans-serif";
 
 const STAGGER_MS = [0, 100, 200, 300, 400, 400, 400, 400, 400];
 const delayFor = (i: number) => STAGGER_MS[Math.min(i, STAGGER_MS.length - 1)];
@@ -174,8 +171,8 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
         return (
           <p
             key={block._key}
+            className="font-montserrat"
             style={{
-              fontFamily: montserrat,
               fontSize: "1.5rem",
               letterSpacing: "0.42em",
               textTransform: "uppercase",
@@ -191,10 +188,9 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
         return (
           <p
             key={block._key}
+            className="font-serif-elegant-italic"
             style={{
-              fontFamily: cormorant,
               fontSize: "1.25rem",
-              fontStyle: "italic",
               color: "rgba(253,246,232,0.5)",
               letterSpacing: "0.06em",
               marginTop: 6,
@@ -215,11 +211,9 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
         return (
           <p
             key={block._key}
+            className="font-serif-elegant-italic"
             style={{
-              fontFamily: cormorant,
               fontSize: "2.125rem",
-              fontStyle: "italic",
-              fontWeight: 400,
               color: CREAM,
               lineHeight: 1.2,
               marginBottom: 40,
@@ -233,11 +227,9 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
         return (
           <p
             key={block._key}
+            className="font-serif-elegant-italic"
             style={{
-              fontFamily: cormorant,
               fontSize: "2.125rem",
-              fontStyle: "italic",
-              fontWeight: 400,
               color: CREAM,
               lineHeight: 1.25,
               marginBottom: blockIdx === 0 ? 0 : 40,
@@ -251,8 +243,8 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
         return (
           <p
             key={block._key}
+            className="font-open-sans"
             style={{
-              fontFamily: openSans,
               fontSize: "0.9375rem",
               color: CREAM_DIM,
               lineHeight: 1.8,
@@ -268,8 +260,8 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
         return (
           <p
             key={block._key}
+            className="font-montserrat"
             style={{
-              fontFamily: montserrat,
               fontSize: "0.875rem",
               color: G,
               letterSpacing: "0.02em",
@@ -292,8 +284,8 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
             }}
           >
             <p
+              className="font-montserrat"
               style={{
-                fontFamily: montserrat,
                 fontSize: "0.58rem",
                 letterSpacing: "0.18em",
                 textTransform: "uppercase",
@@ -304,8 +296,8 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
               {block.label}
             </p>
             <p
+              className="font-open-sans"
               style={{
-                fontFamily: openSans,
                 fontSize: "0.9375rem",
                 color: CREAM_DIM,
                 lineHeight: 1.7,
@@ -329,11 +321,10 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
     <button
       key={block._key}
       onClick={() => handleCta(block.linkPath)}
-      className="w-full active:scale-95"
+      className="w-full active:scale-95 font-montserrat"
       style={{
         background: CTA_GRADIENT,
         color: E,
-        fontFamily: montserrat,
         fontSize: "0.75rem",
         fontWeight: 700,
         letterSpacing: "0.12em",
@@ -355,9 +346,8 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
     <button
       key={block._key}
       onClick={() => handleCta(block.linkPath)}
-      className="w-full py-3"
+      className="w-full py-3 font-montserrat"
       style={{
-        fontFamily: montserrat,
         fontSize: "0.65rem",
         color: `rgba(${G_RGB},0.55)`,
         letterSpacing: "0.1em",
@@ -404,11 +394,10 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
       {/* Skip */}
       <button
         onClick={skipToToday}
-        className="absolute z-50 transition-colors duration-200 hover:opacity-70"
+        className="absolute z-50 transition-colors duration-200 hover:opacity-70 font-montserrat"
         style={{
           top: "calc(env(safe-area-inset-top, 0px) + 18px)",
           right: 20,
-          fontFamily: montserrat,
           fontSize: "0.65rem",
           letterSpacing: "0.18em",
           textTransform: "uppercase",

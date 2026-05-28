@@ -49,29 +49,29 @@ function DayRow({
   return (
     <button
       className={`w-full flex items-center gap-4 px-5 py-4 text-left border-l-2 transition-colors bg-white border-b border-black/5 ${
-        isComplete ? "border-l-[#4a7a62]" : "border-l-black/8"
+        isComplete ? "border-l-sage" : "border-l-black/8"
       }`}
       onClick={onOpen}
     >
       <div
         className={`flex-shrink-0 w-9 h-9 flex items-center justify-center text-sm font-bold border transition-colors ${
           isComplete
-            ? "border-[#4a7a62] text-[#4a7a62] bg-[#4a7a62]/8"
+            ? "border-sage text-sage bg-sage/8"
             : isActive
-            ? "border-[#1a1a1a]/40 text-[#1a1a1a]"
-            : "border-black/10 text-[#7a9a8a]"
+            ? "border-near-black/40 text-near-black"
+            : "border-black/10 text-sage-muted"
         }`}
       >
         {isComplete ? "✓" : day.dayNumber}
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className="text-[#7a9a8a] text-xs tracking-widest uppercase mb-0.5">
+        <p className="text-sage-muted text-xs tracking-widest uppercase mb-0.5">
           Day {day.dayNumber}
         </p>
         <h3
           className={`font-semibold text-sm line-clamp-1 transition-colors ${
-            isActive || isComplete ? "text-[#1a1a1a]" : "text-[#7a9a8a]"
+            isActive || isComplete ? "text-near-black" : "text-sage-muted"
           }`}
         >
           {day.dayTitle}
@@ -81,7 +81,7 @@ function DayRow({
       <div className="flex-shrink-0 flex items-center gap-1">
         <button
           onClick={(e) => { e.stopPropagation(); onShare(); }}
-          className="w-8 h-8 flex items-center justify-center text-[#b0c4b8] hover:text-[#4a7a62] transition-colors"
+          className="w-8 h-8 flex items-center justify-center text-[#b0c4b8] hover:text-sage transition-colors"
           aria-label={`Share Day ${day.dayNumber}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
@@ -92,7 +92,7 @@ function DayRow({
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          className="w-4 h-4 text-[#7a9a8a]"
+          className="w-4 h-4 text-sage-muted"
         >
           <path
             fillRule="evenodd"
@@ -110,15 +110,15 @@ function DayRow({
 function LockedDayRow({ planned }: { planned: PlannedDay }) {
   return (
     <div className="w-full flex items-center gap-4 px-5 py-4 text-left border-l-2 border-b border-black/5 border-l-black/8 opacity-35 select-none">
-      <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center text-sm font-bold border border-black/10 text-[#7a9a8a]">
+      <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center text-sm font-bold border border-black/10 text-sage-muted">
         {planned.dayNumber}
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className="text-[#7a9a8a] text-xs tracking-widest uppercase mb-0.5">
+        <p className="text-sage-muted text-xs tracking-widest uppercase mb-0.5">
           Day {planned.dayNumber}
         </p>
-        <h3 className="font-semibold text-sm line-clamp-1 text-[#7a9a8a]">
+        <h3 className="font-semibold text-sm line-clamp-1 text-sage-muted">
           {planned.dayTitle}
         </h3>
       </div>
@@ -128,7 +128,7 @@ function LockedDayRow({ planned }: { planned: PlannedDay }) {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          className="w-4 h-4 text-[#7a9a8a]"
+          className="w-4 h-4 text-sage-muted"
         >
           <path
             fillRule="evenodd"
@@ -236,7 +236,7 @@ export default function JourneyDetailClient({
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#fdf6e8]">
+      <div className="min-h-screen bg-parchment">
         {/* Hero */}
         <div className="relative h-[280px]">
           <img
@@ -244,7 +244,7 @@ export default function JourneyDetailClient({
             alt={journey.title}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-[#fdf6e8]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-parchment" />
           <button
             onClick={() => router.back()}
             aria-label="Go back"
@@ -258,23 +258,23 @@ export default function JourneyDetailClient({
 
         {/* Journey info */}
         <div className="px-5 pt-2 pb-6">
-          <h1 className="font-serif-elegant text-3xl text-[#1a1a1a] mb-2">
+          <h1 className="font-serif-elegant text-3xl text-near-black mb-2">
             {journey.title}
           </h1>
-          <p className="text-[#7a9a8a] text-sm leading-relaxed mb-4">
+          <p className="text-sage-muted text-sm leading-relaxed mb-4">
             {journey.description}
           </p>
 
           <div className="flex items-center gap-4 mb-4">
-            <span className="text-[#7a9a8a] text-xs">
+            <span className="text-sage-muted text-xs">
               {journey.estimatedMinutesPerDay ?? 10} min/day
             </span>
-            <span className="text-[#7a9a8a]/40">·</span>
-            <span className="text-[#7a9a8a] text-xs">{totalDays} days</span>
+            <span className="text-sage-muted/40">·</span>
+            <span className="text-sage-muted text-xs">{totalDays} days</span>
             {completedCount > 0 && (
               <>
-                <span className="text-[#7a9a8a]/40">·</span>
-                <span className="text-[#4a7a62] text-xs">
+                <span className="text-sage-muted/40">·</span>
+                <span className="text-sage text-xs">
                   {completedCount}/{totalDays} complete
                 </span>
               </>
@@ -283,7 +283,7 @@ export default function JourneyDetailClient({
 
           <div className="h-1 bg-black/5 mb-2">
             <div
-              className="h-full bg-[#4a7a62] transition-all duration-500"
+              className="h-full bg-sage transition-all duration-500"
               style={{ width: `${progressPct}%` }}
             />
           </div>

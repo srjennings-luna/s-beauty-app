@@ -95,8 +95,8 @@ export default function ContentItemsClient({ items }: { items: ContentItemRow[] 
   };
   const sortArrow = (k: SortKey) =>
     sortKey === k ? (sortDir === "asc" ? " ▲" : " ▼") : "";
-  const h = "px-2 py-1 text-left font-sans text-[9px] tracking-wider cursor-pointer select-none hover:text-[#C19B5F]";
-  const hNum = "px-2 py-1 font-sans text-[9px] tracking-wider cursor-pointer select-none hover:text-[#C19B5F]";
+  const h = "px-2 py-1 text-left font-sans text-[9px] tracking-wider cursor-pointer select-none hover:text-sacred-gold";
+  const hNum = "px-2 py-1 font-sans text-[9px] tracking-wider cursor-pointer select-none hover:text-sacred-gold";
 
   const anyFilter = !!filterType || !!filterTheme || filterStatus !== "all";
   const clear = () => {
@@ -107,7 +107,7 @@ export default function ContentItemsClient({ items }: { items: ContentItemRow[] 
 
   return (
     <div className="border border-[#e8e0d4]">
-      <div className="bg-[#fdf6e8] text-[#16110d] px-4 py-2 flex items-center flex-wrap gap-2 text-[11px]">
+      <div className="bg-parchment text-espresso px-4 py-2 flex items-center flex-wrap gap-2 text-[11px]">
         <span className="font-sans text-sm font-bold">{sorted.length} / {items.length} items</span>
         <div className="ml-auto flex flex-wrap gap-2 items-center">
           <select
@@ -147,7 +147,7 @@ export default function ContentItemsClient({ items }: { items: ContentItemRow[] 
           {anyFilter && (
             <button
               onClick={clear}
-              className="border border-[#C19B5F] text-[#C19B5F] px-2 py-1 text-[10px] font-sans uppercase tracking-wider hover:bg-[#C19B5F] hover:text-white"
+              className="border border-sacred-gold text-sacred-gold px-2 py-1 text-[10px] font-sans uppercase tracking-wider hover:bg-sacred-gold hover:text-white"
             >
               Clear
             </button>
@@ -156,7 +156,7 @@ export default function ContentItemsClient({ items }: { items: ContentItemRow[] 
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-[11px]">
-          <thead className="bg-[#16110d] text-[#fdf6e8]">
+          <thead className="bg-espresso text-parchment">
             <tr>
               <th className={h} onClick={() => toggleSort("type")}>
                 Type{sortArrow("type")}
@@ -199,11 +199,11 @@ export default function ContentItemsClient({ items }: { items: ContentItemRow[] 
                   <td className="px-2 py-1 text-[#5a5048]">{c.era || c.year || "—"}</td>
                   <td className="px-2 py-1 text-[#5a5048]">{c.medium || "—"}</td>
                   <td className="px-2 py-1 text-[#5a5048]">{(c.journeyTitles ?? []).join(", ") || "—"}</td>
-                  <td className="px-2 py-1 text-center">{c.hasImage ? <span className="text-[#4a7a62] font-bold">Y</span> : <span className="text-[#c25555]">—</span>}</td>
-                  <td className="px-2 py-1 text-center">{c.hasArtworkHook ? <span className="text-[#4a7a62] font-bold">Y</span> : <span className="text-[#c25555]">—</span>}</td>
-                  <td className="px-2 py-1 text-center">{c.hasContext ? <span className="text-[#4a7a62] font-bold">Y</span> : <span className="text-[#c25555]">—</span>}</td>
+                  <td className="px-2 py-1 text-center">{c.hasImage ? <span className="text-sage font-bold">Y</span> : <span className="text-[#c25555]">—</span>}</td>
+                  <td className="px-2 py-1 text-center">{c.hasArtworkHook ? <span className="text-sage font-bold">Y</span> : <span className="text-[#c25555]">—</span>}</td>
+                  <td className="px-2 py-1 text-center">{c.hasContext ? <span className="text-sage font-bold">Y</span> : <span className="text-[#c25555]">—</span>}</td>
                   <td className="px-2 py-1 text-right">{c.themeCount}</td>
-                  <td className="px-2 py-1 text-center">{c.hasAudioFile ? <span className="text-[#4a7a62] font-bold">Y</span> : <span className="text-[#c25555]">—</span>}</td>
+                  <td className="px-2 py-1 text-center">{c.hasAudioFile ? <span className="text-sage font-bold">Y</span> : <span className="text-[#c25555]">—</span>}</td>
                   <td className="px-2 py-1 text-center">
                     {c.needsArtworkHookReview ? (
                       <span className="text-[#a06010] font-bold text-[9px] uppercase tracking-wider">review</span>

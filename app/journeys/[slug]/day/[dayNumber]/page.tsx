@@ -67,11 +67,11 @@ export default async function JourneyDayPage({
 
   if (!journey) {
     return (
-      <div className="min-h-screen bg-[#fdf6e8] flex items-center justify-center px-5">
+      <div className="min-h-screen bg-parchment flex items-center justify-center px-5">
         <div className="text-center">
-          <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-3">Not found</p>
-          <h2 className="text-[#1a1a1a] text-xl font-bold mb-4">Journey not found</h2>
-          <a href="/journeys" className="text-[#7a9a8a] text-sm hover:text-[#1a1a1a] transition-colors">
+          <p className="text-sage text-xs tracking-widest uppercase mb-3">Not found</p>
+          <h2 className="text-near-black text-xl font-bold mb-4">Journey not found</h2>
+          <a href="/journeys" className="text-sage-muted text-sm hover:text-near-black transition-colors">
             ← Back to journeys
           </a>
         </div>
@@ -84,10 +84,10 @@ export default async function JourneyDayPage({
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#fdf6e8] flex items-center justify-center">
+        <div className="min-h-screen bg-parchment flex items-center justify-center">
           <div className="text-center">
-            <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-[#4a7a62] rounded-full animate-spin mb-2" />
-            <p className="text-[#7a9a8a] text-sm">Loading journey…</p>
+            <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-sage rounded-full animate-spin mb-2" />
+            <p className="text-sage-muted text-sm">Loading journey…</p>
           </div>
         </div>
       }

@@ -234,7 +234,7 @@ export default function ReviewGridClient({ rows }: { rows: GridRow[] }) {
     <div className="min-h-screen bg-[#f0e9d8] p-6">
       <div className="max-w-[1800px] mx-auto">
         <header className="mb-5">
-          <h1 className="font-serif text-3xl font-light tracking-wider text-[#16110d]">
+          <h1 className="font-serif text-3xl font-light tracking-wider text-espresso">
             Content Review
           </h1>
           <div className="text-xs italic text-[#7a7062] mt-1">
@@ -322,8 +322,8 @@ function PresetBar({
             title={p.description}
             className={`px-3 py-1.5 text-[10px] uppercase tracking-widest border transition-colors ${
               active
-                ? "bg-[#16110d] text-[#fdf6e8] border-[#16110d]"
-                : "bg-white text-[#16110d] border-[#16110d] hover:bg-[#16110d] hover:text-[#fdf6e8]"
+                ? "bg-espresso text-parchment border-espresso"
+                : "bg-white text-espresso border-espresso hover:bg-espresso hover:text-parchment"
             }`}
           >
             {p.label}
@@ -452,8 +452,8 @@ function FilterBar({
             onClick={() => setURL({ docType: c.id === "both" ? null : c.id })}
             className={`px-3 py-1 text-[11px] tracking-wide border transition-colors ${
               active
-                ? "bg-[#4a7a62] text-white border-[#4a7a62]"
-                : "bg-white text-[#16110d] border-[#e8e0d4] hover:border-[#4a7a62]"
+                ? "bg-sage text-white border-sage"
+                : "bg-white text-espresso border-[#e8e0d4] hover:border-sage"
             }`}
           >
             {c.label}
@@ -507,7 +507,7 @@ function Toolbar({
     <div className="flex items-center gap-3 mb-4 relative flex-wrap">
       <button
         onClick={() => setPanelOpen(!panelOpen)}
-        className="px-3 py-1.5 text-[10px] uppercase tracking-widest border border-[#16110d] text-[#16110d] hover:bg-[#16110d] hover:text-[#fdf6e8] transition-colors"
+        className="px-3 py-1.5 text-[10px] uppercase tracking-widest border border-espresso text-espresso hover:bg-espresso hover:text-parchment transition-colors"
       >
         Columns ({visibleColCount})
       </button>
@@ -524,7 +524,7 @@ function Toolbar({
       <a
         href={csvHref}
         download
-        className="px-3 py-1.5 text-[10px] uppercase tracking-widest border border-[#4a7a62] text-[#4a7a62] hover:bg-[#4a7a62] hover:text-white transition-colors"
+        className="px-3 py-1.5 text-[10px] uppercase tracking-widest border border-sage text-sage hover:bg-sage hover:text-white transition-colors"
         title="Download current view as CSV"
       >
         Download CSV
@@ -541,7 +541,7 @@ function Toolbar({
             value={columnSearch}
             onChange={(e) => setColumnSearch(e.target.value)}
             placeholder="Search columns…"
-            className="w-full px-3 py-2 text-sm border-b border-[#e8e0d4] focus:outline-none focus:bg-[#fdf6e8]"
+            className="w-full px-3 py-2 text-sm border-b border-[#e8e0d4] focus:outline-none focus:bg-parchment"
           />
           <div className="py-1">
             {filteredColumnDefs.length === 0 ? (
@@ -554,15 +554,15 @@ function Toolbar({
                 return (
                   <label
                     key={col.key}
-                    className={`flex items-center gap-2 px-3 py-1.5 cursor-pointer hover:bg-[#fdf6e8] ${
-                      checked ? "text-[#4a7a62] font-medium" : "text-[#16110d]"
+                    className={`flex items-center gap-2 px-3 py-1.5 cursor-pointer hover:bg-parchment ${
+                      checked ? "text-sage font-medium" : "text-espresso"
                     }`}
                   >
                     <input
                       type="checkbox"
                       checked={checked}
                       onChange={() => toggleColumn(col.key)}
-                      className="w-4 h-4 accent-[#4a7a62]"
+                      className="w-4 h-4 accent-sage"
                     />
                     <span className="text-sm flex-1">{col.label}</span>
                     {col.appliesTo !== "both" && (
@@ -584,7 +584,7 @@ function Toolbar({
           </div>
           <button
             onClick={resetColumns}
-            className="w-full px-3 py-2 text-[10px] uppercase tracking-widest border-t border-[#e8e0d4] text-[#7a7062] hover:bg-[#fdf6e8]"
+            className="w-full px-3 py-2 text-[10px] uppercase tracking-widest border-t border-[#e8e0d4] text-[#7a7062] hover:bg-parchment"
           >
             Reset to preset defaults
           </button>
@@ -615,7 +615,7 @@ function Dropdown({
       <select
         value={value ?? ""}
         onChange={(e) => onChange(e.target.value || null)}
-        className="px-2 py-1 text-[11px] border border-[#e8e0d4] bg-white focus:outline-none focus:border-[#4a7a62]"
+        className="px-2 py-1 text-[11px] border border-[#e8e0d4] bg-white focus:outline-none focus:border-sage"
       >
         <option value="">{placeholder}</option>
         {options.map((opt) => (
@@ -678,7 +678,7 @@ function GridTable({
             />
           ))}
         </colgroup>
-        <thead className="bg-[#16110d] text-[#fdf6e8] text-[10px] uppercase tracking-widest">
+        <thead className="bg-espresso text-parchment text-[10px] uppercase tracking-widest">
           <tr>
             <th className="px-2 py-2" />
             <SortableHeader
@@ -764,13 +764,13 @@ function SortableHeader({
   return (
     <th
       className={`text-left px-3 py-2 cursor-pointer select-none ${
-        sticky ? "sticky bg-[#16110d] z-10" : ""
+        sticky ? "sticky bg-espresso z-10" : ""
       } hover:bg-[#2b2117]`}
       style={{ ...(sticky && left !== undefined ? { left } : {}) }}
       onClick={() => onClick(sortKey)}
     >
       <span>{label}</span>
-      {indicator && <span className="ml-1 text-[#C19B5F]">{indicator}</span>}
+      {indicator && <span className="ml-1 text-sacred-gold">{indicator}</span>}
     </th>
   );
 }
@@ -846,11 +846,11 @@ function ResizableHeader({
         className="cursor-pointer block pr-3"
       >
         {label}
-        {indicator && <span className="ml-1 text-[#C19B5F]">{indicator}</span>}
+        {indicator && <span className="ml-1 text-sacred-gold">{indicator}</span>}
       </span>
       <span
         onMouseDown={onMouseDown}
-        className="absolute top-0 right-0 h-full w-1.5 cursor-col-resize hover:bg-[#C19B5F]/60"
+        className="absolute top-0 right-0 h-full w-1.5 cursor-col-resize hover:bg-sacred-gold/60"
         title="Drag to resize"
         aria-label="Resize column"
       />
@@ -880,14 +880,14 @@ function RowView({
   const rowBg = isPinned ? "bg-[#fff5e0]" : "bg-white";
   const recordHref = `/dashboard/review/record/${row._id}?from=${encodeURIComponent(fromQuery)}`;
   return (
-    <tr className={`border-b border-[#e8e0d4] hover:bg-[#fdf6e8]/60 ${rowBg}`}>
+    <tr className={`border-b border-[#e8e0d4] hover:bg-parchment/60 ${rowBg}`}>
       <td className={`px-2 py-3 align-top text-center ${rowBg}`}>
         <button
           onClick={onTogglePin}
           aria-label={isPinned ? "Unpin row" : "Pin row"}
           title={isPinned ? "Unpin row" : "Pin row"}
           className={`w-5 h-5 inline-flex items-center justify-center text-sm ${
-            isPinned ? "text-[#C19B5F]" : "text-[#bfb8aa] hover:text-[#16110d]"
+            isPinned ? "text-sacred-gold" : "text-[#bfb8aa] hover:text-espresso"
           }`}
         >
           {isPinned ? "★" : "☆"}
@@ -899,7 +899,7 @@ function RowView({
       >
         <Link
           href={recordHref}
-          className="text-xs font-medium text-[#16110d] hover:text-[#C19B5F] underline decoration-transparent hover:decoration-[#C19B5F]"
+          className="text-xs font-medium text-espresso hover:text-sacred-gold underline decoration-transparent hover:decoration-sacred-gold"
         >
           {id1}
         </Link>
@@ -911,7 +911,7 @@ function RowView({
         className={`px-3 py-3 align-top sticky border-r border-[#e8e0d4] ${rowBg}`}
         style={{ left: PIN_COL_WIDTH + ID1_COL_WIDTH }}
       >
-        <div className="text-xs text-[#16110d]">{id2}</div>
+        <div className="text-xs text-espresso">{id2}</div>
       </td>
       {visibleCols.map((key) => {
         const col = findColumn(key);
@@ -966,7 +966,7 @@ function CellRender({
   if (Array.isArray(value)) {
     return (
       <div className="relative pr-5">
-        <ul className="list-disc ml-4 text-xs space-y-0.5 text-[#16110d]">
+        <ul className="list-disc ml-4 text-xs space-y-0.5 text-espresso">
           {value.map((v, i) => (
             <li key={i}>{v}</li>
           ))}
@@ -982,7 +982,7 @@ function CellRender({
           onClick={onToggle}
           onDoubleClick={() => isExpanded && onToggle()}
           title={isExpanded ? "Click to collapse" : "Click to expand"}
-          className={`text-xs leading-relaxed text-[#16110d] whitespace-pre-line cursor-pointer ${
+          className={`text-xs leading-relaxed text-espresso whitespace-pre-line cursor-pointer ${
             isExpanded ? "" : "line-clamp-3"
           }`}
         >
@@ -994,7 +994,7 @@ function CellRender({
   }
   return (
     <div className="relative pr-5">
-      <div className="text-xs text-[#16110d]">{value}</div>
+      <div className="text-xs text-espresso">{value}</div>
       <VoiceBadge matches={matches} />
     </div>
   );

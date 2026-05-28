@@ -20,14 +20,14 @@ function formatTime(s: number): string {
 // The /prompt screen no longer uses the shared Whisper gradient — it has its
 // own three-layer P&P gradient driven by content type (PPGradientBackground).
 const C = {
-  bg: "#16110d",
+  bg: "var(--color-espresso)",
   header: "rgba(22,17,13,0.97)",
   cream: "rgba(253,246,232,0.88)",
   creamDim: "rgba(253,246,232,0.5)",
   creamFaint: "rgba(253,246,232,0.25)",
-  sage: "#4a7a62",
-  sageMuted: "#7a9a8a",
-  gold: "#C19B5F",
+  sage: "var(--color-sage)",
+  sageMuted: "var(--color-sage-muted)",
+  gold: "var(--color-gold)",
   divider: "rgba(253,246,232,0.1)",
 };
 
@@ -287,13 +287,15 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
 
         {/* Preview mode banner */}
         {isPreview && (
-          <div style={{
-            position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
-            background: "#C19B5F", color: "#16110d",
-            textAlign: "center", padding: "8px 16px",
-            fontFamily: "Open Sans, sans-serif", fontSize: "0.8rem",
-            fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
-          }}>
+          <div
+            className="font-open-sans"
+            style={{
+              position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
+              background: "var(--color-gold)", color: "var(--color-espresso)",
+              textAlign: "center", padding: "8px 16px",
+              fontSize: "0.8rem",
+              fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
+            }}>
             Preview mode — draft content
           </div>
         )}

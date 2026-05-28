@@ -34,7 +34,7 @@ export default async function RecordPage({
         <div className="max-w-3xl mx-auto">
           <BackLink from={from} />
           <div className="mt-12 text-center">
-            <h1 className="font-serif text-2xl text-[#16110d] mb-3">
+            <h1 className="font-serif text-2xl text-espresso mb-3">
               Record not found
             </h1>
             <p className="text-sm text-[#7a7062]">
@@ -65,7 +65,7 @@ function BackLink({ from }: { from?: string }) {
   return (
     <Link
       href={safeFrom}
-      className="inline-block text-[10px] uppercase tracking-widest text-[#7a7062] hover:text-[#16110d] mb-6"
+      className="inline-block text-[10px] uppercase tracking-widest text-[#7a7062] hover:text-espresso mb-6"
     >
       ← Back to grid
     </Link>
@@ -79,7 +79,7 @@ function RecordHeader({ row }: { row: GridRow }) {
         <div className="text-[10px] uppercase tracking-widest text-[#7a7062] mb-1">
           {row.journeyTitle ?? "Untitled journey"}
         </div>
-        <h1 className="font-serif text-3xl font-light tracking-wide text-[#16110d]">
+        <h1 className="font-serif text-3xl font-light tracking-wide text-espresso">
           Day {row.dayNumber}: {row.dayTitle}
         </h1>
       </header>
@@ -90,7 +90,7 @@ function RecordHeader({ row }: { row: GridRow }) {
       <div className="text-[10px] uppercase tracking-widest text-[#7a7062] mb-1">
         Pause &amp; Ponder · {row.date}
       </div>
-      <h1 className="font-serif text-3xl font-light tracking-wide text-[#16110d]">
+      <h1 className="font-serif text-3xl font-light tracking-wide text-espresso">
         {row.artworkTitle ?? "Untitled"}
       </h1>
     </header>
@@ -204,7 +204,7 @@ function Field({
         {label}
       </div>
       {value ? (
-        <div className="text-base text-[#16110d] leading-relaxed whitespace-pre-line">
+        <div className="text-base text-espresso leading-relaxed whitespace-pre-line">
           {value}
         </div>
       ) : null}
@@ -222,7 +222,7 @@ function FieldArray({ label, values }: { label: string; values: string[] | null 
       <div className="text-[10px] uppercase tracking-widest text-[#7a7062] mb-1">
         {label}
       </div>
-      <ul className="list-disc ml-5 space-y-1 text-base text-[#16110d]">
+      <ul className="list-disc ml-5 space-y-1 text-base text-espresso">
         {values.map((v, i) => (
           <li key={i}>{v}</li>
         ))}
@@ -240,7 +240,7 @@ function FieldGroup({
 }) {
   return (
     <div className="border border-[#e8e0d4] bg-white p-5">
-      <div className="text-[11px] uppercase tracking-widest text-[#C19B5F] font-bold mb-3">
+      <div className="text-[11px] uppercase tracking-widest text-sacred-gold font-bold mb-3">
         {label}
       </div>
       <div className="space-y-4">{children}</div>

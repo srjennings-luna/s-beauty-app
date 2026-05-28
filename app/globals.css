@@ -21,7 +21,7 @@
 
 @theme inline {
   /* KALLOS design system */
-  --color-parchment: #fdf6e8;       /* browse screen background */
+  --color-parchment: #fdf6e9;       /* browse screen background */
   --color-espresso: #16110d;        /* immersive screen background */
   --color-near-black: #1a1a1a;      /* primary text on parchment */
   --color-cream: rgba(253,246,232,0.88); /* primary text on espresso */
@@ -33,6 +33,8 @@
   --color-sacred-gold: #C19B5F;     /* ONE use per screen — quote border on immersive */
   --color-accent-gold: #C19B5F;     /* alias */
   --color-accent-gold-light: #d4b56a;
+  --color-gold: #C19B5F;            /* canonical brand gold — most-used accent */
+  --color-gold-light: #D4B56A;      /* lighter gold — gradient endpoints, hovers */
 
   /* Kept for backward compat — mapped to espresso (deprecated #203545 removed) */
   --color-sacred-teal: #16110d;

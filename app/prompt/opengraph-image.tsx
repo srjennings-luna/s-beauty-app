@@ -16,6 +16,9 @@ export default async function Image({
 
   const imageUrl = prompt?.content?.imageUrl ?? "";
 
+  // NOTE: Hex literals are required here — Next.js OG ImageResponse renders
+  // server-side without CSS context, so var(--color-*) does not resolve.
+  // Keep values in sync with --color-espresso and --color-gold in globals.css.
   return new ImageResponse(
     (
       <div

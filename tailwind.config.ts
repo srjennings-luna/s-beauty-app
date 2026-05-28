@@ -1,5 +1,15 @@
 import type { Config } from "tailwindcss";
 
+/**
+ * NOTE: This project uses Tailwind v4 — the `@theme inline` block in
+ * app/globals.css is the canonical source of truth for design tokens.
+ * The color values here are kept in sync as a backstop only. If you change
+ * a color, change it in globals.css FIRST, then mirror it here.
+ *
+ * TODO: Once we verify nothing depends on this config file for color
+ * resolution (Tailwind v4 reads `@theme inline` directly), we can drop
+ * the colors block entirely.
+ */
 const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,8 +19,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        /* KALLOS design system */
-        "parchment":   "#fdf6e8",
+        /* KALLOS design system — mirrors --color-* in app/globals.css */
+        "parchment":   "#fdf6e9",
         "espresso":    "#16110d",
         "near-black":  "#1a1a1a",
         "sage":        "#4a7a62",
@@ -20,6 +30,8 @@ const config: Config = {
         /* aliases */
         "accent-gold": "#C19B5F",
         "accent-gold-light": "#D4B56A",
+        "gold":        "#C19B5F",
+        "gold-light":  "#D4B56A",
         /* kept for any remaining legacy references */
         "deep-navy": "#1a2742",
         "deep-navy-light": "#263654",

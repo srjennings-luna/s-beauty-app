@@ -173,18 +173,18 @@ function dayTrafficLight(d: JourneyDaySummary): "green" | "yellow" | "red" {
 }
 
 function lightColor(status: "green" | "yellow" | "red") {
-  return status === "green" ? "#4a7a62" : status === "yellow" ? "#C19B5F" : "#c25555";
+  return status === "green" ? "var(--color-sage)" : status === "yellow" ? "var(--color-gold)" : "#c25555";
 }
 
 function Yes({ value }: { value: boolean | undefined }) {
-  return value ? <span className="text-[#4a7a62] font-bold">Y</span> : <span className="text-[#c25555]">—</span>;
+  return value ? <span className="text-sage font-bold">Y</span> : <span className="text-[#c25555]">—</span>;
 }
 
 function StatCard({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
   return (
     <div className="border border-[#e8e0d4] bg-[#fdfaf2] p-4">
-      <div className="font-serif text-3xl font-normal text-[#16110d] leading-none">{value}</div>
-      <div className="mt-2 font-sans text-[9px] font-bold tracking-widest uppercase text-[#C19B5F]">{label}</div>
+      <div className="font-serif text-3xl font-normal text-espresso leading-none">{value}</div>
+      <div className="mt-2 font-sans text-[9px] font-bold tracking-widest uppercase text-sacred-gold">{label}</div>
       {sub && <div className="mt-1 text-[11px] text-[#7a7062]">{sub}</div>}
     </div>
   );
@@ -193,8 +193,8 @@ function StatCard({ label, value, sub }: { label: string; value: string | number
 function SectionHeading({ num, title, note }: { num: number; title: string; note?: string }) {
   return (
     <div className="mt-12 mb-4 border-b border-[#e8e0d4] pb-2">
-      <div className="font-sans text-[10px] font-bold tracking-widest uppercase text-[#C19B5F]">Section {num}</div>
-      <h2 className="font-sans text-lg font-bold text-[#16110d] mt-1">{title}</h2>
+      <div className="font-sans text-[10px] font-bold tracking-widest uppercase text-sacred-gold">Section {num}</div>
+      <h2 className="font-sans text-lg font-bold text-espresso mt-1">{title}</h2>
       {note && <p className="text-xs text-[#7a7062] mt-1 italic">{note}</p>}
     </div>
   );
@@ -454,10 +454,10 @@ export default async function DashboardPage() {
     }));
 
   return (
-    <div className="min-h-screen bg-[#fdf6e8] text-[#2C2C2C] pb-32">
+    <div className="min-h-screen bg-parchment text-[#2C2C2C] pb-32">
       {/* Cover */}
-      <div className="bg-[#16110d] text-[#fdf6e8] py-12 px-6 text-center">
-        <div className="font-sans text-[11px] tracking-widest uppercase text-[#C19B5F] mb-2">KALLOS · Content Dashboard</div>
+      <div className="bg-espresso text-parchment py-12 px-6 text-center">
+        <div className="font-sans text-[11px] tracking-widest uppercase text-sacred-gold mb-2">KALLOS · Content Dashboard</div>
         <h1 className="font-serif text-3xl font-light tracking-wider">Live content state</h1>
         <div className="text-xs italic text-[#bfb8aa] mt-2">Queries live at page load · Revalidated every 60 seconds</div>
         <div className="text-[10px] text-[#7a7062] mt-3">Gated by DASHBOARD_ENABLED env var · noindex</div>
@@ -478,9 +478,9 @@ export default async function DashboardPage() {
           const pct = j.totalDays ? Math.round((100 * j.daysBuilt) / j.totalDays) : 100;
           return (
             <div key={j._id} className="border border-[#e8e0d4] mb-5">
-              <div className="bg-[#16110d] text-[#fdf6e8] px-4 py-2 flex items-baseline gap-4 flex-wrap">
+              <div className="bg-espresso text-parchment px-4 py-2 flex items-baseline gap-4 flex-wrap">
                 <span className="font-sans text-base">{j.title}</span>
-                <span className="font-sans text-[11px] text-[#C19B5F] tracking-wider">
+                <span className="font-sans text-[11px] text-sacred-gold tracking-wider">
                   {j.daysBuilt} / {j.totalDays ?? "null"} days ({pct}%){j.plannedCount ? ` · ${j.plannedCount} planned` : ""}
                 </span>
                 <span className="font-sans text-[10px] text-[#bfb8aa] ml-auto">{j.themeName ?? ""} · order {j.order ?? "—"}</span>
@@ -492,7 +492,7 @@ export default async function DashboardPage() {
                   </div>
                 )}
                 <table className="w-full text-[11px]">
-                  <thead className="bg-[#16110d] text-[#fdf6e8]">
+                  <thead className="bg-espresso text-parchment">
                     <tr>
                       <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Day</th>
                       <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Title</th>
@@ -524,14 +524,14 @@ export default async function DashboardPage() {
                               }
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-[#16110d] hover:text-[#C19B5F] underline decoration-transparent hover:decoration-[#C19B5F]"
+                              className="text-espresso hover:text-sacred-gold underline decoration-transparent hover:decoration-sacred-gold"
                             >
                               {d.dayTitle || "(no title)"}
                             </a>
                             {d._id && (
                               <Link
                                 href={`/dashboard/review/record/${d._id}?from=${encodeURIComponent("/dashboard")}`}
-                                className="ml-2 text-[10px] uppercase tracking-widest text-[#7a7062] hover:text-[#C19B5F]"
+                                className="ml-2 text-[10px] uppercase tracking-widest text-[#7a7062] hover:text-sacred-gold"
                                 title="Open in Content Review"
                               >
                                 Review →
@@ -608,13 +608,13 @@ export default async function DashboardPage() {
             </p>
           </div>
         ) : (
-          <div className="bg-[#f0f7f3] border-l-2 border-[#4a7a62] text-xs p-3 mb-4">
-            <strong className="text-[#4a7a62] uppercase tracking-widest text-[10px]">No cross-journey author repeats.</strong>
+          <div className="bg-[#f0f7f3] border-l-2 border-sage text-xs p-3 mb-4">
+            <strong className="text-sage uppercase tracking-widest text-[10px]">No cross-journey author repeats.</strong>
           </div>
         )}
 
         {/* Source concentration — % breakdown, flag any single type >50% */}
-        <h3 className="font-sans text-sm font-bold text-[#16110d] mt-5 mb-2">Source concentration</h3>
+        <h3 className="font-sans text-sm font-bold text-espresso mt-5 mb-2">Source concentration</h3>
         {concentrationFlag && (
           <div className="bg-[#fff5e0] border-l-2 border-[#a06010] text-xs p-2 mb-2">
             <strong className="text-[#a06010] uppercase tracking-widest text-[10px]">Over-concentration:</strong>{" "}
@@ -631,7 +631,7 @@ export default async function DashboardPage() {
               <div
                 key={r.type}
                 style={{ width: `${r.pct}%`, backgroundColor: color }}
-                className="flex items-center justify-center text-[9px] font-sans tracking-wider text-[#fdf6e8] overflow-hidden whitespace-nowrap"
+                className="flex items-center justify-center text-[9px] font-sans tracking-wider text-parchment overflow-hidden whitespace-nowrap"
                 title={`${r.type}: ${r.count} (${r.pct}%)`}
               >
                 {r.pct >= 8 ? `${r.pct}%` : ""}
@@ -655,10 +655,10 @@ export default async function DashboardPage() {
           })}
         </div>
 
-        <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">AuthorType breakdown</h3>
+        <h3 className="font-sans text-sm font-bold text-espresso mt-4 mb-2">AuthorType breakdown</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-[11px]">
-            <thead className="bg-[#16110d] text-[#fdf6e8]">
+            <thead className="bg-espresso text-parchment">
               <tr>
                 <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Type</th>
                 <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Count</th>
@@ -677,13 +677,13 @@ export default async function DashboardPage() {
           </table>
         </div>
 
-        <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">TRs by journey</h3>
+        <h3 className="font-sans text-sm font-bold text-espresso mt-4 mb-2">TRs by journey</h3>
         <div className="space-y-4">
           {trData.byJourney.map((j) => (
             <details key={j._id} className="border border-[#e8e0d4]">
-              <summary className="bg-[#16110d] text-[#fdf6e8] px-4 py-2 cursor-pointer flex items-baseline gap-4">
+              <summary className="bg-espresso text-parchment px-4 py-2 cursor-pointer flex items-baseline gap-4">
                 <span className="font-sans text-sm">{j.title}</span>
-                <span className="font-sans text-[11px] text-[#C19B5F] tracking-wider">
+                <span className="font-sans text-[11px] text-sacred-gold tracking-wider">
                   {(j.trRefs || []).length} TRs across {j.daysBuilt} days
                 </span>
               </summary>
@@ -726,7 +726,7 @@ export default async function DashboardPage() {
           <StatCard label="P&P records missing curator audio" value={promptCuratorAudioMissing} sub="Narration for the daily hook" />
         </div>
 
-        <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">Genre distribution (auditio)</h3>
+        <h3 className="font-sans text-sm font-bold text-espresso mt-4 mb-2">Genre distribution (auditio)</h3>
         {genreEntries.length === 0 ? (
           <p className="text-[11px] text-[#7a7062] italic mb-3">
             No genre values entered yet. Populate <code className="text-[10px] bg-[#f0ebe0] px-1">auditio.genre</code> in Sanity Studio on each journey day and P&P to start tracking variety.
@@ -741,7 +741,7 @@ export default async function DashboardPage() {
             )}
             <div className="overflow-x-auto border border-[#e8e0d4] mb-4">
               <table className="w-full text-[11px]">
-                <thead className="bg-[#16110d] text-[#fdf6e8]">
+                <thead className="bg-espresso text-parchment">
                   <tr>
                     <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Genre</th>
                     <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Count</th>
@@ -762,7 +762,7 @@ export default async function DashboardPage() {
           </>
         )}
 
-        <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">Work-level repeat detection</h3>
+        <h3 className="font-sans text-sm font-bold text-espresso mt-4 mb-2">Work-level repeat detection</h3>
         {allWorks.length === 0 ? (
           <p className="text-[11px] text-[#7a7062] italic mb-3">
             No auditio records have a title yet. Populate{" "}
@@ -772,8 +772,8 @@ export default async function DashboardPage() {
             uses of the same work (flag).
           </p>
         ) : repeatedWorks.length === 0 ? (
-          <div className="bg-[#f0f7f3] border-l-2 border-[#4a7a62] text-xs p-2 mb-3">
-            <strong className="text-[#4a7a62] uppercase tracking-widest text-[10px]">
+          <div className="bg-[#f0f7f3] border-l-2 border-sage text-xs p-2 mb-3">
+            <strong className="text-sage uppercase tracking-widest text-[10px]">
               No work repeats detected
             </strong>{" "}
             across {allWorks.length} auditio record{allWorks.length === 1 ? "" : "s"}.
@@ -789,7 +789,7 @@ export default async function DashboardPage() {
             </div>
             <div className="overflow-x-auto border border-[#e8e0d4] mb-3">
               <table className="w-full text-[11px]">
-                <thead className="bg-[#16110d] text-[#fdf6e8]">
+                <thead className="bg-espresso text-parchment">
                   <tr>
                     <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Work</th>
                     <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Uses</th>
@@ -833,13 +833,13 @@ export default async function DashboardPage() {
           });
           return (
             <details className="mb-3 border border-[#e8e0d4]">
-              <summary className="bg-[#fdf6e8] px-4 py-2 cursor-pointer font-sans text-[11px] font-bold text-[#16110d] select-none flex items-center justify-between">
+              <summary className="bg-parchment px-4 py-2 cursor-pointer font-sans text-[11px] font-bold text-espresso select-none flex items-center justify-between">
                 <span>Full Auditio library ({allWorks.length} piece{allWorks.length === 1 ? "" : "s"}) — expand to check before proposing new audio</span>
-                <span className="text-[#C19B5F] text-[10px] tracking-wider uppercase">expand / collapse</span>
+                <span className="text-sacred-gold text-[10px] tracking-wider uppercase">expand / collapse</span>
               </summary>
               <div className="overflow-x-auto">
                 <table className="w-full text-[11px]">
-                  <thead className="bg-[#16110d] text-[#fdf6e8]">
+                  <thead className="bg-espresso text-parchment">
                     <tr>
                       <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Composer / Artist</th>
                       <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Work Title</th>
@@ -865,16 +865,16 @@ export default async function DashboardPage() {
           );
         })()}
 
-        <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">Journey day audio</h3>
+        <h3 className="font-sans text-sm font-bold text-espresso mt-4 mb-2">Journey day audio</h3>
         <p className="text-[11px] text-[#7a7062] italic mb-2">
           Six narration slots per day. <code className="text-[10px] bg-[#f0ebe0] px-1">artworkHook</code> and <code className="text-[10px] bg-[#f0ebe0] px-1">context</code> live on the linked content item. <code className="text-[10px] bg-[#f0ebe0] px-1">goDeeper</code> = count of tradition reflections with audio / total linked. Use the filters to isolate what still needs recording.
         </p>
         <AudioTableClient journeys={audioStatus.journeys} />
 
-        <h3 className="font-sans text-sm font-bold text-[#16110d] mt-4 mb-2">Daily prompt audio</h3>
+        <h3 className="font-sans text-sm font-bold text-espresso mt-4 mb-2">Daily prompt audio</h3>
         <div className="overflow-x-auto border border-[#e8e0d4]">
           <table className="w-full text-[11px]">
-            <thead className="bg-[#16110d] text-[#fdf6e8]">
+            <thead className="bg-espresso text-parchment">
               <tr>
                 <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Date</th>
                 <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Content</th>
@@ -911,17 +911,17 @@ export default async function DashboardPage() {
               className="inline-block w-4 h-4 rounded-full"
               style={{ backgroundColor: lightColor(SCHEMA_HEALTH.overall) }}
             />
-            <span className="font-sans text-sm font-bold text-[#16110d] capitalize">{SCHEMA_HEALTH.overall}</span>
+            <span className="font-sans text-sm font-bold text-espresso capitalize">{SCHEMA_HEALTH.overall}</span>
             <span className="font-sans text-xs text-[#7a7062] ml-auto">Last audited: {SCHEMA_HEALTH.lastAudited}</span>
           </div>
-          <h4 className="font-sans text-[10px] tracking-wider uppercase text-[#C19B5F] font-bold mb-2">Top open issues</h4>
+          <h4 className="font-sans text-[10px] tracking-wider uppercase text-sacred-gold font-bold mb-2">Top open issues</h4>
           <ol className="list-decimal ml-5 text-xs space-y-1">
             {SCHEMA_HEALTH.topIssues.map((iss, i) => (
               <li key={i}>{iss}</li>
             ))}
           </ol>
           <details className="mt-4 text-[11px] text-[#7a7062]">
-            <summary className="cursor-pointer font-sans uppercase tracking-wider text-[9px] text-[#4a7a62]">How to update this section</summary>
+            <summary className="cursor-pointer font-sans uppercase tracking-wider text-[9px] text-sage">How to update this section</summary>
             <p className="mt-2 leading-relaxed italic">{SCHEMA_HEALTH.updateInstructions}</p>
           </details>
         </div>
@@ -931,7 +931,7 @@ export default async function DashboardPage() {
 
         <div className="overflow-x-auto border border-[#e8e0d4]">
           <table className="w-full text-[11px]">
-            <thead className="bg-[#16110d] text-[#fdf6e8]">
+            <thead className="bg-espresso text-parchment">
               <tr>
                 <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Document type</th>
                 <th className="px-2 py-1 font-sans text-[9px] tracking-wider">Records populated</th>
@@ -946,14 +946,14 @@ export default async function DashboardPage() {
                 <tr key={k} className="border-b border-[#e8e0d4]">
                   <td className="px-2 py-1"><code className="text-[10px] bg-[#f0ebe0] px-1">{k}</code></td>
                   <td className="px-2 py-1 text-right">{v.recs}</td>
-                  <td className="px-2 py-1 text-right text-[#4a7a62]">{v.withAudio}</td>
+                  <td className="px-2 py-1 text-right text-sage">{v.withAudio}</td>
                   <td className="px-2 py-1 text-right text-[#c25555]">{v.missingAudio}</td>
                   <td className="px-2 py-1 text-right">{v.missingChars.toLocaleString()}</td>
                   <td className="px-2 py-1 text-right">{Math.round(v.missingChars / 5.2).toLocaleString()}</td>
                 </tr>
               ))}
-              <tr className="bg-[#16110d] text-[#fdf6e8] font-bold">
-                <td className="px-2 py-1 text-[#C19B5F]">GRAND TOTAL</td>
+              <tr className="bg-espresso text-parchment font-bold">
+                <td className="px-2 py-1 text-sacred-gold">GRAND TOTAL</td>
                 <td className="px-2 py-1"></td>
                 <td className="px-2 py-1"></td>
                 <td className="px-2 py-1"></td>
@@ -964,11 +964,11 @@ export default async function DashboardPage() {
           </table>
         </div>
 
-        <h3 className="font-sans text-sm font-bold text-[#16110d] mt-6 mb-2">Cost reference (static — manual update)</h3>
+        <h3 className="font-sans text-sm font-bold text-espresso mt-6 mb-2">Cost reference (static — manual update)</h3>
         <p className="text-xs text-[#7a7062] mb-2 italic">Rates current as of April 23, 2026. Verify before costing. Apply to the Grand Total above.</p>
         <div className="overflow-x-auto border border-[#e8e0d4]">
           <table className="w-full text-[11px]">
-            <thead className="bg-[#16110d] text-[#fdf6e8]">
+            <thead className="bg-espresso text-parchment">
               <tr>
                 <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Provider</th>
                 <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Tier</th>
@@ -994,8 +994,8 @@ export default async function DashboardPage() {
             { name: "Elizabeth Lev — Pio Cristiano Lecture", status: "Planning" },
           ].map((c) => (
             <div key={c.name} className="border border-dashed border-[#e8e0d4] p-4 bg-[#fdfaf2]">
-              <div className="font-serif text-base text-[#16110d]">{c.name}</div>
-              <div className="font-sans text-[10px] tracking-widest uppercase text-[#C19B5F] mt-2">{c.status}</div>
+              <div className="font-serif text-base text-espresso">{c.name}</div>
+              <div className="font-sans text-[10px] tracking-widest uppercase text-sacred-gold mt-2">{c.status}</div>
               <div className="text-[11px] text-[#7a7062] mt-2 italic">No Sanity data yet. This card will switch to a Section-1-style completion row once a journey record is created.</div>
             </div>
           ))}
@@ -1003,7 +1003,7 @@ export default async function DashboardPage() {
 
         <p className="mt-16 text-[11px] text-[#8a7a6a] italic">
           Dashboard data is revalidated every 60 seconds. Schema health in Section 5 is static and must be updated manually after each audit.{" "}
-          <Link href="/" className="text-[#C19B5F] hover:underline">Back to Today</Link>
+          <Link href="/" className="text-sacred-gold hover:underline">Back to Today</Link>
         </p>
       </div>
     </div>

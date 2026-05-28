@@ -57,9 +57,9 @@ const C = {
   cream: "rgba(253,246,232,0.88)",
   creamDim: "rgba(253,246,232,0.5)",
   creamFaint: "rgba(253,246,232,0.3)",
-  sage: "#4a7a62",
-  sageMuted: "#7a9a8a",
-  gold: "#C19B5F",           // ONE moment: sacred quote border only
+  sage: "var(--color-sage)",
+  sageMuted: "var(--color-sage-muted)",
+  gold: "var(--color-gold)",           // ONE moment: sacred quote border only
 };
 
 /**

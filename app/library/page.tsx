@@ -7,6 +7,7 @@ import { getContentItemById, getDailyPromptById, getAllPrompts } from "@/lib/san
 import type { ContentItem, Artwork, ContentType, DailyPrompt, LocationType } from "@/lib/types";
 import ArtworkViewer from "@/components/ArtworkViewer";
 import PageTransition from "@/components/ui/PageTransition";
+import { CONTENT_TYPE_COLORS } from "@/lib/contentTypeColors";
 
 const CONTENT_TYPE_TO_LOCATION: Record<ContentType, LocationType> = {
   "sacred-art": "sacred-art",
@@ -44,19 +45,21 @@ function toArtwork(item: ContentItem): Artwork {
 }
 
 function formatPromptDate(dateStr: string) {
-  return new Date(dateStr + "T00:00:00").toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-  });
+  const d = new Date(dateStr + "T00:00:00");
+  const month = d.toLocaleDateString("en-US", { month: "short" }).toUpperCase();
+  const day = d.getDate();
+  return `${month} ${day}`;
 }
 
 // ── Pause & Ponder archive card ───────────────────────────────────────────────
 function PromptCard({ prompt, isSaved }: { prompt: DailyPrompt; isSaved: boolean }) {
+  const typeColor = CONTENT_TYPE_COLORS[prompt.content?.contentType ?? ""] ?? "#C19B5F";
+
   return (
     <Link
       href={prompt.date ? `/prompt?date=${prompt.date}` : "/prompt"}
-      className="flex items-start gap-3 bg-white p-4"
-      style={{ borderLeft: "2px solid #C19B5F" }}
+      className="flex items-start gap-3 px-5 py-3"
+      style={{ borderBottom: "0.5px solid rgba(0,0,0,0.08)" }}
     >
       {prompt.content?.imageUrl && (
         <div className="flex-shrink-0 w-14 h-14 overflow-hidden">
@@ -68,27 +71,35 @@ function PromptCard({ prompt, isSaved }: { prompt: DailyPrompt; isSaved: boolean
         </div>
       )}
       <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between gap-2 mb-0.5">
-          <p className="text-xs tracking-widest uppercase" style={{ color: "#C19B5F" }}>
+        {/* Date + thin right-side rule */}
+        <div className="flex items-center gap-2 mb-1">
+          <span
+            className="text-[10px] font-semibold tracking-widest uppercase flex-shrink-0"
+            style={{ color: typeColor }}
+          >
             {prompt.date ? formatPromptDate(prompt.date) : "Daily Prompt"}
-          </p>
+          </span>
+          <span
+            className="flex-1 h-px"
+            style={{ background: typeColor, opacity: 0.35 }}
+          />
           {isSaved && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              className="w-3.5 h-3.5 flex-shrink-0"
-              style={{ color: "#C19B5F" }}
+              className="w-3 h-3 flex-shrink-0"
+              style={{ color: typeColor }}
             >
               <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
             </svg>
           )}
         </div>
-        <p className="text-sm font-medium text-[#1a1a1a] line-clamp-1">
+        <p className="text-sm font-medium text-near-black line-clamp-1">
           {prompt.content?.title ?? "Pause & Ponder"}
         </p>
         {prompt.promptQuestion && (
-          <p className="text-xs text-[#7a9a8a] mt-0.5 line-clamp-2 italic">
+          <p className="text-xs text-sage-muted mt-0.5 line-clamp-2 italic">
             {prompt.promptQuestion}
           </p>
         )}
@@ -160,10 +171,10 @@ export default function LibraryPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#fdf6e8] flex items-center justify-center">
+      <div className="min-h-screen bg-parchment flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-[#4a7a62] rounded-full animate-spin mb-2" />
-          <p className="text-[#7a9a8a]">Loading…</p>
+          <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-sage rounded-full animate-spin mb-2" />
+          <p className="text-sage-muted">Loading…</p>
         </div>
       </div>
     );
@@ -171,9 +182,9 @@ export default function LibraryPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#fdf6e8] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-parchment flex items-center justify-center p-6">
         <div className="text-center">
-          <p className="text-[#7a9a8a] mb-4">Couldn&apos;t load your library.</p>
+          <p className="text-sage-muted mb-4">Couldn&apos;t load your library.</p>
           <button
             onClick={() => { setError(false); setFavoritesLoading(true); }}
             className="btn-primary"
@@ -187,11 +198,11 @@ export default function LibraryPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#fdf6e8]">
+      <div className="min-h-screen bg-parchment">
         {/* Header */}
         <div className="px-5 pt-12 pb-6">
-          <h1 className="text-3xl font-bold text-[#1a1a1a] mb-1">Library</h1>
-          <p className="text-[#7a9a8a] text-sm">
+          <h1 className="text-3xl font-bold text-near-black mb-1">Library</h1>
+          <p className="text-sage-muted text-sm">
             {allPrompts.length > 0
               ? `${allPrompts.length} prompt${allPrompts.length !== 1 ? "s" : ""}${savedItems.length > 0 ? ` · ${savedItems.length} saved` : ""}`
               : savedItems.length > 0
@@ -207,7 +218,7 @@ export default function LibraryPage() {
             <section>
               {/* Section header + All / Saved filter */}
               <div className="flex items-center justify-between mb-3">
-                <p className="text-xs tracking-widest uppercase text-[#C19B5F]">
+                <p className="text-xs tracking-widest uppercase text-sacred-gold">
                   Pause &amp; Ponder
                 </p>
                 {savedPrompts.length > 0 && (
@@ -216,8 +227,8 @@ export default function LibraryPage() {
                       onClick={() => setPromptFilter("all")}
                       className="px-3 py-1 text-xs tracking-widest uppercase transition-colors"
                       style={{
-                        background: promptFilter === "all" ? "#C19B5F" : "transparent",
-                        color: promptFilter === "all" ? "#fdf6e8" : "#9a9488",
+                        background: promptFilter === "all" ? "var(--color-gold)" : "transparent",
+                        color: promptFilter === "all" ? "var(--color-parchment)" : "#9a9488",
                       }}
                     >
                       All
@@ -226,8 +237,8 @@ export default function LibraryPage() {
                       onClick={() => setPromptFilter("saved")}
                       className="px-3 py-1 text-xs tracking-widest uppercase transition-colors"
                       style={{
-                        background: promptFilter === "saved" ? "#C19B5F" : "transparent",
-                        color: promptFilter === "saved" ? "#fdf6e8" : "#9a9488",
+                        background: promptFilter === "saved" ? "var(--color-gold)" : "transparent",
+                        color: promptFilter === "saved" ? "var(--color-parchment)" : "#9a9488",
                       }}
                     >
                       Saved
@@ -237,7 +248,7 @@ export default function LibraryPage() {
               </div>
 
               {visiblePrompts.length > 0 ? (
-                <div className="space-y-3">
+                <div>
                   {visiblePrompts.map((prompt) => (
                     <PromptCard
                       key={prompt._id}
@@ -247,7 +258,7 @@ export default function LibraryPage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-[#7a9a8a] py-6 text-center">
+                <p className="text-sm text-sage-muted py-6 text-center">
                   No saved prompts yet — tap the heart on any prompt to save it.
                 </p>
               )}
@@ -257,7 +268,7 @@ export default function LibraryPage() {
           {/* ── Saved content items ────────────────────────────────────────── */}
           {savedItems.length > 0 && (
             <section>
-              <p className="text-xs tracking-widest uppercase text-[#4a7a62] mb-3">
+              <p className="text-xs tracking-widest uppercase text-sage mb-3">
                 Saved Content
               </p>
               <div className="grid grid-cols-2 gap-3">
@@ -300,7 +311,7 @@ export default function LibraryPage() {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-8 h-8 text-[#7a9a8a]"
+                  className="w-8 h-8 text-sage-muted"
                 >
                   <path
                     strokeLinecap="round"
@@ -309,10 +320,10 @@ export default function LibraryPage() {
                   />
                 </svg>
               </div>
-              <h2 className="text-lg font-semibold text-[#1a1a1a] mb-2">
+              <h2 className="text-lg font-semibold text-near-black mb-2">
                 Your library is empty
               </h2>
-              <p className="text-[#7a9a8a] mb-6 text-sm">
+              <p className="text-sage-muted mb-6 text-sm">
                 Tap the heart icon on any content or daily prompt to save it here.
               </p>
               <Link href="/explore" className="inline-block cta-inline">

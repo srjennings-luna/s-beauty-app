@@ -38,7 +38,7 @@ function GridLoadingSkeleton() {
   return (
     <div className="min-h-screen bg-[#f0e9d8] p-6">
       <div className="max-w-[1800px] mx-auto">
-        <div className="font-serif text-3xl font-light tracking-wider text-[#16110d]">
+        <div className="font-serif text-3xl font-light tracking-wider text-espresso">
           Content Review
         </div>
         <div className="text-xs italic text-[#7a7062] mt-1">Loading…</div>

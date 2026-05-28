@@ -11,10 +11,10 @@ import ArtworkViewer from "@/components/ArtworkViewer";
 const GlobalMap = dynamic(() => import("@/components/GlobalMap"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-[#fdf6e8]">
+    <div className="w-full h-full flex items-center justify-center bg-parchment">
       <div className="text-center">
-        <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-[#4a7a62] rounded-full animate-spin mb-2" />
-        <p className="text-[#7a9a8a] text-sm">Loading map…</p>
+        <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-sage rounded-full animate-spin mb-2" />
+        <p className="text-sage-muted text-sm">Loading map…</p>
       </div>
     </div>
   ),
@@ -127,10 +127,10 @@ export default function ExplorePage() {
   const headerTitle = showMap ? "Map" : selectedTheme ? selectedTheme.title : "Explore";
 
   return (
-    <div className="h-screen bg-[#fdf6e8] flex flex-col overflow-hidden">
+    <div className="h-screen bg-parchment flex flex-col overflow-hidden">
 
       {/* ── Header ── */}
-      <div className="bg-[#fdf6e8] border-b border-black/8 px-4 pt-12 pb-3 flex-shrink-0">
+      <div className="bg-parchment border-b border-black/8 px-4 pt-12 pb-3 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             {/* Back button when a theme is selected */}
@@ -138,7 +138,7 @@ export default function ExplorePage() {
               <button
                 onClick={() => setSelectedTheme(null)}
                 aria-label="Back to themes"
-                className="w-8 h-8 flex items-center justify-center text-[#1a1a1a]/50 hover:text-[#1a1a1a] transition-colors -ml-1"
+                className="w-8 h-8 flex items-center justify-center text-near-black/50 hover:text-near-black transition-colors -ml-1"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -146,9 +146,9 @@ export default function ExplorePage() {
               </button>
             )}
             <div>
-              <h1 className="text-xl font-bold text-[#1a1a1a]">{headerTitle}</h1>
+              <h1 className="text-xl font-bold text-near-black">{headerTitle}</h1>
               {selectedTheme && !showMap && (
-                <p className="text-xs text-[#7a9a8a] mt-0.5 italic">{selectedTheme.question}</p>
+                <p className="text-xs text-sage-muted mt-0.5 italic">{selectedTheme.question}</p>
               )}
             </div>
           </div>
@@ -157,7 +157,7 @@ export default function ExplorePage() {
           <button
             onClick={() => setShowMap((v) => !v)}
             aria-label={showMap ? "Show list view" : "Show map view"}
-            className="w-10 h-10 flex items-center justify-center bg-black/5 text-[#1a1a1a]/60 hover:bg-black/10 transition-colors"
+            className="w-10 h-10 flex items-center justify-center bg-black/5 text-near-black/60 hover:bg-black/10 transition-colors"
           >
             {showMap ? (
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -177,7 +177,7 @@ export default function ExplorePage() {
         {error ? (
           <div className="h-full flex items-center justify-center px-8">
             <div className="text-center">
-              <p className="text-[#7a9a8a] mb-4">Couldn&apos;t load content.</p>
+              <p className="text-sage-muted mb-4">Couldn&apos;t load content.</p>
               <button
                 onClick={() => { setError(false); setLoading(true); setRetryCount((c) => c + 1); }}
                 className="btn-primary"
@@ -189,8 +189,8 @@ export default function ExplorePage() {
         ) : loading ? (
           <div className="h-full flex items-center justify-center">
             <div className="text-center">
-              <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-[#4a7a62] rounded-full animate-spin mb-2" />
-              <p className="text-[#7a9a8a] text-sm">Loading…</p>
+              <div className="inline-block w-8 h-8 border-4 border-black/10 border-t-sage rounded-full animate-spin mb-2" />
+              <p className="text-sage-muted text-sm">Loading…</p>
             </div>
           </div>
         ) : showMap ? (
@@ -204,7 +204,7 @@ export default function ExplorePage() {
           // ── Theme Cards Landing ──────────────────────────────────────────
           <div className="h-full overflow-y-auto pb-20">
             <div className="px-4 pt-5 pb-3">
-              <p className="text-sm text-[#7a9a8a]">What are you drawn to?</p>
+              <p className="text-sm text-sage-muted">What are you drawn to?</p>
             </div>
             <div className="grid grid-cols-2 gap-3 px-4 pb-6">
               {/* Populated themes — tappable */}
@@ -213,7 +213,7 @@ export default function ExplorePage() {
                   key={theme._id}
                   onClick={() => setSelectedTheme(theme)}
                   className="text-left relative overflow-hidden aspect-[3/2] flex flex-col justify-end p-3"
-                  style={{ backgroundColor: theme.color ?? "#4a7a62" }}
+                  style={{ backgroundColor: theme.color ?? "var(--color-sage)" }}
                 >
                   {theme.imageUrl && (
                     <div
@@ -238,7 +238,7 @@ export default function ExplorePage() {
                   key={theme._id}
                   aria-disabled="true"
                   className="relative overflow-hidden aspect-[3/2] flex flex-col justify-end p-3 opacity-35 grayscale pointer-events-none select-none"
-                  style={{ backgroundColor: theme.color ?? "#4a7a62" }}
+                  style={{ backgroundColor: theme.color ?? "var(--color-sage)" }}
                 >
                   {theme.imageUrl && (
                     <div
@@ -299,10 +299,10 @@ export default function ExplorePage() {
                     )}
                   </div>
                   <div className="mt-2 px-0.5">
-                    <h3 className="text-[#1a1a1a] font-medium text-sm">
+                    <h3 className="text-near-black font-medium text-sm">
                       {item.title}
                     </h3>
-                    <p className="text-[#7a9a8a] text-xs mt-0.5">
+                    <p className="text-sage-muted text-xs mt-0.5">
                       {item.artist ?? item.composer ?? item.author ?? item.thinkerName ?? item.locationName ?? ""}
                     </p>
                     {item.description && (

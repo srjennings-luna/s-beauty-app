@@ -57,14 +57,14 @@ export default function TodayPage() {
   }, [retryCount]);
 
   if (hasOnboarded === null) {
-    return <div className="min-h-screen bg-[#fdf6e8]" />;
+    return <div className="min-h-screen bg-parchment" />;
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#fdf6e8] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-parchment flex items-center justify-center p-6">
         <div className="text-center">
-          <p className="text-[#7a9a8a] mb-4">Couldn&apos;t load today&apos;s content.</p>
+          <p className="text-sage-muted mb-4">Couldn&apos;t load today&apos;s content.</p>
           <button
             onClick={() => { setError(false); setLoading(true); setRetryCount((c) => c + 1); }}
             className="btn-primary"
@@ -84,12 +84,12 @@ export default function TodayPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#fdf6e8] pb-28">
+      <div className="min-h-screen bg-parchment pb-28">
 
         {/* Header */}
         <FadeUp delay={0} className="px-5 pt-12 pb-4">
-          <p className="text-[#8aacb8] text-xs tracking-widest uppercase mb-1">{today}</p>
-          <h1 className="font-serif-elegant text-3xl text-[#1a1a1a] tracking-widest uppercase">
+          <p className="text-blue-mist text-xs tracking-widest uppercase mb-1">{today}</p>
+          <h1 className="font-serif-elegant text-3xl text-near-black tracking-widest uppercase">
             KALLOS
           </h1>
         </FadeUp>
@@ -108,10 +108,10 @@ export default function TodayPage() {
                 <section className="mb-8">
                   {/* Section header — above the image */}
                   <div className="px-5 mb-3 flex items-baseline justify-between">
-                    <p className="text-xs tracking-widest uppercase font-medium" style={{ color: "#4a7a62" }}>
+                    <p className="text-xs tracking-widest uppercase font-medium text-sage">
                       Pause &amp; Ponder
                     </p>
-                    <p className="text-xs" style={{ color: "#7a9a8a" }}>A minute reflection</p>
+                    <p className="text-xs text-sage-muted">A minute reflection</p>
                   </div>
                   {/* Entire card is tappable */}
                   <Link href="/prompt" className="block relative aspect-[4/3] overflow-hidden">
@@ -132,12 +132,12 @@ export default function TodayPage() {
                 </section>
               ) : (
                 <section className="mx-5 mb-8 py-12 text-center border border-black/8">
-                  <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-4">Today</p>
-                  <p className="font-serif-elegant text-xl text-[#1a1a1a]/70 italic leading-relaxed">
+                  <p className="text-sage text-xs tracking-widest uppercase mb-4">Today</p>
+                  <p className="font-serif-elegant text-xl text-near-black/70 italic leading-relaxed">
                     &ldquo;Beauty will save the world.&rdquo;
                   </p>
-                  <p className="text-[#7a9a8a] text-sm mt-3">— Dostoevsky</p>
-                  <p className="text-[#7a9a8a] text-xs mt-6">
+                  <p className="text-sage-muted text-sm mt-3">— Dostoevsky</p>
+                  <p className="text-sage-muted text-xs mt-6">
                     Add a Daily Prompt in Sanity Studio to appear here.
                   </p>
                 </section>
@@ -149,10 +149,10 @@ export default function TodayPage() {
               <FadeUp delay={120}>
                 <section className="px-5 mb-8">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-[#4a7a62] font-medium tracking-widest uppercase text-xs">
+                    <h2 className="text-sage font-medium tracking-widest uppercase text-xs">
                       Journeys
                     </h2>
-                    <Link href="/journeys" className="text-[#7a9a8a] text-xs tracking-wide hover:text-[#1a1a1a] transition-colors">
+                    <Link href="/journeys" className="text-sage-muted text-xs tracking-wide hover:text-near-black transition-colors">
                       See all →
                     </Link>
                   </div>
@@ -199,10 +199,10 @@ export default function TodayPage() {
               <FadeUp delay={180}>
                 <section className="px-5">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-[#4a7a62] font-medium tracking-widest uppercase text-xs">
+                    <h2 className="text-sage font-medium tracking-widest uppercase text-xs">
                       Explore
                     </h2>
-                    <Link href="/explore" className="text-[#7a9a8a] text-xs tracking-wide hover:text-[#1a1a1a] transition-colors">
+                    <Link href="/explore" className="text-sage-muted text-xs tracking-wide hover:text-near-black transition-colors">
                       See all →
                     </Link>
                   </div>
@@ -233,11 +233,11 @@ export default function TodayPage() {
             {!dailyPrompt && journeys.length === 0 && recentContent.length === 0 && (
               <FadeUp delay={60}>
                 <div className="px-5 py-16 text-center">
-                  <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-4">Coming soon</p>
-                  <h2 className="font-serif-elegant text-2xl text-[#1a1a1a] mb-3">
+                  <p className="text-sage text-xs tracking-widest uppercase mb-4">Coming soon</p>
+                  <h2 className="font-serif-elegant text-2xl text-near-black mb-3">
                     Content is being curated
                   </h2>
-                  <p className="text-[#7a9a8a] text-sm leading-relaxed max-w-xs mx-auto">
+                  <p className="text-sage-muted text-sm leading-relaxed max-w-xs mx-auto">
                     Add Daily Prompts, Journeys, and Content Items in Sanity Studio to begin.
                   </p>
                   <Link

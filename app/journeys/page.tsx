@@ -27,8 +27,7 @@ function SectionHeader({ label }: { label: string }) {
     <div className="px-5 mb-4">
       <div className="border-t" style={{ borderColor: "rgba(42,32,21,0.4)" }} />
       <p
-        className="mt-3 text-[11px] tracking-[0.18em] uppercase font-semibold"
-        style={{ color: "#C19B5F" }}
+        className="mt-3 text-[11px] tracking-[0.18em] uppercase font-semibold text-sacred-gold"
       >
         {label}
       </p>
@@ -69,7 +68,7 @@ function StandardCard({ journey, completedDays }: CardProps) {
             className="absolute top-3 right-3 px-2.5 py-1 text-[10px] font-bold tracking-[0.14em] uppercase"
             style={{
               backgroundColor: "rgba(193,155,95,0.95)",
-              color: "#16110d",
+              color: "var(--color-espresso)",
             }}
           >
             Start Here
@@ -120,17 +119,17 @@ function StandardCard({ journey, completedDays }: CardProps) {
 
       {/* Description + progress bar */}
       <div className="px-4 py-4 bg-white border border-black/5">
-        <p className="text-[#7a9a8a] text-sm leading-relaxed line-clamp-2 mb-3">
+        <p className="text-sage-muted text-sm leading-relaxed line-clamp-2 mb-3">
           {journey.description}
         </p>
         <div className="flex items-center gap-3">
           <div className="flex-1 h-1 bg-black/5">
             <div
-              className="h-full bg-[#4a7a62] transition-all duration-500"
+              className="h-full bg-sage transition-all duration-500"
               style={{ width: `${pct}%` }}
             />
           </div>
-          <span className="text-[#7a9a8a] text-xs flex-shrink-0">
+          <span className="text-sage-muted text-xs flex-shrink-0">
             {isStarted ? `${pct}%` : "Begin →"}
           </span>
         </div>
@@ -168,7 +167,7 @@ function CompanionCard({ journey, completedDays }: CardProps) {
         <span
           className="uppercase font-semibold"
           style={{
-            color: "#4a7a62",
+            color: "var(--color-sage)",
             fontSize: "10px",
             letterSpacing: "0.12em",
           }}
@@ -218,23 +217,23 @@ function CompanionCard({ journey, completedDays }: CardProps) {
 
       {/* Description + watch cue + progress bar */}
       <div className="px-4 py-4 bg-white border-t-0">
-        <p className="text-[#7a9a8a] text-sm leading-relaxed line-clamp-2 mb-2">
+        <p className="text-sage-muted text-sm leading-relaxed line-clamp-2 mb-2">
           {journey.description}
         </p>
         <p
           className="font-serif-elegant italic mb-3"
-          style={{ color: "#4a7a62", fontSize: "11px" }}
+          style={{ color: "var(--color-sage)", fontSize: "11px" }}
         >
           Watch the episode before beginning
         </p>
         <div className="flex items-center gap-3">
           <div className="flex-1 h-1 bg-black/5">
             <div
-              className="h-full bg-[#4a7a62] transition-all duration-500"
+              className="h-full bg-sage transition-all duration-500"
               style={{ width: `${pct}%` }}
             />
           </div>
-          <span className="text-[#7a9a8a] text-xs flex-shrink-0">
+          <span className="text-sage-muted text-xs flex-shrink-0">
             {isStarted ? `${pct}%` : "Begin →"}
           </span>
         </div>
@@ -288,19 +287,19 @@ export default function JourneysPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-[#fdf6e8] pb-28">
+      <div className="min-h-screen bg-parchment pb-28">
 
         {/* Page header */}
         <div className="px-5 pt-12 pb-6">
-          <h1 className="text-3xl font-bold text-[#1a1a1a] mb-1">Journeys</h1>
-          <p className="text-[#7a9a8a] text-sm">
+          <h1 className="text-3xl font-bold text-near-black mb-1">Journeys</h1>
+          <p className="text-sage-muted text-sm">
             Curated explorations of beauty and truth
           </p>
         </div>
 
         {error ? (
           <div className="px-5 py-16 text-center">
-            <p className="text-[#7a9a8a] mb-4">Couldn&apos;t load journeys.</p>
+            <p className="text-sage-muted mb-4">Couldn&apos;t load journeys.</p>
             <button
               onClick={() => {
                 setError(false);
@@ -324,13 +323,13 @@ export default function JourneysPage() {
           </div>
         ) : journeys.length === 0 ? (
           <div className="px-5 py-16 text-center">
-            <p className="text-[#4a7a62] text-xs tracking-widest uppercase mb-4">
+            <p className="text-sage text-xs tracking-widest uppercase mb-4">
               Coming soon
             </p>
-            <h2 className="font-serif-elegant text-2xl text-[#1a1a1a] mb-3">
+            <h2 className="font-serif-elegant text-2xl text-near-black mb-3">
               Journeys are being prepared
             </h2>
-            <p className="text-[#7a9a8a] text-sm leading-relaxed max-w-xs mx-auto">
+            <p className="text-sage-muted text-sm leading-relaxed max-w-xs mx-auto">
               Each Journey is a curated exploration of one theme: sacred art, music,
               literature, landscape, and the wisdom of the great tradition.
             </p>

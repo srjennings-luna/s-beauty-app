@@ -19,7 +19,7 @@ export type AudioJourney = { title: string; slug: string; days?: AudioDay[] };
 
 function Yes({ value }: { value: boolean | undefined }) {
   return value ? (
-    <span className="text-[#4a7a62] font-bold">Y</span>
+    <span className="text-sage font-bold">Y</span>
   ) : (
     <span className="text-[#c25555]">—</span>
   );
@@ -59,7 +59,7 @@ export default function AudioTableClient({ journeys }: { journeys: AudioJourney[
 
   return (
     <>
-      <div className="bg-[#fdf6e8] border border-[#e8e0d4] px-4 py-2 flex items-center flex-wrap gap-2 text-[11px] mb-3">
+      <div className="bg-parchment border border-[#e8e0d4] px-4 py-2 flex items-center flex-wrap gap-2 text-[11px] mb-3">
         <span className="font-sans text-[10px] text-[#7a7062]">
           {shown} of {totalDays} days shown
         </span>
@@ -76,7 +76,7 @@ export default function AudioTableClient({ journeys }: { journeys: AudioJourney[
               </option>
             ))}
           </select>
-          <label className="flex items-center gap-1 text-[11px] text-[#16110d]">
+          <label className="flex items-center gap-1 text-[11px] text-espresso">
             <input
               type="checkbox"
               checked={missingOnly}
@@ -90,7 +90,7 @@ export default function AudioTableClient({ journeys }: { journeys: AudioJourney[
                 setFilterJourney("");
                 setMissingOnly(false);
               }}
-              className="border border-[#C19B5F] text-[#C19B5F] px-2 py-1 text-[10px] font-sans uppercase tracking-wider hover:bg-[#C19B5F] hover:text-white"
+              className="border border-sacred-gold text-sacred-gold px-2 py-1 text-[10px] font-sans uppercase tracking-wider hover:bg-sacred-gold hover:text-white"
             >
               Clear
             </button>
@@ -100,18 +100,18 @@ export default function AudioTableClient({ journeys }: { journeys: AudioJourney[
 
       {filteredJourneys.map((j) => (
         <div key={j.slug} className="border border-[#e8e0d4] mb-3">
-          <div className="bg-[#16110d] text-[#fdf6e8] px-4 py-2 font-sans text-sm flex justify-between">
+          <div className="bg-espresso text-parchment px-4 py-2 font-sans text-sm flex justify-between">
             <span>{j.title}</span>
-            <span className="text-[10px] text-[#C19B5F] tracking-wider">
+            <span className="text-[10px] text-sacred-gold tracking-wider">
               {j.days.length} {missingOnly ? "day(s) with gaps" : "day(s)"}
             </span>
           </div>
           {j.days.length === 0 ? (
-            <p className="text-[11px] text-[#4a7a62] italic px-4 py-3">All days complete for this journey.</p>
+            <p className="text-[11px] text-sage italic px-4 py-3">All days complete for this journey.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-[11px]">
-                <thead className="bg-[#fdf6e8]">
+                <thead className="bg-parchment">
                   <tr>
                     <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Day</th>
                     <th className="px-2 py-1 text-left font-sans text-[9px] tracking-wider">Title</th>
@@ -134,7 +134,7 @@ export default function AudioTableClient({ journeys }: { journeys: AudioJourney[
                         <span
                           className={
                             d.goDeeperWithAudio === d.goDeeperTotal
-                              ? "text-[#4a7a62]"
+                              ? "text-sage"
                               : d.goDeeperWithAudio === 0
                               ? "text-[#c25555]"
                               : "text-[#a06010]"
