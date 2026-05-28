@@ -834,7 +834,6 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
                           color: checkedItems[i] ? C.creamFaint : C.cream,
                           fontSize: "0.95rem",
                           lineHeight: "1.65",
-                          textDecorationColor: C.creamFaint,
                           transition: "color 0.2s ease",
                         }}
                       >
