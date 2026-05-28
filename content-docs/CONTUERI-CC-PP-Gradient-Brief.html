@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contueri — CC Build Brief: P&P Gradient Color System</title>
+<style>
+  body { font-family: Georgia, serif; max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; background: #fdfaf5; color: #1a1a1a; line-height: 1.7; }
+  h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 4px; }
+  .eyebrow { font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #888; margin-bottom: 12px; }
+  .meta { font-size: 13px; color: #666; border-bottom: 1px solid #ddd; padding-bottom: 16px; margin-bottom: 32px; }
+  h2 { font-size: 1.25rem; margin-top: 48px; margin-bottom: 8px; border-bottom: 2px solid #C19B5F; padding-bottom: 6px; }
+  h3 { font-size: 1rem; font-weight: 700; margin-top: 28px; margin-bottom: 6px; }
+  p { margin-bottom: 14px; }
+  code { font-family: 'Courier New', monospace; font-size: 0.88em; background: #f0ece4; padding: 1px 5px; border-radius: 3px; }
+  pre { background: #1a1a1a; color: #f0ece4; padding: 18px 20px; font-family: 'Courier New', monospace; font-size: 0.82em; line-height: 1.6; overflow-x: auto; margin: 16px 0 20px; border-radius: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 0.9em; }
+  th { text-align: left; background: #f0ece4; padding: 8px 12px; font-family: 'Courier New', monospace; font-size: 0.8em; letter-spacing: 0.06em; text-transform: uppercase; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e8e4dc; vertical-align: top; }
+  .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 0; vertical-align: middle; margin-right: 6px; border: 1px solid rgba(0,0,0,0.15); }
+  .callout { background: #fef9ef; border-left: 4px solid #C19B5F; padding: 14px 18px; margin: 20px 0; font-size: 0.93em; }
+  .callout.warn { background: #fff8f0; border-left-color: #c68a77; }
+  .callout.close { background: #f0f5f0; border-left-color: #4a7a62; }
+  ul, ol { margin: 8px 0 16px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .section-tag { font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #C19B5F; font-weight: 700; margin-bottom: 4px; }
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 11px; color: #999; font-family: 'Courier New', monospace; }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Contueri · CC Build Brief · May 27, 2026</div>
+<h1>P&amp;P Gradient Color System</h1>
+<div class="meta">
+  Filed by: Sheri (PM) · Reviewed by: Claude (Cowork) + Claude Code architectural consult<br>
+  Scope: New feature — <code>PPGradientBackground</code> component + color token system<br>
+  Affected files: <code>lib/ppGradients.ts</code> (new), <code>components/PPGradientBackground/</code> (new), <code>app/prompt/PromptClient.tsx</code> (modify)
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>1. Background &amp; Context</h2>
+
+<h3>The app: Contueri (formerly KALLOS)</h3>
+<p>The app is being renamed from KALLOS to <strong>Contueri</strong> (Latin: "to gaze with purpose" — root of "contemplate" and "intuition"). The codebase, Vercel project, Sanity Studio, and all existing docs still reference KALLOS. A full find/replace CC task (Manual Task 70) is pending and will be done as a separate session — it requires the one-line descriptor and tagline to be finalized first. When you encounter KALLOS in code or comments, treat it as Contueri. All <strong>new files</strong> created in this session should use Contueri naming (e.g. <code>CONTUERI-</code> prefix for docs, Contueri in user-facing strings).</p>
+
+<h3>Stack</h3>
+<p>Next.js 14 (App Router), TypeScript, Tailwind CSS, Sanity CMS. Deployed on Vercel. Currently web-only (mobile-first web app). Native iOS and Android are planned for a future phase — this matters for the architectural decisions below.</p>
+
+<h3>Design system context</h3>
+<p>The app has two visual modes:</p>
+<ul>
+  <li><strong>Espresso mode</strong> (<code>#16110d</code>) — immersive screens: P&amp;P, Journey steps, Visio Divina, Breathe</li>
+  <li><strong>Parchment mode</strong> (<code>#fdf6e8</code>) — browse/reading screens: Today landing, Explore, Journeys list, Library</li>
+</ul>
+<p>No rounded corners anywhere. Full design system in <code>CLAUDE_REFERENCE.md</code>.</p>
+
+<h3>What prompted this work</h3>
+<p>The Pause &amp; Ponder (P&amp;P) daily screen features a full-bleed classical artwork as hero image. The existing design is clean but undifferentiated — all P&amp;P screens look identical regardless of content type. During a design exploration session (May 2026), we developed a system using classical fresco pigment hues as ambient gradient backgrounds, one per content type. The goal: each P&amp;P type has a distinct atmosphere the user feels even if they can't articulate why — similar to how Spotify extracts album art color into the player UI.</p>
+
+<div class="callout close">
+  <strong>BG-01 closed:</strong> A previous UX backlog item (BG-01) tracked a potential parchment-mode gradient to reduce the visual seam between the espresso splash and flat parchment screens. That item is now closed — won't do. The P&amp;P gradient system resolves the seam question differently: espresso P&amp;P screens become distinctly rich, while parchment screens staying flat is now intentional (it signals "browsing mode" vs. "contemplative mode"). No gradient should be added to Explore, Today, Library, or Journeys screens.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>2. What to Build</h2>
+
+<h3>The feature in one sentence</h3>
+<p>Each P&amp;P screen gets a three-layer ambient gradient fixed to the viewport (so content scrolls over it), with gradient color and accent color both driven by <code>contentItem.contentType</code>.</p>
+
+<h3>Visual behavior</h3>
+<ul>
+  <li>Three radial-gradient ellipse layers, absolutely positioned inside a <code>position: fixed</code> container</li>
+  <li>Upper-left sweep (large, 22s drift cycle), diagonal band (rotated ellipse, 18s), lower-right pool (28s)</li>
+  <li>Each layer animates with <code>transform: translate()</code> + <code>opacity</code> — GPU-accelerated, no jumping. Never animate the <code>background</code> property directly.</li>
+  <li>Travel distance: 70–80px for sweep and pool, 60px for band. Opacity range: 1.0 → 0.55 at peak drift.</li>
+  <li>Independent cycle durations (22s / 18s / 28s) so layers never synchronize — creates organic, non-repeating movement.</li>
+  <li>The gradient sits behind all content; nav and scrollable content layer above it.</li>
+</ul>
+
+<h3>Accent color cascade</h3>
+<p>The same hex color used for the gradient is used as the accent throughout the P&amp;P screen: section labels (READING, ACTION), READ MORE / LISTEN buttons, scripture attribution lines, checkbox borders, active tab indicator. This makes every interactive and label element feel like it belongs to that content type's atmosphere.</p>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>3. Type → Color Mapping</h2>
+
+<table>
+  <tr><th>contentType value</th><th>Color name</th><th>Hex</th><th>RGB</th></tr>
+  <tr><td><code>sacred-art</code></td><td>Mineral Blue</td><td><span class="swatch" style="background:#7ba2b8"></span><code>#7ba2b8</code></td><td>123, 162, 184</td></tr>
+  <tr><td><code>music</code></td><td>Fresco Plum</td><td><span class="swatch" style="background:#9a8a9e"></span><code>#9a8a9e</code></td><td>154, 138, 158</td></tr>
+  <tr><td><code>literature</code></td><td>Old Ochre</td><td><span class="swatch" style="background:#c9a07c"></span><code>#c9a07c</code></td><td>201, 160, 124</td></tr>
+  <tr><td><code>landscape</code></td><td>Sage Stone</td><td><span class="swatch" style="background:#a8ae9a"></span><code>#a8ae9a</code></td><td>168, 174, 154</td></tr>
+  <tr><td><code>food-wine</code></td><td>Clay Terra</td><td><span class="swatch" style="background:#c68a77"></span><code>#c68a77</code></td><td>198, 138, 119</td></tr>
+  <tr><td><code>math-science</code></td><td>Verdigris</td><td><span class="swatch" style="background:#84a9a2"></span><code>#84a9a2</code></td><td>132, 169, 162</td></tr>
+  <tr><td><code>thinker</code></td><td>Illuminated Gold</td><td><span class="swatch" style="background:#E4C371"></span><code>#E4C371</code></td><td>228, 195, 113</td></tr>
+  <tr><td><code>watch-listen</code></td><td>Pompeian Crimson</td><td><span class="swatch" style="background:#b8869a"></span><code>#b8869a</code></td><td>184, 134, 154</td></tr>
+  <tr><td><code>photography</code></td><td>Warm Slate</td><td><span class="swatch" style="background:#a49898"></span><code>#a49898</code></td><td>164, 152, 152</td></tr>
+</table>
+
+<p style="font-size:0.88em; color:#666;">All 9 types are now mapped. No fallback needed — the <code>getPPGradient()</code> function should still include a safe default (e.g. <code>sacred-art</code>) for any future types added before a color is assigned.</p>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>4. Architectural Decisions</h2>
+
+<p>Claude Code was consulted on the implementation approach before writing this brief, specifically regarding the future iOS/Android migration. These decisions reflect that consult. Do not deviate without discussion.</p>
+
+<h3>4a. TypeScript as color token source of truth</h3>
+<p>Create <code>lib/ppGradients.ts</code> as a pure TypeScript file with no web-specific imports (no CSS, no <code>document</code>). This file will be the only place colors are defined — it survives the eventual React Native migration unchanged.</p>
+
+<pre>// lib/ppGradients.ts
+export const PP_GRADIENTS = {
+  'sacred-art':    { hex: '#7ba2b8', rgb: '123,162,184' },
+  'music':         { hex: '#9a8a9e', rgb: '154,138,158' },
+  'literature':    { hex: '#c9a07c', rgb: '201,160,124' },
+  'landscape':     { hex: '#a8ae9a', rgb: '168,174,154' },
+  'food-wine':     { hex: '#c68a77', rgb: '198,138,119' },
+  'math-science':  { hex: '#84a9a2', rgb: '132,169,162' },
+  'thinker':       { hex: '#E4C371', rgb: '228,195,113' },
+  'watch-listen':  { hex: '#b8869a', rgb: '184,134,154' },
+  'photography':   { hex: '#a49898', rgb: '164,152,152' },
+} as const satisfies Record&lt;ContentType, { hex: string; rgb: string }&gt;;
+
+export type PPGradientType = keyof typeof PP_GRADIENTS;
+
+export function getPPGradient(contentType: ContentType) {
+  return PP_GRADIENTS[contentType as PPGradientType] ?? PP_GRADIENTS['sacred-art'];
+}</pre>
+
+<h3>4b. One wrapper component with CSS custom property cascade</h3>
+<p>Create <code>components/PPGradientBackground/index.tsx</code>. This component accepts <code>contentType</code> and <code>children</code>. It writes <code>--pp-accent</code> and <code>--pp-accent-rgb</code> to the wrapper element as CSS custom properties so every child element in the P&amp;P screen can reference them without receiving color as a prop.</p>
+
+<pre>// components/PPGradientBackground/index.tsx
+import { getPPGradient } from '@/lib/ppGradients';
+import type { ContentType } from '@/lib/types';
+import styles from './gradient.module.css';
+
+interface Props {
+  contentType: ContentType;
+  children: React.ReactNode;
+}
+
+export default function PPGradientBackground({ contentType, children }: Props) {
+  const token = getPPGradient(contentType);
+  return (
+    &lt;div
+      className={styles.phone}
+      style={{ '--pp-accent': token.hex, '--pp-accent-rgb': token.rgb } as React.CSSProperties}
+    &gt;
+      &lt;div className={styles.gradientBg} aria-hidden="true"&gt;
+        &lt;div className={styles.gSweep} /&gt;
+        &lt;div className={styles.gBand} /&gt;
+        &lt;div className={styles.gPool} /&gt;
+      &lt;/div&gt;
+      {children}
+    &lt;/div&gt;
+  );
+}</pre>
+
+<p>Child elements reference the accent color via <code>color: var(--pp-accent)</code> in CSS. No hex strings should appear outside <code>lib/ppGradients.ts</code>.</p>
+
+<h3>4c. CSS module for gradient styles</h3>
+<p>Put all gradient CSS (keyframes, layer sizing, animation) in <code>components/PPGradientBackground/gradient.module.css</code>. Use <code>var(--pp-accent-rgb)</code> inside <code>rgba()</code> for gradient colors so the single custom property drives all three layers automatically.</p>
+
+<pre>/* gradient.module.css — key patterns */
+
+.gradientBg {
+  position: fixed;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 345px; height: 100dvh;   /* 100dvh not 100vh — see mobile web note */
+  background: #16110d;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.gSweep {
+  position: absolute;
+  width: 380px; height: 460px;
+  top: -140px; left: -110px;
+  border-radius: 50%;
+  will-change: transform, opacity;   /* GPU layer promotion */
+  background: radial-gradient(ellipse at center,
+    rgba(var(--pp-accent-rgb), 0.32) 0%,
+    rgba(var(--pp-accent-rgb), 0.10) 40%,
+    transparent 68%);
+  animation: sweepDrift 22s ease-in-out infinite;
+}
+
+/* similar for .gBand (rotated ellipse, 18s) and .gPool (lower-right, 28s) */
+
+@keyframes sweepDrift {
+  0%   { transform: translate(0px, 0px);   opacity: 1; }
+  40%  { transform: translate(70px, 80px); opacity: 0.55; }
+  75%  { transform: translate(30px, 40px); opacity: 0.80; }
+  100% { transform: translate(0px, 0px);   opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gSweep, .gBand, .gPool { animation: none; }
+}</pre>
+
+<h3>4d. No cross-platform abstraction layer — plan for a clean rewrite later</h3>
+<p>Do not add Expo, Tamagui, NativeWind, or any React Native abstraction layer to the current Next.js codebase. The web and native gradient implementations will necessarily differ (CSS radial gradients don't exist in React Native; the RN approach will use <code>@shopify/react-native-skia</code> or <code>expo-linear-gradient</code> + <code>react-native-reanimated</code>). The correct approach is to keep the component interface clean now so the internals can be swapped without touching the consuming code. The migration surface area when going native is exactly <code>components/PPGradientBackground/</code> — nothing else.</p>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>4b. Related Journey CTA Color</h2>
+
+<p>The P&amp;P screen can surface a "Related Journey" CTA linking users to a companion journey. This CTA should <strong>keep the app's standard sacred gold (<code>#C19B5F</code>)</strong> — it does not adopt the type accent color.</p>
+
+<p>Rationale: the Related Journey CTA is the only outbound action on the screen. Sacred gold already carries "primary action" meaning throughout the app. Keeping it gold signals "this takes you somewhere else" — it acts as a deliberate contrast point within the monochromatic type system. If every interactive element adopts the type color, the CTA loses hierarchy. Sacred gold as the exit color is semantically correct.</p>
+
+<p>This will be revisited after the gradient system is implemented and reviewed in production. No change to the CTA styling is needed in this build.</p>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>5. Mobile Web Requirements</h2>
+
+<p>Three specific issues to address — all confirmed by CC architectural consult:</p>
+
+<h3>5a. Use <code>100dvh</code> not <code>100vh</code></h3>
+<p>On iOS Safari, when the virtual keyboard appears, <code>position: fixed</code> elements can jump or repaint if sized with <code>100vh</code>. Use <code>100dvh</code> (dynamic viewport height, supported Safari 15.4+) on the gradient container. This handles the keyboard appearance correctly.</p>
+
+<h3>5b. Add <code>will-change: transform, opacity</code> to animated layers</h3>
+<p>Three simultaneously-animated layers can cause jank on budget Android devices (2GB RAM). Adding <code>will-change: transform, opacity</code> promotes each layer to its own GPU compositing layer upfront rather than on first animation frame. Apply to <code>.gSweep</code>, <code>.gBand</code>, and <code>.gPool</code>.</p>
+
+<h3>5c. Respect reduced motion</h3>
+<p>Wrap all animations in a <code>@media (prefers-reduced-motion: reduce)</code> block that disables them. The gradient should still display (static is fine) — just no movement. This is both an accessibility requirement and a battery consideration.</p>
+
+<div class="callout warn">
+  <strong>Desktop / iPad fallback needed.</strong> The <code>width: 345px</code> fixed container assumes a narrow phone viewport. On an iPad or desktop browser, the gradient will render as a narrow strip against the page background. Either cap the component to phone-width screens only (media query) or implement a responsive fallback (e.g. center the gradient in a <code>max-width: 480px</code> container). Confirm approach with Sheri before implementing if unclear.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>6. Where to Plug This In</h2>
+
+<h3>Data path</h3>
+<p>The P&amp;P page (<code>app/prompt/PromptClient.tsx</code>) already fetches the <code>dailyPrompt</code> document from Sanity, which includes a reference to <code>contentItem</code>. The <code>contentType</code> field lives on <code>contentItem.contentType</code>. The GROQ query already resolves this — confirm by checking <code>lib/sanity.ts</code> for the <code>getDailyPrompt</code> / <code>getPromptByDate</code> query. If <code>contentItem.contentType</code> is not currently projected, add it.</p>
+
+<h3>Wrapping PromptClient</h3>
+<p>Wrap the existing <code>PromptClient</code> content with <code>PPGradientBackground</code>:</p>
+<pre>// app/prompt/PromptClient.tsx (simplified)
+import PPGradientBackground from '@/components/PPGradientBackground';
+
+export default function PromptClient({ prompt }) {
+  return (
+    &lt;PPGradientBackground contentType={prompt.contentItem?.contentType ?? 'sacred-art'}&gt;
+      {/* existing prompt content */}
+    &lt;/PPGradientBackground&gt;
+  );
+}</pre>
+
+<h3>Updating existing accent color references</h3>
+<p>The P&amp;P screen currently uses hardcoded accent colors (sacred gold <code>#C19B5F</code> and blue mist <code>#8aacb8</code> in various places). These should be migrated to reference <code>var(--pp-accent)</code> so the type-specific color cascades correctly. Key elements to update:</p>
+<ul>
+  <li>Section labels (<code>.section-label</code>, READING, ACTION etc.)</li>
+  <li>READ MORE / LISTEN button text</li>
+  <li>Scripture attribution line</li>
+  <li>Checkbox border (<code>actio-row</code> checkbox)</li>
+  <li>Active tab indicator in the P&amp;P tab bar</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>7. What NOT to Touch</h2>
+
+<ul>
+  <li><strong>Explore page</strong> — light parchment background. No gradient. The 8 fresco colors are for espresso mode only. Theme cards use their own <code>theme.color</code> field from Sanity — a completely separate system.</li>
+  <li><strong>Today landing, Library, Journeys list</strong> — flat parchment. BG-01 (parchment gradient) is closed. See Section 1.</li>
+  <li><strong>Journey step gradient panels</strong> — Journey steps have their own plum gradient panel treatment on the Context block. This is a separate, unrelated system. Do not merge or override.</li>
+  <li><strong>ArtworkViewer</strong> — neutral overlay. No type-based color treatment here.</li>
+  <li><strong>Splash screen</strong> — has its own Whisper gradient (mauve-tinted espresso). Leave it.</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>8. File Structure Summary</h2>
+
+<pre>lib/
+  ppGradients.ts                    ← NEW: color tokens (pure TS, no web imports)
+
+components/
+  PPGradientBackground/
+    index.tsx                       ← NEW: wrapper component
+    gradient.module.css             ← NEW: keyframes + layer classes
+
+app/prompt/
+  PromptClient.tsx                  ← MODIFY: wrap with PPGradientBackground, pass contentType
+
+lib/sanity.ts                       ← CHECK: ensure contentItem.contentType is projected in getDailyPrompt query</pre>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>9. Reference Mockups</h2>
+<p>All 8 variants are built as standalone HTML mockups in the Documents folder. Reference these for exact visual behavior before coding — they show the gradient layers, animation, and accent color application on real P&amp;P content:</p>
+<ul>
+  <li><code>contueri-pp-mockup.html</code> — Mineral Blue (Sacred Art)</li>
+  <li><code>contueri-pp-plum.html</code> — Fresco Plum (Music)</li>
+  <li><code>contueri-pp-ochre.html</code> — Old Ochre (Literature)</li>
+  <li><code>contueri-pp-sage.html</code> — Sage Stone (Landscape)</li>
+  <li><code>contueri-pp-terra.html</code> — Clay Terra (Food &amp; Wine)</li>
+  <li><code>contueri-pp-verdigris.html</code> — Verdigris (Pattern &amp; Proof)</li>
+  <li><code>contueri-pp-crimson.html</code> — Pompeian Crimson (Watch/Listen)</li>
+  <li><code>contueri-pp-gold.html</code> — Illuminated Gold (Thinker)</li>
+  <li><code>contueri-pp-photography.html</code> — Warm Slate (Photography)</li>
+</ul>
+
+<div class="callout">
+  <strong>Design rule to preserve:</strong> The gradient is what makes P&amp;P feel like a different room from the rest of the app. Its power comes entirely from being contained to one screen. If there is ever a request to add this treatment to other screens, check with Sheri first — this is a deliberate product decision, not an oversight.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>10. Open Questions / Decisions Needed During Build</h2>
+<ol>
+  <li><strong>Photography color:</strong> Assign a 9th color before shipping if any Photography P&amp;P exists in Sanity.</li>
+  <li><strong>Desktop/iPad fallback:</strong> Confirm narrow-strip behavior is acceptable or implement responsive handling. Confirm with Sheri.</li>
+  <li><strong>Existing hardcoded accent colors:</strong> Audit <code>app/prompt/PromptClient.tsx</code> and related CSS for all places where the old accent (<code>#C19B5F</code>, <code>#8aacb8</code>) is used. These should migrate to <code>var(--pp-accent)</code> — but do not make blind replacements. If the gold appears in a global context (not P&amp;P-specific), leave it.</li>
+</ol>
+
+<footer>
+  Contueri · CC Build Brief · P&P Gradient Color System · May 27, 2026<br>
+  Written by Sheri (PM) with Claude (Cowork) + Claude Code architectural consult<br>
+  KALLOS = Contueri · rebrand find/replace pending (Manual Task 70)
+</footer>
+
+</body>
+</html>

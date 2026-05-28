@@ -9,7 +9,7 @@ import type { DailyPrompt } from "@/lib/types";
 import { addFavorite, removeFavorite, isFavorite } from "@/lib/favorites";
 import PageTransition from "@/components/ui/PageTransition";
 import NarrationButton, { NARRATION_START_EVENT, NARRATION_END_EVENT } from "@/components/NarrationButton";
-import { WHISPER_GRADIENT } from "@/lib/design-tokens";
+import PPGradientBackground from "@/components/PPGradientBackground";
 
 function formatTime(s: number): string {
   const m = Math.floor(s / 60);
@@ -17,10 +17,10 @@ function formatTime(s: number): string {
 }
 
 // ── Espresso palette ──────────────────────────────────────────────────────────
-// bgGradient is the shared Whisper gradient from lib/design-tokens.
+// The /prompt screen no longer uses the shared Whisper gradient — it has its
+// own three-layer P&P gradient driven by content type (PPGradientBackground).
 const C = {
   bg: "#16110d",
-  bgGradient: WHISPER_GRADIENT,
   header: "rgba(22,17,13,0.97)",
   cream: "rgba(253,246,232,0.88)",
   creamDim: "rgba(253,246,232,0.5)",
@@ -236,25 +236,32 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
   };
 
   // ── Loading / error states ─────────────────────────────────────────────────
+  // Both states wrap with PPGradientBackground so the page atmosphere is
+  // consistent before/during/after content load. Undefined contentType
+  // falls back to sacred-art (Mineral Blue) per getPPGradient.
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: C.bgGradient }}>
-        <div className="text-center">
-          <div className="inline-block w-8 h-8 border-4 border-white/15 border-t-white/60 rounded-full animate-spin mb-2" />
-          <p style={{ color: C.creamDim }}>Loading today&apos;s prompt…</p>
+      <PPGradientBackground contentType={undefined}>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="inline-block w-8 h-8 border-4 border-white/15 border-t-white/60 rounded-full animate-spin mb-2" />
+            <p style={{ color: C.creamDim }}>Loading today&apos;s prompt…</p>
+          </div>
         </div>
-      </div>
+      </PPGradientBackground>
     );
   }
 
   if (!prompt) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6" style={{ background: C.bgGradient }}>
-        <div className="text-center">
-          <p className="text-sm mb-6" style={{ color: C.creamDim }}>No prompt for today yet.</p>
-          <button onClick={() => router.back()} className="text-sm cta-inline-dark">← Back</button>
+      <PPGradientBackground contentType={undefined}>
+        <div className="min-h-screen flex items-center justify-center p-6">
+          <div className="text-center">
+            <p className="text-sm mb-6" style={{ color: C.creamDim }}>No prompt for today yet.</p>
+            <button onClick={() => router.back()} className="text-sm cta-inline-dark">← Back</button>
+          </div>
         </div>
-      </div>
+      </PPGradientBackground>
     );
   }
 
@@ -268,7 +275,8 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
 
   return (
     <PageTransition variant="slide-up">
-      <div className="min-h-screen pb-28" style={{ background: C.bgGradient }}>
+      <PPGradientBackground contentType={prompt.content?.contentType}>
+      <div className="pb-28">
 
         {/* Preview mode banner */}
         {isPreview && (
@@ -343,7 +351,7 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
             <button
               onClick={() => setMusicMenuOpen(!musicMenuOpen)}
               className="text-xs font-medium"
-              style={{ color: musicPlaying ? C.sageMuted : C.creamFaint }}
+              style={{ color: musicPlaying ? "var(--pp-accent)" : C.creamFaint }}
             >
               {musicPlaying ? "♪" : "Music"}
             </button>
@@ -398,9 +406,10 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
         </div>
 
         {/* ── Title + date — always below image, small print ───────────────── */}
-        <div className="px-6 pt-5 pb-2" style={{ background: C.bgGradient }}>
+        {/* No background — the PPGradientBackground layer is the atmosphere now. */}
+        <div className="px-6 pt-5 pb-2">
           <div className="flex items-center justify-between mb-1">
-            <p className="text-xs tracking-widest uppercase" style={{ color: C.sageMuted, letterSpacing: "0.15em" }}>
+            <p className="text-xs tracking-widest uppercase" style={{ color: "var(--pp-accent)", letterSpacing: "0.15em" }}>
               {new Date(prompt.date + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
             </p>
             <p className="text-xs tracking-wide pointer-events-none" style={{ color: "rgba(253,246,232,0.4)" }}>
@@ -506,7 +515,7 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
                       <button
                         onClick={() => setContextExpanded(!contextExpanded)}
                         className="flex items-center gap-2 text-xs tracking-widest uppercase"
-                        style={{ color: C.sageMuted, letterSpacing: "0.18em" }}
+                        style={{ color: "var(--pp-accent)", letterSpacing: "0.18em" }}
                       >
                         <span>{contextExpanded ? "Less" : "Read more"}</span>
                         <svg
@@ -535,7 +544,7 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
             <section>
               <p
                 className="text-xs tracking-widest mb-6 pb-2"
-                style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
+                style={{ color: "var(--pp-accent)", borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
               >
                 READING <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Lectio)</span>
               </p>
@@ -556,7 +565,7 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
                       &ldquo;{prompt.lectio.philosophyText}&rdquo;
                     </p>
                     {prompt.lectio.philosophyAttribution && (
-                      <p className="text-xs tracking-widest uppercase" style={{ color: C.sageMuted }}>
+                      <p className="text-xs tracking-widest uppercase" style={{ color: "var(--pp-accent)" }}>
                         — {prompt.lectio.philosophyAttribution}
                       </p>
                     )}
@@ -577,7 +586,7 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
                     &ldquo;{prompt.lectio.text}&rdquo;
                   </p>
                   {prompt.lectio.attribution && (
-                    <p className="text-xs tracking-widest uppercase" style={{ color: C.sageMuted }}>
+                    <p className="text-xs tracking-widest uppercase" style={{ color: "var(--pp-accent)" }}>
                       — {prompt.lectio.attribution}
                     </p>
                   )}
@@ -592,7 +601,7 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
             <section>
               <p
                 className="text-xs tracking-widest mb-6 pb-2"
-                style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
+                style={{ color: "var(--pp-accent)", borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
               >
                 MUSIC <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Auditio)</span>
               </p>
@@ -661,7 +670,7 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
                     <div className="mt-4">
                       <div style={{ position: "relative", width: "100%", height: 20, display: "flex", alignItems: "center" }}>
                         <div style={{ position: "absolute", width: "100%", height: 3, background: "rgba(253,246,232,0.12)" }}>
-                          <div ref={auditioFillRef} style={{ width: "0%", height: "100%", background: C.gold }} />
+                          <div ref={auditioFillRef} style={{ width: "0%", height: "100%", background: "var(--pp-accent)" }} />
                         </div>
                         {/* Uncontrolled range input — value updated via ref in timeupdate for smooth scrubbing */}
                         <input
@@ -726,7 +735,7 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
                   <button
                     onClick={() => setVerbaOpen(v => !v)}
                     className="flex items-center gap-2 text-left"
-                    style={{ color: C.sageMuted }}
+                    style={{ color: "var(--pp-accent)" }}
                     aria-expanded={verbaOpen}
                   >
                     <span className="text-xs tracking-widest" style={{ letterSpacing: "0.2em" }}>VERBA</span>
@@ -774,7 +783,7 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
           <section ref={actioRef}>
             <p
               className="text-xs tracking-widest mb-6 pb-2"
-              style={{ color: C.sageMuted, borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
+              style={{ color: "var(--pp-accent)", borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
             >
               ACTION <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Actio)</span>
             </p>
@@ -793,8 +802,11 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
                         className="flex-shrink-0 mt-1"
                         style={{
                           width: 20, height: 20,
-                          border: `1px solid ${checkedItems[i] ? C.gold : C.creamFaint}`,
-                          background: checkedItems[i] ? C.gold : "transparent",
+                          // Checkbox uses the type-specific accent so the
+                          // "done" affordance lives in the same color family
+                          // as the rest of the P&P screen (per gradient brief).
+                          border: `1px solid ${checkedItems[i] ? "var(--pp-accent)" : C.creamFaint}`,
+                          background: checkedItems[i] ? "var(--pp-accent)" : "transparent",
                           display: "flex", alignItems: "center", justifyContent: "center",
                         }}
                       >
@@ -833,7 +845,7 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
             )}
 
           {completed && (
-            <p className="text-xs mt-6 tracking-wide" style={{ color: C.sageMuted }}>
+            <p className="text-xs mt-6 tracking-wide" style={{ color: "var(--pp-accent)" }}>
               You showed up today.
             </p>
           )}
@@ -860,6 +872,7 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
         </div>{/* end space-y-12 */}
         <div className="h-16" />
       </div>
+      </PPGradientBackground>
     </PageTransition>
   );
 }

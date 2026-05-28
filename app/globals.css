@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────────────────
+   Contueri · P&P gradient accent — registered as <color> so it interpolates.
+   When PPGradientBackground re-renders with a new contentType, the wrapper
+   sets a new --pp-accent value. With @property registration, the browser
+   can smoothly transition the custom property itself, which means every
+   element that reads var(--pp-accent) (text colors, borders, color-mix()
+   gradient layers) morphs frame-by-frame rather than snapping.
+
+   Required for the cross-fade between content types and the initial-load
+   transition from the sacred-art fallback to the prompt's actual type.
+
+   Safari 16.4+, Chrome 85+, Firefox 128+ — meets the KALLOS mobile baseline.
+   ───────────────────────────────────────────────────────────────────────── */
+@property --pp-accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #7ba2b8; /* sacred-art Mineral Blue, the safe fallback */
+}
+
 @theme inline {
   /* KALLOS design system */
   --color-parchment: #fdf6e8;       /* browse screen background */
