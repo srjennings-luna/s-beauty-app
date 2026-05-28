@@ -285,10 +285,16 @@ export async function getDailyPrompt(date?: string) {
   // Use local date (not UTC) so the prompt matches the user's actual calendar day
   const targetDate = date ?? new Date().toLocaleDateString('en-CA') // en-CA gives YYYY-MM-DD in local timezone
 
-  // Try exact date match first
+  // cache: 'no-store' on both fetches forces the browser (and any
+  // intermediate caches) to bypass cached responses. Necessary during
+  // active iteration: Safari on iOS will otherwise serve a stale empty
+  // response after content is added to Sanity, even after dev server
+  // restarts. Sanity's free-tier rate limits are well above what KALLOS
+  // generates, so this is a safe always-on setting.
   const exact = await sanityClient.fetch(
     `*[_type == "dailyPrompt" && date == $targetDate][0] {${DAILY_PROMPT_FIELDS}}`,
-    { targetDate }
+    { targetDate },
+    { cache: 'no-store' }
   )
 
   // If we got a valid result with content linked, use it
@@ -296,7 +302,9 @@ export async function getDailyPrompt(date?: string) {
 
   // Fallback: most recently published prompt (handles editorial gaps)
   return sanityClient.fetch(
-    `*[_type == "dailyPrompt"] | order(date desc)[0] {${DAILY_PROMPT_FIELDS}}`
+    `*[_type == "dailyPrompt"] | order(date desc)[0] {${DAILY_PROMPT_FIELDS}}`,
+    {},
+    { cache: 'no-store' }
   )
 }
 

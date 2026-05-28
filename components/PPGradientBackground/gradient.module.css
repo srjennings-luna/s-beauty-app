@@ -26,7 +26,14 @@
 
 .phone {
   position: relative;
+  /* Content column matches the gradient's centered 480px max-width so on
+     desktop/iPad the content stays inside the same column as the gradient
+     (the body parchment shows on either side, like a phone-bezel preview).
+     On a real phone viewport (~390-414px), max-width has no effect and
+     content fills edge-to-edge as expected. */
   width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
   min-height: 100dvh;
   background: transparent;
   display: flex;

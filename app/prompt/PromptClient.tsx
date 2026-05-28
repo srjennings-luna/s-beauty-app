@@ -273,9 +273,16 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
 
   const defaultActio = "Carry one image of beauty with you today. Let it be a question, not an answer.";
 
+  // Note on nesting order: PPGradientBackground wraps PageTransition (not
+  // the other way around). PageTransition uses `transform` + `will-change`
+  // which create a CSS containing block for position:fixed children. If the
+  // gradient lived inside, its `position: fixed` would be relative to
+  // PageTransition's element rather than the viewport — clipping the
+  // gradient at the page's scroll height. Outside, the gradient covers the
+  // viewport reliably while the content still animates.
   return (
-    <PageTransition variant="slide-up">
-      <PPGradientBackground contentType={prompt.content?.contentType}>
+    <PPGradientBackground contentType={prompt.content?.contentType}>
+      <PageTransition variant="slide-up">
       <div className="pb-28">
 
         {/* Preview mode banner */}
@@ -820,11 +827,13 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
                         className="leading-relaxed flex-1"
                         style={{
                           // Active items match context/lectio readability baseline (C.cream).
-                          // Checked items dim to creamFaint as a "done" cue, intentional.
+                          // Checked items dim to creamFaint as a "done" cue. No
+                          // strike-through, intentional: striking out a
+                          // contemplative practice reads productivity-app, not
+                          // contemplative. The dim alone says "honored."
                           color: checkedItems[i] ? C.creamFaint : C.cream,
                           fontSize: "0.95rem",
                           lineHeight: "1.65",
-                          textDecoration: checkedItems[i] ? "line-through" : "none",
                           textDecorationColor: C.creamFaint,
                           transition: "color 0.2s ease",
                         }}
@@ -872,8 +881,8 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
         </div>{/* end space-y-12 */}
         <div className="h-16" />
       </div>
-      </PPGradientBackground>
-    </PageTransition>
+      </PageTransition>
+    </PPGradientBackground>
   );
 }
 
