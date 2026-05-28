@@ -130,8 +130,14 @@
   100% { transform: translate(0px, 0px);     opacity: 1; }
 }
 
-/* ── Reduced-motion: disable drift entirely; static gradient remains ─ */
+/* ── Reduced-motion: disable drift AND the color transition.
+   Per Apple HIG, users who opt out of motion shouldn't get any animation
+   even for functional state changes — the color should snap on content
+   type change rather than morph over 0.5s. Static gradient remains. ──── */
 @media (prefers-reduced-motion: reduce) {
+  .phone {
+    transition: none;
+  }
   .gSweep,
   .gBand,
   .gPool {
