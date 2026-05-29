@@ -69,6 +69,49 @@ function hexToRgba(hex: string, a: number): string {
   return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`;
 }
 
+/**
+ * Theme-name → bubble color overrides, drawn from the original Variant
+ * design palette (the same fresco-pigment family used by the P&P gradient
+ * system shipped May 28, 2026). The Sanity `theme.color` field may not yet
+ * be in sync with this map; until it is, we look up the bubble color by
+ * normalized theme name here so production looks right without requiring
+ * an editorial pass first.
+ *
+ * Keys are normalized (lowercased, ampersands and "the"/"and" stripped,
+ * collapsed whitespace) so that minor title variations in Sanity
+ * ("Home / The Restless Heart" vs "The Restless Heart" vs "Restless Heart")
+ * still resolve correctly.
+ */
+const THEME_COLOR_OVERRIDES: Record<string, string> = {
+  silence: "#9a8a9e",                  // Fresco Plum
+  "restless heart": "#c68a77",         // Clay Terra
+  "beauty truth goodness": "#a8ae9a",  // Sage Stone
+  creation: "#83a9a2",                 // Verdigris
+  "suffering beauty": "#8b4557",       // Roman Wine
+  light: "#c9a07c",                    // Old Ochre
+};
+
+function normalizeThemeName(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/[&/,.()]/g, " ")
+    .replace(/\bthe\b/g, " ")
+    .replace(/\band\b/g, " ")
+    .replace(/[^a-z\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getThemeColor(themeTitle: string, fallback: string): string {
+  const norm = normalizeThemeName(themeTitle);
+  if (THEME_COLOR_OVERRIDES[norm]) return THEME_COLOR_OVERRIDES[norm];
+  // Partial match — "home restless heart" contains "restless heart" → match
+  for (const [key, color] of Object.entries(THEME_COLOR_OVERRIDES)) {
+    if (norm.includes(key)) return color;
+  }
+  return fallback;
+}
+
 interface BubbleState {
   x: number;
   y: number;
@@ -486,7 +529,7 @@ export default function ThemeBubbleCanvas({
       >
         {visibleThemes.map(({ theme, baseR }) => {
           const size = baseR * 2;
-          const fillColor = theme.color ?? "#7a9a8a";
+          const fillColor = getThemeColor(theme.title ?? "", theme.color ?? "#7a9a8a");
           return (
             <button
               key={theme._id}
@@ -553,7 +596,7 @@ export default function ThemeBubbleCanvas({
         const words = theme.title.split(" ").length;
         const fontSize = words === 1 ? 17 : words <= 2 ? 14 : 12;
         const fixedTextW = Math.round(baseR * 2 - 20);
-        const fillColor = theme.color ?? "#7a9a8a";
+        const fillColor = getThemeColor(theme.title ?? "", theme.color ?? "#7a9a8a");
         const themeQuestion = theme.question ?? "";
 
         return (

@@ -155,7 +155,7 @@ export default function ExplorePage() {
           {/* Zone 1 — slim nav chrome */}
           <div
             className="bg-parchment flex-shrink-0 pt-12"
-            style={{ borderBottom: "0.5px solid rgba(26,26,26,0.07)" }}
+            style={{ borderBottom: "0.5px solid rgba(22,17,13,0.18)" }}
           >
             <div
               className="flex items-center justify-between"
@@ -165,7 +165,7 @@ export default function ExplorePage() {
                 onClick={() => setSelectedTheme(null)}
                 aria-label="Back to themes"
                 className="w-8 h-8 flex items-center justify-center"
-                style={{ color: "rgba(26,26,26,0.38)" }}
+                style={{ color: "#16110d" }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -179,7 +179,7 @@ export default function ExplorePage() {
                     fontWeight: 600,
                     letterSpacing: "0.24em",
                     textTransform: "uppercase",
-                    color: "rgba(26,26,26,0.58)",
+                    color: "#16110d",
                   }}
                 >
                   Contueri
@@ -189,7 +189,7 @@ export default function ExplorePage() {
                 onClick={() => setShowMap((v) => !v)}
                 aria-label="Show map view"
                 className="w-8 h-8 flex items-center justify-center"
-                style={{ color: "rgba(26,26,26,0.38)" }}
+                style={{ color: "#16110d" }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[17px] h-[17px]">
                   <path fillRule="evenodd" d="M8.161 2.58a1.875 1.875 0 011.678 0l4.993 2.498c.106.052.23.052.336 0l3.869-1.935A1.875 1.875 0 0121.75 4.82v12.485c0 .71-.401 1.36-1.037 1.677l-4.875 2.437a1.875 1.875 0 01-1.676 0l-4.994-2.497a.375.375 0 00-.336 0l-3.868 1.935A1.875 1.875 0 012.25 19.18V6.695c0-.71.401-1.36 1.036-1.677l4.875-2.437zM9 6a.75.75 0 01.75.75V15a.75.75 0 01-1.5 0V6.75A.75.75 0 019 6zm6.75 3a.75.75 0 00-1.5 0v8.25a.75.75 0 001.5 0V9z" clipRule="evenodd" />
@@ -202,7 +202,7 @@ export default function ExplorePage() {
             className="bg-parchment text-center flex-shrink-0"
             style={{
               padding: "24px 32px 22px",
-              borderBottom: "0.5px solid rgba(26,26,26,0.09)",
+              borderBottom: "0.5px solid rgba(22,17,13,0.22)",
             }}
           >
             <h1
@@ -239,29 +239,94 @@ export default function ExplorePage() {
           </div>
         </>
       ) : (
-        <div className="bg-parchment border-b border-black/8 px-4 pt-12 pb-3 flex-shrink-0">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl font-bold text-near-black">{headerTitle}</h1>
-            </div>
-            {/* Map / List toggle */}
-            <button
-              onClick={() => setShowMap((v) => !v)}
-              aria-label={showMap ? "Show list view" : "Show map view"}
-              className="w-10 h-10 flex items-center justify-center bg-black/5 text-near-black/60 hover:bg-black/10 transition-colors"
+        // ── Bubble landing (or map view) header — two-zone, matching the
+        //    detail screen's Zone 1 + Zone 2 pattern. Zone 1 is the slim
+        //    nav bar (Contueri wordmark + map button, no back chevron since
+        //    this is the landing). Zone 2 is the editorial header
+        //    ("Explore" Cormorant 40px + tagline). Same overall structure
+        //    as the detail header so the two states feel unified. ──
+        <>
+          {/* Zone 1: slim nav bar */}
+          <div
+            className="bg-parchment flex-shrink-0 pt-12"
+            style={{ borderBottom: "0.5px solid rgba(22,17,13,0.18)" }}
+          >
+            <div
+              className="flex items-center justify-between"
+              style={{ height: 46, padding: "0 14px" }}
             >
-              {showMap ? (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                  <path fillRule="evenodd" d="M2.625 6.75a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0A.75.75 0 018.25 6h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75zM2.625 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zM7.5 12a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12A.75.75 0 017.5 12zm-4.875 5.25a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75z" clipRule="evenodd" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                  <path fillRule="evenodd" d="M8.161 2.58a1.875 1.875 0 011.678 0l4.993 2.498c.106.052.23.052.336 0l3.869-1.935A1.875 1.875 0 0121.75 4.82v12.485c0 .71-.401 1.36-1.037 1.677l-4.875 2.437a1.875 1.875 0 01-1.676 0l-4.994-2.497a.375.375 0 00-.336 0l-3.868 1.935A1.875 1.875 0 012.25 19.18V6.695c0-.71.401-1.36 1.036-1.677l4.875-2.437zM9 6a.75.75 0 01.75.75V15a.75.75 0 01-1.5 0V6.75A.75.75 0 019 6zm6.75 3a.75.75 0 00-1.5 0v8.25a.75.75 0 001.5 0V9z" clipRule="evenodd" />
-                </svg>
-              )}
-            </button>
+              {/* Spacer where back chevron lives on the detail screen.
+                  Keeps the wordmark optically centered. */}
+              <div style={{ width: 32, height: 32 }} />
+              <div className="flex-1 flex items-center justify-center">
+                <span
+                  style={{
+                    fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+                    fontSize: 12.5,
+                    fontWeight: 600,
+                    letterSpacing: "0.24em",
+                    textTransform: "uppercase",
+                    color: "#16110d",
+                  }}
+                >
+                  Contueri
+                </span>
+              </div>
+              <button
+                onClick={() => setShowMap((v) => !v)}
+                aria-label={showMap ? "Show list view" : "Show map view"}
+                className="w-8 h-8 flex items-center justify-center"
+                style={{ color: "#16110d" }}
+              >
+                {showMap ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[17px] h-[17px]">
+                    <path fillRule="evenodd" d="M2.625 6.75a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0A.75.75 0 018.25 6h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75zM2.625 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zM7.5 12a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12A.75.75 0 017.5 12zm-4.875 5.25a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75z" clipRule="evenodd" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[17px] h-[17px]">
+                    <path fillRule="evenodd" d="M8.161 2.58a1.875 1.875 0 011.678 0l4.993 2.498c.106.052.23.052.336 0l3.869-1.935A1.875 1.875 0 0121.75 4.82v12.485c0 .71-.401 1.36-1.037 1.677l-4.875 2.437a1.875 1.875 0 01-1.676 0l-4.994-2.497a.375.375 0 00-.336 0l-3.868 1.935A1.875 1.875 0 012.25 19.18V6.695c0-.71.401-1.36 1.036-1.677l4.875-2.437zM9 6a.75.75 0 01.75.75V15a.75.75 0 01-1.5 0V6.75A.75.75 0 019 6zm6.75 3a.75.75 0 00-1.5 0v8.25a.75.75 0 001.5 0V9z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
-        </div>
+          {/* Zone 2: editorial header — Explore + tagline, centered */}
+          <div
+            className="bg-parchment text-center flex-shrink-0"
+            style={{
+              padding: "24px 22px 22px",
+              borderBottom: "0.5px solid rgba(22,17,13,0.22)",
+            }}
+          >
+            <h1
+              style={{
+                fontFamily: '"Cormorant Garamond", Georgia, serif',
+                fontSize: 40,
+                fontWeight: 500,
+                color: "#1a1a1a",
+                letterSpacing: "0.5px",
+                lineHeight: 1,
+                margin: 0,
+              }}
+            >
+              {headerTitle}
+            </h1>
+            {!showMap && (
+              <p
+                style={{
+                  fontFamily: '"Cormorant Garamond", Georgia, serif',
+                  fontSize: 16,
+                  color: "#978b7d",
+                  fontStyle: "italic",
+                  fontWeight: 400,
+                  margin: "7px 0 0",
+                }}
+              >
+                What are you drawn to?
+              </p>
+            )}
+          </div>
+        </>
       )}
 
       {/* ── Content Area ── */}
@@ -300,24 +365,18 @@ export default function ExplorePage() {
               that state so we don't burn battery on an off-screen sim. */}
           <div
             style={{
-              display: selectedTheme ? "none" : "flex",
-              flexDirection: "column",
+              display: selectedTheme ? "none" : "block",
               position: "absolute",
               inset: 0,
               paddingBottom: "5rem",
             }}
           >
-            <div className="px-4 pt-5 pb-3 flex-shrink-0">
-              <p className="text-sm text-sage-muted">What are you drawn to?</p>
-            </div>
-            <div style={{ flex: 1, position: "relative", minHeight: 0 }}>
-              <ThemeBubbleCanvas
-                themes={populatedThemes}
-                contentCounts={contentCounts}
-                onSelect={setSelectedTheme}
-                isHidden={!!selectedTheme}
-              />
-            </div>
+            <ThemeBubbleCanvas
+              themes={populatedThemes}
+              contentCounts={contentCounts}
+              onSelect={setSelectedTheme}
+              isHidden={!!selectedTheme}
+            />
           </div>
 
           {selectedTheme && (

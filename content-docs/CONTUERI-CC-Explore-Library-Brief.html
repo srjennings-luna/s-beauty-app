@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contueri — CC Build Brief: Explore Page Redesign + Library Polish</title>
+<style>
+  body { font-family: Georgia, serif; max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; background: #fdfaf5; color: #1a1a1a; line-height: 1.7; }
+  h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 4px; }
+  .eyebrow { font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #888; margin-bottom: 12px; }
+  .meta { font-size: 13px; color: #666; border-bottom: 1px solid #ddd; padding-bottom: 16px; margin-bottom: 32px; }
+  h2 { font-size: 1.25rem; margin-top: 48px; margin-bottom: 8px; border-bottom: 2px solid #C19B5F; padding-bottom: 6px; }
+  h3 { font-size: 1rem; font-weight: 700; margin-top: 28px; margin-bottom: 6px; }
+  p { margin-bottom: 14px; }
+  code { font-family: 'Courier New', monospace; font-size: 0.88em; background: #f0ece4; padding: 1px 5px; border-radius: 3px; }
+  pre { background: #1a1a1a; color: #f0ece4; padding: 18px 20px; font-family: 'Courier New', monospace; font-size: 0.82em; line-height: 1.6; overflow-x: auto; margin: 16px 0 20px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 0.9em; }
+  th { text-align: left; background: #f0ece4; padding: 8px 12px; font-family: 'Courier New', monospace; font-size: 0.8em; letter-spacing: 0.06em; text-transform: uppercase; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e8e4dc; vertical-align: top; }
+  .callout { background: #fef9ef; border-left: 4px solid #C19B5F; padding: 14px 18px; margin: 20px 0; font-size: 0.93em; }
+  .callout.warn { background: #fff8f0; border-left-color: #c68a77; }
+  .callout.info { background: #f0f5f0; border-left-color: #4a7a62; }
+  ul, ol { margin: 8px 0 16px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .section-tag { font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #C19B5F; font-weight: 700; margin-bottom: 4px; }
+  .do { color: #2d6a4f; font-weight: 700; }
+  .dont { color: #9b2335; font-weight: 700; }
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 11px; color: #999; font-family: 'Courier New', monospace; }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Contueri · CC Build Brief · May 29, 2026</div>
+<h1>Explore Page Redesign + Library Polish</h1>
+<div class="meta">
+  Filed by: Sheri (PM) · Designed in: Cowork (Claude desktop)<br>
+  Scope: <strong>Explore</strong> — replace theme grid with physics bubbles + Option E editorial detail header · <strong>Library</strong> — font polish only<br>
+  Affected files: <code>app/explore/page.tsx</code>, <code>app/library/page.tsx</code>, potentially new component files<br>
+  Reference prototypes: <code>~/Documents/contueri-explore-bubbles.html</code> · <code>~/Documents/contueri-theme-detail-mockup.html</code>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>0. Required Reading Before Any Code</h2>
+
+<div class="callout warn">
+  <strong>Do not write a single line of code until you have read all documents in this section.</strong> This is not boilerplate — each doc contains decisions that directly affect implementation choices. After reading, you are expected to ask clarifying questions and flag concerns before proceeding.
+</div>
+
+<h3>Core project docs (in this repo)</h3>
+<table>
+  <tr>
+    <th>File</th>
+    <th>Why it matters for this brief</th>
+  </tr>
+  <tr>
+    <td><code>CLAUDE.md</code></td>
+    <td>Full project brief. How Sheri works. All standing decisions. Build verification rules. Read every word — it exists because skipping it produces generic output.</td>
+  </tr>
+  <tr>
+    <td><code>CLAUDE_REFERENCE.md</code></td>
+    <td>Design system: color tokens, typography scale, component patterns, spacing rules. No rounded corners. Two visual modes. Every CSS decision flows from this.</td>
+  </tr>
+  <tr>
+    <td><code>content-docs/KALLOS-Cowork-Briefing.html</code></td>
+    <td>Master context brief. The product's purpose, the seven real people this is built for, what "earns its place" means, the Lectio quality standard. Understand <em>why</em> the Explore page is designed the way it is before you touch it.</td>
+  </tr>
+  <tr>
+    <td><code>content-docs/KALLOS-CC-Audit-Brief.html</code></td>
+    <td>Architecture constraints and audit findings. Read before any structural changes to components or data fetching.</td>
+  </tr>
+</table>
+
+<h3>App Store launch docs (in <code>~/Documents/KALLOS Launch/</code>)</h3>
+<table>
+  <tr>
+    <th>File</th>
+    <th>Why it matters for this brief</th>
+  </tr>
+  <tr>
+    <td><code>KALLOS-v1-Launch-Plan.html</code></td>
+    <td>Single source of truth for the iOS launch. Contains scope decisions, deferred features, and open decisions that affect what we build now vs. later. The Explore page redesign must be compatible with the v1 launch scope — read this and flag any conflicts before implementing.</td>
+  </tr>
+</table>
+
+<h3>Prototype files (in <code>~/Documents/</code>)</h3>
+<table>
+  <tr>
+    <th>File</th>
+    <th>What to do with it</th>
+  </tr>
+  <tr>
+    <td><code>contueri-explore-bubbles.html</code></td>
+    <td>Open in browser. Interact with it fully — drag bubbles, tap a bubble to open the detail screen, tap ← to return. This is the working interactive spec. Understand every behavior before porting it.</td>
+  </tr>
+  <tr>
+    <td><code>contueri-theme-detail-mockup.html</code></td>
+    <td>Open in browser. Scroll to <strong>Option E</strong> (labeled "Option E — accent title"). This is the locked detail header design. Compare it against the other options to understand what was rejected and why.</td>
+  </tr>
+</table>
+
+<h3>After reading — before coding</h3>
+<p>Once you have read the above, <strong>ask any clarifying questions you have</strong> and <strong>flag any concerns</strong> about the approach — including:</p>
+<ul>
+  <li>Anything in the launch plan that conflicts with or constrains the Explore redesign</li>
+  <li>Architectural decisions (component structure, state management, animation strategy) where you see a better approach</li>
+  <li>Anything in the existing codebase that will be affected by these changes that this brief does not mention</li>
+  <li>Any App Store review concerns specific to the physics animation or touch handling</li>
+</ul>
+<p>Sheri is a PM, not a developer. She makes product decisions; you make implementation decisions. Surface the tradeoffs — don't silently pick one.</p>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>1. Background</h2>
+
+<p>The current <code>app/explore/page.tsx</code> uses a standard 2-column card grid for the theme landing and a flat inline header for the theme detail view. Both were placeholders. This brief replaces them with the final designed experience.</p>
+
+<p>The design was fully prototyped in Cowork as two HTML mockup files. Both files are in <code>~/Documents/</code> — open them in a browser before writing any code. They are the source of truth for visual behavior and structure.</p>
+
+<table>
+  <tr>
+    <th>File</th>
+    <th>What it shows</th>
+  </tr>
+  <tr>
+    <td><code>contueri-explore-bubbles.html</code></td>
+    <td>Fully interactive prototype. Explore landing (physics bubbles) + connected theme detail screen (Option E design). Tap any bubble to see the detail screen. Tap ← to return.</td>
+  </tr>
+  <tr>
+    <td><code>contueri-theme-detail-mockup.html</code></td>
+    <td>Side-by-side comparison of all detail page variants (A through F). <strong>Option E is the locked design</strong> — the rightmost phone labeled "Option E — accent title."</td>
+  </tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>2. Explore Page — Task A: Physics Bubble Landing</h2>
+
+<h3>What to replace</h3>
+<p>The current theme landing (the grid of <code>aspect-[3/2]</code> theme cards inside <code>!selectedTheme</code>) is replaced with the physics bubble UI. Everything else in the file — the header zone, map toggle, theme detail feed, <code>ArtworkViewer</code>, data fetching — stays untouched.</p>
+
+<h3>How it works (read the prototype)</h3>
+<p>Open <code>contueri-explore-bubbles.html</code> and interact with it. The bubbles are draggable, physics-driven circles on an espresso background. Each bubble represents a theme. Tapping (not dragging) a bubble transitions to the detail screen.</p>
+
+<p>Key behaviors to preserve in the React port:</p>
+<ul>
+  <li>Bubbles use <code>requestAnimationFrame</code> for a physics simulation (velocity, damping, wall bounce, inter-bubble repulsion)</li>
+  <li>Drag vs. tap distinction — short-distance mouseup/touchend = tap (open detail), longer = drag (was panning)</li>
+  <li>The canvas/simulation dimensions should use the container's actual width, not a hardcoded <code>390</code> — this is one of the Task #12 fixes (see Section 4)</li>
+  <li>Bubbles render the theme name centered in the circle, colored with the theme's accent color</li>
+  <li>Bubble size is proportional to content volume (more content items = larger bubble)</li>
+</ul>
+
+<h3>React architecture guidance</h3>
+<p>Extract the bubble simulation into a custom hook (<code>useThemeBubbles</code>) or a separate component (<code>ThemeBubbleCanvas</code>). Keep the physics logic in a <code>useRef</code>/<code>useEffect</code> loop rather than React state to avoid re-render thrash on every frame. The prototype's vanilla JS is a clean reference — the simulation math ports directly.</p>
+
+<div class="callout warn">
+  <strong>Do not use innerHTML in the React port.</strong> The HTML prototype uses <code>innerHTML</code> to render bubble labels and card content — this is flagged as a security issue for App Store review. In React, render bubble text and card content with JSX elements only.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>3. Explore Page — Task B: Option E Editorial Detail Header</h2>
+
+<p>When a user taps a bubble, the current code renders the theme title as a plain <code>h1</code> inside the main header bar alongside the back button. This is replaced with a two-zone editorial header — the locked Option E design.</p>
+
+<h3>Two-zone structure</h3>
+
+<p><strong>Zone 1 — Slim nav chrome</strong> (always visible, ~46px tall):</p>
+<ul>
+  <li>Back chevron (left) → returns to bubble landing</li>
+  <li>CONTUERI wordmark centered (Montserrat 600, 12.5px, letter-spacing 0.24em, uppercase, <code>rgba(26,26,26,0.58)</code>)</li>
+  <li>Map icon (right) → existing map toggle behavior</li>
+  <li>Parchment background, 0.5px bottom border at <code>rgba(26,26,26,0.07)</code></li>
+</ul>
+
+<p><strong>Zone 2 — Editorial header</strong> (below Zone 1, text-centered):</p>
+<ul>
+  <li>Theme title — Montserrat 600, 26px, <code>letter-spacing: 0.14em</code>, <code>text-transform: uppercase</code>, color = <strong>theme's accent color</strong> (from <code>theme.color</code>), not near-black</li>
+  <li><strong>No rule</strong> — there is no decorative line under the title in Option E</li>
+  <li>Theme question — Open Sans, 14px, italic, <code>color: #6e8e7e</code>, line-height 1.55, max-width 270px centered, <strong><code>margin-top: 20px</code></strong> (this spacing compensates for the absent rule)</li>
+  <li>Padding: 24px top, 32px sides, 22px bottom</li>
+  <li>Parchment background, 0.5px bottom border at <code>rgba(26,26,26,0.09)</code></li>
+</ul>
+
+<h3>Editorial gallery cards (content feed below the header)</h3>
+<p>The existing 16:9 image cards in the theme detail feed are replaced with <strong>1:1 square editorial cards</strong>. Each card:</p>
+<ul>
+  <li>Image: <code>aspect-ratio: 1 / 1</code>, full-bleed, no rounded corners</li>
+  <li>Type label: Montserrat 600, 8px, uppercase, letter-spacing 0.18em, sage color (<code>#7a9a8a</code>)</li>
+  <li>Item title: Cormorant Garamond, 24px, weight 400, <code>color: #1a1a1a</code>, line-height 1.2</li>
+  <li>Attribution: 11px, sage-muted, below title</li>
+  <li>Excerpt/description: Open Sans, 13px, italic, <code>color: #3d3530</code>, line-height 1.65, 3-line clamp</li>
+  <li>Card padding: 14px 18px 20px</li>
+  <li><strong>No prop-rule</strong> — no decorative line between image and text</li>
+</ul>
+
+<div class="callout info">
+  The existing <code>ArtworkViewer</code> component is still used when a user taps a content card inside the detail feed — that behavior is unchanged. The editorial card is just a new presentation layer for the list item.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>4. Explore Page — Task C: Production-Readiness Fixes (Bundle with Tasks A &amp; B)</h2>
+
+<p>These were identified in a prior CC Opus audit (Task #12 in the backlog). Since Tasks A and B already touch the explore page, fix these in the same PR rather than a separate pass.</p>
+
+<table>
+  <tr>
+    <th>Priority</th>
+    <th>Issue</th>
+    <th>Fix</th>
+  </tr>
+  <tr>
+    <td><span class="dont">Critical</span></td>
+    <td>Reduced-motion fallback broken</td>
+    <td>Check <code>prefers-reduced-motion</code> media query. When true, skip the physics animation — render bubbles as a static grid instead.</td>
+  </tr>
+  <tr>
+    <td><span class="dont">Critical</span></td>
+    <td><code>innerHTML</code> used for bubble labels and card content</td>
+    <td>Already solved by the React port — render with JSX, never innerHTML.</td>
+  </tr>
+  <tr>
+    <td>High</td>
+    <td><code>requestAnimationFrame</code> loop runs forever even when off-screen</td>
+    <td>Cancel the rAF loop (<code>cancelAnimationFrame</code>) when the component unmounts or when the detail screen is visible. Resume when returning to the bubble view.</td>
+  </tr>
+  <tr>
+    <td>High</td>
+    <td>No ARIA / keyboard navigation</td>
+    <td>Each bubble should be a <code>&lt;button&gt;</code> with <code>aria-label="{theme.title} — {theme.question}"</code>. Tab order should cycle through themes. Enter/Space opens detail.</td>
+  </tr>
+  <tr>
+    <td>High</td>
+    <td>iOS ghost-click on bubble tap</td>
+    <td>Add <code>touch-action: manipulation</code> to bubble elements. Use <code>touchend</code> with <code>e.preventDefault()</code> to suppress the 300ms delayed click.</td>
+  </tr>
+  <tr>
+    <td>High</td>
+    <td><code>touchcancel</code> not handled</td>
+    <td>Add a <code>touchcancel</code> listener that clears the active drag state — same cleanup as <code>touchend</code>.</td>
+  </tr>
+  <tr>
+    <td>Medium</td>
+    <td>Canvas width hardcoded to <code>390</code></td>
+    <td>Use <code>containerRef.current.getBoundingClientRect().width</code> on mount (and on resize via <code>ResizeObserver</code>) to set simulation width dynamically.</td>
+  </tr>
+  <tr>
+    <td>Medium</td>
+    <td>Viewport meta needs <code>viewport-fit=cover</code></td>
+    <td>Update <code>app/layout.tsx</code> viewport meta: <code>content="width=device-width, initial-scale=1, viewport-fit=cover"</code>. Ensures safe-area insets work on iPhone with notch/Dynamic Island.</td>
+  </tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>5. Library Page — Minor Polish Only</h2>
+
+<p>The library page (<code>app/library/page.tsx</code>) is already largely correct — the Variant 2 layout (thumbnail left, colored date with extending rule, bold title, italic question) is the locked design. This is a polish pass only.</p>
+
+<div class="callout info">
+  <strong>The subtitle has already been updated in the file.</strong> It now renders a blank line (space character) instead of "26 prompts · 1 saved." Do not change it.
+</div>
+
+<h3>Font fixes</h3>
+<ul>
+  <li><strong>Row title</strong> (the prompt/content item title in each card): must be <code>font-family: 'Montserrat', sans-serif; font-weight: 600;</code> — currently renders in the default system sans</li>
+  <li><strong>Question text</strong> (the italic excerpt below each title): must be <code>font-family: 'Open Sans', sans-serif;</code> — confirm this is explicitly set, not inherited</li>
+</ul>
+
+<h3>Do not touch</h3>
+<ul>
+  <li>The All / Saved toggle — leave it as-is for now, it will be evaluated separately</li>
+  <li>The saved content grid section</li>
+  <li>The subtitle spacing (the blank <code>&lt;p&gt;</code> line that holds spacing under "Library")</li>
+  <li>Data fetching logic</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>6. What Is Not In Scope</h2>
+
+<ul>
+  <li>Removing the All/Saved toggle from Library (deferred — needs more thought)</li>
+  <li>Surfacing saved content above P&amp;P archive in Library (backlog — Task #13)</li>
+  <li>Renaming "Pause &amp; Ponder" label in Library subtitle (backlog — Task #14)</li>
+  <li><strong>Music bubble — do not ship to production.</strong> Music exists as a content type in Sanity but has not been implemented in the app. It was added to the HTML prototype for design exploration only. Tapping a Music bubble in production would open a blank detail screen — there is no content behind it. The bubble set in production should be the 5 founding themes only: Light, Shadow, Stillness, Threshold, Resonance. Adding Music as a browseable theme is on the backlog but is not v1 scope.</li>
+  <li>Any changes to Today, Journeys, or the P&amp;P screen</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>7. Build Verification</h2>
+
+<p>After all changes:</p>
+<ol>
+  <li>Run <code>npm run build</code> from repo root. If the SWC binary error appears (Cowork VM ARM64 limitation), fall back to <code>npx tsc --noEmit</code> — but note that tsc alone does not catch all Next.js build failures. Prefer the full build wherever possible.</li>
+  <li>Visually test the explore page: bubbles animate, drag works, tap opens detail, back returns to bubbles, map toggle works, reduced-motion renders a static fallback.</li>
+  <li>Confirm the Option E header: "LIGHT" (or any theme title) appears uppercase in the theme accent color with no rule below, and the italic question has breathing room beneath it.</li>
+  <li>Commit after each task (A, B/C together, library) so there are clean rollback points.</li>
+</ol>
+
+<div class="callout warn">
+  <strong>Do not claim any task is shipped on <code>tsc --noEmit</code> alone.</strong> It misses Suspense wrapping, prerender errors, and dynamic-route mismatches. Always prefer <code>npm run build</code>.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>8. Prototype Reference Quick-Start</h2>
+
+<p>Before writing any code, open both prototype files in a browser:</p>
+<pre>open ~/Documents/contueri-explore-bubbles.html
+open ~/Documents/contueri-theme-detail-mockup.html</pre>
+
+<p>In the bubbles file: drag bubbles around, tap one, confirm the Option E detail screen appears (uppercase accent-colored title, no rule, italic question, 1:1 cards), tap ← to return.</p>
+<p>In the mockup file: scroll right to <strong>Option E</strong> (labeled "Option E — accent title") — that is the exact locked design for the detail header.</p>
+
+<footer>
+  Contueri CC Build Brief — Explore + Library · May 29, 2026 · Filed by Sheri (PM) via Cowork
+</footer>
+
+</body>
+</html>
