@@ -100,27 +100,35 @@ export default function ExplorePage() {
     fetchData();
   }, [retryCount]);
 
-  // Filter content by selected theme, then dedupe by title.
-  // The dedupe is a temporary safety net for Sanity duplicates (Manual Task
-  // #52 in CLAUDE.md: Spiegel im Spiegel ×2, Adoration of the Magi ×2,
-  // Calling of Saint Matthew ×2, Supper at Emmaus ×2). The real fix is a
-  // Sanity cleanup pass; until then we keep the first occurrence per
-  // case-insensitive trimmed title so the Explore feed never shows
-  // visibly-identical cards back-to-back. Falls back to _id if a content
-  // item somehow has no title.
+  // Filter content by selected theme. Dedupe only within a theme view —
+  // not across the full feed — so a piece legitimately tagged with two
+  // themes still shows up in both theme detail screens.
+  //
+  // When duplicate docs exist for the same piece (Manual Task #52 in
+  // CLAUDE.md: Spiegel im Spiegel ×2, Adoration of the Magi ×2, Calling
+  // of Saint Matthew ×2, Supper at Emmaus ×2), prefer the instance with
+  // the most theme tags. Rationale: one copy is often tagged more richly
+  // than the other; keeping the richer one preserves cross-theme reach
+  // (the 2-theme version still surfaces in both themes; the 1-theme
+  // duplicate would have surfaced in only one anyway).
+  //
+  // Real fix is a Sanity cleanup pass — see UX Backlog DUP-01.
   const filtered = useMemo(() => {
-    const base = !selectedTheme
-      ? content
-      : content.filter((i) =>
-          i.themes?.some((t) => t._id === selectedTheme._id)
-        );
-    const seen = new Set<string>();
-    return base.filter((i) => {
-      const key = i.title?.toLowerCase().trim() || i._id;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
+    if (!selectedTheme) return content;
+    const themeFiltered = content.filter((i) =>
+      i.themes?.some((t) => t._id === selectedTheme._id)
+    );
+    const bestByTitle = new Map<string, (typeof themeFiltered)[number]>();
+    for (const item of themeFiltered) {
+      const key = item.title?.toLowerCase().trim() || item._id;
+      const existing = bestByTitle.get(key);
+      const itemThemes = item.themes?.length ?? 0;
+      const existingThemes = existing?.themes?.length ?? -1;
+      if (itemThemes > existingThemes) {
+        bestByTitle.set(key, item);
+      }
+    }
+    return Array.from(bestByTitle.values());
   }, [content, selectedTheme]);
 
   const mappable = useMemo(
