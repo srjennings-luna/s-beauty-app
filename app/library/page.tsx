@@ -95,11 +95,22 @@ function PromptCard({ prompt, isSaved }: { prompt: DailyPrompt; isSaved: boolean
             </svg>
           )}
         </div>
-        <p className="text-sm font-medium text-near-black line-clamp-1">
+        <p
+          className="text-sm text-near-black line-clamp-1"
+          style={{
+            fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+            fontWeight: 600,
+          }}
+        >
           {prompt.content?.title ?? "Pause & Ponder"}
         </p>
         {prompt.promptQuestion && (
-          <p className="text-xs text-sage-muted mt-0.5 line-clamp-2 italic">
+          <p
+            className="text-xs text-sage-muted mt-0.5 line-clamp-2 italic"
+            style={{
+              fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+            }}
+          >
             {prompt.promptQuestion}
           </p>
         )}
@@ -202,13 +213,7 @@ export default function LibraryPage() {
         {/* Header */}
         <div className="px-5 pt-12 pb-6">
           <h1 className="text-3xl font-bold text-near-black mb-1">Library</h1>
-          <p className="text-sage-muted text-sm">
-            {allPrompts.length > 0
-              ? `${allPrompts.length} prompt${allPrompts.length !== 1 ? "s" : ""}${savedItems.length > 0 ? ` · ${savedItems.length} saved` : ""}`
-              : savedItems.length > 0
-              ? `${savedItems.length} saved item${savedItems.length !== 1 ? "s" : ""}`
-              : "Your saved content"}
-          </p>
+          <p className="text-sage-muted text-sm">{" "}</p>
         </div>
 
         <div className="px-5 pb-28 space-y-10">
