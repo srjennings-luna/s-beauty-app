@@ -41,6 +41,11 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  // viewport-fit=cover lets the app extend under the notch / Dynamic Island
+  // on iPhone so safe-area-inset-* CSS values work correctly. Required for
+  // any full-bleed immersive surface (Encounter, P&P, Visio Divina, the
+  // Explore bubble canvas).
+  viewportFit: "cover",
   // Mirror --color-parchment in app/globals.css (browser meta accepts only literal hex)
   themeColor: "#fdf6e9",
 };

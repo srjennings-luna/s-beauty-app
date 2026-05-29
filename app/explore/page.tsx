@@ -142,48 +142,127 @@ export default function ExplorePage() {
   return (
     <div className="h-screen bg-parchment flex flex-col overflow-hidden">
 
-      {/* ── Header ── */}
-      <div className="bg-parchment border-b border-black/8 px-4 pt-12 pb-3 flex-shrink-0">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* Back button when a theme is selected */}
-            {selectedTheme && !showMap && (
+      {/* ── Header ──────────────────────────────────────────────────────
+          Two completely different designs:
+          (a) Default (bubble landing or map view): the existing single-row
+              header with "Explore" title + map toggle.
+          (b) Theme detail (Option E): two-zone editorial header — slim nav
+              chrome on top (back / CONTUERI wordmark / map), then the
+              theme title in the theme's accent color (uppercase, no rule)
+              with the italic question below. */}
+      {selectedTheme && !showMap ? (
+        <>
+          {/* Zone 1 — slim nav chrome */}
+          <div
+            className="bg-parchment flex-shrink-0 pt-12"
+            style={{ borderBottom: "0.5px solid rgba(26,26,26,0.07)" }}
+          >
+            <div
+              className="flex items-center justify-between"
+              style={{ height: 46, padding: "0 14px" }}
+            >
               <button
                 onClick={() => setSelectedTheme(null)}
                 aria-label="Back to themes"
-                className="w-8 h-8 flex items-center justify-center text-near-black/50 hover:text-near-black transition-colors -ml-1"
+                className="w-8 h-8 flex items-center justify-center"
+                style={{ color: "rgba(26,26,26,0.38)" }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                 </svg>
               </button>
-            )}
-            <div>
-              <h1 className="text-xl font-bold text-near-black">{headerTitle}</h1>
-              {selectedTheme && !showMap && (
-                <p className="text-xs text-sage-muted mt-0.5 italic">{selectedTheme.question}</p>
-              )}
+              <div className="flex-1 flex items-center justify-center">
+                <span
+                  style={{
+                    fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+                    fontSize: 12.5,
+                    fontWeight: 600,
+                    letterSpacing: "0.24em",
+                    textTransform: "uppercase",
+                    color: "rgba(26,26,26,0.58)",
+                  }}
+                >
+                  Contueri
+                </span>
+              </div>
+              <button
+                onClick={() => setShowMap((v) => !v)}
+                aria-label="Show map view"
+                className="w-8 h-8 flex items-center justify-center"
+                style={{ color: "rgba(26,26,26,0.38)" }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[17px] h-[17px]">
+                  <path fillRule="evenodd" d="M8.161 2.58a1.875 1.875 0 011.678 0l4.993 2.498c.106.052.23.052.336 0l3.869-1.935A1.875 1.875 0 0121.75 4.82v12.485c0 .71-.401 1.36-1.037 1.677l-4.875 2.437a1.875 1.875 0 01-1.676 0l-4.994-2.497a.375.375 0 00-.336 0l-3.868 1.935A1.875 1.875 0 012.25 19.18V6.695c0-.71.401-1.36 1.036-1.677l4.875-2.437zM9 6a.75.75 0 01.75.75V15a.75.75 0 01-1.5 0V6.75A.75.75 0 019 6zm6.75 3a.75.75 0 00-1.5 0v8.25a.75.75 0 001.5 0V9z" clipRule="evenodd" />
+                </svg>
+              </button>
             </div>
           </div>
-
-          {/* Map / List toggle */}
-          <button
-            onClick={() => setShowMap((v) => !v)}
-            aria-label={showMap ? "Show list view" : "Show map view"}
-            className="w-10 h-10 flex items-center justify-center bg-black/5 text-near-black/60 hover:bg-black/10 transition-colors"
+          {/* Zone 2 — editorial header (Option E: no rule, accent-colored title) */}
+          <div
+            className="bg-parchment text-center flex-shrink-0"
+            style={{
+              padding: "24px 32px 22px",
+              borderBottom: "0.5px solid rgba(26,26,26,0.09)",
+            }}
           >
-            {showMap ? (
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                <path fillRule="evenodd" d="M2.625 6.75a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0A.75.75 0 018.25 6h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75zM2.625 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zM7.5 12a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12A.75.75 0 017.5 12zm-4.875 5.25a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75z" clipRule="evenodd" />
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                <path fillRule="evenodd" d="M8.161 2.58a1.875 1.875 0 011.678 0l4.993 2.498c.106.052.23.052.336 0l3.869-1.935A1.875 1.875 0 0121.75 4.82v12.485c0 .71-.401 1.36-1.037 1.677l-4.875 2.437a1.875 1.875 0 01-1.676 0l-4.994-2.497a.375.375 0 00-.336 0l-3.868 1.935A1.875 1.875 0 012.25 19.18V6.695c0-.71.401-1.36 1.036-1.677l4.875-2.437zM9 6a.75.75 0 01.75.75V15a.75.75 0 01-1.5 0V6.75A.75.75 0 019 6zm6.75 3a.75.75 0 00-1.5 0v8.25a.75.75 0 001.5 0V9z" clipRule="evenodd" />
-              </svg>
+            <h1
+              style={{
+                fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+                fontSize: 26,
+                fontWeight: 600,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                lineHeight: 1.15,
+                color: selectedTheme.color ?? "#1a1a1a",
+                margin: 0,
+              }}
+            >
+              {selectedTheme.title}
+            </h1>
+            {selectedTheme.question && (
+              <p
+                style={{
+                  fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                  fontSize: 14,
+                  fontStyle: "italic",
+                  color: "#6e8e7e",
+                  lineHeight: 1.55,
+                  marginTop: 20,
+                  maxWidth: 270,
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+              >
+                {selectedTheme.question}
+              </p>
             )}
-          </button>
+          </div>
+        </>
+      ) : (
+        <div className="bg-parchment border-b border-black/8 px-4 pt-12 pb-3 flex-shrink-0">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-bold text-near-black">{headerTitle}</h1>
+            </div>
+            {/* Map / List toggle */}
+            <button
+              onClick={() => setShowMap((v) => !v)}
+              aria-label={showMap ? "Show list view" : "Show map view"}
+              className="w-10 h-10 flex items-center justify-center bg-black/5 text-near-black/60 hover:bg-black/10 transition-colors"
+            >
+              {showMap ? (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path fillRule="evenodd" d="M2.625 6.75a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0A.75.75 0 018.25 6h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75zM2.625 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zM7.5 12a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12A.75.75 0 017.5 12zm-4.875 5.25a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path fillRule="evenodd" d="M8.161 2.58a1.875 1.875 0 011.678 0l4.993 2.498c.106.052.23.052.336 0l3.869-1.935A1.875 1.875 0 0121.75 4.82v12.485c0 .71-.401 1.36-1.037 1.677l-4.875 2.437a1.875 1.875 0 01-1.676 0l-4.994-2.497a.375.375 0 00-.336 0l-3.868 1.935A1.875 1.875 0 012.25 19.18V6.695c0-.71.401-1.36 1.036-1.677l4.875-2.437zM9 6a.75.75 0 01.75.75V15a.75.75 0 01-1.5 0V6.75A.75.75 0 019 6zm6.75 3a.75.75 0 00-1.5 0v8.25a.75.75 0 001.5 0V9z" clipRule="evenodd" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── Content Area ── */}
       <div className="flex-1 relative min-h-0">
@@ -242,57 +321,115 @@ export default function ExplorePage() {
           </div>
 
           {selectedTheme && (
-          // ── Themed Content Feed ──────────────────────────────────────────
+          // ── Themed Content Feed — Option E editorial cards ───────────────
+          // 1:1 image, Cormorant title, sage type label, italic excerpt.
+          // Cards stack flush (no gap, no horizontal padding) so the images
+          // bleed edge-to-edge of the column.
           <div className="h-full overflow-y-auto pb-20">
-            <div className="flex flex-col gap-4 px-4 pt-4">
-              {filtered.map((item) => (
-                <button
-                  key={item._id}
-                  onClick={() => setSelectedItem(toArtwork(item))}
-                  className="text-left w-full"
-                >
-                  <div className="relative aspect-[16/9] overflow-hidden w-full">
-                    <img
-                      src={item.imageUrl}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent" />
-                    {/* Content type badge */}
-                    <div className="absolute top-2 left-2">
-                      <span className="px-1.5 py-0.5 bg-black/50 backdrop-blur-sm text-white/80 text-[10px] font-medium tracking-wide">
-                        {CONTENT_TYPE_LABELS[item.contentType]}
-                      </span>
+            <div className="flex flex-col">
+              {filtered.map((item) => {
+                const attribution =
+                  item.artist ??
+                  item.composer ??
+                  item.author ??
+                  item.thinkerName ??
+                  item.locationName ??
+                  "";
+                const showVisio =
+                  item.contentType === "sacred-art" ||
+                  item.contentType === "landscape";
+                return (
+                  <button
+                    key={item._id}
+                    onClick={() => setSelectedItem(toArtwork(item))}
+                    className="text-left w-full block"
+                  >
+                    {/* 1:1 full-bleed image */}
+                    <div
+                      className="relative w-full overflow-hidden"
+                      style={{ aspectRatio: "1 / 1" }}
+                    >
+                      <img
+                        src={item.imageUrl}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                      />
+                      {showVisio && (
+                        <Link
+                          href={`/pray/${item._id}`}
+                          onClick={(e) => e.stopPropagation()}
+                          aria-label="Visio Divina prayer"
+                          className="absolute top-2 right-2 w-11 h-11 flex items-center justify-center bg-black/40 backdrop-blur-sm text-white/70 hover:text-white transition-colors"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" className="w-4 h-4">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                        </Link>
+                      )}
                     </div>
-                    {/* Visio Divina link */}
-                    {(item.contentType === "sacred-art" || item.contentType === "landscape") && (
-                      <Link
-                        href={`/pray/${item._id}`}
-                        onClick={(e) => e.stopPropagation()}
-                        aria-label="Visio Divina prayer"
-                        className="absolute top-1 right-1 w-11 h-11 flex items-center justify-center bg-black/40 backdrop-blur-sm text-white/70 hover:text-white transition-colors"
+                    {/* Typographic meta — no prop-rule between image and text */}
+                    <div style={{ padding: "14px 18px 20px" }}>
+                      <div
+                        style={{
+                          fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+                          fontSize: 8,
+                          fontWeight: 600,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.18em",
+                          color: "#7a9a8a",
+                          marginBottom: 7,
+                        }}
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                          <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.061zM5.404 6.464a.75.75 0 001.06-1.06L5.404 4.343a.75.75 0 10-1.06 1.06l1.06 1.061z" />
-                        </svg>
-                      </Link>
-                    )}
-                  </div>
-                  <div className="mt-2 px-0.5">
-                    <h3 className="text-near-black font-medium text-sm">
-                      {item.title}
-                    </h3>
-                    <p className="text-sage-muted text-xs mt-0.5">
-                      {item.artist ?? item.composer ?? item.author ?? item.thinkerName ?? item.locationName ?? ""}
-                    </p>
-                    {item.description && (
-                      <p className="text-[#5a4a3a] text-xs mt-1.5 leading-relaxed line-clamp-2">
-                        {item.description}
-                      </p>
-                    )}
-                  </div>
-                </button>
-              ))}
+                        {CONTENT_TYPE_LABELS[item.contentType]}
+                      </div>
+                      <h3
+                        style={{
+                          fontFamily: '"Cormorant Garamond", Georgia, serif',
+                          fontSize: 24,
+                          fontWeight: 400,
+                          color: "#1a1a1a",
+                          lineHeight: 1.2,
+                          letterSpacing: "0.01em",
+                          marginBottom: 4,
+                          margin: 0,
+                        }}
+                      >
+                        {item.title}
+                      </h3>
+                      {attribution && (
+                        <p
+                          style={{
+                            fontSize: 11,
+                            color: "#7a9a8a",
+                            marginTop: 4,
+                            marginBottom: 8,
+                          }}
+                        >
+                          {attribution}
+                        </p>
+                      )}
+                      {item.description && (
+                        <p
+                          style={{
+                            fontFamily: '"Cormorant Garamond", Georgia, serif',
+                            fontSize: 13,
+                            fontStyle: "italic",
+                            color: "#3d3530",
+                            lineHeight: 1.65,
+                            display: "-webkit-box",
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                          }}
+                        >
+                          {item.description}
+                        </p>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
           )}
