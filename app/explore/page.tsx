@@ -6,6 +6,7 @@ import Link from "next/link";
 import { getAllContentItems, getThemes } from "@/lib/sanity";
 import type { ContentItem, Theme, ContentType, Artwork, LocationType } from "@/lib/types";
 import ArtworkViewer from "@/components/ArtworkViewer";
+import ThemeBubbleCanvas from "@/components/ThemeBubbleCanvas";
 
 // Dynamically import map (no SSR)
 const GlobalMap = dynamic(() => import("@/components/GlobalMap"), {
@@ -112,17 +113,29 @@ export default function ExplorePage() {
 
   const mappableArtworks = useMemo(() => mappable.map(toArtwork), [mappable]);
 
-  // Separate themes into populated and empty, so empty ones sort to bottom
-  const { populatedThemes, emptyThemes } = useMemo(() => {
-    const populated: Theme[] = [];
-    const empty: Theme[] = [];
-    for (const theme of themes) {
-      const hasContent = content.some((i) => i.themes?.some((t) => t._id === theme._id));
-      if (hasContent) populated.push(theme);
-      else empty.push(theme);
-    }
-    return { populatedThemes: populated, emptyThemes: empty };
+  // Themes with at least one content item. Empty themes are dropped from the
+  // bubble UI (the old grid greyed them out with "Coming soon"; the bubble
+  // design doesn't accommodate that, and editorially the cleaner choice is
+  // to surface only themes the user can actually browse). They reappear
+  // automatically once content is added.
+  const populatedThemes = useMemo(() => {
+    return themes.filter((theme) =>
+      content.some((i) => i.themes?.some((t) => t._id === theme._id))
+    );
   }, [themes, content]);
+
+  // Bubble size is proportional to content volume. Computed once here and
+  // handed to the canvas so the data layer owns the count, not the visual.
+  const contentCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const theme of populatedThemes) {
+      counts.set(
+        theme._id,
+        content.filter((i) => i.themes?.some((t) => t._id === theme._id)).length
+      );
+    }
+    return counts;
+  }, [populatedThemes, content]);
 
   const headerTitle = showMap ? "Map" : selectedTheme ? selectedTheme.title : "Explore";
 
@@ -199,69 +212,36 @@ export default function ExplorePage() {
             onMarkerClick={(aw) => setSelectedItem(aw)}
             selectedArtwork={selectedItem}
           />
-        ) : !selectedTheme ? (
-
-          // ── Theme Cards Landing ──────────────────────────────────────────
-          <div className="h-full overflow-y-auto pb-20">
-            <div className="px-4 pt-5 pb-3">
+        ) : (
+          <>
+          {/* ── Bubble Landing ──────────────────────────────────────────────
+              Always mounted (while not in map view) so the physics state
+              survives the trip into a theme detail. Hidden via display:none
+              when a theme is selected; the canvas pauses its rAF loop in
+              that state so we don't burn battery on an off-screen sim. */}
+          <div
+            style={{
+              display: selectedTheme ? "none" : "flex",
+              flexDirection: "column",
+              position: "absolute",
+              inset: 0,
+              paddingBottom: "5rem",
+            }}
+          >
+            <div className="px-4 pt-5 pb-3 flex-shrink-0">
               <p className="text-sm text-sage-muted">What are you drawn to?</p>
             </div>
-            <div className="grid grid-cols-2 gap-3 px-4 pb-6">
-              {/* Populated themes — tappable */}
-              {populatedThemes.map((theme) => (
-                <button
-                  key={theme._id}
-                  onClick={() => setSelectedTheme(theme)}
-                  className="text-left relative overflow-hidden aspect-[3/2] flex flex-col justify-end p-3"
-                  style={{ backgroundColor: theme.color ?? "var(--color-sage)" }}
-                >
-                  {theme.imageUrl && (
-                    <div
-                      className="absolute inset-0 bg-cover bg-center"
-                      style={{ backgroundImage: `url(${theme.imageUrl})` }}
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  <div className="relative z-10">
-                    <h2 className="text-white font-semibold text-sm tracking-wide leading-tight">
-                      {theme.title}
-                    </h2>
-                    <p className="text-white/70 text-[11px] mt-0.5 italic leading-snug line-clamp-2">
-                      {theme.question}
-                    </p>
-                  </div>
-                </button>
-              ))}
-              {/* Empty themes — non-tappable, grayed out, sorted to bottom */}
-              {emptyThemes.map((theme) => (
-                <div
-                  key={theme._id}
-                  aria-disabled="true"
-                  className="relative overflow-hidden aspect-[3/2] flex flex-col justify-end p-3 opacity-35 grayscale pointer-events-none select-none"
-                  style={{ backgroundColor: theme.color ?? "var(--color-sage)" }}
-                >
-                  {theme.imageUrl && (
-                    <div
-                      className="absolute inset-0 bg-cover bg-center"
-                      style={{ backgroundImage: `url(${theme.imageUrl})` }}
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  <div className="relative z-10">
-                    <h2 className="text-white font-semibold text-sm tracking-wide leading-tight">
-                      {theme.title}
-                    </h2>
-                    <p className="text-white/60 text-[10px] mt-0.5 tracking-widest uppercase">
-                      Coming soon
-                    </p>
-                  </div>
-                </div>
-              ))}
+            <div style={{ flex: 1, position: "relative", minHeight: 0 }}>
+              <ThemeBubbleCanvas
+                themes={populatedThemes}
+                contentCounts={contentCounts}
+                onSelect={setSelectedTheme}
+                isHidden={!!selectedTheme}
+              />
             </div>
           </div>
 
-        ) : (
-
+          {selectedTheme && (
           // ── Themed Content Feed ──────────────────────────────────────────
           <div className="h-full overflow-y-auto pb-20">
             <div className="flex flex-col gap-4 px-4 pt-4">
@@ -315,6 +295,8 @@ export default function ExplorePage() {
               ))}
             </div>
           </div>
+          )}
+          </>
         )}
       </div>
 
