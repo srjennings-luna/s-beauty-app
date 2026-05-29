@@ -104,31 +104,51 @@ export default function ExplorePage() {
   // not across the full feed — so a piece legitimately tagged with two
   // themes still shows up in both theme detail screens.
   //
-  // When duplicate docs exist for the same piece (Manual Task #52 in
-  // CLAUDE.md: Spiegel im Spiegel ×2, Adoration of the Magi ×2, Calling
-  // of Saint Matthew ×2, Supper at Emmaus ×2), prefer the instance with
-  // the most theme tags. Rationale: one copy is often tagged more richly
-  // than the other; keeping the richer one preserves cross-theme reach
-  // (the 2-theme version still surfaces in both themes; the 1-theme
-  // duplicate would have surfaced in only one anyway).
+  // Two-pass dedupe. Both passes keep the instance with the most theme
+  // tags (richer copy wins; tie-breaker is first-seen via Map insertion
+  // order).
   //
-  // Real fix is a Sanity cleanup pass — see UX Backlog DUP-01.
+  // Pass 1: same title. Catches records with identical names like
+  // "The Supper at Emmaus" ×2 or "Spiegel im Spiegel" ×2.
+  //
+  // Pass 2: same image asset. Catches records with different titles that
+  // share one uploaded image — e.g., "Casina Pio IV" and "Casino of Pius
+  // IV" (Vatican building, two naming conventions, one image). Title-only
+  // dedupe misses these because the titles legitimately differ.
+  //
+  // Real fix for both is a Sanity cleanup pass — see Manual Task #52 in
+  // CLAUDE.md and UX Backlog DUP-01.
   const filtered = useMemo(() => {
     if (!selectedTheme) return content;
     const themeFiltered = content.filter((i) =>
       i.themes?.some((t) => t._id === selectedTheme._id)
     );
-    const bestByTitle = new Map<string, (typeof themeFiltered)[number]>();
-    for (const item of themeFiltered) {
-      const key = item.title?.toLowerCase().trim() || item._id;
-      const existing = bestByTitle.get(key);
-      const itemThemes = item.themes?.length ?? 0;
-      const existingThemes = existing?.themes?.length ?? -1;
-      if (itemThemes > existingThemes) {
-        bestByTitle.set(key, item);
+
+    const dedupeBy = (
+      items: typeof themeFiltered,
+      keyFn: (item: (typeof themeFiltered)[number]) => string | null,
+    ) => {
+      const best = new Map<string, (typeof themeFiltered)[number]>();
+      for (const item of items) {
+        const key = keyFn(item) ?? `__noKey__${item._id}`;
+        const existing = best.get(key);
+        const itemThemes = item.themes?.length ?? 0;
+        const existingThemes = existing?.themes?.length ?? -1;
+        if (itemThemes > existingThemes) best.set(key, item);
       }
-    }
-    return Array.from(bestByTitle.values());
+      return Array.from(best.values());
+    };
+
+    const byTitle = dedupeBy(themeFiltered, (i) =>
+      i.title ? i.title.toLowerCase().trim() : null,
+    );
+    const byImage = dedupeBy(byTitle, (i) => {
+      if (!i.imageUrl) return null;
+      // Sanity CDN URLs end with "<assetHash>-<dim>.<ext>"; the filename
+      // portion uniquely identifies the uploaded asset.
+      return i.imageUrl.split("?")[0].split("/").pop() ?? null;
+    });
+    return byImage;
   }, [content, selectedTheme]);
 
   const mappable = useMemo(
