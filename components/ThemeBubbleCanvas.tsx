@@ -42,17 +42,19 @@ interface Props {
 }
 
 // ── Physics constants ────────────────────────────────────────────────────────
-// Tuned May 29, 2026 (Brief Polish session) for a calmer, more meditative
-// feel on entrance, walls, and bubble-to-bubble contact. Originals from
-// the prototype are noted inline. Tuning bar: a person in a contemplative
-// state should not feel interrupted by the physics.
-const WALL_RESTITUTION   = 0.12;   // was 0.80 — walls now absorb ~88% of impact
-const BUBBLE_RESTITUTION = 0.35;   // was 0.88 — drag-into-bubble no longer ricochets
-const DAMPING            = 0.978;  // was 0.993 — slows to near-rest in ~2s post-release
+// Tuned May 29, 2026. Originals from the prototype noted inline. Tuning
+// bar: a contemplative pace, but bubbles must read as objects with their
+// own life. First pass overshot on calm (no perceptible bounce, almost no
+// idle drift); this revision walks bubble-to-bubble contact and ambient
+// motion back toward the original feel while keeping walls absorbed and
+// the entrance soft.
+const WALL_RESTITUTION   = 0.12;   // was 0.80 — walls absorb ~88% of impact
+const BUBBLE_RESTITUTION = 0.70;   // was 0.88 (first pass 0.35 killed the bounce)
+const DAMPING            = 0.991;  // was 0.993 (first pass 0.978 stalled idle drift)
 const ENTRANCE_DAMPING   = 0.977;
 const ENTRANCE_DECAY_MS  = 2400;   // was 1600 — longer ramp into normal damping
-const IMPULSE_STRENGTH   = 0.016;  // was 0.022 — gentler random nudges
-const IMPULSE_CHANCE     = 0.005;  // was 0.010 — half the frequency
+const IMPULSE_STRENGTH   = 0.020;  // was 0.022 (first pass 0.016 too gentle)
+const IMPULSE_CHANCE     = 0.009;  // was 0.010 (first pass 0.005 too sparse)
 const SPEED_SCALE        = 0.065;
 const THROW_MULTIPLIER   = 10;     // was 18 — fling release less energetic
 const SEPARATION_FORCE   = 0.52;
