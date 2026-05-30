@@ -332,10 +332,6 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
             </svg>
           </button>
 
-          <span className="text-xs tracking-widest uppercase" style={{ color: C.creamFaint }}>
-            Daily Prompt
-          </span>
-
           <div className="flex items-center gap-3">
             <button
               onClick={() => setFavorited(toggleFavorite(prompt._id))}
