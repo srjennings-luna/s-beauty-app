@@ -218,14 +218,12 @@ export default function ThemeBubbleCanvas({
   // ── Initialize physics state whenever the visible theme set changes ──────
   useEffect(() => {
     const w = canvasWRef.current;
-    // Entrance cluster — upper-left of canvas, scaled to width
-    const entranceBase = { x: w * 0.24, y: 115 };
-    const entranceJitter = [
-      { x:  0, y:   0 }, { x: 20, y: -18 }, { x: -12, y:  22 },
-      { x: 18, y:  12 }, { x: -6, y: -14 }, { x:  14, y:  28 },
-      { x: -16, y:  6 },
-    ];
-    // Spread targets — direction guides for entrance velocities
+    // Spawn positions — bubbles appear at rest at these spots when the
+    // page opens. The idle physics (impulses + breathing + damping)
+    // takes over from there, producing the subtle drift we tuned May 29.
+    // No entrance animation. Sheri's call after three iterations of fade
+    // tuning that never quite settled — the contemplative register reads
+    // better with no ceremony at all.
     const spreadPos = [
       { x: w * 0.26, y: 100 },
       { x: w * 0.73, y:  80 },
@@ -237,18 +235,12 @@ export default function ThemeBubbleCanvas({
     ];
 
     stateRef.current = visibleThemes.map(({ baseR }, i) => {
-      const jitter = entranceJitter[i % entranceJitter.length];
-      const ex = entranceBase.x + jitter.x;
-      const ey = entranceBase.y + jitter.y;
-      const target = spreadPos[i % spreadPos.length];
-      const dx = target.x - ex;
-      const dy = target.y - ey;
-      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      const pos = spreadPos[i % spreadPos.length];
       return {
-        x: ex,
-        y: ey,
-        vx: (dx / dist) * ENTRANCE_SPEED,
-        vy: (dy / dist) * ENTRANCE_SPEED,
+        x: pos.x,
+        y: pos.y,
+        vx: 0,
+        vy: 0,
         baseR,
         r: baseR,
         maxR: Math.ceil(baseR * (1 + BREATH_VARIATION)) + 1,
@@ -264,24 +256,10 @@ export default function ThemeBubbleCanvas({
       };
     });
 
-    // Staggered fade-in. Gentle opacity ramp so each bubble settles into
-    // view rather than appearing all at once.
-    bubbleRefs.current.forEach((el, i) => {
-      if (!el) return;
-      el.style.opacity = "0";
-      // ease-out (slow start, gentle arrival) reads as "settling in"
-      // rather than the default "ease" which front-loads the change and
-      // feels like the bubble pops into view.
-      el.style.transition = `opacity ${ENTRANCE_FADE_MS}ms ease-out`;
-      setTimeout(() => {
-        if (!el) return;
-        el.style.opacity = "1";
-        setTimeout(() => {
-          if (el) el.style.transition = "none";
-        }, ENTRANCE_FADE_MS + 30);
-      }, i * ENTRANCE_STAGGER);
-    });
-
+    // ENTRANCE_DAMPING applies for the first ENTRANCE_DECAY_MS to settle
+    // any residual motion. With vx/vy initialized to 0 this is a no-op
+    // visually, but we keep the timer so the damping handoff logic
+    // elsewhere in the rAF loop continues to behave consistently.
     entranceEndTimeRef.current =
       (typeof performance !== "undefined" ? performance.now() : Date.now()) +
       ENTRANCE_DECAY_MS;
@@ -650,11 +628,6 @@ export default function ThemeBubbleCanvas({
               cursor: "grab",
               textAlign: "center",
               padding: 0,
-              // Start invisible so the bubble never paints at full opacity
-              // before the staggered fade-in runs in the entrance useEffect.
-              // The effect mutates this via ref to "1" once its setTimeout
-              // fires, then transition: none locks it in.
-              opacity: 0,
               userSelect: "none",
               WebkitTapHighlightColor: "transparent",
               willChange: "transform",
