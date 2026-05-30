@@ -273,7 +273,9 @@ export default function ExplorePage() {
                   fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
                   fontSize: 14,
                   fontStyle: "italic",
-                  color: "#6e8e7e",
+                  // Editorial muted; matches the landing tagline at line ~370.
+                  // Token --color-editorial-muted to be added in a later sweep.
+                  color: "#978b7d",
                   lineHeight: 1.55,
                   marginTop: 20,
                   maxWidth: 270,
