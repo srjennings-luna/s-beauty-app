@@ -651,9 +651,9 @@ function ViewToggle({
           viewBox="0 0 24 24"
           aria-hidden="true"
         >
-          <circle cx="8.5"  cy="10" r="4.5" fill="#16110d" fillOpacity="0.3" />
-          <circle cx="15.5" cy="10" r="4.5" fill="#16110d" fillOpacity="0.55" />
-          <circle cx="12"   cy="15.5" r="4.5" fill="#16110d" fillOpacity="1" />
+          <circle cx="8.5"  cy="10" r="4.5" fill="#4a7a62" fillOpacity="0.3" />
+          <circle cx="15.5" cy="10" r="4.5" fill="#4a7a62" fillOpacity="0.55" />
+          <circle cx="12"   cy="15.5" r="4.5" fill="#4a7a62" fillOpacity="1" />
         </svg>
       </button>
       <button
@@ -673,9 +673,9 @@ function ViewToggle({
           viewBox="0 0 24 24"
           aria-hidden="true"
         >
-          <rect x="4" y="6"  width="16" height="2.2" fill="#16110d" />
-          <rect x="4" y="11" width="16" height="2.2" fill="#16110d" />
-          <rect x="4" y="16" width="16" height="2.2" fill="#16110d" />
+          <rect x="4" y="6"  width="16" height="2.2" fill="#4a7a62" fillOpacity="0.3" />
+          <rect x="4" y="11" width="16" height="2.2" fill="#4a7a62" fillOpacity="0.55" />
+          <rect x="4" y="16" width="16" height="2.2" fill="#4a7a62" fillOpacity="1" />
         </svg>
       </button>
     </div>
@@ -683,11 +683,13 @@ function ViewToggle({
 }
 
 // ── ThemeListView ─────────────────────────────────────────────────────────────
-// Flush-edge list of theme rows. Each row: fresco palette color dot + theme
-// title (Montserrat) + chevron right + hairline bottom border. Excludes
-// empty themes (handled upstream by populatedThemes) and Music (no content
-// behind it per CLAUDE.md). Tapping a row enters the same theme detail as
-// tapping a bubble.
+// Card-style list. Each card: cream surface elevated off parchment with a
+// soft shadow, fresco palette color dot, theme title in Montserrat, chevron
+// right. Sharp corners (design system rule) and color dot kept from the
+// flush-row pass — only the row container moves to a card. Excludes empty
+// themes (handled upstream by populatedThemes) and Music (no content behind
+// it per CLAUDE.md). Tapping a card enters the same theme detail as tapping
+// a bubble.
 function ThemeListView({
   themes,
   onSelect,
@@ -696,7 +698,10 @@ function ThemeListView({
   onSelect: (t: Theme) => void;
 }) {
   return (
-    <div className="h-full overflow-y-auto" style={{ paddingBottom: "5rem" }}>
+    <div
+      className="h-full overflow-y-auto"
+      style={{ padding: "16px 20px 5rem" }}
+    >
       {themes.map((theme) => {
         const dotColor = getThemeColor(theme.title ?? "", theme.color ?? "#7a9a8a");
         return (
@@ -706,13 +711,12 @@ function ThemeListView({
             onClick={() => onSelect(theme)}
             className="w-full text-left flex items-center justify-between"
             style={{
-              padding: "20px 22px",
-              borderBottom: "0.5px solid rgba(22,17,13,0.12)",
-              background: "transparent",
-              border: "none",
-              borderTop: "none",
-              borderLeft: "none",
-              borderRight: "none",
+              padding: "18px 20px",
+              marginBottom: 12,
+              background: "#fffaf0",
+              border: "0.5px solid rgba(22,17,13,0.10)",
+              boxShadow: "0 1px 3px rgba(22,17,13,0.06)",
+              borderRadius: 0,
               cursor: "pointer",
             }}
             aria-label={`Open ${theme.title}`}

@@ -48,7 +48,10 @@ interface Props {
 // idle drift); this revision walks bubble-to-bubble contact and ambient
 // motion back toward the original feel while keeping walls absorbed and
 // the entrance soft.
-const WALL_RESTITUTION   = 0.12;   // was 0.80 — walls absorb ~88% of impact
+// Walls and bubble-to-bubble within 0.05 of each other so the canvas
+// feels like one material. Walls slightly bouncier than bubbles per
+// Sheri's call after device testing.
+const WALL_RESTITUTION   = 0.75;   // was 0.80 (first pass 0.12 was too dead)
 const BUBBLE_RESTITUTION = 0.70;   // was 0.88 (first pass 0.35 killed the bounce)
 const DAMPING            = 0.991;  // was 0.993 (first pass 0.978 stalled idle drift)
 const ENTRANCE_DAMPING   = 0.977;
