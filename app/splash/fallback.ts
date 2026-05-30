@@ -67,7 +67,7 @@ export const FALLBACK_SCREENS: SplashScreen[] = [
     screenNumber: 4,
     screenTitle: "Hook",
     blocks: [
-      { _type: "heading", _key: "f4-heading", text: "You already know this feeling." },
+      { _type: "heading", _key: "f4-heading", text: "Ever had that feeling?" },
       { _type: "goldRule", _key: "f4-rule" },
       {
         _type: "body",
