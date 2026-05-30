@@ -10,8 +10,8 @@ export const FALLBACK_SCREENS: SplashScreen[] = [
     screenNumber: 1,
     screenTitle: "Brand Identity",
     blocks: [
-      { _type: "wordmark", _key: "f1-wordmark", text: "KALLOS" },
-      { _type: "pronunciation", _key: "f1-pronunciation", text: "kal · os" },
+      { _type: "wordmark", _key: "f1-wordmark", text: "CONTUERI" },
+      { _type: "pronunciation", _key: "f1-pronunciation", text: "kon · too · air · ee" },
       { _type: "goldRule", _key: "f1-rule" },
       { _type: "quote", _key: "f1-quote", text: "Beauty will save the world." },
       {
@@ -39,7 +39,7 @@ export const FALLBACK_SCREENS: SplashScreen[] = [
         _key: "f2-body2",
         text: "The tradition that produced the greatest art in the Western world kept all three in the same room.",
       },
-      { _type: "tagline", _key: "f2-tagline", text: "KALLOS is built on that." },
+      { _type: "tagline", _key: "f2-tagline", text: "CONTUERI is built on that." },
     ],
   },
   {
@@ -74,7 +74,7 @@ export const FALLBACK_SCREENS: SplashScreen[] = [
         _key: "f4-body1",
         text: "The painting you can’t look away from. The piece of music that opens something in you. The line from a book you’ve carried for years.",
       },
-      { _type: "body", _key: "f4-body2", text: "KALLOS is built for exactly that." },
+      { _type: "body", _key: "f4-body2", text: "CONTUERI is built for exactly that." },
     ],
   },
   {
