@@ -33,7 +33,7 @@ export const VOICE_RULES: VoiceRule[] = [
     pattern: /\bjourney\b/gi,
     label: '"journey" (noun)',
     severity: "warn",
-    suggestion: "Banned voice word in KALLOS content. Find a more specific noun.",
+    suggestion: "Banned voice word in CONTUERI content. Find a more specific noun.",
   },
   {
     id: "word-sacred",

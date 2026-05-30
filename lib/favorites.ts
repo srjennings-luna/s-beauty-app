@@ -1,15 +1,26 @@
 import { Favorite, FavoriteItemType } from "./types";
 
-const STORAGE_KEY = "kallos-favorites";
-const LEGACY_KEY = "seeking-beauty-favorites";
+const STORAGE_KEY = "contueri-favorites";
+const LEGACY_KALLOS_KEY = "kallos-favorites";
+const LEGACY_SEEKING_KEY = "seeking-beauty-favorites";
 
-// Migrate favorites from old key to new key (runs once per session)
+// Migrate favorites from older keys to the current key (runs once per session).
+// Order: seeking-beauty -> kallos -> contueri. Each migration runs only if the
+// next key is unset, so users carry favorites forward through every rename.
 function migrate(): void {
   if (typeof window === "undefined") return;
-  const legacy = localStorage.getItem(LEGACY_KEY);
-  if (legacy && !localStorage.getItem(STORAGE_KEY)) {
-    localStorage.setItem(STORAGE_KEY, legacy);
-    localStorage.removeItem(LEGACY_KEY);
+  if (!localStorage.getItem(STORAGE_KEY)) {
+    const kallos = localStorage.getItem(LEGACY_KALLOS_KEY);
+    if (kallos) {
+      localStorage.setItem(STORAGE_KEY, kallos);
+      localStorage.removeItem(LEGACY_KALLOS_KEY);
+      return;
+    }
+    const seeking = localStorage.getItem(LEGACY_SEEKING_KEY);
+    if (seeking) {
+      localStorage.setItem(STORAGE_KEY, seeking);
+      localStorage.removeItem(LEGACY_SEEKING_KEY);
+    }
   }
 }
 

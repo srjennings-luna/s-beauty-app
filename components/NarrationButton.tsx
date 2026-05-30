@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef } from "react";
 
 // Dispatched when narration starts — audio players pause so two tracks never overlap.
-export const NARRATION_START_EVENT = "kallos-narration-start";
+export const NARRATION_START_EVENT = "contueri-narration-start";
 // Dispatched when narration ends (naturally or manually) — audio players resume.
-export const NARRATION_END_EVENT = "kallos-narration-end";
+export const NARRATION_END_EVENT = "contueri-narration-end";
 
 interface NarrationButtonProps {
   audioUrl?: string;

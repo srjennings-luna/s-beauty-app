@@ -77,12 +77,12 @@ function BreatheOverlay() {
   return (
     <>
       <style>{`
-        @keyframes kallosBreathe {
+        @keyframes contueriBreathe {
           0%, 100% { transform: scale(1); opacity: 0.3; }
           50%       { transform: scale(4); opacity: 0.8; }
         }
-        .kallos-breathe-dot {
-          animation: kallosBreathe 8s ease-in-out infinite;
+        .contueri-breathe-dot {
+          animation: contueriBreathe 8s ease-in-out infinite;
         }
       `}</style>
       <div
@@ -101,7 +101,7 @@ function BreatheOverlay() {
           }}
         >
           <div
-            className="kallos-breathe-dot"
+            className="contueri-breathe-dot"
             style={{
               width: 10,
               height: 10,
@@ -127,7 +127,7 @@ function truncateToSentences(text: string, maxChars = 220): string {
   return lastEnd > 60 ? text.slice(0, lastEnd + 1) : slice.trimEnd() + "…";
 }
 
-// ── KALLOS espresso palette ───────────────────────────────────────────────────
+// ── CONTUERI espresso palette ─────────────────────────────────────────────────
 const C = {
   bg: "#16110d",
   bgGradient: WHISPER_GRADIENT,
@@ -905,7 +905,7 @@ function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete, journeyTit
     const url = journeySlug
       ? `${window.location.origin}/journeys/${journeySlug}`
       : window.location.href;
-    const title = journeyTitle ?? "A Journey on KALLOS";
+    const title = journeyTitle ?? "A Journey on CONTUERI";
 
     if (navigator.share) {
       navigator.share({ title, url }).catch(() => {});
