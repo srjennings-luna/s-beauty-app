@@ -313,6 +313,11 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
     }
   };
 
+  // Primary CTA: ghost style — gilt outline + gilt text, transparent fill.
+  // Earned-feel button rather than a filled gradient shouting the action.
+  // Pairs with the secondary CTA below to keep both reading as actions in
+  // the same gilt thread (both routes land on /prompt today, just framed
+  // differently) without one drowning out the other.
   const renderPrimaryCta = (
     screenIdx: number,
     block: Extract<SplashBlock, { _type: "primaryCta" }>,
@@ -323,8 +328,9 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
       onClick={() => handleCta(block.linkPath)}
       className="w-full active:scale-95 font-montserrat"
       style={{
-        background: CTA_GRADIENT,
-        color: E,
+        background: "transparent",
+        color: G,
+        border: `1.5px solid ${G}`,
         fontSize: "0.75rem",
         fontWeight: 700,
         letterSpacing: "0.12em",
@@ -338,6 +344,9 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
     </button>
   );
 
+  // Secondary CTA: gilt text at lower opacity with a trailing chevron
+  // so it still reads as an action (not body copy) while sitting clearly
+  // below the primary in visual weight.
   const renderSecondaryCta = (
     screenIdx: number,
     block: Extract<SplashBlock, { _type: "secondaryCta" }>,
@@ -349,13 +358,13 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
       className="w-full py-3 font-montserrat"
       style={{
         fontSize: "0.65rem",
-        color: `rgba(${G_RGB},0.55)`,
+        color: `rgba(${G_RGB},0.4)`,
         letterSpacing: "0.1em",
         textTransform: "uppercase",
         ...animStyle(screenIdx, blockIdx),
       }}
     >
-      {block.label}
+      {block.label} <span style={{ marginLeft: 4 }}>→</span>
     </button>
   );
 
