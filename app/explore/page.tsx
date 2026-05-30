@@ -651,9 +651,11 @@ function ViewToggle({
           viewBox="0 0 24 24"
           aria-hidden="true"
         >
-          <circle cx="8.5"  cy="10" r="4.5" fill="#4a7a62" fillOpacity="0.3" />
-          <circle cx="15.5" cy="10" r="4.5" fill="#4a7a62" fillOpacity="0.55" />
-          <circle cx="12"   cy="15.5" r="4.5" fill="#4a7a62" fillOpacity="1" />
+          {/* Two solid sage bubbles: large lower-left, small upper-right.
+              Reads as "bubbles, plural" at small icon size without the
+              three-overlapping-filled-circles blob problem. */}
+          <circle cx="9"  cy="14" r="5.5" fill="#4a7a62" />
+          <circle cx="17" cy="8"  r="2.8" fill="#4a7a62" />
         </svg>
       </button>
       <button
@@ -673,9 +675,12 @@ function ViewToggle({
           viewBox="0 0 24 24"
           aria-hidden="true"
         >
-          <rect x="4" y="6"  width="16" height="2.2" fill="#4a7a62" fillOpacity="0.3" />
-          <rect x="4" y="11" width="16" height="2.2" fill="#4a7a62" fillOpacity="0.55" />
-          <rect x="4" y="16" width="16" height="2.2" fill="#4a7a62" fillOpacity="1" />
+          {/* Three solid sage bars, no opacity ladder. The earlier 0.3 /
+              0.55 / 1.0 ladder read as a fade-out gradient rather than
+              "three list rows." Solid color, three identical bars. */}
+          <rect x="4" y="6"  width="16" height="2.2" fill="#4a7a62" />
+          <rect x="4" y="11" width="16" height="2.2" fill="#4a7a62" />
+          <rect x="4" y="16" width="16" height="2.2" fill="#4a7a62" />
         </svg>
       </button>
     </div>
