@@ -4,9 +4,15 @@ import { useEffect, useState, ReactNode } from "react";
 
 interface FadeUpProps {
   children: ReactNode;
-  /** Delay in ms before the animation starts — use multiples of 60 for staggering */
+  /** Delay in ms before the animation starts. Use multiples of 60 for staggering. */
   delay?: number;
   className?: string;
+  /**
+   * Optional inline styles merged with the animation styles. Useful when a
+   * caller needs paddingTop with env(safe-area-inset-top) or any other
+   * dynamic value Tailwind cannot express. Caller styles win on collision.
+   */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -20,6 +26,7 @@ export default function FadeUp({
   children,
   delay = 0,
   className = "",
+  style,
 }: FadeUpProps) {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -36,6 +43,7 @@ export default function FadeUp({
         transform: isVisible ? "translateY(0)" : "translateY(12px)",
         transition: "opacity 400ms ease, transform 400ms ease",
         willChange: "opacity, transform",
+        ...style,
       }}
     >
       {children}

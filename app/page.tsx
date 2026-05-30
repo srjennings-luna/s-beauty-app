@@ -87,7 +87,11 @@ export default function TodayPage() {
       <div className="min-h-screen bg-parchment pb-28">
 
         {/* Header */}
-        <FadeUp delay={0} className="px-5 pt-12 pb-4">
+        <FadeUp
+          delay={0}
+          className="px-5 pb-4"
+          style={{ paddingTop: "env(safe-area-inset-top, 16px)" }}
+        >
           <p className="text-blue-mist text-xs tracking-widest uppercase mb-1">{today}</p>
           <h1 className="font-serif-elegant text-3xl text-near-black tracking-widest uppercase">
             KALLOS

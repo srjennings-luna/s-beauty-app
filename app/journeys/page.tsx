@@ -290,7 +290,10 @@ export default function JourneysPage() {
       <div className="min-h-screen bg-parchment pb-28">
 
         {/* Page header */}
-        <div className="px-5 pt-12 pb-6">
+        <div
+          className="px-5 pb-6"
+          style={{ paddingTop: "env(safe-area-inset-top, 16px)" }}
+        >
           <h1 className="text-3xl font-bold text-near-black mb-1">Journeys</h1>
           <p className="text-sage-muted text-sm">
             Curated explorations of beauty and truth

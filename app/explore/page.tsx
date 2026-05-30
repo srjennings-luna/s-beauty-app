@@ -199,8 +199,11 @@ export default function ExplorePage() {
         <>
           {/* Zone 1 — slim nav chrome */}
           <div
-            className="bg-parchment flex-shrink-0 pt-12"
-            style={{ borderBottom: "0.5px solid rgba(22,17,13,0.18)" }}
+            className="bg-parchment flex-shrink-0"
+            style={{
+              borderBottom: "0.5px solid rgba(22,17,13,0.18)",
+              paddingTop: "env(safe-area-inset-top, 16px)",
+            }}
           >
             <div
               className="flex items-center justify-between"
@@ -293,8 +296,11 @@ export default function ExplorePage() {
         <>
           {/* Zone 1: slim nav bar */}
           <div
-            className="bg-parchment flex-shrink-0 pt-12"
-            style={{ borderBottom: "0.5px solid rgba(22,17,13,0.18)" }}
+            className="bg-parchment flex-shrink-0"
+            style={{
+              borderBottom: "0.5px solid rgba(22,17,13,0.18)",
+              paddingTop: "env(safe-area-inset-top, 16px)",
+            }}
           >
             <div
               className="flex items-center justify-between"

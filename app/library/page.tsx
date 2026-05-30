@@ -211,7 +211,10 @@ export default function LibraryPage() {
     <PageTransition>
       <div className="min-h-screen bg-parchment">
         {/* Header */}
-        <div className="px-5 pt-12 pb-6">
+        <div
+          className="px-5 pb-6"
+          style={{ paddingTop: "env(safe-area-inset-top, 16px)" }}
+        >
           <h1 className="text-3xl font-bold text-near-black mb-1">Library</h1>
           <p className="text-sage-muted text-sm">{" "}</p>
         </div>
