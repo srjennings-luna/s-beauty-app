@@ -67,7 +67,7 @@ const MIN_SPEED          = 0.06;
 const BREATH_VARIATION   = 0.04;
 const ENTRANCE_SPEED     = 0.6;    // was 2.5 original / 1.5 first tune — calm drift in
 const ENTRANCE_STAGGER   = 280;    // was 130 original / 200 first tune — more space between bubbles
-const ENTRANCE_FADE_MS   = 800;    // was 350 original / 500 first tune — opacity ramp covers more of the motion
+const ENTRANCE_FADE_MS   = 1500;   // was 350 -> 500 -> 800 -> 1500. Slower fade so the bubble settles in rather than appearing.
 
 // Default canvas dimensions before measurement — typical phone viewport.
 const DEFAULT_W = 390;
@@ -269,7 +269,10 @@ export default function ThemeBubbleCanvas({
     bubbleRefs.current.forEach((el, i) => {
       if (!el) return;
       el.style.opacity = "0";
-      el.style.transition = `opacity ${ENTRANCE_FADE_MS}ms ease`;
+      // ease-out (slow start, gentle arrival) reads as "settling in"
+      // rather than the default "ease" which front-loads the change and
+      // feels like the bubble pops into view.
+      el.style.transition = `opacity ${ENTRANCE_FADE_MS}ms ease-out`;
       setTimeout(() => {
         if (!el) return;
         el.style.opacity = "1";
