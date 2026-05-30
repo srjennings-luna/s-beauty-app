@@ -63,7 +63,7 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
 
   const markSession = () => {
     try {
-      localStorage.setItem("kallos-onboarded", "true");
+      localStorage.setItem("contueri-onboarded", "true");
     } catch {
       // Private mode / storage blocked — splash will show again next visit. Not fatal.
     }
@@ -126,7 +126,7 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
         }}
       >
         <div
-          className="kallos-nav-ring"
+          className="contueri-nav-ring"
           style={{
             position: "absolute",
             inset: -8,
@@ -367,11 +367,11 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
       onTouchEnd={handleTouchEnd}
     >
       <style>{`
-        @keyframes kallosNavBreathe {
+        @keyframes contueriNavBreathe {
           0%, 100% { transform: scale(1); opacity: 0.45; }
           50%       { transform: scale(1.55); opacity: 0; }
         }
-        .kallos-nav-ring { animation: kallosNavBreathe 3.5s ease-in-out infinite; }
+        .contueri-nav-ring { animation: contueriNavBreathe 3.5s ease-in-out infinite; }
       `}</style>
 
       {/* Progress bar */}
