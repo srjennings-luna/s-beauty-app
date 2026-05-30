@@ -66,10 +66,10 @@ async function sharePrompt(prompt: DailyPrompt) {
   // share rather than serving a stale cached card from a previous share of the same URL.
   // The app ignores the v param — only date is used for content lookup.
   const shareUrl = `${window.location.origin}/prompt?date=${prompt.date}&v=${Date.now()}`;
-  const text = `"${prompt.promptQuestion}"\n\n— KALLOS`;
+  const text = `"${prompt.promptQuestion}"\n\n— CONTUERI`;
   if (navigator.share) {
     try {
-      await navigator.share({ title: "Pause & Ponder — KALLOS", text, url: shareUrl });
+      await navigator.share({ title: "Pause & Ponder — CONTUERI", text, url: shareUrl });
     } catch (_) { /* dismissed */ }
   } else {
     await navigator.clipboard.writeText(`${text}\n\n${shareUrl}`);

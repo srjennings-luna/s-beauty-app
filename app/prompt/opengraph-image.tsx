@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { getDailyPrompt } from "@/lib/sanity";
 
 export const runtime = "nodejs";
-export const alt = "Pause & Ponder — KALLOS";
+export const alt = "Pause & Ponder — CONTUERI";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -58,7 +58,7 @@ export default async function Image({
           }}
         />
 
-        {/* KALLOS wordmark — bottom left */}
+        {/* CONTUERI wordmark — bottom left */}
         <div
           style={{
             position: "absolute",
@@ -79,7 +79,7 @@ export default async function Image({
               textTransform: "uppercase",
             }}
           >
-            KALLOS
+            CONTUERI
           </span>
           <span
             style={{

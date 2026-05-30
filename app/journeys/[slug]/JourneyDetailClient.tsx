@@ -329,7 +329,7 @@ export default function JourneyDetailClient({
                   onOpen={() => openDay(day)}
                   onShare={() => {
                     const url = `${window.location.origin}/journeys/${slug}?day=${day.dayNumber}`;
-                    const title = `Day ${day.dayNumber} of ${journey.title} — KALLOS`;
+                    const title = `Day ${day.dayNumber} of ${journey.title} — CONTUERI`;
                     if (navigator.share) {
                       navigator.share({ title, url }).catch(() => {});
                     } else {
