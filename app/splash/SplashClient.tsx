@@ -344,9 +344,10 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
     </button>
   );
 
-  // Secondary CTA: gilt text at lower opacity with a trailing chevron
-  // so it still reads as an action (not body copy) while sitting clearly
-  // below the primary in visual weight.
+  // Secondary CTA: gilt text at lower opacity. Sanity labels already
+  // include their own trailing arrow (Sheri's convention), so we render
+  // the label as-is. The lowered opacity keeps it visually below the
+  // primary while still reading as an action.
   const renderSecondaryCta = (
     screenIdx: number,
     block: Extract<SplashBlock, { _type: "secondaryCta" }>,
@@ -364,7 +365,7 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
         ...animStyle(screenIdx, blockIdx),
       }}
     >
-      {block.label} <span style={{ marginLeft: 4 }}>→</span>
+      {block.label}
     </button>
   );
 
