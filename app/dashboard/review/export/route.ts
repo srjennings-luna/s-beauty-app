@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
       .join("\r\n");
 
   const today = new Date().toISOString().slice(0, 10);
-  const filename = `kallos-review-${today}.csv`;
+  const filename = `contueri-review-${today}.csv`;
 
   return new Response(csv, {
     headers: {

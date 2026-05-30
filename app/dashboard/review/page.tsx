@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getReviewGridRows } from "@/lib/sanity";
 import ReviewGridClient from "./ReviewGridClient";
 
-// KALLOS content review dashboard.
+// CONTUERI content review dashboard.
 // Server-rendered, revalidated every 60s, gated by DASHBOARD_ENABLED env var.
 // All data fetched server-side once and passed to the client component for
 // interactive filtering/sorting/expansion. See
@@ -14,7 +14,7 @@ import ReviewGridClient from "./ReviewGridClient";
 
 export const revalidate = 60;
 export const metadata = {
-  title: "KALLOS · Content Review",
+  title: "CONTUERI · Content Review",
   robots: "noindex, nofollow",
 };
 

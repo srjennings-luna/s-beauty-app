@@ -10,7 +10,7 @@ import { getReviewGridRowById, type GridRow } from "@/lib/sanity";
 
 export const revalidate = 60;
 export const metadata = {
-  title: "KALLOS · Content Review · Record",
+  title: "CONTUERI · Content Review · Record",
   robots: "noindex, nofollow",
 };
 

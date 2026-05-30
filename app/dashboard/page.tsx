@@ -11,12 +11,12 @@ import TRTableClient from "./TRTableClient";
 import ContentItemsClient from "./ContentItemsClient";
 import AudioTableClient from "./AudioTableClient";
 
-// KALLOS content dashboard.
+// CONTUERI content dashboard.
 // Server-rendered, revalidated every 60s, gated by DASHBOARD_ENABLED env var.
 // All data fetched server-side. See content-docs/KALLOS-CC-Audit-Brief.html for scope.
 
 export const revalidate = 60;
-export const metadata = { title: "KALLOS — Content Dashboard", robots: "noindex, nofollow" };
+export const metadata = { title: "CONTUERI — Content Dashboard", robots: "noindex, nofollow" };
 
 // Schema audit manually maintained — see Task 1 output for underlying detail.
 const SCHEMA_HEALTH = {
@@ -457,7 +457,7 @@ export default async function DashboardPage() {
     <div className="min-h-screen bg-parchment text-[#2C2C2C] pb-32">
       {/* Cover */}
       <div className="bg-espresso text-parchment py-12 px-6 text-center">
-        <div className="font-sans text-[11px] tracking-widest uppercase text-sacred-gold mb-2">KALLOS · Content Dashboard</div>
+        <div className="font-sans text-[11px] tracking-widest uppercase text-sacred-gold mb-2">CONTUERI · Content Dashboard</div>
         <h1 className="font-serif text-3xl font-light tracking-wider">Live content state</h1>
         <div className="text-xs italic text-[#bfb8aa] mt-2">Queries live at page load · Revalidated every 60 seconds</div>
         <div className="text-[10px] text-[#7a7062] mt-3">Gated by DASHBOARD_ENABLED env var · noindex</div>
