@@ -27,7 +27,7 @@ export default function TodayPage() {
       setHasOnboarded(true);
       return;
     }
-    const onboarded = localStorage.getItem("kallos-onboarded");
+    const onboarded = localStorage.getItem("contueri-onboarded");
     if (!onboarded) {
       router.push("/splash");
     } else {
@@ -94,7 +94,7 @@ export default function TodayPage() {
         >
           <p className="text-blue-mist text-xs tracking-widest uppercase mb-1">{today}</p>
           <h1 className="font-serif-elegant text-3xl text-near-black tracking-widest uppercase">
-            KALLOS
+            CONTUERI
           </h1>
         </FadeUp>
 
