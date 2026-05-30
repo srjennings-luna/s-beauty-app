@@ -527,7 +527,7 @@ export default function ExplorePage() {
                             fontFamily: '"Cormorant Garamond", Georgia, serif',
                             fontSize: 13,
                             fontStyle: "italic",
-                            color: "#3d3530",
+                            color: "var(--color-warm-dark)",
                             lineHeight: 1.65,
                             display: "-webkit-box",
                             WebkitLineClamp: 3,

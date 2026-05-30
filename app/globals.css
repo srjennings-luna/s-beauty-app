@@ -25,6 +25,7 @@
   --color-espresso: #16110d;        /* immersive screen background */
   --color-near-black: #1a1a1a;      /* primary text on parchment */
   --color-cream: rgba(253,246,232,0.88); /* primary text on espresso */
+  --color-warm-dark: #3d3530;       /* Cormorant italic excerpt on editorial cards */
 
   --color-sage: #4a7a62;            /* active states, nav, labels, progress */
   --color-sage-muted: #7a9a8a;      /* secondary text — replaces all gray/white-opacity */
