@@ -107,7 +107,15 @@ function normalizeThemeName(s: string): string {
     .trim();
 }
 
-function getThemeColor(themeTitle: string, fallback: string): string {
+/**
+ * Resolve a theme's bubble color. Looks up the Variant fresco palette
+ * override by normalized name; falls back to whatever color was provided
+ * (typically theme.color from Sanity). Exported so the list-view rows
+ * can render the same color dot as the corresponding bubble while
+ * Sanity theme.color drifts behind the deepened palette. Will be
+ * obsolete once Tech Debt item 1 lands (overrides moved to Sanity).
+ */
+export function getThemeColor(themeTitle: string, fallback: string): string {
   const norm = normalizeThemeName(themeTitle);
   if (THEME_COLOR_OVERRIDES[norm]) return THEME_COLOR_OVERRIDES[norm];
   // Partial match — "home restless heart" contains "restless heart" → match

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { getAllContentItems, getThemes } from "@/lib/sanity";
 import type { ContentItem, Theme, ContentType, Artwork, LocationType } from "@/lib/types";
 import ArtworkViewer from "@/components/ArtworkViewer";
-import ThemeBubbleCanvas from "@/components/ThemeBubbleCanvas";
+import ThemeBubbleCanvas, { getThemeColor } from "@/components/ThemeBubbleCanvas";
 
 // Dynamically import map (no SSR)
 const GlobalMap = dynamic(() => import("@/components/GlobalMap"), {
@@ -80,6 +80,18 @@ export default function ExplorePage() {
   const [selectedTheme, setSelectedTheme] = useState<Theme | null>(null);
   const [showMap, setShowMap] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Artwork | null>(null);
+
+  // Bubble vs list view on the landing screen. Defaults to bubbles unless
+  // the user has prefers-reduced-motion set, in which case list is more
+  // appropriate (no physics, scannable, accessible). Session state only;
+  // not persisted to localStorage so a fresh visit re-evaluates the
+  // motion preference and starts from the same baseline.
+  const [viewMode, setViewMode] = useState<"bubbles" | "list">("bubbles");
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mq.matches) setViewMode("list");
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -343,40 +355,53 @@ export default function ExplorePage() {
               </button>
             </div>
           </div>
-          {/* Zone 2: editorial header — Explore + tagline, centered */}
+          {/* Zone 2: editorial header — Explore + tagline (centered), then
+              a right-aligned bubbles/list toggle row below the tagline.
+              Toggle hides on the map view; otherwise present whenever the
+              landing is showing. */}
           <div
-            className="bg-parchment text-center flex-shrink-0"
+            className="bg-parchment flex-shrink-0"
             style={{
-              padding: "24px 22px 22px",
+              padding: "24px 22px 18px",
               borderBottom: "0.5px solid rgba(22,17,13,0.22)",
             }}
           >
-            <h1
-              style={{
-                fontFamily: '"Cormorant Garamond", Georgia, serif',
-                fontSize: 40,
-                fontWeight: 500,
-                color: "#1a1a1a",
-                letterSpacing: "0.5px",
-                lineHeight: 1,
-                margin: 0,
-              }}
-            >
-              {headerTitle}
-            </h1>
-            {!showMap && (
-              <p
+            <div className="text-center">
+              <h1
                 style={{
                   fontFamily: '"Cormorant Garamond", Georgia, serif',
-                  fontSize: 16,
-                  color: "#978b7d",
-                  fontStyle: "italic",
-                  fontWeight: 400,
-                  margin: "7px 0 0",
+                  fontSize: 40,
+                  fontWeight: 500,
+                  color: "#1a1a1a",
+                  letterSpacing: "0.5px",
+                  lineHeight: 1,
+                  margin: 0,
                 }}
               >
-                What are you drawn to?
-              </p>
+                {headerTitle}
+              </h1>
+              {!showMap && (
+                <p
+                  style={{
+                    fontFamily: '"Cormorant Garamond", Georgia, serif',
+                    fontSize: 16,
+                    color: "#978b7d",
+                    fontStyle: "italic",
+                    fontWeight: 400,
+                    margin: "7px 0 0",
+                  }}
+                >
+                  What are you drawn to?
+                </p>
+              )}
+            </div>
+            {!showMap && (
+              <div
+                className="flex justify-end"
+                style={{ marginTop: 14 }}
+              >
+                <ViewToggle viewMode={viewMode} onChange={setViewMode} />
+              </div>
             )}
           </div>
         </>
@@ -412,25 +437,43 @@ export default function ExplorePage() {
         ) : (
           <>
           {/* ── Bubble Landing ──────────────────────────────────────────────
-              Always mounted (while not in map view) so the physics state
-              survives the trip into a theme detail. Hidden via display:none
-              when a theme is selected; the canvas pauses its rAF loop in
-              that state so we don't burn battery on an off-screen sim. */}
-          <div
-            style={{
-              display: selectedTheme ? "none" : "block",
-              position: "absolute",
-              inset: 0,
-              paddingBottom: "5rem",
-            }}
-          >
-            <ThemeBubbleCanvas
+              Mounted whenever the user is on bubbles mode and not in map
+              view. Hidden via display:none when a theme is selected so the
+              physics state survives the trip into a theme detail. Canvas
+              pauses its rAF loop while hidden. When the user toggles to
+              list view we fully unmount the canvas — physics state resets
+              on next return to bubbles, which is fine (the entrance is
+              now calm enough that it does not feel jarring). */}
+          {viewMode === "bubbles" && (
+            <div
+              style={{
+                display: selectedTheme ? "none" : "block",
+                position: "absolute",
+                inset: 0,
+                paddingBottom: "5rem",
+              }}
+            >
+              <ThemeBubbleCanvas
+                themes={populatedThemes}
+                contentCounts={contentCounts}
+                onSelect={setSelectedTheme}
+                isHidden={!!selectedTheme}
+              />
+            </div>
+          )}
+
+          {/* ── List Landing ────────────────────────────────────────────────
+              Quieter alternative to the bubble canvas. One row per theme,
+              fresco color dot on the left, theme name in Montserrat,
+              chevron right, hairline divider. Defaults on for users with
+              prefers-reduced-motion. Tapping a row enters the same theme
+              detail as tapping a bubble. */}
+          {viewMode === "list" && !selectedTheme && (
+            <ThemeListView
               themes={populatedThemes}
-              contentCounts={contentCounts}
               onSelect={setSelectedTheme}
-              isHidden={!!selectedTheme}
             />
-          </div>
+          )}
 
           {selectedTheme && (
           // ── Themed Content Feed — Option E editorial cards ───────────────
@@ -553,6 +596,171 @@ export default function ExplorePage() {
       {selectedItem && (
         <ArtworkViewer artwork={selectedItem} onClose={() => setSelectedItem(null)} />
       )}
+    </div>
+  );
+}
+
+// ── ViewToggle ────────────────────────────────────────────────────────────────
+// Two icon buttons side by side in Zone 2: bubbles (three overlapping circles
+// at staggered opacities) and list (three horizontal rectangles). Sharp
+// corners only per design system. Active state is a subtle espresso tint
+// behind the active icon; inactive is transparent. Icons stay espresso in
+// both states so the icon spec is preserved while the highlight reads.
+function ViewToggle({
+  viewMode,
+  onChange,
+}: {
+  viewMode: "bubbles" | "list";
+  onChange: (mode: "bubbles" | "list") => void;
+}) {
+  const btnBase: React.CSSProperties = {
+    width: 36,
+    height: 32,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    border: "none",
+    padding: 0,
+    cursor: "pointer",
+    transition: "background-color 160ms ease",
+  };
+  const activeBg = "rgba(22,17,13,0.08)";
+
+  return (
+    <div
+      role="group"
+      aria-label="Explore view mode"
+      style={{
+        display: "inline-flex",
+        border: "1px solid rgba(22,17,13,0.18)",
+      }}
+    >
+      <button
+        type="button"
+        aria-label="Bubble view"
+        aria-pressed={viewMode === "bubbles"}
+        onClick={() => onChange("bubbles")}
+        style={{
+          ...btnBase,
+          background: viewMode === "bubbles" ? activeBg : "transparent",
+        }}
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <circle cx="8.5"  cy="10" r="4.5" fill="#16110d" fillOpacity="0.3" />
+          <circle cx="15.5" cy="10" r="4.5" fill="#16110d" fillOpacity="0.55" />
+          <circle cx="12"   cy="15.5" r="4.5" fill="#16110d" fillOpacity="1" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        aria-label="List view"
+        aria-pressed={viewMode === "list"}
+        onClick={() => onChange("list")}
+        style={{
+          ...btnBase,
+          background: viewMode === "list" ? activeBg : "transparent",
+          borderLeft: "1px solid rgba(22,17,13,0.18)",
+        }}
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <rect x="4" y="6"  width="16" height="2.2" fill="#16110d" />
+          <rect x="4" y="11" width="16" height="2.2" fill="#16110d" />
+          <rect x="4" y="16" width="16" height="2.2" fill="#16110d" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
+// ── ThemeListView ─────────────────────────────────────────────────────────────
+// Flush-edge list of theme rows. Each row: fresco palette color dot + theme
+// title (Montserrat) + chevron right + hairline bottom border. Excludes
+// empty themes (handled upstream by populatedThemes) and Music (no content
+// behind it per CLAUDE.md). Tapping a row enters the same theme detail as
+// tapping a bubble.
+function ThemeListView({
+  themes,
+  onSelect,
+}: {
+  themes: Theme[];
+  onSelect: (t: Theme) => void;
+}) {
+  return (
+    <div className="h-full overflow-y-auto" style={{ paddingBottom: "5rem" }}>
+      {themes.map((theme) => {
+        const dotColor = getThemeColor(theme.title ?? "", theme.color ?? "#7a9a8a");
+        return (
+          <button
+            key={theme._id}
+            type="button"
+            onClick={() => onSelect(theme)}
+            className="w-full text-left flex items-center justify-between"
+            style={{
+              padding: "20px 22px",
+              borderBottom: "0.5px solid rgba(22,17,13,0.12)",
+              background: "transparent",
+              border: "none",
+              borderTop: "none",
+              borderLeft: "none",
+              borderRight: "none",
+              cursor: "pointer",
+            }}
+            aria-label={`Open ${theme.title}`}
+          >
+            <span className="flex items-center" style={{ gap: 14 }}>
+              <span
+                aria-hidden="true"
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: "50%",
+                  background: dotColor,
+                  display: "inline-block",
+                  flexShrink: 0,
+                }}
+              />
+              <span
+                style={{
+                  fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+                  fontSize: 14,
+                  fontWeight: 500,
+                  color: "#1a1a1a",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {theme.title}
+              </span>
+            </span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.5}
+              width="16"
+              height="16"
+              style={{ color: "rgba(22,17,13,0.35)" }}
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </button>
+        );
+      })}
     </div>
   );
 }
