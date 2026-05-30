@@ -1,6 +1,8 @@
-# KALLOS — Claude Code Standing Brief
+# Contueri — Claude Code Standing Brief
 
 Read this at the start of every session. It contains all key product decisions, the current state of the project, and how to work with Sheri.
+
+**Rebrand note (May 2026):** The app is being renamed from KALLOS to **Contueri**. The codebase, onboarding screens, GitHub repo, Vercel project, and all docs still reference KALLOS — a full find/replace CC task is pending (see Manual Task 70). When reading existing code or docs, KALLOS = Contueri. When writing new code or docs, use Contueri.
 
 **Also read before any content, editorial, or product work:** `content-docs/KALLOS-Cowork-Briefing.html` (in this repo). It contains the product's purpose, the seven real people this is built for, what "earns its place" means, the Lectio quality standard, settled decisions not to relitigate, and how Sheri works as a PM. A session that skips this brief will produce generic output.
 
@@ -8,13 +10,20 @@ Read this at the start of every session. It contains all key product decisions, 
 
 ## The App
 
-**Name:** KALLOS (double-L)
-**Tagline:** Love the beautiful and the good
+**Name:** Contueri (formerly KALLOS — rebrand in progress as of May 2026)
+**Latin root:** *contueri* — "to look at fixedly, gaze on, or behold with purpose." Root of "contemplate" and "intuition." USPTO search: zero results, completely clean.
+**Tagline:** TBD (open decision — see Open Decisions below)
 **Founding statement:** Beauty is the splendor of truth
 **Type:** Independent contemplative discovery app (not an EWTN companion — no relationship or rights)
-**Primary audience:** The curious seeker — moved by beauty, asking deeper questions, regardless of faith background
-**Live app URL:** https://s-beauty-app.vercel.app
-**Sanity Studio URL:** https://seeking-beauty.sanity.studio (to be renamed kallos.sanity.studio)
+**Primary audience:** All Christians and Christian curious seeking something deeper. Catholics are primary, but the invitation is open to all. The curious seeker — moved by beauty, asking deeper questions, regardless of faith background.
+**Live app URL:** https://s-beauty-app.vercel.app (temporary — will move to contueri.app or contueri.com)
+**Sanity Studio URL:** https://seeking-beauty.sanity.studio (to be renamed kallos.sanity.studio, then eventually contueri.sanity.studio)
+**Domains:** contueri.com (primary) | contueri.app (app-specific links). Registered on Namecheap, May 2026. Subdomains (app., mail., support., dashboard.) do not require separate registrations.
+
+**Social handles claimed (@contueri):**
+X (Twitter), Instagram, TikTok, YouTube (Brand Account under Sheri's personal Google), Etsy.
+Pinterest and Facebook still to claim (see Manual Tasks 71-72).
+**URGENT:** Write down which email was used to create each social account before you forget. Once hello@contueri.com is set up (Google Workspace, ~$6/month), update all accounts to that email.
 
 ---
 
@@ -57,6 +66,7 @@ Read this at the start of every session. It contains all key product decisions, 
 | `content-docs/KALLOS-Content-Usage-Log.html` | **In repo** — content usage log (tracks audio, quotes, scripture used across all content) |
 | `content-docs/CONTENT-RULES.md` | **In repo** — condensed content rules reference |
 | `content-docs/KALLOS-CC-Audit-Brief.html` | **In repo** — Claude Code audit brief. READ THIS before any architecture or schema work. |
+| `content-docs/CONTUERI-CC-Explore-Library-Brief.html` | **In repo** — Claude Code build brief for Explore bubbles + Option E detail + Library subtitle polish. Shipped May 29, 2026. Includes Music bubble exclusion note. |
 | `content-docs/KALLOS-CC-Schema-Design-Brief.html` | **In repo** — Claude Code schema design and migration brief. ✅ Complete April 23, 2026. |
 | `content-docs/KALLOS-CC-Dashboard-Enhancement-Brief.html` | **In repo** — Claude Code dashboard enhancements brief. ✅ Complete April 24, 2026.
 | `content-docs/KALLOS-CC-Content-Review-Dashboard-Brief.html` | **In repo** — Content Review Dashboard design brief. Architecture input requested from Opus before any build begins. Five open questions: where to build (Next.js vs App SDK), cross-type row model, detail panel strategy, preset view persistence, data fetching approach.
@@ -82,6 +92,13 @@ Read this at the start of every session. It contains all key product decisions, 
 | `KALLOS-PM-Brief.html` | Product brief for cold sessions — product purpose, the seven real users, what "earns its place," Lectio quality standard, Sheri's working style, settled decisions. Read this before any content or editorial work. |
 | `KALLOS-Onboarding-Copy.html` | Onboarding screen copy — 4 screens, voice-reviewed March 2026. Reference doc for onboarding build. |
 
+**Launch docs (in `~/Documents/KALLOS Launch/`):**
+
+| File | What it is |
+|------|-----------|
+| `KALLOS-v1-Launch-Plan.html` | v1.0 app launch plan — scope, timeline, assumptions, deferred features, costs, code hosting, legal entity minimum. Single source of truth for iOS launch. |
+| `KALLOS-SnailMail-MarketStrategy.html` | Snail mail subscription market strategy — competitor analysis (Thistle & Quartz $11.11/mo, Cloud Report $8/mo, Stephanie Hathaway $12/mo), unit economics, editorial framework ("Beautiful Traditions Worth Reclaiming"), open product decisions, GTM platform cards (X, YouTube, LinkedIn), conservative revenue scenarios. **Major revision completed May 2026.** Key decisions documented: target market is all Christians and Christian curious (Catholics primary), high-quality envelopes (not rigid flat mailers), working price hypothesis $13-15/month for founder launch (not locked, long-term TBD). |
+
 ---
 
 ## Current Phase: Phase 2 — In Progress (March 2026)
@@ -96,6 +113,38 @@ Read this at the start of every session. It contains all key product decisions, 
 - Bug fixes: aria-labels, error states, TypeScript consolidation
 - `data/episodes.ts` deleted
 - Build passes clean — deployed to Vercel
+
+### Phase 2 Work Done (May 29, 2026 — Explore Bubbles + Library Polish)
+
+- ✅ **Explore page rebuilt with physics bubble navigation.** Six theme bubbles (Light, Silence, Suffering & Beauty, Creation, Home/The Restless Heart, Beauty Truth & Goodness) replace the flat theme-card grid. requestAnimationFrame physics loop: velocity, damping, wall-bounce, repulsion. Drag vs. tap distinction. React port uses `useThemeBubbles` hook; `display: none` (not unmount) preserves physics state; rAF cancelled when hidden. Reduced-motion fallback: static circle grid. Production-readiness fixes shipped (Task #12): ARIA + keyboard nav, iOS ghost-click suppression, touchcancel handler, ResizeObserver for dynamic canvas width, `viewport-fit=cover` in `layout.tsx`, innerHTML replaced with JSX.
+- ✅ **Explore detail screen: Option E design locked.** Two-zone header architecture: Zone 1 = slim 46px nav (back chevron + CONTUERI wordmark + map button), Zone 2 = editorial header (uppercase accent-colored title + italic question). Option E spec: Montserrat 600 26px letter-spacing 0.14em text-transform uppercase color=theme accent. No rule. Open Sans italic 14px `#978b7d` margin-top 20px. Hairline borders: `rgba(22,17,13,0.18)` Zone 1 / `rgba(22,17,13,0.22)` Zone 2. See `CLAUDE_REFERENCE.md` Two-Zone Header Pattern.
+- ✅ **Editorial card pattern on Explore detail.** 1:1 square image, Montserrat 8px 600 uppercase type label (accent color), Cormorant Garamond 24px weight 400 title, sage attribution, Cormorant italic 13px `#3d3530` excerpt with 3-line clamp. Flush edge-to-edge. Two-pass dedupe: title (normalized) + image asset filename (catches same image under different names like "Casina Pio IV" vs "Casino of Pius IV"). Manual Task #52 (Sanity dedup) is the real fix; code safety net stays until then.
+- ✅ **Variant fresco palette locked.** Six theme-specific accent colors (see `CLAUDE_REFERENCE.md`). Stored in Sanity `theme.color` field. Apply to bubble fill, Zone 2 title, and type labels. Separate from P&P gradient system.
+- ✅ **Library subtitle cleaned.** Removed "26 prompts · 1 saved" count — replaced with a blank space-holding line. Prompt count is non-user-meaningful. Spacing preserved.
+- ✅ **Design system corrections documented.** Parchment hex corrected from `#fdf6e8` to `#fdf6e9`. Chrome on parchment rule: espresso `#16110d` for nav/header chrome, not gray. New tokens: `--color-editorial-muted: #978b7d`, `--color-warm-dark: #3d3530`. Hairline border values established. CLAUDE_REFERENCE.md updated.
+- ✅ **CC build brief created.** `content-docs/CONTUERI-CC-Explore-Library-Brief.html` — full spec for Explore + Library implementation. Includes explicit "do not ship Music bubble to production" note (no content behind it; would open blank screen).
+- ✅ **Session retrospective created by CC.** `Contueri-Explore-Library-Retrospective.html` in Documents folder. Documents 10 brief errors caught during the CC session, corrected spec, and 3 open items (resolved via Cowork widget: question color `#978b7d`, excerpt color `#3d3530`, bubble sizes hand-tuned fixed values).
+
+**Bubble sizes (hand-tuned fixed — do not calculate from Sanity or screen size):**
+Light 52px, Silence 47px, Suffering & Beauty 50px, Creation 49px, Home/The Restless Heart 48px, Beauty Truth & Goodness 45px.
+
+**Brief hierarchy rule (established May 29):** Prototype wins for visual/layout/interaction decisions. Brief wins for scope and deferred items. When prototype and brief conflict, prototype is the spec.
+
+**Music bubble — do not ship to production.** Tapping it would open a blank detail screen. Music is a Sanity content type but has no app implementation. Music bubble is a backlog item for a future session when Music content exists.
+
+### Phase 2 Work Done (May 28, 2026 — P&P Gradient Color System)
+- ✅ **P&P Gradient Color System designed, documented, and shipped to production.** 15 commits. Each P&P screen now has a three-layer ambient gradient fixed to the viewport, color driven by `contentItem.contentType`. Full 9-type mapping finalized (see P&P Gradient Color System section in this file). Key implementation details:
+  - Architecture: `lib/ppGradients.ts` (pure TS color tokens, native-portable), `components/PPGradientBackground/` (wrapper component + CSS module), `app/globals.css` (`@property --pp-accent` registered as `<color>`), `app/prompt/PromptClient.tsx` (accent cascade: section labels, music toggle, audio progress fill, actio checkbox)
+  - Architectural deviation from brief: `@property` + `color-mix(in srgb, var(--pp-accent) X%, transparent)` used instead of `rgba(var(--pp-accent-rgb), X)` so gradient layers themselves interpolate on type change. Full color cascade (gradient + text + borders + fills) morphs over 0.5s. Requires Safari 16.4+ — confirmed fine for 2026 launch; pre-16.4 degrades to plain espresso background (graceful, app fully functional).
+  - Reduced-motion: both keyframe animations AND color transition disabled per Apple HIG.
+  - Desktop/iPad: max-width 480px centered, parchment on either side.
+  - Bugs fixed: `PageTransition` transform trapped gradient — inverted nesting to fix; Safari Sanity API caching — added `cache: 'no-store'`; stale `textDecorationColor` React warning cleaned up.
+  - Side UX fix: actio checkbox strike-through removed (kept dim only) — striking out a contemplative practice was tonally wrong.
+  - 8 of 9 colors live in production. Photography (Warm Slate `#a49898`) wired but untestable — no Photography P&P exists yet. Cameron "English Blossoms" re-tagged to `photography` in Sanity by Sheri.
+  - Deliberately NOT migrated to type accent: favorite heart, Related Journey CTA (keeps sacred gold `#C19B5F`), `.cta-inline-dark`, preview-mode banner.
+- ✅ **BG-01 closed (Won't Do).** Parchment-mode gradient exploration (Plaster/Verdigris/Manuscript) formally closed. Parchment screens staying flat `#fdf6e8` is now intentional — signals browse vs. contemplative mode. UX Backlog updated.
+- ✅ **CC build brief created.** `content-docs/CONTUERI-CC-PP-Gradient-Brief.html` — full implementation spec including architectural decisions, type→color mapping, mobile web requirements, what not to touch.
+- ✅ **9 P&P mockup files** created in Documents folder (one per content type) — reference visuals for all gradient variants with correct READ MORE/LISTEN row and attribution styling.
 
 ### Phase 2 Work Done (May 21, 2026 — evening, UI iteration)
 - ✅ UX backlog **LBL-01** closed. Renamed the P&P related-journey CTA eyebrow from "Go deeper" to "Related Journey" (commit `ace74a60`). Removes label collision with the Journey Day Step 6 "Go Deeper" tradition reflections section. UX Backlog updated.
@@ -446,7 +495,7 @@ All live in the `contentItem` Sanity schema with `contentType` field:
 - **No rounded corners.** `border-radius: 0` everywhere. Sharp/square corners.
 - **Two-mode system:**
   - **Espresso mode** (immersive): `#16110d` — Journey steps, Visio Divina, Breathe page
-  - **Parchment mode** (browse): `#fdf6e8` — Today, Explore, Journeys, Library
+  - **Parchment mode** (browse): `#fdf6e9` — Today, Explore, Journeys, Library
 - **Gold accent:** `#C19B5F` — CTAs, active states, labels. NOT `#C9A227`.
 - **Sage:** `#4a7a62` — active step indicator, interactive elements
 - **Typography:** Montserrat (labels/UI), Open Sans regular (body), Open Sans italic (contemplative instructional text), Cormorant Garamond (quoted material only — 1.3rem minimum, line height 1.4). Below 1.3rem, use Open Sans italic instead. Cormorant is a display typeface; it breaks down at small sizes on screen.
@@ -455,6 +504,58 @@ All live in the `contentItem` Sanity schema with `contentType` field:
 - **DEPRECATED:** `#203545` (old dark teal) — do NOT use anywhere. Espresso `#16110d` replaced it.
 
 Full details: `CLAUDE_REFERENCE.md`
+
+---
+
+## P&P Gradient Color System
+
+### What it is
+Each Pause & Ponder screen has an ambient gradient background that reflects the **content type** of that day's prompt — not the theme. A Sacred Art P&P breathes mineral blue; a Thinker P&P glows with illuminated gold; a Landscape P&P settles into sage stone. The color is a fresco pigment analog: muted, low-opacity, classical.
+
+The gradient is three layered radial ellipses on a fixed (viewport-anchored) container so it stays put while the content scrolls over it. All interactive/label elements (READ MORE, LISTEN, section labels, scripture attribution, checkbox border, active tab) use the same accent color as the gradient. One type = one color, used consistently throughout the screen.
+
+### Why it exists
+P&P is already the most contemplative screen in the app. The gradient deepens that without adding visual complexity — it works subliminally. It also gives each content type a distinct "atmosphere" that users will feel even if they can't articulate why, similar to how Spotify bleeds album art color into the player UI.
+
+### Type → Color mapping (May 2026)
+| Content Type | Color Name | Hex |
+|---|---|---|
+| Sacred Art | Mineral Blue | `#7ba2b8` |
+| Music | Fresco Plum | `#9a8a9e` |
+| Literature | Old Ochre | `#c9a07c` |
+| Landscape | Sage Stone | `#a8ae9a` |
+| Food & Wine | Clay Terra | `#c68a77` |
+| Pattern & Proof | Verdigris | `#84a9a2` |
+| Thinker | Illuminated Gold | `#E4C371` |
+| Watch/Listen | Pompeian Crimson | `#b8869a` |
+| Suffering / Depth | Roman Wine | `#8b4557` |
+
+Photography → Warm Slate `#a49898` (rgb: 164,152,152). Muted warm grey-taupe — sits in its own territory, not cool/blue, not green, not terracotta. Chosen May 27, 2026.
+
+### When to use
+P&P screen only (`/prompt`). This is the **only** screen in the app with this treatment.
+
+### When NOT to use
+- **Explore** — light parchment background (`#fdf6e8`). These colors are designed for espresso dark and will not translate.
+- **Journeys** — Journey steps have their own immersive treatment (plum gradient panels etc). The P&P gradient is a separate system.
+- **Library / Today / ArtworkViewer** — neutral screens. Adding gradient here dilutes what makes P&P feel special.
+- **Theme cards on Explore** — themes (Home, Light, Silence, Suffering, Creation) have their own `color` field in the Sanity `theme` schema. That is a completely separate color system. Do not substitute P&P type colors there.
+
+### ⚠️ What to watch for
+1. **Illuminated Gold (`#E4C371`) is the most at-risk color.** Yellow/gold reads more luminous on dark backgrounds than the cooler colors. If opacity is ever increased, gold tips first. Test on device before pushing higher opacity.
+2. **Animation on OLED at night.** The 22–28 second opacity breathing cycles are designed to be felt, not seen. On a phone OLED in a dark room even slow movement can feel unsettled on a reading screen. Never shorten the cycle times or increase travel distance without testing on device.
+3. **Keep the gradient contained to P&P.** Its power comes from contrast with the rest of the app. If it appears on other screens, it stops being special.
+4. **Color transitions between P&P types.** If a user navigates directly from one P&P to another (e.g. via Library archive), the background color will shift. No animation is needed for this — it's a context change, not a continuous experience.
+
+### Technical implementation
+- `.gradient-bg { position: fixed; }` — gradient stays in viewport while content scrolls
+- Three layers: `.g-sweep` (upper-left, 22s), `.g-band` (diagonal rotated ellipse, 18s), `.g-pool` (lower-right, 28s)
+- Animation: `transform: translate()` + `opacity` together (GPU-accelerated, no jumping). Never animate `background` position directly — causes visible jump.
+- Travel distances: 70–80px for sweep/pool, 60px for band. Opacity range: 1.0 → 0.55.
+- Accent color = gradient hex, applied to: `.section-label`, `.scripture-ref`, `.read-more-btn`, `.listen-btn`, `.check` border, `.tab.active`
+
+### Mockup files (in Documents folder)
+`contueri-pp-mockup.html` (Mineral Blue), `contueri-pp-plum.html`, `contueri-pp-ochre.html`, `contueri-pp-sage.html`, `contueri-pp-terra.html`, `contueri-pp-verdigris.html`, `contueri-pp-crimson.html`, `contueri-pp-gold.html`
 
 ---
 
@@ -510,6 +611,7 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 - **Audio player:** The custom circular play button (64px cream circle, play/pause SVG) is the chosen design. Pause & Ponder has it. Journey Encounter step still uses the native `<audio>` element — **must be replaced** with the circular player to match.
 - **Navigation patterns:** Stories-style thin progress bar + swipe is on Journey. Ensure other multi-step flows (Visio Divina, onboarding) follow the same pattern when built.
 - **Typography & spacing:** Espresso mode screens should all use the same heading sizes, label styles, and padding.
+- **Completion states (no strike-through rule):** When a user marks something complete (actio checkbox, journey day, etc.), dim the text to a faded color as the "done" cue. Do NOT strike through. Strikethrough reads productivity-app; dim alone says "honored." Established May 28, 2026 during P&P gradient QA — applied to actio checkbox items, applies anywhere completion states surface.
 
 **Checklist before every push:** Does this design change appear on more than one screen? If yes, update all of them.
 
@@ -715,9 +817,11 @@ The George Eastman House exhibition "Truth/Beauty: Pictorialism and the Photogra
 ---
 
 ### Language Rule
-**Never say "non-Catholic" as a user category.** Sheri IS Catholic. Users may or may not be. The audience is always "the curious seeker." This applies to all docs, code comments, and content.
+**Never say "non-Catholic" as a user category.** Sheri IS Catholic. Users may or may not be. The audience is always "the curious seeker" or "all Christians and Christian curious." This applies to all docs, code comments, and content.
 
-**Never frame KALLOS as "not a Catholic app."** That framing is unnecessary and inaccurate. The tradition KALLOS recovers is rooted in the Church — do not apologize for that or distance from it. The content points toward beauty, truth, and goodness. Beauty, truth, and goodness point toward God. KALLOS does not make that argument explicitly — it makes the encounter possible. The tradition belongs to everyone. These two things are not in tension.
+**Target market:** All Christians and Christian curious seeking something deeper. Catholics are primary. The product leads with beauty and art as the trad principle of invitation. Do not write as if the audience is Catholic-only, and do not write as if it is generic. These two things are not in tension.
+
+**Never frame Contueri as "not a Catholic app."** That framing is unnecessary and inaccurate. The tradition Contueri recovers is rooted in the Church — do not apologize for that or distance from it. The content points toward beauty, truth, and goodness. Beauty, truth, and goodness point toward God. Contueri does not make that argument explicitly — it makes the encounter possible. The tradition belongs to everyone.
 
 ### Art and Music Are a Single Content Decision
 
@@ -800,7 +904,7 @@ These can't be done in code — Sheri does them in dashboards:
 13. ~~**Holy Week P&P — Sanity entry:**~~ ✅ All 8 days entered and published (April 1, 2026). Day 8 audio is a placeholder — confirm or replace before Easter. Use Verba textarea for Days 2-3 if re-entering.
 20. **Day 1 Connect Thread em dash in Sanity:** Text reads "other forms — and not every one of them stayed in the past." Replace "—" with a comma. Manual Sanity edit on the When Myth Became Fact journey, Day 1 Connect Thread field.
 21. **Set `totalDays` for all journeys in Sanity Studio:** ✅ Done April 13. BTG = 3, When Myth Became Fact = 7, Light = 7, Bosch = 8.
-19. **Custom domain:** Replace `s-beauty-app.vercel.app` with `kallos.app` or update Vercel alias to `kallos-app.vercel.app` before wider launch.
+19. **Custom domain:** Replace `s-beauty-app.vercel.app` with `contueri.app` or `contueri.com` before wider launch. Domains registered on Namecheap (May 2026). Do this as part of the full rebrand CC task (Manual Task 70).
 17. **Palm Sunday — Sanity edits still pending:** curator note rewrite (palms as political act = the hook), context fix ("The disciples behind him are not watching Christ. They are watching the crowd." replaces "almost mechanical" line), actio update ("Press play. While it plays, zoom into the painting and find one face. Stay with it until the music ends.")
 18. **Holy Monday — upload audio:** `01-adoro-te-devote--st-cecilia.mp3` is in Documents/Holy Week/Audio-Holy Week/. Upload to Holy Monday Sanity record Audio File Upload field. Then copy Verba text from entry guide textarea into Verba field.
 14. Seed Themes 2–5 content into Sanity (entry guide doc ready)
@@ -870,3 +974,45 @@ Full detail in `content-docs/KALLOS-Schema-Audit.html` and `content-docs/KALLOS-
 ### New app surface
 
 - **`/dashboard`** — content operations dashboard. Server-rendered, revalidated every 60s, gated by `DASHBOARD_ENABLED` env var, no-indexed. 7 sections: Journey Completion, Content Library, Tradition Reflections, Audio Status, Schema Health (static), TTS Coverage, Companion Journey placeholders. See `app/dashboard/page.tsx` + 5 new named query functions in `lib/sanity.ts` (search for "Dashboard queries"). Schema Health section is hand-maintained — update the `SCHEMA_HEALTH` const in the page file after every audit.
+
+---
+
+## Open Decisions (as of May 2026)
+
+These are not yet made. Do not assume or resolve them without a session with Sheri.
+
+1. **Mail subscription identity** — Does the snail mail subscription share the Contueri name, or does it get its own brand identity under the Contueri umbrella? (e.g., "Contueri Letters" vs. a separate name entirely)
+2. **Color palette** — Does the existing Contueri/KALLOS palette (espresso #16110d, gold #C19B5F, parchment #fdf6e8, sage #4a7a62) carry over as-is, or is a fresh start warranted with the rebrand?
+3. **One-line descriptor** — What is the single sentence that describes Contueri for someone who has never heard of it? Governs App Store copy, social bio, pitch deck cover. Not yet written.
+4. **App vs. mail content split** — Does the mail subscription deliver unique content not in the app, or is it a physical companion to the app experience? Governs the editorial calendar and content creation workload.
+5. **Protestant sensitivity** — Two options: (a) be transparent about Catholic roots and trust that intellectual honesty draws broad-minded Protestants, or (b) lead so firmly with "beauty and tradition" that Protestant visitors self-select in without friction. Recommendation is (a) — transparency is a feature, not a risk. Not yet locked.
+
+---
+
+### Manual tasks added May 29, 2026 (Explore + Library corrections)
+
+79. **CC task — Explore detail question text color.** Update question text color to `#978b7d` (`--color-editorial-muted`) on the detail Zone 2 header. The CC session shipped with a slightly different value. A new short CC task to correct this and verify on device.
+
+80. **CC task — Add `--color-warm-dark` token.** Add `--color-warm-dark: #3d3530` to `app/globals.css` CSS token block. Used for Cormorant italic excerpt text on editorial cards. Confirm it's applied in the Explore detail card component.
+
+81. **CC task — Confirm bubble sizes are hand-tuned fixed values.** Verify that bubble sizes in the shipped code match the locked spec: Light 52px, Silence 47px, Suffering & Beauty 50px, Creation 49px, Home/The Restless Heart 48px, Beauty Truth & Goodness 45px. If they were overridden during the CC session, revert to these values.
+
+### Manual tasks added May 2026 (Contueri rebrand and snail mail)
+
+70. **CC task — Contueri rebrand:** Find/replace KALLOS throughout the codebase (all files, comments, strings, routes, metadata). Rename GitHub repo (`kallos-app` → `contueri-app` or similar). Rename Vercel project. Update onboarding screens (wordmark, pronunciation note currently reads `kal · os` → update to `con · TWA · ri` or whatever TTS-confirmed phonetic is settled). Update App Store metadata. Do NOT run this until the one-line descriptor and tagline are decided — those will go in at the same time.
+
+71. **Claim @contueri on Pinterest** — Manual. Sheri does this directly on Pinterest.com.
+
+72. **Claim Contueri page on Facebook** — Manual. Sheri does this directly on Facebook.
+
+73. **URGENT: Write down account credentials** — Write down which email address was used to create each social account (X, Instagram, TikTok, YouTube Brand Account, Etsy). Do this before the memory fades. Store in a secure password manager or notes doc.
+
+74. **Set up hello@contueri.com** — Google Workspace account, ~$6/month. Once live, update all social accounts to use this email as the primary account email.
+
+75. **File Contueri trademark** — When revenue is established. Use an attorney. Budget ~$750-1000 across relevant classes: software (Class 42), subscription services (Class 41), publishing (Class 16). Prior use rights began at first commercial use — document that date when it happens. Trademark filing date does not need to match launch date.
+
+76. **Companion journey description issue (pre-existing, flagged for next content session)** — Series title "Seeking Beauty" is not in the journey title; "Liv Lev" named without David Henrie (host). Clarify location of this content in Sanity before the next companion journey session.
+
+77. **CC task (post-launch) — Migrate nav tab active indicator to `var(--pp-accent)` on `/prompt` route.** The global `components/ui/Navigation.tsx` uses a hardcoded color for the active tab. When on `/prompt`, the Today tab active indicator should pick up the type accent color for full system coherence. Intentionally deferred from the gradient build — address after gradient is confirmed in production.
+
+78. **Photography gradient untestable until a Photography P&P is created.** Cameron "English Blossoms" is re-tagged `photography` in Sanity (done May 28) but has never been used in a P&P — only in the BTG journey. Warm Slate (`#a49898`) is wired and ready; it just needs a Photography daily prompt to render against. Create one when the editorial pipeline reaches Photography.
