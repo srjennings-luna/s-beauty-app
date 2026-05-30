@@ -55,7 +55,7 @@ const WALL_RESTITUTION   = 0.75;   // was 0.80 (first pass 0.12 was too dead)
 const BUBBLE_RESTITUTION = 0.70;   // was 0.88 (first pass 0.35 killed the bounce)
 const DAMPING            = 0.991;  // was 0.993 (first pass 0.978 stalled idle drift)
 const ENTRANCE_DAMPING   = 0.977;
-const ENTRANCE_DECAY_MS  = 2400;   // was 1600 — longer ramp into normal damping
+const ENTRANCE_DECAY_MS  = 1500;   // was 1600 original / 2400 first tune — shorter handoff to normal damping
 const IMPULSE_STRENGTH   = 0.020;  // was 0.022 (first pass 0.016 too gentle)
 const IMPULSE_CHANCE     = 0.009;  // was 0.010 (first pass 0.005 too sparse)
 const SPEED_SCALE        = 0.065;
@@ -65,9 +65,9 @@ const COLLISION_IMPULSE  = 1.2;
 const TAP_THRESHOLD      = 6;
 const MIN_SPEED          = 0.06;
 const BREATH_VARIATION   = 0.04;
-const ENTRANCE_SPEED     = 1.5;    // was 2.5 — softer initial velocity
-const ENTRANCE_STAGGER   = 200;    // was 130 — more breathing room between bubbles
-const ENTRANCE_FADE_MS   = 500;    // was 350 — gentler opacity fade-in
+const ENTRANCE_SPEED     = 0.6;    // was 2.5 original / 1.5 first tune — calm drift in
+const ENTRANCE_STAGGER   = 280;    // was 130 original / 200 first tune — more space between bubbles
+const ENTRANCE_FADE_MS   = 800;    // was 350 original / 500 first tune — opacity ramp covers more of the motion
 
 // Default canvas dimensions before measurement — typical phone viewport.
 const DEFAULT_W = 390;
@@ -647,6 +647,11 @@ export default function ThemeBubbleCanvas({
               cursor: "grab",
               textAlign: "center",
               padding: 0,
+              // Start invisible so the bubble never paints at full opacity
+              // before the staggered fade-in runs in the entrance useEffect.
+              // The effect mutates this via ref to "1" once its setTimeout
+              // fires, then transition: none locks it in.
+              opacity: 0,
               userSelect: "none",
               WebkitTapHighlightColor: "transparent",
               willChange: "transform",
