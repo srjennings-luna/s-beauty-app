@@ -41,12 +41,15 @@ interface Props {
   isHidden?: boolean;
 }
 
-// ── Physics constants (ported verbatim from prototype) ───────────────────────
+// ── Physics constants ────────────────────────────────────────────────────────
+// Tuned May 29, 2026 (Brief Polish session) for a calmer, more meditative
+// feel on entrance. Originals are noted inline. Wall and bubble-to-bubble
+// restitution will be tuned further in the next task.
 const WALL_RESTITUTION   = 0.80;
 const BUBBLE_RESTITUTION = 0.88;
 const DAMPING            = 0.993;
 const ENTRANCE_DAMPING   = 0.977;
-const ENTRANCE_DECAY_MS  = 1600;
+const ENTRANCE_DECAY_MS  = 2400;   // was 1600 — longer ramp into normal damping
 const IMPULSE_STRENGTH   = 0.022;
 const IMPULSE_CHANCE     = 0.010;
 const SPEED_SCALE        = 0.065;
@@ -56,8 +59,9 @@ const COLLISION_IMPULSE  = 1.2;
 const TAP_THRESHOLD      = 6;
 const MIN_SPEED          = 0.06;
 const BREATH_VARIATION   = 0.04;
-const ENTRANCE_SPEED     = 2.5;
-const ENTRANCE_STAGGER   = 130;
+const ENTRANCE_SPEED     = 1.5;    // was 2.5 — softer initial velocity
+const ENTRANCE_STAGGER   = 200;    // was 130 — more breathing room between bubbles
+const ENTRANCE_FADE_MS   = 500;    // was 350 — gentler opacity fade-in
 
 // Default canvas dimensions before measurement — typical phone viewport.
 const DEFAULT_W = 390;
@@ -246,17 +250,18 @@ export default function ThemeBubbleCanvas({
       };
     });
 
-    // Staggered fade-in
+    // Staggered fade-in. Gentle opacity ramp so each bubble settles into
+    // view rather than appearing all at once.
     bubbleRefs.current.forEach((el, i) => {
       if (!el) return;
       el.style.opacity = "0";
-      el.style.transition = "opacity 0.35s ease";
+      el.style.transition = `opacity ${ENTRANCE_FADE_MS}ms ease`;
       setTimeout(() => {
         if (!el) return;
         el.style.opacity = "1";
         setTimeout(() => {
           if (el) el.style.transition = "none";
-        }, 380);
+        }, ENTRANCE_FADE_MS + 30);
       }, i * ENTRANCE_STAGGER);
     });
 
