@@ -653,9 +653,10 @@ function ViewToggle({
         >
           {/* Two solid sage bubbles: large lower-left, small upper-right.
               Reads as "bubbles, plural" at small icon size without the
-              three-overlapping-filled-circles blob problem. */}
-          <circle cx="9"  cy="14" r="5.5" fill="#4a7a62" />
-          <circle cx="17" cy="8"  r="2.8" fill="#4a7a62" />
+              three-overlapping-filled-circles blob problem. Sized to
+              fill more of the viewBox per Sheri's device review. */}
+          <circle cx="9"    cy="14"  r="6.5" fill="#4a7a62" />
+          <circle cx="17.5" cy="7.5" r="3.5" fill="#4a7a62" />
         </svg>
       </button>
       <button
