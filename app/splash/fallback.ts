@@ -101,7 +101,7 @@ export const FALLBACK_SCREENS: SplashScreen[] = [
       {
         _type: "secondaryCta",
         _key: "f5-secondary",
-        label: "See today’s Pause & Ponder →",
+        label: "SKIP",
         linkPath: "/prompt",
       },
     ],
