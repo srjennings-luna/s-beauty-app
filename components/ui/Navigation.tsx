@@ -66,6 +66,14 @@ export default function Navigation() {
     return null;
   }
 
+  // On the P&P route the active tab picks up the type-driven accent color
+  // so the whole screen reads as one consistent atmosphere (matches the
+  // gradient + section labels + music toggle + audio progress + actio
+  // checkbox cascade established May 28). Fallback to sage if --pp-accent
+  // is not yet populated by PromptClient.
+  const isPromptRoute = pathname.startsWith("/prompt");
+  const activeColor = isPromptRoute ? "var(--pp-accent, #4a7a62)" : "#4a7a62";
+
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 safe-area-bottom">
       <div className="absolute inset-0 bg-[#fdf6e8]/97 backdrop-blur-md border-t border-black/8" />
@@ -80,8 +88,9 @@ export default function Navigation() {
               key={item.href}
               href={item.href}
               className={`flex flex-col items-center justify-center w-full h-full transition-all duration-200 ${
-                isActive ? "text-[#4a7a62]" : "text-[#1a1a1a]/55 hover:text-[#1a1a1a]/75"
+                isActive ? "" : "text-[#1a1a1a]/55 hover:text-[#1a1a1a]/75"
               }`}
+              style={isActive ? { color: activeColor } : undefined}
             >
               <div className={`transition-transform duration-200 ${isActive ? "-translate-y-0.5" : ""}`}>
                 {item.icon(isActive)}
