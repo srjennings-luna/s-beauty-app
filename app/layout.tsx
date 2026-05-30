@@ -30,9 +30,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://s-beauty-app.vercel.app",
   ),
-  title: "KALLOS · Daily Vibes: Beauty • Truth • Goodness",
+  title: "CONTUERI · Beauty • Truth • Goodness",
   description:
-    "KALLOS is a contemplative discovery app for seekers of beauty, truth, and goodness: sacred art, music, literature, landscape, and the great tradition.",
+    "CONTUERI is a contemplative discovery app for seekers of beauty, truth, and goodness: sacred art, music, literature, landscape, and the great tradition.",
   keywords: ["beauty", "contemplation", "classical", "tradition", "sacred art", "philosophy", "music", "literature"],
 };
 

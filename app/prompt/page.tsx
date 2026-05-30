@@ -20,14 +20,14 @@ export async function generateMetadata({
     : "";
 
   return {
-    title: "Pause & Ponder — KALLOS",
+    title: "Pause & Ponder — CONTUERI",
     openGraph: {
-      title: "Pause & Ponder — KALLOS",
+      title: "Pause & Ponder — CONTUERI",
       ...(imageUrl && { images: [{ url: imageUrl, width: 1200, height: 630 }] }),
     },
     twitter: {
       card: imageUrl ? "summary_large_image" : "summary",
-      title: "Pause & Ponder — KALLOS",
+      title: "Pause & Ponder — CONTUERI",
       ...(imageUrl && { images: [imageUrl] }),
     },
   };

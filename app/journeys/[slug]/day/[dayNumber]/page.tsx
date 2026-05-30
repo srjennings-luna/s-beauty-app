@@ -34,24 +34,24 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug, dayNumber } = await params;
   const journey = await fetchJourney(slug);
-  if (!journey) return { title: "Journey — KALLOS" };
+  if (!journey) return { title: "Journey — CONTUERI" };
 
   const dayNum = parseInt(dayNumber, 10);
   const day = journey.days?.find((d: { dayNumber: number }) => d.dayNumber === dayNum);
-  if (!day) return { title: `${journey.title} — KALLOS` };
+  if (!day) return { title: `${journey.title} — CONTUERI` };
 
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://kallos.app";
   const imageUrl = day.openImageUrl ?? journey.heroImageUrl ?? null;
   return {
-    title: `${day.dayTitle} — KALLOS`,
+    title: `${day.dayTitle} — CONTUERI`,
     description: `Day ${dayNum} of ${journey.title}`,
     metadataBase: new URL(siteUrl),
     openGraph: {
       title: day.dayTitle,
       description: `Day ${dayNum} of ${journey.title}`,
       url: `${siteUrl}/journeys/${slug}/day/${dayNum}`,
-      siteName: "KALLOS",
+      siteName: "CONTUERI",
       ...(imageUrl && { images: [{ url: imageUrl, width: 1200, height: 630 }] }),
     },
   };

@@ -38,7 +38,7 @@ export async function generateMetadata({
 
   if (!journey) {
     return {
-      title: "Journey — KALLOS",
+      title: "Journey — CONTUERI",
       description: "A contemplative journey through beauty, truth, and goodness.",
     };
   }
@@ -52,14 +52,14 @@ export async function generateMetadata({
       const imageUrl = day.openImageUrl ?? journey.heroImageUrl ?? null;
       const description = `Day ${dayNum} of ${journey.title}`;
       return {
-        title: `${day.dayTitle} — KALLOS`,
+        title: `${day.dayTitle} — CONTUERI`,
         description,
         metadataBase: new URL(siteUrl),
         openGraph: {
           title: day.dayTitle,
           description,
           url: pageUrl,
-          siteName: "KALLOS",
+          siteName: "CONTUERI",
           type: "website",
           ...(imageUrl && {
             images: [{ url: imageUrl, width: 1200, height: 630, alt: day.dayTitle }],
@@ -79,14 +79,14 @@ export async function generateMetadata({
   const pageUrl = `${siteUrl}/journeys/${slug}`;
   const imageUrl = journey.heroImageUrl ?? null;
   return {
-    title: `${journey.title} — KALLOS`,
+    title: `${journey.title} — CONTUERI`,
     description: journey.description,
     metadataBase: new URL(siteUrl),
     openGraph: {
       title: journey.title,
       description: journey.description,
       url: pageUrl,
-      siteName: "KALLOS",
+      siteName: "CONTUERI",
       type: "website",
       ...(imageUrl && {
         images: [{ url: imageUrl, width: 1200, height: 630, alt: journey.title }],

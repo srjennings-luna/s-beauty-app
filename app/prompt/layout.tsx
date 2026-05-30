@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pause & Ponder — KALLOS",
+  title: "Pause & Ponder — CONTUERI",
   description:
     "A daily encounter with beauty. A piece of art, a question, and a moment to sit with both.",
   openGraph: {
-    title: "Pause & Ponder — KALLOS",
+    title: "Pause & Ponder — CONTUERI",
     description:
       "A daily encounter with beauty. A piece of art, a question, and a moment to sit with both.",
-    siteName: "KALLOS",
+    siteName: "CONTUERI",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pause & Ponder — KALLOS",
+    title: "Pause & Ponder — CONTUERI",
     description: "A daily encounter with beauty.",
   },
 };
