@@ -12,16 +12,16 @@ import JourneyContinueStrip from "@/components/JourneyContinueStrip";
 // surface of Journeys / Explore, no separate header chrome. The user
 // opens the app and lands directly inside today's contemplative moment.
 //
-// A thin JourneyContinueStrip sits above the P&P content when the user
-// has a journey in progress, surfacing the single most-recently-touched
-// active journey. If no journey is active, the strip is null and Today
-// is pure P&P. Multi-journey users navigate to the Journeys tab to see
-// the full list.
+// JourneyContinueStrip is passed to PromptClient via the topSlot prop so
+// it renders INSIDE the fixed top chrome (above the back/heart/share/
+// music row) and stays in the same stacking context as the P&P gradient.
+// Rendering the strip as a sibling outside PromptClient would put it
+// behind the gradient because of the fixed-position layering.
 //
-// PromptClient is rendered in homeMode so its chrome header drops the
-// fixed-positioning behavior (the strip needs the top of the scroll) and
-// suppresses the back chevron (there is nowhere to go back to from the
-// landing route).
+// The strip returns null when no journey is in progress, collapsing the
+// top chrome back to just the chrome row. Multi-journey users see only
+// the most-recently-touched journey here; the Journeys tab carries the
+// full picture.
 export default function TodayPage() {
   const router = useRouter();
   const [hasOnboarded, setHasOnboarded] = useState<boolean | null>(null);
@@ -50,10 +50,5 @@ export default function TodayPage() {
     return <div className="min-h-screen bg-parchment" />;
   }
 
-  return (
-    <>
-      <JourneyContinueStrip />
-      <PromptClient homeMode />
-    </>
-  );
+  return <PromptClient topSlot={<JourneyContinueStrip />} />;
 }

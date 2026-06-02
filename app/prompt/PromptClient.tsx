@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, Suspense } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { getDailyPrompt, getDailyPromptPreview } from "@/lib/sanity";
@@ -99,19 +99,13 @@ const MUSIC_AMBIENT = "/music/natureseye-piano-dreamcloud-meditation-179215.mp3"
 
 function DailyPromptPageInner({
   initialDate,
-  homeMode: homeModeProp,
+  topSlot,
 }: {
   initialDate?: string;
-  homeMode?: boolean;
+  topSlot?: React.ReactNode;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pathname = usePathname();
-  // Home mode kicks in either when the parent explicitly passes the prop
-  // OR when this component is rendered on the Today landing route ("/").
-  // Detecting from the path here is belt-and-suspenders against any prop
-  // chain failure through the Suspense boundary.
-  const homeMode = homeModeProp === true || pathname === "/";
   // Prefer an explicit path-param date (from /prompt/[date]) over the query
   // string (/prompt?date=X), since Sanity Presentation can only construct
   // path-based iframe URLs cleanly — query strings get URL-encoded into the
@@ -323,30 +317,28 @@ function DailyPromptPageInner({
           }}
         />
 
-        {/* ── Chrome header ────────────────────────────────────────────────
-            On the standalone /prompt route this header is fixed at the top
-            and floats over the scrolling content. On the Today landing
-            (homeMode) it sits in flow so the JourneyContinueStrip above it
-            can occupy the top of the scroll cleanly. */}
+        {/* ── Sticky top chrome ────────────────────────────────────────────
+            Single fixed container that holds the optional topSlot (used by
+            Today to render the JourneyContinueStrip above the chrome) and
+            the chrome header itself. Putting both inside one fixed wrapper
+            keeps the safe-area handling on the outer element and avoids
+            the gradient's containing block hiding the slot. */}
         <div
-          className={`${
-            homeMode
-              ? "relative flex items-center justify-between px-4 py-3"
-              : "fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-4 py-3 safe-area-top"
-          }`}
+          className="fixed top-0 left-0 right-0 z-30"
           style={{
-            background: "rgba(22,17,13,0.82)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
-            borderBottom: `1px solid ${C.divider}`,
+            paddingTop: "env(safe-area-inset-top, 16px)",
           }}
         >
-          {homeMode ? (
-            // Empty placeholder keeps the right-side action group aligned
-            // via justify-between without rendering a back chevron that
-            // wouldn't lead anywhere from the landing route.
-            <div style={{ width: 40, height: 40 }} />
-          ) : (
+          {topSlot}
+          <div
+            className="flex items-center justify-between px-4 py-3"
+            style={{
+              background: "rgba(22,17,13,0.82)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              borderBottom: `1px solid ${C.divider}`,
+            }}
+          >
             <button
               onClick={() => router.back()}
               className="w-10 h-10 flex items-center justify-center"
@@ -357,7 +349,6 @@ function DailyPromptPageInner({
                 <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 010-1.06l7.5-7.5a.75.75 0 111.06 1.06L9.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5z" clipRule="evenodd" />
               </svg>
             </button>
-          )}
 
           <div className="flex items-center gap-3">
             <button
@@ -389,6 +380,7 @@ function DailyPromptPageInner({
             </button>
           </div>
         </div>
+        </div>
 
         {/* Music menu */}
         {musicMenuOpen && (
@@ -405,13 +397,13 @@ function DailyPromptPageInner({
         )}
 
         {/* ── Hero — pinch-to-zoom + pan ───────────────────────────────────── */}
-        {/* The 48px top margin pushes the hero down below the fixed glass
-            header on /prompt. In homeMode the header sits in flow above,
-            so the margin would just add dead space. */}
+        {/* Top margin pushes the hero below the fixed top chrome. When a
+            topSlot is present (Today's JourneyContinueStrip), the chrome is
+            taller, so the margin grows to clear it. */}
         <div
           ref={heroRef}
           className="relative w-full overflow-hidden"
-          style={{ height: "62vh", marginTop: homeMode ? 0 : "48px" }}
+          style={{ height: "62vh", marginTop: topSlot ? "96px" : "48px" }}
         >
           <TransformWrapper
             maxScale={8}
@@ -915,21 +907,20 @@ function DailyPromptPageInner({
 
 // useSearchParams() requires a Suspense boundary in Next.js App Router
 //
-// homeMode: when true, the component is embedded on the Today landing route
-// rather than the standalone /prompt route. Two effects: (1) the back chevron
-// is suppressed (there's nowhere to go back to from the landing), and (2)
-// the chrome header drops its fixed positioning so the JourneyContinueStrip
-// above it can sit at the top of the scroll cleanly.
+// topSlot: optional content rendered inside the fixed top chrome, above the
+// back/heart/share/music row. Today passes JourneyContinueStrip here so the
+// strip lives in the same stacking context as the gradient and is not
+// hidden behind it. Standalone /prompt does not pass anything.
 export default function PromptClient({
   initialDate,
-  homeMode,
+  topSlot,
 }: {
   initialDate?: string;
-  homeMode?: boolean;
+  topSlot?: React.ReactNode;
 } = {}) {
   return (
     <Suspense>
-      <DailyPromptPageInner initialDate={initialDate} homeMode={homeMode} />
+      <DailyPromptPageInner initialDate={initialDate} topSlot={topSlot} />
     </Suspense>
   );
 }

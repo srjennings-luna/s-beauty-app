@@ -105,10 +105,10 @@ export default function JourneyContinueStrip() {
       style={{
         // Espresso surface so it reads as part of the P&P atmosphere.
         // Subtle hairline border underneath to separate the strip from
-        // the gradient + P&P content below.
+        // the chrome header below. The safe-area-inset-top is handled
+        // by the fixed parent wrapper in PromptClient, not here.
         background: "rgba(22,17,13,0.78)",
         borderBottom: "0.5px solid rgba(253,246,232,0.08)",
-        paddingTop: "env(safe-area-inset-top, 16px)",
       }}
       aria-label={`Continue ${journey.title}, day ${nextDay} of ${totalDays}`}
     >
