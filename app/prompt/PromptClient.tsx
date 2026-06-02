@@ -399,10 +399,13 @@ function DailyPromptPageInner({
         )}
 
         {/* ── Hero — pinch-to-zoom + pan ───────────────────────────────────── */}
+        {/* The 48px top margin pushes the hero down below the fixed glass
+            header on /prompt. In homeMode the header sits in flow above,
+            so the margin would just add dead space. */}
         <div
           ref={heroRef}
           className="relative w-full overflow-hidden"
-          style={{ height: "62vh", marginTop: "48px" }}
+          style={{ height: "62vh", marginTop: homeMode ? 0 : "48px" }}
         >
           <TransformWrapper
             maxScale={8}
