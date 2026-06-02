@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import PromptClient from "./prompt/PromptClient";
-import JourneyContinueStrip from "@/components/JourneyContinueStrip";
 
 // Today landing.
 //
@@ -12,16 +11,15 @@ import JourneyContinueStrip from "@/components/JourneyContinueStrip";
 // surface of Journeys / Explore, no separate header chrome. The user
 // opens the app and lands directly inside today's contemplative moment.
 //
-// JourneyContinueStrip is passed to PromptClient via the topSlot prop so
-// it renders INSIDE the fixed top chrome (above the back/heart/share/
-// music row) and stays in the same stacking context as the P&P gradient.
-// Rendering the strip as a sibling outside PromptClient would put it
-// behind the gradient because of the fixed-position layering.
-//
-// The strip returns null when no journey is in progress, collapsing the
-// top chrome back to just the chrome row. Multi-journey users see only
-// the most-recently-touched journey here; the Journeys tab carries the
-// full picture.
+// JourneyContinueStrip rollback (June 2, 2026): the strip component
+// remains in the repo at components/JourneyContinueStrip.tsx but is no
+// longer rendered here. Earlier attempts to surface it above the chrome
+// row failed to render reliably on device despite multiple stacking-
+// context fixes. The leading hypothesis is a slug mismatch between
+// localStorage progress records and Sanity's slug.current, but cost of
+// further iteration outweighed the value of an auxiliary surface.
+// Backlog item: revisit with a fresh investigation in a dedicated build.
+// Today now collapses to pure P&P, matching standalone /prompt.
 export default function TodayPage() {
   const router = useRouter();
   const [hasOnboarded, setHasOnboarded] = useState<boolean | null>(null);
@@ -50,5 +48,5 @@ export default function TodayPage() {
     return <div className="min-h-screen bg-parchment" />;
   }
 
-  return <PromptClient topSlot={<JourneyContinueStrip />} />;
+  return <PromptClient />;
 }

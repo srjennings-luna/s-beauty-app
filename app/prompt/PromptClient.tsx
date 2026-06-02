@@ -94,15 +94,16 @@ function toggleFavorite(id: string): boolean {
 }
 
 // ── Music ─────────────────────────────────────────────────────────────────────
-const MUSIC_CHANT   = "/music/nickpanek-ave-maria-latin-catholic-gregorian-chant-218251.mp3";
-const MUSIC_AMBIENT = "/music/natureseye-piano-dreamcloud-meditation-179215.mp3";
+// Background music (Chant / Ambient) was removed June 2, 2026. Editorial
+// decision: music selection is content-specific per day and lives in the
+// Auditio field of each dailyPrompt. General music browsing will move to
+// the Explore tab. The Music button + dropdown was simplifying clutter
+// out of the contemplative chrome row.
 
 function DailyPromptPageInner({
   initialDate,
-  topSlot,
 }: {
   initialDate?: string;
-  topSlot?: React.ReactNode;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -117,8 +118,9 @@ function DailyPromptPageInner({
   const [loading, setLoading]             = useState(true);
   const [favorited, setFavorited]         = useState(false);
   const [completed, setCompleted]         = useState(false);
+  // `musicPlaying` now tracks Auditio (artwork audio) playback only.
+  // Background-music state was retired with the Music button removal.
   const [musicPlaying, setMusicPlaying]   = useState(false);
-  const [musicMenuOpen, setMusicMenuOpen] = useState(false);
   const [checkedItems, setCheckedItems]   = useState<boolean[]>([]);
   const [contextExpanded, setContextExpanded] = useState(false);
   const [verbaOpen, setVerbaOpen]             = useState(false);
@@ -127,11 +129,9 @@ function DailyPromptPageInner({
 
   const heroRef               = useRef<HTMLDivElement>(null);
   const actioRef              = useRef<HTMLDivElement>(null);
-  const audioRef              = useRef<HTMLAudioElement | null>(null);  // background music
   const auditioRef            = useRef<HTMLAudioElement | null>(null);  // artwork audio
   const observerRef           = useRef<IntersectionObserver | null>(null);
   const wasAuditioPlayingRef  = useRef(false);
-  const wasMusicPlayingRef    = useRef(false);
   // DOM refs for Auditio progress bar — direct manipulation for smooth real-time updates
   const auditioFillRef        = useRef<HTMLDivElement | null>(null);
   const auditioTimeRef        = useRef<HTMLSpanElement | null>(null);
@@ -178,43 +178,17 @@ function DailyPromptPageInner({
     return () => observerRef.current?.disconnect();
   }, [loading, completed]);
 
-  // ── Music ──────────────────────────────────────────────────────────────────
-  const playChant = () => {
-    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
-    const a = new Audio(MUSIC_CHANT);
-    a.loop = true; a.volume = 0.7;
-    a.play().catch(() => {});
-    audioRef.current = a;
-    setMusicPlaying(true); setMusicMenuOpen(false);
-  };
+  // ── Auditio lifecycle ──────────────────────────────────────────────────────
+  // Cleanup on unmount.
+  useEffect(() => () => { auditioRef.current?.pause(); }, []);
 
-  const playAmbient = () => {
-    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
-    const a = new Audio(MUSIC_AMBIENT);
-    a.loop = true; a.volume = 0.7;
-    a.play().catch(() => {});
-    audioRef.current = a;
-    setMusicPlaying(true); setMusicMenuOpen(false);
-  };
-
-  const stopMusic = () => {
-    audioRef.current?.pause();
-    setMusicPlaying(false); setMusicMenuOpen(false);
-  };
-
-  useEffect(() => () => { audioRef.current?.pause(); auditioRef.current?.pause(); }, []);
-
-  // Pause music/Auditio when narration starts; auto-resume when narration ends
+  // Pause Auditio when narration starts; auto-resume when narration ends.
   useEffect(() => {
     const startHandler = () => {
       wasAuditioPlayingRef.current = !!(auditioRef.current && !auditioRef.current.paused);
-      wasMusicPlayingRef.current   = !!(audioRef.current  && !audioRef.current.paused);
-      if (audioRef.current && !audioRef.current.paused) {
-        audioRef.current.pause();
-        setMusicPlaying(false);
-      }
       if (auditioRef.current && !auditioRef.current.paused) {
         auditioRef.current.pause();
+        setMusicPlaying(false);
       }
     };
     const endHandler = () => {
@@ -222,10 +196,6 @@ function DailyPromptPageInner({
         auditioRef.current.play().catch(() => {});
         setMusicPlaying(true);
         wasAuditioPlayingRef.current = false;
-      } else if (wasMusicPlayingRef.current && audioRef.current) {
-        audioRef.current.play().catch(() => {});
-        setMusicPlaying(true);
-        wasMusicPlayingRef.current = false;
       }
     };
     window.addEventListener(NARRATION_START_EVENT, startHandler);
@@ -318,24 +288,26 @@ function DailyPromptPageInner({
         />
 
         {/* ── Sticky top chrome ────────────────────────────────────────────
-            Single fixed container that holds the optional topSlot (used by
-            Today to render the JourneyContinueStrip above the chrome) and
-            the chrome header itself. Putting both inside one fixed wrapper
-            keeps the safe-area handling on the outer element and avoids
-            the gradient's containing block hiding the slot. */}
+            Sticky (not fixed) so the chrome occupies its own physical row
+            at the top of the document, with the image flush below it. As
+            the user scrolls, the chrome pins to the viewport top. Image
+            scrolls up and disappears under the chrome cleanly. Removing
+            the prior `fixed` + hero `marginTop: 48px` pattern eliminates
+            the dead space above the image that long predated the strip
+            work. June 2, 2026 redesign.
+            Music button + dropdown removed same date (see Music section). */}
         <div
-          className="fixed top-0 left-0 right-0 z-30"
+          className="sticky top-0 z-30"
           style={{
             paddingTop: "env(safe-area-inset-top, 16px)",
+            background: "rgba(22,17,13,0.82)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
           }}
         >
-          {topSlot}
           <div
             className="flex items-center justify-between px-4 py-3"
             style={{
-              background: "rgba(22,17,13,0.82)",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
               borderBottom: `1px solid ${C.divider}`,
             }}
           >
@@ -371,39 +343,23 @@ function DailyPromptPageInner({
                 <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/>
               </svg>
             </button>
-            <button
-              onClick={() => setMusicMenuOpen(!musicMenuOpen)}
-              className="text-xs font-medium"
-              style={{ color: musicPlaying ? "var(--pp-accent)" : C.creamFaint }}
-            >
-              {musicPlaying ? "♪" : "Music"}
-            </button>
           </div>
         </div>
         </div>
 
-        {/* Music menu */}
-        {musicMenuOpen && (
-          <>
-            <div className="fixed inset-0 z-40" aria-hidden onClick={() => setMusicMenuOpen(false)} />
-            <div className="fixed top-14 right-4 z-50 w-40 py-1 shadow-lg" style={{ background: "#1e1410", border: `1px solid ${C.divider}` }}>
-              {musicPlaying && (
-                <button onClick={stopMusic} className="w-full px-4 py-2 text-left text-sm" style={{ color: C.cream }}>Stop</button>
-              )}
-              <button onClick={playChant} className="w-full px-4 py-2 text-left text-sm" style={{ color: C.creamDim }}>Chant</button>
-              <button onClick={playAmbient} className="w-full px-4 py-2 text-left text-sm" style={{ color: C.creamDim }}>Ambient</button>
-            </div>
-          </>
-        )}
-
         {/* ── Hero — pinch-to-zoom + pan ───────────────────────────────────── */}
-        {/* Top margin pushes the hero below the fixed top chrome. When a
-            topSlot is present (Today's JourneyContinueStrip), the chrome is
-            taller, so the margin grows to clear it. */}
+        {/* Dynamic height — the image determines container height. Wide
+            horizontal pieces produce a short hero; tall icons / portraits
+            produce a tall one. `max-height: 85vh` caps the extreme so a
+            very tall painting still lets the date + title peek at the
+            bottom of the first viewport. No more fixed 62vh letterbox.
+            No marginTop — chrome is sticky and sits above this row in
+            document flow, so the image starts flush against the chrome's
+            bottom border. June 2, 2026 redesign. */}
         <div
           ref={heroRef}
           className="relative w-full overflow-hidden"
-          style={{ height: "62vh", marginTop: topSlot ? "96px" : "48px" }}
+          style={{ maxHeight: "85vh" }}
         >
           <TransformWrapper
             maxScale={8}
@@ -412,13 +368,13 @@ function DailyPromptPageInner({
             wheel={{ disabled: true }}
           >
             <TransformComponent
-              wrapperStyle={{ width: "100%", height: "100%" }}
-              contentStyle={{ width: "100%", height: "100%" }}
+              wrapperStyle={{ width: "100%", height: "auto" }}
+              contentStyle={{ width: "100%", height: "auto" }}
             >
               <img
                 src={prompt.content.imageUrl}
                 alt={prompt.content.title}
-                className="w-full h-full object-contain"
+                style={{ width: "100%", height: "auto", maxHeight: "85vh", display: "block" }}
               />
             </TransformComponent>
           </TransformWrapper>
@@ -429,25 +385,57 @@ function DailyPromptPageInner({
             style={{ background: `linear-gradient(to top, rgba(22,17,13,0.35) 0%, transparent 50%)` }}
           />
 
-          {/* Pinch hint — fades after first interaction */}
+          {/* Pinch hint — overlaid bottom-right of image, fades on first
+              pinch (zoom transforms displace the parent so this text
+              naturally disappears with interaction). */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              bottom: 12,
+              right: 14,
+              color: "rgba(253,246,232,0.5)",
+              fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+              fontSize: 11,
+              fontStyle: "italic",
+              letterSpacing: "0.02em",
+              textShadow: "0 1px 3px rgba(0,0,0,0.45)",
+            }}
+          >
+            pinch to explore image
+          </div>
         </div>
 
-        {/* ── Title + date — always below image, small print ───────────────── */}
-        {/* No background — the PPGradientBackground layer is the atmosphere now. */}
-        <div className="px-6 pt-5 pb-2">
-          <div className="flex items-center justify-between mb-1">
-            <p className="text-xs tracking-widest uppercase" style={{ color: "var(--pp-accent)", letterSpacing: "0.15em" }}>
-              {new Date(prompt.date + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
-            </p>
-            <p className="text-xs tracking-wide pointer-events-none" style={{ color: "rgba(253,246,232,0.4)" }}>
-              pinch to explore image
-            </p>
-          </div>
+        {/* ── Editorial title + date ────────────────────────────────────────
+            Date on its own line in sage caps (color cascades from the
+            type-accent so a Music day reads plum, a Sacred Art day
+            reads mineral blue, etc.). Title sits below the date in
+            Cormorant Garamond italic at 50px — confidently editorial.
+            Pinch hint that used to share the date's row has moved onto
+            the image as an overlay (see hero block above). June 2, 2026.
+            No background — PPGradientBackground is the atmosphere now. */}
+        <div className="px-6" style={{ paddingTop: 32, paddingBottom: 4 }}>
+          <p
+            className="uppercase"
+            style={{
+              color: "var(--pp-accent)",
+              fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+              fontSize: 11.5,
+              fontWeight: 600,
+              letterSpacing: "0.24em",
+              marginBottom: 14,
+            }}
+          >
+            {new Date(prompt.date + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+          </p>
           <p
             style={{
-              color: C.creamDim,
-              fontSize: "clamp(0.9rem, 3vw, 1.05rem)",
-              fontWeight: 400,
+              color: C.cream,
+              fontFamily: "var(--font-cormorant), 'Cormorant Garamond', serif",
+              fontStyle: "italic",
+              fontWeight: 500,
+              fontSize: "clamp(2.25rem, 11vw, 3.125rem)",
+              lineHeight: 1.02,
+              letterSpacing: "0.003em",
             }}
           >
             {prompt.content.title}
@@ -643,8 +631,6 @@ function DailyPromptPageInner({
                           auditioRef.current?.pause();
                           setMusicPlaying(false);
                         } else {
-                          // Stop background music if running
-                          if (audioRef.current) { audioRef.current.pause(); }
                           // Create fresh audio element on first play or after track ended
                           if (!auditioRef.current || auditioRef.current.ended) {
                             const a = new Audio(prompt.auditio!.audioFileUrl ?? prompt.auditio!.audioUrl);
@@ -905,22 +891,19 @@ function DailyPromptPageInner({
   );
 }
 
-// useSearchParams() requires a Suspense boundary in Next.js App Router
+// useSearchParams() requires a Suspense boundary in Next.js App Router.
 //
-// topSlot: optional content rendered inside the fixed top chrome, above the
-// back/heart/share/music row. Today passes JourneyContinueStrip here so the
-// strip lives in the same stacking context as the gradient and is not
-// hidden behind it. Standalone /prompt does not pass anything.
+// The `topSlot` prop (used to render JourneyContinueStrip above the chrome
+// on Today) was removed June 2, 2026 along with the strip rollback. Today
+// now renders <PromptClient /> exactly as standalone /prompt does.
 export default function PromptClient({
   initialDate,
-  topSlot,
 }: {
   initialDate?: string;
-  topSlot?: React.ReactNode;
 } = {}) {
   return (
     <Suspense>
-      <DailyPromptPageInner initialDate={initialDate} topSlot={topSlot} />
+      <DailyPromptPageInner initialDate={initialDate} />
     </Suspense>
   );
 }
