@@ -67,6 +67,9 @@ Pinterest and Facebook still to claim (see Manual Tasks 71-72).
 | `content-docs/CONTENT-RULES.md` | **In repo** — condensed content rules reference |
 | `content-docs/KALLOS-CC-Audit-Brief.html` | **In repo** — Claude Code audit brief. READ THIS before any architecture or schema work. |
 | `content-docs/CONTUERI-CC-Explore-Library-Brief.html` | **In repo** — Claude Code build brief for Explore bubbles + Option E detail + Library subtitle polish. Shipped May 29, 2026. Includes Music bubble exclusion note. |
+| `content-docs/CONTUERI-CC-Polish-Brief.html` | **In repo** — Claude Code build brief for Explore + Library polish pass: physics tuning, toggle placement, safe-area, reduced-motion, list card borders. Shipped May 29, 2026. |
+| `content-docs/CONTUERI-CC-Rebrand-Brief.html` | **In repo** — Claude Code brief for full KALLOS → CONTUERI codebase rebrand: 10 tasks covering user-facing text, metadata, share text, and localStorage onboarding key rename. Pending CC execution (see Manual Task 82). |
+| `content-docs/CONTUERI-Theme-Research.html` | **In repo** — Research doc for expanding the Sanity theme library. Intellectual tradition context (Augustinian/Neoplatonic), search strategies, key figures table, 15 candidate themes. |
 | `content-docs/KALLOS-CC-Schema-Design-Brief.html` | **In repo** — Claude Code schema design and migration brief. ✅ Complete April 23, 2026. |
 | `content-docs/KALLOS-CC-Dashboard-Enhancement-Brief.html` | **In repo** — Claude Code dashboard enhancements brief. ✅ Complete April 24, 2026.
 | `content-docs/KALLOS-CC-Content-Review-Dashboard-Brief.html` | **In repo** — Content Review Dashboard design brief. Architecture input requested from Opus before any build begins. Five open questions: where to build (Next.js vs App SDK), cross-type row model, detail panel strategy, preset view persistence, data fetching approach.
@@ -91,6 +94,9 @@ Pinterest and Facebook still to claim (see Manual Tasks 71-72).
 | `KALLOS-HolyWeek-Sanity-Entry-Guide.html` | Holy Week P&P Sanity entry guide — all 8 days (Palm Sunday–Easter), all fields pre-filled except Lectio + Actio (placeholders with territory guidance). Deadline March 28. |
 | `KALLOS-PM-Brief.html` | Product brief for cold sessions — product purpose, the seven real users, what "earns its place," Lectio quality standard, Sheri's working style, settled decisions. Read this before any content or editorial work. |
 | `KALLOS-Onboarding-Copy.html` | Onboarding screen copy — 4 screens, voice-reviewed March 2026. Reference doc for onboarding build. |
+| `Three-Ways-Reference.html` | **Cowork doc (Documents folder)** — comprehensive reference sheet on the Three Ways (purgative, illuminative, unitive). Covers key thinkers + dates, writings, themes, bios (Origen, Pseudo-Dionysius, John of the Cross), modern adaptations (Jung, Campbell, AA, Rohr, Keating, Fowler, Malick), additional themes with attributions, further reading, classical education parallel (Trivium mapping), and 18 source links. Created June 1, 2026. |
+| `Three-Ways-Timeline.html` | **Cowork doc (Documents folder)** — genealogy roadmap from Plato to the CCC (1992). 7 eras, orthodox development nodes, 8 heresy forks with condemnation dates, councils, pivotal moments (plum), myth-to-fact sidebar arc, closing essay on when philosophical metaphor became magisterial doctrine. Created June 1, 2026. |
+| `CONTUERI-Journey-Map-ThreeWays-OOTSP.html` | **Cowork doc (Documents folder)** — day-by-day planning maps for two journeys: Journey 1 "The Way Within" (Three Ways as 7-day arc: purgative Days 1-3, illuminative Days 4-5, threshold Day 6, unitive Day 7) and Journey 2 "Out of the Silent Planet" (Lewis's purgative displacement across 7 days). Draft for review. Part of a planned 4-journey arc. Created June 1, 2026. |
 
 **Launch docs (in `~/Documents/KALLOS Launch/`):**
 
@@ -113,6 +119,44 @@ Pinterest and Facebook still to claim (see Manual Tasks 71-72).
 - Bug fixes: aria-labels, error states, TypeScript consolidation
 - `data/episodes.ts` deleted
 - Build passes clean — deployed to Vercel
+
+### Phase 2 Work Done (June 2, 2026 · Today + P&P redesign, strip rollback)
+
+- ✅ **Today + P&P redesign shipped.** Commits `a3491aee` (main redesign) and `5a0f2cba` (pinch-hint fade fix). Today landing and standalone `/prompt` share identical chrome/layout now. Live behavior:
+  - **Sticky chrome.** Chrome row sits above the image in document flow (`position: sticky; top: 0`) and pins to viewport top on scroll. Image scrolls up under the chrome cleanly. Safe-area-inset-top lives on the sticky wrapper so it clears the iOS notch. The prior `position: fixed` + hero `marginTop: 48px/96px` pattern is gone, along with the dead space it created above wide images.
+  - **Dynamic hero height.** Hero loses fixed `height: 62vh` + `object-contain` (which letterboxed wide frescoes). Image now uses `width: 100%; height: auto; max-height: 85vh`. Wide horizontal pieces give a short hero, tall portraits give a tall one, no letterboxing. Confirmed on device for both shapes: Justin Martyr (wide fresco) on Today, El Greco "Christ in Gethsemane (Agony in the Garden)" (tall portrait) via Library archive.
+  - **Editorial title + date.** Title bumps from ~22px to 50px Cormorant Garamond italic (weight 500, line-height 1.02). Date moves to its own line above the title in sage/Montserrat caps (11.5px, weight 600, letter-spacing 0.24em). Date color cascades from `var(--pp-accent)` so each content type reads in its own accent. Title wraps flush-left; see CLAUDE_REFERENCE.md Typography for the multi-line rule.
+  - **Music button + dropdown removed from P&P chrome.** Editorial simplification: per-day music lives in the Auditio field of each `dailyPrompt`; general music browsing will move to the Explore tab when Music content is built out. `MUSIC_CHANT`/`MUSIC_AMBIENT` constants, `playChant`/`playAmbient`/`stopMusic` functions, `audioRef`, `wasMusicPlayingRef`, `musicMenuOpen` state, and the background-music half of the narration pause/resume handlers all deleted. `musicPlaying` state stays but now exclusively tracks Auditio playback.
+  - **Pinch hint moved onto the image.** "pinch to explore image" used to share the date's row below the image; now it sits as an overlay on the bottom-right of the hero with a soft text shadow for legibility on light artwork edges. Fades to opacity 0 over 400ms on first zoom or pan (TransformWrapper's `onZoomStart` + `onPanningStart` callbacks set `heroInteracted` state). Stays hidden for the rest of the session. Marked `aria-hidden` once faded.
+- ✅ **JourneyContinueStrip rolled back from Today.** The component never landed reliably on device despite multiple stacking-context fixes through the late-May sprint. Component file remains at `components/JourneyContinueStrip.tsx` (unused) for a future fresh-eyes investigation. `app/page.tsx` now renders `<PromptClient />` exactly as standalone `/prompt`. Today collapses to pure P&P. Backlog entry logged in `~/Documents/Kallos-UX-Backlog.html` under Pending with leading suspect: `localStorage["kallos-journey-progress"]` slug keys not matching Sanity `slug.current`.
+
+### Phase 2 Work Done (June 1, 2026 — Three Ways Research + Journey Planning)
+
+- ✅ **Three Ways reference suite created (Cowork session).** Three documents built covering the full Three Ways framework and its intellectual lineage:
+  - `Three-Ways-Reference.html` — comprehensive reference sheet with thinker timeline, bios, modern adaptations, additional themes, Trivium parallel, and sources
+  - `Three-Ways-Timeline.html` — genealogy roadmap from Plato to the CCC (1992) with heresy forks, councils, myth-to-fact arc, and closing essay
+  - `CONTUERI-Journey-Map-ThreeWays-OOTSP.html` — day-by-day planning maps for Journey 1 (Three Ways as arc) and Journey 2 (Out of the Silent Planet)
+- ✅ **Four-journey Lewis Space Trilogy arc confirmed.** Journey 1: The Three Ways (theological map). Journey 2: Out of the Silent Planet (purgative). Journey 3: Perelandra (illuminative). Journey 4: That Hideous Strength + Abolition of Man (unitive stakes). Each journey standalone; all four form a complete arc.
+- ✅ **Trivium/Three Ways parallel documented.** Grammar/Logic/Rhetoric maps structurally onto Purgative/Illuminative/Unitive. Hugh of St. Victor (1096-1141) is the only medieval figure who explicitly unified them. Gap in contemporary literature confirmed: no canonical piece connecting the two traditions currently exists.
+
+### Phase 2 Work Done (May 29, 2026 — Contueri Polish Build + Rebrand Brief)
+
+- ✅ **Explore Polish CC session shipped.** 9-task polish brief (`CONTUERI-CC-Polish-Brief.html`) executed. Key results:
+  - iOS safe-area gap fixed: `env(safe-area-inset-top, 16px)` with 16px non-notch fallback. Correct fix is NOT `max(env(), 48px)` -- that form preserves the gap on non-notch devices.
+  - Reduced-motion users default to list view on Explore; toggle still available for override.
+  - Toggle placement settled: separate row below Zone 2 tagline, right-aligned. Not inside the Zone 2 header row.
+  - Bubble physics tuned to meditative feel: BUBBLE_RESTITUTION 0.70 (from 0.88), WALL_RESTITUTION 0.12 (unchanged), DAMPING 0.991.
+  - Explore toggle icon color: 3 distinct sage green hues (variants of `#4a7a62`). Not espresso. Not the fresco palette. Will revisit in a future session.
+- ⚠️ **Library layout change -- under review.** CC removed the ALL/SAVED toggle and surfaced Saved as its own section above the archive. Sheri has not approved this change and does not like the new layout. See Manual Task 85.
+- ✅ **KALLOS → CONTUERI Rebrand Brief written.** `content-docs/CONTUERI-CC-Rebrand-Brief.html` -- 10 tasks covering all user-facing text, metadata, share text, and localStorage onboarding key. Pronunciation confirmed: `kon · too · air · ee`. The `kallos-onboarded` → `contueri-onboarded` rename is intentional (re-shows splash on next visit for existing users -- splash content is changing to match new brand). See Manual Task 82. Do NOT rename: `kallos-prompt-streak`, `kallos-prompt-last`, `kallos-journey-progress`, `kallos-visio-note-*` -- renaming those wipes user streak, progress, and notes data.
+- ✅ **Contueri intellectual tradition identified.** Existing themes (Light, Silence, Restless Heart, Music) are rooted in the Augustinian/Western Christian contemplative tradition, grounded in Neoplatonism (Plato → Plotinus → Augustine → medieval mystics). Best single search for more themes: "Classics of Western Spirituality Paulist Press" series -- each volume's table of contents is a ready-made theme list. 15 candidate themes + key figures table documented in `content-docs/CONTUERI-Theme-Research.html`.
+- ✅ **Onboarding copy fully rewritten for Contueri brand.** All 5 screens updated in `app/splash/fallback.ts` and Sanity Studio:
+  - Screen 1: wordmark CONTUERI, pronunciation `kon · too · air · ee`, tagline field holds Latin definition "Contueri: To gaze on, behold, contemplate with purpose" as intentional placeholder (see Onboarding Framework below).
+  - Screen 2 P&P description (new): "Every day, a painting, a proof, a text, a life to sit with."
+  - Screen 3 Journey description (new): "Or go deeper. A theme, artist, or author. One day at a time."
+  - Screen 4 hook (new): "Ever had that feeling?" -- common phrase, users will recognize it immediately.
+  - Screen 5: Ghost CTA button (thin gilt border, gilt text, transparent fill); secondary = "SKIP" at reduced opacity matching the Skip button top-right.
+- ✅ **Splash CTA redesigned to ghost button.** Primary CTA: transparent background, `1.5px solid #B89238` border, gilt text. Gradient CTA was rejected. Secondary CTA changed from "See today's Pause and Ponder" to "SKIP" at opacity 0.4 -- both routes now sit in the same gilt thread without one dominating the other.
 
 ### Phase 2 Work Done (May 29, 2026 — Explore Bubbles + Library Polish)
 
@@ -193,7 +237,7 @@ Light 52px, Silence 47px, Suffering & Beauty 50px, Creation 49px, Home/The Restl
 - ✅ 18 days of P&P content seeded into Sanity via script (Days 2–18; Day 1 St. Patrick manually entered). Day 2 Bosch philosophy/Lectio fields still need manual entry — see Manual Tasks.
 - ✅ UTC timezone bug fixed — `getDailyPrompt()` now uses local timezone (`toLocaleDateString('en-CA')`) instead of UTC `.toISOString()`. Fixes "wrong day showing after 7pm ET" bug.
 - ✅ P&P page — Begin state removed. Today card BEGIN → is the only entry trigger. No second gate on the P&P page itself.
-- ✅ P&P page layout locked: Image (62vh) → Title + date below image → Curator Note → Prompt Question → Context (teaser + expand) → Lectio → Auditio → Actio
+- ✅ P&P page layout locked: Image (62vh) → Title + date below image → Curator Note → Prompt Question → Context (teaser + expand) → Lectio → Auditio → Actio. **Superseded June 2, 2026.** See June 2 Phase 2 entry for the dynamic-height hero + editorial title pass that replaced the 62vh letterboxed treatment.
 - ✅ P&P typography rule applied: Cormorant Garamond ONLY for prompt question, lectio quotes, auditio title. Open Sans for all other text (curator note, title, context, actio items).
 - ✅ P&P context teaser: first 2 sentences always visible; "Read more / Less" toggle reveals remainder.
 - ✅ P&P hero: 8x pinch-to-zoom + pan (react-zoom-pan-pinch). "pinch to explore" hint bottom-right. Parallax removed (conflicts with zoom).
@@ -390,12 +434,12 @@ Light 52px, Silence 47px, Suffering & Beauty 50px, Creation 49px, Home/The Restl
 
 **Screen count:** Target 5 screens. 4 feels tight; up to 6 is acceptable. Each screen does one thing.
 
-**Proposed 5-screen structure:**
-1. Brand identity — KALLOS wordmark, pronunciation (*kal · os*), brief "what this is" framing. Not the hook — grounding first.
-2. App purpose — high-level explanation of why KALLOS exists. The idea of beauty, truth, goodness as a way of seeing. Copy being wordsmithed by Sheri.
-3. Feature tour — two things only: daily P&P and Journeys. Format: two stacked cards (mobile), each with a small visual + one sentence. Card 1: cropped artwork thumbnail + "Every day — a piece of art and a question to sit with." Card 2: journey card visual + "Or go deeper — 7 days into Beauty, Truth, and Goodness." No icons, no bullet lists, no feature names. Show what they'll encounter, not what the product is.
-4. Hook — the emotional culmination. This is the last thing before the CTA. Copy being wordsmithed by Sheri.
-5. CTA — primary: start the 3-day BTG journey. Secondary: skip to Today (P&P). Label TBD.
+**Current 5-screen structure (locked May 29, 2026):**
+1. Brand identity — CONTUERI wordmark, pronunciation `kon · too · air · ee`, Dostoevsky quote "Beauty will save the world.", tagline field: "Contueri: To gaze on, behold, contemplate with purpose" (Latin definition placeholder -- see Tagline Field note above). Not the hook -- grounding first.
+2. The Three — Beauty. Truth. Goodness. Introduces the transcendentals. Body: "Ancient philosophers called them the transcendentals... Follow any one far enough, you might find something unexpected." Tagline: "CONTUERI is built on that."
+3. Feature tour -- two cards: "Pause and Ponder" card: "Every day, a painting, a proof, a text, a life to sit with." Journeys card: "Or go deeper. A theme, artist, or author. One day at a time."
+4. Hook -- "Ever had that feeling?" (common phrase, users will know immediately). Body describes the experience: the painting you can't look away from, music that opens something, a line from a book carried for years. Closes: "CONTUERI is built for exactly that."
+5. CTA -- "Start here →" routes to BTG journey. Secondary: "SKIP" at reduced opacity (matches Skip button top-right). Ghost button style: transparent fill, gilt border + text.
 
 **Note:** Screen order above is indicative. The hook (4) is the only locked position — always the culmination before the CTA. Screens 2 and 3 can be reordered. If the hook copy is strong enough to carry purpose + emotion in one screen, Screens 2 and 4 could merge — but keep them separate until copy is confirmed.
 
@@ -406,15 +450,25 @@ Light 52px, Silence 47px, Suffering & Beauty 50px, Creation 49px, Home/The Restl
 **Secondary option:** Skip to Today (P&P) or Browse Journeys — always available.
 
 **Onboarding gate — show once per install, skip in iframes:**
-- `localStorage` flag `kallos-onboarded` — set on skip or CTA tap, checked on Today page load. Once set, splash never shows again for that install/browser.
+- `localStorage` flag `contueri-onboarded` (renamed from `kallos-onboarded` via CC Rebrand Brief) — set on skip or CTA tap, checked on Today page load. Once set, splash never shows again for that install/browser. The rename intentionally re-shows the splash for existing users -- splash content has changed for the rebrand.
 - Iframe guard: if `window.self !== window.top` (Sanity Presentation preview context), the gate is bypassed entirely and the Today page renders directly. Prevents Presentation iframes being hijacked to `/splash` on cold load.
-- Changed April 24, 2026 from `sessionStorage` (every session) to `localStorage` (once per install). Earlier beta-only "show every session" rule retired — it was hijacking preview iframes and wasn't serving real beta testers (who rarely closed the tab).
+- Changed April 24, 2026 from `sessionStorage` (every session) to `localStorage` (once per install). Earlier beta-only "show every session" rule retired -- it was hijacking preview iframes and wasn't serving real beta testers (who rarely closed the tab).
 - Reverting to every-session behavior would require: swap `localStorage` → `sessionStorage` in `app/page.tsx` gate + `app/splash/page.tsx` `markSession`. Not recommended.
 
 **Skip behavior:**
 - Skip button visible at all times on all screens.
 - Skip routes to Today page (P&P / current daily prompt).
-- On return: splash does NOT show again (localStorage persists). To force-re-view, clear site data in DevTools or delete the `kallos-onboarded` key in localStorage.
+- On return: splash does NOT show again (localStorage persists). To force-re-view, clear site data in DevTools or delete the `contueri-onboarded` key in localStorage (renamed from `kallos-onboarded` via CC Rebrand Brief Task 1 + 3).
+
+**localStorage keys -- critical, never rename these four:**
+- `kallos-prompt-streak` -- user streak count; renaming wipes it
+- `kallos-prompt-last` -- last visit date; renaming resets streak
+- `kallos-journey-progress` -- journey completion state; renaming wipes progress
+- `kallos-visio-note-*` -- user-written Visio Divina notes; renaming loses content
+These four keep the `kallos-` prefix permanently. They can be migrated in a future dedicated session with a key-migration utility. Do not rename them as part of the rebrand.
+
+**Tagline field on Screen 1 -- why it holds a definition, not a tagline:**
+The `tagline` block type on Screen 1 currently holds the Latin definition: "Contueri: To gaze on, behold, contemplate with purpose." This is an intentional placeholder. The app has no official brand tagline yet. "Beauty will save the world." (Dostoevsky) is used as a quote on Screen 1 but has not been designated as the official tagline. Do NOT remove the tagline block or treat it as an error -- it is holding a meaningful field that will be updated once the tagline decision is made. See Open Decisions #6.
 
 **Navigation:** Same Stories-style thin progress bar + swipe as Journey steps. No back button needed. Skip always visible top-right.
 
@@ -498,6 +552,7 @@ All live in the `contentItem` Sanity schema with `contentType` field:
   - **Parchment mode** (browse): `#fdf6e9` — Today, Explore, Journeys, Library
 - **Gold accent:** `#C19B5F` — CTAs, active states, labels. NOT `#C9A227`.
 - **Sage:** `#4a7a62` — active step indicator, interactive elements
+- **Explore toggle icon color:** 3 distinct sage green hues (variants of `#4a7a62`). Not espresso (`#16110d`). Not the fresco/bubble palette. This is "good enough for now" -- will be revisited in a future design pass.
 - **Typography:** Montserrat (labels/UI), Open Sans regular (body), Open Sans italic (contemplative instructional text), Cormorant Garamond (quoted material only — 1.3rem minimum, line height 1.4). Below 1.3rem, use Open Sans italic instead. Cormorant is a display typeface; it breaks down at small sizes on screen.
 - **Images:** Min 1200px, up to 4500px. 8x zoom on Breathe page and P&P hero (react-zoom-pan-pinch).
 - **Safe areas:** Always pad for phone notches and home indicators.
@@ -630,8 +685,8 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 - **Visio Divina** (`/pray/[artworkId]`) — 5-step prayer: Gaze → Meditate → Pray → Contemplate → Action. Finish button routes to `/library` (not `router.back()` — safe from any entry point including share links and Presentation iframes).
 - **Go Deeper** — Tradition reflections (Church Fathers, Saints, Popes) expandable bar
 - **8x pinch-to-zoom** — On Breathe page (Journey), content detail (Explore), and P&P hero image
-- **P&P page** — No Begin state. Layout: Image → Title/date → Curator Note → Prompt Question → Context teaser → Lectio → Auditio → Actio. Typography: Cormorant for prompt question and lectio quotes (both, always, at 1.3rem+). Open Sans italic for auditio title. Open Sans regular for everything else.
-- **Music player** — Chant / Ambient options on Pray page
+- **P&P page**: No Begin state. Sticky chrome (back / heart / share; no Music button as of June 2, 2026) sits above a dynamic-height hero (image determines container height, capped at 85vh). Pinch hint sits as an overlay on the image bottom-right and fades on first zoom/pan. Below the image: date on its own line in sage caps (color cascades from `--pp-accent`), then title in 50px Cormorant Garamond italic, then Curator Note → Prompt Question → Context teaser → Lectio → Auditio → Actio. Typography: Cormorant for prompt question, lectio quotes, and the editorial title (1.3rem minimum for quotes; ~3.125rem for title). Open Sans italic for auditio title. Open Sans regular for everything else.
+- **Music player**: Chant / Ambient options on Visio Divina / Pray page. Removed from P&P chrome June 2, 2026 (per-day music lives in Auditio; general browsing will move to Explore when Music content ships).
 - **Map** with colored markers by content type
 - **Journey Social Sharing** — Share CTA on Connect step (Step 5). Upload arrow icon + "SHARE THIS JOURNEY" small caps. Web Share API sends journey title + URL. OG meta tags on each journey page pull title, description, and hero image from Sanity for rich link previews. `NEXT_PUBLIC_SITE_URL` env var controls base URL.
 - **Share This Day** — Upload arrow icon on each day list row (left of chevron). Shares `/journeys/[slug]?day=N` with day title + "Day N of [Journey]" as OG metadata. iMessage card shows day artwork and day title. `stopPropagation` so tap-to-open still works.
@@ -985,9 +1040,20 @@ These are not yet made. Do not assume or resolve them without a session with She
 2. **Color palette** — Does the existing Contueri/KALLOS palette (espresso #16110d, gold #C19B5F, parchment #fdf6e8, sage #4a7a62) carry over as-is, or is a fresh start warranted with the rebrand?
 3. **One-line descriptor** — What is the single sentence that describes Contueri for someone who has never heard of it? Governs App Store copy, social bio, pitch deck cover. Not yet written.
 4. **App vs. mail content split** — Does the mail subscription deliver unique content not in the app, or is it a physical companion to the app experience? Governs the editorial calendar and content creation workload.
-5. **Protestant sensitivity** — Two options: (a) be transparent about Catholic roots and trust that intellectual honesty draws broad-minded Protestants, or (b) lead so firmly with "beauty and tradition" that Protestant visitors self-select in without friction. Recommendation is (a) — transparency is a feature, not a risk. Not yet locked.
+5. **Protestant sensitivity** — Two options: (a) be transparent about Catholic roots and trust that intellectual honesty draws broad-minded Protestants, or (b) lead so firmly with "beauty and tradition" that Protestant visitors self-select in without friction. Recommendation is (a) -- transparency is a feature, not a risk. Not yet locked.
+6. **Official Contueri tagline** -- No official tagline exists yet. The splash Screen 1 tagline field currently holds the Latin definition as a placeholder. "Beauty will save the world." (Dostoevsky) appears as a quote on Screen 1 but is not the designated tagline. Once a tagline is decided, update Screen 1 in Sanity Studio and retire the placeholder.
 
 ---
+
+### Manual tasks added May 29, 2026 (Polish Build + Rebrand)
+
+82. **CC task — Execute CONTUERI-CC-Rebrand-Brief.html.** Brief is written and ready. 10 tasks, full KALLOS → CONTUERI codebase rebrand. Run this as a dedicated CC session before the next deploy to production. After CC completes: rename GitHub repo and Vercel project manually. Reminder: do NOT rename `kallos-prompt-streak`, `kallos-prompt-last`, `kallos-journey-progress`, or `kallos-visio-note-*` localStorage keys -- brief already excludes them.
+
+83. **CC task -- Fix Explore toggle icon color.** The list/bubble toggle icons should use 3 distinct sage green hues (variants of `#4a7a62`). The dark espresso color tried in the Polish Build session did not read well on device. Implement the 3-hue sage approach and verify on device before closing.
+
+84. **CC task -- Fix Explore list view card borders.** Each content item row in the list view is missing a thin card border. Add the card border to each list row to match the design. Polish Build CC session shipped rows without it.
+
+85. **Review Library layout -- CC changed without approval.** The Polish Build CC session removed the ALL/SAVED toggle and surfaced Saved as its own section above the archive. Sheri has not approved this layout change. Evaluate on device and decide: keep the new layout, modify it, or revert to the original ALL/SAVED toggle. Do not leave this as-is without an explicit decision.
 
 ### Manual tasks added May 29, 2026 (Explore + Library corrections)
 
@@ -999,7 +1065,7 @@ These are not yet made. Do not assume or resolve them without a session with She
 
 ### Manual tasks added May 2026 (Contueri rebrand and snail mail)
 
-70. **CC task — Contueri rebrand:** Find/replace KALLOS throughout the codebase (all files, comments, strings, routes, metadata). Rename GitHub repo (`kallos-app` → `contueri-app` or similar). Rename Vercel project. Update onboarding screens (wordmark, pronunciation note currently reads `kal · os` → update to `con · TWA · ri` or whatever TTS-confirmed phonetic is settled). Update App Store metadata. Do NOT run this until the one-line descriptor and tagline are decided — those will go in at the same time.
+70. **CC task — Contueri rebrand:** Full brief is now written: `content-docs/CONTUERI-CC-Rebrand-Brief.html`. 10 tasks: Today page display name, splash fallback content, splash localStorage key + CSS rename, share sheet text, journey share text, OpenGraph wordmark, root layout metadata, prompt page metadata, journey page metadata, dashboard metadata. Pronunciation: `kon · too · air · ee`. GitHub repo rename and Vercel project rename are separate manual steps (not in the CC brief). See Manual Task 82 to schedule the CC session. **Do NOT run until you are ready for existing users to see the splash again on next visit** (the `kallos-onboarded` → `contueri-onboarded` key rename is intentional and documented).
 
 71. **Claim @contueri on Pinterest** — Manual. Sheri does this directly on Pinterest.com.
 
@@ -1016,3 +1082,15 @@ These are not yet made. Do not assume or resolve them without a session with She
 77. **CC task (post-launch) — Migrate nav tab active indicator to `var(--pp-accent)` on `/prompt` route.** The global `components/ui/Navigation.tsx` uses a hardcoded color for the active tab. When on `/prompt`, the Today tab active indicator should pick up the type accent color for full system coherence. Intentionally deferred from the gradient build — address after gradient is confirmed in production.
 
 78. **Photography gradient untestable until a Photography P&P is created.** Cameron "English Blossoms" is re-tagged `photography` in Sanity (done May 28) but has never been used in a P&P — only in the BTG journey. Warm Slate (`#a49898`) is wired and ready; it just needs a Photography daily prompt to render against. Create one when the editorial pipeline reaches Photography.
+
+### Manual tasks added June 2026 (Three Ways reference suite + journey planning)
+
+79. **Review Three-Ways-Reference.html** — Read through the full reference sheet. Check accuracy of thinker bios (Origen, Pseudo-Dionysius, John of the Cross), modern adaptations, additional themes, and the Trivium comparison table. Note anything to correct or expand before using as a session reference doc.
+
+80. **Review Three-Ways-Timeline.html** — Read through the full genealogy roadmap. Verify the heresy fork descriptions and condemnation dates. Check the myth-to-fact sidebar arc and the closing essay. Flag anything that needs a source check.
+
+81. **Review CONTUERI-Journey-Map-ThreeWays-OOTSP.html** — Review both journey maps (The Way Within + Out of the Silent Planet) day by day. Confirm content type selections, lectio passages, and look-closer details are right for Contueri's voice and audience. Note any days that need a different content item or thinker pairing before moving to Sanity entry planning.
+
+82. **Decide: proceed with Perelandra and That Hideous Strength journey maps?** — If yes, schedule a Cowork session to map Journeys 3 and 4. Journey 3 (Perelandra) is illuminative; Journey 4 (THS) is unitive and integrates Abolition of Man Days 5-6. Confirm whether Abolition of Man warrants its own standalone journey or folds entirely into THS.
+
+83. **Consider: does Abolition of Man warrant a standalone journey?** — The book is 90 pages and integrates directly into THS, but it could also stand alone as a 5-7 day journey ("What Are We Made For?") aimed at classical educators and former evangelicals. Decision affects how the Lewis arc is marketed and sequenced in the app.
