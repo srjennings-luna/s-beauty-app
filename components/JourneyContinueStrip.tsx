@@ -76,7 +76,7 @@ export default function JourneyContinueStrip() {
         const pick = pickMostRecentActiveSlug(allJourneys ?? []);
         if (!pick) return;
         const matched = (allJourneys ?? []).find(
-          (j) => j.slug?.current === pick.slug,
+          (j: Journey) => j.slug?.current === pick.slug,
         );
         if (matched) {
           setJourney(matched);
