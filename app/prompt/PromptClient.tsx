@@ -97,7 +97,13 @@ function toggleFavorite(id: string): boolean {
 const MUSIC_CHANT   = "/music/nickpanek-ave-maria-latin-catholic-gregorian-chant-218251.mp3";
 const MUSIC_AMBIENT = "/music/natureseye-piano-dreamcloud-meditation-179215.mp3";
 
-function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
+function DailyPromptPageInner({
+  initialDate,
+  homeMode,
+}: {
+  initialDate?: string;
+  homeMode?: boolean;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   // Prefer an explicit path-param date (from /prompt/[date]) over the query
@@ -311,9 +317,17 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
           }}
         />
 
-        {/* ── Sticky glass header ──────────────────────────────────────────── */}
+        {/* ── Chrome header ────────────────────────────────────────────────
+            On the standalone /prompt route this header is fixed at the top
+            and floats over the scrolling content. On the Today landing
+            (homeMode) it sits in flow so the JourneyContinueStrip above it
+            can occupy the top of the scroll cleanly. */}
         <div
-          className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-4 py-3 safe-area-top"
+          className={`${
+            homeMode
+              ? "relative flex items-center justify-between px-4 py-3"
+              : "fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-4 py-3 safe-area-top"
+          }`}
           style={{
             background: "rgba(22,17,13,0.82)",
             backdropFilter: "blur(12px)",
@@ -321,16 +335,23 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
             borderBottom: `1px solid ${C.divider}`,
           }}
         >
-          <button
-            onClick={() => router.back()}
-            className="w-10 h-10 flex items-center justify-center"
-            style={{ color: C.creamDim }}
-            aria-label="Back"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-              <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 010-1.06l7.5-7.5a.75.75 0 111.06 1.06L9.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5z" clipRule="evenodd" />
-            </svg>
-          </button>
+          {homeMode ? (
+            // Empty placeholder keeps the right-side action group aligned
+            // via justify-between without rendering a back chevron that
+            // wouldn't lead anywhere from the landing route.
+            <div style={{ width: 40, height: 40 }} />
+          ) : (
+            <button
+              onClick={() => router.back()}
+              className="w-10 h-10 flex items-center justify-center"
+              style={{ color: C.creamDim }}
+              aria-label="Back"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 010-1.06l7.5-7.5a.75.75 0 111.06 1.06L9.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5z" clipRule="evenodd" />
+              </svg>
+            </button>
+          )}
 
           <div className="flex items-center gap-3">
             <button
@@ -884,10 +905,22 @@ function DailyPromptPageInner({ initialDate }: { initialDate?: string }) {
 }
 
 // useSearchParams() requires a Suspense boundary in Next.js App Router
-export default function PromptClient({ initialDate }: { initialDate?: string } = {}) {
+//
+// homeMode: when true, the component is embedded on the Today landing route
+// rather than the standalone /prompt route. Two effects: (1) the back chevron
+// is suppressed (there's nowhere to go back to from the landing), and (2)
+// the chrome header drops its fixed positioning so the JourneyContinueStrip
+// above it can sit at the top of the scroll cleanly.
+export default function PromptClient({
+  initialDate,
+  homeMode,
+}: {
+  initialDate?: string;
+  homeMode?: boolean;
+} = {}) {
   return (
     <Suspense>
-      <DailyPromptPageInner initialDate={initialDate} />
+      <DailyPromptPageInner initialDate={initialDate} homeMode={homeMode} />
     </Suspense>
   );
 }

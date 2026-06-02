@@ -66,13 +66,14 @@ export default function Navigation() {
     return null;
   }
 
-  // On the P&P route the active tab picks up the type-driven accent color
-  // so the whole screen reads as one consistent atmosphere (matches the
-  // gradient + section labels + music toggle + audio progress + actio
-  // checkbox cascade established May 28). Fallback to sage if --pp-accent
-  // is not yet populated by PromptClient.
-  const isPromptRoute = pathname.startsWith("/prompt");
-  const activeColor = isPromptRoute ? "var(--pp-accent, #4a7a62)" : "#4a7a62";
+  // On any route that embeds the P&P content (the standalone /prompt
+  // routes AND the Today landing at /) the active tab picks up the
+  // type-driven accent color so the whole screen reads as one consistent
+  // atmosphere (matches the gradient + section labels + music toggle +
+  // audio progress + actio checkbox cascade established May 28).
+  // Fallback to sage if --pp-accent is not yet populated by PromptClient.
+  const isPpAtmosphere = pathname === "/" || pathname.startsWith("/prompt");
+  const activeColor = isPpAtmosphere ? "var(--pp-accent, #4a7a62)" : "#4a7a62";
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 safe-area-bottom">
