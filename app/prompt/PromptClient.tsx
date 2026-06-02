@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { getDailyPrompt, getDailyPromptPreview } from "@/lib/sanity";
@@ -99,13 +99,19 @@ const MUSIC_AMBIENT = "/music/natureseye-piano-dreamcloud-meditation-179215.mp3"
 
 function DailyPromptPageInner({
   initialDate,
-  homeMode,
+  homeMode: homeModeProp,
 }: {
   initialDate?: string;
   homeMode?: boolean;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  // Home mode kicks in either when the parent explicitly passes the prop
+  // OR when this component is rendered on the Today landing route ("/").
+  // Detecting from the path here is belt-and-suspenders against any prop
+  // chain failure through the Suspense boundary.
+  const homeMode = homeModeProp === true || pathname === "/";
   // Prefer an explicit path-param date (from /prompt/[date]) over the query
   // string (/prompt?date=X), since Sanity Presentation can only construct
   // path-based iframe URLs cleanly — query strings get URL-encoded into the
