@@ -124,6 +124,11 @@ function DailyPromptPageInner({
   const [checkedItems, setCheckedItems]   = useState<boolean[]>([]);
   const [contextExpanded, setContextExpanded] = useState(false);
   const [verbaOpen, setVerbaOpen]             = useState(false);
+  // Once the user pinches or pans the hero, the "pinch to explore image"
+  // hint fades out. Set to true on first zoom/pan and stays true for the
+  // rest of the session — the hint never returns once the affordance has
+  // been used.
+  const [heroInteracted, setHeroInteracted]   = useState(false);
 
   const [auditioDuration, setAudiotioDuration] = useState(0);
 
@@ -366,6 +371,8 @@ function DailyPromptPageInner({
             minScale={1}
             centerOnInit
             wheel={{ disabled: true }}
+            onZoomStart={() => setHeroInteracted(true)}
+            onPanningStart={() => setHeroInteracted(true)}
           >
             <TransformComponent
               wrapperStyle={{ width: "100%", height: "auto" }}
@@ -385,11 +392,14 @@ function DailyPromptPageInner({
             style={{ background: `linear-gradient(to top, rgba(22,17,13,0.35) 0%, transparent 50%)` }}
           />
 
-          {/* Pinch hint — overlaid bottom-right of image, fades on first
-              pinch (zoom transforms displace the parent so this text
-              naturally disappears with interaction). */}
+          {/* Pinch hint — overlaid bottom-right of image. Fades out on
+              first zoom or pan via TransformWrapper's onZoomStart /
+              onPanningStart callbacks above (which set heroInteracted).
+              Stays mounted so the opacity transition reads as a graceful
+              fade rather than a pop, and aria-hidden once faded. */}
           <div
             className="absolute pointer-events-none"
+            aria-hidden={heroInteracted}
             style={{
               bottom: 12,
               right: 14,
@@ -399,6 +409,8 @@ function DailyPromptPageInner({
               fontStyle: "italic",
               letterSpacing: "0.02em",
               textShadow: "0 1px 3px rgba(0,0,0,0.45)",
+              opacity: heroInteracted ? 0 : 1,
+              transition: "opacity 0.4s ease-out",
             }}
           >
             pinch to explore image
