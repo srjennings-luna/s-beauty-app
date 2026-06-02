@@ -1,13 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useFavorites } from "@/hooks/useFavorites";
 import { getContentItemById, getDailyPromptById, getAllPrompts } from "@/lib/sanity";
 import type { ContentItem, Artwork, ContentType, DailyPrompt, LocationType } from "@/lib/types";
 import ArtworkViewer from "@/components/ArtworkViewer";
 import PageTransition from "@/components/ui/PageTransition";
-import { CONTENT_TYPE_COLORS } from "@/lib/contentTypeColors";
+import { PromptCard } from "./PromptCard";
+
+// Format a "2026-05" key as "MAY 2026" for the section divider.
+function formatMonthLabel(monthKey: string): string {
+  const [yearStr, monthStr] = monthKey.split("-");
+  const d = new Date(parseInt(yearStr, 10), parseInt(monthStr, 10) - 1, 1);
+  return d
+    .toLocaleDateString("en-US", { month: "long", year: "numeric" })
+    .toUpperCase();
+}
+
+// Visible Saved section cap on the Library landing. When saved prompts
+// exceed this, the landing shows this many most-recent + a "View all
+// saved (N)" link to /library/saved.
+const SAVED_PREVIEW_CAP = 10;
 
 const CONTENT_TYPE_TO_LOCATION: Record<ContentType, LocationType> = {
   "sacred-art": "sacred-art",
@@ -44,80 +58,9 @@ function toArtwork(item: ContentItem): Artwork {
   };
 }
 
-function formatPromptDate(dateStr: string) {
-  const d = new Date(dateStr + "T00:00:00");
-  const month = d.toLocaleDateString("en-US", { month: "short" }).toUpperCase();
-  const day = d.getDate();
-  return `${month} ${day}`;
-}
-
-// ── Pause & Ponder archive card ───────────────────────────────────────────────
-function PromptCard({ prompt, isSaved }: { prompt: DailyPrompt; isSaved: boolean }) {
-  const typeColor = CONTENT_TYPE_COLORS[prompt.content?.contentType ?? ""] ?? "#C19B5F";
-
-  return (
-    <Link
-      href={prompt.date ? `/prompt?date=${prompt.date}` : "/prompt"}
-      className="flex items-start gap-3 px-5 py-3"
-      style={{ borderBottom: "0.5px solid rgba(0,0,0,0.08)" }}
-    >
-      {prompt.content?.imageUrl && (
-        <div className="flex-shrink-0 w-14 h-14 overflow-hidden">
-          <img
-            src={prompt.content.imageUrl}
-            alt={prompt.content.title ?? ""}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      )}
-      <div className="flex-1 min-w-0">
-        {/* Date + thin right-side rule */}
-        <div className="flex items-center gap-2 mb-1">
-          <span
-            className="text-[10px] font-semibold tracking-widest uppercase flex-shrink-0"
-            style={{ color: typeColor }}
-          >
-            {prompt.date ? formatPromptDate(prompt.date) : "Daily Prompt"}
-          </span>
-          <span
-            className="flex-1 h-px"
-            style={{ background: typeColor, opacity: 0.35 }}
-          />
-          {isSaved && (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="w-3 h-3 flex-shrink-0"
-              style={{ color: typeColor }}
-            >
-              <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-            </svg>
-          )}
-        </div>
-        <p
-          className="text-sm text-near-black line-clamp-1"
-          style={{
-            fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
-            fontWeight: 600,
-          }}
-        >
-          {prompt.content?.title ?? "Pause & Ponder"}
-        </p>
-        {prompt.promptQuestion && (
-          <p
-            className="text-xs text-sage-muted mt-0.5 line-clamp-2 italic"
-            style={{
-              fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-            }}
-          >
-            {prompt.promptQuestion}
-          </p>
-        )}
-      </div>
-    </Link>
-  );
-}
+// PromptCard + formatPromptDate live in ./PromptCard.tsx so the
+// dedicated /library/saved page can reuse them. Keep visual changes
+// there to stay in sync across both surfaces.
 
 export default function LibraryPage() {
   const { favorites, isLoaded } = useFavorites();
@@ -174,6 +117,44 @@ export default function LibraryPage() {
 
   const savedPrompts = allPrompts.filter((p) => savedPromptIds.has(p._id));
 
+  // Group archive prompts by year-month, sorted reverse-chronological.
+  // Each entry is [monthKey, prompts] e.g. ["2026-05", [...]]
+  const promptsByMonth = useMemo(() => {
+    const groups = new Map<string, DailyPrompt[]>();
+    for (const p of allPrompts) {
+      if (!p.date) continue;
+      const monthKey = p.date.slice(0, 7); // "2026-05" from "2026-05-28"
+      if (!groups.has(monthKey)) groups.set(monthKey, []);
+      groups.get(monthKey)!.push(p);
+    }
+    return Array.from(groups.entries()).sort((a, b) => b[0].localeCompare(a[0]));
+  }, [allPrompts]);
+
+  const allMonthKeys = useMemo(
+    () => promptsByMonth.map(([key]) => key),
+    [promptsByMonth],
+  );
+
+  // Per-month collapse state. Default empty (all expanded) on every mount,
+  // so Library always opens fully expanded. Sheri's call: predictability
+  // beats efficiency at the contemplative register. No localStorage.
+  const [collapsedMonths, setCollapsedMonths] = useState<Set<string>>(new Set());
+
+  const toggleMonth = (key: string) => {
+    setCollapsedMonths((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
+  const allCollapsed =
+    allMonthKeys.length > 0 && collapsedMonths.size === allMonthKeys.length;
+  const toggleAll = () => {
+    setCollapsedMonths(allCollapsed ? new Set() : new Set(allMonthKeys));
+  };
+
   const isLoading = promptsLoading || !isLoaded || favoritesLoading;
 
   if (isLoading) {
@@ -217,14 +198,14 @@ export default function LibraryPage() {
 
         <div className="px-5 pb-28 space-y-10">
 
-          {/* ── Saved P&P prompts (surfaced above the archive) ─────────────── */}
+          {/* ── Saved P&P prompts (capped, View all link if over the cap) ─── */}
           {savedPrompts.length > 0 && (
             <section>
               <p className="text-xs tracking-widest uppercase text-sacred-gold mb-3">
                 Saved
               </p>
               <div>
-                {savedPrompts.map((prompt) => (
+                {savedPrompts.slice(0, SAVED_PREVIEW_CAP).map((prompt) => (
                   <PromptCard
                     key={`saved-${prompt._id}`}
                     prompt={prompt}
@@ -232,24 +213,117 @@ export default function LibraryPage() {
                   />
                 ))}
               </div>
+              {savedPrompts.length > SAVED_PREVIEW_CAP && (
+                <Link
+                  href="/library/saved"
+                  className="block px-5 pt-3 pb-1 text-right"
+                  style={{
+                    fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "#C19B5F",
+                  }}
+                >
+                  View all saved ({savedPrompts.length}) ›
+                </Link>
+              )}
             </section>
           )}
 
-          {/* ── Pause & Ponder archive (full list, reverse chronological) ──── */}
+          {/* ── Pause & Ponder archive (grouped by month, collapsible) ─────── */}
           {allPrompts.length > 0 && (
             <section>
-              <p className="text-xs tracking-widest uppercase text-sacred-gold mb-3">
-                Pause &amp; Ponder
-              </p>
-              <div>
-                {allPrompts.map((prompt) => (
-                  <PromptCard
-                    key={prompt._id}
-                    prompt={prompt}
-                    isSaved={savedPromptIds.has(prompt._id)}
-                  />
-                ))}
+              {/* Section eyebrow + Collapse/Expand all link. The link only
+                  surfaces once there are at least 2 months in the archive;
+                  with a single month there is nothing to collapse against. */}
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs tracking-widest uppercase text-sacred-gold">
+                  Pause &amp; Ponder
+                </p>
+                {allMonthKeys.length > 1 && (
+                  <button
+                    onClick={toggleAll}
+                    className="text-[10px] tracking-widest uppercase transition-colors"
+                    style={{
+                      color: "rgba(193,155,95,0.7)",
+                      fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+                      fontWeight: 600,
+                      letterSpacing: "0.16em",
+                    }}
+                    aria-label={allCollapsed ? "Expand all months" : "Collapse all months"}
+                  >
+                    {allCollapsed ? "Expand all" : "Collapse all"}
+                  </button>
+                )}
               </div>
+
+              {promptsByMonth.map(([monthKey, prompts]) => {
+                const isCollapsed = collapsedMonths.has(monthKey);
+                return (
+                  <div key={monthKey}>
+                    {/* Month divider header — tappable, chevron rotates on
+                        state. Hairline border on top anchors the section
+                        visually without a heavy treatment. */}
+                    <button
+                      onClick={() => toggleMonth(monthKey)}
+                      className="w-full flex items-center justify-between text-left"
+                      style={{
+                        padding: "16px 4px 12px",
+                        background: "transparent",
+                        border: "none",
+                        borderTop: "0.5px solid rgba(22,17,13,0.10)",
+                        cursor: "pointer",
+                      }}
+                      aria-expanded={!isCollapsed}
+                      aria-label={`${formatMonthLabel(monthKey)}, ${isCollapsed ? "expand" : "collapse"} month`}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+                          fontSize: 10,
+                          fontWeight: 600,
+                          letterSpacing: "0.22em",
+                          textTransform: "uppercase",
+                          color: "#978b7d",
+                        }}
+                      >
+                        {formatMonthLabel(monthKey)}
+                      </span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={1.8}
+                        width="14"
+                        height="14"
+                        style={{
+                          color: "rgba(22,17,13,0.45)",
+                          transform: isCollapsed ? "rotate(-90deg)" : "rotate(0deg)",
+                          transition: "transform 200ms ease",
+                        }}
+                        aria-hidden="true"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                      </svg>
+                    </button>
+
+                    {!isCollapsed && (
+                      <div>
+                        {prompts.map((prompt) => (
+                          <PromptCard
+                            key={prompt._id}
+                            prompt={prompt}
+                            isSaved={savedPromptIds.has(prompt._id)}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </section>
           )}
 
