@@ -5,20 +5,14 @@ import Link from "next/link";
 import { getJourneys } from "@/lib/sanity";
 import type { Journey } from "@/lib/types";
 import PageTransition from "@/components/ui/PageTransition";
+import { useAllJourneyProgress } from "@/hooks/useJourneyProgress";
 
-// ── Progress helper ──────────────────────────────────────────────────────────
-
-function getProgress(slug: string): number {
-  if (typeof window === "undefined") return 0;
-  try {
-    const raw = localStorage.getItem("kallos-journey-progress");
-    if (!raw) return 0;
-    const data = JSON.parse(raw);
-    return (data[slug]?.completedDays ?? []).length;
-  } catch {
-    return 0;
-  }
-}
+// Progress reads moved to the auth-ready data layer June 2, 2026.
+// useAllJourneyProgress (hooks/useJourneyProgress.ts) wraps
+// lib/userData.ts and returns the full {slug: ProgressRecord} map.
+// Today the map is hydrated from localStorage; when auth ships it
+// resolves from the authenticated user record without changing this
+// component.
 
 // ── Section header (gold small caps over thin rule) ──────────────────────────
 
@@ -256,18 +250,21 @@ export default function JourneysPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
-  const [progress, setProgress] = useState<Record<string, number>>({});
+  const { progressMap } = useAllJourneyProgress();
+
+  // Derived per-journey completed-day count, keyed by slug. Updates
+  // whenever the hook re-hydrates (e.g., after a day was marked complete
+  // on a journey detail page and the user returns here).
+  const progress: Record<string, number> = {};
+  for (const slug of Object.keys(progressMap)) {
+    progress[slug] = progressMap[slug]?.completedDays.length ?? 0;
+  }
 
   useEffect(() => {
     async function fetchData() {
       try {
         const data = await getJourneys();
         setJourneys(data ?? []);
-        const prog: Record<string, number> = {};
-        (data ?? []).forEach((j: Journey) => {
-          prog[j.slug.current] = getProgress(j.slug.current);
-        });
-        setProgress(prog);
       } catch (err) {
         console.error("Error fetching journeys:", err);
         setError(true);

@@ -7,6 +7,7 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import GoDeeperSection from "@/components/GoDeeperSection";
 import PageTransition from "@/components/ui/PageTransition";
 import ScrollCue from "@/components/ScrollCue";
+import useVisioNote from "@/hooks/useVisioNote";
 import { WHISPER_GRADIENT } from "@/lib/design-tokens";
 type SanityArtwork = {
   _id: string;
@@ -80,7 +81,18 @@ export default function PrayClient({
   // never be true in the new server-fetch flow.
   const [loading] = useState(false);
   const [step, setStep] = useState(0);
+  // Visio note read/write moved to the auth-ready data layer June 2,
+  // 2026. The useVisioNote hook wraps lib/userData.ts; when auth ships,
+  // notes move from per-artwork localStorage keys onto the
+  // authenticated user record without changing this component.
+  const { note: storedNote, saveNote: persistVisioNote } = useVisioNote(initialArtwork?._id);
   const [actionNote, setActionNote] = useState("");
+  // Hydrate the local actionNote textarea state once the hook resolves
+  // the stored value. Editing flows through local state for input
+  // responsiveness; the hook persists on Finish.
+  useEffect(() => {
+    if (storedNote) setActionNote(storedNote);
+  }, [storedNote]);
   const [musicMode, setMusicMode] = useState<MusicMode>("off");
   const [musicPaused, setMusicPaused] = useState(false);
   const [musicMenuOpen, setMusicMenuOpen] = useState(false);
@@ -185,11 +197,11 @@ export default function PrayClient({
 
   const handleFinish = () => {
     if (actionNote.trim()) {
-      localStorage.setItem(`kallos-visio-note-${artwork?._id}`, actionNote);
+      persistVisioNote(actionNote);
     }
-    // Explicit nav to Library (where Visio Divina history lives) instead of
-    // router.back() — back() silently fails when there's no history, e.g.
-    // arriving from a share link or inside Sanity Presentation's iframe.
+    // Explicit nav to Library (where Visio Divina history lives) instead
+    // of router.back(); back() silently fails when there is no history,
+    // e.g. arriving from a share link or inside Sanity Presentation.
     router.push("/library");
   };
 

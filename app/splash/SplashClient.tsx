@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import useOnboarded from "@/hooks/useOnboarded";
 import { WHISPER_GRADIENT } from "@/lib/design-tokens";
 
 export type SplashBlock =
@@ -61,12 +62,13 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
   const next = () => setCurrent((c) => Math.min(c + 1, total - 1));
   const prev = () => setCurrent((c) => Math.max(c - 1, 0));
 
+  // markOnboarded writes through the auth-ready data layer
+  // (lib/userData.ts). Today's localStorage write is unchanged; when
+  // auth ships, the same call writes to the authenticated user record
+  // without touching this component.
+  const { markOnboarded } = useOnboarded();
   const markSession = () => {
-    try {
-      localStorage.setItem("contueri-onboarded", "true");
-    } catch {
-      // Private mode / storage blocked — splash will show again next visit. Not fatal.
-    }
+    markOnboarded();
   };
 
   const skipToToday = () => {

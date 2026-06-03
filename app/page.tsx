@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import PromptClient from "./prompt/PromptClient";
+import useOnboarded from "@/hooks/useOnboarded";
 
 // Today landing.
 //
@@ -22,29 +23,31 @@ import PromptClient from "./prompt/PromptClient";
 // Today now collapses to pure P&P, matching standalone /prompt.
 export default function TodayPage() {
   const router = useRouter();
-  const [hasOnboarded, setHasOnboarded] = useState<boolean | null>(null);
+  // useOnboarded reads through the auth-ready data layer
+  // (lib/userData.ts). Today it resolves from localStorage; when auth
+  // ships it resolves from the authenticated user record. Hook surface
+  // does not change, so this gate stays the same code.
+  const { onboarded } = useOnboarded();
+  const [iframeBypass, setIframeBypass] = useState(false);
 
   useEffect(() => {
     // Never run the onboarding gate inside an iframe (Sanity Presentation
     // preview). Without this, every preview session starts with no
-    // localStorage and bounces to /splash, hijacking the iframe.
-    const inIframe = typeof window !== "undefined" && window.self !== window.top;
-    if (inIframe) {
-      setHasOnboarded(true);
+    // user data and bounces to /splash, hijacking the iframe.
+    if (typeof window !== "undefined" && window.self !== window.top) {
+      setIframeBypass(true);
       return;
     }
-    const onboarded = localStorage.getItem("contueri-onboarded");
-    if (!onboarded) {
+    if (onboarded === false) {
       router.push("/splash");
-    } else {
-      setHasOnboarded(true);
     }
-  }, [router]);
+  }, [onboarded, router]);
 
   // Hold a blank parchment surface while the onboarding gate decides
   // whether to redirect. Avoids a single-frame flash of the espresso
   // P&P atmosphere before sending a first-time user to /splash.
-  if (hasOnboarded === null) {
+  const resolved = iframeBypass || onboarded === true;
+  if (!resolved) {
     return <div className="min-h-screen bg-parchment" />;
   }
 

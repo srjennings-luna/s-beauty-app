@@ -10,6 +10,7 @@ import { addFavorite, removeFavorite, isFavorite } from "@/lib/favorites";
 import PageTransition from "@/components/ui/PageTransition";
 import NarrationButton, { NARRATION_START_EVENT, NARRATION_END_EVENT } from "@/components/NarrationButton";
 import PPGradientBackground from "@/components/PPGradientBackground";
+import useStreak from "@/hooks/useStreak";
 
 function formatTime(s: number): string {
   const m = Math.floor(s / 60);
@@ -31,33 +32,11 @@ const C = {
   divider: "rgba(253,246,232,0.1)",
 };
 
-// ── Streak helpers ────────────────────────────────────────────────────────────
-const STREAK_KEY = "kallos-prompt-streak";
-const LAST_KEY   = "kallos-prompt-last";
-
-function getTodayStr() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-function getStreak(): number {
-  if (typeof window === "undefined") return 0;
-  return parseInt(localStorage.getItem(STREAK_KEY) ?? "0", 10);
-}
-
-function markCompleted() {
-  const today = getTodayStr();
-  const last  = localStorage.getItem(LAST_KEY);
-  if (last === today) return;
-
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  const yStr = yesterday.toISOString().slice(0, 10);
-
-  const current = getStreak();
-  const newStreak = last === yStr ? current + 1 : 1;
-  localStorage.setItem(STREAK_KEY, String(newStreak));
-  localStorage.setItem(LAST_KEY, today);
-}
+// ── Streak ────────────────────────────────────────────────────────────────────
+// Streak read/write moved to the auth-ready data layer June 2, 2026.
+// Components consume via the useStreak() hook (hooks/useStreak.ts) which
+// wraps lib/userData.ts. When auth ships the underlying storage swaps
+// from localStorage to API; this component does not change.
 
 // ── Share ─────────────────────────────────────────────────────────────────────
 async function sharePrompt(prompt: DailyPrompt) {
@@ -132,6 +111,11 @@ function DailyPromptPageInner({
 
   const [auditioDuration, setAudiotioDuration] = useState(0);
 
+  // Streak marker. The hook handles the localStorage read/write through
+  // the auth-ready data layer; when auth ships the streak count and last-
+  // completed date move to the user record without changing this code.
+  const { markCompleted: markStreakCompleted } = useStreak();
+
   const heroRef               = useRef<HTMLDivElement>(null);
   const actioRef              = useRef<HTMLDivElement>(null);
   const auditioRef            = useRef<HTMLAudioElement | null>(null);  // artwork audio
@@ -173,7 +157,7 @@ function DailyPromptPageInner({
     observerRef.current = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !completed) {
-          markCompleted();
+          markStreakCompleted();
           setCompleted(true);
         }
       },

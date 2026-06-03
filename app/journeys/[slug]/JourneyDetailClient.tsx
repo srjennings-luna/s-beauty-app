@@ -4,32 +4,15 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import PageTransition from "@/components/ui/PageTransition";
 import JourneyDaySteps from "@/components/JourneyDaySteps";
+import { useJourneyProgress } from "@/hooks/useJourneyProgress";
 import type { Journey, JourneyDay, PlannedDay } from "@/lib/types";
 
-// ── Progress helpers ─────────────────────────────────────────────────────────
-
-const PROGRESS_KEY = "kallos-journey-progress";
-
-function loadProgress(slug: string): number[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(PROGRESS_KEY);
-    return (JSON.parse(raw ?? "{}")?.[slug]?.completedDays ?? []) as number[];
-  } catch {
-    return [];
-  }
-}
-
-function saveProgress(slug: string, completedDays: number[]) {
-  try {
-    const raw = localStorage.getItem(PROGRESS_KEY);
-    const data = JSON.parse(raw ?? "{}");
-    data[slug] = { completedDays, updatedAt: new Date().toISOString() };
-    localStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
-  } catch {
-    /* ignore */
-  }
-}
+// Progress read/write moved to the auth-ready data layer June 2, 2026.
+// The useJourneyProgress hook (hooks/useJourneyProgress.ts) wraps
+// lib/userData.ts. Today reads/writes flow through localStorage with
+// the existing kallos-journey-progress key; when auth ships, the same
+// hook resolves from the authenticated user record without changing
+// this component.
 
 // ── Day row ──────────────────────────────────────────────────────────────────
 
@@ -161,14 +144,11 @@ export default function JourneyDetailClient({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [completedDays, setCompletedDays] = useState<number[]>([]);
+  const { completedDays, markDayComplete } = useJourneyProgress(slug);
   const [activeDay, setActiveDay] = useState<JourneyDay | null>(null);
 
-  // Load progress and open day from URL on mount
+  // Open day from URL on mount (progress comes from the hook).
   useEffect(() => {
-    const loaded = loadProgress(slug);
-    setCompletedDays(loaded);
-
     const dayNumFromPath = initialDayNumber;
     const dayParam = dayNumFromPath ?? parseInt(searchParams.get("day") ?? "", 10);
     if (Number.isFinite(dayParam)) {
@@ -192,13 +172,9 @@ export default function JourneyDetailClient({
 
   const toggleDayComplete = useCallback(
     (dayNumber: number) => {
-      setCompletedDays((prev) => {
-        const next = prev.includes(dayNumber) ? prev : [...prev, dayNumber];
-        saveProgress(slug, next);
-        return next;
-      });
+      markDayComplete(dayNumber);
     },
-    [slug],
+    [markDayComplete],
   );
 
   // ── Derived values ─────────────────────────────────────────────────────────
