@@ -120,6 +120,19 @@ Pinterest and Facebook still to claim (see Manual Tasks 71-72).
 - `data/episodes.ts` deleted
 - Build passes clean — deployed to Vercel
 
+### Phase 2 Work Done (June 3, 2026 · Ambient Sound System brief locked)
+
+- ✅ **Voices + Lectio split shipped** as commit `5e25e8b2`. The single READING (Lectio) section in P&P split into two sibling sections: VOICES (Voces) with philosophy quote in Open Sans Regular at smaller clamp + sage left hairline + gold/sage eyebrow with border-bottom; LECTIO with scripture in Cormorant Garamond italic + no eyebrow border + no left rule. Section order on a music day reads Context → Music (Auditio + Verba) → Voices → Lectio → Action. Auditio moved up from its prior position after Lectio. Schema unchanged.
+- ✅ **PB-01 shipped** as commit `e7368fc9` via a 4-agent workflow (parallel scout of Journey Stories pattern + PrayClient current state → implement → adversarial verify). Visio Divina dot indicators replaced with the Journey Day Stories-style thin segments at the top, sage active fill. Footer collapses to Next/Finish only. All 7 verify checks pass.
+- ✅ **Ambient Sound System brief locked** at `~/Documents/KALLOS Launch/CONTUERI-CC-Ambient-Sound-Brief.html`. 19 sections, self-contained, validated by a 5-agent workflow + 1 synthesis pass (Run ID `wf_02061b58-02c`). The original June 2 ambient brief had a materially incorrect premise (Visio Divina floating button was NOT deleted, it lives at `PrayClient.tsx:339-353`); this locked version corrects the framing to "recolor + rewire" and folds in all decisions:
+  - Architecture: three independent `<audio>` elements (no shared AudioContext), `AmbientSoundProvider` in `app/layout.tsx`, persistence via `lib/userData.ts` extension + new `useAmbientPreferences` hook, full context API spec.
+  - Sheri product decisions (June 3): (1) intentional evolution not walk-back from June 2 P&P chrome Music removal; (2) full PrayClient migration to provider, floating-player-only on both surfaces (remove chrome label button + dropdown, remove 2 local audio elements, remove ~150 lines of music plumbing).
+  - Sheri / Cowork design decisions (June 3): cross-route ambient continues uninterrupted (no fade), 300ms+300ms cross-fade between sounds, 10px minimum stroke on parchment dial (accept 2.4:1 gold contrast as interactive-control not text), discovery flag set on first render (one-time render regardless of action), iOS interruption pauses ambient and does NOT auto-resume, Journey Day included as contemplative surface for floating button.
+  - Mockups confirmed: 4 floating button states (Playing / Paused / First-launch / Off-hidden), 2 dial contexts (espresso + parchment), Settings inline picker (sage selection), long-press popover (gold selection on espresso).
+  - Spec additions baked in: DUCK_RATIO 0.30, 250ms rAF volume ramp, DUCK_FOR_TTS = true gate, autoplay policy non-negotiable callout, SVG arc math with `pathLength="1"` + `stroke-dashoffset` portable formula, Pointer Events with `touch-action: none`, full ARIA slider pattern with keyboard support.
+  - Effort: 5 days realistic, 6 days stretch. Blocker: 6 gapless-loop MP3 audio assets (Gregorian Chant, Plainchant, Light Piano, Gentle Rain, Ocean Waves, Nature Sounds) must be sourced + licensed + encoded by Sheri before W2 build can start.
+- ✅ **Launch plan updated.** `KALLOS-v1-Launch-Plan.html` now lists the Ambient Sound System as W2 Agent 2's primary deliverable; privacy/terms pages slid to W3. The brief is registered in the Companion Docs section.
+
 ### Phase 2 Work Done (June 2, 2026 evening · Launch readiness gates closed)
 
 All pre-W1 gates for the v1.0 launch were closed in a planning conversation. Detail lives in `~/Documents/KALLOS Launch/KALLOS-v1-Launch-Plan.html` (updated June 2 with locked specs). Summary for cold-session reference:
@@ -1100,12 +1113,12 @@ These are not yet made. Do not assume or resolve them without a session with She
 
 ### Manual tasks added June 2026 (Three Ways reference suite + journey planning)
 
-79. **Review Three-Ways-Reference.html** — Read through the full reference sheet. Check accuracy of thinker bios (Origen, Pseudo-Dionysius, John of the Cross), modern adaptations, additional themes, and the Trivium comparison table. Note anything to correct or expand before using as a session reference doc.
+86. **Review Three-Ways-Reference.html** — Read through the full reference sheet. Check accuracy of thinker bios (Origen, Pseudo-Dionysius, John of the Cross), modern adaptations, additional themes, and the Trivium comparison table. Note anything to correct or expand before using as a session reference doc.
 
-80. **Review Three-Ways-Timeline.html** — Read through the full genealogy roadmap. Verify the heresy fork descriptions and condemnation dates. Check the myth-to-fact sidebar arc and the closing essay. Flag anything that needs a source check.
+87. **Review Three-Ways-Timeline.html** — Read through the full genealogy roadmap. Verify the heresy fork descriptions and condemnation dates. Check the myth-to-fact sidebar arc and the closing essay. Flag anything that needs a source check.
 
-81. **Review CONTUERI-Journey-Map-ThreeWays-OOTSP.html** — Review both journey maps (The Way Within + Out of the Silent Planet) day by day. Confirm content type selections, lectio passages, and look-closer details are right for Contueri's voice and audience. Note any days that need a different content item or thinker pairing before moving to Sanity entry planning.
+88. **Review CONTUERI-Journey-Map-ThreeWays-OOTSP.html** — Review both journey maps (The Way Within + Out of the Silent Planet) day by day. Confirm content type selections, lectio passages, and look-closer details are right for Contueri's voice and audience. Note any days that need a different content item or thinker pairing before moving to Sanity entry planning.
 
-82. **Decide: proceed with Perelandra and That Hideous Strength journey maps?** — If yes, schedule a Cowork session to map Journeys 3 and 4. Journey 3 (Perelandra) is illuminative; Journey 4 (THS) is unitive and integrates Abolition of Man Days 5-6. Confirm whether Abolition of Man warrants its own standalone journey or folds entirely into THS.
+89. **Decide: proceed with Perelandra and That Hideous Strength journey maps?** — If yes, schedule a Cowork session to map Journeys 3 and 4. Journey 3 (Perelandra) is illuminative; Journey 4 (THS) is unitive and integrates Abolition of Man Days 5-6. Confirm whether Abolition of Man warrants its own standalone journey or folds entirely into THS.
 
-83. **Consider: does Abolition of Man warrant a standalone journey?** — The book is 90 pages and integrates directly into THS, but it could also stand alone as a 5-7 day journey ("What Are We Made For?") aimed at classical educators and former evangelicals. Decision affects how the Lewis arc is marketed and sequenced in the app.
+90. **Consider: does Abolition of Man warrant a standalone journey?** — The book is 90 pages and integrates directly into THS, but it could also stand alone as a 5-7 day journey ("What Are We Made For?") aimed at classical educators and former evangelicals. Decision affects how the Lewis arc is marketed and sequenced in the app.
