@@ -51,5 +51,9 @@ export default function TodayPage() {
     return <div className="min-h-screen bg-parchment" />;
   }
 
-  return <PromptClient />;
+  // Today is the only route that renders the gear icon in place of the
+  // back chevron; SET-01 spec, June 2 2026. Standalone /prompt and
+  // /prompt/[date] keep back chevron behavior so users return to where
+  // they came from (Library archive, deep link source, etc.).
+  return <PromptClient showSettings />;
 }

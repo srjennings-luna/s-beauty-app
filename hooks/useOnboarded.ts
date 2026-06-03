@@ -22,5 +22,14 @@ export default function useOnboarded() {
     setOnboardedState(true);
   };
 
-  return { onboarded, markOnboarded };
+  // resetOnboarded flips the flag back to false so the next visit to
+  // the Today page redirects to the splash. Used by the Settings page
+  // "Restart onboarding" row so the user can intentionally re-see the
+  // splash experience.
+  const resetOnboarded = () => {
+    setOnboarded(false);
+    setOnboardedState(false);
+  };
+
+  return { onboarded, markOnboarded, resetOnboarded };
 }
