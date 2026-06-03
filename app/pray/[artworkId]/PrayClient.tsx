@@ -240,39 +240,76 @@ export default function PrayClient({
         className="min-h-screen flex flex-col safe-area-bottom"
         style={{ background: C.bg, paddingBottom: "calc(4rem + env(safe-area-inset-bottom, 0px))" }}
       >
-        {/* Header — espresso dark, sticky */}
+        {/* Header: espresso dark, sticky. Stories-style progress segments
+            sit at the top edge of the header (PB-01, June 2 2026). */}
         <div
-          className="flex-shrink-0 sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-white/8 safe-area-top"
+          className="flex-shrink-0 sticky top-0 z-10 border-b border-white/8 safe-area-top"
           style={{ background: C.header }}
         >
-          <Link
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              if (step > 0) setStep(step - 1);
-              else router.back();
+          {/* Stories-style progress segments. Mirrors Journey Day pattern:
+              cream rail at 12%, sage fill on current and prior segments. */}
+          <div
+            className="absolute z-20 flex"
+            style={{
+              top: "calc(max(env(safe-area-inset-top, 0px), 48px) - 8px)",
+              left: 12,
+              right: 12,
+              gap: 3,
+              height: 2,
             }}
-            className="w-10 h-10 flex items-center justify-center bg-white/8 transition-colors hover:bg-white/12"
-            style={{ color: C.creamDim }}
-            aria-label={step > 0 ? "Previous step" : "Back"}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-              <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 010-1.06l7.5-7.5a.75.75 0 111.06 1.06L9.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5z" clipRule="evenodd" />
-            </svg>
-          </Link>
+            {STEPS.map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  flex: 1,
+                  background: "rgba(253,246,232,0.12)",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: i <= step ? C.sage : "transparent",
+                    transition: "background 0.4s ease",
+                  }}
+                />
+              </div>
+            ))}
+          </div>
 
-          <span className="text-sm" style={{ color: C.creamDim }}>
-            {step + 1} of {STEPS.length} · {STEPS[step].title}
-          </span>
+          <div className="flex items-center justify-between px-4 py-3">
+            <Link
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (step > 0) setStep(step - 1);
+                else router.back();
+              }}
+              className="w-10 h-10 flex items-center justify-center bg-white/8 transition-colors hover:bg-white/12"
+              style={{ color: C.creamDim }}
+              aria-label={step > 0 ? "Previous step" : "Back"}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 010-1.06l7.5-7.5a.75.75 0 111.06 1.06L9.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5z" clipRule="evenodd" />
+              </svg>
+            </Link>
 
-          <button
-            type="button"
-            onClick={() => { setMusicLoadError(false); setMusicMenuOpen(true); }}
-            className="text-xs font-medium"
-            style={{ color: C.creamFaint }}
-          >
-            {musicMode === "off" ? "Music" : musicMode === "chant" ? "Chant ♪" : "Ambient ♪"}
-          </button>
+            <span className="text-sm" style={{ color: C.creamDim }}>
+              {STEPS[step].title}
+            </span>
+
+            <button
+              type="button"
+              onClick={() => { setMusicLoadError(false); setMusicMenuOpen(true); }}
+              className="text-xs font-medium"
+              style={{ color: C.creamFaint }}
+            >
+              {musicMode === "off" ? "Music" : musicMode === "chant" ? "Chant ♪" : "Ambient ♪"}
+            </button>
+          </div>
         </div>
 
         <audio ref={chantAudioRef} src={MUSIC_CHANT} loop playsInline preload="auto" muted={false} />
@@ -553,22 +590,10 @@ export default function PrayClient({
 
           </div>{/* end slide viewport */}
 
-          {/* Progress dots + Next/Finish — pinned below slide, always visible */}
-          <div className="flex-shrink-0 px-4 py-5 flex items-center justify-between gap-3 w-full border-t border-white/8">
-            <div className="flex items-center justify-center gap-1.5 flex-1" role="tablist" aria-label="Prayer steps">
-              {STEPS.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  role="tab"
-                  aria-label={`${STEPS[i].title}${step === i ? ", current" : ""}`}
-                  aria-selected={step === i}
-                  onClick={() => setStep(i)}
-                  className={`transition-all focus:outline-none ${step === i ? "w-5 h-1.5 rounded-full" : "w-1.5 h-1.5 rounded-full"}`}
-                  style={{ background: step === i ? C.sage : C.creamFaint }}
-                />
-              ))}
-            </div>
+          {/* Next/Finish: pinned below slide, always visible. Progress dots
+              removed June 2 2026 (PB-01); progress now lives in the Stories
+              segments at the top of the header. */}
+          <div className="flex-shrink-0 px-4 py-5 flex items-center justify-end gap-3 w-full border-t border-white/8">
             <button
               type="button"
               onClick={() => (isLastStep ? handleFinish() : setStep(step + 1))}
