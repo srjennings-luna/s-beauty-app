@@ -40,5 +40,30 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local migration safety backups — JSON snapshots written before writes
+# local migration safety backups: JSON snapshots written before writes
 scripts/backups/
+
+# Ruby/Fastlane build pipeline
+.bundle/
+vendor/bundle/
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Capacitor + Xcode build artifacts
+ios/App/Pods/
+ios/App/build/
+ios/build/
+ios/DerivedData/
+*.xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+
+# Fastlane-generated provisioning files (Match handles distribution
+# certs via an encrypted private repo; nothing local should be
+# committed)
+*.mobileprovision
+*.p12
+*.cer
+*.certSigningRequest

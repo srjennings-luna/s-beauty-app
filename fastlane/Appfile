@@ -1,0 +1,17 @@
+# Fastlane Appfile for Contueri.
+#
+# Holds the app + team identifiers so individual lanes do not have
+# to repeat them. Resolves from environment variables so the same
+# Appfile works in CI and locally without committing any Apple-
+# specific identifiers to the repo.
+
+app_identifier("app.contueri.ios")
+
+# Apple ID email used for the Developer Program enrollment.
+# Resolved from environment so the file stays portable.
+apple_id(ENV["APPLE_ID"])
+
+# 10-character team identifier from
+# https://developer.apple.com/account/#/membership.
+# Visible once Individual enrollment activates.
+team_id(ENV["APPLE_TEAM_ID"])

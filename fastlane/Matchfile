@@ -1,0 +1,34 @@
+# Fastlane Match config for Contueri.
+#
+# Match stores App Store distribution certificates and provisioning
+# profiles in an encrypted private Git repo. CI runners fetch and
+# decrypt them at build time using MATCH_PASSWORD; no certs ever
+# live on Sheri's laptop, no .p12 files get committed.
+#
+# The URL below uses environment variables so the same Matchfile
+# works for local invocation and CI invocation.
+
+git_url(ENV["MATCH_GIT_URL"])
+
+# storage_mode "git" is the default; explicit here for clarity.
+storage_mode("git")
+
+# "appstore" type for production distribution to TestFlight + App Store.
+# Switch to "development" or "adhoc" temporarily if testing on
+# Sheri's own iPhone via a personal team setup, but the W1 + W2 path
+# uses appstore throughout.
+type("appstore")
+
+# Bundle identifier matches what Capacitor generates and what the
+# App Store Connect app record uses. Locked in DEV-01.
+app_identifier(["app.contueri.ios"])
+
+# Apple ID and Team ID resolved from environment so the same Matchfile
+# works locally (where Sheri's terminal has them via .env or shell)
+# and in CI (where GitHub Actions injects them as secrets).
+username(ENV["APPLE_ID"])
+team_id(ENV["APPLE_TEAM_ID"])
+
+# Read-only mode is enforced in the CI workflow itself, not here.
+# Local invocations of `fastlane match_init` need write mode to
+# create the certs the first time.

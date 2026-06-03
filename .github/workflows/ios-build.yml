@@ -1,0 +1,180 @@
+# iOS Build + TestFlight upload
+#
+# Cloud-build pipeline for the Contueri iOS app per the v1.0 Launch Plan
+# (KALLOS-v1-Launch-Plan.html, W1 scope). Builds the Capacitor iOS app
+# on a GitHub-hosted macOS runner, signs with the distribution
+# certificate from Fastlane Match, uploads to TestFlight via Fastlane
+# Deliver. Zero dependency on Sheri's laptop.
+#
+# This workflow is the scaffold; the cert + secret wiring activates
+# once the Apple Developer account is enrolled (Individual, per
+# DEV-01 lock). Until then the workflow runs on push to main, fails
+# at the Match step, and surfaces a clear error. Set the secrets
+# listed below before enabling the workflow.
+#
+# REQUIRED GITHUB ACTIONS SECRETS (add via repo Settings -> Secrets
+# and variables -> Actions):
+#
+#   APPLE_ID
+#     Sheri's Apple ID email used for the Developer account.
+#
+#   APPLE_TEAM_ID
+#     10-character team identifier from
+#     https://developer.apple.com/account/#/membership (visible
+#     once Individual enrollment activates).
+#
+#   APP_STORE_CONNECT_API_KEY_ID
+#   APP_STORE_CONNECT_API_KEY_ISSUER_ID
+#   APP_STORE_CONNECT_API_KEY_CONTENT
+#     App Store Connect API key (preferred over Apple ID password
+#     for automation). Generate at
+#     https://appstoreconnect.apple.com/access/api after enrollment.
+#     The _CONTENT secret holds the .p8 file contents verbatim
+#     (multi-line, including the BEGIN/END markers).
+#
+#   MATCH_PASSWORD
+#     Passphrase used to encrypt the certificate repo. Set this
+#     once; the same value must be used when running
+#     `fastlane match init` locally.
+#
+#   MATCH_GIT_URL
+#     SSH URL of the private repo that stores the encrypted
+#     certificates (e.g., git@github.com:srjennings-luna/contueri-certs.git).
+#     The repo can be empty at creation; `fastlane match` populates
+#     it on first run.
+#
+#   MATCH_GIT_BASIC_AUTHORIZATION
+#     Base64-encoded "username:personal-access-token" for the
+#     certificate repo, used by Match to clone in CI without SSH
+#     keys. Set this only if MATCH_GIT_URL is https://; for ssh://
+#     URLs use SSH_PRIVATE_KEY instead.
+#
+# OPTIONAL SECRETS:
+#
+#   SSH_PRIVATE_KEY
+#     Used in place of MATCH_GIT_BASIC_AUTHORIZATION if MATCH_GIT_URL
+#     is an ssh:// URL. The matching public key must be added as a
+#     deploy key on the cert repo.
+#
+# When all required secrets are present, push to main triggers a
+# build that uploads to TestFlight automatically. Sheri reviews the
+# build in TestFlight on her phone; no Xcode required.
+
+name: iOS Build + TestFlight
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # Only rebuild when something that affects the iOS bundle changes.
+      # Avoids burning runner minutes on doc-only commits.
+      - 'app/**'
+      - 'components/**'
+      - 'hooks/**'
+      - 'lib/**'
+      - 'public/**'
+      - 'sanity/**'
+      - 'capacitor.config.ts'
+      - 'capacitor.config.json'
+      - 'ios/**'
+      - 'fastlane/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/ios-build.yml'
+  workflow_dispatch:
+    # Manual trigger from the Actions tab; useful for re-running a
+    # build without pushing.
+
+# Cancel any in-flight build when a newer commit arrives. Saves runner
+# minutes when commits land rapidly.
+concurrency:
+  group: ios-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and upload to TestFlight
+    runs-on: macos-14
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Set up Ruby for Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+        # Fastlane is invoked via bundler so the version is pinned in
+        # Gemfile.lock (added during W1 Fastlane setup, not in this
+        # scaffold). Bundler-cache speeds up subsequent runs by
+        # caching the Gem install.
+
+      # ── Capacitor sync ─────────────────────────────────────────────
+      # The Capacitor live-URL approach means the iOS shell just loads
+      # contueri.app; we still run `cap sync` so any native plugin
+      # config (OneSignal, MediaSession audio, etc.) lands in the iOS
+      # project before the build.
+      - name: Capacitor sync iOS
+        run: npx cap sync ios
+        # TODO (W1 Capacitor scaffold): this step assumes the ios/
+        # directory exists with the Xcode project. Until W1 lands
+        # Capacitor + creates the ios/ scaffold, this step fails fast
+        # which is the correct behavior.
+
+      # ── Certificates via Fastlane Match ─────────────────────────────
+      # Match fetches the distribution cert + provisioning profile
+      # from the encrypted private cert repo, decrypts with
+      # MATCH_PASSWORD, and installs into the runner's keychain.
+      - name: Install certificates via Fastlane Match
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          FASTLANE_USER: ${{ secrets.APPLE_ID }}
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+        run: bundle exec fastlane match appstore --readonly
+        # TODO (post Apple Dev activation): the first time Match runs,
+        # it must be invoked locally with `fastlane match appstore`
+        # (without --readonly) to generate the cert + profile and
+        # push them to MATCH_GIT_URL. Subsequent CI runs use
+        # --readonly to fetch only.
+
+      # ── Build + upload via Fastlane ─────────────────────────────────
+      # The `deploy_testflight` lane in fastlane/Fastfile bumps the
+      # build number, runs `xcodebuild archive` against the Capacitor
+      # iOS scheme, signs with the Match-installed profile, and uploads
+      # the resulting .ipa to TestFlight via App Store Connect API.
+      - name: Build and upload to TestFlight
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        run: bundle exec fastlane ios deploy_testflight
+
+      - name: Upload .ipa artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: contueri-ios-build
+          path: ios/build/*.ipa
+          retention-days: 7
+          if-no-files-found: warn
+        # Keeps the signed .ipa around for 7 days as a fallback in
+        # case TestFlight upload succeeded but the build needs to be
+        # re-uploaded manually for some reason.
