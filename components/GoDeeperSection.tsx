@@ -107,8 +107,19 @@ export default function GoDeeperSection({ reflections: propReflections }: GoDeep
         </svg>
       </button>
 
+      {/* EX-01 fix (June 2, 2026): cap the expanded drawer height with
+          maxHeight: 35vh + overflow-y-auto so the artwork image above
+          stays visible. Previously the drawer grew to fit all carousel
+          content and on shorter viewports (iPhone SE / 8) the expanded
+          drawer covered the image entirely. Cap is on the expanded
+          content wrapper, not the parent button, so the collapsed
+          trigger row stays its natural height. Carousel content
+          scrolls internally if it exceeds 35vh. */}
       {expanded && (
-        <div className="px-4 pb-6 animate-fade-in">
+        <div
+          className="px-4 pb-6 animate-fade-in overflow-y-auto"
+          style={{ maxHeight: "35vh" }}
+        >
           {loading ? (
             <div className="py-6 text-center text-white/50 text-sm">
               Loading…
