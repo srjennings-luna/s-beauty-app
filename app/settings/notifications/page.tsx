@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import PageTransition from "@/components/ui/PageTransition";
@@ -287,6 +287,15 @@ function NotificationTypeRow({
 }
 
 // ─── Pre-permission rationale modal ──────────────────────────────────────────
+//
+// A11y polish (June 3, 2026 audit findings):
+//   - Auto-focus the Continue button on open (primary action default)
+//   - Trap focus inside the modal: Tab from last focusable element wraps
+//     to the first, Shift+Tab from first wraps to the last
+//   - Restore focus to the element that opened the modal (the
+//     triggering toggle) on close, captured via document.activeElement
+//     at mount
+//   - Escape key calls onSkip() so keyboard users can dismiss
 
 function RationaleModal({
   onContinue,
@@ -295,8 +304,58 @@ function RationaleModal({
   onContinue: () => void;
   onSkip: () => void;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const continueRef  = useRef<HTMLButtonElement>(null);
+  // Captured at mount so we can restore focus to the triggering toggle
+  // on unmount, regardless of whether the user dismissed via Continue,
+  // Not now, Escape, or outside tap (no outside-tap-to-dismiss in this
+  // modal by design, but the ref still survives all close paths).
+  const triggerRef   = useRef<Element | null>(null);
+
+  useEffect(() => {
+    triggerRef.current = document.activeElement;
+    // Defer the focus call one tick so iOS Safari renders the modal
+    // before we move focus. Same pattern used in other Settings flows.
+    const t = window.setTimeout(() => continueRef.current?.focus(), 0);
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onSkip();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const container = containerRef.current;
+      if (!container) return;
+      const focusables = container.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last  = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKey);
+
+    return () => {
+      window.clearTimeout(t);
+      document.removeEventListener("keydown", handleKey);
+      // Restore focus to the triggering element on unmount. Safari
+      // sometimes drops focus during DOM removal; guard with optional
+      // chaining + cast to HTMLElement for focus() availability.
+      (triggerRef.current as HTMLElement | null)?.focus?.();
+    };
+  }, [onSkip]);
+
   return (
     <div
+      ref={containerRef}
       role="dialog"
       aria-modal="true"
       aria-labelledby="notif-rationale-title"
@@ -395,6 +454,7 @@ function RationaleModal({
             Not now
           </button>
           <button
+            ref={continueRef}
             type="button"
             onClick={onContinue}
             style={{

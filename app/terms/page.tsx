@@ -46,8 +46,13 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 }
 
 function Placeholder({ children }: { children: React.ReactNode }) {
+  // aria-hidden so screen readers do not narrate bracketed placeholder
+  // text as part of the legal content. The visual pink box still shows
+  // for sighted review. Resolves to plain text once Sheri fills in
+  // before App Store submission.
   return (
     <span
+      aria-hidden="true"
       style={{
         background: "rgba(139,69,87,0.10)",
         color: "#8b4557",
