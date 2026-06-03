@@ -572,64 +572,14 @@ function DailyPromptPageInner({
             );
           })()}
 
-          {/* ── Lectio ────────────────────────────────────────────────────── */}
-          {prompt.lectio && (
-            <section>
-              <p
-                className="text-xs tracking-widest mb-6 pb-2"
-                style={{ color: "var(--pp-accent)", borderBottom: `1px solid ${C.divider}`, letterSpacing: "0.2em" }}
-              >
-                READING <span style={{ color: C.creamFaint, fontWeight: 300 }}>(Lectio)</span>
-              </p>
-              <div className="pl-4 space-y-6" style={{ borderLeft: `1px solid rgba(138,126,114,0.3)` }}>
-
-                {/* Philosophy quote — shown first when present */}
-                {prompt.lectio.philosophyText && (
-                  <div className="space-y-2">
-                    <p
-                      className="italic leading-tight"
-                      style={{
-                        color: C.cream,
-                        fontFamily: "var(--font-cormorant)",
-                        fontSize: "clamp(1.3rem, 4.5vw, 1.55rem)",
-                        lineHeight: "1.4",
-                      }}
-                    >
-                      &ldquo;{prompt.lectio.philosophyText}&rdquo;
-                    </p>
-                    {prompt.lectio.philosophyAttribution && (
-                      <p className="text-xs tracking-widest uppercase" style={{ color: "var(--pp-accent)" }}>
-                        — {prompt.lectio.philosophyAttribution}
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {/* Scripture — shown second (or alone if no philosophy quote) */}
-                <div className="space-y-2">
-                  <p
-                    className="italic leading-tight"
-                    style={{
-                      color: C.cream,
-                      fontFamily: "var(--font-cormorant)",
-                      fontSize: "clamp(1.3rem, 4.5vw, 1.55rem)",
-                      lineHeight: "1.4",
-                    }}
-                  >
-                    &ldquo;{prompt.lectio.text}&rdquo;
-                  </p>
-                  {prompt.lectio.attribution && (
-                    <p className="text-xs tracking-widest uppercase" style={{ color: "var(--pp-accent)" }}>
-                      — {prompt.lectio.attribution}
-                    </p>
-                  )}
-                </div>
-
-              </div>
-            </section>
-          )}
-
-          {/* ── Auditio — circular player ──────────────────────────────────── */}
+          {/* ── Music (Auditio): circular player ────────────────────────────
+              Moved above Voices + Lectio June 2 2026. The day's editorial
+              music sets the contemplative ground for the reading that
+              follows. On no-music days the section is skipped and the
+              user lands directly on Voices.
+              VERBA stays inside this section as the Latin to English
+              translation panel for chanted audio (conditional on the
+              auditio.verbaOriginal field being populated). */}
           {prompt.auditio && (
             <section>
               <p
@@ -807,6 +757,109 @@ function DailyPromptPageInner({
                   )}
                 </div>
               )}
+            </section>
+          )}
+
+          {/* ── Voices (Voces): philosophy quote ────────────────────────────
+              Split from the prior single READING (Lectio) section on
+              June 2, 2026. The philosophy quote gets its own section in
+              Open Sans Regular at a smaller clamp than scripture, so it
+              reads as voice/argument rather than devotional weight.
+              Renders only when the day has a philosophyText populated.
+              Eyebrow uses the same gold caps treatment as other section
+              headers, with a Voces italic faint right-eyebrow mirroring
+              the VERBA pattern. Sage left hairline on the quote block
+              anchors it as a structured quotation. */}
+          {prompt.lectio?.philosophyText && (
+            <section>
+              <p
+                className="text-xs tracking-widest mb-6 pb-2 flex items-center justify-between"
+                style={{
+                  color: "var(--pp-accent)",
+                  borderBottom: `1px solid ${C.divider}`,
+                  letterSpacing: "0.2em",
+                }}
+              >
+                <span>VOICES</span>
+                <span
+                  className="italic"
+                  style={{
+                    color: C.creamFaint,
+                    fontWeight: 300,
+                    letterSpacing: "0.05em",
+                    textTransform: "none",
+                  }}
+                >
+                  Voces
+                </span>
+              </p>
+              <div
+                className="pl-4 space-y-2"
+                style={{ borderLeft: `1px solid rgba(138,126,114,0.3)` }}
+              >
+                <p
+                  className="leading-relaxed"
+                  style={{
+                    color: C.cream,
+                    fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                    fontWeight: 400,
+                    fontSize: "clamp(1rem, 3.5vw, 1.2rem)",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  &ldquo;{prompt.lectio.philosophyText}&rdquo;
+                </p>
+                {prompt.lectio.philosophyAttribution && (
+                  <p
+                    className="text-xs tracking-widest uppercase"
+                    style={{ color: "var(--pp-accent)" }}
+                  >
+                    {prompt.lectio.philosophyAttribution}
+                  </p>
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* ── Lectio: scripture ───────────────────────────────────────────
+              Split from the prior single READING (Lectio) section on
+              June 2, 2026. Scripture closes the reading sequence and is
+              the devotional moment of the day. Cormorant Garamond italic
+              at the larger clamp carries the gravity; no eyebrow rule
+              and no left hairline on the quote, so the typography lands
+              without framing. The eyebrow is "LECTIO" alone (no Latin
+              parenthetical, since Lectio is already Latin). Renders only
+              when the day has a scripture quote populated, which is the
+              expected baseline for every day. */}
+          {prompt.lectio?.text && (
+            <section>
+              <p
+                className="text-xs tracking-widest mb-6"
+                style={{ color: "var(--pp-accent)", letterSpacing: "0.2em" }}
+              >
+                LECTIO
+              </p>
+              <div className="space-y-2">
+                <p
+                  className="italic leading-tight"
+                  style={{
+                    color: C.cream,
+                    fontFamily: "var(--font-cormorant)",
+                    fontSize: "clamp(1.3rem, 4.5vw, 1.55rem)",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  &ldquo;{prompt.lectio.text}&rdquo;
+                </p>
+                {prompt.lectio.attribution && (
+                  <p
+                    className="text-xs tracking-widest uppercase"
+                    style={{ color: "var(--pp-accent)" }}
+                  >
+                    {prompt.lectio.attribution}
+                  </p>
+                )}
+              </div>
             </section>
           )}
 
