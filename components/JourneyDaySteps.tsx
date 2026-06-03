@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import type { JourneyDay } from "@/lib/types";
 import NarrationButton, { NARRATION_START_EVENT, NARRATION_END_EVENT } from "@/components/NarrationButton";
+import ScrollCue from "@/components/ScrollCue";
 import { WHISPER_GRADIENT } from "@/lib/design-tokens";
 
 // Encounter-panel palettes for the gradient-glow treatment on Context and
@@ -180,9 +181,14 @@ function StoriesProgressBar({ current, total }: { current: number; total: number
 
 // ── Step 1: Open ──────────────────────────────────────────────────────────────
 function StepOpen({ day }: { day: JourneyDay }) {
+  // ref + ScrollCue wired in for IMG-01 fix (June 2, 2026): on short
+  // viewports the openText below the 4:3 hero image lives below the
+  // fold. The cue signals scrollability without breaking contemplative
+  // silence and auto-hides on first scroll.
+  const scrollRef = useRef<HTMLDivElement>(null);
   return (
-    <div className="h-full overflow-y-auto">
-      {/* Spacer for overlaid header (nav row only — progress is now in footer) */}
+    <div ref={scrollRef} className="h-full overflow-y-auto relative">
+      {/* Spacer for overlaid header (nav row only; progress is now in footer) */}
       <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)" }} />
 
       {/* Hero image — full width, reliable 4:3 aspect ratio via padding trick */}
@@ -231,6 +237,8 @@ function StepOpen({ day }: { day: JourneyDay }) {
 
       {/* Footer spacer */}
       <div className="h-12" />
+
+      <ScrollCue containerRef={scrollRef} />
     </div>
   );
 }

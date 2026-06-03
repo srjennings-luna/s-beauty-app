@@ -6,6 +6,7 @@ import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import GoDeeperSection from "@/components/GoDeeperSection";
 import PageTransition from "@/components/ui/PageTransition";
+import ScrollCue from "@/components/ScrollCue";
 import { WHISPER_GRADIENT } from "@/lib/design-tokens";
 type SanityArtwork = {
   _id: string;
@@ -91,6 +92,9 @@ export default function PrayClient({
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
   const stepRef = useRef(step);
+  // Ref attached to the Gaze step's scrollable container so ScrollCue
+  // can detect overflow and signal scrollability. IMG-01 fix, June 2 2026.
+  const gazeScrollRef = useRef<HTMLDivElement>(null);
   stepRef.current = step;
 
   // Data fetch moved to the server component wrapper (see page.tsx);
@@ -310,7 +314,14 @@ export default function PrayClient({
           >
 
             {/* ── Gaze ── */}
+            {/* gazeScrollRef + ScrollCue: IMG-01 fix (June 2, 2026).
+                The image is min-h-[55vh] max-h-[70vh]; on short
+                viewports the contemplative copy ("Let your eyes
+                rest...") and the pinch hint live below the fold and
+                users don't know to scroll. ScrollCue surfaces the
+                affordance silently and auto-hides on first scroll. */}
             <div
+              ref={gazeScrollRef}
               className="absolute inset-0 overflow-y-auto touch-pan-y"
               style={{
                 transform: `translateX(${(0 - step) * 100}%)`,
@@ -333,8 +344,9 @@ export default function PrayClient({
                 <p className="text-sm text-center leading-relaxed max-w-md mx-auto" style={{ color: C.creamDim }}>
                   Let your eyes rest on the image. Notice what draws you. Ask God to open the eyes of your heart.
                 </p>
-                <p className="text-xs mt-4 text-center" style={{ color: C.creamFaint }}>Take 1–2 minutes if you like. Pinch to zoom the image.</p>
+                <p className="text-xs mt-4 text-center" style={{ color: C.creamFaint }}>Take 1-2 minutes if you like. Pinch to zoom the image.</p>
               </div>
+              <ScrollCue containerRef={gazeScrollRef} />
             </div>
 
             {/* ── Meditate ── */}
