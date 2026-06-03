@@ -28,6 +28,20 @@ export const STREAK_COUNT_KEY     = "kallos-prompt-streak";
 export const STREAK_LAST_KEY      = "kallos-prompt-last";
 export const JOURNEY_PROGRESS_KEY = "kallos-journey-progress";
 
+// ─── Notification preferences (D-04 locked spec) ────────────────────────────
+// One storage key per type containing { enabled, time, daysOfWeek }.
+// Time is "HH:MM" 24h local. daysOfWeek is array of 0-6 (Sunday=0).
+// Defaults: all disabled; per-type defaults applied in the hook on first read.
+// W2 OneSignal integration reads these to populate user-tag segments and
+// scheduled-send time-of-day rules. Pre-permission rationale screen state
+// stored as a separate boolean so the rationale only shows once per install.
+
+export const NOTIF_PP_KEY          = "contueri-notif-pp";
+export const NOTIF_JOURNEY_KEY     = "contueri-notif-journey-day";
+export const NOTIF_STREAK_KEY      = "contueri-notif-streak";
+export const NOTIF_SEASONAL_KEY    = "contueri-notif-seasonal";
+export const NOTIF_RATIONALE_KEY   = "contueri-notif-rationale-shown";
+
 export function visioNoteKey(artworkId: string): string {
   return `kallos-visio-note-${artworkId}`;
 }
@@ -147,6 +161,88 @@ export function setVisioNote(artworkId: string, note: string): void {
   try {
     if (note) localStorage.setItem(visioNoteKey(artworkId), note);
     else localStorage.removeItem(visioNoteKey(artworkId));
+  } catch {
+    /* ignore */
+  }
+}
+
+// ─── Notification preferences ────────────────────────────────────────────────
+
+// One row per notification type. daysOfWeek uses 0=Sunday..6=Saturday.
+// Time string is "HH:MM" 24h local; consumers convert for display.
+export type NotificationTypePref = {
+  enabled: boolean;
+  time: string;
+  daysOfWeek: number[];
+};
+
+export type NotificationType = "pp" | "journey" | "streak" | "seasonal";
+
+const NOTIF_KEY_MAP: Record<NotificationType, string> = {
+  pp:       NOTIF_PP_KEY,
+  journey:  NOTIF_JOURNEY_KEY,
+  streak:   NOTIF_STREAK_KEY,
+  seasonal: NOTIF_SEASONAL_KEY,
+};
+
+// Per-type defaults applied on first read. Time defaults come from the
+// D-04 spec: P&P morning (7am), journey midday (noon), streak evening
+// (8pm), seasonal morning (7am). All disabled by default per the
+// Apple-post-2024 default-off guideline.
+const NOTIF_DEFAULTS: Record<NotificationType, NotificationTypePref> = {
+  pp:       { enabled: false, time: "07:00", daysOfWeek: [0, 1, 2, 3, 4, 5, 6] },
+  journey:  { enabled: false, time: "12:00", daysOfWeek: [0, 1, 2, 3, 4, 5, 6] },
+  streak:   { enabled: false, time: "20:00", daysOfWeek: [0, 1, 2, 3, 4, 5, 6] },
+  seasonal: { enabled: false, time: "07:00", daysOfWeek: [0, 1, 2, 3, 4, 5, 6] },
+};
+
+export function getNotificationTypePref(type: NotificationType): NotificationTypePref {
+  const fallback = NOTIF_DEFAULTS[type];
+  if (!hasWindow()) return fallback;
+  try {
+    const raw = localStorage.getItem(NOTIF_KEY_MAP[type]);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw) as Partial<NotificationTypePref>;
+    return {
+      enabled: typeof parsed.enabled === "boolean" ? parsed.enabled : fallback.enabled,
+      time: typeof parsed.time === "string" ? parsed.time : fallback.time,
+      daysOfWeek: Array.isArray(parsed.daysOfWeek)
+        ? parsed.daysOfWeek.filter((d) => typeof d === "number" && d >= 0 && d <= 6)
+        : fallback.daysOfWeek,
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+export function setNotificationTypePref(type: NotificationType, pref: NotificationTypePref): void {
+  if (!hasWindow()) return;
+  try {
+    localStorage.setItem(NOTIF_KEY_MAP[type], JSON.stringify(pref));
+  } catch {
+    /* ignore */
+  }
+}
+
+// Pre-permission rationale screen tracking. True once the user has
+// seen and dismissed the rationale, regardless of whether they tapped
+// "Allow" or "Not now." Subsequent first-toggle taps skip the screen
+// and go straight to the iOS permission prompt (handled by W2
+// OneSignal integration).
+export function getNotificationRationaleShown(): boolean {
+  if (!hasWindow()) return false;
+  try {
+    return localStorage.getItem(NOTIF_RATIONALE_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+export function setNotificationRationaleShown(value: boolean): void {
+  if (!hasWindow()) return;
+  try {
+    if (value) localStorage.setItem(NOTIF_RATIONALE_KEY, "true");
+    else localStorage.removeItem(NOTIF_RATIONALE_KEY);
   } catch {
     /* ignore */
   }
