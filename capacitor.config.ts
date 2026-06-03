@@ -1,39 +1,6 @@
+import type { CapacitorConfig } from "@capacitor/cli";
+
 // Capacitor configuration for the Contueri iOS app.
-//
-// NOTE: @capacitor/cli is not installed yet (lands in W1 when the
-// Capacitor scaffold runs `npm install @capacitor/cli @capacitor/core
-// @capacitor/ios`). Until then this file uses a structural type
-// declaration inline instead of importing CapacitorConfig. The W1
-// agent should replace the inline type with the real import:
-//
-//   import type { CapacitorConfig } from "@capacitor/cli";
-//
-// once the package is installed. The shape below matches the
-// Capacitor 8 schema (verified against
-// https://capacitorjs.com/docs/config). If Capacitor updates its
-// schema, the W1 agent reconciles.
-
-type CapacitorConfig = {
-  appId: string;
-  appName: string;
-  webDir: string;
-  server?: {
-    url?: string;
-    iosScheme?: string;
-    androidScheme?: string;
-    cleartext?: boolean;
-    allowNavigation?: string[];
-  };
-  ios?: {
-    contentInset?: "automatic" | "scrollableAxes" | "never" | "always";
-    scheme?: string;
-    backgroundColor?: string;
-    limitsNavigationsToAppBoundDomains?: boolean;
-  };
-  plugins?: Record<string, Record<string, unknown>>;
-};
-
-// Original architectural intent below.
 //
 // Per the v1.0 Launch Plan: Capacitor 8 with the LIVE-URL approach.
 // The iOS shell loads contueri.app (Vercel-hosted Next.js) inside a
