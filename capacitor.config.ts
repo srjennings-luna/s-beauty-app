@@ -89,15 +89,22 @@ const config: CapacitorConfig = {
       // globals.css; with auto-hide off, the splash holds across
       // that gap).
       //
-      // - launchAutoHide: false → splash never auto-dismisses; JS
-      //   alone controls the hide moment.
-      // - launchShowDuration: 0 → no fixed hold timer. JS controls.
+      // - launchAutoHide: false → splash never auto-dismisses on
+      //   the timer; JS alone controls the hide moment.
+      // - launchShowDuration: 30000 → 30-second fallback. Capacitor
+      //   8 has a subtlety where `launchShowDuration: 0` combined
+      //   with `launchAutoHide: false` can still cause the splash to
+      //   dismiss when the WebView's page-load event fires
+      //   (regardless of launchAutoHide). Setting a long duration
+      //   ensures the splash stays visible until JS explicitly
+      //   hides it via SplashScreen.hide() — typically within ~500ms
+      //   of layout mount, far less than 30s.
       // - launchFadeOutDuration: 300 → kept as the fade duration
       //   passed to hide().
       // - backgroundColor: "#5a7a8a" → Mineral Blue dominant blend
       //   tone, applied to any letterbox slivers iOS shows outside
       //   the splash image.
-      launchShowDuration: 0,
+      launchShowDuration: 30000,
       launchAutoHide: false,
       launchFadeOutDuration: 300,
       backgroundColor: "#5a7a8a",
