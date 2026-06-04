@@ -2,7 +2,7 @@ import type { SplashScreen } from "./SplashClient";
 
 // Used when Sanity returns zero splash documents (or the query fails).
 // Mirrors the live Sanity content so a fresh install never sees an empty
-// splash. Last synced from Sanity on 2026-05-29. Keep in sync when Studio
+// splash. Last synced from Sanity on 2026-06-03. Keep in sync when Studio
 // is edited.
 export const FALLBACK_SCREENS: SplashScreen[] = [
   {
@@ -47,12 +47,12 @@ export const FALLBACK_SCREENS: SplashScreen[] = [
         _key: "f2-body2",
         text: "The tradition that produced the greatest art in the Western world also produced great musicians, scientists and philosophers.",
       },
-      // Screen 2 closer ("CONTUERI is built on that.") removed June 3.
-      // Heading + body paragraphs do all the work; the closer told the
-      // reader what conclusion to draw instead of trusting them to
-      // arrive there. Same editorial register as the voice-rule bans on
-      // "spiritual practice," "invitation to," etc. — explaining
-      // instead of showing.
+      // Screen 2 closer text ("CONTUERI is built on that.") cleared
+      // June 3 — editorial cut. Tagline block kept in place as an
+      // empty placeholder so future closer copy can be added back in
+      // Studio without re-creating the block. Renderer skips empty
+      // taglines so no visual gap appears.
+      { _type: "tagline", _key: "f2-tagline", text: "" },
     ],
   },
   {
@@ -87,23 +87,15 @@ export const FALLBACK_SCREENS: SplashScreen[] = [
         _key: "f4-body1",
         text: "The painting you can’t look away from. The piece of music that opens something in you. The line from a book you’ve carried for years.",
       },
-      // Screen 4 closer — re-added June 3 as a `tagline` block (not
-      // `body`) after the structural typing fix. Original May 29
-      // rebrand authored it as a body block (renders cream), which was
-      // inconsistent with screen 2's tagline closer (renders verdigris
-      // green). Sanity production migrated via
-      // scripts/migrate-splash-screen-4-closer-to-tagline.ts; this
-      // fallback now mirrors that state so the safety-net rendering
-      // matches live behavior.
-      //
-      // Editorial removal of this closer (and screen 2's) is still on
-      // the table per Sheri's plan, pending her visual confirmation.
-      // If she removes from Sanity Studio, also delete this block to
-      // keep fallback aligned.
+      // Screen 4 closer text ("CONTUERI is built for exactly that.")
+      // cleared June 3 — editorial cut. Tagline block kept in place as
+      // an empty placeholder so future closer copy can be added back
+      // in Studio without re-creating the block. Renderer skips empty
+      // taglines so no visual gap appears.
       {
         _type: "tagline",
         _key: "f4-tagline",
-        text: "CONTUERI is built for exactly that.",
+        text: "",
       },
     ],
   },
