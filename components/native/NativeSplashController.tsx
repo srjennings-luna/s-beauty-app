@@ -51,8 +51,25 @@ export default function NativeSplashController() {
 
         const { SplashScreen } = await import("@capacitor/splash-screen");
 
-        // Two rAF ticks → guarantees React has painted at least one
-        // frame before we start the native splash fade.
+        // Wait for window.load — fires when ALL resources have
+        // downloaded (HTML, CSS, fonts, images, scripts) AND React
+        // has had time to hydrate the page-specific content
+        // underneath the layout. Two rAF ticks after layout mount
+        // wasn't enough: the layout components mount before the
+        // actual page content (SplashClient, PromptClient) paints,
+        // so hide() fired too early and the WebView's body bg
+        // (parchment, per globals.css) briefly showed before the
+        // page's espresso/gradient background painted.
+        if (document.readyState !== "complete") {
+          await new Promise<void>((resolve) => {
+            const onLoad = () => resolve();
+            window.addEventListener("load", onLoad, { once: true });
+          });
+        }
+        if (cancelled) return;
+
+        // Two rAF ticks after load to guarantee at least one painted
+        // frame of the now-fully-loaded content.
         await new Promise<void>((resolve) =>
           requestAnimationFrame(() => resolve()),
         );
