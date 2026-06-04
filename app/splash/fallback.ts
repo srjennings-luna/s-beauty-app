@@ -93,6 +93,16 @@ export const FALLBACK_SCREENS: SplashScreen[] = [
       // hook ("Ever had that feeling?") + the description lands the
       // encounter on its own; the closer was telling the reader what
       // they had just felt.
+      //
+      // Block-type correction for future use: the removed closer was
+      // incorrectly typed as a `body` block (renders cream), which made
+      // it inconsistent with screen 2's tagline closer (renders
+      // verdigris green per the SplashClient tagline renderer). If
+      // closer text is ever added back to screen 4 in Sanity Studio or
+      // here, author it as a `tagline` block, not `body`, so it picks
+      // up the verdigris treatment and matches the screen 2 / screen 1
+      // pattern. Per Sheri's June 3 call: tagline-block typing is the
+      // canonical closer treatment on the splash flow.
     ],
   },
   {
