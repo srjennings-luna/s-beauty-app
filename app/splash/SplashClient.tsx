@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useOnboarded from "@/hooks/useOnboarded";
-import { WHISPER_GRADIENT } from "@/lib/design-tokens";
+import PPGradientBackground from "@/components/PPGradientBackground";
 
 export type SplashBlock =
   | { _type: "wordmark"; _key: string; text: string }
@@ -32,13 +32,20 @@ export type SplashScreen = {
 // moment; aged gilt + verdigris signal "fresco / museum" rather than
 // "wellness / meditation." The rest of the app still runs sacred gold
 // #C19B5F via tailwind --accent-gold; that's the daily-use functional palette.
+//
+// Background (June 3, 2026): the splash atmosphere is now the Mineral Blue
+// P&P fluid gradient via <PPGradientBackground contentType={undefined}>,
+// which falls back to the Sacred Art accent. Splash + Today P&P share the
+// same breathing-blue background so the cold-launch handoff (native splash
+// → in-app splash → first P&P) reads as one continuous editorial moment.
+// This is the intentional exception to the "use sparingly" P&P gradient
+// rule; the splash announces "this is curated." Browse-mode surfaces
+// (Explore, Library, Journeys list) stay flat per the original rule.
 const E = "var(--color-espresso)";
 const G = "#B89238"; // aged gilt — the splash gold thread (replaces #C19B5F here)
 const G_RGB = "184,146,56"; // RGB tuple for opacity uses below
 const VERDIGRIS = "#5F7A6B"; // gold-rule color; brand-anchor cousin of sage #4a7a62
 const CTA_GRADIENT = `linear-gradient(135deg, ${VERDIGRIS} 0%, ${G} 100%)`;
-// WHISPER_GRADIENT is imported from lib/design-tokens — shared with the
-// immersive screens (P&P, Journey day, Visio Divina, ArtworkViewer).
 const CREAM = "rgba(253,246,232,0.9)";
 const CREAM_DIM = "rgba(253,246,232,0.52)";
 
@@ -372,9 +379,9 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
   );
 
   return (
+    <PPGradientBackground contentType={undefined}>
     <div
-      className={`fixed inset-0 overflow-hidden transition-opacity duration-700 ${visible ? "opacity-100" : "opacity-0"}`}
-      style={{ background: WHISPER_GRADIENT }}
+      className={`relative h-[100dvh] overflow-hidden transition-opacity duration-700 ${visible ? "opacity-100" : "opacity-0"}`}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -478,5 +485,6 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
         })}
       </div>
     </div>
+    </PPGradientBackground>
   );
 }

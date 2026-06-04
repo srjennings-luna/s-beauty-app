@@ -73,13 +73,24 @@ const config: CapacitorConfig = {
   // empty for W1 scaffold; W2 adds plugin-specific blocks as needed.
   plugins: {
     SplashScreen: {
-      // Splash screen behavior on cold app launch. Show a parchment
-      // background with the Contueri wordmark for up to 2 seconds,
-      // fade out as the WebView finishes loading the live URL.
+      // Splash screen behavior on cold app launch. Show the Mineral
+      // Blue P&P gradient master with the Contueri wordmark centered
+      // for up to 2 seconds, fade out as the WebView finishes loading
+      // the live URL.
+      //
+      // June 3, 2026: backgroundColor switched from parchment #fdf6e9
+      // to Mineral Blue dominant #5a7a8a (approx the blended center
+      // tone of the gradient). Any sliver of native background that
+      // appears outside the splash image (letterbox during fade,
+      // device-class scaling gap) now blends with the gradient tone
+      // instead of flashing parchment. The Mineral Blue gradient is
+      // the same atmosphere used by the in-app /splash route and
+      // Today P&P (Sacred Art fallback) — the cold-launch handoff
+      // reads as one continuous blue moment.
       launchShowDuration: 2000,
       launchAutoHide: true,
       launchFadeOutDuration: 300,
-      backgroundColor: "#fdf6e9",
+      backgroundColor: "#5a7a8a",
       // Splash image asset paths populated in W1 once
       // @capacitor/assets generates the splash variants from the
       // single 1024x1024 wordmark source. Until then, default
