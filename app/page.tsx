@@ -43,12 +43,20 @@ export default function TodayPage() {
     }
   }, [onboarded, router]);
 
-  // Hold a blank parchment surface while the onboarding gate decides
-  // whether to redirect. Avoids a single-frame flash of the espresso
-  // P&P atmosphere before sending a first-time user to /splash.
+  // Hold a blank espresso surface while the onboarding gate decides
+  // whether to redirect. Both destinations are espresso-based:
+  // first-time users → /splash (Mineral Blue gradient on espresso),
+  // returning users → PromptClient (P&P gradient on espresso). An
+  // espresso placeholder bridges both without a flash.
+  //
+  // (Previously parchment — neutral between Today's espresso and the
+  // old whisper-gradient /splash. Now that /splash also uses the P&P
+  // Mineral Blue gradient on espresso, parchment IS the flash, not
+  // the neutral. Changed June 4, 2026 as part of iOS step 1 splash-
+  // hide work to eliminate the parchment flash on cold launch.)
   const resolved = iframeBypass || onboarded === true;
   if (!resolved) {
-    return <div className="min-h-screen bg-parchment" />;
+    return <div className="min-h-screen bg-espresso" />;
   }
 
   // Today is the only route that renders the gear icon in place of the
