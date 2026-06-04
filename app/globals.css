@@ -54,7 +54,18 @@ html {
 
 body {
   font-family: var(--font-open-sans), "Open Sans", sans-serif;
-  background-color: var(--color-parchment); /* Parchment — browse mode default */
+  /* Default body bg is espresso to prevent parchment flash on cold
+     launch — between native splash dismiss and React painting the
+     destination page, any sliver of body bg that's briefly visible
+     (pb-20 padding zone, route transition window, render-blocking
+     CSS gap) now reads espresso instead of parchment. Browse-mode
+     parchment routes (Settings, Privacy, Terms, Library, Explore,
+     Journeys list) all wrap their content in an explicit
+     `min-h-screen bg-parchment` div so they still render parchment.
+     The body bg only matters for the brief paint windows where no
+     route-specific bg has applied yet. Changed June 4, 2026 as
+     part of iOS step 1 splash-hide work. */
+  background-color: var(--color-espresso);
   color: var(--color-near-black);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
