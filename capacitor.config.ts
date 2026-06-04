@@ -73,22 +73,32 @@ const config: CapacitorConfig = {
   // empty for W1 scaffold; W2 adds plugin-specific blocks as needed.
   plugins: {
     SplashScreen: {
-      // Splash screen behavior on cold app launch. Show the Mineral
-      // Blue P&P gradient master with the Contueri wordmark centered
-      // for up to 2 seconds, fade out as the WebView finishes loading
-      // the live URL.
+      // Splash screen behavior on cold app launch. Mineral Blue
+      // gradient master + centered CONTUERI wordmark. Background tone
+      // matches the in-app `/splash` route (Sacred Art Mineral Blue)
+      // so the native → in-app handoff reads as one continuous blue
+      // moment.
       //
-      // June 3, 2026: backgroundColor switched from parchment #fdf6e9
-      // to Mineral Blue dominant #5a7a8a (approx the blended center
-      // tone of the gradient). Any sliver of native background that
-      // appears outside the splash image (letterbox during fade,
-      // device-class scaling gap) now blends with the gradient tone
-      // instead of flashing parchment. The Mineral Blue gradient is
-      // the same atmosphere used by the in-app /splash route and
-      // Today P&P (Sacred Art fallback) — the cold-launch handoff
-      // reads as one continuous blue moment.
-      launchShowDuration: 2000,
-      launchAutoHide: true,
+      // June 4, 2026 — JS-controlled hide:
+      // The native splash holds open until React has mounted and
+      // painted the destination page; `NativeSplashController` then
+      // calls `SplashScreen.hide({ fadeOutDuration: 300 })`. This
+      // eliminates the parchment-flash that previously appeared
+      // between native splash auto-dismiss and React paint (the
+      // WebView's HTML body background defaults to parchment per
+      // globals.css; with auto-hide off, the splash holds across
+      // that gap).
+      //
+      // - launchAutoHide: false → splash never auto-dismisses; JS
+      //   alone controls the hide moment.
+      // - launchShowDuration: 0 → no fixed hold timer. JS controls.
+      // - launchFadeOutDuration: 300 → kept as the fade duration
+      //   passed to hide().
+      // - backgroundColor: "#5a7a8a" → Mineral Blue dominant blend
+      //   tone, applied to any letterbox slivers iOS shows outside
+      //   the splash image.
+      launchShowDuration: 0,
+      launchAutoHide: false,
       launchFadeOutDuration: 300,
       backgroundColor: "#5a7a8a",
       // Splash image asset paths populated in W1 once

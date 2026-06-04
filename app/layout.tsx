@@ -3,6 +3,8 @@ import { Montserrat, Open_Sans, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/ui/Navigation";
 import VisualEditingClient from "@/components/VisualEditingClient";
+import NativeSplashController from "@/components/native/NativeSplashController";
+import StatusBarController from "@/components/native/StatusBarController";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -68,6 +70,19 @@ export default function RootLayout({
           iframe loads but Presentation throws "Unable to connect".
         */}
         <VisualEditingClient />
+        {/*
+          iOS native controllers (no-ops on web). NativeSplashController
+          dismisses the iOS launch image once React has painted, so the
+          native splash fades into the real React content with no
+          parchment-flash in between. StatusBarController updates the
+          iOS status bar style + background per route — light icons on
+          espresso surfaces (Today, P&P, Visio Divina, Journey Day,
+          splash), dark icons on parchment surfaces (Settings, Explore,
+          Library, Journeys list, Privacy, Terms). Both gracefully
+          no-op on web via the dynamic-import guard.
+        */}
+        <NativeSplashController />
+        <StatusBarController />
       </body>
     </html>
   );
