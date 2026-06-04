@@ -274,6 +274,14 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
         // hairline above and lets the definition sit as quiet ground
         // instead of a closer. Also restores gold's "one use per
         // screen" preciousness for the CTA on screen 5.
+        //
+        // Empty-text guard: tagline.text is now optional in the Sanity
+        // schema (June 3) so Studio editors can clear the text and
+        // keep the block as a placeholder for future closer copy
+        // without re-creating the block. If text is empty/whitespace,
+        // render nothing — otherwise an empty <p> with marginTop: 48
+        // would leave a visible gap at the bottom of the screen.
+        if (!block.text || block.text.trim().length === 0) return null;
         return (
           <p
             key={block._key}

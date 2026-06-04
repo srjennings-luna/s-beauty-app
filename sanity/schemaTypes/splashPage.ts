@@ -131,11 +131,19 @@ export default defineType({
               name: 'text',
               title: 'Text',
               type: 'string',
-              description: 'Short closing line. Rendered in Montserrat gold, small.',
-              validation: (Rule) => Rule.required(),
+              description:
+                'Short closing line. Rendered in Montserrat verdigris (#5F7A6B), small. Optional — leave empty to keep the block as a placeholder for future text without rendering anything on the screen.',
+              // Optional (June 3, 2026). Sheri wants the ability to
+              // clear the text in Studio while keeping the tagline
+              // block in place as a structural placeholder, so future
+              // closer text can be added back without re-creating the
+              // block. Renderer skips empty taglines so no visual gap.
             }),
           ],
-          preview: {select: {title: 'text'}, prepare: ({title}) => ({title: `Tagline — ${title ?? ''}`})},
+          preview: {
+            select: {title: 'text'},
+            prepare: ({title}) => ({title: `Tagline — ${title || '(empty)'}`}),
+          },
         }),
         defineArrayMember({
           name: 'featureCard',
