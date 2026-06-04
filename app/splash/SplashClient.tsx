@@ -266,13 +266,21 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
           </p>
         );
       case "tagline":
+        // June 3, 2026: color swapped from gilt G to VERDIGRIS for the
+        // editorial pass. On screen 1 this block holds the word
+        // definition (etymology of "contueri"), not a tagline (real
+        // brand tagline TBD — see CLAUDE.md Open Decisions #6). Gold
+        // read as a punchline / brand assertion; verdigris echoes the
+        // hairline above and lets the definition sit as quiet ground
+        // instead of a closer. Also restores gold's "one use per
+        // screen" preciousness for the CTA on screen 5.
         return (
           <p
             key={block._key}
             className="font-montserrat"
             style={{
               fontSize: "0.875rem",
-              color: G,
+              color: VERDIGRIS,
               letterSpacing: "0.02em",
               marginTop: 48,
               ...style,

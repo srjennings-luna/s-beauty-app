@@ -22,7 +22,12 @@ export const FALLBACK_SCREENS: SplashScreen[] = [
       {
         _type: "tagline",
         _key: "f1-tagline",
-        text: "Contueri: To gaze on, behold, contemplate with purpose",
+        // Word definition (etymology), held in the tagline block as a
+        // rebrand-day stopgap; brand tagline TBD. "Contueri:" prefix
+        // dropped June 3 — the wordmark + pronunciation above already
+        // name the word twice; repeating it a third time before the
+        // definition reads anxious.
+        text: "To gaze on, behold, contemplate with purpose.",
       },
     ],
   },
@@ -42,7 +47,12 @@ export const FALLBACK_SCREENS: SplashScreen[] = [
         _key: "f2-body2",
         text: "The tradition that produced the greatest art in the Western world also produced great musicians, scientists and philosophers.",
       },
-      { _type: "tagline", _key: "f2-tagline", text: "CONTUERI is built on that." },
+      // Screen 2 closer ("CONTUERI is built on that.") removed June 3.
+      // Heading + body paragraphs do all the work; the closer told the
+      // reader what conclusion to draw instead of trusting them to
+      // arrive there. Same editorial register as the voice-rule bans on
+      // "spiritual practice," "invitation to," etc. — explaining
+      // instead of showing.
     ],
   },
   {
@@ -77,7 +87,12 @@ export const FALLBACK_SCREENS: SplashScreen[] = [
         _key: "f4-body1",
         text: "The painting you can’t look away from. The piece of music that opens something in you. The line from a book you’ve carried for years.",
       },
-      { _type: "body", _key: "f4-body2", text: "CONTUERI is built for exactly that." },
+      // Screen 4 closer ("CONTUERI is built for exactly that.") removed
+      // June 3. Same line as screen 2's closer in different wrapping —
+      // a rebrand-era template that explained instead of showed. The
+      // hook ("Ever had that feeling?") + the description lands the
+      // encounter on its own; the closer was telling the reader what
+      // they had just felt.
     ],
   },
   {
