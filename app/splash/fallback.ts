@@ -87,22 +87,24 @@ export const FALLBACK_SCREENS: SplashScreen[] = [
         _key: "f4-body1",
         text: "The painting you can’t look away from. The piece of music that opens something in you. The line from a book you’ve carried for years.",
       },
-      // Screen 4 closer ("CONTUERI is built for exactly that.") removed
-      // June 3. Same line as screen 2's closer in different wrapping —
-      // a rebrand-era template that explained instead of showed. The
-      // hook ("Ever had that feeling?") + the description lands the
-      // encounter on its own; the closer was telling the reader what
-      // they had just felt.
+      // Screen 4 closer — re-added June 3 as a `tagline` block (not
+      // `body`) after the structural typing fix. Original May 29
+      // rebrand authored it as a body block (renders cream), which was
+      // inconsistent with screen 2's tagline closer (renders verdigris
+      // green). Sanity production migrated via
+      // scripts/migrate-splash-screen-4-closer-to-tagline.ts; this
+      // fallback now mirrors that state so the safety-net rendering
+      // matches live behavior.
       //
-      // Block-type correction for future use: the removed closer was
-      // incorrectly typed as a `body` block (renders cream), which made
-      // it inconsistent with screen 2's tagline closer (renders
-      // verdigris green per the SplashClient tagline renderer). If
-      // closer text is ever added back to screen 4 in Sanity Studio or
-      // here, author it as a `tagline` block, not `body`, so it picks
-      // up the verdigris treatment and matches the screen 2 / screen 1
-      // pattern. Per Sheri's June 3 call: tagline-block typing is the
-      // canonical closer treatment on the splash flow.
+      // Editorial removal of this closer (and screen 2's) is still on
+      // the table per Sheri's plan, pending her visual confirmation.
+      // If she removes from Sanity Studio, also delete this block to
+      // keep fallback aligned.
+      {
+        _type: "tagline",
+        _key: "f4-tagline",
+        text: "CONTUERI is built for exactly that.",
+      },
     ],
   },
   {
