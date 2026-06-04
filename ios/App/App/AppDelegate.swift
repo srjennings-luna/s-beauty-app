@@ -7,7 +7,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // Set the UIWindow's background color to espresso (#16110d) so
+        // the lowest iOS view layer matches the rest of the cold-launch
+        // view stack:
+        //   - UIWindow.backgroundColor = espresso (here)
+        //   - LaunchScreen.storyboard view bg = espresso (storyboard fix)
+        //   - WebView container bg = espresso (capacitor.config.ts
+        //     ios.backgroundColor)
+        //   - body bg = espresso (app/globals.css)
+        //
+        // Without this line, UIWindow defaults to white. During the
+        // splash → WebView handoff there's a brief moment where the
+        // window itself is visible; without this, that flashed white.
+        // Sheri caught the white flash on Simulator (June 4, 2026).
+        if let window = self.window {
+            window.backgroundColor = UIColor(red: 0.0862745098, green: 0.0666666667, blue: 0.0509803922, alpha: 1.0)
+        }
         return true
     }
 
