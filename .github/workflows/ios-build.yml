@@ -95,12 +95,38 @@ concurrency:
 jobs:
   build:
     name: Build and upload to TestFlight
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 60
+    # Runner upgraded from macos-14 (Xcode 15) to macos-15 (Xcode 16).
+    # @capacitor/status-bar 8.0.x and @capacitor/splash-screen 8.0.x
+    # both call into `capacitor-swift-pm` 8.4.0 binary APIs that are
+    # gated behind `#if compiler(>=5.3) && $NonescapableTypes` (a
+    # Swift 6 experimental feature). Without a Swift 6-capable
+    # toolchain (Xcode 16+), the compiler treats `PluginConfig.getString`,
+    # `UIColor.capacitor.color(fromHex:)`, `CAPBridgeProtocol.webView`,
+    # and `CAPBridgeProtocol.viewController` as undefined, and the
+    # plugin Swift files fail to compile. Xcode 16 on macos-15
+    # enables `$NonescapableTypes` so the gated APIs resolve.
 
     steps:
       - name: Check out source
         uses: actions/checkout@v4
+
+      - name: Select latest Xcode 16
+        run: |
+          # macos-15 ships with multiple Xcode versions installed
+          # under /Applications/Xcode_<ver>.app. Pick the highest 16.x
+          # available so the build is deterministic across runner
+          # image updates but still tracks security patches.
+          XCODE=$(ls -d /Applications/Xcode_16*.app 2>/dev/null | sort -V | tail -1)
+          if [ -z "$XCODE" ]; then
+            echo "::error::No Xcode 16.x found on runner"
+            ls /Applications/ | grep -i xcode || true
+            exit 1
+          fi
+          echo "Selecting $XCODE"
+          sudo xcode-select -switch "$XCODE"
+          xcodebuild -version
 
       - name: Set up Node 22
         uses: actions/setup-node@v4
