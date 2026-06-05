@@ -39,10 +39,40 @@
  */
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import useOnboarded from "@/hooks/useOnboarded";
 
 export default function NativeSplashController() {
+  const pathname = usePathname();
+  const { onboarded } = useOnboarded();
+
   useEffect(() => {
     let cancelled = false;
+
+    // Cold-launch gate handling (June 5, 2026):
+    //
+    // First-time users land on `/` (Today), which renders an espresso
+    // placeholder while it checks the onboarded flag, then redirects
+    // to /splash. If we hide the native iOS splash as soon as Today
+    // paints, the user sees the placeholder + the parchment bottom
+    // nav (the "white nav strip" flash) for the duration of the
+    // redirect chain + /splash route load + Sanity fetch. Felt
+    // duration: 1–3s of flicker.
+    //
+    // Hold the native splash for the redirect chain by deferring the
+    // hide until either:
+    //   (a) the user has been confirmed onboarded (onboarded === true)
+    //       — they're staying on Today, paint it, then hide; OR
+    //   (b) the route has transitioned to /splash and /splash itself
+    //       has painted — first-time user redirect complete.
+    //
+    // If we're on `/` and onboarded is undefined (still resolving) or
+    // false (about to redirect), bail early. The effect re-runs on
+    // pathname change → next entry is `/splash`, which is the
+    // "destination painted" signal, and we proceed to hide.
+    if (pathname === "/" && onboarded !== true) {
+      return;
+    }
 
     async function hideSplash() {
       try {
@@ -58,8 +88,8 @@ export default function NativeSplashController() {
         // wasn't enough: the layout components mount before the
         // actual page content (SplashClient, PromptClient) paints,
         // so hide() fired too early and the WebView's body bg
-        // (parchment, per globals.css) briefly showed before the
-        // page's espresso/gradient background painted.
+        // briefly showed before the page's espresso/gradient
+        // background painted.
         if (document.readyState !== "complete") {
           await new Promise<void>((resolve) => {
             const onLoad = () => resolve();
@@ -90,7 +120,7 @@ export default function NativeSplashController() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [pathname, onboarded]);
 
   return null;
 }

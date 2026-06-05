@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import useOnboarded from "@/hooks/useOnboarded";
 
 const navItems = [
   {
@@ -56,6 +57,7 @@ const navItems = [
 
 export default function Navigation() {
   const pathname = usePathname();
+  const { onboarded } = useOnboarded();
 
   // Hide navigation for immersive experiences
   if (
@@ -63,6 +65,19 @@ export default function Navigation() {
     pathname.includes("/pray") ||
     pathname === "/splash"
   ) {
+    return null;
+  }
+
+  // Hide the bottom nav on Today (`/`) while the onboarding gate is
+  // still resolving OR while it's about to redirect a first-time user
+  // to /splash. Today's app/page.tsx renders an espresso placeholder
+  // div for that brief window; without this guard the parchment nav
+  // bar paints under the placeholder, producing a visible cream strip
+  // at the bottom of the screen during cold launch (the "blank screen
+  // with white nav" Sheri saw June 5). Once onboarded === true, the
+  // user lands on PromptClient and the nav appears in its normal
+  // espresso-aware state.
+  if (pathname === "/" && onboarded !== true) {
     return null;
   }
 
