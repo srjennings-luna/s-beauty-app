@@ -120,6 +120,35 @@ Pinterest and Facebook still to claim (see Manual Tasks 71-72).
 - `data/episodes.ts` deleted
 - Build passes clean — deployed to Vercel
 
+### Phase 2 Work Done (June 5, 2026 early hours · iOS CI pipeline green, first TestFlight build uploaded)
+
+Multi-hour session diagnosing and fixing every wall between the W1 scaffold and a working `git push → TestFlight` pipeline. Final result: build 2 uploaded to App Store Connect / TestFlight at 05:02 UTC on June 5. Total CI run time once green: ~3 minutes. The infrastructure to ship every commit on `main` to TestFlight automatically is now live.
+
+- ✅ **iOS CI pipeline fully working end-to-end** — `.github/workflows/ios-build.yml` + `fastlane/Fastfile`. Six commits across the session, each unblocking the next wall:
+  - `cf2048ad` — Ruby pinned to 3.1 (Gemfile.lock's `CFPropertyList 3.0.9` requires Ruby < 3.2; CI's default 3.3.x was incompatible).
+  - `a4758d4c` — `MATCH_GIT_URL`, `MATCH_GIT_BASIC_AUTHORIZATION`, `MATCH_FORCE_LEGACY_ENCRYPTION` propagated to BOTH the Match step AND the Build step env blocks. Without them on the Build step, Fastlane errored with "No value found for 'git_url'" even though the prior Match step had succeeded.
+  - `1631b6bf` — `fastlane/Fastfile` switched from `workspace: WORKSPACE_PATH` to `project: PROJECT_PATH`. Capacitor 8 with Swift Package Manager (CapApp-SPM) generates no `App.xcworkspace`; only `App.xcodeproj` exists. `build_app` accepts `project:` directly when there is no workspace.
+  - `33d12f2b` — Added `update_code_signing_settings` between `match` and `build_app` so the Xcode project switches from automatic signing (which requires a GUI) to manual signing using the Match-installed AppStore profile. Without this, `xcodebuild archive` failed in CI with "No profiles for 'app.contueri.ios' were found".
+  - `9acdd00b` — Runner upgraded `macos-14 → macos-15` with explicit Xcode 16 select. `@capacitor/status-bar` 8.0.x and `@capacitor/splash-screen` 8.0.x call `capacitor-swift-pm` 8.4.0 binary APIs gated behind `#if compiler(>=5.3) && $NonescapableTypes` (a Swift 6 experimental feature). Xcode 15 silently treats those APIs as undefined — the compiler reported `PluginConfig has no member 'getString'`, `CAPBridgeProtocol has no member 'webView'/'viewController'`, and `incorrect argument label in call (have 'fromHex:', expected 'argb:')`. Xcode 16 enables `$NonescapableTypes` and the gated APIs resolve. Also restored Capacitor plugin pins to clean stable (`^8.0.1` splash-screen, `^8.0.2` status-bar) since the issue was the runner toolchain, not the plugin source.
+  - `dc93aa1a` — `setup_ci if ENV["CI"]` added to the top of the `deploy_testflight` lane, BEFORE `match`. Without it, `xcodebuild` hung 58 minutes at the "Signing Cordova.framework" step waiting for a keychain unlock prompt that never arrives on a headless runner, until the 60-min workflow timeout killed the build. `setup_ci` creates `fastlane_tmp_keychain-db`, unlocks it, sets a long timeout, and configures the keychain partition list so signing identities are accessible without prompting. Match then imports certs into this temp keychain. Also removed the separate "Install certificates via Fastlane Match" workflow step — it ran match in its own Ruby invocation, set up no CI keychain, and the resulting cert state did not carry over to the build step.
+  - `57983e6b` — Xcode select bumped `16 → 26`. After signing was fixed, App Store Connect rejected the upload at altool with iris-code `STATE_ERROR.VALIDATION_ERROR`: "SDK version issue. This app was built with the iOS 18.5 SDK. All iOS and iPadOS apps must be built with the iOS 26 SDK or later, included in Xcode 26 or later, in order to be uploaded to App Store Connect or submitted for distribution." Xcode 16.4 ships iOS 18.5 SDK; Apple's June 2026 policy requires iOS 26. macos-15 has Xcode 26.x pre-installed alongside 16.x.
+- ✅ **Apple Developer Individual enrollment is Active.** Team ID, App Store Connect API key, App Store Connect "Contueri-ios" app record all created. Eight GitHub Actions secrets configured (APPLE_ID, APPLE_TEAM_ID, APP_STORE_CONNECT_API_KEY_ID, APP_STORE_CONNECT_API_KEY_ISSUER_ID, APP_STORE_CONNECT_API_KEY_CONTENT, MATCH_PASSWORD, MATCH_GIT_URL, MATCH_GIT_BASIC_AUTHORIZATION, MATCH_FORCE_LEGACY_ENCRYPTION). Encrypted Match certs repo `srjennings-luna/contueri-certs` populated via one-time local `bundle exec fastlane match_init`. Distribution cert + provisioning profile (`match AppStore app.contueri.ios`) live in that repo and pulled read-only by every CI build.
+- ✅ **Mid-session secret fixes Sheri did manually:** retyped MATCH_GIT_URL after a leading-space copy/paste caused `protocol ' https' is not supported`; regenerated MATCH_GIT_BASIC_AUTHORIZATION with a fresh fine-grained PAT scoped to Contueri-certs (Contents Read+write) after the old token returned 401; deleted typo'd `APPLE_STORE_CONNECT_API_KEY_ISSUER_ID` and created the correct `APP_STORE_CONNECT_API_KEY_ID = SJAYUGD994`.
+- ✅ **fastlane/Fastfile final state** (`deploy_testflight` lane):
+  1. `setup_ci if ENV["CI"]` — keychain setup.
+  2. `match(type: "appstore", readonly: true)` — pull certs into temp keychain.
+  3. `update_code_signing_settings` — switch project to manual signing.
+  4. `app_store_connect_api_key` — auth.
+  5. `increment_build_number` from highest TestFlight build.
+  6. `build_app(project: PROJECT_PATH, scheme: "App", export_method: "app-store")`.
+  7. `upload_to_testflight(skip_waiting_for_build_processing: true)`.
+- ✅ **fastlane/Fastfile second commit** `7ecc49c0` (cleanup pass): corrected Visio Divina step order to canonical Lectio Divina sequence (Gaze → Meditate → Pray → Contemplate → Action; was Pray and Contemplate swapped). Same commit: StatusBar default flipped from `DARK` on parchment to `LIGHT` on espresso to eliminate cold-launch parchment strip flash before `StatusBarController` resolves the per-route style. 99% of cold-launch routes land on espresso surfaces, so LIGHT-on-espresso is the correct default; parchment routes get the swap via the runtime controller.
+- ✅ **Final timing on the green run (#26996339629):** `setup_ci` 0s, `match` 2s, `update_code_signing_settings` 0s, `app_store_connect_api_key` 0s, `latest_testflight_build_number` 0s, `increment_build_number` 1s, `build_app` 54s, `upload_to_testflight` 116s. Total workflow: 3m 28s including npm install and Xcode select.
+- ✅ **Repo + secret topology now standing:**
+  - `srjennings-luna/s-beauty-app` — main app repo. Pushes to `main` trigger `.github/workflows/ios-build.yml` on macos-15 / Xcode 26.
+  - `srjennings-luna/contueri-certs` — encrypted Match cert storage, private, accessed via PAT in `MATCH_GIT_BASIC_AUTHORIZATION`.
+  - App Store Connect: app `Contueri-ios` (bundle id `app.contueri.ios`), Team ID active. API key file content lives in `APP_STORE_CONNECT_API_KEY_CONTENT` secret.
+
 ### Phase 2 Work Done (June 3, 2026 night / June 4 early hours · Mineral Blue splash + onboarding editorial pass)
 
 Late-night session that pivoted from iOS step 1 (status bar runtime wiring) to a splash architecture correction after Sheri reviewed the previous Claude Code session's notes and caught three explicit mistakes in the splash plumbing. iOS step 1 paused; will resume on top of the new splash design.
@@ -473,9 +502,47 @@ Light 52px, Silence 47px, Suffering & Beauty 50px, Creation 49px, Home/The Restl
 - ✅ Day 7 Holy Saturday: curator note updated ("no morning Mass"), actio updated ("Light a candle. Reflect on the week."), Exsultet audio sourced (archive.org, CC0, cantor unattributed).
 - ✅ Day 8 Easter Sunday: context restructured (CHRIST IS RISEN leads), curator note rewritten (Justin Martyr/Emperor's court), prompt question updated ("Did you know it was true?"), Lectio updated (Cicero + Luke 24:5-6).
 
-### Up Next: Phase 2 Remaining
+### Up Next: iOS App Store Launch (current focus, June 5, 2026)
 
-**Next session priorities (in order):**
+The CI pipeline is green and build 2 is uploaded. The path from here to App Store is short. **Priorities in order:**
+
+**1. (PASSIVE) Verify build 2 in TestFlight on Sheri's phone.**
+- Apple processes uploaded builds for 5–30 min. Watch for "Processing complete" email or refresh App Store Connect → Apps → Contueri → TestFlight → Builds.
+- Install via the TestFlight app on iPhone (Sheri is already an internal tester since she's the account holder).
+- Sanity-check on device: splash gradient renders Mineral Blue (no parchment flash), status bar style swaps correctly between espresso routes (Today, /splash, /prompt) and parchment routes (Settings, Privacy, Terms, Explore), Auditio audio plays, no obvious crashes. If anything broken, file an entry under the bug list and decide before pushing.
+- This is the gate before anything else ships. **Do not move to W2 if v1 doesn't render on a real device.**
+
+**2. W1 iOS Job 2: MediaSession lockscreen metadata.** (~½ day)
+- During Auditio playback, the lockscreen / Control Center / CarPlay should display the artwork title + composer/artist + album-art-style cover. Currently the audio plays but the lockscreen shows nothing meaningful.
+- iOS-side: configure `MPNowPlayingInfoCenter.nowPlayingInfo` via a Capacitor plugin when the `<audio>` element fires `playing`. Reset on `pause`/`ended`.
+- Web-side: `navigator.mediaSession.metadata = new MediaMetadata({title, artist, album, artwork: [{src, sizes, type}]})` covers most of this once the WKWebView is configured to surface it.
+- Acceptance: lockscreen on Sheri's phone shows the painting + title + artist when an Auditio track is playing.
+
+**3. W1 iOS Job 3: Capacitor Browser plugin for external links.** (~2 hours)
+- Tap on any external URL inside the WebView should open in `SFSafariViewController` (in-app browser) instead of jumping out to Safari proper.
+- Required for App Store Review Guideline 4.5.4 ("in-app browsing experience").
+- Install `@capacitor/browser`, intercept link clicks via a global handler, call `Browser.open({url})`.
+- Acceptance: external links in Tradition Reflection sources, Visio Divina related links, etc. open in-app with a Done button.
+
+**4. (NO-CODE BLOCKERS — do anytime, can run in parallel)**
+- **Privacy + Terms legal placeholder fills** (Manual Task #94). ~5 min. Open `app/privacy/page.tsx` and `app/terms/page.tsx`; replace `[LEGAL ENTITY NAME]` with "Sheri Jennings", `[STATE]` with Sheri's state of residence, `[LAUNCH DATE]` with the actual launch date when known. App Store will not accept submission without working URLs.
+- **6 ambient sound MP3s sourced + licensed + gapless-loop encoded** (Manual Task #95). Hard blocker for the W2 Ambient Sound System build. Paths required: `/public/music/ambient-{gregorian-chant,plainchant,light-piano,gentle-rain,ocean-waves,nature-sounds}.mp3`. Source per CLAUDE.md Auditio rules (Pixabay / Musopen / archive.org / gregorian-chant-hymns.com). Convert MP4→MP3 with ffmpeg if needed.
+- **DNS: contueri.app → Vercel.** (Manual Task #96). ~30 min including propagation. Vercel Project Settings → Domains → add contueri.app; add A record (or CNAME for www) in Namecheap DNS per Vercel's instructions. Lets the Capacitor live-URL approach (which currently loads contueri.app per `capacitor.config.ts server.url`) work on a real domain instead of relying on the Vercel default.
+
+**5. Once 1–3 are done: W2 begins.**
+- Ambient Sound System (per `~/Documents/KALLOS Launch/CONTUERI-CC-Ambient-Sound-Brief.html`). Blocked by #4 ambient sound assets.
+- OneSignal push wiring once Apple Push cert generates.
+- Settings page polish.
+- See `~/Documents/KALLOS Launch/KALLOS-v1-Launch-Plan.html` for full W2 scope.
+
+**6. v1.0 App Store submission.** App Store Connect → Apps → Contueri-ios → Add for Review. Apple Review wait 1–7 days. v1.0 ships silent (no marketing) per the launch strategy reframe. Public announcement waits for v1.1 (auth + cross-device sync) ~3–4 weeks later.
+
+---
+
+### Content Backlog (defer until post-launch)
+
+These are content/editorial tasks that predate the launch focus. They will resume after v1.0 ships:
+
 1. ~~**Holy Week Sanity entry:** Days 3-6 still need entry.~~ ✅ All 8 Holy Week days entered and published (April 1, 2026). Day 8 audio is a placeholder — confirm or replace before Easter.
 2. **Today tab redesign:** Remove the tap-to-begin card. Make Today = full P&P experience as the landing state. Decision made March 30 (see Parking Lot). **Now unblocked — Holy Week content is complete.**
 3. **Standards for seeding docs:** define a repeatable format/checklist for Sanity entry guides so every new content type gets the same treatment.
@@ -1168,11 +1235,11 @@ These are not yet made. Do not assume or resolve them without a session with She
 
 ### Manual tasks added June 3, 2026 evening (W1 in flight, Apple Dev pending)
 
-91. **Apple Developer activation watch (24-48h from June 3 submission).** Confirmation email + iPhone Developer app status flip from Pending to Active. Once Active: log into https://developer.apple.com/account, grab the 10-character Team ID from the Membership tab. Then at https://appstoreconnect.apple.com/access/api generate an App Store Connect API key (role: Admin or App Manager), download the .p8 file (one-time download), note the Key ID and Issuer ID. These three values populate three GitHub Actions secrets.
+91. ~~**Apple Developer activation watch.**~~ ✅ DONE June 4, 2026. Apple Dev Individual enrollment active. Team ID, App Store Connect API key (Key ID `SJAYUGD994`), and `.p8` file content all in place.
 
-92. **GitHub Actions secrets setup (after Apple Dev activates).** Follow `fastlane/README.md` activation checklist. Add 8 secrets in the `s-beauty-app` repo Settings: `APPLE_ID`, `APPLE_TEAM_ID`, `APP_STORE_CONNECT_API_KEY_ID`, `APP_STORE_CONNECT_API_KEY_ISSUER_ID`, `APP_STORE_CONNECT_API_KEY_CONTENT`, `MATCH_GIT_URL`, `MATCH_GIT_BASIC_AUTHORIZATION`, `MATCH_PASSWORD`. Create the encrypted certs repo first (private, empty at creation); pick a strong MATCH_PASSWORD; generate a PAT for the certs repo with repo scope and base64-encode `username:token` for MATCH_GIT_BASIC_AUTHORIZATION.
+92. ~~**GitHub Actions secrets setup.**~~ ✅ DONE June 4, 2026. All 9 secrets configured in `s-beauty-app` repo (APPLE_ID, APPLE_TEAM_ID, APP_STORE_CONNECT_API_KEY_ID, APP_STORE_CONNECT_API_KEY_ISSUER_ID, APP_STORE_CONNECT_API_KEY_CONTENT, MATCH_PASSWORD, MATCH_GIT_URL, MATCH_GIT_BASIC_AUTHORIZATION, MATCH_FORCE_LEGACY_ENCRYPTION). Encrypted certs repo `srjennings-luna/contueri-certs` created. Match auth uses fine-grained PAT scoped to that repo (Contents Read+write).
 
-93. **One-time `fastlane match_init` locally (after secrets configured).** Run `bundle exec fastlane match_init` from kallos-app with env vars set. Generates the distribution cert + provisioning profile and pushes them encrypted to MATCH_GIT_URL. After this runs once, every CI build uses Match in --readonly mode. See `fastlane/README.md`.
+93. ~~**One-time `fastlane match_init` locally.**~~ ✅ DONE June 4, 2026. Distribution cert + AppStore provisioning profile (`match AppStore app.contueri.ios`) generated and pushed to encrypted `contueri-certs` repo. Every CI build pulls them read-only via `match(readonly: true)`.
 
 94. **Privacy + Terms placeholder fills** in `app/privacy/page.tsx` and `app/terms/page.tsx`. Per `~/Documents/KALLOS Launch/CONTUERI-Legal-Placeholders-Reference.html`. Five placeholders total. Recommended values: "Sheri Jennings" for legal entity (Individual enrollment path); state of residence for jurisdiction; launch date filled at App Store submission. ~5 minutes once values are known. Per Sheri's standing rule, review with qualified counsel before publishing.
 
@@ -1180,6 +1247,10 @@ These are not yet made. Do not assume or resolve them without a session with She
 
 96. **DNS contueri.app → Vercel.** Before W3 ideally (testing the live URL on device). Vercel Project Settings → Domains → add contueri.app. Namecheap DNS for contueri.app needs an A record (or CNAME for www) per Vercel's instructions. ~30 minutes including propagation.
 
-97. **iOS scaffold next steps when Apple Dev activates.** Open Xcode (`npx cap open ios`), App target → Signing & Capabilities → set Team to the activated Apple Dev account. Build for Simulator to confirm signing works. Once Match certs are in (Manual Task 93), every push to main triggers the GitHub Actions iOS Build + TestFlight workflow.
+97. ~~**iOS scaffold next steps when Apple Dev activates.**~~ ✅ DONE June 4-5, 2026. Local Xcode + Simulator signing confirmed, CI build + TestFlight upload confirmed green on run #26996339629 (June 5, 05:02 UTC). Every push to `main` now triggers an automatic TestFlight build via `.github/workflows/ios-build.yml`.
 
 98. **Verify Vercel deploy of recent commits.** Open `s-beauty-app.vercel.app` and confirm `/privacy`, `/terms`, `/settings`, `/settings/notifications` all render. Gear icon top-left on Today routes to Settings. Settings rows route to Privacy + Terms.
+
+99. **Verify build 2 on TestFlight on Sheri's phone.** After Apple finishes processing the upload from CI run #26996339629 (5–30 min from 05:02 UTC June 5), open the TestFlight app on Sheri's phone, install Contueri build 2, and sanity-check on a real device: splash gradient renders Mineral Blue (no parchment flash), StatusBar style swaps correctly between espresso routes (Today /, /splash, /prompt, journey day) and parchment routes (Settings, Privacy, Terms, Explore, Library, Journeys list), Auditio audio plays, no crashes. **This is the gate before W1 Jobs 2 + 3 begin.** If anything breaks, log a bug entry and decide before pushing.
+
+100. **Watch for Apple TestFlight processing email** from build 2 upload (CI run #26996339629). Usually arrives within 5–30 min. If no email after 30 min, check spam folder + appstoreconnect.apple.com → Apps → Contueri-ios → TestFlight → Builds (the dashboard updates in real time independent of email).
