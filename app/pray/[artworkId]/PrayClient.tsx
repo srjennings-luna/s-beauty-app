@@ -30,12 +30,12 @@ type SanityArtwork = {
   traditionalPrayerSource?: string;
 };
 
-// FIX 1: Swap pray and contemplate order
+// Visio Divina order (per Lectio Divina tradition): Visio → Meditatio → Oratio → Contemplatio → Actio
 const STEPS = [
   { key: "gaze", title: "Gaze", label: "Visio" },
   { key: "meditate", title: "Meditate", label: "Meditatio" },
-  { key: "contemplate", title: "Contemplate", label: "Contemplatio" },
   { key: "pray", title: "Pray", label: "Oratio" },
+  { key: "contemplate", title: "Contemplate", label: "Contemplatio" },
   { key: "action", title: "Action", label: "Operatio" },
 ];
 
@@ -452,11 +452,11 @@ export default function PrayClient({
               </div>
             </div>
 
-            {/* ── Contemplate ── */}
+            {/* ── Contemplate ── (slide index 3: Gaze→Meditate→Pray→Contemplate→Action) */}
             <div
               className="absolute inset-0 overflow-y-auto touch-pan-y"
               style={{
-                transform: `translateX(${(2 - step) * 100}%)`,
+                transform: `translateX(${(3 - step) * 100}%)`,
                 transition: "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)",
                 willChange: "transform",
               }}
@@ -480,11 +480,11 @@ export default function PrayClient({
               </div>
             </div>
 
-            {/* ── Pray ── */}
+            {/* ── Pray ── (slide index 2: Gaze→Meditate→Pray→Contemplate→Action) */}
             <div
               className="absolute inset-0 overflow-y-auto touch-pan-y"
               style={{
-                transform: `translateX(${(3 - step) * 100}%)`,
+                transform: `translateX(${(2 - step) * 100}%)`,
                 transition: "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)",
                 willChange: "transform",
               }}

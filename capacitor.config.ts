@@ -119,15 +119,26 @@ const config: CapacitorConfig = {
       spinnerColor: "#7a9a8a",
     },
     StatusBar: {
-      // Status bar style flips per surface in the app:
+      // Status bar style flips per surface in the app via
+      // components/native/StatusBarController.tsx:
+      //   espresso surfaces (Today /, /prompt, /pray, journey day,
+      //     /splash) -> LIGHT icons on espresso bg
       //   parchment surfaces (Settings, Privacy, Terms, Explore,
-      //     Journeys list, Library) -> dark icons on cream
-      //   espresso surfaces (Today, Visio Divina) -> light icons
-      // The Capacitor StatusBar plugin is invoked at route transition
-      // (W1 wiring) to set the style. Default at cold launch is dark
-      // icons on cream since splash background is parchment.
-      style: "DARK",
-      backgroundColor: "#fdf6e9",
+      //     Library, Journeys list) -> DARK icons on parchment bg
+      //
+      // Default at cold launch is LIGHT icons on espresso. Reasoning:
+      // 99% of cold-launch routes are espresso surfaces. New users
+      // go / -> /splash, both espresso. Returning users land on /
+      // (PromptClient, espresso). The previous default (DARK icons
+      // on parchment) caused a brief parchment strip flash across
+      // the top of the screen during cold launch — visible as a
+      // cream bar at the top of Sheri's June 4 Simulator recording
+      // — before StatusBarController ran and swapped to espresso.
+      // Espresso default eliminates that flash. Parchment routes
+      // (rarely entered as cold launch destinations) get the swap
+      // via StatusBarController.
+      style: "LIGHT",
+      backgroundColor: "#16110d",
       overlaysWebView: false,
     },
     Keyboard: {
