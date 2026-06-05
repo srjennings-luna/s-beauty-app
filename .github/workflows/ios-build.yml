@@ -97,30 +97,42 @@ jobs:
     name: Build and upload to TestFlight
     runs-on: macos-15
     timeout-minutes: 60
-    # Runner upgraded from macos-14 (Xcode 15) to macos-15 (Xcode 16).
-    # @capacitor/status-bar 8.0.x and @capacitor/splash-screen 8.0.x
-    # both call into `capacitor-swift-pm` 8.4.0 binary APIs that are
-    # gated behind `#if compiler(>=5.3) && $NonescapableTypes` (a
-    # Swift 6 experimental feature). Without a Swift 6-capable
-    # toolchain (Xcode 16+), the compiler treats `PluginConfig.getString`,
-    # `UIColor.capacitor.color(fromHex:)`, `CAPBridgeProtocol.webView`,
-    # and `CAPBridgeProtocol.viewController` as undefined, and the
-    # plugin Swift files fail to compile. Xcode 16 on macos-15
-    # enables `$NonescapableTypes` so the gated APIs resolve.
+    # Runner: macos-15 with Xcode 26 (selected explicitly below).
+    # Two reasons both Xcode 16+ AND Xcode 26+ are required:
+    #   1. @capacitor/status-bar 8.0.x and @capacitor/splash-screen
+    #      8.0.x call into `capacitor-swift-pm` 8.4.0 binary APIs
+    #      gated behind `#if compiler(>=5.3) && $NonescapableTypes`
+    #      (a Swift 6 experimental feature). Xcode 15 silently treats
+    #      those APIs as undefined; Xcode 16+ resolves them.
+    #   2. App Store Connect (as of June 2026) rejects any IPA built
+    #      with an SDK older than iOS 26 — which only ships in
+    #      Xcode 26+. Xcode 16.4 builds against iOS 18.5 SDK and is
+    #      rejected at upload time with iris-code STATE_ERROR.
+    #      VALIDATION_ERROR.
+    # Xcode 26 satisfies both gates.
 
     steps:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Select latest Xcode 16
+      - name: Select latest Xcode 26
         run: |
-          # macos-15 ships with multiple Xcode versions installed
-          # under /Applications/Xcode_<ver>.app. Pick the highest 16.x
-          # available so the build is deterministic across runner
-          # image updates but still tracks security patches.
-          XCODE=$(ls -d /Applications/Xcode_16*.app 2>/dev/null | sort -V | tail -1)
+          # As of June 2026, Apple App Store Connect requires apps to
+          # be built with the iOS 26 SDK or later (included in Xcode 26
+          # or later). The previous run used Xcode 16.4 (iOS 18.5 SDK)
+          # and altool rejected the upload with:
+          #   "SDK version issue. This app was built with the iOS 18.5 SDK.
+          #   All iOS and iPadOS apps must be built with the iOS 26 SDK or
+          #   later, included in Xcode 26 or later, in order to be uploaded
+          #   to App Store Connect or submitted for distribution."
+          # macos-15 ships with multiple Xcode versions; pick the
+          # highest 26.x available. If 26.x is not installed on the
+          # runner, error early with the list of available Xcodes so
+          # the message is actionable.
+          XCODE=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
           if [ -z "$XCODE" ]; then
-            echo "::error::No Xcode 16.x found on runner"
+            echo "::error::No Xcode 26.x found on runner"
+            echo "Available Xcode versions:"
             ls /Applications/ | grep -i xcode || true
             exit 1
           fi
