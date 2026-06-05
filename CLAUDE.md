@@ -504,7 +504,23 @@ Light 52px, Silence 47px, Suffering & Beauty 50px, Creation 49px, Home/The Restl
 
 ### Up Next: iOS App Store Launch (current focus, June 5, 2026)
 
-The CI pipeline is green and build 2 is uploaded. The path from here to App Store is short. **Priorities in order:**
+**🎯 App Store submission target: June 12, 2026 (personal commitment, 7 days from June 5).** Every decision below is in service of hitting this date. If something would push past June 12, flag it and find a smaller cut rather than slipping.
+
+**Day-by-day path to submission (7 days):**
+- **Fri Jun 5 (today):** ✅ CI green, builds 2 + 3 uploaded. DONE.
+- **Sat Jun 6:** verify build 3 on phone via TestFlight (passive) + MediaSession lockscreen metadata (~½ day).
+- **Sun Jun 7:** Capacitor Browser plugin for external links (~2 hours). W1 closes here.
+- **Mon Jun 8:** Privacy + Terms legal placeholder fills + DNS contueri.app → Vercel + **Sheri sources all 6 ambient MP3s** (critical path — gates Tue's build).
+- **Tue Jun 9:** Ambient Sound System build (per `~/Documents/KALLOS Launch/CONTUERI-CC-Ambient-Sound-Brief.html`).
+- **Wed Jun 10:** OneSignal push wiring + Settings page polish.
+- **Thu Jun 11:** final on-device QA pass; fix anything broken.
+- **Fri Jun 12:** App Store Connect → Add for Review → **SUBMIT.**
+
+**Single biggest risk to June 12:** the 6 ambient sound files. They are 100% on Sheri (sourcing + licensing + encoding), block ~3 days of W2 build work, and have no shortcut. **Source them Monday Jun 8 at the latest.** If Monday slips, the rest of the schedule slips day-for-day.
+
+After submission: Apple Review wait 1–7 days. v1.0 ships silent (no marketing). v1.1 (auth + cross-device sync) build begins immediately and runs in parallel with the review wait.
+
+**Priorities in order (same scope, now framed against the June 12 deadline):**
 
 **1. (PASSIVE) Verify build 2 in TestFlight on Sheri's phone.**
 - Apple processes uploaded builds for 5–30 min. Watch for "Processing complete" email or refresh App Store Connect → Apps → Contueri → TestFlight → Builds.
