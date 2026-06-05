@@ -114,11 +114,19 @@ jobs:
       - name: Set up Ruby for Fastlane
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
+          ruby-version: '3.1'
           bundler-cache: true
+        # Ruby pinned to 3.1 (was 3.3) because Sheri's Gemfile.lock
+        # was originally generated on macOS system Ruby 2.6, and the
+        # locked CFPropertyList 3.0.9 (a transitive Fastlane dep)
+        # declares `required_ruby_version < 3.2` — incompatible with
+        # CI's Ruby 3.3.x. Ruby 3.1 satisfies that constraint AND is
+        # fully supported by Fastlane 2.224 + the rest of the gem
+        # set. Long-term cleanup: regenerate Gemfile.lock on a system
+        # running Ruby 3.x so all gems resolve to versions
+        # compatible with modern Ruby, then bump CI back to 3.3.
         # Fastlane is invoked via bundler so the version is pinned in
-        # Gemfile.lock (added during W1 Fastlane setup, not in this
-        # scaffold). Bundler-cache speeds up subsequent runs by
+        # Gemfile.lock. Bundler-cache speeds up subsequent runs by
         # caching the Gem install.
 
       # ── Capacitor sync ─────────────────────────────────────────────
