@@ -150,6 +150,7 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          MATCH_FORCE_LEGACY_ENCRYPTION: ${{ secrets.MATCH_FORCE_LEGACY_ENCRYPTION }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
           FASTLANE_USER: ${{ secrets.APPLE_ID }}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
@@ -173,6 +174,15 @@ jobs:
           APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          # Match config also needed in this step because the
+          # deploy_testflight Fastlane lane re-references match
+          # (e.g., for code signing identity lookup or any in-lane
+          # match call). Without these, Fastlane errors with
+          # "No value found for 'git_url'" even though the previous
+          # Match step succeeded.
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          MATCH_FORCE_LEGACY_ENCRYPTION: ${{ secrets.MATCH_FORCE_LEGACY_ENCRYPTION }}
         run: bundle exec fastlane ios deploy_testflight
 
       - name: Upload .ipa artifact
