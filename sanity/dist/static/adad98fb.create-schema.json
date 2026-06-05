@@ -1960,18 +1960,7 @@
           {
             "fields": [
               {
-                "validation": [
-                  {
-                    "rules": [
-                      {
-                        "flag": "presence",
-                        "constraint": "required"
-                      }
-                    ],
-                    "level": "error"
-                  }
-                ],
-                "description": "Short closing line. Rendered in Montserrat gold, small.",
+                "description": "Short closing line. Rendered in Montserrat verdigris (#5F7A6B), small. Optional — leave empty to keep the block as a placeholder for future text without rendering anything on the screen.",
                 "name": "text",
                 "type": "string"
               }

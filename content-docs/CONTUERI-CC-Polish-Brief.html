@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contueri — CC Polish Brief: Nav, Explore, Library, Bubbles</title>
+<style>
+  body { font-family: Georgia, serif; max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; background: #fdfaf5; color: #1a1a1a; line-height: 1.7; }
+  h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 4px; }
+  .eyebrow { font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #888; margin-bottom: 12px; }
+  .meta { font-size: 13px; color: #666; border-bottom: 1px solid #ddd; padding-bottom: 16px; margin-bottom: 32px; }
+  h2 { font-size: 1.25rem; margin-top: 48px; margin-bottom: 8px; border-bottom: 2px solid #C19B5F; padding-bottom: 6px; }
+  h3 { font-size: 1rem; font-weight: 700; margin-top: 28px; margin-bottom: 6px; }
+  p { margin-bottom: 14px; }
+  code { font-family: 'Courier New', monospace; font-size: 0.88em; background: #f0ece4; padding: 1px 5px; border-radius: 3px; }
+  pre { background: #1a1a1a; color: #f0ece4; padding: 18px 20px; font-family: 'Courier New', monospace; font-size: 0.82em; line-height: 1.6; overflow-x: auto; margin: 16px 0 20px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 0.9em; }
+  th { text-align: left; background: #f0ece4; padding: 8px 12px; font-family: 'Courier New', monospace; font-size: 0.8em; letter-spacing: 0.06em; text-transform: uppercase; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e8e4dc; vertical-align: top; }
+  .callout { background: #fef9ef; border-left: 4px solid #C19B5F; padding: 14px 18px; margin: 20px 0; font-size: 0.93em; }
+  .callout.warn { background: #fff8f0; border-left-color: #c68a77; }
+  .callout.info { background: #f0f5f0; border-left-color: #4a7a62; }
+  ul, ol { margin: 8px 0 16px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .section-tag { font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #C19B5F; font-weight: 700; margin-bottom: 4px; }
+  .task-num { display: inline-block; background: #16110d; color: #fdf6e9; font-family: 'Courier New', monospace; font-size: 11px; padding: 2px 7px; margin-right: 8px; }
+  .do { color: #2d6a4f; font-weight: 700; }
+  .dont { color: #9b2335; font-weight: 700; }
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 11px; color: #999; font-family: 'Courier New', monospace; }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Contueri · CC Polish Brief · May 29, 2026</div>
+<h1>Nav Gap, Explore Visual/List Toggle, Library, Bubble Physics</h1>
+<div class="meta">
+  Filed by: Sheri (PM) · Designed in: Cowork (Claude desktop)<br>
+  Scope: 9 targeted fixes across <code>app/explore/page.tsx</code>, <code>app/page.tsx</code>, <code>app/library/page.tsx</code>, <code>app/globals.css</code>, <code>components/ThemeBubbleCanvas</code>, Sanity Studio<br>
+  Reference: <code>CLAUDE_REFERENCE.md</code> · <code>CLAUDE.md</code>
+</div>
+
+<h2>0. Required Reading Before Any Code</h2>
+
+<div class="callout warn">
+  <strong>Do not write a single line of code until you have read all documents in this section.</strong>
+</div>
+
+<table>
+  <tr><th>File</th><th>Why it matters</th></tr>
+  <tr>
+    <td><code>CLAUDE.md</code></td>
+    <td>Full project standing brief. All decisions, working rules, build verification process. Read every word.</td>
+  </tr>
+  <tr>
+    <td><code>CLAUDE_REFERENCE.md</code></td>
+    <td>Design system source of truth. Color tokens, typography, component patterns. Every CSS decision flows from this. No rounded corners. No gray text. Chrome on parchment = espresso <code>#16110d</code>.</td>
+  </tr>
+</table>
+
+<div class="callout info">
+  Build verification: run <code>npm run build</code> from the repo root after every task. If SWC binary error appears (Cowork VM ARM64 limitation), fall back to <code>npx tsc --noEmit</code>. Commit after every task for clean rollback.
+</div>
+
+
+<h2>Task 1 — Zone 1 Nav Gap Fix</h2>
+
+<div class="section-tag">Affected files: app/explore/page.tsx · app/page.tsx · app/library/page.tsx</div>
+
+<p>The Zone 1 nav bar sits too far down from the status bar on all three pages. The cause is a hardcoded <code>pt-12</code> (48px) class on the Zone 1 container. This is too much padding on most devices and does not adapt to the actual iOS safe area inset.</p>
+
+<h3>Fix</h3>
+<p>On every Zone 1 container that currently has <code>pt-12</code>, remove that class and add the safe area top padding via inline style:</p>
+
+<pre>style={{ paddingTop: 'env(safe-area-inset-top, 16px)' }}</pre>
+
+<p>This adapts to the actual device — ~20px on older iPhones, ~59px on iPhone with Dynamic Island — so the nav sits correctly on all hardware.</p>
+
+<h3>Locations to fix</h3>
+<ul>
+  <li><code>app/explore/page.tsx</code> — two Zone 1 containers: line ~202 (theme detail state) and line ~296 (bubble landing state). Both have <code>className="bg-parchment flex-shrink-0 pt-12"</code>.</li>
+  <li><code>app/page.tsx</code> (Today tab) — check for same <code>pt-12</code> pattern on the top-level header container. Apply same fix.</li>
+  <li><code>app/library/page.tsx</code> — check for same pattern. Apply same fix.</li>
+</ul>
+
+<div class="callout">
+  Do not change any other spacing. Only the top padding on Zone 1 containers is affected.
+</div>
+
+
+<h2>Task 2 — Question Text Color Fix</h2>
+
+<div class="section-tag">Affected file: app/explore/page.tsx</div>
+
+<p>The italic question text in Zone 2 of the Explore detail header is rendering in the wrong color. The live app shows approximately <code>#6e8e7e</code> (a teal/sage tone). The correct color per design system is <code>#978b7d</code> (<code>--color-editorial-muted</code>).</p>
+
+<h3>Fix</h3>
+<p>In <code>app/explore/page.tsx</code>, find the Zone 2 question text element (approximately line 272). Change its color from <code>#6e8e7e</code> to <code>#978b7d</code>.</p>
+
+<pre>color: "#978b7d",  /* --color-editorial-muted */</pre>
+
+<div class="callout warn">
+  Do not change the Zone 2 title color — that uses the per-theme accent color from <code>selectedTheme.color</code> and is correct.
+</div>
+
+
+<h2>Task 3 — Add CSS Token</h2>
+
+<div class="section-tag">Affected file: app/globals.css</div>
+
+<p>Add the missing <code>--color-warm-dark</code> token to the CSS custom properties block in <code>app/globals.css</code>. This token is used for excerpt text on editorial cards.</p>
+
+<pre>--color-warm-dark: #3d3530;</pre>
+
+<p>Place it alongside the other browse-mode color tokens. After adding, confirm it is referenced correctly in the Explore detail card component wherever excerpt text appears.</p>
+
+
+<h2>Task 4 — Visual/List Icon Toggle on Explore</h2>
+
+<div class="section-tag">Affected file: app/explore/page.tsx</div>
+
+<p>Add a view mode toggle to the Explore bubble landing page (not the detail screen — the landing screen with the bubbles). This allows users to switch between the physics bubble view and a simple list view of all six themes.</p>
+
+<h3>Toggle placement</h3>
+<p>Right-aligned in Zone 2 of the bubble landing header, on the same row as the existing "Explore" heading or just below it. Do not center it. Match the right-alignment pattern of the ALL/SAVED toggle on the Library page.</p>
+
+<h3>Toggle design — icon only, no text labels</h3>
+
+<p>Two icon buttons side by side. Active state: highlighted background behind the active icon (same pattern as Library's ALL/SAVED toggle). Inactive state: no background.</p>
+
+<p><strong>Circles icon</strong> (Visual/Bubbles mode):</p>
+<ul>
+  <li>Three overlapping circles, espresso <code>#16110d</code>, varying opacity to show depth</li>
+  <li>Back circle: <code>fill-opacity="0.3"</code></li>
+  <li>Middle circle: <code>fill-opacity="0.55"</code></li>
+  <li>Front circle: <code>fill-opacity="1"</code></li>
+  <li>Semi-stacked arrangement (not perfectly aligned — offset so all three are visible)</li>
+</ul>
+
+<p><strong>List icon</strong> (List mode):</p>
+<ul>
+  <li>Three horizontal rectangles, espresso <code>#16110d</code>, solid fill</li>
+  <li><span class="dont">No rounded corners</span> — <code>rx="0"</code> or no rx attribute. Sharp ends only. This is non-negotiable per design system.</li>
+</ul>
+
+<div class="callout warn">
+  <strong>No rounded corners on any element of this toggle.</strong> The design system rule is absolute: <code>border-radius: 0</code> everywhere. This includes the list icon lines, the toggle container, and the active state background. Do not add <code>rx</code> values or <code>border-radius</code> to any part of this component.
+</div>
+
+<h3>List view — theme rows</h3>
+<p>When the user selects the list icon, replace the bubble canvas with a simple list of all six themes. Each row:</p>
+<ul>
+  <li>Fresco palette color dot (filled circle, ~10px) on the left — color comes from <code>theme.color</code> field in Sanity</li>
+  <li>Theme name (Montserrat, same weight as other labels)</li>
+  <li>Chevron right on the far right</li>
+  <li>No secondary tagline text</li>
+  <li>Tapping a row navigates to the theme detail screen (same as tapping a bubble)</li>
+  <li>Rows flush edge-to-edge with a hairline divider between them — <code>rgba(22,17,13,0.12)</code></li>
+</ul>
+
+<p>The list view uses the same parchment background and Zone 1/Zone 2 header as the bubble landing. Only the content area changes.</p>
+
+<h3>State persistence</h3>
+<p>The selected view mode (bubbles or list) should persist within the session using React state. No need for localStorage persistence — reverting to bubbles on next visit is fine.</p>
+
+
+<h2>Task 5 — Nav Tab Active Indicator on P&amp;P Route</h2>
+
+<div class="section-tag">Affected file: components/ui/Navigation.tsx (or equivalent)</div>
+
+<p>The active tab indicator in the bottom navigation bar currently uses a hardcoded color. On the <code>/prompt</code> route (Pause &amp; Ponder screen), the active tab indicator should use <code>var(--pp-accent)</code> — the same accent color driving the P&amp;P gradient background — so the entire P&amp;P screen uses one consistent type-driven color.</p>
+
+<p>On all other routes, the active indicator continues to use its current color (<code>#4a7a62</code> sage). Only the <code>/prompt</code> route gets the accent cascade.</p>
+
+<div class="callout">
+  <code>--pp-accent</code> is already registered as a CSS custom property in <code>app/globals.css</code> via <code>@property</code>. It is set dynamically on the P&amp;P screen based on content type. Read <code>CLAUDE.md</code> P&amp;P Gradient Color System section before implementing.
+</div>
+
+
+<h2>Task 6 — Library: Surface Saved Items</h2>
+
+<div class="section-tag">Affected file: app/library/page.tsx</div>
+
+<p>The Library page currently shows all P&amp;P prompts in reverse chronological order, with a toggle to filter to saved items. The saved items should be surfaced above the full archive — users should see what they saved without having to tap the SAVED filter.</p>
+
+<h3>New structure</h3>
+<ul>
+  <li>If the user has saved items: show a "Saved" section at the top with those items, then the full "Pause &amp; Ponder" archive below</li>
+  <li>If the user has no saved items: no Saved section — just the archive as it is now</li>
+  <li>The ALL/SAVED toggle can remain as a secondary filter or be removed if the new layout makes it redundant — use your judgment based on how it looks</li>
+</ul>
+
+<div class="callout">
+  Saved state is currently stored in localStorage under the existing favorites key. Check how the Library page currently reads saved state before implementing.
+</div>
+
+
+<h2>Task 7 — Bubble Entrance Animation</h2>
+
+<div class="section-tag">Affected file: components/ThemeBubbleCanvas.tsx (or equivalent)</div>
+
+<p>The bubbles currently appear too fast when the Explore page loads. This feels jarring for a meditative app. The entrance should feel like objects gently settling into place, not launching onto the screen.</p>
+
+<h3>Target feel</h3>
+<p>Slow, calm, staggered. Each bubble should drift in gently — either fading in with low initial velocity, or starting from a resting position and slowly coming to life. The entrance should take 1.5–2.5 seconds total, with each bubble slightly offset in timing so they don't all appear at once.</p>
+
+<h3>Guidance</h3>
+<ul>
+  <li>Reduce initial velocity to near zero — bubbles should barely be moving when they first appear</li>
+  <li>Stagger the fade-in or entry of each bubble by 150–250ms</li>
+  <li>Do not use a dramatic scale-up or bounce entrance — subtle opacity fade is preferred</li>
+  <li>Respect <code>prefers-reduced-motion</code> — if set, skip the entrance animation and show bubbles immediately at rest</li>
+</ul>
+
+
+<h2>Task 8 — Bubble Bounce Physics</h2>
+
+<div class="section-tag">Affected file: components/ThemeBubbleCanvas.tsx (or equivalent)</div>
+
+<p>When bubbles hit the canvas walls or are released after being dragged, the bounce is too energetic for a meditative app. The physics should feel like objects drifting in water — slow, absorbing, calming — not like rubber balls.</p>
+
+<h3>Two specific adjustments</h3>
+
+<p><strong>Wall bounce (coefficient of restitution):</strong> Reduce significantly. Current behavior has bubbles bouncing off walls with most of their energy retained. Target: bubbles should absorb the wall, losing 80–90% of velocity on impact. A coefficient around 0.1–0.15 is the target range.</p>
+
+<p><strong>Velocity damping after user release:</strong> Increase the damping factor so bubbles decelerate quickly after the user lets go. They should slow to near-stillness within 1–2 seconds of release, not continue drifting for a long time.</p>
+
+<div class="callout">
+  These changes should feel like a significant behavioral shift on device — noticeably calmer. If the result still feels energetic, reduce further. The bar is: a person in a contemplative state should not feel interrupted by the physics.
+</div>
+
+<div class="callout warn">
+  Do not touch bubble sizes. The current sizes are not the final spec — a breathing animation (grow/shrink between 90px–110px diameter) is planned for a future session. Leave bubble sizing logic untouched.
+</div>
+
+
+<h2>Task 9 — Sanity: Rename "Restless Heart" Theme</h2>
+
+<div class="section-tag">Affected: Sanity Studio — theme document</div>
+
+<p>The theme currently titled "Home / The Restless Heart" should be renamed. The slash and the word "Home" look odd as a Zone 2 display header and in the list view.</p>
+
+<h3>New title</h3>
+<p>Update the <code>title</code> field on the "Home / The Restless Heart" theme document in Sanity Studio to:</p>
+
+<pre>Restless Heart</pre>
+
+<p>No "The". No "Home /". Just "Restless Heart".</p>
+
+<p>This change flows automatically to the Zone 2 header, the bubble label, and the list view rows — no code changes needed beyond the Sanity field update.</p>
+
+<div class="callout info">
+  After updating in Sanity Studio, verify the change appears correctly in: (1) the bubble label on the Explore landing, (2) the Zone 2 header on the theme detail screen, and (3) the list view row if Task 4 is already implemented.
+</div>
+
+
+<h2>Task Order Recommendation</h2>
+
+<ol>
+  <li>Task 9 (Sanity rename) — zero code risk, do this first</li>
+  <li>Tasks 1–3 (nav gap, question color, CSS token) — small targeted fixes, low risk</li>
+  <li>Task 4 (Visual/List toggle) — new feature, medium complexity</li>
+  <li>Tasks 7–8 (bubble physics) — touch only the physics/animation layer</li>
+  <li>Task 5 (nav tab accent) — CSS cascade work, do last</li>
+  <li>Task 6 (Library saved) — data/layout work, do last</li>
+</ol>
+
+<p>Commit after each task. Run <code>npm run build</code> (or <code>npx tsc --noEmit</code> on Cowork VM) before committing.</p>
+
+
+<footer>
+  Contueri · CC Polish Brief · Filed May 29, 2026 · Do not implement from this doc alone — always read CLAUDE.md and CLAUDE_REFERENCE.md first.
+</footer>
+
+</body>
+</html>

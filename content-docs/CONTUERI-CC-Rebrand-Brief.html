@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contueri — CC Rebrand Brief: KALLOS → CONTUERI</title>
+<style>
+  body { font-family: Georgia, serif; max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; background: #fdfaf5; color: #1a1a1a; line-height: 1.7; }
+  h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 4px; }
+  .eyebrow { font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #888; margin-bottom: 12px; }
+  .meta { font-size: 13px; color: #666; border-bottom: 1px solid #ddd; padding-bottom: 16px; margin-bottom: 32px; }
+  h2 { font-size: 1.25rem; margin-top: 48px; margin-bottom: 8px; border-bottom: 2px solid #C19B5F; padding-bottom: 6px; }
+  h3 { font-size: 1rem; font-weight: 700; margin-top: 28px; margin-bottom: 6px; }
+  p { margin-bottom: 14px; }
+  code { font-family: 'Courier New', monospace; font-size: 0.88em; background: #f0ece4; padding: 1px 5px; border-radius: 3px; }
+  pre { background: #1a1a1a; color: #f0ece4; padding: 18px 20px; font-family: 'Courier New', monospace; font-size: 0.82em; line-height: 1.6; overflow-x: auto; margin: 16px 0 20px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 0.9em; }
+  th { text-align: left; background: #f0ece4; padding: 8px 12px; font-family: 'Courier New', monospace; font-size: 0.8em; letter-spacing: 0.06em; text-transform: uppercase; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e8e4dc; vertical-align: top; }
+  .callout { background: #fef9ef; border-left: 4px solid #C19B5F; padding: 14px 18px; margin: 20px 0; font-size: 0.93em; }
+  .callout.warn { background: #fff8f0; border-left-color: #c68a77; }
+  .callout.info { background: #f0f5f0; border-left-color: #4a7a62; }
+  ul, ol { margin: 8px 0 16px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .section-tag { font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #C19B5F; font-weight: 700; margin-bottom: 4px; }
+  .task-num { display: inline-block; background: #16110d; color: #fdf6e9; font-family: 'Courier New', monospace; font-size: 11px; padding: 2px 7px; margin-right: 8px; }
+  .skip { display: inline-block; background: #888; color: #fff; font-family: 'Courier New', monospace; font-size: 11px; padding: 2px 7px; margin-right: 8px; }
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 11px; color: #999; font-family: 'Courier New', monospace; }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Contueri — CC Build Brief</div>
+<h1>Rebrand: KALLOS → CONTUERI</h1>
+<div class="meta">Created May 2026 &nbsp;·&nbsp; Full codebase name rebrand — user-facing text, metadata, share text, localStorage keys</div>
+
+<div class="callout">
+  <strong>Context:</strong> The app is rebranding from KALLOS (Greek for beauty) to CONTUERI (Latin: <em>to contemplate, to gaze upon</em>). This brief covers all code-level changes. Sanity splash content is a separate manual task (noted at end). Do not rename <code>kallos-prompt-streak</code>, <code>kallos-prompt-last</code>, <code>kallos-journey-progress</code>, or <code>kallos-visio-note-*</code> localStorage keys — renaming those would wipe users' streak and progress data.
+</div>
+
+<div class="callout info">
+  <strong>Pronunciation for splash:</strong> <code>kon · too · air · ee</code>
+</div>
+
+<h2>Task 1 — Today Page display name</h2>
+<div class="section-tag">User-facing · High priority</div>
+
+<p><strong>File:</strong> <code>app/page.tsx</code> line 97</p>
+<p>Change the visible "KALLOS" text to "CONTUERI".</p>
+
+<pre>// Before
+KALLOS
+
+// After
+CONTUERI</pre>
+
+<p>Also line 30 — the localStorage read for onboarding state:</p>
+<pre>// Before
+localStorage.getItem("kallos-onboarded")
+
+// After
+localStorage.getItem("contueri-onboarded")</pre>
+
+<div class="callout warn">
+  The <code>kallos-onboarded</code> → <code>contueri-onboarded</code> rename will cause existing users to see the splash again on next visit. This is intentional — the splash content is changing to reflect the new brand name.
+</div>
+
+<h2>Task 2 — Splash fallback content</h2>
+<div class="section-tag">User-facing · High priority</div>
+
+<p><strong>File:</strong> <code>app/splash/fallback.ts</code></p>
+<p>The fallback is shown when Sanity is unreachable. Update it to match the new brand. Four changes:</p>
+
+<table>
+  <tr><th>Location</th><th>Before</th><th>After</th></tr>
+  <tr><td>Screen 1 wordmark (line 13)</td><td><code>"KALLOS"</code></td><td><code>"CONTUERI"</code></td></tr>
+  <tr><td>Screen 1 pronunciation (line 14)</td><td><code>"kal · os"</code></td><td><code>"kon · too · air · ee"</code></td></tr>
+  <tr><td>Screen 2 tagline (line 43)</td><td><code>"KALLOS is built on that."</code></td><td><code>"CONTUERI is built on that."</code></td></tr>
+  <tr><td>Screen 4 body (line 77)</td><td><code>"KALLOS is built for exactly that."</code></td><td><code>"CONTUERI is built for exactly that."</code></td></tr>
+</table>
+
+<p><strong>Do not change</strong> the Screen 1 body text: <em>"The Greeks called it KALLOS, and they believed the three were inseparable."</em> This sentence uses KALLOS as a Greek word, not a brand name — it requires an editorial rewrite, not a find/replace. Leave as-is for now; Sanity controls the real splash content and that will be updated separately.</p>
+
+<h2>Task 3 — Splash localStorage key + CSS rename</h2>
+<div class="section-tag">Functional · No visual change</div>
+
+<p><strong>File:</strong> <code>app/splash/SplashClient.tsx</code></p>
+
+<table>
+  <tr><th>Type</th><th>Before</th><th>After</th></tr>
+  <tr><td>localStorage write (line 66)</td><td><code>"kallos-onboarded"</code></td><td><code>"contueri-onboarded"</code></td></tr>
+  <tr><td>CSS class (line 129)</td><td><code>kallos-nav-ring</code></td><td><code>contueri-nav-ring</code></td></tr>
+  <tr><td>CSS keyframe (line 370)</td><td><code>@keyframes kallosNavBreathe</code></td><td><code>@keyframes contueriNavBreathe</code></td></tr>
+  <tr><td>CSS rule (line 374)</td><td><code>.kallos-nav-ring { animation: kallosNavBreathe … }</code></td><td><code>.contueri-nav-ring { animation: contueriNavBreathe … }</code></td></tr>
+</table>
+
+<h2>Task 4 — Share sheet text</h2>
+<div class="section-tag">User-facing · High priority</div>
+
+<p><strong>File:</strong> <code>app/prompt/PromptClient.tsx</code></p>
+<p>When a user shares a P&amp;P via native share sheet (SMS, social, etc.), the text includes the brand name.</p>
+
+<table>
+  <tr><th>Line</th><th>Before</th><th>After</th></tr>
+  <tr><td>69</td><td><code>— KALLOS</code> (in share body text)</td><td><code>— CONTUERI</code></td></tr>
+  <tr><td>72</td><td><code>title: "Pause &amp; Ponder — KALLOS"</code></td><td><code>title: "Pause &amp; Ponder — CONTUERI"</code></td></tr>
+</table>
+
+<p>Also rename the localStorage streak keys — but only the key names, not the stored values. <strong>Actually DO NOT rename these</strong> — <code>kallos-prompt-streak</code> and <code>kallos-prompt-last</code> are functional data keys. Renaming wipes streak. Leave them.</p>
+
+<h2>Task 5 — Journey share text</h2>
+<div class="section-tag">User-facing · High priority</div>
+
+<p><strong>File:</strong> <code>app/journeys/[slug]/JourneyDetailClient.tsx</code> line 332</p>
+
+<pre>// Before
+const title = `Day ${day.dayNumber} of ${journey.title} — KALLOS`;
+
+// After
+const title = `Day ${day.dayNumber} of ${journey.title} — CONTUERI`;</pre>
+
+<h2>Task 6 — OpenGraph image wordmark</h2>
+<div class="section-tag">User-facing · Medium priority (social share previews)</div>
+
+<p><strong>File:</strong> <code>app/prompt/opengraph-image.tsx</code></p>
+
+<table>
+  <tr><th>Line</th><th>Before</th><th>After</th></tr>
+  <tr><td>5</td><td><code>alt = "Pause &amp; Ponder — KALLOS"</code></td><td><code>alt = "Pause &amp; Ponder — CONTUERI"</code></td></tr>
+  <tr><td>82</td><td><code>KALLOS</code> (visible wordmark in OG image)</td><td><code>CONTUERI</code></td></tr>
+</table>
+
+<h2>Task 7 — Root layout metadata</h2>
+<div class="section-tag">SEO / browser tab</div>
+
+<p><strong>File:</strong> <code>app/layout.tsx</code> lines 33–35</p>
+
+<pre>// Before
+title: "KALLOS · Daily Vibes: Beauty • Truth • Goodness",
+description: "KALLOS is a contemplative discovery app for seekers of beauty, truth, and goodness: sacred art, music, literature, landscape, and the great tradition.",
+
+// After
+title: "CONTUERI · Beauty • Truth • Goodness",
+description: "CONTUERI is a contemplative discovery app for seekers of beauty, truth, and goodness: sacred art, music, literature, landscape, and the great tradition.",</pre>
+
+<h2>Task 8 — Prompt page metadata</h2>
+<div class="section-tag">SEO / browser tab · Simple find/replace</div>
+
+<p>Replace <code>"Pause &amp; Ponder — KALLOS"</code> with <code>"Pause &amp; Ponder — CONTUERI"</code> and <code>siteName: "KALLOS"</code> with <code>siteName: "CONTUERI"</code> across:</p>
+<ul>
+  <li><code>app/prompt/layout.tsx</code></li>
+  <li><code>app/prompt/page.tsx</code></li>
+  <li><code>app/prompt/[date]/page.tsx</code></li>
+</ul>
+
+<h2>Task 9 — Journey page metadata</h2>
+<div class="section-tag">SEO / browser tab · Simple find/replace</div>
+
+<p>Replace all <code>"— KALLOS"</code> title suffixes and <code>siteName: "KALLOS"</code> across:</p>
+<ul>
+  <li><code>app/journeys/[slug]/page.tsx</code></li>
+  <li><code>app/journeys/[slug]/day/[dayNumber]/page.tsx</code></li>
+</ul>
+
+<p>Also note: both files contain a URL fallback <code>"https://kallos.app"</code> (env variable default). Leave this for now — update when the new domain is confirmed.</p>
+
+<h2>Task 10 — Dashboard metadata</h2>
+<div class="section-tag">Internal only · Low priority</div>
+
+<p>These are developer-facing pages (not user-visible in the app). Update for consistency but treat as lowest priority.</p>
+<ul>
+  <li><code>app/dashboard/page.tsx</code> line 19 — <code>title: "KALLOS — Content Dashboard"</code> → <code>"CONTUERI — Content Dashboard"</code></li>
+  <li><code>app/dashboard/page.tsx</code> line 460 — visible heading <code>KALLOS · Content Dashboard</code> → <code>CONTUERI · Content Dashboard</code></li>
+  <li><code>app/dashboard/review/record/[id]/page.tsx</code> line 13 — title</li>
+  <li><code>app/dashboard/review/export/route.ts</code> line 90 — CSV export filename <code>kallos-review-YYYY-MM-DD.csv</code> → <code>contueri-review-YYYY-MM-DD.csv</code></li>
+  <li><code>app/dashboard/review/page.tsx</code> line 17 — title</li>
+</ul>
+<p>Comments inside dashboard files that reference KALLOS (not user-facing) can be updated or left — use judgment.</p>
+
+<h2>Do Not Change</h2>
+<div class="callout warn">
+  <strong>localStorage keys to leave alone:</strong>
+  <ul>
+    <li><code>kallos-prompt-streak</code> — user streak count; renaming wipes data</li>
+    <li><code>kallos-prompt-last</code> — last visit date; renaming resets streak</li>
+    <li><code>kallos-journey-progress</code> — journey completion state; renaming wipes progress</li>
+    <li><code>kallos-visio-note-*</code> — user-written notes in Visio Divina; renaming loses content</li>
+  </ul>
+  These can be migrated in a future dedicated session with a key-migration utility. For now, leave them.
+</div>
+
+<h2>Sanity — Manual (not for CC)</h2>
+<div class="callout info">
+  <p>The real splash content lives in Sanity Studio, not in code. After CC completes the code changes, update these fields manually in Studio:</p>
+  <ul>
+    <li><strong>Screen 1 wordmark field:</strong> KALLOS → CONTUERI</li>
+    <li><strong>Screen 1 pronunciation field:</strong> kal · os → kon · too · air · ee</li>
+    <li><strong>Screen 1 body:</strong> Rewrite the sentence "The Greeks called it KALLOS…" — this uses KALLOS as a Greek word, so it needs an editorial rewrite for the Latin/Contueri brand identity, not a find/replace</li>
+    <li><strong>Screen 2 tagline:</strong> "KALLOS is built on that." → "CONTUERI is built on that."</li>
+    <li><strong>Screen 4 body:</strong> "KALLOS is built for exactly that." → "CONTUERI is built for exactly that."</li>
+  </ul>
+</div>
+
+<footer>
+  CONTUERI — CC Rebrand Brief &nbsp;·&nbsp; KALLOS → CONTUERI &nbsp;·&nbsp; May 2026
+</footer>
+
+</body>
+</html>
