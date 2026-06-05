@@ -3,6 +3,10 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useOnboarded from "@/hooks/useOnboarded";
+import {
+  isLegacyOnboardedWithoutCookie,
+  setOnboarded as setOnboardedRaw,
+} from "@/lib/userData";
 import PPGradientBackground from "@/components/PPGradientBackground";
 
 export type SplashBlock =
@@ -58,13 +62,50 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
   const [current, setCurrent] = useState(0);
   const [visible, setVisible] = useState(false);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  // `migrating` is true when a returning user (localStorage flag set
+  // before the June 5 middleware/cookie deploy) lands on /splash via
+  // the new edge redirect, but doesn't actually need to re-onboard.
+  // We silently sync their cookie and bounce them back to `/` without
+  // ever rendering the splash UI. Cf. lib/userData.ts comment block.
+  const [migrating, setMigrating] = useState(false);
   const router = useRouter();
 
   const total = screens.length;
 
   useEffect(() => {
+    // Migration: existing users have `contueri-onboarded` in
+    // localStorage but no cookie. Middleware sees no cookie and
+    // redirected them here. Detect that state, set the cookie so
+    // future visits pass middleware, and bounce to `/` so they never
+    // see the splash. The native iOS splash from
+    // NativeSplashController is still up at this point and stays up
+    // through the bounce, so the user just sees the wordmark for a
+    // hair longer than usual on this one transitional cold launch.
+    //
+    // Edge case: if cookies are disabled / writes are blocked,
+    // setOnboardedRaw will succeed for localStorage but silently
+    // fail for the cookie. Bouncing to `/` in that case would loop
+    // (middleware sees no cookie → redirects back to /splash →
+    // migration runs → tries to bounce again → infinite loop).
+    // We verify the cookie was actually written by re-checking
+    // isLegacyOnboardedWithoutCookie() — if it now returns false,
+    // the cookie is set and the bounce is safe. If it still returns
+    // true, cookies are broken; we fall through to showing the
+    // splash UI as a degraded-but-functional fallback so the user
+    // can manually proceed.
+    if (isLegacyOnboardedWithoutCookie()) {
+      setOnboardedRaw(true); // writes BOTH cookie and localStorage
+      if (!isLegacyOnboardedWithoutCookie()) {
+        // Cookie verified — safe to bounce.
+        setMigrating(true);
+        router.replace("/");
+        return;
+      }
+      // Cookie write failed (cookies disabled?). Fall through to
+      // showing the splash so the user can interact with it.
+    }
     requestAnimationFrame(() => setVisible(true));
-  }, []);
+  }, [router]);
 
   const next = () => setCurrent((c) => Math.min(c + 1, total - 1));
   const prev = () => setCurrent((c) => Math.max(c - 1, 0));
@@ -98,6 +139,11 @@ export default function SplashClient({ screens }: { screens: SplashScreen[] }) {
   };
 
   if (total === 0) return null;
+  // Migration bounce in progress (returning user, no cookie yet):
+  // render nothing so we don't briefly flash the splash UI before
+  // the router.replace("/") in the migration useEffect lands. The
+  // iOS native splash stays up via NativeSplashController.
+  if (migrating) return null;
 
   const animStyle = (screenIdx: number, blockIdx: number): React.CSSProperties => ({
     transitionProperty: "opacity, transform",

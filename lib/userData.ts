@@ -71,9 +71,73 @@ function hasWindow(): boolean {
 }
 
 // ─── Onboarded flag ──────────────────────────────────────────────────────────
+//
+// Dual-write strategy (June 5, 2026): the flag now lives in BOTH a
+// cookie AND localStorage.
+//
+//   - Cookie is the source of truth for SERVER-SIDE reads. Next.js
+//     middleware reads it at the edge to short-circuit first-time
+//     users from `/` → `/splash` without rendering Today first. This
+//     eliminates the cold-launch "espresso placeholder + parchment
+//     nav flash" that the layered NativeSplashController fix only
+//     hides; middleware actually removes the work.
+//
+//   - localStorage is the fallback for the rare cases where Capacitor
+//     WKWebView's cookie store doesn't survive a cold launch (iOS
+//     WebView quirk; mostly resolved iOS 14+ but occasional reports
+//     remain). The client-side hook reads both and accepts either.
+//
+// The cookie name MUST match the localStorage key so middleware and
+// browser stay in sync.
+
+const ONBOARDED_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365; // 1 year
+
+function readOnboardedCookie(): boolean {
+  if (!hasWindow()) return false;
+  try {
+    // Parse `document.cookie` for our key. Standard split-on-`;`
+    // pattern; trim each pair; check key match.
+    const pairs = document.cookie.split(";");
+    for (const pair of pairs) {
+      const eq = pair.indexOf("=");
+      if (eq === -1) continue;
+      const key = pair.slice(0, eq).trim();
+      if (key === ONBOARDED_KEY) {
+        const val = pair.slice(eq + 1).trim();
+        return val === "true" || val === "1";
+      }
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+function writeOnboardedCookie(value: boolean): void {
+  if (!hasWindow()) return;
+  try {
+    const base = `${ONBOARDED_KEY}=${value ? "true" : ""}; path=/; samesite=lax`;
+    // Production runs over HTTPS (contueri.app via Vercel + the
+    // Capacitor live-URL); Secure flag protects the value in transit.
+    // Local dev over http://localhost works without Secure.
+    const secure =
+      window.location.protocol === "https:" ? "; secure" : "";
+    if (value) {
+      document.cookie = `${base}; max-age=${ONBOARDED_COOKIE_MAX_AGE_SECONDS}${secure}`;
+    } else {
+      // Clear by setting max-age=0
+      document.cookie = `${base}; max-age=0${secure}`;
+    }
+  } catch {
+    /* ignore — cookies disabled */
+  }
+}
 
 export function getOnboarded(): boolean {
   if (!hasWindow()) return false;
+  // Either source counts. Cookie first (matches what middleware sees);
+  // localStorage second (iOS WebView fallback + legacy users).
+  if (readOnboardedCookie()) return true;
   try {
     return localStorage.getItem(ONBOARDED_KEY) !== null;
   } catch {
@@ -83,11 +147,31 @@ export function getOnboarded(): boolean {
 
 export function setOnboarded(value: boolean): void {
   if (!hasWindow()) return;
+  // Dual-write so both surfaces stay in sync. localStorage may fail
+  // (quota / disabled) — that's fine, cookie alone is enough for
+  // middleware to pass. Cookie may fail (some embedded contexts) —
+  // localStorage alone is enough for the client-side hook to return
+  // true.
   try {
     if (value) localStorage.setItem(ONBOARDED_KEY, "true");
     else localStorage.removeItem(ONBOARDED_KEY);
   } catch {
-    /* ignore quota / disabled-storage errors */
+    /* ignore */
+  }
+  writeOnboardedCookie(value);
+}
+
+// Used by the SplashClient migration path: returns true iff the user
+// has localStorage set but no cookie. When true, SplashClient sets the
+// cookie + redirects silently, avoiding showing the splash to someone
+// who already onboarded before the middleware deploy.
+export function isLegacyOnboardedWithoutCookie(): boolean {
+  if (!hasWindow()) return false;
+  if (readOnboardedCookie()) return false;
+  try {
+    return localStorage.getItem(ONBOARDED_KEY) !== null;
+  } catch {
+    return false;
   }
 }
 
