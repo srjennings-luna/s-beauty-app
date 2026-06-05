@@ -67,6 +67,23 @@ platform :ios do
       readonly: true,
     )
 
+    # Switch the Xcode project from "Automatic signing" (the Xcode
+    # default that requires GUI sign-in) to manual signing using the
+    # Match-installed AppStore profile. Without this, `xcodebuild
+    # archive` in CI fails with "No profiles for 'app.contueri.ios'
+    # were found" because there's no Xcode GUI to grant signing
+    # access. Match sets ENV vars after running with the profile
+    # name and team id; we read those to configure the project.
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: PROJECT_PATH,
+      team_id: ENV["APPLE_TEAM_ID"],
+      code_sign_identity: "Apple Distribution",
+      bundle_identifier: "app.contueri.ios",
+      profile_name: ENV["sigh_app.contueri.ios_appstore_profile-name"] || "match AppStore app.contueri.ios",
+      build_configurations: ["Release"],
+    )
+
     # Authenticate to App Store Connect with the API key (no Apple
     # ID password required for upload).
     app_store_connect_api_key(
