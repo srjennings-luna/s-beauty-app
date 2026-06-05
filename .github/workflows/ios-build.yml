@@ -167,31 +167,27 @@ jobs:
         # Capacitor + creates the ios/ scaffold, this step fails fast
         # which is the correct behavior.
 
-      # ── Certificates via Fastlane Match ─────────────────────────────
-      # Match fetches the distribution cert + provisioning profile
-      # from the encrypted private cert repo, decrypts with
-      # MATCH_PASSWORD, and installs into the runner's keychain.
-      - name: Install certificates via Fastlane Match
-        env:
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
-          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
-          MATCH_FORCE_LEGACY_ENCRYPTION: ${{ secrets.MATCH_FORCE_LEGACY_ENCRYPTION }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          FASTLANE_USER: ${{ secrets.APPLE_ID }}
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
-        run: bundle exec fastlane match appstore --readonly
-        # TODO (post Apple Dev activation): the first time Match runs,
-        # it must be invoked locally with `fastlane match appstore`
-        # (without --readonly) to generate the cert + profile and
-        # push them to MATCH_GIT_URL. Subsequent CI runs use
-        # --readonly to fetch only.
-
       # ── Build + upload via Fastlane ─────────────────────────────────
-      # The `deploy_testflight` lane in fastlane/Fastfile bumps the
-      # build number, runs `xcodebuild archive` against the Capacitor
-      # iOS scheme, signs with the Match-installed profile, and uploads
-      # the resulting .ipa to TestFlight via App Store Connect API.
+      # The `deploy_testflight` lane in fastlane/Fastfile does:
+      #   1. `setup_ci` — temp unlocked keychain for non-interactive
+      #      signing (critical: without this, xcodebuild hangs at the
+      #      "Signing Cordova.framework" step waiting for a GUI
+      #      keychain unlock prompt that never arrives).
+      #   2. `match --readonly` — pull certs into that temp keychain.
+      #   3. `update_code_signing_settings` — switch the project to
+      #      manual signing using the Match-installed profile.
+      #   4. ASC API key auth.
+      #   5. `increment_build_number` from the highest TestFlight build.
+      #   6. `build_app` — xcodebuild archive + sign + export .ipa.
+      #   7. `upload_to_testflight`.
+      #
+      # The redundant pre-step "Install certificates via Fastlane Match"
+      # was removed June 4, 2026. It used to run match in a separate
+      # Ruby invocation, but the keychain it set up did not carry over
+      # to the build step's process, and it skipped `setup_ci` so the
+      # cert ended up in the wrong (locked) keychain — causing the
+      # 58-minute signing hang in the run that timed out at the 60-min
+      # workflow cap.
       - name: Build and upload to TestFlight
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}

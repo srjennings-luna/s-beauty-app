@@ -59,6 +59,19 @@ platform :ios do
 
   desc "CI: pull certs, bump build number, archive, sign, upload to TestFlight."
   lane :deploy_testflight do
+    # `setup_ci` creates a temporary unlocked keychain configured
+    # for non-interactive use. Without this, `xcodebuild` hangs at
+    # the "Signing Cordova.framework" step waiting for a keychain
+    # password prompt that will never arrive (no GUI on the runner).
+    # The previous CI run got all the way through linking the app,
+    # then sat at signing for 58 minutes until the 60-min workflow
+    # timeout killed it. `setup_ci` is the documented Fastlane fix:
+    # creates `fastlane_tmp_keychain-db`, unlocks it, sets a long
+    # timeout, and configures the keychain partition list so signing
+    # identities are accessible without prompting. Must run BEFORE
+    # `match` so the temp keychain receives the imported certs.
+    setup_ci if ENV["CI"]
+
     # Pull existing certs without creating new ones. Fails fast in
     # CI if certs are missing; match_init must run locally first.
     match(
