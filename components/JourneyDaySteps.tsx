@@ -7,6 +7,7 @@ import type { JourneyDay } from "@/lib/types";
 import NarrationButton, { NARRATION_START_EVENT, NARRATION_END_EVENT } from "@/components/NarrationButton";
 import ScrollCue from "@/components/ScrollCue";
 import { WHISPER_GRADIENT } from "@/lib/design-tokens";
+import useMediaSession from "@/hooks/useMediaSession";
 
 // Encounter-panel palettes for the gradient-glow treatment on Context and
 // Look Closer. Toggle via URL param ?palette=fresco for comparison. Default
@@ -248,11 +249,17 @@ function CircularAudioPlayer({
   audioSrc,
   title,
   subtitle,
+  artworkUrl,
   externalUrl,
 }: {
   audioSrc?: string;
   title?: string;
   subtitle?: string;
+  /** Optional artwork URL for the iOS lockscreen / Control Center via
+   *  MediaSession. Pass the encounter content's image or the day's
+   *  open image. Sanity CDN URLs are auto-resized for different
+   *  lockscreen sizes by useMediaSession. */
+  artworkUrl?: string;
   externalUrl?: string;
 }) {
   const [audioPlaying, setAudioPlaying] = useState(false);
@@ -263,6 +270,25 @@ function CircularAudioPlayer({
   const progressFillRef = useRef<HTMLDivElement | null>(null);
   const currentTimeRef  = useRef<HTMLSpanElement | null>(null);
   const rangeRef        = useRef<HTMLInputElement | null>(null);
+
+  // MediaSession metadata for the iOS lockscreen, Control Center,
+  // AirPods, and CarPlay. Activates while the journey-day auditio is
+  // playing; clears when paused or the day step unmounts.
+  useMediaSession({
+    audioRef,
+    active: audioPlaying,
+    track:
+      audioPlaying && title
+        ? {
+            title,
+            artist: subtitle,
+            album: "Contueri · Journey",
+            artworkUrl,
+          }
+        : null,
+    onPlay: () => setAudioPlaying(true),
+    onPause: () => setAudioPlaying(false),
+  });
 
   // Stop audio and clean up when the component unmounts (journey closes)
   useEffect(() => {
@@ -477,6 +503,12 @@ function StepEncounter({ day }: { day: JourneyDay }) {
   const audioExternalUrl =
     day.auditio?.externalUrl ||
     (content.contentType === "music" ? (content.externalMusicUrl || content.musicUrl) : undefined);
+  // Lockscreen / Control Center artwork is the encounter content's
+  // image (the piece the user is contemplating) for non-music content,
+  // or — for music content where the "encounter image" might be a
+  // composer portrait that reads cleaner at lockscreen size — the
+  // day's own openImageUrl.
+  const audioArtworkUrl = content.imageUrl || day.openImageUrl;
 
   // Watch/Listen for watch-listen content type (content level only)
   const showWatchLink = content.contentType === "watch-listen" && content.mediaUrl;
@@ -687,6 +719,7 @@ function StepEncounter({ day }: { day: JourneyDay }) {
             audioSrc={inAppAudioSrc}
             title={audioTitle}
             subtitle={audioSubtitle}
+            artworkUrl={audioArtworkUrl}
             externalUrl={inAppAudioSrc ? audioExternalUrl : undefined}
           />
         )}

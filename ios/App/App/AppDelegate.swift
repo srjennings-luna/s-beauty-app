@@ -1,5 +1,6 @@
 import UIKit
 import Capacitor
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,6 +24,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let window = self.window {
             window.backgroundColor = UIColor(red: 0.0862745098, green: 0.0666666667, blue: 0.0509803922, alpha: 1.0)
         }
+
+        // Configure the shared AVAudioSession for music-style playback.
+        //
+        // .playback category means:
+        //   - Audio continues when the silent / ring switch is enabled
+        //     (matches what users expect from any music app — a P&P
+        //     Auditio playing should not be muted by the silent switch)
+        //   - Audio continues when the screen locks or the app is
+        //     backgrounded (paired with UIBackgroundModes "audio" in
+        //     Info.plist)
+        //   - Lockscreen + Control Center surface MediaSession
+        //     metadata set from JS (navigator.mediaSession), so the
+        //     user sees the track title, composer, and artwork on the
+        //     lockscreen and can pause / resume from there
+        //
+        // .mixWithOthers is intentionally NOT used — playing Contueri
+        // audio should pause Spotify / Apple Music etc, the same way
+        // any foreground music app does. The user has chosen to listen
+        // to a P&P track; their other audio should yield.
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            // No-op: if audio session fails to configure, audio still
+            // plays in foreground via the default category, just
+            // without background / lockscreen support.
+        }
+
         return true
     }
 

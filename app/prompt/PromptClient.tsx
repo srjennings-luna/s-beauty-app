@@ -11,6 +11,7 @@ import PageTransition from "@/components/ui/PageTransition";
 import NarrationButton, { NARRATION_START_EVENT, NARRATION_END_EVENT } from "@/components/NarrationButton";
 import PPGradientBackground from "@/components/PPGradientBackground";
 import useStreak from "@/hooks/useStreak";
+import useMediaSession from "@/hooks/useMediaSession";
 
 function formatTime(s: number): string {
   const m = Math.floor(s / 60);
@@ -178,6 +179,32 @@ function DailyPromptPageInner({
   // ── Auditio lifecycle ──────────────────────────────────────────────────────
   // Cleanup on unmount.
   useEffect(() => () => { auditioRef.current?.pause(); }, []);
+
+  // MediaSession metadata for the iOS lockscreen, Control Center,
+  // AirPods, and CarPlay. Activates while Auditio is playing; clears
+  // when paused or the prompt unmounts. The artwork is the day's
+  // painting (DailyPrompt content image), which Sanity CDN re-serves
+  // at the iOS-appropriate sizes via query params.
+  useMediaSession({
+    audioRef: auditioRef,
+    active: musicPlaying,
+    track:
+      musicPlaying && prompt?.auditio
+        ? {
+            // Prefer the structured workTitle (e.g. "O Vos Omnes") with
+            // a fallback to the free-text title (used pre R7-migration).
+            title:
+              prompt.auditio.workTitle?.trim() ||
+              prompt.auditio.title?.trim() ||
+              "Auditio",
+            artist: prompt.auditio.composerArtist?.trim() || undefined,
+            album: "Contueri · Pause and Ponder",
+            artworkUrl: prompt.content?.imageUrl,
+          }
+        : null,
+    onPlay: () => setMusicPlaying(true),
+    onPause: () => setMusicPlaying(false),
+  });
 
   // Pause Auditio when narration starts; auto-resume when narration ends.
   useEffect(() => {

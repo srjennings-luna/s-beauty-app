@@ -32,6 +32,19 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<!--
+	    Enable background audio playback so Auditio + (future) ambient
+	    sound system keep playing when the screen locks or the user
+	    switches to another app. Without "audio" in UIBackgroundModes,
+	    iOS suspends audio output as soon as the WebView loses
+	    foreground. Paired with AVAudioSession.setCategory(.playback)
+	    in AppDelegate.swift (which routes audio output even when the
+	    silent switch is on, the standard category for music apps).
+	-->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
