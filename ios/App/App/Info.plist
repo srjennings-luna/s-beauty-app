@@ -47,5 +47,20 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<!--
+	    UIStatusBarStyle controls the status bar appearance AT LAUNCH
+	    (before any view controller takes over status bar management).
+	    Even with UIViewControllerBasedStatusBarAppearance=true above,
+	    iOS uses this key for the launch-screen status bar style.
+	    UIStatusBarStyleLightContent = white text/icons on dark backdrop —
+	    matches our espresso launch storyboard. Without this, iOS uses
+	    the .default style at launch, which on some iOS versions
+	    renders a translucent light backdrop in the status bar region,
+	    appearing as a cream/parchment strip at the top of the screen
+	    over the dark splash image. Visible in Sheri's June 5 device
+	    recording at t=7s.
+	-->
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 </dict>
 </plist>
