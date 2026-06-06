@@ -307,14 +307,34 @@ export default function PrayClient({
               {STEPS[step].title}
             </span>
 
-            <button
-              type="button"
-              onClick={() => { setMusicLoadError(false); setMusicMenuOpen(true); }}
-              className="text-xs font-medium"
-              style={{ color: C.creamFaint }}
-            >
-              {musicMode === "off" ? "Music" : musicMode === "chant" ? "Chant ♪" : "Ambient ♪"}
-            </button>
+            {/* Right cluster: Music label + X close.
+                X close (added June 5, 2026) gives Visio Divina the
+                modal-dismiss affordance it was missing. Tap routes
+                straight to /library via handleFinish() — the same exit
+                the Finish button uses on the last step — so the user
+                can leave the contemplative flow at any point without
+                stepping back through every prior step. */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => { setMusicLoadError(false); setMusicMenuOpen(true); }}
+                className="text-xs font-medium"
+                style={{ color: C.creamFaint }}
+              >
+                {musicMode === "off" ? "Music" : musicMode === "chant" ? "Chant ♪" : "Ambient ♪"}
+              </button>
+              <button
+                type="button"
+                onClick={handleFinish}
+                className="w-10 h-10 flex items-center justify-center bg-white/8 transition-colors hover:bg-white/12"
+                style={{ color: C.creamDim }}
+                aria-label="Close"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 

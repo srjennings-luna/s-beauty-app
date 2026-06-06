@@ -130,13 +130,39 @@ export default function GoDeeperSection({ reflections: propReflections }: GoDeep
             </p>
           ) : (
             <>
-              {/* Carousel card - swipeable */}
+              {/* Carousel card - swipeable.
+                  June 5, 2026: minHeight added so cards stay the same
+                  frame size when swiping between short and long
+                  reflections (some include context paragraphs,
+                  others don't). The card scrolls internally if a
+                  particular reflection runs longer than the frame.
+                  Pairs with the X/Y counter below — the dot-
+                  indicator carousel was visually competing with the
+                  Stories progress segments at the top of the Visio
+                  Divina header (two steppers on one page read as
+                  confusion); a numeric counter retires that conflict. */}
               <div
-                className="bg-white/5 border border-white/10 p-4"
+                className="bg-white/5 border border-white/10 p-4 overflow-y-auto relative"
+                style={{ minHeight: "220px" }}
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
-                <h3 className="text-white font-semibold text-base mb-2">
+                {/* X/Y counter — top-right corner of card.
+                    Replaces the gold-pill dot row that previously sat
+                    below the card and competed with the page-stepper
+                    Stories segments at the top of the Visio Divina
+                    header. Only shown when there's more than one
+                    reflection to count. */}
+                {reflections.length > 1 && (
+                  <span
+                    aria-label={`Reflection ${currentIndex + 1} of ${reflections.length}`}
+                    className="absolute top-3 right-3 text-[10px] font-mono tracking-wider"
+                    style={{ color: "rgba(253,246,232,0.55)" }}
+                  >
+                    {currentIndex + 1}/{reflections.length}
+                  </span>
+                )}
+                <h3 className="text-white font-semibold text-base mb-2 pr-10">
                   {currentReflection.title}
                 </h3>
                 {currentReflection.shortQuote && (
@@ -168,25 +194,6 @@ export default function GoDeeperSection({ reflections: propReflections }: GoDeep
                   <NarrationButton audioUrl={currentReflection.reflectionAudioUrl} />
                 </div>
               </div>
-
-              {/* Dot indicators - unified design */}
-              {reflections.length > 1 && (
-                <div className="flex items-center justify-center gap-1.5 mt-4">
-                  {reflections.map((_, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => setCurrentIndex(i)}
-                      aria-label={`Reflection ${i + 1}`}
-                      className={`transition-all ${
-                        i === currentIndex
-                          ? "w-5 h-1.5 rounded-full bg-[#C19B5F]"
-                          : "w-1.5 h-1.5 rounded-full bg-white/35"
-                      }`}
-                    />
-                  ))}
-                </div>
-              )}
             </>
           )}
         </div>
