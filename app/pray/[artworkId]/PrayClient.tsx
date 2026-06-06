@@ -240,6 +240,12 @@ export default function PrayClient({
             ))}
           </div>
 
+          {/* Chrome row: icon-only Back (left) and X close (right). No
+              backgrounds, no center title. Step name is shown by the
+              h2 inside each slide's content (one label per slide, not
+              duplicated in the chrome). Sheri June 5: "remove recs
+              around back and close buttons, doesn't match other places
+              in app" + the duplicate-header note. */}
           <div className="flex items-center justify-between px-4 py-3">
             <Link
               href="#"
@@ -248,7 +254,7 @@ export default function PrayClient({
                 if (step > 0) setStep(step - 1);
                 else router.back();
               }}
-              className="w-10 h-10 flex items-center justify-center bg-white/8 transition-colors hover:bg-white/12"
+              className="w-10 h-10 flex items-center justify-center"
               style={{ color: C.creamDim }}
               aria-label={step > 0 ? "Previous step" : "Back"}
             >
@@ -257,37 +263,17 @@ export default function PrayClient({
               </svg>
             </Link>
 
-            <span className="text-sm" style={{ color: C.creamDim }}>
-              {STEPS[step].title}
-            </span>
-
-            {/* Right cluster: X close only. The "Music" label was
-                retired June 5, 2026 when the global
-                AmbientSoundProvider shipped — the global floating
-                button (bottom-right) is the single control for
-                ambient sound everywhere now, and the picker lives
-                in Settings → Sound rather than as a per-Visio
-                dropdown.
-
-                X close gives Visio Divina the modal-dismiss
-                affordance it was missing. Tap routes straight to
-                /library via handleFinish() — the same exit the
-                Finish button uses on the last step — so the user
-                can leave the contemplative flow at any point
-                without stepping back through every prior step. */}
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleFinish}
-                className="w-10 h-10 flex items-center justify-center bg-white/8 transition-colors hover:bg-white/12"
-                style={{ color: C.creamDim }}
-                aria-label="Close"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handleFinish}
+              className="w-10 h-10 flex items-center justify-center"
+              style={{ color: C.creamDim }}
+              aria-label="Close"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -315,13 +301,15 @@ export default function PrayClient({
             onTouchEnd={handleTouchEnd}
           >
 
-            {/* ── Gaze ── */}
-            {/* gazeScrollRef + ScrollCue: IMG-01 fix (June 2, 2026).
-                The image is min-h-[55vh] max-h-[70vh]; on short
-                viewports the contemplative copy ("Let your eyes
-                rest...") and the pinch hint live below the fold and
-                users don't know to scroll. ScrollCue surfaces the
-                affordance silently and auto-hides on first scroll. */}
+            {/* ── Gaze ──
+                Image bumped to min-h-[60vh] / max-h-[78vh] June 5,
+                2026 per Sheri's note: image is the focus of Visio
+                Divina, should fill at least half the page like the
+                Breathe step in Journey. Pinch-to-zoom (8x) is via
+                react-zoom-pan-pinch's TransformWrapper. Padding
+                tightened (py-6 → py-4) so the image dominates the
+                viewport and the contemplative copy below sits just
+                under it without requiring a page-down to find. */}
             <div
               ref={gazeScrollRef}
               className="absolute inset-0 overflow-y-auto touch-pan-y"
@@ -331,22 +319,22 @@ export default function PrayClient({
                 willChange: "transform",
               }}
             >
-              <div className="flex flex-col px-4 py-6">
-                <h2 className="text-sm font-medium uppercase tracking-wider mb-4 text-center" style={{ color: C.cream }}>Gaze</h2>
-                <div className="w-full min-h-[55vh] flex-1 flex flex-col mb-6">
+              <div className="flex flex-col px-4 py-4">
+                <h2 className="text-sm font-medium uppercase tracking-wider mb-3 text-center" style={{ color: C.cream }}>Gaze</h2>
+                <div className="w-full min-h-[60vh] flex-1 flex flex-col mb-4">
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
-                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "55vh" }}
+                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "60vh" }}
                       contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
                     >
-                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[70vh] object-contain select-none" draggable={false} />
+                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[78vh] object-contain select-none" draggable={false} />
                     </TransformComponent>
                   </TransformWrapper>
                 </div>
                 <p className="text-sm text-center leading-relaxed max-w-md mx-auto" style={{ color: C.creamDim }}>
                   Let your eyes rest on the image. Notice what draws you. Ask God to open the eyes of your heart.
                 </p>
-                <p className="text-xs mt-4 text-center" style={{ color: C.creamFaint }}>Take 1-2 minutes if you like. Pinch to zoom the image.</p>
+                <p className="text-xs mt-3 text-center" style={{ color: C.creamFaint }}>Take 1-2 minutes if you like. Pinch to zoom the image.</p>
               </div>
               <ScrollCue containerRef={gazeScrollRef} />
             </div>
@@ -362,13 +350,13 @@ export default function PrayClient({
             >
               <div className="px-4 py-6">
                 <h2 className="text-sm font-medium uppercase tracking-wider mb-4" style={{ color: C.cream }}>Meditate</h2>
-                <div className="w-full min-h-[50vh] mb-6">
+                <div className="w-full min-h-[55vh] mb-4">
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
-                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "50vh" }}
+                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "55vh" }}
                       contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
                     >
-                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[65vh] object-contain select-none" draggable={false} />
+                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[72vh] object-contain select-none" draggable={false} />
                     </TransformComponent>
                   </TransformWrapper>
                 </div>
@@ -430,13 +418,13 @@ export default function PrayClient({
             >
               <div className="flex flex-col px-4 py-6">
                 <h2 className="text-sm font-medium uppercase tracking-wider mb-4 text-center" style={{ color: C.cream }}>Contemplate</h2>
-                <div className="w-full min-h-[55vh] mb-6">
+                <div className="w-full min-h-[60vh] mb-4">
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
-                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "55vh" }}
+                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "60vh" }}
                       contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
                     >
-                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[70vh] object-contain select-none" draggable={false} />
+                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[78vh] object-contain select-none" draggable={false} />
                     </TransformComponent>
                   </TransformWrapper>
                 </div>
@@ -458,13 +446,13 @@ export default function PrayClient({
             >
               <div className="flex flex-col px-4 py-6">
                 <h2 className="text-sm font-medium uppercase tracking-wider mb-4" style={{ color: C.cream }}>Pray</h2>
-                <div className="w-full min-h-[40vh] mb-6">
+                <div className="w-full min-h-[55vh] mb-4">
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
-                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "40vh" }}
+                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "55vh" }}
                       contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
                     >
-                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[55vh] object-contain select-none" draggable={false} />
+                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[72vh] object-contain select-none" draggable={false} />
                     </TransformComponent>
                   </TransformWrapper>
                 </div>
