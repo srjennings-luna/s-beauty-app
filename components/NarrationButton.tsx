@@ -50,21 +50,33 @@ export default function NarrationButton({ audioUrl, color = "#C19B5F" }: Narrati
 
   const toggle = () => {
     if (playing) {
+      // Just pause — the "pause" event listener below handles the
+      // NARRATION_END dispatch so we don't double-fire it.
       audioRef.current?.pause();
       setPlaying(false);
-      // Signal audio players to resume (user manually stopped narration)
-      window.dispatchEvent(new CustomEvent(NARRATION_END_EVENT));
     } else {
       // Signal all audio players (Auditio music, background music) to pause
       window.dispatchEvent(new CustomEvent(NARRATION_START_EVENT));
       if (!audioRef.current) {
         const audio = new Audio(audioUrl);
-        audio.addEventListener("ended", () => {
+        // "ended" fires when playback reaches the natural end. Also
+        // sets playing=false so the button flips sooner; the
+        // companion "pause" event (which fires immediately after
+        // "ended") is what dispatches NARRATION_END.
+        audio.addEventListener("ended", () => setPlaying(false));
+        // "pause" is the single canonical place we dispatch
+        // NARRATION_END. It fires uniformly whether the user tapped
+        // STOP, the audio finished naturally, or iOS auto-paused us
+        // (the Vercel-URL lockscreen case — iOS Safari has no
+        // background audio permission without a Capacitor shell that
+        // sets UIBackgroundModes=audio). Centralising the dispatch
+        // here means ambient resume logic kicks in for ALL pause
+        // paths, including the auto-pause-on-lock that caused the
+        // June 6, 2026 stuck-paused bug Sheri caught.
+        audio.addEventListener("pause", () => {
           setPlaying(false);
-          // Signal audio players to resume after narration finishes naturally
           window.dispatchEvent(new CustomEvent(NARRATION_END_EVENT));
         });
-        audio.addEventListener("pause", () => setPlaying(false));
         audioRef.current = audio;
       }
       audioRef.current.play().catch(() => {});
