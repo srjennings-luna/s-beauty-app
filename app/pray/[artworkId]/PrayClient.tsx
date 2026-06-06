@@ -603,8 +603,14 @@ export default function PrayClient({
               />
 
               {/* Content */}
-              <div className="relative z-10 h-full w-full overflow-y-auto flex flex-col items-center px-6 py-10">
-                <div className="max-w-md w-full text-center mt-8">
+              {/* Action content is centered both vertically and
+                  horizontally on the page (Sheri June 5, 2026: the
+                  prompt should be page-centered, not anchored under
+                  the stepper). justify-center pairs with h-full so
+                  the single content block floats at the optical
+                  center of the slide. */}
+              <div className="relative z-10 h-full w-full overflow-y-auto flex flex-col items-center justify-center px-6 py-10">
+                <div className="max-w-md w-full text-center">
                   <p
                     className="font-serif-elegant italic leading-relaxed mb-3"
                     style={{
