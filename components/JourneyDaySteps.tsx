@@ -189,8 +189,16 @@ function StepOpen({ day }: { day: JourneyDay }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   return (
     <div ref={scrollRef} className="h-full overflow-y-auto relative">
-      {/* Spacer for overlaid header (nav row only; progress is now in footer) */}
-      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)" }} />
+      {/* Hero image rises to the top of the page; the overlaid header
+          floats ON the image's upper portion (chrome has no background).
+          June 5, 2026 — Sheri: "the first 2 images in journey... need to
+          rise to the top of the page just like the breathe page but the
+          lower portion of the image should stay in the same position."
+          The previous spacer-then-image pattern pushed the image down
+          BELOW the chrome; removing the spacer lets the image extend
+          upward into the chrome area, keeping its bottom edge at the
+          same place (the 4:3 padding-bottom trick still controls the
+          image's overall height). */}
 
       {/* Hero image — full width, reliable 4:3 aspect ratio via padding trick */}
       {day.openImageUrl && (
@@ -521,8 +529,10 @@ function StepEncounter({ day }: { day: JourneyDay }) {
 
   return (
     <div className="h-full overflow-y-auto">
-      {/* Spacer for overlaid header */}
-      <div style={{ height: "calc(max(env(safe-area-inset-top, 0px), 48px) + 56px)" }} />
+      {/* Image rises to the top of the page; the overlaid header floats
+          ON the image's upper portion (chrome has no background). Same
+          pattern as Step Open + Breathe. June 5, 2026 — Sheri's note
+          for Journey Days. */}
 
       {/* Content image — no zoom (zoom lives on the Breathe page) */}
       {content.imageUrl && (

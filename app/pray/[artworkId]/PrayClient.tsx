@@ -200,11 +200,16 @@ export default function PrayClient({
         className="min-h-screen flex flex-col safe-area-bottom"
         style={{ background: C.bg, paddingBottom: "calc(4rem + env(safe-area-inset-bottom, 0px))" }}
       >
-        {/* Header: espresso dark, sticky. Stories-style progress segments
-            sit at the top edge of the header (PB-01, June 2 2026). */}
+        {/* Header: absolutely positioned overlay. Floats ON the image
+            (image extends to viewport top) with no espresso background
+            so the artwork is the visual ground. Same pattern as Journey
+            BREATHE + Step Open + Step Encounter. Sheri June 5, 2026:
+            "image to rise to the top of the page just like the breathe
+            page." Buttons stay tap-able via pointer-events-auto on the
+            inner row; the outer wrapper is pointer-events-none so taps
+            on the image (e.g., pinch-zoom) pass through. */}
         <div
-          className="flex-shrink-0 sticky top-0 z-10 safe-area-top"
-          style={{ background: C.header }}
+          className="absolute top-0 inset-x-0 z-10 safe-area-top pointer-events-none"
         >
           {/* Stories-style progress segments. Mirrors Journey Day pattern:
               cream rail at 12%, sage fill on current and prior segments. */}
@@ -252,7 +257,7 @@ export default function PrayClient({
               slide's content has been removed so the image can sit
               directly under the chrome). Matches the BREATHE-style
               chrome in Journey Day. */}
-          <div className="grid grid-cols-[1fr_auto_1fr] items-center px-4 py-2">
+          <div className="pointer-events-auto grid grid-cols-[1fr_auto_1fr] items-center px-4 py-2">
             <Link
               href="#"
               onClick={(e) => {
