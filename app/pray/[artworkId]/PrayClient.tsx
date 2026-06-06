@@ -36,7 +36,7 @@ const STEPS = [
   { key: "meditate", title: "Meditate", label: "Meditatio" },
   { key: "pray", title: "Pray", label: "Oratio" },
   { key: "contemplate", title: "Contemplate", label: "Contemplatio" },
-  { key: "action", title: "Action", label: "Operatio" },
+  { key: "action", title: "Action", label: "Actio" },
 ];
 
 // Updated June 5, 2026 to point at the W2 Ambient Sound System slate
