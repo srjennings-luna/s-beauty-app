@@ -5,6 +5,7 @@ import Navigation from "@/components/ui/Navigation";
 import VisualEditingClient from "@/components/VisualEditingClient";
 import NativeSplashController from "@/components/native/NativeSplashController";
 import StatusBarController from "@/components/native/StatusBarController";
+import ExternalLinkInterceptor from "@/components/native/ExternalLinkInterceptor";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -78,11 +79,18 @@ export default function RootLayout({
           iOS status bar style + background per route — light icons on
           espresso surfaces (Today, P&P, Visio Divina, Journey Day,
           splash), dark icons on parchment surfaces (Settings, Explore,
-          Library, Journeys list, Privacy, Terms). Both gracefully
-          no-op on web via the dynamic-import guard.
+          Library, Journeys list, Privacy, Terms). ExternalLinkInterceptor
+          routes cross-origin http/https link clicks through the
+          Capacitor Browser plugin (SFSafariViewController on iOS) so
+          external content opens in an in-app browser overlay instead
+          of kicking the user out to system Safari. Required for App
+          Store Review Guideline 4.5.4 and keeps the contemplative
+          space intact. All three gracefully no-op on web via the
+          dynamic-import guard.
         */}
         <NativeSplashController />
         <StatusBarController />
+        <ExternalLinkInterceptor />
       </body>
     </html>
   );
