@@ -291,13 +291,8 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
           audio.removeAttribute("src");
           audio.load();
           setIsPlaying(false);
-          // Restore gain so the next play() doesn't start silent.
-          if (gainNodeRef.current && audioCtxRef.current) {
-            gainNodeRef.current.gain.setValueAtTime(
-              volumeRef.current,
-              audioCtxRef.current.currentTime,
-            );
-          }
+          // Intentionally do not restore gain — see provider.pause()
+          // comment. play() resets gain to 0 + ramps up on next start.
         }, FADE_MS);
       } else {
         audio.pause();
@@ -437,14 +432,20 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
       // Wait PAUSE_FIRE_DELAY_MS (longer than SOFT_FADE_MS) before
       // audio.pause() so the fade-out has fully reached the output
       // buffer before we interrupt the waveform.
+      //
+      // INTENTIONALLY DO NOT restore gain to user volume here. iOS
+      // WKWebView holds ~30-60ms of audio queued in its output buffer
+      // ahead of currentTime. If we restore gain immediately after
+      // audio.pause() (especially within the buffer window), the
+      // restored gain re-amplifies the queued samples BEFORE iOS
+      // completes the pause — producing a brief audible burst that
+      // reads as a "tick" after the fade-out. Waveform analysis on
+      // June 6, 2026 caught this directly: 50ms of audio appearing
+      // ~100ms after the pause, at exactly the moment gain was
+      // restored. play() already resets gain to 0 at start and ramps
+      // up to volume, so leaving gain at 0 after pause is safe.
       setTimeout(() => {
         audioRef.current?.pause();
-        // Restore gain so future play() starts from a known baseline.
-        if (gainNodeRef.current && audioCtxRef.current) {
-          const t = audioCtxRef.current.currentTime;
-          gainNodeRef.current.gain.cancelScheduledValues(t);
-          gainNodeRef.current.gain.setValueAtTime(volumeRef.current, t);
-        }
       }, PAUSE_FIRE_DELAY_MS);
     } else {
       audioRef.current.pause();
@@ -517,13 +518,11 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
             gain.gain.cancelScheduledValues(now);
             gain.gain.setValueAtTime(gain.gain.value, now);
             gain.gain.linearRampToValueAtTime(0, now + SOFT_FADE_SECONDS);
+            // Don't restore gain — same iOS audio-buffer-burst reason
+            // as provider.pause(). play() resets gain to 0 + ramps up
+            // on next start.
             setTimeout(() => {
               audioRef.current?.pause();
-              if (gainNodeRef.current && audioCtxRef.current) {
-                const t = audioCtxRef.current.currentTime;
-                gainNodeRef.current.gain.cancelScheduledValues(t);
-                gainNodeRef.current.gain.setValueAtTime(volumeRef.current, t);
-              }
             }, PAUSE_FIRE_DELAY_MS);
           } else {
             audioRef.current.pause();
