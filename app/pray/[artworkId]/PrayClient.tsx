@@ -232,7 +232,12 @@ export default function PrayClient({
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: i <= step ? C.sage : "transparent",
+                    // Stepper segments use cream (Sheri June 5, 2026
+                    // reversed prior call: "i agreed to the green
+                    // stepper, but it was the wrong call, it should
+                    // be cream"). Cream-faint at 88% matches the
+                    // baseline cream used for body text on espresso.
+                    background: i <= step ? "rgba(253,246,232,0.88)" : "transparent",
                     transition: "background 0.4s ease",
                   }}
                 />
@@ -247,7 +252,7 @@ export default function PrayClient({
               slide's content has been removed so the image can sit
               directly under the chrome). Matches the BREATHE-style
               chrome in Journey Day. */}
-          <div className="grid grid-cols-[1fr_auto_1fr] items-center px-4 py-3">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center px-4 py-2">
             <Link
               href="#"
               onClick={(e) => {
@@ -362,17 +367,29 @@ export default function PrayClient({
                 willChange: "transform",
               }}
             >
-              <div className="px-4 py-6">
-                <div className="w-full min-h-[55vh] mb-4">
+              <div className="flex flex-col">
+                {/* Image is full-bleed edge-to-edge horizontally, no
+                    px frame, object-cover so it fills its allocated
+                    window (60vh — slightly shorter than Gaze to leave
+                    room for the substantial text below). Pinch-zoom
+                    + pan reveals any cropped edges. */}
+                <div className="w-full mb-4" style={{ height: "min(60vh, 60dvh)" }}>
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
-                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "55vh" }}
-                      contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                      wrapperStyle={{ width: "100%", height: "100%" }}
+                      contentStyle={{ width: "100%", height: "100%" }}
                     >
-                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[72vh] object-contain select-none" draggable={false} />
+                      <img
+                        src={artwork.imageUrl}
+                        alt={artwork.title}
+                        draggable={false}
+                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        className="select-none"
+                      />
                     </TransformComponent>
                   </TransformWrapper>
                 </div>
+                <div className="px-4 pb-4">
                 <h2 className="font-semibold text-lg mb-2" style={{ color: C.cream }}>Reflect</h2>
                 <p className="text-sm mb-4" style={{ color: C.creamDim }}>
                   Look deeper. What movement or relationships do you see? Where are you in this image?
@@ -417,6 +434,7 @@ export default function PrayClient({
                 <div className="mt-8">
                   <GoDeeperSection inline />
                 </div>
+                </div>{/* end px-4 pb-4 text wrapper */}
               </div>
             </div>
 
@@ -429,21 +447,29 @@ export default function PrayClient({
                 willChange: "transform",
               }}
             >
-              <div className="flex flex-col px-4 py-6">
-                <div className="w-full min-h-[60vh] mb-4">
+              <div className="flex flex-col">
+                <div className="w-full mb-4" style={{ height: "min(75vh, 75dvh)" }}>
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
-                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "60vh" }}
-                      contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                      wrapperStyle={{ width: "100%", height: "100%" }}
+                      contentStyle={{ width: "100%", height: "100%" }}
                     >
-                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[78vh] object-contain select-none" draggable={false} />
+                      <img
+                        src={artwork.imageUrl}
+                        alt={artwork.title}
+                        draggable={false}
+                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        className="select-none"
+                      />
                     </TransformComponent>
                   </TransformWrapper>
                 </div>
-                <p className="text-sm text-center leading-relaxed max-w-md mx-auto" style={{ color: C.creamDim }}>
-                  Rest in God&apos;s presence. No words are needed. Let the beauty you&apos;ve seen lead you into silence and communion.
-                </p>
-                <p className="text-xs mt-4 text-center" style={{ color: C.creamFaint }}>Pinch to zoom the image.</p>
+                <div className="px-4 pb-4">
+                  <p className="text-sm text-center leading-relaxed max-w-md mx-auto" style={{ color: C.creamDim }}>
+                    Rest in God&apos;s presence. No words are needed. Let the beauty you&apos;ve seen lead you into silence and communion.
+                  </p>
+                  <p className="text-xs mt-4 text-center" style={{ color: C.creamFaint }}>Pinch to zoom the image.</p>
+                </div>
               </div>
             </div>
 
@@ -456,17 +482,24 @@ export default function PrayClient({
                 willChange: "transform",
               }}
             >
-              <div className="flex flex-col px-4 py-6">
-                <div className="w-full min-h-[55vh] mb-4">
+              <div className="flex flex-col">
+                <div className="w-full mb-4" style={{ height: "min(60vh, 60dvh)" }}>
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
-                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "55vh" }}
-                      contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                      wrapperStyle={{ width: "100%", height: "100%" }}
+                      contentStyle={{ width: "100%", height: "100%" }}
                     >
-                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[72vh] object-contain select-none" draggable={false} />
+                      <img
+                        src={artwork.imageUrl}
+                        alt={artwork.title}
+                        draggable={false}
+                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        className="select-none"
+                      />
                     </TransformComponent>
                   </TransformWrapper>
                 </div>
+                <div className="px-4 pb-4">
 
                 {/* Sacred quote block — GOLD BORDER is the ONE gold moment on this screen */}
                 {isSacredArt && artwork.scripturePairing && (
@@ -522,6 +555,7 @@ export default function PrayClient({
                     </div>
                   )}
                 </div>
+                </div>{/* end px-4 pb-4 text wrapper */}
               </div>
             </div>
 
