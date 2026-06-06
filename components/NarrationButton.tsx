@@ -1,11 +1,17 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import {
+  NARRATION_START_EVENT,
+  NARRATION_END_EVENT,
+} from "@/lib/audioEvents";
 
-// Dispatched when narration starts — audio players pause so two tracks never overlap.
-export const NARRATION_START_EVENT = "contueri-narration-start";
-// Dispatched when narration ends (naturally or manually) — audio players resume.
-export const NARRATION_END_EVENT = "contueri-narration-end";
+// Re-export the narration event names from this module for back-compat
+// with existing imports (`import { NARRATION_START_EVENT } from
+// "@/components/NarrationButton"`). The canonical source of truth is
+// now lib/audioEvents.ts, where the auditio + ambient coordination
+// constants live alongside.
+export { NARRATION_START_EVENT, NARRATION_END_EVENT };
 
 interface NarrationButtonProps {
   audioUrl?: string;

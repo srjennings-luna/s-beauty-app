@@ -4,7 +4,13 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import type { JourneyDay } from "@/lib/types";
-import NarrationButton, { NARRATION_START_EVENT, NARRATION_END_EVENT } from "@/components/NarrationButton";
+import NarrationButton from "@/components/NarrationButton";
+import {
+  NARRATION_START_EVENT,
+  NARRATION_END_EVENT,
+  AUDITIO_START_EVENT,
+  AUDITIO_END_EVENT,
+} from "@/lib/audioEvents";
 import ScrollCue from "@/components/ScrollCue";
 import { WHISPER_GRADIENT } from "@/lib/design-tokens";
 import useMediaSession from "@/hooks/useMediaSession";
@@ -334,6 +340,23 @@ function CircularAudioPlayer({
       window.removeEventListener(NARRATION_END_EVENT, endHandler);
     };
   }, []);
+
+  // Tell the global ambient-sound provider when this Journey-Day
+  // Auditio starts / stops so it can pause itself for the duration.
+  // Same pattern as PromptClient — see lib/audioEvents.ts. The provider
+  // refcounts START/END events from all sources (narration + every
+  // Auditio player) and only resumes when the count reaches zero, so
+  // overlap with narration resolves correctly even if a Journey Day
+  // step has both running simultaneously.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (audioPlaying) {
+      window.dispatchEvent(new CustomEvent(AUDITIO_START_EVENT));
+      return () => {
+        window.dispatchEvent(new CustomEvent(AUDITIO_END_EVENT));
+      };
+    }
+  }, [audioPlaying]);
 
   if (!audioSrc && !externalUrl) return null;
 

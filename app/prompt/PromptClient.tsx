@@ -8,7 +8,13 @@ import { getDailyPrompt, getDailyPromptPreview } from "@/lib/sanity";
 import type { DailyPrompt } from "@/lib/types";
 import { addFavorite, removeFavorite, isFavorite } from "@/lib/favorites";
 import PageTransition from "@/components/ui/PageTransition";
-import NarrationButton, { NARRATION_START_EVENT, NARRATION_END_EVENT } from "@/components/NarrationButton";
+import NarrationButton from "@/components/NarrationButton";
+import {
+  NARRATION_START_EVENT,
+  NARRATION_END_EVENT,
+  AUDITIO_START_EVENT,
+  AUDITIO_END_EVENT,
+} from "@/lib/audioEvents";
 import PPGradientBackground from "@/components/PPGradientBackground";
 import useStreak from "@/hooks/useStreak";
 import useMediaSession from "@/hooks/useMediaSession";
@@ -229,6 +235,27 @@ function DailyPromptPageInner({
       window.removeEventListener(NARRATION_END_EVENT, endHandler);
     };
   }, []);
+
+  // Tell the global ambient-sound provider when the P&P Auditio
+  // starts / stops so it can pause itself for the duration. Without
+  // this, the curated music + the ambient track played simultaneously
+  // and stepped on each other (caught June 6, 2026 — Veni Creator
+  // Spiritus overlapping Gregorian Chant on a Today screen).
+  //
+  // The effect dispatches START whenever `musicPlaying` flips to true,
+  // and END whenever it flips to false OR the component unmounts. The
+  // provider refcounts these events alongside narration, so if both
+  // narration and Auditio fire START before either fires END, ambient
+  // stays paused until both have ended.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (musicPlaying) {
+      window.dispatchEvent(new CustomEvent(AUDITIO_START_EVENT));
+      return () => {
+        window.dispatchEvent(new CustomEvent(AUDITIO_END_EVENT));
+      };
+    }
+  }, [musicPlaying]);
 
   // ── Toggle actio checkbox ──────────────────────────────────────────────────
   const toggleCheck = (i: number) => {

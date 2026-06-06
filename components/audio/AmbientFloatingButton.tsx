@@ -98,6 +98,20 @@ export default function AmbientFloatingButton() {
       longPressTimerRef.current = null;
       markDiscoverySeen();
       setPickerOpen(true);
+      // Haptic "tick" on iOS the moment the long-press deadline fires.
+      // Gives users physical confirmation the gesture registered —
+      // important for a long-press because there's no other immediate
+      // feedback until the popover finishes appearing. Dynamic import
+      // so web / SSR / haptic-less devices fall through to a silent
+      // no-op rather than crashing.
+      void (async () => {
+        try {
+          const { Haptics, ImpactStyle } = await import("@capacitor/haptics");
+          await Haptics.impact({ style: ImpactStyle.Light });
+        } catch {
+          /* plugin unavailable (web preview, older device, or sync not run) — silent no-op */
+        }
+      })();
     }, LONG_PRESS_MS);
   }, [markDiscoverySeen]);
 

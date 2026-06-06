@@ -15,7 +15,9 @@ import { AMBIENT_SOUNDS, type AmbientSoundId } from "@/lib/userData";
 import {
   NARRATION_START_EVENT,
   NARRATION_END_EVENT,
-} from "@/components/NarrationButton";
+  AUDITIO_START_EVENT,
+  AUDITIO_END_EVENT,
+} from "@/lib/audioEvents";
 
 // Contueri · AmbientSoundProvider
 //
@@ -93,6 +95,12 @@ function fileFor(id: AmbientSoundId | null): string | null {
   return AMBIENT_SOUNDS.find((s) => s.id === id)?.file ?? null;
 }
 
+// Cross-fade duration. 400ms feels intentional without registering as
+// a glitch in either direction. Mirror in seconds for AudioContext
+// scheduling (which uses currentTime + offset, not setTimeout's ms).
+const FADE_MS = 400;
+const FADE_SECONDS = FADE_MS / 1000;
+
 export default function AmbientSoundProvider({ children }: { children: ReactNode }) {
   const {
     prefs,
@@ -131,6 +139,18 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
   const audioCtxRef = useRef<AudioContext | null>(null);
   const sourceNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
+  // Tracks the setTimeout id for an in-flight cross-fade swap so a
+  // second sound-change (user tapping rapidly through the picker)
+  // can cancel the pending swap and the latest selection wins.
+  const pendingSwapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Always-current volume value for the fade-in target. Without this,
+  // the cross-fade setTimeout would close over the volume value at
+  // fade-out start; if the user drags the slider during the ~400ms
+  // fade, the fade-in would ramp to the stale target.
+  const volumeRef = useRef(prefs.volume);
+  useEffect(() => {
+    volumeRef.current = prefs.volume;
+  }, [prefs.volume]);
 
   // Detect iframe (Sanity Presentation) on mount. If we're embedded,
   // the audio element never mounts — preserves the editor tab's
@@ -192,28 +212,128 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
     }
   }, [prefs.volume]);
 
-  // When the selected sound changes, swap the audio src. If we were
-  // playing, keep playing the new sound; otherwise stay paused.
+  // When the selected sound changes, swap the audio src.
+  //
+  // Cross-fade behaviour (added June 6, 2026 — stretch goal in the
+  // brief, picked up after MVP shipped):
+  //   - Switching between two sounds WHILE PLAYING → fade gain to 0
+  //     (FADE_MS), swap src, fade gain back up to user volume (FADE_MS).
+  //     Total transition ~800ms — long enough to feel intentional,
+  //     short enough not to register as a glitch.
+  //   - Switching to Off WHILE PLAYING → fade gain to 0 then pause.
+  //   - All other transitions (off→sound, or any swap while paused)
+  //     stay instant. The picker calls play() right after selectSound
+  //     for the off→sound case, and instant response is correct UX
+  //     for a user gesture.
+  //
+  // Implementation notes:
+  //   - Uses the existing GainNode (Web Audio chain). On browsers
+  //     where Web Audio isn't available (rare — desktop Firefox
+  //     historical bugs), falls back to instant swap so behaviour
+  //     degrades gracefully.
+  //   - `linearRampToValueAtTime` is scheduled on AudioContext.currentTime
+  //     so multiple in-flight fades don't fight (each fade calls
+  //     cancelScheduledValues + setValueAtTime first to anchor the
+  //     starting point).
+  //   - The fade-out timer (setTimeout) is tracked in a ref so a
+  //     rapid second sound-change cancels the pending swap and starts
+  //     a fresh fade. Without that, picking sound A → B → C in
+  //     quick succession would leave the B-load pending after C
+  //     already became the prefs target.
   useEffect(() => {
     if (!audioRef.current) return;
     const url = fileFor(prefs.sound);
+    const audio = audioRef.current;
+    const wasPlaying = !audio.paused;
+    const gain = gainNodeRef.current;
+    const ctx = audioCtxRef.current;
+    const canFade = wasPlaying && gain && ctx;
+
+    // Cancel any pending swap from a previous fade so the latest
+    // selection wins.
+    if (pendingSwapTimerRef.current) {
+      clearTimeout(pendingSwapTimerRef.current);
+      pendingSwapTimerRef.current = null;
+    }
+
     if (!url) {
-      audioRef.current.pause();
-      audioRef.current.removeAttribute("src");
-      audioRef.current.load();
-      setIsPlaying(false);
+      // sound → Off
+      if (canFade) {
+        const now = ctx.currentTime;
+        gain.gain.cancelScheduledValues(now);
+        gain.gain.setValueAtTime(gain.gain.value, now);
+        gain.gain.linearRampToValueAtTime(0, now + FADE_SECONDS);
+        pendingSwapTimerRef.current = setTimeout(() => {
+          pendingSwapTimerRef.current = null;
+          audio.pause();
+          audio.removeAttribute("src");
+          audio.load();
+          setIsPlaying(false);
+          // Restore gain so the next play() doesn't start silent.
+          if (gainNodeRef.current && audioCtxRef.current) {
+            gainNodeRef.current.gain.setValueAtTime(
+              volumeRef.current,
+              audioCtxRef.current.currentTime,
+            );
+          }
+        }, FADE_MS);
+      } else {
+        audio.pause();
+        audio.removeAttribute("src");
+        audio.load();
+        setIsPlaying(false);
+      }
       return;
     }
-    // Avoid reloading if the src is already correct (same sound).
-    if (audioRef.current.currentSrc.endsWith(url)) return;
-    const wasPlaying = !audioRef.current.paused;
-    audioRef.current.src = url;
-    audioRef.current.load();
-    if (wasPlaying) {
-      audioRef.current.play().catch(() => {
-        setIsPlaying(false);
-      });
+
+    // Same sound — no-op.
+    if (audio.currentSrc.endsWith(url)) return;
+
+    if (canFade) {
+      // sound → different sound, while playing: cross-fade.
+      const now = ctx.currentTime;
+      gain.gain.cancelScheduledValues(now);
+      gain.gain.setValueAtTime(gain.gain.value, now);
+      gain.gain.linearRampToValueAtTime(0, now + FADE_SECONDS);
+      pendingSwapTimerRef.current = setTimeout(() => {
+        pendingSwapTimerRef.current = null;
+        if (!audioRef.current) return;
+        audioRef.current.src = url;
+        audioRef.current.load();
+        audioRef.current
+          .play()
+          .then(() => {
+            if (!gainNodeRef.current || !audioCtxRef.current) return;
+            const ctx2 = audioCtxRef.current;
+            const g2 = gainNodeRef.current;
+            const t2 = ctx2.currentTime;
+            g2.gain.cancelScheduledValues(t2);
+            g2.gain.setValueAtTime(0, t2);
+            g2.gain.linearRampToValueAtTime(volumeRef.current, t2 + FADE_SECONDS);
+          })
+          .catch(() => {
+            setIsPlaying(false);
+            // Restore gain on play() failure so a later play() works.
+            if (gainNodeRef.current && audioCtxRef.current) {
+              gainNodeRef.current.gain.setValueAtTime(
+                volumeRef.current,
+                audioCtxRef.current.currentTime,
+              );
+            }
+          });
+      }, FADE_MS);
+      return;
     }
+
+    // Not playing (or no Web Audio graph) — just swap, no fade needed.
+    audio.src = url;
+    audio.load();
+    if (wasPlaying) {
+      audio.play().catch(() => setIsPlaying(false));
+    }
+    // Deps intentionally exclude prefs.volume — that's read via
+    // volumeRef inside the cross-fade callbacks so the effect doesn't
+    // re-run on every slider tick.
   }, [prefs.sound]);
 
   const play = useCallback(async () => {
@@ -281,39 +401,64 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
     }
   }, [prefs.discoverySeen, persistDiscoverySeen]);
 
-  // Pause / resume around TTS narration. PromptClient + NarrationButton
-  // dispatch window events on the narration lifecycle (already wired
-  // for the existing Auditio audio coordination). We listen for the
-  // same events and apply a simple auto-pause / auto-resume.
+  // Pause / resume around any higher-priority audio stream — narration
+  // (TTS via NarrationButton) and Auditio (curated music in P&P +
+  // Journey Day). All four streams dispatch START / END events from
+  // lib/audioEvents.ts; we refcount them here so ambient stays paused
+  // while ANY of them is active and only resumes when the count
+  // reaches zero.
   //
-  // Real "ducking" (volume drop instead of pause) is a stretch goal
-  // for this MVP — the current pattern is what the user sees today
-  // for Auditio so this matches.
-  const wasPlayingBeforeTTSRef = useRef(false);
+  // Why a refcount instead of a single "paused-for-X" flag: if
+  // narration starts during Auditio playback, then narration ends, the
+  // user would expect ambient to STAY paused (Auditio is still going).
+  // A simple flag would resume too eagerly. The refcount handles
+  // any combination of overlapping sources correctly.
+  //
+  // Real "ducking" (drop ambient volume to ~20% instead of fully
+  // pausing) is v1.1 — confirmed June 5 with Sheri.
+  const higherPriorityCountRef = useRef(0);
+  const wasPlayingBeforeDuckRef = useRef(false);
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const onStart = () => {
+    const onAnyStart = () => {
       if (!audioRef.current) return;
-      wasPlayingBeforeTTSRef.current = !audioRef.current.paused;
-      if (!audioRef.current.paused) {
-        audioRef.current.pause();
-        setIsPlaying(false);
+      // Snapshot was-playing BEFORE incrementing — only the first
+      // START in a chain captures the original ambient state.
+      if (higherPriorityCountRef.current === 0) {
+        wasPlayingBeforeDuckRef.current = !audioRef.current.paused;
+        if (!audioRef.current.paused) {
+          audioRef.current.pause();
+          setIsPlaying(false);
+        }
       }
+      higherPriorityCountRef.current += 1;
     };
-    const onEnd = () => {
+    const onAnyEnd = () => {
       if (!audioRef.current) return;
-      if (wasPlayingBeforeTTSRef.current) {
+      higherPriorityCountRef.current = Math.max(
+        0,
+        higherPriorityCountRef.current - 1,
+      );
+      // Only resume once ALL higher-priority sources have finished.
+      if (
+        higherPriorityCountRef.current === 0 &&
+        wasPlayingBeforeDuckRef.current
+      ) {
         audioRef.current.play().catch(() => {});
         setIsPlaying(true);
-        wasPlayingBeforeTTSRef.current = false;
+        wasPlayingBeforeDuckRef.current = false;
       }
     };
 
-    window.addEventListener(NARRATION_START_EVENT, onStart);
-    window.addEventListener(NARRATION_END_EVENT, onEnd);
+    window.addEventListener(NARRATION_START_EVENT, onAnyStart);
+    window.addEventListener(AUDITIO_START_EVENT, onAnyStart);
+    window.addEventListener(NARRATION_END_EVENT, onAnyEnd);
+    window.addEventListener(AUDITIO_END_EVENT, onAnyEnd);
     return () => {
-      window.removeEventListener(NARRATION_START_EVENT, onStart);
-      window.removeEventListener(NARRATION_END_EVENT, onEnd);
+      window.removeEventListener(NARRATION_START_EVENT, onAnyStart);
+      window.removeEventListener(AUDITIO_START_EVENT, onAnyStart);
+      window.removeEventListener(NARRATION_END_EVENT, onAnyEnd);
+      window.removeEventListener(AUDITIO_END_EVENT, onAnyEnd);
     };
   }, []);
 
