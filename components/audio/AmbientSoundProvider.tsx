@@ -11,6 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import useAmbientPreferences from "@/hooks/useAmbientPreferences";
+import useMediaSession from "@/hooks/useMediaSession";
 import { AMBIENT_SOUNDS, type AmbientSoundId } from "@/lib/userData";
 import {
   NARRATION_START_EVENT,
@@ -461,6 +462,37 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
       window.removeEventListener(AUDITIO_END_EVENT, onAnyEnd);
     };
   }, []);
+
+  // Lockscreen / Control Center metadata while ambient is playing.
+  // Without this, iOS shows its default Now Playing widget for any
+  // audio playing in background — black-square + play-triangle
+  // placeholder, page <title> as the track title. With this, the
+  // widget shows "Gregorian Chant · Contueri" (or whichever sound)
+  // with the Contueri brand icon as artwork, and the play/pause
+  // button on lockscreen calls into our provider's play/pause so
+  // state stays in sync.
+  //
+  // Added June 6, 2026 as the third leg of the lockscreen polish pass
+  // (AUDITIO-LS-01 + NARR-LS-01 + this — AMBIENT-LS).
+  const currentSoundLabel =
+    AMBIENT_SOUNDS.find((s) => s.id === prefs.sound)?.label ?? null;
+  useMediaSession({
+    audioRef,
+    active: isPlaying && !!currentSoundLabel,
+    track:
+      isPlaying && currentSoundLabel
+        ? {
+            title: currentSoundLabel,
+            album: "Contueri · Ambient",
+          }
+        : null,
+    onPlay: () => {
+      void play();
+    },
+    onPause: () => {
+      pause();
+    },
+  });
 
   // Context value is memoized so consumers don't re-render on every
   // parent render. Identity changes only when actual state changes.
