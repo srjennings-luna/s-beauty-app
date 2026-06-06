@@ -11,7 +11,6 @@ import {
   type ReactNode,
 } from "react";
 import useAmbientPreferences from "@/hooks/useAmbientPreferences";
-import useMediaSession from "@/hooks/useMediaSession";
 import { AMBIENT_SOUNDS, type AmbientSoundId } from "@/lib/userData";
 import {
   NARRATION_START_EVENT,
@@ -463,42 +462,24 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
     };
   }, []);
 
-  // Lockscreen / Control Center metadata while ambient is playing.
-  // Without this, iOS shows its default Now Playing widget for any
-  // audio playing in background — black-square + play-triangle
-  // placeholder, page <title> as the track title. With this, the
-  // widget shows "Gregorian Chant · Contueri" (or whichever sound)
-  // with the Contueri brand icon as artwork.
+  // MediaSession integration for ambient is INTENTIONALLY OMITTED for
+  // v1.0. The previous attempts (commits e4dee973 + e10af45b) caused
+  // intermittent audio "ticking" / playback loops on iOS Safari —
+  // the provider's high render frequency (re-renders on every consumer
+  // state change) made useMediaSession's effect cycle handler register
+  // → clear → register rapidly, and iOS Safari responded to the
+  // playbackState churn with stream restarts.
   //
-  // onPlay / onPause INTENTIONALLY only sync React state — they do
-  // NOT call provider.play() / provider.pause(). The useMediaSession
-  // hook's action handlers already call audio.play() / audio.pause()
-  // on the audio element directly when the lockscreen play/pause
-  // button is tapped. If we ALSO called provider.play() from onPlay,
-  // we'd double-fire audio.play() and on iOS Safari that triggered a
-  // playback feedback loop (audio "ticking" as iOS rapidly restarted
-  // the stream). Caught + fixed June 6, 2026 — same-day as the
-  // initial AMBIENT-LS integration.
+  // Trade-off accepted for v1.0: ambient on lockscreen shows iOS's
+  // default placeholder (black square + play-triangle icon) + page
+  // <title> as the now-playing text, rather than the sound label +
+  // Contueri brand artwork. Functional, not pretty.
   //
-  // The trade-off: lockscreen pause won't persist wasPlaying=false
-  // through provider.pause()'s persistWasPlaying call. That's fine —
-  // wasPlaying is only a UI hint, never gates auto-resume on cold
-  // launch. Sync drift here doesn't matter.
-  const currentSoundLabel =
-    AMBIENT_SOUNDS.find((s) => s.id === prefs.sound)?.label ?? null;
-  useMediaSession({
-    audioRef,
-    active: isPlaying && !!currentSoundLabel,
-    track:
-      isPlaying && currentSoundLabel
-        ? {
-            title: currentSoundLabel,
-            album: "Contueri · Ambient",
-          }
-        : null,
-    onPlay: () => setIsPlaying(true),
-    onPause: () => setIsPlaying(false),
-  });
+  // For v1.1: re-attempt with (a) memoised `track` + onPlay/onPause
+  // callbacks, (b) the integration moved INTO a child component that
+  // re-renders less than the provider, OR (c) a global ref-based
+  // mediaSession setter outside React's render lifecycle.
+  // Backlog: AMBIENT-LS-02.
 
   // Context value is memoized so consumers don't re-render on every
   // parent render. Identity changes only when actual state changes.
