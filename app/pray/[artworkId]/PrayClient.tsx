@@ -310,14 +310,13 @@ export default function PrayClient({
           >
 
             {/* ── Gaze ──
-                Image bumped to min-h-[60vh] / max-h-[78vh] June 5,
-                2026 per Sheri's note: image is the focus of Visio
-                Divina, should fill at least half the page like the
-                Breathe step in Journey. Pinch-to-zoom (8x) is via
-                react-zoom-pan-pinch's TransformWrapper. Padding
-                tightened (py-6 → py-4) so the image dominates the
-                viewport and the contemplative copy below sits just
-                under it without requiring a page-down to find. */}
+                Image is FULL BLEED edge-to-edge horizontally per
+                Sheri's reference June 5, 2026 — no px-4 frame around
+                the image, object-cover so the image fills its
+                container without letterboxing (pinch-zoom + pan
+                reveal any cropped edges). Contemplative copy below
+                keeps its breathing room via px-4 padding on its
+                own wrapper, not on the image's container. */}
             <div
               ref={gazeScrollRef}
               className="absolute inset-0 overflow-y-auto touch-pan-y"
@@ -327,21 +326,29 @@ export default function PrayClient({
                 willChange: "transform",
               }}
             >
-              <div className="flex flex-col px-4 py-4">
-                <div className="w-full min-h-[60vh] flex-1 flex flex-col mb-4">
+              <div className="flex flex-col">
+                <div className="w-full mb-4" style={{ height: "min(75vh, 75dvh)" }}>
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
-                      wrapperStyle={{ width: "100%", height: "100%", minHeight: "60vh" }}
-                      contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                      wrapperStyle={{ width: "100%", height: "100%" }}
+                      contentStyle={{ width: "100%", height: "100%" }}
                     >
-                      <img src={artwork.imageUrl} alt={artwork.title} className="max-w-full max-h-[78vh] object-contain select-none" draggable={false} />
+                      <img
+                        src={artwork.imageUrl}
+                        alt={artwork.title}
+                        draggable={false}
+                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        className="select-none"
+                      />
                     </TransformComponent>
                   </TransformWrapper>
                 </div>
-                <p className="text-sm text-center leading-relaxed max-w-md mx-auto" style={{ color: C.creamDim }}>
-                  Let your eyes rest on the image. Notice what draws you. Ask God to open the eyes of your heart.
-                </p>
-                <p className="text-xs mt-3 text-center" style={{ color: C.creamFaint }}>Take 1-2 minutes if you like. Pinch to zoom the image.</p>
+                <div className="px-4 pb-4">
+                  <p className="text-sm text-center leading-relaxed max-w-md mx-auto" style={{ color: C.creamDim }}>
+                    Let your eyes rest on the image. Notice what draws you. Ask God to open the eyes of your heart.
+                  </p>
+                  <p className="text-xs mt-3 text-center" style={{ color: C.creamFaint }}>Take 1-2 minutes if you like. Pinch to zoom the image.</p>
+                </div>
               </div>
               <ScrollCue containerRef={gazeScrollRef} />
             </div>
