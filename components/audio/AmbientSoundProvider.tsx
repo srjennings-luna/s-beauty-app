@@ -101,12 +101,14 @@ function fileFor(id: AmbientSoundId | null): string | null {
 const FADE_MS = 400;
 const FADE_SECONDS = FADE_MS / 1000;
 
-// Soft-fade duration for click suppression on play/pause. Bumped to
-// 100ms (from 40ms) on June 6, 2026 — 40ms wasn't enough for iOS
-// WKWebView's audio output buffer to reflect the gain ramp before
-// audio.pause() / audio.play() fired. 100ms is still right at the
-// human reaction threshold (imperceptible delay) but well past the
-// 10-30ms audio buffer window so the fade has time to take effect.
+// Soft-fade duration for play/pause. Bumped through 40ms → 100ms →
+// 200ms over a single afternoon of iteration. 200ms is where the fade
+// crosses from "imperceptible click suppression" into "deliberately
+// audible graceful exhale" — Sheri's call. At 100ms the click was
+// suppressed but the audio still felt like it stopped on whatever
+// waveform position it happened to land on, which sounded harsh on
+// certain notes. At 200ms the audio gently winds down regardless of
+// the underlying note, matching the contemplative app feel.
 //
 // PRE_PLAY_GAIN_SETTLE_MS: short delay between setting gain to 0 and
 // calling audio.play(). Gives the GainNode's scheduled value time to
@@ -116,10 +118,10 @@ const FADE_SECONDS = FADE_MS / 1000;
 // PAUSE_FIRE_DELAY_MS: longer than SOFT_FADE_MS so the fade-out has
 // fully completed (and propagated through the buffer) before
 // audio.pause() interrupts the waveform.
-const SOFT_FADE_MS = 100;
+const SOFT_FADE_MS = 200;
 const SOFT_FADE_SECONDS = SOFT_FADE_MS / 1000;
 const PRE_PLAY_GAIN_SETTLE_MS = 15;
-const PAUSE_FIRE_DELAY_MS = 120;
+const PAUSE_FIRE_DELAY_MS = 220;
 
 export default function AmbientSoundProvider({ children }: { children: ReactNode }) {
   const {
