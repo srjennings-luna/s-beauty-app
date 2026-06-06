@@ -475,6 +475,20 @@ export default function PrayClient({
                     )}
                   </div>
                 )}
+
+                {/* Go Deeper · Reflections from the tradition.
+                    Moved here (Meditate step) June 5, 2026 from a
+                    fixed-bottom position visible on every step. Per
+                    Sheri's call: Meditate is the active-engagement
+                    step where text-rich tradition reflections (quotes,
+                    summaries, analysis) belong; Contemplate is silent
+                    abiding and adding text there fights the mode.
+                    Inline within the scrollable Meditate slide — no
+                    height cap, no border-top, the section behaves like
+                    any other expandable block of the step. */}
+                <div className="mt-8">
+                  <GoDeeperSection inline />
+                </div>
               </div>
             </div>
 
@@ -616,26 +630,28 @@ export default function PrayClient({
 
           </div>{/* end slide viewport */}
 
-          {/* Next/Finish: pinned below slide, always visible. Progress dots
-              removed June 2 2026 (PB-01); progress now lives in the Stories
-              segments at the top of the header. */}
-          <div className="flex-shrink-0 px-4 py-5 flex items-center justify-end gap-3 w-full border-t border-white/8">
-            <button
-              type="button"
-              onClick={() => (isLastStep ? handleFinish() : setStep(step + 1))}
-              className="flex-shrink-0 text-sm font-medium hover:underline focus:outline-none focus:underline"
-              style={{ color: C.cream }}
-            >
-              {isLastStep ? "Finish" : "Next →"}
-            </button>
-          </div>
+          {/*
+            Next/Finish footer button removed June 5, 2026.
+            Navigation between steps is now swipe-only (touch handlers
+            on the slide viewport); exit happens via the X close in
+            the upper-right header. Stories segments at the top
+            indicate position in the 5-step flow. Removing this
+            footer button retires the "competing navigation moments"
+            problem Sheri flagged (Stories stepper at top vs Next
+            button at bottom) and gives the slide content more
+            vertical breathing room.
+          */}
 
         </div>
 
-        {/* Go Deeper — fixed bottom, espresso bg */}
-        <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-white/8 safe-area-bottom" style={{ background: "rgba(13,10,7,0.97)" }}>
-          <GoDeeperSection />
-        </div>
+        {/*
+          Go Deeper was previously rendered here as a fixed-bottom
+          drawer visible on every step. Moved June 5, 2026 to live
+          inside the Meditate slide content (above) per Sheri's call:
+          tradition reflections are active-engagement content that
+          belongs with Meditate, not with Gaze (which should be the
+          image alone) or Contemplate (silent abiding).
+        */}
       </div>
     </PageTransition>
   );

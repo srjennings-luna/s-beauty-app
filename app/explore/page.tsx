@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { getAllContentItems, getThemes } from "@/lib/sanity";
 import type { ContentItem, Theme, ContentType, Artwork, LocationType } from "@/lib/types";
 import ArtworkViewer from "@/components/ArtworkViewer";
@@ -71,6 +72,7 @@ function toArtwork(item: ContentItem): Artwork {
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ExplorePage() {
+  const router = useRouter();
   const [content, setContent] = useState<ContentItem[]>([]);
   const [themes, setThemes] = useState<Theme[]>([]);
   const [loading, setLoading] = useState(true);
@@ -490,13 +492,28 @@ export default function ExplorePage() {
                   item.thinkerName ??
                   item.locationName ??
                   "";
+                // Sacred art and landscape items go STRAIGHT to Visio
+                // Divina on tap (June 5, 2026 — Sheri's call). The
+                // previous two-step pattern (tap card → P&P-style
+                // detail page with "Pray with this image" CTA → enter
+                // Visio Divina) added friction with no editorial gain
+                // for image-based contemplative content. The detail
+                // modal stays as the destination for non-visio content
+                // types (music, literature, thinker, etc.) where the
+                // detail surface is the actual content.
                 const showVisio =
                   item.contentType === "sacred-art" ||
                   item.contentType === "landscape";
                 return (
                   <button
                     key={item._id}
-                    onClick={() => setSelectedItem(toArtwork(item))}
+                    onClick={() => {
+                      if (showVisio) {
+                        router.push(`/pray/${item._id}`);
+                      } else {
+                        setSelectedItem(toArtwork(item));
+                      }
+                    }}
                     className="text-left w-full block"
                   >
                     {/* 1:1 full-bleed image */}
@@ -509,19 +526,12 @@ export default function ExplorePage() {
                         alt={item.title}
                         className="w-full h-full object-cover"
                       />
-                      {showVisio && (
-                        <Link
-                          href={`/pray/${item._id}`}
-                          onClick={(e) => e.stopPropagation()}
-                          aria-label="Visio Divina prayer"
-                          className="absolute top-2 right-2 w-11 h-11 flex items-center justify-center bg-black/40 backdrop-blur-sm text-white/70 hover:text-white transition-colors"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" className="w-4 h-4">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          </svg>
-                        </Link>
-                      )}
+                      {/*
+                        The eye-icon Link overlay that previously sat
+                        at top-2 right-2 was removed June 5, 2026. With
+                        the whole card now routing visio items straight
+                        to /pray/[id], that affordance was redundant.
+                      */}
                     </div>
                     {/* Typographic meta — no prop-rule between image and text */}
                     <div style={{ padding: "14px 18px 20px" }}>

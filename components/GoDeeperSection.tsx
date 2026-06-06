@@ -8,9 +8,22 @@ import NarrationButton from "@/components/NarrationButton";
 
 interface GoDeeperSectionProps {
   reflections?: TraditionReflection[];
+  /**
+   * When true, render the section as a normal in-flow block (no
+   * top border, no maxHeight cap on the expanded drawer). Used when
+   * the section sits inside an already-scrollable parent — e.g. the
+   * Visio Divina Meditate slide content, where the slide handles its
+   * own overflow and an internal 35vh cap would create a nested
+   * scroll trap.
+   *
+   * When false (default), render the section as a fixed-bottom-style
+   * drawer with a top border and a 35vh cap on the expanded content,
+   * so it doesn't blanket the screen.
+   */
+  inline?: boolean;
 }
 
-export default function GoDeeperSection({ reflections: propReflections }: GoDeeperSectionProps) {
+export default function GoDeeperSection({ reflections: propReflections, inline = false }: GoDeeperSectionProps) {
   const [expanded, setExpanded] = useState(false);
   const [reflections, setReflections] = useState<TraditionReflection[]>([]);
   const [loading, setLoading] = useState(false);
@@ -79,15 +92,24 @@ export default function GoDeeperSection({ reflections: propReflections }: GoDeep
   const currentReflection = reflections[currentIndex];
 
   return (
-    <div className="border-t border-white/10">
+    <div className={inline ? "" : "border-t border-white/10"}>
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
-        className="w-full px-4 py-4 flex items-center justify-between text-left"
+        className={`w-full flex items-center justify-between text-left ${inline ? "py-3" : "px-4 py-4"}`}
         aria-expanded={expanded}
         aria-label={expanded ? "Collapse Go deeper" : "Go deeper – reflections from the tradition"}
       >
-        <span className="text-[#C19B5F] font-semibold tracking-wide">
+        {/* "Go deeper" label retired the gold treatment June 5, 2026
+            per Sheri's call ("Remove GO Deeper in gold, it's jarring
+            against the meditative mode"). Gold is reserved for clear
+            CTA moments; this is an expandable section header. Cream-
+            faint reads as an affordance without competing for
+            attention against the contemplative content above. */}
+        <span
+          className="font-semibold tracking-wide"
+          style={{ color: "rgba(253,246,232,0.7)" }}
+        >
           Go deeper
         </span>
         <span className="text-white/50 text-sm">
@@ -117,8 +139,8 @@ export default function GoDeeperSection({ reflections: propReflections }: GoDeep
           scrolls internally if it exceeds 35vh. */}
       {expanded && (
         <div
-          className="px-4 pb-6 animate-fade-in overflow-y-auto"
-          style={{ maxHeight: "35vh" }}
+          className={`animate-fade-in ${inline ? "pb-4" : "px-4 pb-6 overflow-y-auto"}`}
+          style={inline ? undefined : { maxHeight: "35vh" }}
         >
           {loading ? (
             <div className="py-6 text-center text-white/50 text-sm">
