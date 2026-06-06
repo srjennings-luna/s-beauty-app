@@ -240,13 +240,14 @@ export default function PrayClient({
             ))}
           </div>
 
-          {/* Chrome row: icon-only Back (left) and X close (right). No
-              backgrounds, no center title. Step name is shown by the
-              h2 inside each slide's content (one label per slide, not
-              duplicated in the chrome). Sheri June 5: "remove recs
-              around back and close buttons, doesn't match other places
-              in app" + the duplicate-header note. */}
-          <div className="flex items-center justify-between px-4 py-3">
+          {/* Chrome row: icon-only Back (left), step title centered,
+              X close (right). No backgrounds — Sheri June 5: "doesn't
+              match other places in app." The step title here is the
+              ONLY step-name surface (the previous h2 inside each
+              slide's content has been removed so the image can sit
+              directly under the chrome). Matches the BREATHE-style
+              chrome in Journey Day. */}
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center px-4 py-3">
             <Link
               href="#"
               onClick={(e) => {
@@ -254,7 +255,7 @@ export default function PrayClient({
                 if (step > 0) setStep(step - 1);
                 else router.back();
               }}
-              className="w-10 h-10 flex items-center justify-center"
+              className="w-10 h-10 flex items-center justify-center justify-self-start"
               style={{ color: C.creamDim }}
               aria-label={step > 0 ? "Previous step" : "Back"}
             >
@@ -263,10 +264,17 @@ export default function PrayClient({
               </svg>
             </Link>
 
+            <span
+              className="text-sm font-medium uppercase tracking-widest"
+              style={{ color: C.creamDim }}
+            >
+              {STEPS[step].title}
+            </span>
+
             <button
               type="button"
               onClick={handleFinish}
-              className="w-10 h-10 flex items-center justify-center"
+              className="w-10 h-10 flex items-center justify-center justify-self-end"
               style={{ color: C.creamDim }}
               aria-label="Close"
             >
@@ -320,7 +328,6 @@ export default function PrayClient({
               }}
             >
               <div className="flex flex-col px-4 py-4">
-                <h2 className="text-sm font-medium uppercase tracking-wider mb-3 text-center" style={{ color: C.cream }}>Gaze</h2>
                 <div className="w-full min-h-[60vh] flex-1 flex flex-col mb-4">
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
@@ -349,7 +356,6 @@ export default function PrayClient({
               }}
             >
               <div className="px-4 py-6">
-                <h2 className="text-sm font-medium uppercase tracking-wider mb-4" style={{ color: C.cream }}>Meditate</h2>
                 <div className="w-full min-h-[55vh] mb-4">
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
@@ -417,7 +423,6 @@ export default function PrayClient({
               }}
             >
               <div className="flex flex-col px-4 py-6">
-                <h2 className="text-sm font-medium uppercase tracking-wider mb-4 text-center" style={{ color: C.cream }}>Contemplate</h2>
                 <div className="w-full min-h-[60vh] mb-4">
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
@@ -445,7 +450,6 @@ export default function PrayClient({
               }}
             >
               <div className="flex flex-col px-4 py-6">
-                <h2 className="text-sm font-medium uppercase tracking-wider mb-4" style={{ color: C.cream }}>Pray</h2>
                 <div className="w-full min-h-[55vh] mb-4">
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
@@ -524,7 +528,6 @@ export default function PrayClient({
               }}
             >
               <div className="px-6 py-8">
-                <h2 className="text-sm font-medium uppercase tracking-wider mb-4" style={{ color: C.cream }}>Action</h2>
                 <h3 className="font-semibold text-lg mb-2" style={{ color: C.cream }}>How will you live this out?</h3>
                 <p className="text-sm mb-4" style={{ color: C.creamDim }}>
                   Ask yourself and God: How will you apply what you&apos;ve received in prayer to your life?
