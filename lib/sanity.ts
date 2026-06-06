@@ -300,9 +300,17 @@ export async function getDailyPrompt(date?: string) {
   // If we got a valid result with content linked, use it
   if (exact?.content?.imageUrl) return exact
 
-  // Fallback: most recently published prompt (handles editorial gaps)
+  // Fallback: most recently published prompt (handles editorial gaps).
+  // defined(date) skips any half-entered draft with date=null —
+  // GROQ's `order(date desc)` puts NULLs first, so without the
+  // defined(date) filter the fallback returns the null-date stub
+  // and PromptClient renders "No prompt for today yet" even when
+  // there are perfectly good dated prompts behind it. June 5
+  // 2026 surfaced this when today's date had no prompt and the
+  // null-date stub shadowed the most-recent-dated one ("They
+  // Were Early", 2026-06-01).
   return sanityClient.fetch(
-    `*[_type == "dailyPrompt"] | order(date desc)[0] {${DAILY_PROMPT_FIELDS}}`,
+    `*[_type == "dailyPrompt" && defined(date)] | order(date desc)[0] {${DAILY_PROMPT_FIELDS}}`,
     {},
     { cache: 'no-store' }
   )
@@ -324,9 +332,12 @@ export async function getDailyPromptPreview(date: string) {
   )
   if (exact) return exact
 
-  // Fallback: most recent draft/published prompt
+  // Fallback: most recent draft/published prompt. Same `defined(date)`
+  // guard as getDailyPrompt() — without it the null-date stub returned
+  // first and Studio Presentation preview rendered the "no prompt"
+  // empty state for routes the editor was actively browsing.
   return previewClient.fetch(
-    `*[_type == "dailyPrompt"] | order(date desc)[0] {${DAILY_PROMPT_FIELDS}}`
+    `*[_type == "dailyPrompt" && defined(date)] | order(date desc)[0] {${DAILY_PROMPT_FIELDS}}`
   )
 }
 
@@ -502,6 +513,46 @@ export async function getDashboardContentItems() {
       "needsArtworkHookReview": defined(curatorNote) && length(curatorNote) > 0,
       // Post-R5: content items are referenced by journeyDay, not journey.
       "journeyTitles": array::unique(*[_type == "journeyDay" && encounterContent._ref == ^._id]{ "t": journey->title }.t)
+    }
+  `)
+}
+
+// Visio Divina audit — every contentItem eligible for /pray/[id]
+// (sacred-art + landscape) with the artwork image, the FULL
+// traditionalPrayer text (not yes/no), traditionalPrayerSource, and
+// every linked traditionReflection expanded inline (title, shortQuote,
+// summary, source, authorType, era). Sheri's spec: "the content should
+// show, not just a yes, no or 3 (ex 3 reflections)." Server-rendered
+// at /dashboard/visio-audit.
+export async function getDashboardVisioAuditItems() {
+  return sanityClient.fetch(`
+    *[
+      _type == "contentItem"
+      && !string::startsWith(_id, "drafts.")
+      && (contentType == "sacred-art" || contentType == "landscape")
+    ] | order(contentType asc, title asc) {
+      _id,
+      title,
+      contentType,
+      artist,
+      year,
+      medium,
+      era,
+      "imageUrl": image.asset->url,
+      "hasImage": defined(image.asset),
+      traditionalPrayer,
+      traditionalPrayerSource,
+      "traditionReflections": traditionReflections[]->{
+        _id,
+        title,
+        shortQuote,
+        summary,
+        source,
+        authorType,
+        era,
+        order,
+      } | order(order asc),
+      "reflectionCount": count(traditionReflections),
     }
   `)
 }

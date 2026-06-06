@@ -581,6 +581,33 @@ export default async function DashboardPage() {
         )}
         <ContentItemsClient items={contentItems} />
 
+        {/* Visio Divina audit deep-link. Lives in its own page rather
+            than this dashboard so the audit-card layout (image + full
+            prayer text + every linked reflection in full) has room
+            without exploding the inline grid here. */}
+        <div className="my-6 bg-white border border-espresso/10 px-4 py-3 flex items-baseline justify-between">
+          <div>
+            <div className="text-[10px] uppercase tracking-widest text-espresso/60">
+              Companion view
+            </div>
+            <div className="text-sm font-medium mt-0.5">
+              Visio Divina content audit
+            </div>
+            <p className="text-xs text-espresso/60 mt-1 max-w-md">
+              Every sacred-art and landscape item shown with its image,
+              full Traditional Prayer text, and every linked Tradition
+              Reflection in full — for editorial decisions on what to
+              fill in before launch.
+            </p>
+          </div>
+          <Link
+            href="/dashboard/visio-audit"
+            className="text-xs uppercase tracking-widest text-sage hover:underline whitespace-nowrap"
+          >
+            Open audit →
+          </Link>
+        </div>
+
         {/* ═══ Section 3 — Tradition Reflection Tracker ═══ */}
         <SectionHeading num={3} title="Go Deeper / Tradition Reflection Tracker" />
 
