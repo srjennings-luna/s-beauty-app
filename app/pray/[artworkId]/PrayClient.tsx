@@ -619,29 +619,12 @@ export default function PrayClient({
                   </p>
                 </div>
 
-                <div className="w-full max-w-md mt-8">
-                  <textarea
-                    placeholder="Optional: a few words to remember…"
-                    value={actionNote}
-                    onChange={(e) => setActionNote(e.target.value)}
-                    rows={4}
-                    className="w-full min-h-[120px] text-sm p-4 resize-none"
-                    style={{
-                      color: C.cream,
-                      background: "rgba(22,17,13,0.55)",
-                      border: "1px solid rgba(253,246,232,0.18)",
-                      backdropFilter: "blur(2px)",
-                      WebkitBackdropFilter: "blur(2px)",
-                    }}
-                  />
-                  <p
-                    className="text-xs mt-2 text-center"
-                    style={{ color: C.creamFaint }}
-                  >
-                    Your note is kept only on this device and is not
-                    saved to the cloud.
-                  </p>
-                </div>
+                {/* Textarea + safety caption hidden June 5, 2026 per
+                    Sheri ("just hide the text input box for now").
+                    The actionNote state + useActionNote hook still
+                    persist anything the user wrote previously so a
+                    later un-hide doesn't lose data; nothing to do
+                    when un-hiding except restore this block. */}
               </div>
             </div>
 
