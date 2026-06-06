@@ -203,7 +203,7 @@ export default function PrayClient({
         {/* Header: espresso dark, sticky. Stories-style progress segments
             sit at the top edge of the header (PB-01, June 2 2026). */}
         <div
-          className="flex-shrink-0 sticky top-0 z-10 border-b border-white/8 safe-area-top"
+          className="flex-shrink-0 sticky top-0 z-10 safe-area-top"
           style={{ background: C.header }}
         >
           {/* Stories-style progress segments. Mirrors Journey Day pattern:
@@ -332,7 +332,7 @@ export default function PrayClient({
               }}
             >
               <div className="flex flex-col">
-                <div className="w-full mb-4" style={{ height: "min(75vh, 75dvh)" }}>
+                <div className="w-full mb-4" style={{ height: "min(65vh, 65dvh)" }}>
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
                       wrapperStyle={{ width: "100%", height: "100%" }}
@@ -373,7 +373,7 @@ export default function PrayClient({
                     window (60vh — slightly shorter than Gaze to leave
                     room for the substantial text below). Pinch-zoom
                     + pan reveals any cropped edges. */}
-                <div className="w-full mb-4" style={{ height: "min(60vh, 60dvh)" }}>
+                <div className="w-full mb-4" style={{ height: "min(65vh, 65dvh)" }}>
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
                       wrapperStyle={{ width: "100%", height: "100%" }}
@@ -448,7 +448,7 @@ export default function PrayClient({
               }}
             >
               <div className="flex flex-col">
-                <div className="w-full mb-4" style={{ height: "min(75vh, 75dvh)" }}>
+                <div className="w-full mb-4" style={{ height: "min(65vh, 65dvh)" }}>
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
                       wrapperStyle={{ width: "100%", height: "100%" }}
@@ -483,7 +483,7 @@ export default function PrayClient({
               }}
             >
               <div className="flex flex-col">
-                <div className="w-full mb-4" style={{ height: "min(60vh, 60dvh)" }}>
+                <div className="w-full mb-4" style={{ height: "min(65vh, 65dvh)" }}>
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
                       wrapperStyle={{ width: "100%", height: "100%" }}
