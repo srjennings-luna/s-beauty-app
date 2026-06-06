@@ -468,12 +468,22 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
   // audio playing in background — black-square + play-triangle
   // placeholder, page <title> as the track title. With this, the
   // widget shows "Gregorian Chant · Contueri" (or whichever sound)
-  // with the Contueri brand icon as artwork, and the play/pause
-  // button on lockscreen calls into our provider's play/pause so
-  // state stays in sync.
+  // with the Contueri brand icon as artwork.
   //
-  // Added June 6, 2026 as the third leg of the lockscreen polish pass
-  // (AUDITIO-LS-01 + NARR-LS-01 + this — AMBIENT-LS).
+  // onPlay / onPause INTENTIONALLY only sync React state — they do
+  // NOT call provider.play() / provider.pause(). The useMediaSession
+  // hook's action handlers already call audio.play() / audio.pause()
+  // on the audio element directly when the lockscreen play/pause
+  // button is tapped. If we ALSO called provider.play() from onPlay,
+  // we'd double-fire audio.play() and on iOS Safari that triggered a
+  // playback feedback loop (audio "ticking" as iOS rapidly restarted
+  // the stream). Caught + fixed June 6, 2026 — same-day as the
+  // initial AMBIENT-LS integration.
+  //
+  // The trade-off: lockscreen pause won't persist wasPlaying=false
+  // through provider.pause()'s persistWasPlaying call. That's fine —
+  // wasPlaying is only a UI hint, never gates auto-resume on cold
+  // launch. Sync drift here doesn't matter.
   const currentSoundLabel =
     AMBIENT_SOUNDS.find((s) => s.id === prefs.sound)?.label ?? null;
   useMediaSession({
@@ -486,12 +496,8 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
             album: "Contueri · Ambient",
           }
         : null,
-    onPlay: () => {
-      void play();
-    },
-    onPause: () => {
-      pause();
-    },
+    onPlay: () => setIsPlaying(true),
+    onPause: () => setIsPlaying(false),
   });
 
   // Context value is memoized so consumers don't re-render on every
