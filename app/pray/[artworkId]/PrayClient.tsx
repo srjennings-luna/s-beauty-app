@@ -39,8 +39,14 @@ const STEPS = [
   { key: "action", title: "Action", label: "Operatio" },
 ];
 
-const MUSIC_AMBIENT = "/music/natureseye-piano-dreamcloud-meditation-179215.mp3";
-const MUSIC_CHANT = "/music/nickpanek-ave-maria-latin-catholic-gregorian-chant-218251.mp3";
+// Updated June 5, 2026 to point at the W2 Ambient Sound System slate
+// (see public/music/README.md). The old natureseye-piano +
+// nickpanek-ave-maria files were short and not seamlessly loopable;
+// these replacements are 1.5–4 min and gapless-loop-processed via
+// /tmp/make-loop.sh so Visio Divina background playback feels
+// continuous through the prayer.
+const MUSIC_AMBIENT = "/music/ambient-light-piano.mp3";
+const MUSIC_CHANT = "/music/ambient-gregorian-chant.mp3";
 
 type MusicMode = "off" | "chant" | "ambient";
 
