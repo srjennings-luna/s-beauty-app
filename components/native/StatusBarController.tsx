@@ -35,7 +35,7 @@
  * false and this is a silent no-op.
  */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 /**
@@ -43,8 +43,15 @@ import { usePathname } from "next/navigation";
  * Order matters: more-specific prefixes checked before broader ones
  * so e.g. `/journeys/x/day/1` matches espresso even though
  * `/journeys/...` also matches the parchment-by-default branch.
+ *
+ * `hasDayQuery` is passed in because the Journey Day stepper opens
+ * as a modal at the route `/journeys/[slug]?day=N` (NOT a path
+ * segment). The pathname alone is the parchment journey detail
+ * route; when the day query param is present, the modal is open and
+ * we want espresso. June 5, 2026 — Sheri caught the parchment band
+ * at the top of the Journey Encounter step.
  */
-function isEspressoRoute(pathname: string): boolean {
+function isEspressoRoute(pathname: string, hasDayQuery: boolean): boolean {
   // Exact-match routes
   if (pathname === "/") return true; // Today landing = PromptClient
   if (pathname === "/prompt") return true;
@@ -55,9 +62,12 @@ function isEspressoRoute(pathname: string): boolean {
   if (pathname.startsWith("/pray/")) return true; // /pray/[artworkId]
 
   // Journey day = espresso; journey list (/journeys) + detail
-  // (/journeys/[slug]) = parchment. Match only when /day/ segment
-  // appears.
+  // (/journeys/[slug]) = parchment. Two surfaces qualify:
+  //   - /journeys/[slug]/day/N — legacy path-segment form
+  //   - /journeys/[slug] with ?day=N query param — the actual
+  //     modal-opens-stepper form used in production
   if (/^\/journeys\/[^/]+\/day\//.test(pathname)) return true;
+  if (/^\/journeys\/[^/]+$/.test(pathname) && hasDayQuery) return true;
 
   // Default: parchment
   return false;
@@ -68,6 +78,26 @@ const PARCHMENT_HEX = "#fdf6e9";
 
 export default function StatusBarController() {
   const pathname = usePathname();
+  // We track the day query param via window.location.search rather
+  // than next/navigation's useSearchParams() because the latter
+  // requires a Suspense boundary and StatusBarController is mounted
+  // in the root layout outside one (wrapping it would force the
+  // whole tree into client-side rendering).
+  const [hasDayQuery, setHasDayQuery] = useState(false);
+
+  // Re-check the day query param on pathname change AND on any
+  // popstate (back / forward / programmatic history changes within
+  // the same pathname — e.g. swiping between journey days updates
+  // ?day=N without changing /journeys/[slug]).
+  useEffect(() => {
+    function syncDayQuery() {
+      if (typeof window === "undefined") return;
+      setHasDayQuery(new URLSearchParams(window.location.search).has("day"));
+    }
+    syncDayQuery();
+    window.addEventListener("popstate", syncDayQuery);
+    return () => window.removeEventListener("popstate", syncDayQuery);
+  }, [pathname]);
 
   useEffect(() => {
     async function updateStatusBar() {
@@ -77,7 +107,7 @@ export default function StatusBarController() {
 
         const { StatusBar, Style } = await import("@capacitor/status-bar");
 
-        const espresso = isEspressoRoute(pathname);
+        const espresso = isEspressoRoute(pathname, hasDayQuery);
         const style = espresso ? Style.Light : Style.Dark;
         const backgroundColor = espresso ? ESPRESSO_HEX : PARCHMENT_HEX;
 
@@ -93,7 +123,7 @@ export default function StatusBarController() {
     }
 
     updateStatusBar();
-  }, [pathname]);
+  }, [pathname, hasDayQuery]);
 
   return null;
 }
