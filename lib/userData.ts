@@ -42,6 +42,19 @@ export const NOTIF_STREAK_KEY      = "contueri-notif-streak";
 export const NOTIF_SEASONAL_KEY    = "contueri-notif-seasonal";
 export const NOTIF_RATIONALE_KEY   = "contueri-notif-rationale-shown";
 
+// ─── Ambient Sound System (W2 — see CONTUERI-CC-Ambient-Sound-Brief.html) ───
+//
+// Four storage keys + a typed sound identifier so the AmbientSoundProvider
+// can persist user preference across cold launches. Discovery flag is
+// intentionally SEPARATE from contueri-onboarded — resetting onboarding
+// must NOT reset the discovery flag, per the brief's "shows once per
+// install for any user who has completed splash" rule.
+
+export const AMBIENT_SOUND_KEY            = "contueri-ambient-sound";
+export const AMBIENT_VOLUME_KEY           = "contueri-ambient-volume";
+export const AMBIENT_WAS_PLAYING_KEY      = "contueri-ambient-was-playing";
+export const AMBIENT_DISCOVERY_SEEN_KEY   = "contueri-ambient-discovery-seen";
+
 export function visioNoteKey(artworkId: string): string {
   return `kallos-visio-note-${artworkId}`;
 }
@@ -331,3 +344,149 @@ export function setNotificationRationaleShown(value: boolean): void {
     /* ignore */
   }
 }
+
+// ─── Ambient Sound preferences ──────────────────────────────────────────────
+//
+// Per CONTUERI-CC-Ambient-Sound-Brief.html (W2 Agent 2, June 5 build):
+// these helpers persist the user's selected ambient sound, last volume,
+// "was playing before cold launch" hint, and one-time discovery seen
+// flag across launches. AmbientSoundProvider reads them on mount and
+// writes them on every preference change.
+//
+// Sound slate is the 6 (minus nature) selected June 5: gregorian-chant,
+// plainchant, light-piano, lofi-piano, gentle-rain, ocean-waves. The
+// brief specced "nature-sounds" but Sheri replaced it with lofi-piano
+// because nature didn't meet the contemplative register established by
+// the splash + onboarding voice.
+
+export type AmbientSoundId =
+  | "gregorian-chant"
+  | "plainchant"
+  | "light-piano"
+  | "lofi-piano"
+  | "gentle-rain"
+  | "ocean-waves";
+
+export type AmbientPreferences = {
+  /** Selected sound, null if user has never chosen one. */
+  sound: AmbientSoundId | null;
+  /** Volume in [0, 1]. Default 0.5. */
+  volume: number;
+  /**
+   * UI hint persisted across cold launches: was the user actively playing
+   * before they last quit / backgrounded? Used by the floating button to
+   * show a subtle resume affordance — NOT used to auto-resume playback
+   * (cold launch never auto-resumes per the brief's non-negotiable
+   * autoplay policy).
+   */
+  wasPlaying: boolean;
+  /** True once the user has seen the first-launch discovery surfacing. */
+  discoverySeen: boolean;
+};
+
+// Defaults for SSR + brand-new browser. Components must handle this state.
+const AMBIENT_DEFAULTS: AmbientPreferences = {
+  sound: null,
+  volume: 0.5,
+  wasPlaying: false,
+  discoverySeen: false,
+};
+
+const VALID_SOUND_IDS: ReadonlySet<AmbientSoundId> = new Set([
+  "gregorian-chant",
+  "plainchant",
+  "light-piano",
+  "lofi-piano",
+  "gentle-rain",
+  "ocean-waves",
+]);
+
+export function getAmbientPreferences(): AmbientPreferences {
+  if (!hasWindow()) return { ...AMBIENT_DEFAULTS };
+  try {
+    const rawSound = localStorage.getItem(AMBIENT_SOUND_KEY);
+    const sound =
+      rawSound && VALID_SOUND_IDS.has(rawSound as AmbientSoundId)
+        ? (rawSound as AmbientSoundId)
+        : null;
+
+    const rawVolume = localStorage.getItem(AMBIENT_VOLUME_KEY);
+    const parsedVolume = rawVolume === null ? NaN : Number(rawVolume);
+    const volume = Number.isFinite(parsedVolume)
+      ? Math.min(1, Math.max(0, parsedVolume))
+      : AMBIENT_DEFAULTS.volume;
+
+    const wasPlaying =
+      localStorage.getItem(AMBIENT_WAS_PLAYING_KEY) === "true";
+
+    const discoverySeen =
+      localStorage.getItem(AMBIENT_DISCOVERY_SEEN_KEY) === "true";
+
+    return { sound, volume, wasPlaying, discoverySeen };
+  } catch {
+    return { ...AMBIENT_DEFAULTS };
+  }
+}
+
+export function setAmbientSound(id: AmbientSoundId | null): void {
+  if (!hasWindow()) return;
+  try {
+    if (id === null) {
+      localStorage.removeItem(AMBIENT_SOUND_KEY);
+    } else if (VALID_SOUND_IDS.has(id)) {
+      localStorage.setItem(AMBIENT_SOUND_KEY, id);
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
+export function setAmbientVolume(v: number): void {
+  if (!hasWindow()) return;
+  if (!Number.isFinite(v)) return;
+  const clamped = Math.min(1, Math.max(0, v));
+  try {
+    localStorage.setItem(AMBIENT_VOLUME_KEY, String(clamped));
+  } catch {
+    /* ignore */
+  }
+}
+
+export function setAmbientWasPlaying(b: boolean): void {
+  if (!hasWindow()) return;
+  try {
+    if (b) localStorage.setItem(AMBIENT_WAS_PLAYING_KEY, "true");
+    else localStorage.removeItem(AMBIENT_WAS_PLAYING_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+export function setAmbientDiscoverySeen(b: boolean): void {
+  if (!hasWindow()) return;
+  try {
+    if (b) localStorage.setItem(AMBIENT_DISCOVERY_SEEN_KEY, "true");
+    else localStorage.removeItem(AMBIENT_DISCOVERY_SEEN_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+/**
+ * Static metadata for each sound in the slate. Mirrors the
+ * /public/music/ filenames produced by the June 5 gapless-loop
+ * pipeline (see public/music/README.md). The provider uses this list
+ * to build the picker UI and resolve sound IDs to audio file URLs.
+ */
+export const AMBIENT_SOUNDS: ReadonlyArray<{
+  id: AmbientSoundId;
+  label: string;
+  file: string;
+}> = [
+  { id: "gregorian-chant", label: "Gregorian Chant", file: "/music/ambient-gregorian-chant.mp3" },
+  { id: "plainchant",      label: "Plainchant",      file: "/music/ambient-plainchant.mp3" },
+  { id: "light-piano",     label: "Light Piano",     file: "/music/ambient-light-piano.mp3" },
+  { id: "lofi-piano",      label: "Lofi Piano",      file: "/music/ambient-lofi-piano.mp3" },
+  { id: "gentle-rain",     label: "Gentle Rain",     file: "/music/ambient-gentle-rain.mp3" },
+  { id: "ocean-waves",     label: "Ocean Waves",     file: "/music/ambient-ocean-waves.mp3" },
+];

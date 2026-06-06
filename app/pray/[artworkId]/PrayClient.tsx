@@ -39,16 +39,15 @@ const STEPS = [
   { key: "action", title: "Action", label: "Actio" },
 ];
 
-// Updated June 5, 2026 to point at the W2 Ambient Sound System slate
-// (see public/music/README.md). The old natureseye-piano +
-// nickpanek-ave-maria files were short and not seamlessly loopable;
-// these replacements are 1.5–4 min and gapless-loop-processed via
-// /tmp/make-loop.sh so Visio Divina background playback feels
-// continuous through the prayer.
-const MUSIC_AMBIENT = "/music/ambient-light-piano.mp3";
-const MUSIC_CHANT = "/music/ambient-gregorian-chant.mp3";
-
-type MusicMode = "off" | "chant" | "ambient";
+// Visio Divina ambient music is now handled by the global
+// AmbientSoundProvider (see components/audio/AmbientSoundProvider.tsx,
+// shipped June 5, 2026). The transitional MUSIC_AMBIENT / MUSIC_CHANT
+// constants + per-Visio music menu + floating button + dropdown were
+// retired here when the global system landed. Users now set their
+// preferred ambient sound once in Settings → Sound and it carries
+// across every contemplative surface. The narration auto-pause /
+// auto-resume contract is handled by the global Provider too via
+// NARRATION_START_EVENT / NARRATION_END_EVENT.
 
 const FALLBACK_PRAYER = `Lord, as I look upon this image, I am reminded of your glory made visible.
 Open the eyes of my heart. Let what I see lead me beyond what I see.
@@ -99,14 +98,11 @@ export default function PrayClient({
   useEffect(() => {
     if (storedNote) setActionNote(storedNote);
   }, [storedNote]);
-  const [musicMode, setMusicMode] = useState<MusicMode>("off");
-  const [musicPaused, setMusicPaused] = useState(false);
-  const [musicMenuOpen, setMusicMenuOpen] = useState(false);
-  const [musicLoadError, setMusicLoadError] = useState(false);
+  // Music state retired June 5, 2026 — handled by global
+  // AmbientSoundProvider (see header comment near the top of the
+  // file for context).
   const [reflectionExpanded, setReflectionExpanded] = useState(false);
   const [prayerDrawerOpen, setPrayerDrawerOpen] = useState(false);
-  const chantAudioRef = useRef<HTMLAudioElement | null>(null);
-  const ambientAudioRef = useRef<HTMLAudioElement | null>(null);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
   const stepRef = useRef(step);
@@ -133,55 +129,13 @@ export default function PrayClient({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [step, router]);
 
-  const setMusic = (mode: MusicMode) => {
-    const chant = chantAudioRef.current;
-    const ambient = ambientAudioRef.current;
-    chant?.pause();
-    ambient?.pause();
-    setMusicMenuOpen(false);
-    if (mode === "off") {
-      setMusicPaused(true);
-      setMusicMode("off");
-      return;
-    }
-    if (mode === "chant" && chant) {
-      setMusicPaused(false);
-      setMusicMode("chant");
-      chant.muted = false;
-      chant.volume = 1;
-      const p = chant.play();
-      if (p && typeof p.then === "function") {
-        p.then(() => setMusicLoadError(false)).catch(() => setMusicLoadError(true));
-      }
-      return;
-    }
-    if (mode === "ambient" && ambient) {
-      setMusicPaused(false);
-      setMusicMode("ambient");
-      ambient.muted = false;
-      ambient.volume = 1;
-      const p = ambient.play();
-      if (p && typeof p.then === "function") {
-        p.then(() => setMusicLoadError(false)).catch(() => setMusicLoadError(true));
-      }
-      return;
-    }
-    setMusicMode(mode);
-  };
-
-  const pauseMusic = () => {
-    chantAudioRef.current?.pause();
-    ambientAudioRef.current?.pause();
-    setMusicPaused(true);
-    setMusicMenuOpen(false);
-  };
-
-  const resumeMusic = () => {
-    if (musicMode === "chant") setMusic("chant");
-    else if (musicMode === "ambient") setMusic("ambient");
-  };
-
-  const isPlaying = (musicMode === "chant" || musicMode === "ambient") && !musicPaused;
+  // setMusic / pauseMusic / resumeMusic / isPlaying / chantAudioRef /
+  // ambientAudioRef + their audio elements were retired here
+  // June 5, 2026 when the global AmbientSoundProvider shipped.
+  // Visio Divina now consumes the same provider as every other
+  // contemplative surface, so the user's ambient sound preference
+  // travels with them through the prayer instead of being a
+  // surface-local Chant/Ambient toggle.
 
   const SWIPE_THRESHOLD = 50;
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -307,22 +261,21 @@ export default function PrayClient({
               {STEPS[step].title}
             </span>
 
-            {/* Right cluster: Music label + X close.
-                X close (added June 5, 2026) gives Visio Divina the
-                modal-dismiss affordance it was missing. Tap routes
-                straight to /library via handleFinish() — the same exit
-                the Finish button uses on the last step — so the user
-                can leave the contemplative flow at any point without
-                stepping back through every prior step. */}
+            {/* Right cluster: X close only. The "Music" label was
+                retired June 5, 2026 when the global
+                AmbientSoundProvider shipped — the global floating
+                button (bottom-right) is the single control for
+                ambient sound everywhere now, and the picker lives
+                in Settings → Sound rather than as a per-Visio
+                dropdown.
+
+                X close gives Visio Divina the modal-dismiss
+                affordance it was missing. Tap routes straight to
+                /library via handleFinish() — the same exit the
+                Finish button uses on the last step — so the user
+                can leave the contemplative flow at any point
+                without stepping back through every prior step. */}
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => { setMusicLoadError(false); setMusicMenuOpen(true); }}
-                className="text-xs font-medium"
-                style={{ color: C.creamFaint }}
-              >
-                {musicMode === "off" ? "Music" : musicMode === "chant" ? "Chant ♪" : "Ambient ♪"}
-              </button>
               <button
                 type="button"
                 onClick={handleFinish}
@@ -338,45 +291,19 @@ export default function PrayClient({
           </div>
         </div>
 
-        <audio ref={chantAudioRef} src={MUSIC_CHANT} loop playsInline preload="auto" muted={false} />
-        <audio ref={ambientAudioRef} src={MUSIC_AMBIENT} loop playsInline preload="auto" muted={false} />
-
-        {/* Music menu */}
-        {musicMenuOpen && (
-          <>
-            <div className="fixed inset-0 z-40" aria-hidden onClick={() => setMusicMenuOpen(false)} />
-            <div className="fixed top-14 right-4 z-50 w-40 bg-[#1e1410] border border-white/10 py-1 shadow-lg">
-              {isPlaying ? (
-                <button type="button" onClick={pauseMusic} className="w-full px-4 py-2 text-left text-sm" style={{ color: C.cream }}>Pause</button>
-              ) : (musicMode === "chant" || musicMode === "ambient") ? (
-                <button type="button" onClick={resumeMusic} className="w-full px-4 py-2 text-left text-sm" style={{ color: C.sage }}>Resume</button>
-              ) : null}
-              <button type="button" onClick={() => setMusic("off")} className="w-full px-4 py-2 text-left text-sm" style={{ color: musicMode === "off" ? C.sage : C.creamDim }}>Off</button>
-              <button type="button" onClick={() => setMusic("chant")} className="w-full px-4 py-2 text-left text-sm" style={{ color: musicMode === "chant" ? C.sage : C.creamDim }}>Chant</button>
-              <button type="button" onClick={() => setMusic("ambient")} className="w-full px-4 py-2 text-left text-sm" style={{ color: musicMode === "ambient" ? C.sage : C.creamDim }}>Ambient</button>
-              {musicLoadError && (
-                <p className="px-4 py-2 text-xs border-t border-white/10" style={{ color: C.creamFaint }}>Couldn&apos;t load music. Try again or check the file.</p>
-              )}
-              <p className="px-4 py-2 text-xs border-t border-white/10" style={{ color: C.creamFaint }}>No sound? Check device volume and, on iPhone, the side mute switch.</p>
-            </div>
-          </>
-        )}
-
-        {/* Floating music button */}
-        {(musicMode === "chant" || musicMode === "ambient") && (
-          <button
-            type="button"
-            onClick={() => setMusicMenuOpen(!musicMenuOpen)}
-            className="fixed bottom-24 right-4 z-30 w-12 h-12 flex items-center justify-center bg-[#1e1410] border border-white/15 shadow-lg safe-area-bottom"
-            style={{ marginBottom: "env(safe-area-inset-bottom, 0)", color: C.sage }}
-            aria-label="Music options"
-            aria-expanded={musicMenuOpen}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-              <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.14c-.938 0-1.64.703-1.64 1.64v6.72c0 .937.702 1.64 1.64 1.64h2.3l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06zM18.44 18.53c.266-.436.227-.905-.096-1.228A9.92 9.92 0 0119 12c0-2.233-.758-4.29-2.034-5.964a1.077 1.077 0 00-1.532.066 1.077 1.077 0 00.066 1.532A7.92 7.92 0 0117 12c0 1.61-.428 3.118-1.176 4.408a1.078 1.078 0 00.616 1.479c.44.161.92.023 1.24-.355z" />
-            </svg>
-          </button>
-        )}
+        {/*
+          Audio elements (chant + ambient) + music dropdown menu +
+          floating music button were retired here June 5, 2026 when
+          the global AmbientSoundProvider shipped. The global
+          AmbientFloatingButton sits at the same approximate position
+          (bottom: env(safe-area-inset-bottom) + 64px; right: 16px)
+          and the picker lives in Settings → Sound. Audio playback
+          is now via a single shared <audio> element in the provider,
+          which survives every route change. The narration auto-
+          pause / auto-resume contract is handled by the provider too,
+          so the prior wasMusicPlayingRef bookkeeping is no longer
+          needed.
+        */}
 
         {/* Step content — lateral slide container */}
         <div className="flex-1 min-h-0 flex flex-col">

@@ -6,6 +6,8 @@ import VisualEditingClient from "@/components/VisualEditingClient";
 import NativeSplashController from "@/components/native/NativeSplashController";
 import StatusBarController from "@/components/native/StatusBarController";
 import ExternalLinkInterceptor from "@/components/native/ExternalLinkInterceptor";
+import AmbientSoundProvider from "@/components/audio/AmbientSoundProvider";
+import AmbientFloatingButton from "@/components/audio/AmbientFloatingButton";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -61,8 +63,21 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${montserrat.variable} ${openSans.variable} ${cormorantGaramond.variable}`}>
       <body className="antialiased min-h-screen pb-20">
-        <main>{children}</main>
-        <Navigation />
+        {/*
+          AmbientSoundProvider wraps everything that needs cross-route
+          audio continuity. Sits above the route content AND above
+          Navigation so the floating button (rendered as a sibling of
+          Navigation) can consume the context. VisualEditingClient is
+          OUTSIDE the provider since it's a Sanity-preview bridge with
+          its own lifecycle that shouldn't touch ambient state.
+          See components/audio/AmbientSoundProvider.tsx for the full
+          contract (autoplay policy, narration coordination, etc.).
+        */}
+        <AmbientSoundProvider>
+          <main>{children}</main>
+          <Navigation />
+          <AmbientFloatingButton />
+        </AmbientSoundProvider>
         {/*
           Visual Editing bridge for Sanity Studio's Presentation tool.
           Self-detects whether the page is rendered inside a Studio iframe

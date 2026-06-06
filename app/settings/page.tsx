@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import PageTransition from "@/components/ui/PageTransition";
 import useOnboarded from "@/hooks/useOnboarded";
+import AmbientSettingsSection from "@/components/audio/AmbientSettingsSection";
 
 // Settings page (SET-01, June 2, 2026 launch readiness lock).
 //
@@ -220,6 +221,13 @@ export default function SettingsPage() {
           rightSlot={<Chevron />}
           href="/settings/notifications"
         />
+
+        {/* Sound — Ambient Sound System picker + volume slider.
+            Inline (no chevron / drill-down) per the brief's SET section
+            spec. The floating button (rendered globally in root layout)
+            deep-links to this section via /settings#sound when no sound
+            is selected yet, so the discovery affordance lands here. */}
+        <AmbientSettingsSection />
 
         {/* Legal */}
         <SectionLabel label="Legal" />
