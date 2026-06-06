@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAmbientSound } from "./AmbientSoundProvider";
+import AmbientQuickPicker from "./AmbientQuickPicker";
 
 // Contueri · AmbientFloatingButton
 //
@@ -27,13 +29,19 @@ import { useAmbientSound } from "./AmbientSoundProvider";
 // screen edge than strictly needed, which is the right tradeoff for
 // a single global control.
 //
-// MVP does NOT include the long-press popover (stretch goal). The
-// button is purely a play/pause toggle; sound selection happens in
-// Settings → SOUND. To get the user there in one tap, the button
-// also wraps in a Link to /settings when there's no sound selected
-// (the Off-hidden state's "discovery affordance") so first-time
-// users have an obvious path. Once a sound is selected, the button
-// becomes the play/pause toggle.
+// Long-press quick picker (added June 6, 2026):
+//   When a sound is already selected, holding the button for ~450ms
+//   opens AmbientQuickPicker — a small espresso popover anchored above
+//   the button with the same Off + 6-sound list as Settings. Lets the
+//   user switch sounds without detouring through Settings. The tap
+//   that follows the long-press is suppressed so the popover isn't
+//   instantly torn down by an unintended play/pause toggle.
+//
+//   In the "no sound selected" state we keep the original Link → Settings
+//   behaviour. The Link routes the user to the canonical picker (which
+//   doubles as the discovery surface), and we don't try to make a Link
+//   long-pressable. Once they've picked a sound the long-press shortcut
+//   takes over.
 //
 // Surfaces where the button is hidden:
 //   - /splash (onboarding)
@@ -47,11 +55,70 @@ import { useAmbientSound } from "./AmbientSoundProvider";
 // motion — is v1.1.
 
 const HIDE_ON_PATHS = ["/splash"];
+const LONG_PRESS_MS = 450;
 
 export default function AmbientFloatingButton() {
   const pathname = usePathname();
   const { selectedSound, isPlaying, isReady, toggle, markDiscoverySeen } =
     useAmbientSound();
+
+  // Quick-picker state. The two refs coordinate long-press vs tap:
+  //   - longPressTimerRef holds the setTimeout id while pointer is down
+  //   - longPressFiredRef is true if the timer reached its deadline
+  //     before pointerup — in that case the onClick that follows
+  //     should be swallowed (the picker is the action, not the toggle).
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressFiredRef = useRef(false);
+
+  // Dismiss the picker on any route change so it doesn't linger across
+  // navigation. Pathname change is the trigger; the picker also closes
+  // itself on outside-tap / Escape internally.
+  useEffect(() => {
+    setPickerOpen(false);
+  }, [pathname]);
+
+  // Cleanup any pending long-press timer on unmount (defensive — usually
+  // pointerup clears it, but if the component unmounts mid-press we
+  // don't want the timer firing into a stale closure).
+  useEffect(() => {
+    return () => {
+      if (longPressTimerRef.current) {
+        clearTimeout(longPressTimerRef.current);
+        longPressTimerRef.current = null;
+      }
+    };
+  }, []);
+
+  const startLongPress = useCallback(() => {
+    longPressFiredRef.current = false;
+    if (longPressTimerRef.current) clearTimeout(longPressTimerRef.current);
+    longPressTimerRef.current = setTimeout(() => {
+      longPressFiredRef.current = true;
+      longPressTimerRef.current = null;
+      markDiscoverySeen();
+      setPickerOpen(true);
+    }, LONG_PRESS_MS);
+  }, [markDiscoverySeen]);
+
+  const cancelLongPress = useCallback(() => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  }, []);
+
+  const handleTapClick = useCallback(() => {
+    // If the long-press timer fired before pointerup, the gesture was
+    // a hold — the picker is now open, and the synthetic click that
+    // follows pointerup should NOT also toggle play/pause.
+    if (longPressFiredRef.current) {
+      longPressFiredRef.current = false;
+      return;
+    }
+    markDiscoverySeen();
+    void toggle();
+  }, [markDiscoverySeen, toggle]);
 
   // Hide during onboarding, before prefs hydrate, or when in a
   // route that should stay chrome-free.
@@ -102,53 +169,70 @@ export default function AmbientFloatingButton() {
     );
   }
 
-  // Sound is selected → render the play/pause toggle.
+  // Sound is selected → render the play/pause toggle with long-press
+  // → quick picker layered on top.
   return (
-    <button
-      type="button"
-      onClick={() => {
-        markDiscoverySeen();
-        void toggle();
-      }}
-      aria-label={isPlaying ? "Pause ambient sound" : "Play ambient sound"}
-      aria-pressed={isPlaying}
-      className="fixed z-40 flex items-center justify-center transition-colors"
-      style={{
-        bottom: "calc(env(safe-area-inset-bottom, 0px) + 64px)",
-        right: 16,
-        width: 52,
-        height: 52,
-        borderRadius: "50%",
-        background: "rgba(22,17,13,0.92)",
-        border: "1px solid rgba(253,246,232,0.18)",
-        color: isPlaying ? "rgba(253,246,232,0.95)" : "rgba(253,246,232,0.6)",
-        boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
-      }}
-    >
-      {isPlaying ? (
-        // Pause: two thick vertical bars
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          width={20}
-          height={20}
-        >
-          <rect x="7" y="5" width="4" height="14" rx="0.5" />
-          <rect x="13" y="5" width="4" height="14" rx="0.5" />
-        </svg>
-      ) : (
-        // Play: right-facing triangle
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          width={22}
-          height={22}
-        >
-          <path d="M8 5v14l11-7z" />
-        </svg>
-      )}
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={handleTapClick}
+        onPointerDown={startLongPress}
+        onPointerUp={cancelLongPress}
+        onPointerCancel={cancelLongPress}
+        onPointerLeave={cancelLongPress}
+        aria-label={isPlaying ? "Pause ambient sound" : "Play ambient sound"}
+        aria-pressed={isPlaying}
+        aria-haspopup="menu"
+        aria-expanded={pickerOpen}
+        className="fixed z-40 flex items-center justify-center transition-colors select-none"
+        style={{
+          bottom: "calc(env(safe-area-inset-bottom, 0px) + 64px)",
+          right: 16,
+          width: 52,
+          height: 52,
+          borderRadius: "50%",
+          background: "rgba(22,17,13,0.92)",
+          border: "1px solid rgba(253,246,232,0.18)",
+          color: isPlaying ? "rgba(253,246,232,0.95)" : "rgba(253,246,232,0.6)",
+          boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
+          // Disable iOS Safari's long-press magnifier / callout on this control
+          // so the gesture lands as our handler instead of the system selection
+          // UI. WebkitTouchCallout works on iOS; webkitUserSelect blocks the
+          // selection that triggers the menu in the first place.
+          WebkitTouchCallout: "none",
+          WebkitUserSelect: "none",
+          touchAction: "manipulation",
+        }}
+      >
+        {isPlaying ? (
+          // Pause: two thick vertical bars
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            width={20}
+            height={20}
+          >
+            <rect x="7" y="5" width="4" height="14" rx="0.5" />
+            <rect x="13" y="5" width="4" height="14" rx="0.5" />
+          </svg>
+        ) : (
+          // Play: right-facing triangle
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            width={22}
+            height={22}
+          >
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        )}
+      </button>
+      <AmbientQuickPicker
+        open={pickerOpen}
+        onClose={() => setPickerOpen(false)}
+      />
+    </>
   );
 }
