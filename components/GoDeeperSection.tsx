@@ -103,23 +103,31 @@ export default function GoDeeperSection({ reflections: propReflections, inline =
         {/* "Go deeper" label retired the gold treatment June 5, 2026
             per Sheri's call ("Remove GO Deeper in gold, it's jarring
             against the meditative mode"). Gold is reserved for clear
-            CTA moments; this is an expandable section header. Cream-
-            faint reads as an affordance without competing for
-            attention against the contemplative content above. */}
+            CTA moments; this is an expandable section header.
+            Switched June 6, 2026 from `rgba(253,246,232,...)` to the
+            warm-cream base `rgba(232,217,184,...)` — the previous tone
+            read as stark white on OLED rather than cream. Subtitle
+            "Reflections from the tradition" and chevron both moved off
+            `text-white/50` to the matching warm-cream at lower alpha
+            so the whole row reads as a single parchment register. */}
         <span
           className="font-semibold tracking-wide"
-          style={{ color: "rgba(253,246,232,0.7)" }}
+          style={{ color: "rgba(232,217,184,0.85)" }}
         >
           Go deeper
         </span>
-        <span className="text-white/50 text-sm">
+        <span
+          className="text-sm"
+          style={{ color: "rgba(232,217,184,0.55)" }}
+        >
           Reflections from the tradition
         </span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          className={`w-5 h-5 text-white/50 transition-transform ${expanded ? "rotate-180" : ""}`}
+          className={`w-5 h-5 transition-transform ${expanded ? "rotate-180" : ""}`}
+          style={{ color: "rgba(232,217,184,0.55)" }}
         >
           <path
             fillRule="evenodd"

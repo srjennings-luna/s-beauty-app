@@ -6,7 +6,6 @@ import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import GoDeeperSection from "@/components/GoDeeperSection";
 import PageTransition from "@/components/ui/PageTransition";
-import ScrollCue from "@/components/ScrollCue";
 import useVisioNote from "@/hooks/useVisioNote";
 import { WHISPER_GRADIENT } from "@/lib/design-tokens";
 type SanityArtwork = {
@@ -58,10 +57,17 @@ world without end. Amen.`;
 
 // Espresso color palette — immersive mode.
 // `bg` is the shared Whisper gradient applied to all page-level surfaces.
+//
+// `creamWarm` is a more obviously parchment-toned cream used for section
+// titles (Reflect, Traditional Prayer, Go deeper) — `cream` at 88% over
+// pure-black espresso was reading as stark white on OLED. The warmer
+// base (232,217,184) holds its yellow tint at high opacity so titles
+// still pop as cream rather than white. June 6, 2026.
 const C = {
   bg: WHISPER_GRADIENT,
   header: "rgba(22,17,13,0.97)",
   cream: "rgba(253,246,232,0.88)",
+  creamWarm: "rgba(232,217,184,0.92)",
   creamDim: "rgba(253,246,232,0.5)",
   creamFaint: "rgba(253,246,232,0.3)",
   sage: "var(--color-sage)",
@@ -106,9 +112,6 @@ export default function PrayClient({
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
   const stepRef = useRef(step);
-  // Ref attached to the Gaze step's scrollable container so ScrollCue
-  // can detect overflow and signal scrollability. IMG-01 fix, June 2 2026.
-  const gazeScrollRef = useRef<HTMLDivElement>(null);
   stepRef.current = step;
 
   // Data fetch moved to the server component wrapper (see page.tsx);
@@ -328,7 +331,6 @@ export default function PrayClient({
                 keeps its breathing room via px-4 padding on its
                 own wrapper, not on the image's container. */}
             <div
-              ref={gazeScrollRef}
               className="absolute inset-0 overflow-y-auto touch-pan-y"
               style={{
                 transform: `translateX(${(0 - step) * 100}%)`,
@@ -360,7 +362,10 @@ export default function PrayClient({
                   <p className="text-xs mt-3 text-center" style={{ color: C.creamFaint }}>Take 1-2 minutes if you like. Pinch to zoom the image.</p>
                 </div>
               </div>
-              <ScrollCue containerRef={gazeScrollRef} />
+              {/* ScrollCue removed June 6, 2026 — the chevron-down sat
+                  inside the contemplative frame and read as a UI control
+                  competing with the artwork. The slide's overflow-y-auto
+                  preserves scrollability without the visual cue. */}
             </div>
 
             {/* ── Meditate ── */}
@@ -395,7 +400,7 @@ export default function PrayClient({
                   </TransformWrapper>
                 </div>
                 <div className="px-4 pb-4">
-                <h2 className="font-semibold text-lg mb-2" style={{ color: C.cream }}>Reflect</h2>
+                <h2 className="font-semibold text-lg mb-2" style={{ color: C.creamWarm }}>Reflect</h2>
                 <p className="text-sm mb-4" style={{ color: C.creamDim }}>
                   Look deeper. What movement or relationships do you see? Where are you in this image?
                 </p>
@@ -540,7 +545,7 @@ export default function PrayClient({
                     className="w-full px-4 py-4 flex items-center justify-between text-left"
                     aria-expanded={prayerDrawerOpen}
                   >
-                    <span className="font-medium tracking-wide text-sm" style={{ color: C.cream }}>
+                    <span className="font-medium tracking-wide text-sm" style={{ color: C.creamWarm }}>
                       Traditional Prayer
                     </span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={`w-5 h-5 transition-transform ${prayerDrawerOpen ? "rotate-180" : ""}`} style={{ color: C.creamDim }}>
