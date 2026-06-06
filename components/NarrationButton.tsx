@@ -5,6 +5,7 @@ import {
   NARRATION_START_EVENT,
   NARRATION_END_EVENT,
 } from "@/lib/audioEvents";
+import useMediaSession from "@/hooks/useMediaSession";
 
 // Re-export the narration event names from this module for back-compat
 // with existing imports (`import { NARRATION_START_EVENT } from
@@ -22,6 +23,33 @@ interface NarrationButtonProps {
 export default function NarrationButton({ audioUrl, color = "#C19B5F" }: NarrationButtonProps) {
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Register MediaSession metadata + lockscreen handlers while
+  // narration is active. Without this, iOS shows its generic
+  // Now Playing widget (page <title> as title, black square +
+  // play-triangle as artwork) and — worse — the play/pause icon
+  // never updates when the audio actually pauses or ends, so users
+  // see a stuck "pause" button on lock even after narration is done.
+  //
+  // The hook also wires play/pause action handlers so the lockscreen
+  // play/pause button calls into our state directly. Pausing via
+  // lockscreen → audio.pause() → "pause" event listener dispatches
+  // NARRATION_END (centralised in toggle's audio listener) → ambient
+  // refcount decrements → ambient resumes.
+  //
+  // NARR-LS-01 fix shipped June 6, 2026.
+  useMediaSession({
+    audioRef,
+    active: playing,
+    track: playing
+      ? {
+          title: "Narration",
+          album: "Contueri",
+        }
+      : null,
+    onPlay: () => setPlaying(true),
+    onPause: () => setPlaying(false),
+  });
 
   // Stop and clean up when unmounted (step change, page navigation, etc.)
   useEffect(() => {

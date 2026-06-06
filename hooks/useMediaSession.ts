@@ -93,6 +93,17 @@ function buildArtwork(url: string): MediaImage[] {
   });
 }
 
+// Brand-wordmark fallback artwork shown on the iOS lockscreen Now
+// Playing widget when a track doesn't provide its own artworkUrl
+// (narration, days without a content imageUrl, etc.). Sourced from
+// the iOS app icon. Without this, iOS shows its generic placeholder
+// (black square + white play triangle) which reads as "audio playing
+// from a generic source" rather than "Contueri." Added June 6, 2026
+// as part of AUDITIO-LS-01 / NARR-LS-01.
+const FALLBACK_ARTWORK: MediaImage[] = [
+  { src: "/contueri-icon-1024.png", sizes: "1024x1024", type: "image/png" },
+];
+
 export default function useMediaSession({
   audioRef,
   active,
@@ -132,7 +143,9 @@ export default function useMediaSession({
         title: track.title,
         artist: track.artist ?? "",
         album: track.album ?? "Contueri",
-        artwork: track.artworkUrl ? buildArtwork(track.artworkUrl) : [],
+        artwork: track.artworkUrl
+          ? buildArtwork(track.artworkUrl)
+          : FALLBACK_ARTWORK,
       });
       ms.playbackState = "playing";
     } catch {
