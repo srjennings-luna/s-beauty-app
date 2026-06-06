@@ -337,7 +337,7 @@ export default function PrayClient({
               }}
             >
               <div className="flex flex-col">
-                <div className="w-full mb-4" style={{ height: "min(65vh, 65dvh)" }}>
+                <div className="w-full mb-4" style={{ height: "calc(65vh + max(env(safe-area-inset-top, 0px), 48px) + 56px)" }}>
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
                       wrapperStyle={{ width: "100%", height: "100%" }}
@@ -378,7 +378,7 @@ export default function PrayClient({
                     window (60vh — slightly shorter than Gaze to leave
                     room for the substantial text below). Pinch-zoom
                     + pan reveals any cropped edges. */}
-                <div className="w-full mb-4" style={{ height: "min(65vh, 65dvh)" }}>
+                <div className="w-full mb-4" style={{ height: "calc(65vh + max(env(safe-area-inset-top, 0px), 48px) + 56px)" }}>
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
                       wrapperStyle={{ width: "100%", height: "100%" }}
@@ -453,7 +453,7 @@ export default function PrayClient({
               }}
             >
               <div className="flex flex-col">
-                <div className="w-full mb-4" style={{ height: "min(65vh, 65dvh)" }}>
+                <div className="w-full mb-4" style={{ height: "calc(65vh + max(env(safe-area-inset-top, 0px), 48px) + 56px)" }}>
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
                       wrapperStyle={{ width: "100%", height: "100%" }}
@@ -488,7 +488,7 @@ export default function PrayClient({
               }}
             >
               <div className="flex flex-col">
-                <div className="w-full mb-4" style={{ height: "min(65vh, 65dvh)" }}>
+                <div className="w-full mb-4" style={{ height: "calc(65vh + max(env(safe-area-inset-top, 0px), 48px) + 56px)" }}>
                   <TransformWrapper initialScale={1} minScale={1} maxScale={8} centerOnInit={false} doubleClick={{ mode: "toggle", step: 2 }}>
                     <TransformComponent
                       wrapperStyle={{ width: "100%", height: "100%" }}
