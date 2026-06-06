@@ -484,7 +484,7 @@ export const AMBIENT_SOUNDS: ReadonlyArray<{
   file: string;
 }> = [
   { id: "gregorian-chant", label: "Gregorian Chant", file: "/music/ambient-gregorian-chant.mp3" },
-  { id: "plainchant",      label: "Plainchant",      file: "/music/ambient-plainchant.mp3" },
+  { id: "plainchant",      label: "Choral Chant",    file: "/music/ambient-plainchant.mp3" },
   { id: "light-piano",     label: "Light Piano",     file: "/music/ambient-light-piano.mp3" },
   { id: "lofi-piano",      label: "Lofi Piano",      file: "/music/ambient-lofi-piano.mp3" },
   { id: "gentle-rain",     label: "Gentle Rain",     file: "/music/ambient-gentle-rain.mp3" },
