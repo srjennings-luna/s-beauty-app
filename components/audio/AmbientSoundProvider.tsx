@@ -101,14 +101,25 @@ function fileFor(id: AmbientSoundId | null): string | null {
 const FADE_MS = 400;
 const FADE_SECONDS = FADE_MS / 1000;
 
-// Soft-fade duration for click suppression on play/pause. 40ms is
-// well below the human perception threshold (~100ms) but long enough
-// to ramp gain past the speaker-pop point. Used to eliminate the
-// audible click when audio.pause()/.play() interrupts a non-zero
-// waveform. June 6, 2026 — Sheri caught the pop on every floating-
-// button pause in the Xcode build.
-const SOFT_FADE_MS = 40;
+// Soft-fade duration for click suppression on play/pause. Bumped to
+// 100ms (from 40ms) on June 6, 2026 — 40ms wasn't enough for iOS
+// WKWebView's audio output buffer to reflect the gain ramp before
+// audio.pause() / audio.play() fired. 100ms is still right at the
+// human reaction threshold (imperceptible delay) but well past the
+// 10-30ms audio buffer window so the fade has time to take effect.
+//
+// PRE_PLAY_GAIN_SETTLE_MS: short delay between setting gain to 0 and
+// calling audio.play(). Gives the GainNode's scheduled value time to
+// propagate into the audio output buffer so audio doesn't start at
+// full volume before the fade-in begins.
+//
+// PAUSE_FIRE_DELAY_MS: longer than SOFT_FADE_MS so the fade-out has
+// fully completed (and propagated through the buffer) before
+// audio.pause() interrupts the waveform.
+const SOFT_FADE_MS = 100;
 const SOFT_FADE_SECONDS = SOFT_FADE_MS / 1000;
+const PRE_PLAY_GAIN_SETTLE_MS = 15;
+const PAUSE_FIRE_DELAY_MS = 120;
 
 export default function AmbientSoundProvider({ children }: { children: ReactNode }) {
   const {
@@ -365,17 +376,29 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
       audioRef.current.src = url;
       audioRef.current.load();
     }
-    // Click suppression: start gain at 0 and ramp up to user volume
-    // over SOFT_FADE_MS. Without this, audio.play() resuming after a
-    // pause causes a brief audible "pop" because the waveform jumps
-    // from silent to mid-amplitude. The 40ms ramp is inaudible to
-    // humans but long enough to glide past the discontinuity.
+    // Click suppression: start gain at 0, wait PRE_PLAY_GAIN_SETTLE_MS
+    // for the value to propagate into iOS's audio output buffer, then
+    // call audio.play() and ramp gain up to user volume over
+    // SOFT_FADE_MS. Without the settle delay, audio.play() can produce
+    // its first sample before the gain-at-0 reaches the speaker, and
+    // the listener hears an abrupt full-volume start instead of a fade.
     const gain = gainNodeRef.current;
     if (ctx && gain) {
       const now = ctx.currentTime;
       gain.gain.cancelScheduledValues(now);
       gain.gain.setValueAtTime(0, now);
-      gain.gain.linearRampToValueAtTime(volumeRef.current, now + SOFT_FADE_SECONDS);
+      // Wait briefly so the gain-at-0 is in the output buffer.
+      await new Promise<void>((resolve) =>
+        setTimeout(resolve, PRE_PLAY_GAIN_SETTLE_MS),
+      );
+      // Schedule the fade-in starting from the (now-current) currentTime.
+      const fadeStart = ctx.currentTime;
+      gain.gain.cancelScheduledValues(fadeStart);
+      gain.gain.setValueAtTime(0, fadeStart);
+      gain.gain.linearRampToValueAtTime(
+        volumeRef.current,
+        fadeStart + SOFT_FADE_SECONDS,
+      );
     }
     try {
       await audioRef.current.play();
@@ -409,6 +432,9 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
       gain.gain.cancelScheduledValues(now);
       gain.gain.setValueAtTime(gain.gain.value, now);
       gain.gain.linearRampToValueAtTime(0, now + SOFT_FADE_SECONDS);
+      // Wait PAUSE_FIRE_DELAY_MS (longer than SOFT_FADE_MS) before
+      // audio.pause() so the fade-out has fully reached the output
+      // buffer before we interrupt the waveform.
       setTimeout(() => {
         audioRef.current?.pause();
         // Restore gain so future play() starts from a known baseline.
@@ -417,7 +443,7 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
           gainNodeRef.current.gain.cancelScheduledValues(t);
           gainNodeRef.current.gain.setValueAtTime(volumeRef.current, t);
         }
-      }, SOFT_FADE_MS);
+      }, PAUSE_FIRE_DELAY_MS);
     } else {
       audioRef.current.pause();
     }
@@ -496,7 +522,7 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
                 gainNodeRef.current.gain.cancelScheduledValues(t);
                 gainNodeRef.current.gain.setValueAtTime(volumeRef.current, t);
               }
-            }, SOFT_FADE_MS);
+            }, PAUSE_FIRE_DELAY_MS);
           } else {
             audioRef.current.pause();
           }
