@@ -101,6 +101,15 @@ function fileFor(id: AmbientSoundId | null): string | null {
 const FADE_MS = 400;
 const FADE_SECONDS = FADE_MS / 1000;
 
+// Soft-fade duration for click suppression on play/pause. 40ms is
+// well below the human perception threshold (~100ms) but long enough
+// to ramp gain past the speaker-pop point. Used to eliminate the
+// audible click when audio.pause()/.play() interrupts a non-zero
+// waveform. June 6, 2026 — Sheri caught the pop on every floating-
+// button pause in the Xcode build.
+const SOFT_FADE_MS = 40;
+const SOFT_FADE_SECONDS = SOFT_FADE_MS / 1000;
+
 export default function AmbientSoundProvider({ children }: { children: ReactNode }) {
   const {
     prefs,
@@ -356,6 +365,18 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
       audioRef.current.src = url;
       audioRef.current.load();
     }
+    // Click suppression: start gain at 0 and ramp up to user volume
+    // over SOFT_FADE_MS. Without this, audio.play() resuming after a
+    // pause causes a brief audible "pop" because the waveform jumps
+    // from silent to mid-amplitude. The 40ms ramp is inaudible to
+    // humans but long enough to glide past the discontinuity.
+    const gain = gainNodeRef.current;
+    if (ctx && gain) {
+      const now = ctx.currentTime;
+      gain.gain.cancelScheduledValues(now);
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(volumeRef.current, now + SOFT_FADE_SECONDS);
+    }
     try {
       await audioRef.current.play();
       setIsPlaying(true);
@@ -368,7 +389,38 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
 
   const pause = useCallback(() => {
     if (!audioRef.current) return;
-    audioRef.current.pause();
+    // Click suppression: fade gain to 0 over SOFT_FADE_MS, then call
+    // audio.pause() once the ramp completes. Without this, an abrupt
+    // pause mid-waveform produces a speaker pop. Restore gain to user
+    // volume immediately after pausing so the next play() can rely on
+    // its own fade-in starting from a clean 0 → volume ramp.
+    //
+    // Also cancel any in-flight cross-fade swap timer — if user pauses
+    // during a sound transition, we don't want the pending src-swap
+    // and play() to fire after we've paused.
+    if (pendingSwapTimerRef.current) {
+      clearTimeout(pendingSwapTimerRef.current);
+      pendingSwapTimerRef.current = null;
+    }
+    const ctx = audioCtxRef.current;
+    const gain = gainNodeRef.current;
+    if (ctx && gain && !audioRef.current.paused) {
+      const now = ctx.currentTime;
+      gain.gain.cancelScheduledValues(now);
+      gain.gain.setValueAtTime(gain.gain.value, now);
+      gain.gain.linearRampToValueAtTime(0, now + SOFT_FADE_SECONDS);
+      setTimeout(() => {
+        audioRef.current?.pause();
+        // Restore gain so future play() starts from a known baseline.
+        if (gainNodeRef.current && audioCtxRef.current) {
+          const t = audioCtxRef.current.currentTime;
+          gainNodeRef.current.gain.cancelScheduledValues(t);
+          gainNodeRef.current.gain.setValueAtTime(volumeRef.current, t);
+        }
+      }, SOFT_FADE_MS);
+    } else {
+      audioRef.current.pause();
+    }
     setIsPlaying(false);
     persistWasPlaying(false);
   }, [persistWasPlaying]);
@@ -427,7 +479,27 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
       if (higherPriorityCountRef.current === 0) {
         wasPlayingBeforeDuckRef.current = !audioRef.current.paused;
         if (!audioRef.current.paused) {
-          audioRef.current.pause();
+          // Soft fade-out before pausing so the speaker doesn't pop
+          // when narration / Auditio cuts ambient. Same 40ms ramp
+          // pattern as provider.pause().
+          const ctx = audioCtxRef.current;
+          const gain = gainNodeRef.current;
+          if (ctx && gain) {
+            const now = ctx.currentTime;
+            gain.gain.cancelScheduledValues(now);
+            gain.gain.setValueAtTime(gain.gain.value, now);
+            gain.gain.linearRampToValueAtTime(0, now + SOFT_FADE_SECONDS);
+            setTimeout(() => {
+              audioRef.current?.pause();
+              if (gainNodeRef.current && audioCtxRef.current) {
+                const t = audioCtxRef.current.currentTime;
+                gainNodeRef.current.gain.cancelScheduledValues(t);
+                gainNodeRef.current.gain.setValueAtTime(volumeRef.current, t);
+              }
+            }, SOFT_FADE_MS);
+          } else {
+            audioRef.current.pause();
+          }
           setIsPlaying(false);
         }
       }
@@ -444,6 +516,16 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
         higherPriorityCountRef.current === 0 &&
         wasPlayingBeforeDuckRef.current
       ) {
+        // Soft fade-in on resume so the speaker doesn't pop when
+        // ambient comes back after narration / Auditio ends.
+        const ctx = audioCtxRef.current;
+        const gain = gainNodeRef.current;
+        if (ctx && gain) {
+          const now = ctx.currentTime;
+          gain.gain.cancelScheduledValues(now);
+          gain.gain.setValueAtTime(0, now);
+          gain.gain.linearRampToValueAtTime(volumeRef.current, now + SOFT_FADE_SECONDS);
+        }
         audioRef.current.play().catch(() => {});
         setIsPlaying(true);
         wasPlayingBeforeDuckRef.current = false;
@@ -515,17 +597,25 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
   return (
     <AmbientContext.Provider value={value}>
       {/*
-        The shared <audio> element. preload="none" is intentional per
-        the brief — we don't fetch any MP3 until the user has chosen
-        a sound. loop ensures the gapless-loop-processed source (see
-        public/music/README.md) plays continuously. playsInline + the
-        absence of a controls attribute keep it invisible.
+        The shared <audio> element. preload="auto" lets iOS WKWebView
+        fetch the full MP3 as soon as src is set, instead of chunking
+        it on demand. Sheri caught periodic ticks every ~5-6s in the
+        first ~10s of playback on the Xcode build (June 6, 2026) — those
+        were chunk-transition glitches. preload="auto" eliminates them
+        by letting iOS build a comfortable buffer ahead. The brief's
+        original preload="none" was intended to avoid fetching MP3s
+        before the user chose a sound; that's still true because the
+        src attribute isn't set until the user selects (and load() is
+        only called inside the src-swap effect). loop=true plays the
+        gapless-loop-processed source (see public/music/README.md)
+        continuously. playsInline + the absence of a controls attribute
+        keep it invisible.
       */}
       {!inIframe && (
         // eslint-disable-next-line jsx-a11y/media-has-caption
         <audio
           ref={audioRef}
-          preload="none"
+          preload="auto"
           loop
           playsInline
           aria-hidden
