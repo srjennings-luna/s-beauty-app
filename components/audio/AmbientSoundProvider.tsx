@@ -107,6 +107,31 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
   const [isPlaying, setIsPlaying] = useState(false);
   const [inIframe, setInIframe] = useState(false);
 
+  // ── Web Audio volume control ────────────────────────────────────────
+  //
+  // iOS Safari / WKWebView ignores `HTMLMediaElement.volume` — Apple
+  // treats audio volume as user-hardware-controlled and the property
+  // is effectively read-only on the platform. Setting `audio.volume`
+  // from JS silently does nothing on iPhone.
+  //
+  // The workaround (which works on iOS) is to route the <audio>
+  // element through Web Audio:
+  //
+  //     audio ── MediaElementSource ── GainNode ── destination
+  //
+  // The GainNode's `gain.value` is honored everywhere, including iOS
+  // WebView. We create the AudioContext lazily on the first play()
+  // call (autoplay policies require a user gesture before audio
+  // contexts can start producing sound) and re-use it for every
+  // sound change.
+  //
+  // audio.volume is still set to 1.0 as a fallback for desktop
+  // browsers where Web Audio routing might fail; the gain node then
+  // performs the actual volume math.
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const sourceNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
+
   // Detect iframe (Sanity Presentation) on mount. If we're embedded,
   // the audio element never mounts — preserves the editor tab's
   // expectation that previewing a page doesn't trigger media playback.
@@ -115,8 +140,53 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
     setInIframe(window.self !== window.top);
   }, []);
 
-  // Keep the audio element's volume in sync with prefs.
+  // Lazy Web Audio setup — runs the first time we need to play and
+  // the user has provided a gesture. Idempotent: subsequent calls
+  // return the existing graph.
+  const ensureWebAudio = useCallback(() => {
+    if (typeof window === "undefined") return null;
+    if (!audioRef.current) return null;
+    if (audioCtxRef.current) return audioCtxRef.current;
+    try {
+      const Ctx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!Ctx) return null;
+      const ctx = new Ctx();
+      const source = ctx.createMediaElementSource(audioRef.current);
+      const gain = ctx.createGain();
+      gain.gain.value = prefs.volume;
+      source.connect(gain);
+      gain.connect(ctx.destination);
+      audioCtxRef.current = ctx;
+      sourceNodeRef.current = source;
+      gainNodeRef.current = gain;
+      return ctx;
+    } catch {
+      // createMediaElementSource throws if called twice on the same
+      // element (we guard against that above) or if Web Audio is
+      // unavailable. Fall back to the (non-functional on iOS but
+      // working everywhere else) audio.volume path.
+      return null;
+    }
+  }, [prefs.volume]);
+
+  // Keep both the GainNode and the <audio>.volume in sync with prefs.
+  // Web Audio handles iOS; audio.volume covers any fallback case.
   useEffect(() => {
+    if (gainNodeRef.current && audioCtxRef.current) {
+      // setValueAtTime + AudioContext.currentTime is the canonical
+      // way to schedule gain changes; assigning .value directly works
+      // but produces a small zipper noise on rapid drags.
+      try {
+        gainNodeRef.current.gain.setValueAtTime(
+          prefs.volume,
+          audioCtxRef.current.currentTime,
+        );
+      } catch {
+        gainNodeRef.current.gain.value = prefs.volume;
+      }
+    }
     if (audioRef.current) {
       audioRef.current.volume = prefs.volume;
     }
@@ -149,6 +219,19 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
   const play = useCallback(async () => {
     const url = fileFor(prefs.sound);
     if (!url || !audioRef.current) return;
+    // Build the Web Audio graph if it doesn't exist yet — this
+    // happens during a user tap so iOS will allow the AudioContext
+    // to start. If Web Audio isn't available, we fall through and
+    // play via the bare audio element (volume control degrades to
+    // hardware-only on iOS in that case).
+    const ctx = ensureWebAudio();
+    if (ctx && ctx.state === "suspended") {
+      try {
+        await ctx.resume();
+      } catch {
+        /* iOS sometimes errors on resume from a non-running state — fine to ignore */
+      }
+    }
     if (audioRef.current.currentSrc === "" || audioRef.current.src === "") {
       audioRef.current.src = url;
       audioRef.current.load();
@@ -161,7 +244,7 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
       // Autoplay blocked or other failure. Stay paused.
       setIsPlaying(false);
     }
-  }, [prefs.sound, persistWasPlaying]);
+  }, [prefs.sound, persistWasPlaying, ensureWebAudio]);
 
   const pause = useCallback(() => {
     if (!audioRef.current) return;
