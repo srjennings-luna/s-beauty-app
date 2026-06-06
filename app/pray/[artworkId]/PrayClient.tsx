@@ -559,31 +559,89 @@ export default function PrayClient({
               </div>
             </div>
 
-            {/* ── Action ── */}
+            {/* ── Action ──
+                Redesigned June 5, 2026 to match the Journey Reflect
+                aesthetic: blurred artwork as background, dark scrim
+                for readability, content centered with Cormorant
+                italic prompt. Replaces the prior stark espresso /
+                form-only layout Sheri flagged as "lacks any design
+                aesthetic." Mirrors components/JourneyDaySteps.tsx
+                StepReflect exactly so the registers stay consistent
+                across Journey and Visio Divina. */}
             <div
-              className="absolute inset-0 overflow-y-auto touch-pan-y"
+              className="absolute inset-0 overflow-hidden touch-pan-y"
               style={{
                 transform: `translateX(${(4 - step) * 100}%)`,
                 transition: "transform 500ms cubic-bezier(0.4, 0, 0.2, 1)",
                 willChange: "transform",
               }}
             >
-              <div className="px-6 py-8">
-                <h3 className="font-semibold text-lg mb-2" style={{ color: C.cream }}>How will you live this out?</h3>
-                <p className="text-sm mb-4" style={{ color: C.creamDim }}>
-                  Ask yourself and God: How will you apply what you&apos;ve received in prayer to your life?
-                </p>
-                <textarea
-                  placeholder="Optional: a few words to remember..."
-                  value={actionNote}
-                  onChange={(e) => setActionNote(e.target.value)}
-                  className="w-full min-h-[100px] bg-white/5 border border-white/10 text-sm p-3 resize-none"
-                  style={{ color: C.cream }}
-                  rows={3}
+              {/* Blurred background = the artwork the user has been
+                  contemplating. Same blur/brightness values + ken-burns
+                  animation as Journey Reflect. */}
+              {artwork.imageUrl && (
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: `url(${artwork.imageUrl})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    filter: "blur(7px) brightness(0.5)",
+                    animation: "kenBurns 8s ease-in-out infinite alternate",
+                  }}
                 />
-                <p className="text-xs mt-2" style={{ color: C.creamFaint }}>
-                  Your note is kept only on this device and is not saved to the cloud.
-                </p>
+              )}
+              {/* Dark scrim for text legibility — same value as Reflect. */}
+              <div
+                className="absolute inset-0"
+                style={{ background: "rgba(22,17,13,0.45)" }}
+              />
+
+              {/* Content */}
+              <div className="relative z-10 h-full w-full overflow-y-auto flex flex-col items-center px-6 py-10">
+                <div className="max-w-md w-full text-center mt-8">
+                  <p
+                    className="font-serif-elegant italic leading-relaxed mb-3"
+                    style={{
+                      color: C.cream,
+                      fontSize: "clamp(1.4rem, 5vw, 1.8rem)",
+                      lineHeight: "1.4",
+                    }}
+                  >
+                    How will you live this out?
+                  </p>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: C.creamDim }}
+                  >
+                    Ask yourself and God: How will you apply what
+                    you&apos;ve received in prayer to your life?
+                  </p>
+                </div>
+
+                <div className="w-full max-w-md mt-8">
+                  <textarea
+                    placeholder="Optional: a few words to remember…"
+                    value={actionNote}
+                    onChange={(e) => setActionNote(e.target.value)}
+                    rows={4}
+                    className="w-full min-h-[120px] text-sm p-4 resize-none"
+                    style={{
+                      color: C.cream,
+                      background: "rgba(22,17,13,0.55)",
+                      border: "1px solid rgba(253,246,232,0.18)",
+                      backdropFilter: "blur(2px)",
+                      WebkitBackdropFilter: "blur(2px)",
+                    }}
+                  />
+                  <p
+                    className="text-xs mt-2 text-center"
+                    style={{ color: C.creamFaint }}
+                  >
+                    Your note is kept only on this device and is not
+                    saved to the cloud.
+                  </p>
+                </div>
               </div>
             </div>
 
