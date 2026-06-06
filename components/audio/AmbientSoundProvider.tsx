@@ -365,6 +365,11 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
           loop
           playsInline
           aria-hidden
+          // Explicit display:none — Safari without `controls` sometimes
+          // still renders <audio> as a zero-size inline element that
+          // takes a line of vertical space in the flow, which can shift
+          // nearby layouts. Belt-and-braces guard.
+          style={{ display: "none" }}
         />
       )}
       {children}

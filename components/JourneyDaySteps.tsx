@@ -804,13 +804,22 @@ function StepBreathe({ day }: { day: JourneyDay }) {
   const imageUrl = content?.imageUrl;
 
   return (
-    <div className="h-full overflow-hidden">
+    // Explicit absolute inset-0 on the outer wrapper so the image
+    // container's own `absolute inset-0` positions against THIS, not
+    // against an ancestor further up. h-full alone (which becomes
+    // `position: static` by default) was letting iOS Safari resolve
+    // height: 100% against an ambiguous chain and the image
+    // letterboxed (June 5, 2026 fix per Sheri's reference).
+    <div className="absolute inset-0 overflow-hidden">
       {/* Transparent — Whisper gradient from the outer modal shows through. */}
       {/* Full-screen image with 8x zoom */}
       {imageUrl && (
         <div className="absolute inset-0">
           <TransformWrapper maxScale={8} minScale={1} centerOnInit>
-            <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
+            <TransformComponent
+              wrapperStyle={{ width: "100%", height: "100%" }}
+              contentStyle={{ width: "100%", height: "100%" }}
+            >
               <img
                 src={imageUrl}
                 alt={content?.title ?? "Artwork"}
