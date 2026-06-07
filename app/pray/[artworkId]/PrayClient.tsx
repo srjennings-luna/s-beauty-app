@@ -27,7 +27,24 @@ type SanityArtwork = {
   order: number;
   traditionalPrayer?: string;
   traditionalPrayerSource?: string;
+  // Per-artwork prompt overrides for the Visio Divina Pray + Action steps.
+  // When set, override the matching defaults from the visioDefaults
+  // singleton. Cascade lives below in the render path. June 6, 2026.
+  customPrayerPrompt?: string;
+  customActioHeadline?: string;
+  customActioInstruction?: string;
 };
+
+// visioDefaults singleton shape — see lib/types.ts. Inlined here so this
+// file's prop type can live alongside SanityArtwork without a circular
+// dependency on lib/types.
+type VisioDefaultsProp = {
+  defaultActioHeadline: string;
+  defaultActioInstruction: string;
+  defaultPrayerPrompt: string;
+  defaultTraditionalPrayer: string;
+  defaultTraditionalPrayerSource?: string;
+} | null;
 
 // Visio Divina order (per Lectio Divina tradition): Visio → Meditatio → Oratio → Contemplatio → Actio
 const STEPS = [
@@ -82,11 +99,39 @@ const C = {
  */
 export default function PrayClient({
   initialArtwork,
+  visioDefaults,
 }: {
   initialArtwork: SanityArtwork | null;
+  visioDefaults: VisioDefaultsProp;
 }) {
   const router = useRouter();
   const [artwork] = useState<SanityArtwork | null>(initialArtwork);
+
+  // ── Contemplative prompt cascade ───────────────────────────────────────
+  // Each surface text below resolves in this order:
+  //   1. Per-artwork override on the contentItem (artwork.customX)
+  //   2. visioDefaults singleton (props.visioDefaults.defaultX)
+  //   3. Hardcoded last-resort fallback string
+  //
+  // The hardcoded values preserve exact pre-VD-ACTION-01 copy so a fresh
+  // dataset with no singleton document still renders the correct prompts.
+  // VD-ACTION-01 shipped June 6, 2026.
+  const prayPrompt =
+    initialArtwork?.customPrayerPrompt?.trim() ||
+    visioDefaults?.defaultPrayerPrompt ||
+    "Respond to God in prayer—thanksgiving, intercession, or simply conversation about what you notice.";
+  const actioHeadline =
+    initialArtwork?.customActioHeadline?.trim() ||
+    visioDefaults?.defaultActioHeadline ||
+    "How will you live this out?";
+  const actioInstruction =
+    initialArtwork?.customActioInstruction?.trim() ||
+    visioDefaults?.defaultActioInstruction ||
+    "Ask yourself and God: How will you apply what you've received in prayer to your life?";
+  const fallbackTraditionalPrayer =
+    visioDefaults?.defaultTraditionalPrayer || FALLBACK_PRAYER;
+  const fallbackTraditionalPrayerSource =
+    visioDefaults?.defaultTraditionalPrayerSource;
   // Loading state is no longer meaningful — server pre-fetched. Keep the
   // variable so the existing loading-UI branch still compiles; it will
   // never be true in the new server-fetch flow.
@@ -534,7 +579,7 @@ export default function PrayClient({
                 )}
 
                 <p className="text-sm mb-4" style={{ color: C.creamDim }}>
-                  Respond to God in prayer—thanksgiving, intercession, or simply conversation about what you notice.
+                  {prayPrompt}
                 </p>
 
                 {/* Traditional Prayer drawer */}
@@ -555,13 +600,22 @@ export default function PrayClient({
                   {prayerDrawerOpen && (
                     <div className="px-4 pb-6 animate-fade-in">
                       <p className="font-serif-elegant italic text-center mb-3 whitespace-pre-line" style={{ color: C.cream }}>
-                        {artwork.traditionalPrayer || FALLBACK_PRAYER}
+                        {artwork.traditionalPrayer || fallbackTraditionalPrayer}
                       </p>
-                      {artwork.traditionalPrayer && artwork.traditionalPrayerSource && (
-                        <p className="text-xs text-center" style={{ color: C.creamFaint }}>
-                          — {artwork.traditionalPrayerSource}
-                        </p>
-                      )}
+                      {(() => {
+                        // Source attribution cascade: prefer the
+                        // per-artwork source IF the per-artwork prayer is
+                        // what's shown; otherwise use the singleton's
+                        // default source for the fallback prayer.
+                        const source = artwork.traditionalPrayer
+                          ? artwork.traditionalPrayerSource
+                          : fallbackTraditionalPrayerSource;
+                        return source ? (
+                          <p className="text-xs text-center" style={{ color: C.creamFaint }}>
+                            — {source}
+                          </p>
+                        ) : null;
+                      })()}
                     </div>
                   )}
                 </div>
@@ -624,14 +678,13 @@ export default function PrayClient({
                       lineHeight: "1.4",
                     }}
                   >
-                    How will you live this out?
+                    {actioHeadline}
                   </p>
                   <p
                     className="text-sm leading-relaxed"
                     style={{ color: C.creamDim }}
                   >
-                    Ask yourself and God: How will you apply what
-                    you&apos;ve received in prayer to your life?
+                    {actioInstruction}
                   </p>
                 </div>
 

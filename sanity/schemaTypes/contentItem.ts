@@ -405,6 +405,36 @@ export default defineType({
       description: 'Attribution for the prayer above, e.g. "Act of Adoration, Traditional" or "St. Francis of Assisi". Shown below the prayer text.',
       hidden: ({ document }) => !document?.traditionalPrayer,
     }),
+
+    // ── Visio Divina per-artwork prompt overrides ──────────────────────────
+    // Each of these is optional. When set, it overrides the matching field on
+    // the visioDefaults singleton for THIS artwork's Visio Divina session
+    // only. Leave blank to inherit the global default. The cascade lives in
+    // app/pray/[artworkId]/PrayClient.tsx and lib/sanity.ts. Added June 6,
+    // 2026 as part of VD-ACTION-01.
+    defineField({
+      name: 'customPrayerPrompt',
+      title: 'Custom Pray prompt (override)',
+      type: 'text',
+      rows: 3,
+      description: 'Optional. Overrides the default Pray-step instruction sentence for this artwork. Leave blank to use the global Visio Divina default.',
+    }),
+    defineField({
+      name: 'customActioHeadline',
+      title: 'Custom Actio headline (override)',
+      type: 'string',
+      description: 'Optional. Overrides the default Actio italic headline ("How will you live this out?") for this artwork. Leave blank to use the global Visio Divina default.',
+      validation: (Rule) => Rule.max(140),
+    }),
+    defineField({
+      name: 'customActioInstruction',
+      title: 'Custom Actio instruction (override)',
+      type: 'text',
+      rows: 3,
+      description: 'Optional. Overrides the default Actio supporting instruction for this artwork. Leave blank to use the global Visio Divina default.',
+      validation: (Rule) => Rule.max(280),
+    }),
+
     defineField({
       name: 'traditionReflections',
       title: 'Go Deeper: Tradition Reflections',

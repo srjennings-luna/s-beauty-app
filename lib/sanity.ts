@@ -435,6 +435,9 @@ const ARTWORK_QUERY = `*[_id == $id && _type in ["contentItem", "artwork"]][0] {
   coordinates,
   traditionalPrayer,
   traditionalPrayerSource,
+  customPrayerPrompt,
+  customActioHeadline,
+  customActioInstruction,
   "traditionReflections": traditionReflections[]->{
     _id,
     title,
@@ -456,6 +459,32 @@ export async function getArtworkById(id: string) {
  */
 export async function getArtworkByIdPreview(id: string) {
   return previewClient.fetch(ARTWORK_QUERY, { id })
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Visio Divina defaults — singleton document holding the contemplative
+// prompt copy. Added June 6, 2026 (VD-ACTION-01). Cascade order in
+// PrayClient.tsx: artwork.customX → defaults.defaultX → hardcoded fallback.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const VISIO_DEFAULTS_QUERY = `*[_type == "visioDefaults"][0] {
+  defaultActioHeadline,
+  defaultActioInstruction,
+  defaultPrayerPrompt,
+  defaultTraditionalPrayer,
+  defaultTraditionalPrayerSource,
+}`
+
+export async function getVisioDefaults() {
+  return sanityClient.fetch(VISIO_DEFAULTS_QUERY)
+}
+
+/**
+ * Preview variant. Pair with draftMode() in a server component so editors
+ * can preview unpublished default-copy changes before saving.
+ */
+export async function getVisioDefaultsPreview() {
+  return previewClient.fetch(VISIO_DEFAULTS_QUERY)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

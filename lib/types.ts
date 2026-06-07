@@ -90,6 +90,13 @@ export type ContentItem = {
   // Visio Divina
   traditionalPrayer?: string;
   traditionalPrayerSource?: string;
+  // Per-artwork prompt overrides for Visio Divina. Each, when set,
+  // overrides the matching field on the visioDefaults singleton for
+  // this artwork's session only. Cascade lives in PrayClient.tsx.
+  // Added June 6, 2026 (VD-ACTION-01).
+  customPrayerPrompt?: string;
+  customActioHeadline?: string;
+  customActioInstruction?: string;
   traditionReflections?: Array<{
     _id: string;
     title: string;
@@ -98,6 +105,19 @@ export type ContentItem = {
     source: string;
     authorType: string;
   }>;
+};
+
+// ─── Visio Divina defaults (singleton) ────────────────────────────────────────
+// Holds the global default copy for the contemplative prompts on the
+// Visio Divina Pray + Action steps. One document per dataset. Cascade
+// order: artwork.customX → visioDefaults.defaultX → hardcoded last-resort
+// fallback in PrayClient.tsx.
+export type VisioDefaults = {
+  defaultActioHeadline: string;
+  defaultActioInstruction: string;
+  defaultPrayerPrompt: string;
+  defaultTraditionalPrayer: string;
+  defaultTraditionalPrayerSource?: string;
 };
 
 // ─── Journey ──────────────────────────────────────────────────────────────────

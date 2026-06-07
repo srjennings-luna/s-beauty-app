@@ -7,6 +7,7 @@ import auditio from './auditio'
 import journey from './journey'
 import journeyDay from './journeyDay'
 import dailyPrompt from './dailyPrompt'
+import visioDefaults from './visioDefaults'
 
 export const schemaTypes = [
   // Foundational — create these BEFORE journey days or P&P records
@@ -18,8 +19,9 @@ export const schemaTypes = [
   journey,
   journeyDay,
   dailyPrompt,
-  // Other
+  // Singletons (one document each)
   splashPage,
+  visioDefaults,
   // Deprecated — kept to preserve existing Sanity data, hidden from sidebar
   episode,
 ]
