@@ -2,12 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CAPACITOR_DEBUG</key>
+	<key>CAPACITOR_DEBUG</key>
 	<string>$(CAPACITOR_DEBUG)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>Contueri</string>
+	<string>Contueri</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -24,6 +24,11 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -32,19 +37,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
-	<!--
-	    Enable background audio playback so Auditio + (future) ambient
-	    sound system keep playing when the screen locks or the user
-	    switches to another app. Without "audio" in UIBackgroundModes,
-	    iOS suspends audio output as soon as the WebView loses
-	    foreground. Paired with AVAudioSession.setCategory(.playback)
-	    in AppDelegate.swift (which routes audio output even when the
-	    silent switch is on, the standard category for music apps).
-	-->
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -60,20 +54,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<!--
-	    UIStatusBarStyle controls the status bar appearance AT LAUNCH
-	    (before any view controller takes over status bar management).
-	    Even with UIViewControllerBasedStatusBarAppearance=true above,
-	    iOS uses this key for the launch-screen status bar style.
-	    UIStatusBarStyleLightContent = white text/icons on dark backdrop —
-	    matches our espresso launch storyboard. Without this, iOS uses
-	    the .default style at launch, which on some iOS versions
-	    renders a translucent light backdrop in the status bar region,
-	    appearing as a cream/parchment strip at the top of the screen
-	    over the dark splash image. Visible in Sheri's June 5 device
-	    recording at t=7s.
-	-->
-	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleLightContent</string>
 </dict>
 </plist>
