@@ -151,11 +151,17 @@ export default function GoDeeperSection({ reflections: propReflections, inline =
           style={inline ? undefined : { maxHeight: "35vh" }}
         >
           {loading ? (
-            <div className="py-6 text-center text-white/50 text-sm">
+            <div
+              className="py-6 text-center text-sm"
+              style={{ color: "rgba(253,246,232,0.5)" }}
+            >
               Loading…
             </div>
           ) : reflections.length === 0 ? (
-            <p className="text-white/50 text-sm py-4">
+            <p
+              className="text-sm py-4"
+              style={{ color: "rgba(253,246,232,0.5)" }}
+            >
               No reflections available yet. Check back later.
             </p>
           ) : (
@@ -192,11 +198,30 @@ export default function GoDeeperSection({ reflections: propReflections, inline =
                     {currentIndex + 1}/{reflections.length}
                   </span>
                 )}
-                <h3 className="text-white font-semibold text-base mb-2 pr-10">
+                {/*
+                  Reflection card title — warm-cream tone matches the
+                  section titles elsewhere in VD (Reflect, Traditional
+                  Prayer, Go deeper) which all use rgba(232,217,184,0.92).
+                  Previously `text-white` (stark 100% white) which read as
+                  harsh against espresso. June 6, 2026 audit (Sheri caught
+                  the missed subheading style after the first cream pass).
+                */}
+                <h3
+                  className="font-semibold text-base mb-2 pr-10"
+                  style={{ color: "rgba(232,217,184,0.92)" }}
+                >
                   {currentReflection.title}
                 </h3>
                 {currentReflection.shortQuote && (
-                  <p className="font-serif-elegant italic text-white/80 text-sm border-l-2 border-[#C19B5F] pl-3 mb-2">
+                  // Italic quote — drops to the C.cream body baseline
+                  // (rgba(253,246,232,0.88)) so the cream tone matches
+                  // the summary text below and the rest of the page.
+                  // Previously text-white/80 which sat brighter than
+                  // both the body and the section titles.
+                  <p
+                    className="font-serif-elegant italic text-sm border-l-2 border-[#C19B5F] pl-3 mb-2"
+                    style={{ color: "rgba(253,246,232,0.88)" }}
+                  >
                     &ldquo;{currentReflection.shortQuote}&rdquo;
                   </p>
                 )}
