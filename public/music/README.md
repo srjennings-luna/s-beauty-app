@@ -5,18 +5,20 @@ the W2 Ambient Sound System (per
 `~/Documents/KALLOS Launch/CONTUERI-CC-Ambient-Sound-Brief.html`) and
 historically by the Pray page's chant/ambient picker.
 
-## File slate (June 5, 2026)
+## File slate (updated June 7, 2026)
 
-| Canonical filename | Tone | Source |
-|---|---|---|
-| `ambient-gregorian-chant.mp3` | Sacred — male schola, Latin "Amo Te" | nickpanekaiassets via Pixabay |
-| `ambient-plainchant.mp3` | Sacred — sparser ambient hymns | poshpony via Pixabay |
-| `ambient-light-piano.mp3` | Contemplative — slow solo piano | music_for_videos via Pixabay |
-| `ambient-lofi-piano.mp3` | Contemplative — roomy, intimate piano | harumachimusic via Pixabay |
-| `ambient-gentle-rain.mp3` | Nature — soft steady rain | meditativetiger via Pixabay |
-| `ambient-ocean-waves.mp3` | Nature — gentle waves | rmultimediaeu via Pixabay |
+| Canonical filename | Display label | Tone | Source |
+|---|---|---|---|
+| `ambient-gregorian-chant.mp3` | Gregorian Chant | Sacred — male schola, Latin "Amo Te" | nickpanekaiassets via Pixabay |
+| `ambient-plainchant.mp3` | Choral Chant | Sacred — Stabat Mater, choral | Generated via Suno (June 2026 swap; replaces poshpony/Pixabay original) |
+| `ambient-light-piano.mp3` | Light Piano | Contemplative — Arvo Pärt, *Für Alina* (two-piano performance) | archive.org public domain recording (June 2026 swap; replaces music_for_videos/Pixabay original) |
+| `ambient-lofi-piano.mp3` | Lofi Piano | Contemplative — roomy, intimate piano | harumachimusic via Pixabay |
+| `ambient-gentle-rain.mp3` | Gentle Rain | Nature — soft steady rain | meditativetiger via Pixabay |
+| `ambient-ocean-waves.mp3` | Ocean Waves | Nature — gentle waves | rmultimediaeu via Pixabay |
 
-All six are licensed Pixabay (free / no attribution required / commercial use OK).
+Four of the six are licensed Pixabay (free / no attribution required / commercial use OK). Light Piano sourced from a public-domain archive.org recording of Arvo Pärt's *Für Alina* (June 2026 editorial swap — better fits the contemplative register). Choral Chant generated via Suno (June 2026 editorial swap — Stabat Mater register).
+
+The internal sound IDs in `lib/userData.ts` remain unchanged (`plainchant`, `light-piano`) so user preferences persist through the swap. Only the audio content + display label changed.
 
 ## Gapless loop processing
 
