@@ -245,8 +245,24 @@ export default function PrayClient({
   return (
     <PageTransition variant="slide-up">
       <div
-        className="min-h-screen flex flex-col safe-area-bottom"
-        style={{ background: C.bg, paddingBottom: "calc(4rem + env(safe-area-inset-bottom, 0px))" }}
+        className="flex flex-col safe-area-bottom overflow-hidden"
+        style={{
+          // Use `100dvh` (dynamic viewport height) instead of `min-height:
+          // 100vh` (which Tailwind's `min-h-screen` resolves to). On iOS
+          // Safari, `vh` units refer to the LAYOUT viewport (URL bar
+          // collapsed), which is ~80px taller than the visible viewport
+          // when the URL bar is showing. That sized the page bigger than
+          // the visible area, made the body scrollable, and let the
+          // chrome at top:0 scroll off-screen — user had to swipe down
+          // to reveal the header (Sheri caught June 6, 2026 ·
+          // VD-SCROLL-01). `100dvh` adapts to whatever the visible
+          // viewport actually is; combined with `overflow-hidden` the
+          // body never scrolls — only the inner slide containers do.
+          // Same pattern used by SplashClient + JourneyDay stepper.
+          height: "100dvh",
+          background: C.bg,
+          paddingBottom: "calc(4rem + env(safe-area-inset-bottom, 0px))",
+        }}
       >
         {/* Header: absolutely positioned overlay. Floats ON the image
             (image extends to viewport top) with no espresso background
