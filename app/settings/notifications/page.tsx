@@ -6,6 +6,10 @@ import { useRouter } from "next/navigation";
 import PageTransition from "@/components/ui/PageTransition";
 import useNotificationPreferences from "@/hooks/useNotificationPreferences";
 import type { NotificationType, NotificationTypePref } from "@/lib/userData";
+import {
+  requestNotificationPermission,
+  syncNotificationTags,
+} from "@/lib/onesignal";
 
 // Notification preferences UI (/settings/notifications).
 //
@@ -506,7 +510,15 @@ export default function NotificationsPage() {
       updateType(pendingEnable, { enabled: true });
       setPendingEnable(null);
     }
-    // TODO (W2): trigger iOS permission prompt via OneSignal SDK here
+    // Trigger the iOS permission prompt via OneSignal SDK. On accept,
+    // OneSignal registers the APNs token automatically and the device
+    // becomes addressable from the dashboard. On decline, the toggle
+    // stays "enabled" in our local prefs but iOS won't deliver pushes —
+    // user must flip Settings → Notifications → Contueri themselves.
+    // The fallbackToSettings=true behaviour (handled inside
+    // requestNotificationPermission) means a second tap will open iOS
+    // Settings directly instead of silently failing.
+    void requestNotificationPermission();
   };
 
   const skipRationale = () => {

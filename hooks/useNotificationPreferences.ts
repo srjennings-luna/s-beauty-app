@@ -9,6 +9,7 @@ import {
   type NotificationType,
   type NotificationTypePref,
 } from "@/lib/userData";
+import { syncNotificationTags } from "@/lib/onesignal";
 
 // Per-D-04-locked-spec hook for the notification preferences UI.
 // Mirrors useAmbientPreferences / useOnboarded shape: reads through the
@@ -50,7 +51,13 @@ export default function useNotificationPreferences() {
         if (!prev) return prev;
         const next = { ...prev[type], ...patch };
         setNotificationTypePref(type, next);
-        return { ...prev, [type]: next };
+        const nextAll = { ...prev, [type]: next };
+        // Mirror the change to OneSignal user tags so the dashboard's
+        // segments stay in sync with what the user just set. No-op on
+        // web (Capacitor.isNativePlatform() guard inside the helper).
+        // Fire-and-forget — failures log but don't block UI.
+        void syncNotificationTags(nextAll);
+        return nextAll;
       });
     },
     [],

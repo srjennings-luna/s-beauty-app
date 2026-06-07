@@ -6,6 +6,7 @@ import VisualEditingClient from "@/components/VisualEditingClient";
 import NativeSplashController from "@/components/native/NativeSplashController";
 import StatusBarController from "@/components/native/StatusBarController";
 import ExternalLinkInterceptor from "@/components/native/ExternalLinkInterceptor";
+import OneSignalInitializer from "@/components/OneSignalInitializer";
 import AmbientSoundProvider from "@/components/audio/AmbientSoundProvider";
 import AmbientFloatingButton from "@/components/audio/AmbientFloatingButton";
 
@@ -106,6 +107,16 @@ export default function RootLayout({
         <NativeSplashController />
         <StatusBarController />
         <ExternalLinkInterceptor />
+        {/*
+          OneSignal SDK boot: initializes the SDK with the Contueri app
+          ID and tags the device with today's date so the streak
+          segment can target devices that haven't opened today. Native
+          iOS only — no-ops on web (Vercel preview, Sanity Presentation
+          iframe, desktop Safari). See lib/onesignal.ts for the full
+          tagging contract + how user preferences flow to OneSignal
+          segments.
+        */}
+        <OneSignalInitializer />
       </body>
     </html>
   );

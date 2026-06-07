@@ -16,6 +16,7 @@
     "@capacitor/keyboard": "^8.0.3",
     "@capacitor/splash-screen": "^8.0.1",
     "@capacitor/status-bar": "^8.0.2",
+    "@onesignal/capacitor-plugin": "^1.0.6",
     "@sanity/client": "^7.14.1",
     "@sanity/image-url": "^2.0.3",
     "@sanity/preview-url-secret": "^4.0.5",
