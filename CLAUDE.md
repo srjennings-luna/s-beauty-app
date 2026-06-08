@@ -38,6 +38,14 @@ Pinterest and Facebook still to claim (see Manual Tasks 71-72).
 - All future documents: HTML, not Word/docx. Sheri is not a Microsoft user.
 - Design direction reference: **Variant.com** — use for layout, spacing, and typography inspiration.
 
+### Estimating timelines for Sheri
+
+Three calibration notes for any future session estimating effort or scheduling work. The launch plan originally estimated 10–12 weeks; actual execution compressed that by roughly 6x. The compression is real but it lives on specific axes — under-estimating without knowing where to compress will overcommit her.
+
+- **Observed-throughput anchor (June 2026 calibration):** Original v1.0 launch plan estimated 10–12 weeks. Actual time from W1 scaffold (June 3) through TestFlight build 2 + Ambient Sound System MVP + OneSignal end-to-end + Visio Divina restructure + 30-day PP content seed + 30 Tradition Reflections landed = ~5 calendar days. Conservative book estimate was ~6x slow. Default heuristic when estimating: industry-standard multi-week estimates for product-decision / glue / content-integration work should be cut to roughly 1/4 to 1/6. Pure code work keeps its code estimate; the compression is on the decision + content + integration + Sanity-entry axes where Sheri is the bottleneck and is fast.
+- **Parallel tracks, not serial phases.** A typical Sheri day spans CC orchestration + Sanity content entry + designer coordination + Apple Developer dashboard + audio sourcing + Cowork content review + content drafting — concurrently, not sequentially. "Phase A then Phase B then Phase C" framing under-uses available throughput. When proposing a multi-step plan, surface the independent threads and let her run them concurrently. The right primitive is a dependency graph, not a Gantt chart.
+- **Calendar-bound constraints that do NOT compress** — surface these early and budget them separately from work hours: Apple Developer enrollment activation (24–48h), Apple Review (1–7 days), TestFlight build processing (5–30 min), DNS propagation (~30 min – 6h), Cloudflare email routing nameserver propagation (24–48h), designer turnaround (TBD per item), friend-with-Android-phone coordination for Play Console verification (~1 person-day). These don't move regardless of how hard Sheri works. Estimates that ignore these will agree to deadlines that physically can't be hit.
+
 ---
 
 ## Key Spec Documents (in this repo)
