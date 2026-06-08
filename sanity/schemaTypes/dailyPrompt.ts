@@ -24,6 +24,14 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'dayTitle',
+      title: 'Editorial Day Title',
+      type: 'string',
+      description:
+        'Optional: a poetic editorial title for this day (e.g. "God Does Not Die" for the Sacred Heart day). Shown prominently above the artwork. Different from the work title, which lives on the linked content item. Added June 7, 2026 (PP-DAYTITLE-01).',
+      validation: (Rule) => Rule.max(80),
+    }),
+    defineField({
       name: 'promptQuestion',
       title: 'Prompt Question',
       type: 'text',

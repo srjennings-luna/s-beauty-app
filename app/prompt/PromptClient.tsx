@@ -4,8 +4,8 @@ import { useEffect, useRef, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { getDailyPrompt, getDailyPromptPreview } from "@/lib/sanity";
-import type { DailyPrompt } from "@/lib/types";
+import { getDailyPrompt, getDailyPromptPreview, getPpDefaults } from "@/lib/sanity";
+import type { DailyPrompt, PpDefaults } from "@/lib/types";
 import { addFavorite, removeFavorite, isFavorite } from "@/lib/favorites";
 import PageTransition from "@/components/ui/PageTransition";
 import NarrationButton from "@/components/NarrationButton";
@@ -109,6 +109,7 @@ function DailyPromptPageInner({
   // Preview mode is always on for the path-based alias (only Presentation uses it).
   const isPreview = !!initialDate || searchParams.get("preview") === "1";
   const [prompt, setPrompt]               = useState<DailyPrompt | null>(null);
+  const [ppDefaults, setPpDefaults]       = useState<PpDefaults | null>(null);
   const [loading, setLoading]             = useState(true);
   const [favorited, setFavorited]         = useState(false);
   const [completed, setCompleted]         = useState(false);
@@ -142,17 +143,25 @@ function DailyPromptPageInner({
   const auditioRangeRef       = useRef<HTMLInputElement | null>(null);
 
   // ── Load prompt — preview mode fetches drafts; falls back to published if no token ─
+  // Also parallel-fetches the ppDefaults singleton so the Actio cascade can use
+  // the editor-tunable default when this day's actio is blank. PP-DEFAULTS-01.
   useEffect(() => {
     const fetchFn = isPreview && dateParam
       ? getDailyPromptPreview(dateParam).catch(() => null).then(data => data ?? getDailyPrompt(dateParam))
       : getDailyPrompt(dateParam);
-    fetchFn
-      .then((data) => {
+    Promise.all([fetchFn, getPpDefaults().catch(() => null)])
+      .then(([data, defaults]) => {
         setPrompt(data ?? null);
+        setPpDefaults(defaults ?? null);
         if (data) {
           setFavorited(isFavorited(data._id));
-          // Parse actio into lines for checkboxes
-          const lines = (data.actio ?? "")
+          // Parse actio into lines for checkboxes — use the same cascade
+          // the render path uses so the checkbox count matches what's shown.
+          const actioText =
+            (data.actio && data.actio.trim()) ||
+            (defaults?.defaultActio && String(defaults.defaultActio).trim()) ||
+            "";
+          const lines = actioText
             .split("\n")
             .map((l: string) => l.trim())
             .filter(Boolean);
@@ -292,13 +301,27 @@ function DailyPromptPageInner({
     );
   }
 
-  // Parse actio text into lines
+  // Actio cascade (PP-DEFAULTS-01): per-day actio on the prompt → editable
+  // ppDefaults.defaultActio singleton → hardcoded last-resort fallback. The
+  // hardcoded value preserves the exact pre-PP-DEFAULTS-01 string so a fresh
+  // dataset with no singleton document still shows something contemplative.
+  const HARDCODED_FALLBACK_ACTIO =
+    "Look for beauty today. In another person. In the ordinary. In what would otherwise pass unnoticed.";
+  const resolvedActio =
+    (prompt.actio && prompt.actio.trim()) ||
+    (ppDefaults?.defaultActio && ppDefaults.defaultActio.trim()) ||
+    HARDCODED_FALLBACK_ACTIO;
+  // Parse the resolved actio into lines. When the resolution comes from the
+  // singleton/hardcoded fallback (one sentence), this becomes a single-line
+  // array — the render path still shows it correctly via the empty-actio-lines
+  // branch below.
   const actioLines = (prompt.actio ?? "")
     .split("\n")
     .map((l: string) => l.trim())
     .filter(Boolean);
-
-  const defaultActio = "Carry one image of beauty with you today. Let it be a question, not an answer.";
+  // Keep the `defaultActio` name for the existing JSX `else` branch — but
+  // route it through the cascade now so editorial can tune the fallback.
+  const defaultActio = resolvedActio;
 
   // Note on nesting order: PPGradientBackground wraps PageTransition (not
   // the other way around). PageTransition uses `transform` + `will-change`
@@ -547,8 +570,14 @@ function DailyPromptPageInner({
             </div>
           )}
 
-          {/* ── Prompt Question ─────────────────────────────────────────── */}
-          {prompt.promptQuestion && (
+          {/* ── Day Title / Prompt Question ───────────────────────────────
+              PP-DAYTITLE-01 (June 7, 2026): prefer the editorial dayTitle
+              (e.g. "God Does Not Die" for the Sacred Heart day) when it's
+              set on the dailyPrompt. Falls back to promptQuestion for
+              backwards-compat with older P&P docs that pre-date dayTitle.
+              Both occupy the same visual slot — Cormorant italic, large
+              type, sits beneath curator note and above artwork hook. */}
+          {(prompt.dayTitle || prompt.promptQuestion) && (
             <div>
               <p
                 className="leading-snug"
@@ -560,7 +589,7 @@ function DailyPromptPageInner({
                   lineHeight: "1.35",
                 }}
               >
-                {prompt.promptQuestion}
+                {prompt.dayTitle || prompt.promptQuestion}
               </p>
             </div>
           )}

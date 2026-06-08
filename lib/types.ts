@@ -207,6 +207,10 @@ export type DailyPromptLectio = {
 export type DailyPrompt = {
   _id: string;
   date: string;
+  /** Optional editorial title for the day (e.g. "God Does Not Die" for the
+   *  Sacred Heart day). Distinct from the work title which lives on the
+   *  linked contentItem. Shown prominently above the artwork. PP-DAYTITLE-01. */
+  dayTitle?: string;
   content: ContentItem;
   promptQuestion: string;
   curatorNote?: string;
@@ -216,6 +220,12 @@ export type DailyPrompt = {
   actio?: string;
   relatedJourney?: Pick<Journey, '_id' | 'title' | 'slug' | 'heroImageUrl'>;
   theme?: Theme;
+};
+
+// Pause & Ponder defaults singleton. Holds the global default Actio shown
+// on any day where dailyPrompt.actio is blank. PP-DEFAULTS-01.
+export type PpDefaults = {
+  defaultActio: string;
 };
 
 // ─── Tradition Reflection ─────────────────────────────────────────────────────

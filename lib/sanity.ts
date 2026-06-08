@@ -256,6 +256,7 @@ export async function getJourneyPreview(slug: string) {
 const DAILY_PROMPT_FIELDS = `
   _id,
   date,
+  dayTitle,
   "content": content->{${CONTENT_ITEM_FIELDS}},
   promptQuestion,
   curatorNote,
@@ -485,6 +486,25 @@ export async function getVisioDefaults() {
  */
 export async function getVisioDefaultsPreview() {
   return previewClient.fetch(VISIO_DEFAULTS_QUERY)
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Pause & Ponder defaults — singleton holding the default Actio shown on any
+// day where the dailyPrompt.actio field is blank. PP-DEFAULTS-01, June 7, 2026.
+// Mirrors visioDefaults pattern. Cascade: prompt.actio → ppDefaults.defaultActio
+// → hardcoded last-resort fallback in PromptClient.tsx.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const PP_DEFAULTS_QUERY = `*[_type == "ppDefaults"][0] {
+  defaultActio,
+}`
+
+export async function getPpDefaults() {
+  return sanityClient.fetch(PP_DEFAULTS_QUERY)
+}
+
+export async function getPpDefaultsPreview() {
+  return previewClient.fetch(PP_DEFAULTS_QUERY)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
