@@ -306,7 +306,7 @@ function DailyPromptPageInner({
   // hardcoded value preserves the exact pre-PP-DEFAULTS-01 string so a fresh
   // dataset with no singleton document still shows something contemplative.
   const HARDCODED_FALLBACK_ACTIO =
-    "Look for beauty today. In another person. In the ordinary. In what would otherwise pass unnoticed.";
+    "Look for beauty today, in a person, in the ordinary, in what would have passed unnoticed.";
   const resolvedActio =
     (prompt.actio && prompt.actio.trim()) ||
     (ppDefaults?.defaultActio && ppDefaults.defaultActio.trim()) ||

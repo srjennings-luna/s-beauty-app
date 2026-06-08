@@ -63,7 +63,7 @@ const SEED = {
   _id: 'ppDefaults',
   _type: 'ppDefaults',
   defaultActio:
-    'Look for beauty today. In another person. In the ordinary. In what would otherwise pass unnoticed.',
+    'Look for beauty today, in a person, in the ordinary, in what would have passed unnoticed.',
 };
 
 async function main() {
