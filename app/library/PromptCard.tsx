@@ -11,6 +11,18 @@ export function formatPromptDate(dateStr: string) {
   return `${month} ${day}`;
 }
 
+// Anchor id used for hash-scroll from external links (e.g. the Explore
+// detail card's P&P contextual link sends users to /library#june-12).
+// Format: lowercase full month + hyphen + day with no leading zero
+// (e.g. "june-12", "march-3"). Matches the URL format in CONTUERI-Explore-
+// Cards-Build-Brief (June 9, 2026).
+export function anchorIdFromDate(dateStr: string): string {
+  const d = new Date(dateStr + "T00:00:00");
+  const month = d.toLocaleDateString("en-US", { month: "long" }).toLowerCase();
+  const day = d.getDate();
+  return `${month}-${day}`;
+}
+
 // Pause & Ponder row card.
 // Used on the Library landing (main archive + Saved section) and on the
 // dedicated /library/saved page. Extracted into its own client component
@@ -28,6 +40,7 @@ export function PromptCard({
   return (
     <Link
       href={prompt.date ? `/prompt?date=${prompt.date}` : "/prompt"}
+      id={prompt.date ? anchorIdFromDate(prompt.date) : undefined}
       className="flex items-start gap-3 px-5 py-3"
       style={{ borderBottom: "0.5px solid rgba(0,0,0,0.08)" }}
     >

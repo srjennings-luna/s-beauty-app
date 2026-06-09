@@ -228,6 +228,33 @@ export type PpDefaults = {
   defaultActio: string;
 };
 
+// Explore detail card payload — what getExploreDetailItem() returns.
+// Per the June 9, 2026 Explore Cards build brief: Explore reads
+// contentItem ONLY (no dailyPrompt field bleed). The journeys + dailyPrompts
+// arrays are reverse-reference lookups for the contextual links on the
+// detail card, not P&P content data.
+export type ExploreDetailItem = {
+  _id: string;
+  _type: string;
+  contentType: ContentType;
+  title: string;
+  description?: string;
+  imageUrl?: string;
+  /** Computed attribution per content type (e.g. "Rembrandt van Rijn, 1669"). */
+  attribution?: string;
+  /** Journeys that link this contentItem via journeyDay.encounterContent. */
+  journeys: Array<{
+    _id: string;
+    title: string;
+    slug: string;
+  }>;
+  /** P&P days that reference this contentItem via dailyPrompt.content. */
+  dailyPrompts: Array<{
+    date: string;
+    dayTitle?: string;
+  }>;
+};
+
 // ─── Tradition Reflection ─────────────────────────────────────────────────────
 
 export type TraditionReflection = {

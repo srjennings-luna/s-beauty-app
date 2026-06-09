@@ -157,6 +157,66 @@ export default function LibraryPage() {
 
   const isLoading = promptsLoading || !isLoaded || favoritesLoading;
 
+  // ── URL-driven navigation: ?expand=june-2026#june-12 ────────────────────────
+  // Used by the Explore detail card's contextual P&P link to send users
+  // directly to a specific date entry in the archive. Two responsibilities:
+  //   1. ?expand=<month-year> → force that accordion open even if it would
+  //      otherwise be collapsed (defensive: today's default is all-expanded,
+  //      but this future-proofs against any state-persistence later).
+  //   2. #<month-day> hash → scroll to the matching PromptCard after async
+  //      content load completes. Next.js does NOT auto-scroll to hashes once
+  //      content lazy-loads via useEffect, so we do it programmatically here.
+  // Read via window.location to skip the useSearchParams + Suspense dance.
+  // Helper: derive "2026-06" from "june-2026".
+  const monthYearToKey = (input: string): string | null => {
+    const m = input.match(/^([a-z]+)-(\d{4})$/i);
+    if (!m) return null;
+    const [, monthName, year] = m;
+    const d = new Date(`${monthName} 1, ${year}`);
+    if (isNaN(d.getTime())) return null;
+    const monthNum = String(d.getMonth() + 1).padStart(2, "0");
+    return `${year}-${monthNum}`;
+  };
+
+  // (1) Apply ?expand once month groups are known (after prompts load).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (allMonthKeys.length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    const expand = params.get("expand");
+    if (!expand) return;
+    const key = monthYearToKey(expand);
+    if (!key || !allMonthKeys.includes(key)) return;
+    setCollapsedMonths((prev) => {
+      if (!prev.has(key)) return prev;
+      const next = new Set(prev);
+      next.delete(key);
+      return next;
+    });
+  }, [allMonthKeys]);
+
+  // (2) Programmatic hash scroll after content is in the DOM. Double rAF so
+  // layout settles after the prompt list mounts; smooth scroll because the
+  // jump from the top of Library to a mid-archive entry can be jarring.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (isLoading) return;
+    const hash = window.location.hash.replace(/^#/, "");
+    if (!hash) return;
+    let raf1 = 0;
+    let raf2 = 0;
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        const el = document.getElementById(hash);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
+  }, [isLoading, collapsedMonths]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-parchment flex items-center justify-center">

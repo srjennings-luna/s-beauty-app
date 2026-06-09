@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Explore Cards — Build Brief for CC</title>
+<style>
+  body { font-family: Georgia, serif; max-width: 860px; margin: 40px auto; padding: 0 28px;
+         line-height: 1.8; background: #fdf6e8; color: #1a1410; }
+  h1 { font-size: 24px; font-weight: 500; border-bottom: 2px solid #C19B5F;
+       padding-bottom: 10px; margin-bottom: 6px; }
+  h2 { font-size: 17px; font-weight: 500; color: #5c3a1a; margin-top: 40px;
+       border-left: 3px solid #C19B5F; padding-left: 10px; }
+  h3 { font-size: 15px; font-weight: 500; color: #3a2010; margin-top: 24px; margin-bottom: 6px; }
+  .meta { font-family: monospace; font-size: 12px; color: #8a7560; margin-bottom: 36px; }
+  p { margin: 0 0 14px; }
+  code { font-family: monospace; font-size: 13px; background: #f0e8d8; padding: 1px 5px;
+         border-radius: 3px; color: #3a1a0a; }
+  pre { background: #f0e8d8; padding: 14px 18px; border-radius: 4px; font-size: 13px;
+        line-height: 1.6; overflow-x: auto; border-left: 3px solid #C19B5F; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0 24px; }
+  th { text-align: left; font-weight: 500; color: #5c3a1a; border-bottom: 1.5px solid #C19B5F;
+       padding: 6px 10px; }
+  td { padding: 8px 10px; border-bottom: 0.5px solid #d4c4a8; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .urgent { background: #fff3e0; border-left: 3px solid #e65c00; padding: 12px 16px;
+            border-radius: 3px; margin: 20px 0; font-size: 14px; }
+  .rule { background: #f5f0e8; border-left: 3px solid #C19B5F; padding: 12px 16px;
+          border-radius: 3px; margin: 16px 0; font-size: 14px; }
+  .remove { color: #c0392b; font-size: 13px; font-family: monospace; }
+  .keep { color: #27ae60; font-size: 13px; font-family: monospace; }
+  ul { margin: 6px 0 16px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .layout-block { background: #1a1410; color: #f0e8dc; padding: 18px 22px; border-radius: 6px;
+                  font-family: monospace; font-size: 13px; line-height: 2; margin: 16px 0 24px; }
+  .layout-block .label { color: #C19B5F; }
+  .layout-block .muted { color: #7a6a58; }
+  .layout-block .divider { border-top: 0.5px solid #2e2820; margin: 8px 0; }
+</style>
+</head>
+<body>
+
+<h1>Explore Cards — Build Brief</h1>
+<div class="meta">
+  For: CC (developer) &nbsp;|&nbsp;
+  Author: Sheri + Cowork &nbsp;|&nbsp;
+  Date: June 9, 2026 &nbsp;|&nbsp;
+  Status: Ready to implement &nbsp;|&nbsp;
+  Updated: June 9, 2026 (detail card flow confirmed, P&P link destination confirmed)
+</div>
+
+<h2>Problem / current production state</h2>
+<p>Explore surfaces currently pull data from the <code>dailyPrompt</code> schema, causing P&amp;P-specific fields — <code>context</code>, P&amp;P day title, <code>actio</code> — to bleed into the Explore UX. Explore is content-centric, not day-centric. All card data must come from <code>contentItem</code> directly.</p>
+
+<p>Additional issues observed in the live app:</p>
+<ul>
+  <li>List card showing <code>artworkHook</code> excerpt (should show <code>description</code>)</li>
+  <li>Detail card showing <code>dailyPrompt.context</code> text (P&amp;P field — must not appear on Explore)</li>
+  <li><strong>Sacred art + landscape: currently tap straight into Visio Divina with no intermediate detail card.</strong> The new detail card described in this brief does not yet exist — it must be added.</li>
+  <li><strong>All other content types (literature, food &amp; wine, music, etc.) currently show "PRAY WITH THIS IMAGE" — this must be removed.</strong> These types never do Visio Divina. They get REFLECT only.</li>
+  <li>REFLECT expand has a border box — design decision was to remove it (text + chevron only)</li>
+</ul>
+
+<div class="urgent">
+  <strong>Separate urgent fix (Task #113) — must ship before June 12:</strong><br>
+  <code>getDailyPrompt()</code> fallback returns the last seeded date (July 11) when today has no matching prompt.
+  Fix: change fallback from <code>order(date desc)[0]</code> to <code>date &lt;= $today | order(date desc)[0]</code>.
+  This is independent of the Explore work and should be a fast patch.
+</div>
+
+<h2>Data source rule</h2>
+<div class="rule">
+  <strong>All Explore card data comes from <code>contentItem</code> fields only.</strong><br>
+  No <code>dailyPrompt</code> fields on any Explore surface — not context, not actio, not dayTitle, not curatorNote. Use reverse references only to build contextual links (see below).
+</div>
+
+<h2>Fields to use</h2>
+<table>
+  <tr><th>Field</th><th>Used as</th><th>Notes</th></tr>
+  <tr><td><code>contentType</code></td><td>Type label</td><td>Display as uppercase label, e.g., SACRED ART. See type list below.</td></tr>
+  <tr><td><code>title</code></td><td>Display title</td><td></td></tr>
+  <tr><td><code>attribution</code></td><td>Artist / author / source</td><td>Muted style below title</td></tr>
+  <tr><td><code>description</code></td><td>Body text — list card and detail card</td><td>2–3 sentences, factual. Use on both surfaces.</td></tr>
+  <tr><td><code>image</code></td><td>Card image</td><td>Detail card only (full width, top)</td></tr>
+  <tr><td><code>artworkHook</code></td><td><span class="remove">NOT USED on Explore</span></td><td>artworkHook is for P&amp;P and Journey surfaces only</td></tr>
+</table>
+
+<h2>List card layout</h2>
+<p>Shown on the theme content list (after tapping a theme bubble in Explore). Header = theme name.</p>
+
+<div class="layout-block">
+  <span class="label">SACRED ART</span> &nbsp;&larr; contentType, uppercase, gold<br>
+  The Return of the Prodigal Son &nbsp;&larr; title<br>
+  <span class="muted">Rembrandt van Rijn, c. 1669</span> &nbsp;&larr; attribution, muted<br>
+  <span class="muted">A son kneels before his father, his shoes worn through...</span> &nbsp;&larr; description, muted/smaller
+</div>
+
+<p><strong>Remove from list card:</strong> any <code>dailyPrompt</code> title, any <code>context</code> text, any <code>artworkHook</code> text, any P&amp;P reference.</p>
+
+<h2>Detail card layout</h2>
+<p>Opens when user taps a list card. Full screen view. <strong>This is the stop before Visio Divina</strong> — the user sees the detail card first, then taps ENTER VISIO DIVINA to go to the Gaze step. Confirmed flow for sacred-art and landscape.</p>
+
+<div class="layout-block">
+  [ IMAGE — full width, top ] &larr; contentItem.image<br>
+  <div class="divider"></div>
+  <span class="label">SACRED ART</span> &nbsp;&larr; contentType label<br>
+  The Return of the Prodigal Son &nbsp;&larr; title (full width, no competing element)<br>
+  <span class="muted">Rembrandt van Rijn, c. 1669</span> &nbsp;&larr; attribution: artist name + year/date (contentItem.attribution)<br>
+  <br>
+  A son kneels before his father, his shoes worn through, his head pressed<br>
+  against the old man's chest. The father's hands rest on the son's back —<br>
+  one masculine, one feminine, both gentle. The older brother stands in<br>
+  shadow, watching. The light falls only on the reunion.<br>
+  &nbsp;&larr; description field<br>
+  <div class="divider"></div>
+  <span class="label">ENTER VISIO DIVINA</span> &rsaquo; &nbsp;&larr; action zone (see type rules below)<br>
+  <div class="divider"></div>
+  <span class="muted">Part of: The Prodigal Son Journey &rsaquo;</span> &nbsp;&larr; Journey link (if applicable)<br>
+  <span class="muted">Pause &amp; Ponder — March 12 &rsaquo;</span> &nbsp;&larr; P&amp;P link (if applicable)
+</div>
+
+<h2>Action zone — type rules</h2>
+<p>The action zone sits below attribution, above contextual links. It is type-dependent.</p>
+
+<table>
+  <tr><th>contentType(s)</th><th>CTA</th><th>What changes</th><th>Destination</th></tr>
+  <tr>
+    <td><code>sacred-art</code>, <code>landscape</code></td>
+    <td>ENTER VISIO DIVINA →</td>
+    <td><strong>ADD</strong> — the intermediate detail card is new. Currently these types tap straight into Visio Divina. The detail card (with description + this CTA) must be built and inserted between the list and the Gaze step.</td>
+    <td>Gaze step of Visio Divina (existing <code>/pray/[id]</code> flow)</td>
+  </tr>
+  <tr>
+    <td>All other types<br><span style="font-size:12px; color:#7a6a58;">literature, food-and-wine, music, poetry, film, object, place, practice</span></td>
+    <td>REFLECT (text + chevron only — no border box)</td>
+    <td><strong>REMOVE "PRAY WITH THIS IMAGE"</strong> — currently showing on these types in error. These types never enter Visio Divina. REFLECT stays; "PRAY WITH THIS IMAGE" is removed entirely.</td>
+    <td>Existing REFLECT expand</td>
+  </tr>
+</table>
+
+<div class="rule">
+  <strong>ENTER VISIO DIVINA appears on sacred-art and landscape ONLY.</strong> No other content type has this CTA — not literature, not food &amp; wine, not music, not any other type. If a content type is not sacred-art or landscape, the ENTER VISIO DIVINA CTA must not appear anywhere on its list card or detail card. Period.
+</div>
+
+<div class="rule">
+  <strong>Image: expand to full bleed — the image does not move up, it grows.</strong> The bottom edge of the image stays exactly at its current fixed position. The image expands: upward to the top of the screen (removing the top gap), and outward to the left and right screen edges (removing side margins). The lower content block (title, attribution, etc.) does not move — its vertical position is unchanged. Only the image dimensions change: taller and wider, anchored at the bottom.
+</div>
+
+<div class="rule">
+  <strong>REFLECT position for non-VD types:</strong> REFLECT (text + chevron, no border box) sits <em>below the description</em> — not next to the title as it currently appears. The description field is new content being added between attribution and REFLECT. This means the current boxed REFLECT button beside the title is removed and replaced with the text+chevron version lower in the layout, after description. "PRAY WITH THIS IMAGE →" is removed entirely from this position.
+</div>
+
+<div class="rule">
+  <strong>Remove the border/outline box from REFLECT.</strong> Display as text + chevron only. The expand/collapse behavior stays; only the border is removed.
+</div>
+
+<h2>Contextual links</h2>
+<p>Below the action zone, separated by a divider. Shown only when the <code>contentItem</code> is referenced by a journey or a P&amp;P day. These require reverse reference lookups (see GROQ below).</p>
+
+<table>
+  <tr><th>Condition</th><th>Link text</th><th>Destination</th></tr>
+  <tr>
+    <td>contentItem is referenced by a <code>journeyDay</code></td>
+    <td>Part of: [Journey Name] →</td>
+    <td>Journey overview page</td>
+  </tr>
+  <tr>
+    <td>contentItem is referenced by a <code>dailyPrompt</code></td>
+    <td>Pause &amp; Ponder — [Month Day] →</td>
+    <td><code>/library?view=all#[month-day]</code> — always loads Library in "All P&P" view with date anchor, so the entry is visible regardless of the user's last Library filter state. Example: <code>/library?view=all#june-12</code> scrolls to the June 12 entry. Anchor format: lowercase month + hyphen + day, no leading zero.</td>
+  </tr>
+  <tr>
+    <td>Multiple journeys or multiple P&amp;P dates</td>
+    <td>Expandable list (collapsed by default)</td>
+    <td>Same destinations per item</td>
+  </tr>
+  <tr>
+    <td>No references</td>
+    <td><em>Nothing shown</em></td>
+    <td>—</td>
+  </tr>
+</table>
+
+<div class="rule">
+  <strong>Favorites / Saved do not affect P&amp;P link destination.</strong> The link always goes to the dated P&amp;P entry in the Library archive — not to the user's Saved section. Whether a user has the item favorited is irrelevant to this navigation. The P&amp;P link's job is to show the item in its P&amp;P context (day title, actio, etc.), which lives in the dated archive, not in the Saved view.
+</div>
+
+<h2>GROQ — reverse reference queries</h2>
+<p>Run these queries on the detail card load, keyed by <code>contentItem._id</code>.</p>
+
+<h3>Journey membership</h3>
+<pre>*[_type == "journeyDay" && references($contentItemId)] {
+  journey-> {
+    _id,
+    title,
+    slug
+  }
+}</pre>
+
+<h3>P&amp;P day membership</h3>
+<pre>*[_type == "dailyPrompt" && references($contentItemId)] {
+  date,
+  dayTitle
+} | order(date asc)</pre>
+
+<p>Format the date as "Month Day" (e.g., "March 12") for the link label. Link destination = Library page.</p>
+
+<h2>What to remove / clean up</h2>
+<table>
+  <tr><th>Element</th><th>Action</th><th>Scope</th></tr>
+  <tr><td><code>dailyPrompt.context</code> text</td><td>Remove</td><td>Detail card — all types</td></tr>
+  <tr><td><code>dailyPrompt.dayTitle</code></td><td>Remove</td><td>List card and detail card — all types</td></tr>
+  <tr><td><code>artworkHook</code> excerpt</td><td>Remove</td><td>List card</td></tr>
+  <tr><td>"PRAY WITH THIS IMAGE →"</td><td>Remove</td><td>All types — including sacred-art and landscape. This CTA is retired everywhere. Sacred-art/landscape get "ENTER VISIO DIVINA →" on the new detail card instead.</td></tr>
+  <tr><td>Border/outline box on REFLECT</td><td>Remove border only</td><td>All non-sacred-art/landscape types</td></tr>
+  <tr><td>Direct sacred-art/landscape → VD tap (no intermediate card)</td><td>Replace with detail card stop</td><td>Sacred-art and landscape only. ADD the new detail card as the intermediate screen.</td></tr>
+</table>
+
+<h2>Visio Divina — typography and color (all VD screens)</h2>
+<p>Font weight, colors, and opacity in Visio Divina currently look off. All VD screens (Gaze, Meditate, Pray, Contemplate, Action) and the Explore detail card must follow Journey step rules — with one specific difference for the type label color.</p>
+
+<h3>Typography — identical to Journey steps</h3>
+<ul>
+  <li>Montserrat — labels and UI (e.g., "GAZE" step label)</li>
+  <li>Open Sans regular — body text</li>
+  <li>Open Sans italic — contemplative instructional text</li>
+  <li>Cormorant Garamond — quoted material only, 1.3rem minimum</li>
+</ul>
+<p>All other text: standard cream on espresso, same weights and opacities as Journey steps. No custom opacity values, no one-off treatments.</p>
+
+<h3>The only colored text: the content item type label</h3>
+<div class="rule">
+  <strong>The content item type label (e.g., "SACRED ART") is the only colored text on the detail card and in VD screens.</strong> Its color is the <strong>P&amp;P gradient color for that content type</strong> — not the Explore theme color, not app green.
+  <br><br>
+  Examples: Sacred Art = Mineral Blue (<code>#7ba2b8</code>). Literature = Old Ochre (<code>#c9a07c</code>). Landscape = Sage Stone (<code>#a8ae9a</code>). See full type → color mapping in CLAUDE.md P&amp;P Gradient Color System section.
+  <br><br>
+  <strong>Difference from Journeys:</strong> In Journey steps, the type identifier uses app green / sage (<code>#4a7a62</code>). On the Explore detail card and in VD, it uses the content type's P&amp;P gradient color instead. Everything else is identical.
+</div>
+
+<p>This is a polish pass, not a structural change. The goal is visual consistency across Journey steps and VD, with the type label as the single color signal for content type.</p>
+
+<h2>Content type reference</h2>
+<p>The 9 live <code>contentType</code> schema values and their display labels. <strong>Use these exactly — do not use poetry, film, object, place, or food-and-wine (those don't exist in the schema).</strong></p>
+<table>
+  <tr><th>Schema value</th><th>Display label</th><th>VD or REFLECT?</th></tr>
+  <tr><td><code>sacred-art</code></td><td>SACRED ART</td><td>ENTER VISIO DIVINA</td></tr>
+  <tr><td><code>landscape</code></td><td>LANDSCAPE</td><td>ENTER VISIO DIVINA</td></tr>
+  <tr><td><code>photography</code></td><td>PHOTOGRAPHY</td><td>REFLECT</td></tr>
+  <tr><td><code>thinker</code></td><td>THINKER</td><td>REFLECT</td></tr>
+  <tr><td><code>literature</code></td><td>LITERATURE</td><td>REFLECT</td></tr>
+  <tr><td><code>music</code></td><td>MUSIC</td><td>REFLECT</td></tr>
+  <tr><td><code>food-wine</code></td><td>FOOD &amp; WINE</td><td>REFLECT</td></tr>
+  <tr><td><code>watch-listen</code></td><td>WATCH &amp; LISTEN</td><td>REFLECT</td></tr>
+  <tr><td><code>math-science</code></td><td>MATH &amp; SCIENCE</td><td>REFLECT</td></tr>
+</table>
+
+<h2>Confirmed flow summary (June 9, 2026)</h2>
+<p><strong>"PRAY WITH THIS IMAGE" is retired everywhere.</strong> It no longer exists on any surface in Explore.</p>
+<p><strong>Sacred art + landscape:</strong> Currently tap straight into Visio Divina. New flow: Explore list → NEW detail card (image + type label + title + attribution + description + ENTER VISIO DIVINA →) → Gaze step. The detail card is a new screen to build.</p>
+<p><strong>All other types:</strong> Remove "PRAY WITH THIS IMAGE" wherever it appears. These types use REFLECT (text + chevron, no border box). They never enter Visio Divina.</p>
+<p><strong>Attribution format:</strong> Artist name + date/year reference (e.g., "Rembrandt van Rijn, c. 1669"). Source: <code>contentItem.attribution</code>.</p>
+<p><strong>P&amp;P link destination:</strong> <code>/library?view=all#[month-day]</code>. Always loads Library in All view. Anchor format: lowercase, hyphenated, no leading zero (e.g., <code>#june-12</code>). Favorites/Saved status is irrelevant — link always goes to the dated archive entry, not the Saved section.</p>
+
+</body>
+</html>

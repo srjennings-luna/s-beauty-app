@@ -152,6 +152,69 @@ export async function getContentItemById(id: string) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Explore detail card — per-type attribution coalesce + reverse references
+// Used by the Explore detail surface (sacred-art + landscape get ENTER VISIO
+// DIVINA; other 7 types get REFLECT). Per CONTUERI-Explore-Cards-Build-Brief
+// (June 9, 2026). Data source rule: Explore reads contentItem ONLY, never
+// dailyPrompt fields. dailyPrompts on the projection below is a reverse-ref
+// lookup for the contextual P&P link, not P&P content bleed.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Computes a single human-readable attribution string per contentType.
+// Verbose because each contentType has different creator fields; this
+// keeps the per-type formatting explicit and defends against missing
+// sub-fields (e.g. sacred-art with artist but no year). Falls through
+// to the legacy `attribution` field for orphan records that predate the
+// per-type split. See CLAUDE.md "Content Type Check Rule" — 9 schema-
+// valid contentTypes; the brief's 4 invented types (poetry/film/object/
+// place) don't exist in production.
+const EXPLORE_ATTRIBUTION_GROQ = `"attribution": select(
+  contentType == "sacred-art" && defined(artist) && defined(year) => artist + ", " + year,
+  contentType == "sacred-art" && defined(artist) => artist,
+  contentType == "photography" && defined(artist) && defined(year) => artist + ", " + year,
+  contentType == "photography" && defined(artist) => artist,
+  contentType == "thinker" && defined(thinkerName) && defined(era) => thinkerName + " · " + era,
+  contentType == "thinker" && defined(thinkerName) => thinkerName,
+  contentType == "literature" && defined(author) && defined(workTitle) => author + ", " + workTitle,
+  contentType == "literature" && defined(author) => author,
+  contentType == "music" && defined(composer) && defined(performer) => composer + " · " + performer,
+  contentType == "music" && defined(composer) => composer,
+  contentType == "food-wine" && defined(craftTradition) => craftTradition,
+  contentType == "landscape" && defined(locationName) && defined(country) => locationName + ", " + country,
+  contentType == "landscape" && defined(locationName) => locationName,
+  contentType == "watch-listen" && defined(series) => series,
+  contentType == "math-science" && defined(discipline) => discipline,
+  attribution
+)`
+
+export const EXPLORE_DETAIL_FIELDS = `
+  _id,
+  _type,
+  contentType,
+  title,
+  description,
+  "imageUrl": image.asset->url,
+  ${EXPLORE_ATTRIBUTION_GROQ},
+  "journeys": *[_type == "journeyDay" && references(^._id)] {
+    "_id": journey->_id,
+    "title": journey->title,
+    "slug": journey->slug.current
+  },
+  "dailyPrompts": *[_type == "dailyPrompt" && references(^._id) && defined(date)] {
+    date,
+    dayTitle
+  } | order(date asc)
+`
+
+export async function getExploreDetailItem(id: string) {
+  return sanityClient.fetch(
+    `*[_type == "contentItem" && _id == $id][0] {${EXPLORE_DETAIL_FIELDS}}`,
+    { id },
+    { cache: 'no-store' }
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Journeys
 // ─────────────────────────────────────────────────────────────────────────────
 
