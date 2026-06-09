@@ -15,13 +15,15 @@
  * dailyPrompts) on that type are reference lookups for contextual links,
  * not P&P field bleed.
  *
- * Image-anchor rule (brief Section "Image: expand to full bleed"): the
- * bottom edge of the image stays exactly at the existing fixed position;
- * the image grows upward to the top of the screen and outward to the side
- * edges. The lower content block does not move. Implemented as a flex
- * column where the image area is `flex-1` (grows to fill remaining space)
- * with `object-cover` + bottom-anchored alignment, and the content panel
- * is `flex-shrink-0` at the bottom.
+ * Image rule (brief Section "Image: expand to full bleed", refined June 9
+ * after Sheri tested portrait + landscape edge cases): match the VD Gaze
+ * step pattern exactly — fixed-height image container (65dvh) with
+ * object-cover. The earlier flex-1 + object-contain approach created
+ * espresso bars on any image whose aspect ratio didn't match the
+ * available space; the VD pattern gives full-bleed visual every time,
+ * and TransformWrapper's pinch + pan let users recover any cropped
+ * region (same affordance as VD Gaze). Bottom panel sits naturally below
+ * the image; the inner scroll container handles any overflow content.
  *
  * Phase C will refactor non-VD types to use a sibling pattern; this
  * component is purposely scoped to sacred-art + landscape for now.
@@ -111,12 +113,11 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
       className="fixed inset-0 z-[60] flex flex-col"
       style={{
         background: C.espresso,
-        // 100dvh + overflow-hidden so iOS Safari's collapsing URL bar
-        // doesn't shift the content panel. Matches VD-SCROLL-01 pattern.
         height: "100dvh",
       }}
     >
-      {/* Header — close + favorite. flex-shrink-0 so it stays at the top. */}
+      {/* Chrome — close + favorite. flex-shrink-0 keeps it at the top of
+          the column; the scrollable region below scrolls under it. */}
       <div className="flex items-center justify-between px-4 pt-3 pb-2 flex-shrink-0">
         <button
           onClick={onClose}
@@ -140,52 +141,52 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
         <FavoriteButton itemId={item._id} type="contentItem" />
       </div>
 
-      {/* Image area — flex-1 so it absorbs all remaining height between
-          chrome and bottom panel. object-cover with bottom-anchored
-          alignment so the image grows up + outward, bottom edge fixed. */}
-      <div className="flex-1 min-h-0 overflow-hidden">
-        <TransformWrapper
-          initialScale={1}
-          minScale={1}
-          maxScale={8}
-          centerOnInit={false}
-          doubleClick={{ mode: "toggle", step: 2 }}
-        >
-          <TransformComponent
-            wrapperStyle={{ width: "100%", height: "100%" }}
-            contentStyle={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent: "center",
-            }}
+      {/* Scrollable inner area — fixed-height image at top + natural-height
+          bottom panel below. Image uses object-cover so it always fills
+          its container with no espresso bars; pinch + pan inside the
+          TransformWrapper let users recover any cropped region (same
+          affordance as VD Gaze). 65dvh matches the VD Gaze image height. */}
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="w-full" style={{ height: "65dvh" }}>
+          <TransformWrapper
+            initialScale={1}
+            minScale={1}
+            maxScale={8}
+            centerOnInit={false}
+            doubleClick={{ mode: "toggle", step: 2 }}
           >
-            {item.imageUrl && (
-              <img
-                src={item.imageUrl}
-                alt={item.title}
-                className="w-full h-full object-contain"
-                style={{ objectPosition: "center bottom" }}
-                draggable={false}
-              />
-            )}
-          </TransformComponent>
-        </TransformWrapper>
-      </div>
+            <TransformComponent
+              wrapperStyle={{ width: "100%", height: "100%" }}
+              contentStyle={{ width: "100%", height: "100%" }}
+            >
+              {item.imageUrl && (
+                <img
+                  src={item.imageUrl}
+                  alt={item.title}
+                  draggable={false}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                  className="select-none"
+                />
+              )}
+            </TransformComponent>
+          </TransformWrapper>
+        </div>
 
-      {/* Bottom content panel — fixed at bottom (flex-shrink-0). Holds
-          type label, title, attribution, description, action zone,
-          contextual links. Scrolls internally if content runs long. */}
-      <div
-        className="flex-shrink-0 overflow-y-auto"
-        style={{
-          background: C.espresso,
-          borderTop: `1px solid ${C.divider}`,
-          maxHeight: "55dvh",
-          paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)",
-        }}
-      >
+        {/* Bottom content panel — natural height. Sits directly below
+            the image. The inner scroll container above handles overflow
+            if total content exceeds viewport. */}
+        <div
+          style={{
+            background: C.espresso,
+            borderTop: `1px solid ${C.divider}`,
+            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)",
+          }}
+        >
         <div className="px-5 pt-4 pb-2">
           {/* Type label — Montserrat caps, P&P gradient color. The ONLY
               colored text on the card (per brief Section "The only
@@ -496,6 +497,7 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
             )}
           </div>
         )}
+        </div>
       </div>
     </div>
   );
