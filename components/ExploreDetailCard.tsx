@@ -76,11 +76,13 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
   // reflection questions/context (Phase C, June 9, 2026 build brief).
   const isVdEligible =
     item.contentType === "sacred-art" || item.contentType === "landscape";
+  // Per the June 9, 2026 build brief: NO context field on Explore.
+  // contentItem.context is editorial background that's meant for P&P
+  // and Journey contexts — Explore stays out of that lane entirely.
   const hasReflectContent =
     (item.reflectionQuestions?.length ?? 0) > 0 ||
     !!item.scripturePairing ||
-    !!item.quote?.text ||
-    !!item.context;
+    !!item.quote?.text;
 
   // Lock body scroll while modal is open (matches PrayClient pattern).
   useEffect(() => {
@@ -163,7 +165,7 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
               <img
                 src={item.imageUrl}
                 alt={item.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
                 style={{ objectPosition: "center bottom" }}
                 draggable={false}
               />
@@ -304,29 +306,6 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
 
             {showReflect && (
               <div className="mt-4 space-y-4">
-                {item.context && (
-                  <div>
-                    <h4
-                      className="text-[10px] font-semibold uppercase tracking-[0.18em] mb-1.5"
-                      style={{
-                        color: C.creamFaint,
-                        fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
-                      }}
-                    >
-                      Context
-                    </h4>
-                    <p
-                      className="text-sm leading-relaxed"
-                      style={{
-                        color: C.cream,
-                        fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-                      }}
-                    >
-                      {item.context}
-                    </p>
-                  </div>
-                )}
-
                 {item.scripturePairing && (
                   <div>
                     <h4

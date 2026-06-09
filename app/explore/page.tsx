@@ -7,6 +7,7 @@ import { getAllContentItems, getThemes, getExploreDetailItem } from "@/lib/sanit
 import type { ContentItem, Theme, ContentType, Artwork, LocationType, ExploreDetailItem } from "@/lib/types";
 import ExploreDetailCard from "@/components/ExploreDetailCard";
 import ThemeBubbleCanvas, { getThemeColor } from "@/components/ThemeBubbleCanvas";
+import { getContentTypeColor, getContentTypeLabel } from "@/lib/contentTypeColors";
 
 // Dynamically import map (no SSR)
 const GlobalMap = dynamic(() => import("@/components/GlobalMap"), {
@@ -21,17 +22,9 @@ const GlobalMap = dynamic(() => import("@/components/GlobalMap"), {
   ),
 });
 
-const CONTENT_TYPE_LABELS: Record<ContentType, string> = {
-  "sacred-art": "Sacred Art",
-  "photography": "Photography",
-  "thinker": "Thinkers",
-  "literature": "Literature",
-  "music": "Music",
-  "food-wine": "Food & Wine",
-  "landscape": "Landscape",
-  "watch-listen": "Watch & Listen",
-  "math-science": "Pattern & Proof",
-};
+// Content type labels live in lib/contentTypeColors.ts as CONTENT_TYPE_DISPLAY_LABELS
+// (singular forms — THINKER not THINKERS) — single source of truth, also used by
+// ExploreDetailCard. The local map that lived here is retired (C.1, June 9, 2026).
 
 const CONTENT_TYPE_TO_LOCATION: Record<ContentType, LocationType> = {
   "sacred-art": "sacred-art",
@@ -545,6 +538,11 @@ export default function ExplorePage() {
                     </div>
                     {/* Typographic meta — no prop-rule between image and text */}
                     <div style={{ padding: "14px 18px 20px" }}>
+                      {/* Type label — P&P gradient color for that contentType
+                          (C.1, June 9, 2026 build brief). Single source of
+                          truth for the label text + color: lib/contentTypeColors.
+                          Matches the ExploreDetailCard label exactly so list
+                          and detail card read as the same type signal. */}
                       <div
                         style={{
                           fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
@@ -552,11 +550,11 @@ export default function ExplorePage() {
                           fontWeight: 600,
                           textTransform: "uppercase",
                           letterSpacing: "0.18em",
-                          color: "#7a9a8a",
+                          color: getContentTypeColor(item.contentType),
                           marginBottom: 7,
                         }}
                       >
-                        {CONTENT_TYPE_LABELS[item.contentType]}
+                        {getContentTypeLabel(item.contentType)}
                       </div>
                       <h3
                         style={{

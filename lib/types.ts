@@ -242,8 +242,9 @@ export type ExploreDetailItem = {
   imageUrl?: string;
   /** Computed attribution per content type (e.g. "Rembrandt van Rijn, 1669"). */
   attribution?: string;
-  /** Reflect-panel content for non-VD types (Phase C, June 9, 2026). */
-  context?: string;
+  /** Reflect-panel content for non-VD types (Phase C, June 9, 2026).
+   *  contentItem.context is intentionally NOT projected — per the build
+   *  brief, no context field appears on Explore (any surface). */
   reflectionQuestions?: string[];
   scripturePairing?: { verse: string; reference: string };
   quote?: { text?: string; source?: string; attribution?: string };

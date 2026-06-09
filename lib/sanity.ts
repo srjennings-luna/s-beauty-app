@@ -194,7 +194,6 @@ export const EXPLORE_DETAIL_FIELDS = `
   title,
   description,
   "imageUrl": image.asset->url,
-  context,
   reflectionQuestions,
   scripturePairing,
   quote,
