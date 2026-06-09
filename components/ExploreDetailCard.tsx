@@ -116,37 +116,12 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
         height: "100dvh",
       }}
     >
-      {/* Chrome — close + favorite. flex-shrink-0 keeps it at the top of
-          the column; the scrollable region below scrolls under it. */}
-      <div className="flex items-center justify-between px-4 pt-3 pb-2 flex-shrink-0">
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          className="w-10 h-10 flex items-center justify-center"
-          style={{ color: C.cream }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
-        <FavoriteButton itemId={item._id} type="contentItem" />
-      </div>
-
-      {/* Image area — flex-1 so it absorbs ALL remaining vertical space
-          between chrome and the bottom panel. Combined with object-cover
-          on the image element below, this guarantees no espresso bars
-          on any aspect ratio; pinch + pan inside the TransformWrapper
-          let users recover any cropped region (same affordance as
-          VD Gaze). */}
+      {/* Image area — flex-1 fills from y=0 to top of bottom panel.
+          Chrome (close + favorite) overlays on top as absolutely-
+          positioned floating buttons so the image reaches the very top
+          of the viewport with no chrome bar pushing it down. Matches
+          the VD Gaze pattern where the image extends behind the chrome
+          row (calc 65vh + safe-area + chrome height in PrayClient.tsx). */}
       <div className="flex-1 min-h-0">
         <TransformWrapper
           initialScale={1}
@@ -500,6 +475,45 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
             )}
           </div>
         )}
+      </div>
+
+      {/* Chrome overlay — absolutely positioned over the image so the image
+          reaches the very top of the viewport. Subtle dark gradient backdrop
+          keeps the close + favorite icons readable against bright images
+          (gold icons, white skies) without painting a hard espresso bar
+          that interrupts the image. Safe-area-inset-top so the chrome
+          clears the iOS notch / Dynamic Island. */}
+      <div
+        className="absolute top-0 left-0 right-0 z-[61] flex items-center justify-between px-4 pb-2"
+        style={{
+          paddingTop: "calc(env(safe-area-inset-top, 0px) + 0.75rem)",
+          background:
+            "linear-gradient(to bottom, rgba(22,17,13,0.55) 0%, rgba(22,17,13,0.25) 50%, rgba(22,17,13,0) 100%)",
+        }}
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="w-10 h-10 flex items-center justify-center"
+          style={{ color: C.cream }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-5 h-5"
+            style={{
+              filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.5))",
+            }}
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+        <FavoriteButton itemId={item._id} type="contentItem" />
       </div>
     </div>
   );
