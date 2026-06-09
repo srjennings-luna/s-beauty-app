@@ -3,10 +3,10 @@
 import { useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { getAllContentItems, getThemes } from "@/lib/sanity";
-import type { ContentItem, Theme, ContentType, Artwork, LocationType } from "@/lib/types";
+import { getAllContentItems, getThemes, getExploreDetailItem } from "@/lib/sanity";
+import type { ContentItem, Theme, ContentType, Artwork, LocationType, ExploreDetailItem } from "@/lib/types";
 import ArtworkViewer from "@/components/ArtworkViewer";
+import ExploreDetailCard from "@/components/ExploreDetailCard";
 import ThemeBubbleCanvas, { getThemeColor } from "@/components/ThemeBubbleCanvas";
 
 // Dynamically import map (no SSR)
@@ -72,7 +72,6 @@ function toArtwork(item: ContentItem): Artwork {
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ExplorePage() {
-  const router = useRouter();
   const [content, setContent] = useState<ContentItem[]>([]);
   const [themes, setThemes] = useState<Theme[]>([]);
   const [loading, setLoading] = useState(true);
@@ -82,6 +81,11 @@ export default function ExplorePage() {
   const [selectedTheme, setSelectedTheme] = useState<Theme | null>(null);
   const [showMap, setShowMap] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Artwork | null>(null);
+  // Sacred-art + landscape land in the new ExploreDetailCard surface
+  // (June 9, 2026 Explore Cards build, Phase B). Other contentTypes
+  // continue to use ArtworkViewer until Phase C refactors them.
+  const [selectedExploreDetail, setSelectedExploreDetail] = useState<ExploreDetailItem | null>(null);
+  const [exploreDetailLoading, setExploreDetailLoading] = useState(false);
 
   // Bubble vs list view on the landing screen. Defaults to bubbles unless
   // the user has prefers-reduced-motion set, in which case list is more
@@ -492,24 +496,29 @@ export default function ExplorePage() {
                   item.thinkerName ??
                   item.locationName ??
                   "";
-                // Sacred art and landscape items go STRAIGHT to Visio
-                // Divina on tap (June 5, 2026 — Sheri's call). The
-                // previous two-step pattern (tap card → P&P-style
-                // detail page with "Pray with this image" CTA → enter
-                // Visio Divina) added friction with no editorial gain
-                // for image-based contemplative content. The detail
-                // modal stays as the destination for non-visio content
-                // types (music, literature, thinker, etc.) where the
-                // detail surface is the actual content.
+                // Sacred art + landscape land in the ExploreDetailCard
+                // (June 9, 2026 — Explore Cards build brief, Phase B).
+                // The June 5 "tap straight into Visio Divina" pattern
+                // is reversed: users now see the intermediate detail
+                // card (image + type label + title + attribution +
+                // description + ENTER VISIO DIVINA →) before entering
+                // the Gaze step. Other contentTypes continue to use
+                // ArtworkViewer until Phase C refactors them.
                 const showVisio =
                   item.contentType === "sacred-art" ||
                   item.contentType === "landscape";
                 return (
                   <button
                     key={item._id}
-                    onClick={() => {
+                    onClick={async () => {
                       if (showVisio) {
-                        router.push(`/pray/${item._id}`);
+                        setExploreDetailLoading(true);
+                        try {
+                          const detail = await getExploreDetailItem(item._id);
+                          if (detail) setSelectedExploreDetail(detail);
+                        } finally {
+                          setExploreDetailLoading(false);
+                        }
                       } else {
                         setSelectedItem(toArtwork(item));
                       }
@@ -605,6 +614,29 @@ export default function ExplorePage() {
       {/* ── Content Detail Viewer ── */}
       {selectedItem && (
         <ArtworkViewer artwork={selectedItem} onClose={() => setSelectedItem(null)} />
+      )}
+
+      {/* ── Explore Detail Card (sacred-art + landscape, Phase B) ── */}
+      {selectedExploreDetail && (
+        <ExploreDetailCard
+          item={selectedExploreDetail}
+          onClose={() => setSelectedExploreDetail(null)}
+        />
+      )}
+
+      {/* Brief loading overlay while ExploreDetailItem fetch is in flight.
+          Keeps the tap feeling responsive (~200-500ms typical fetch). */}
+      {exploreDetailLoading && !selectedExploreDetail && (
+        <div
+          className="fixed inset-0 z-[59] flex items-center justify-center pointer-events-none"
+          style={{ background: "rgba(22,17,13,0.4)" }}
+          aria-hidden="true"
+        >
+          <div
+            className="w-8 h-8 border-2 border-white/20 rounded-full animate-spin"
+            style={{ borderTopColor: "rgba(253,246,232,0.7)" }}
+          />
+        </div>
       )}
     </div>
   );

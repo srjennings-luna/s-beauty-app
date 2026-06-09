@@ -1,0 +1,328 @@
+"use client";
+
+/**
+ * ExploreDetailCard — the intermediate detail surface for sacred-art and
+ * landscape contentItems on Explore (Phase B of the June 9, 2026 Explore
+ * Cards build brief).
+ *
+ * The two image-based contentTypes used to bypass this surface and tap
+ * straight into Visio Divina. Per the brief, they now stop here first:
+ * the user sees the artwork + title + attribution + description, then
+ * taps ENTER VISIO DIVINA to enter the Gaze step.
+ *
+ * Data source rule (brief Section "Data source rule"): reads contentItem
+ * ONLY via ExploreDetailItem. The reverse-reference arrays (journeys,
+ * dailyPrompts) on that type are reference lookups for contextual links,
+ * not P&P field bleed.
+ *
+ * Image-anchor rule (brief Section "Image: expand to full bleed"): the
+ * bottom edge of the image stays exactly at the existing fixed position;
+ * the image grows upward to the top of the screen and outward to the side
+ * edges. The lower content block does not move. Implemented as a flex
+ * column where the image area is `flex-1` (grows to fill remaining space)
+ * with `object-cover` + bottom-anchored alignment, and the content panel
+ * is `flex-shrink-0` at the bottom.
+ *
+ * Phase C will refactor non-VD types to use a sibling pattern; this
+ * component is purposely scoped to sacred-art + landscape for now.
+ */
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import type { ExploreDetailItem } from "@/lib/types";
+import FavoriteButton from "./ui/FavoriteButton";
+import { getContentTypeColor, getContentTypeLabel } from "@/lib/contentTypeColors";
+import { anchorIdFromDate } from "@/app/library/PromptCard";
+
+interface ExploreDetailCardProps {
+  item: ExploreDetailItem;
+  onClose: () => void;
+}
+
+// Brand colors (espresso surfaces).
+const C = {
+  espresso: "#16110d",
+  cream: "rgba(253,246,232,0.88)",
+  creamWarm: "rgba(232,217,184,0.92)",
+  creamDim: "rgba(253,246,232,0.5)",
+  creamFaint: "rgba(253,246,232,0.3)",
+  divider: "rgba(253,246,232,0.1)",
+  gold: "#C19B5F",
+};
+
+// Format an ISO date string "2026-06-12" → "June 12" for the P&P link label.
+function formatPpDate(dateStr: string): string {
+  const d = new Date(dateStr + "T00:00:00");
+  return d.toLocaleDateString("en-US", { month: "long", day: "numeric" });
+}
+
+// Derive "june-2026" from "2026-06-12" for the Library ?expand= param.
+function expandFromDate(dateStr: string): string {
+  const d = new Date(dateStr + "T00:00:00");
+  const month = d.toLocaleDateString("en-US", { month: "long" }).toLowerCase();
+  const year = d.getFullYear();
+  return `${month}-${year}`;
+}
+
+export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardProps) {
+  const typeColor = getContentTypeColor(item.contentType);
+  const typeLabel = getContentTypeLabel(item.contentType);
+
+  // Lock body scroll while modal is open (matches PrayClient pattern).
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
+  // The 4 visible journey + P&P links collapse into an "expand more"
+  // toggle when there are multiples (brief: "Multiple journeys or
+  // multiple P&P dates → Expandable list (collapsed by default)").
+  // Two sibling lists; if either has >1 entry, collapse the extras.
+  const [showAllJourneys, setShowAllJourneys] = useState(false);
+  const [showAllPp, setShowAllPp] = useState(false);
+  const journeysVisible = showAllJourneys ? item.journeys : item.journeys.slice(0, 1);
+  const ppVisible = showAllPp ? item.dailyPrompts : item.dailyPrompts.slice(0, 1);
+  const moreJourneys = Math.max(0, item.journeys.length - 1);
+  const morePp = Math.max(0, item.dailyPrompts.length - 1);
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] flex flex-col"
+      style={{
+        background: C.espresso,
+        // 100dvh + overflow-hidden so iOS Safari's collapsing URL bar
+        // doesn't shift the content panel. Matches VD-SCROLL-01 pattern.
+        height: "100dvh",
+      }}
+    >
+      {/* Header — close + favorite. flex-shrink-0 so it stays at the top. */}
+      <div className="flex items-center justify-between px-4 pt-3 pb-2 flex-shrink-0">
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          className="w-10 h-10 flex items-center justify-center"
+          style={{ color: C.cream }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-5 h-5"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+        <FavoriteButton itemId={item._id} type="contentItem" />
+      </div>
+
+      {/* Image area — flex-1 so it absorbs all remaining height between
+          chrome and bottom panel. object-cover with bottom-anchored
+          alignment so the image grows up + outward, bottom edge fixed. */}
+      <div className="flex-1 min-h-0 overflow-hidden">
+        <TransformWrapper
+          initialScale={1}
+          minScale={1}
+          maxScale={8}
+          centerOnInit={false}
+          doubleClick={{ mode: "toggle", step: 2 }}
+        >
+          <TransformComponent
+            wrapperStyle={{ width: "100%", height: "100%" }}
+            contentStyle={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "center",
+            }}
+          >
+            {item.imageUrl && (
+              <img
+                src={item.imageUrl}
+                alt={item.title}
+                className="w-full h-full object-cover"
+                style={{ objectPosition: "center bottom" }}
+                draggable={false}
+              />
+            )}
+          </TransformComponent>
+        </TransformWrapper>
+      </div>
+
+      {/* Bottom content panel — fixed at bottom (flex-shrink-0). Holds
+          type label, title, attribution, description, action zone,
+          contextual links. Scrolls internally if content runs long. */}
+      <div
+        className="flex-shrink-0 overflow-y-auto"
+        style={{
+          background: C.espresso,
+          borderTop: `1px solid ${C.divider}`,
+          maxHeight: "55dvh",
+          paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)",
+        }}
+      >
+        <div className="px-5 pt-4 pb-2">
+          {/* Type label — Montserrat caps, P&P gradient color. The ONLY
+              colored text on the card (per brief Section "The only
+              colored text"). */}
+          {typeLabel && (
+            <div
+              className="text-[11px] font-semibold uppercase tracking-[0.18em] mb-2"
+              style={{
+                color: typeColor,
+                fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+              }}
+            >
+              {typeLabel}
+            </div>
+          )}
+
+          {/* Title — Montserrat semibold, cream. No competing element. */}
+          <h2
+            className="font-semibold leading-tight mb-1"
+            style={{
+              color: C.cream,
+              fontSize: "clamp(1.25rem, 4.5vw, 1.5rem)",
+              fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+            }}
+          >
+            {item.title}
+          </h2>
+
+          {/* Attribution — Open Sans, dim cream. Hidden if blank
+              (per Phase A smoke test, 3 of 9 types may return null). */}
+          {item.attribution && (
+            <p
+              className="text-sm"
+              style={{
+                color: C.creamDim,
+                fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+              }}
+            >
+              {item.attribution}
+            </p>
+          )}
+
+          {/* Description — body text, cream. Open Sans regular. */}
+          {item.description && (
+            <p
+              className="mt-4 text-[15px] leading-relaxed"
+              style={{
+                color: C.cream,
+                fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+              }}
+            >
+              {item.description}
+            </p>
+          )}
+        </div>
+
+        {/* Action zone — ENTER VISIO DIVINA for sacred-art + landscape.
+            Other contentTypes never reach this component in Phase B
+            (the explore page guards entry). Defensive: render the CTA
+            only when contentType is in scope. */}
+        {(item.contentType === "sacred-art" || item.contentType === "landscape") && (
+          <div className="px-5 pt-4 pb-1">
+            <div
+              className="h-px mb-4"
+              style={{ background: C.divider }}
+              aria-hidden="true"
+            />
+            <Link
+              href={`/pray/${item._id}`}
+              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em]"
+              style={{
+                color: C.gold,
+                fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+              }}
+            >
+              ENTER VISIO DIVINA
+              <span aria-hidden="true">›</span>
+            </Link>
+          </div>
+        )}
+
+        {/* Contextual links — Journey + P&P. Rendered only when
+            reverse-ref lookups returned results. Shown below action
+            zone with a divider above (brief Section "Contextual links"). */}
+        {(item.journeys.length > 0 || item.dailyPrompts.length > 0) && (
+          <div className="px-5 pt-4 pb-2">
+            <div
+              className="h-px mb-3"
+              style={{ background: C.divider }}
+              aria-hidden="true"
+            />
+            {/* Journey link(s) */}
+            {item.journeys.length > 0 && (
+              <div className="mb-2">
+                {journeysVisible.map((j) => (
+                  <Link
+                    key={j._id}
+                    href={`/journeys/${j.slug}`}
+                    className="block text-sm py-1"
+                    style={{
+                      color: C.creamDim,
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                    }}
+                  >
+                    Part of: {j.title} ›
+                  </Link>
+                ))}
+                {moreJourneys > 0 && !showAllJourneys && (
+                  <button
+                    onClick={() => setShowAllJourneys(true)}
+                    className="text-xs mt-1"
+                    style={{
+                      color: C.creamFaint,
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                    }}
+                  >
+                    + {moreJourneys} more journey{moreJourneys === 1 ? "" : "s"}
+                  </button>
+                )}
+              </div>
+            )}
+            {/* P&P link(s) */}
+            {item.dailyPrompts.length > 0 && (
+              <div>
+                {ppVisible.map((p) => (
+                  <Link
+                    key={p.date}
+                    href={`/library?expand=${expandFromDate(p.date)}#${anchorIdFromDate(p.date)}`}
+                    className="block text-sm py-1"
+                    style={{
+                      color: C.creamDim,
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                    }}
+                  >
+                    Pause & Ponder — {formatPpDate(p.date)} ›
+                  </Link>
+                ))}
+                {morePp > 0 && !showAllPp && (
+                  <button
+                    onClick={() => setShowAllPp(true)}
+                    className="text-xs mt-1"
+                    style={{
+                      color: C.creamFaint,
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                    }}
+                  >
+                    + {morePp} more date{morePp === 1 ? "" : "s"}
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
