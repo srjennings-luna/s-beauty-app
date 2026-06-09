@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { getAllContentItems, getThemes, getExploreDetailItem } from "@/lib/sanity";
 import type { ContentItem, Theme, ContentType, Artwork, LocationType, ExploreDetailItem } from "@/lib/types";
-import ArtworkViewer from "@/components/ArtworkViewer";
 import ExploreDetailCard from "@/components/ExploreDetailCard";
 import ThemeBubbleCanvas, { getThemeColor } from "@/components/ThemeBubbleCanvas";
 
@@ -437,7 +436,18 @@ export default function ExplorePage() {
         ) : showMap ? (
           <GlobalMap
             artworks={mappableArtworks}
-            onMarkerClick={(aw) => setSelectedItem(aw)}
+            onMarkerClick={async (aw) => {
+              // setSelectedItem keeps the map marker highlighted; the
+              // detail surface itself is ExploreDetailCard (Phase C).
+              setSelectedItem(aw);
+              setExploreDetailLoading(true);
+              try {
+                const detail = await getExploreDetailItem(aw.id);
+                if (detail) setSelectedExploreDetail(detail);
+              } finally {
+                setExploreDetailLoading(false);
+              }
+            }}
             selectedArtwork={selectedItem}
           />
         ) : (
@@ -496,31 +506,22 @@ export default function ExplorePage() {
                   item.thinkerName ??
                   item.locationName ??
                   "";
-                // Sacred art + landscape land in the ExploreDetailCard
-                // (June 9, 2026 — Explore Cards build brief, Phase B).
-                // The June 5 "tap straight into Visio Divina" pattern
-                // is reversed: users now see the intermediate detail
-                // card (image + type label + title + attribution +
-                // description + ENTER VISIO DIVINA →) before entering
-                // the Gaze step. Other contentTypes continue to use
-                // ArtworkViewer until Phase C refactors them.
-                const showVisio =
-                  item.contentType === "sacred-art" ||
-                  item.contentType === "landscape";
+                // All 9 contentTypes route through ExploreDetailCard now
+                // (Phase C, June 9, 2026 build brief). Sacred-art + landscape
+                // get ENTER VISIO DIVINA; other 7 get REFLECT (text + chevron,
+                // no border) below the description. "PRAY WITH THIS IMAGE"
+                // is retired everywhere — ArtworkViewer is no longer used
+                // from Explore (it stays for Library).
                 return (
                   <button
                     key={item._id}
                     onClick={async () => {
-                      if (showVisio) {
-                        setExploreDetailLoading(true);
-                        try {
-                          const detail = await getExploreDetailItem(item._id);
-                          if (detail) setSelectedExploreDetail(detail);
-                        } finally {
-                          setExploreDetailLoading(false);
-                        }
-                      } else {
-                        setSelectedItem(toArtwork(item));
+                      setExploreDetailLoading(true);
+                      try {
+                        const detail = await getExploreDetailItem(item._id);
+                        if (detail) setSelectedExploreDetail(detail);
+                      } finally {
+                        setExploreDetailLoading(false);
                       }
                     }}
                     className="text-left w-full block"
@@ -611,16 +612,14 @@ export default function ExplorePage() {
         )}
       </div>
 
-      {/* ── Content Detail Viewer ── */}
-      {selectedItem && (
-        <ArtworkViewer artwork={selectedItem} onClose={() => setSelectedItem(null)} />
-      )}
-
-      {/* ── Explore Detail Card (sacred-art + landscape, Phase B) ── */}
+      {/* ── Explore Detail Card — all 9 contentTypes (Phase C) ── */}
       {selectedExploreDetail && (
         <ExploreDetailCard
           item={selectedExploreDetail}
-          onClose={() => setSelectedExploreDetail(null)}
+          onClose={() => {
+            setSelectedExploreDetail(null);
+            setSelectedItem(null); // also clear map marker highlight
+          }}
         />
       )}
 

@@ -69,6 +69,19 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
   const typeColor = getContentTypeColor(item.contentType);
   const typeLabel = getContentTypeLabel(item.contentType);
 
+  // VD-eligible: sacred-art + landscape get ENTER VISIO DIVINA. Other 7
+  // contentTypes (photography, thinker, literature, music, food-wine,
+  // watch-listen, math-science) get text-only REFLECT below the
+  // description, which expands an inline panel showing scripture/quote/
+  // reflection questions/context (Phase C, June 9, 2026 build brief).
+  const isVdEligible =
+    item.contentType === "sacred-art" || item.contentType === "landscape";
+  const hasReflectContent =
+    (item.reflectionQuestions?.length ?? 0) > 0 ||
+    !!item.scripturePairing ||
+    !!item.quote?.text ||
+    !!item.context;
+
   // Lock body scroll while modal is open (matches PrayClient pattern).
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -77,6 +90,8 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
       document.body.style.overflow = prev;
     };
   }, []);
+
+  const [showReflect, setShowReflect] = useState(false);
 
   // The 4 visible journey + P&P links collapse into an "expand more"
   // toggle when there are multiples (brief: "Multiple journeys or
@@ -225,11 +240,10 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
           )}
         </div>
 
-        {/* Action zone — ENTER VISIO DIVINA for sacred-art + landscape.
-            Other contentTypes never reach this component in Phase B
-            (the explore page guards entry). Defensive: render the CTA
-            only when contentType is in scope. */}
-        {(item.contentType === "sacred-art" || item.contentType === "landscape") && (
+        {/* Action zone — sacred-art + landscape get ENTER VISIO DIVINA
+            (Phase B); other 7 contentTypes get REFLECT (Phase C).
+            "PRAY WITH THIS IMAGE" is retired everywhere per the brief. */}
+        {isVdEligible && (
           <div className="px-5 pt-4 pb-1">
             <div
               className="h-px mb-4"
@@ -247,6 +261,187 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
               ENTER VISIO DIVINA
               <span aria-hidden="true">›</span>
             </Link>
+          </div>
+        )}
+
+        {/* REFLECT (text + chevron, no border box). Sits below description,
+            above contextual links. Tapping toggles an inline expand panel
+            with scripture / quote / reflection questions / context. */}
+        {!isVdEligible && hasReflectContent && (
+          <div className="px-5 pt-4 pb-1">
+            <div
+              className="h-px mb-4"
+              style={{ background: C.divider }}
+              aria-hidden="true"
+            />
+            <button
+              onClick={() => setShowReflect((v) => !v)}
+              aria-expanded={showReflect}
+              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em]"
+              style={{
+                color: C.cream,
+                fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+              }}
+            >
+              REFLECT
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="w-3.5 h-3.5 transition-transform"
+                style={{
+                  transform: showReflect ? "rotate(180deg)" : "rotate(0deg)",
+                }}
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.22 8.22a.75.75 0 011.06 0L10 11.94l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.22 9.28a.75.75 0 010-1.06z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+
+            {showReflect && (
+              <div className="mt-4 space-y-4">
+                {item.context && (
+                  <div>
+                    <h4
+                      className="text-[10px] font-semibold uppercase tracking-[0.18em] mb-1.5"
+                      style={{
+                        color: C.creamFaint,
+                        fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+                      }}
+                    >
+                      Context
+                    </h4>
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{
+                        color: C.cream,
+                        fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                      }}
+                    >
+                      {item.context}
+                    </p>
+                  </div>
+                )}
+
+                {item.scripturePairing && (
+                  <div>
+                    <h4
+                      className="text-[10px] font-semibold uppercase tracking-[0.18em] mb-1.5"
+                      style={{
+                        color: C.creamFaint,
+                        fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+                      }}
+                    >
+                      Scripture
+                    </h4>
+                    <div
+                      className="p-3"
+                      style={{
+                        background: "rgba(253,246,232,0.05)",
+                        borderLeft: `2px solid ${C.gold}`,
+                      }}
+                    >
+                      <p
+                        className="italic text-[15px] leading-relaxed"
+                        style={{
+                          color: C.cream,
+                          fontFamily:
+                            "var(--font-cormorant), 'Cormorant Garamond', serif",
+                        }}
+                      >
+                        &ldquo;{item.scripturePairing.verse}&rdquo;
+                      </p>
+                      <p
+                        className="text-xs mt-2"
+                        style={{
+                          color: C.gold,
+                          fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+                        }}
+                      >
+                        — {item.scripturePairing.reference}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {item.quote?.text && (
+                  <div>
+                    <h4
+                      className="text-[10px] font-semibold uppercase tracking-[0.18em] mb-1.5"
+                      style={{
+                        color: C.creamFaint,
+                        fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+                      }}
+                    >
+                      Quote
+                    </h4>
+                    <div
+                      className="p-3"
+                      style={{
+                        background: "rgba(253,246,232,0.05)",
+                        borderLeft: `2px solid ${C.gold}`,
+                      }}
+                    >
+                      <p
+                        className="italic text-[15px] leading-relaxed"
+                        style={{
+                          color: C.cream,
+                          fontFamily:
+                            "var(--font-cormorant), 'Cormorant Garamond', serif",
+                        }}
+                      >
+                        &ldquo;{item.quote.text}&rdquo;
+                      </p>
+                      {(item.quote.attribution || item.quote.source) && (
+                        <p
+                          className="text-xs mt-2"
+                          style={{
+                            color: C.gold,
+                            fontFamily:
+                              "var(--font-montserrat), Montserrat, sans-serif",
+                          }}
+                        >
+                          — {item.quote.attribution ?? item.quote.source}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {(item.reflectionQuestions?.length ?? 0) > 0 && (
+                  <div>
+                    <h4
+                      className="text-[10px] font-semibold uppercase tracking-[0.18em] mb-2"
+                      style={{
+                        color: C.creamFaint,
+                        fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
+                      }}
+                    >
+                      Reflect
+                    </h4>
+                    <div className="space-y-3">
+                      {item.reflectionQuestions!.map((q, i) => (
+                        <p
+                          key={i}
+                          className="text-sm leading-relaxed"
+                          style={{
+                            color: C.cream,
+                            fontFamily:
+                              "var(--font-open-sans), 'Open Sans', sans-serif",
+                          }}
+                        >
+                          {q}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
