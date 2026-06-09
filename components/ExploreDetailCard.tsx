@@ -141,52 +141,55 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
         <FavoriteButton itemId={item._id} type="contentItem" />
       </div>
 
-      {/* Scrollable inner area — fixed-height image at top + natural-height
-          bottom panel below. Image uses object-cover so it always fills
-          its container with no espresso bars; pinch + pan inside the
-          TransformWrapper let users recover any cropped region (same
-          affordance as VD Gaze). 65dvh matches the VD Gaze image height. */}
-      <div className="flex-1 min-h-0 overflow-y-auto">
-        <div className="w-full" style={{ height: "65dvh" }}>
-          <TransformWrapper
-            initialScale={1}
-            minScale={1}
-            maxScale={8}
-            centerOnInit={false}
-            doubleClick={{ mode: "toggle", step: 2 }}
-          >
-            <TransformComponent
-              wrapperStyle={{ width: "100%", height: "100%" }}
-              contentStyle={{ width: "100%", height: "100%" }}
-            >
-              {item.imageUrl && (
-                <img
-                  src={item.imageUrl}
-                  alt={item.title}
-                  draggable={false}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                  }}
-                  className="select-none"
-                />
-              )}
-            </TransformComponent>
-          </TransformWrapper>
-        </div>
-
-        {/* Bottom content panel — natural height. Sits directly below
-            the image. The inner scroll container above handles overflow
-            if total content exceeds viewport. */}
-        <div
-          style={{
-            background: C.espresso,
-            borderTop: `1px solid ${C.divider}`,
-            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)",
-          }}
+      {/* Image area — flex-1 so it absorbs ALL remaining vertical space
+          between chrome and the bottom panel. Combined with object-cover
+          on the image element below, this guarantees no espresso bars
+          on any aspect ratio; pinch + pan inside the TransformWrapper
+          let users recover any cropped region (same affordance as
+          VD Gaze). */}
+      <div className="flex-1 min-h-0">
+        <TransformWrapper
+          initialScale={1}
+          minScale={1}
+          maxScale={8}
+          centerOnInit={false}
+          doubleClick={{ mode: "toggle", step: 2 }}
         >
+          <TransformComponent
+            wrapperStyle={{ width: "100%", height: "100%" }}
+            contentStyle={{ width: "100%", height: "100%" }}
+          >
+            {item.imageUrl && (
+              <img
+                src={item.imageUrl}
+                alt={item.title}
+                draggable={false}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
+                }}
+                className="select-none"
+              />
+            )}
+          </TransformComponent>
+        </TransformWrapper>
+      </div>
+
+      {/* Bottom content panel — natural height anchored to the bottom of
+          the viewport. Caps internal scroll at 55dvh so a long REFLECT
+          expand can scroll within the panel without pushing the image
+          off-screen. */}
+      <div
+        className="flex-shrink-0 overflow-y-auto"
+        style={{
+          background: C.espresso,
+          borderTop: `1px solid ${C.divider}`,
+          maxHeight: "55dvh",
+          paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)",
+        }}
+      >
         <div className="px-5 pt-4 pb-2">
           {/* Type label — Montserrat caps, P&P gradient color. The ONLY
               colored text on the card (per brief Section "The only
@@ -497,7 +500,6 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
             )}
           </div>
         )}
-        </div>
       </div>
     </div>
   );
