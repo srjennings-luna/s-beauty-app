@@ -301,18 +301,22 @@ export async function getDailyPrompt(date?: string) {
   // If we got a valid result with content linked, use it
   if (exact?.content?.imageUrl) return exact
 
-  // Fallback: most recently published prompt (handles editorial gaps).
+  // Fallback: most recently published prompt ON OR BEFORE today
+  // (handles editorial gaps). The `date <= $today` clause is
+  // essential — without it, once the 30-day P&P seed landed future-
+  // dated prompts (June 12 onward), the fallback started returning
+  // the LATEST seeded prompt (July 11) on every gap day, showing
+  // users content scheduled weeks in the future. June 9 2026 fix.
+  //
   // defined(date) skips any half-entered draft with date=null —
   // GROQ's `order(date desc)` puts NULLs first, so without the
   // defined(date) filter the fallback returns the null-date stub
   // and PromptClient renders "No prompt for today yet" even when
-  // there are perfectly good dated prompts behind it. June 5
-  // 2026 surfaced this when today's date had no prompt and the
-  // null-date stub shadowed the most-recent-dated one ("They
-  // Were Early", 2026-06-01).
+  // there are perfectly good dated prompts behind it. June 5 2026
+  // surfaced this with the null-date stub shadowing 2026-06-01.
   return sanityClient.fetch(
-    `*[_type == "dailyPrompt" && defined(date)] | order(date desc)[0] {${DAILY_PROMPT_FIELDS}}`,
-    {},
+    `*[_type == "dailyPrompt" && defined(date) && date <= $today] | order(date desc)[0] {${DAILY_PROMPT_FIELDS}}`,
+    { today: targetDate },
     { cache: 'no-store' }
   )
 }
