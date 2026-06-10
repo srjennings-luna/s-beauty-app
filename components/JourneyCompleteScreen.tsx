@@ -123,7 +123,7 @@ export default function JourneyCompleteScreen({
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundColor: "#2a1c10",
-              filter: "blur(18px) brightness(0.9)",
+              filter: "blur(12px) brightness(0.92)",
               zIndex: 0,
               animation: "jc-bg-drift 18s ease-in-out infinite alternate",
             }}
