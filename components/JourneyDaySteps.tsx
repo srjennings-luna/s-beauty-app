@@ -1385,10 +1385,13 @@ export default function JourneyDaySteps({
               )}
             </button>
 
-            {/* Center: step label on steps 1+ */}
-            {step > 0 ? (
+            {/* Center: step label on steps 1+, but hidden on the last
+                (Connect / Journey Complete) step. Label array is filtered
+                to skip "Go Deeper" when this day has no Go Deeper content
+                so the indices line up. */}
+            {step > 0 && !isLastStep ? (
               <span className="text-xs tracking-widest uppercase" style={{ color: C.creamDim }}>
-                {STEP_LABELS[step]}
+                {(hasGoDeeper ? STEP_LABELS : STEP_LABELS.filter((l) => l !== "Go Deeper"))[step]}
               </span>
             ) : (
               <span />
