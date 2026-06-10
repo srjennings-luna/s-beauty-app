@@ -1168,7 +1168,7 @@ function StepGoDeeper({ day }: { day: JourneyDay }) {
                     aria-expanded={isOpen}
                   >
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium" style={{ color: C.cream }}>{r.title}</p>
+                      <p className="text-sm font-normal" style={{ color: C.cream }}>{r.title}</p>
                       <p className="text-xs mt-0.5" style={{ color: C.creamDim }}>{r.source}</p>
                     </div>
                     <svg
