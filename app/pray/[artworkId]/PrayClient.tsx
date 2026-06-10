@@ -8,6 +8,7 @@ import GoDeeperSection from "@/components/GoDeeperSection";
 import PageTransition from "@/components/ui/PageTransition";
 import useVisioNote from "@/hooks/useVisioNote";
 import { WHISPER_GRADIENT } from "@/lib/design-tokens";
+import { getContentTypeColor, getContentTypeLabel } from "@/lib/contentTypeColors";
 type SanityArtwork = {
   _id: string;
   title: string;
@@ -18,6 +19,11 @@ type SanityArtwork = {
   historicalSummary?: string;
   scripturePairing?: { verse: string; reference: string };
   quote?: { text: string; attribution: string };
+  /** New 9-type schema field; existing GROQ projection already returns it.
+   *  Used for the P&P gradient color label in the VD chrome (Phase D,
+   *  June 9, 2026 build brief). Optional because legacy artwork records
+   *  predate the contentType enum. */
+  contentType?: string;
   locationType?: string;
   reflectionQuestions?: string[];
   locationName: string;
@@ -338,11 +344,28 @@ export default function PrayClient({
               </svg>
             </Link>
 
-            <span
-              className="text-sm font-medium uppercase tracking-widest"
-              style={{ color: C.creamDim }}
-            >
-              {STEPS[step].title}
+            {/* Step title + content-type label stacked vertically. Step
+                title (GAZE / MEDITATE / etc.) stays cream — it tells you
+                where you are in the flow. Type label below (SACRED ART /
+                LANDSCAPE / etc.) uses the P&P gradient color for the
+                content type — the single colored accent on every VD
+                screen, matching the Explore detail card pattern. Phase D
+                of the June 9, 2026 build brief. */}
+            <span className="flex flex-col items-center justify-center leading-tight">
+              <span
+                className="text-sm font-medium uppercase tracking-widest"
+                style={{ color: C.creamDim }}
+              >
+                {STEPS[step].title}
+              </span>
+              {artwork.contentType && getContentTypeLabel(artwork.contentType) && (
+                <span
+                  className="text-[9px] font-semibold uppercase tracking-[0.18em] mt-0.5"
+                  style={{ color: getContentTypeColor(artwork.contentType) }}
+                >
+                  {getContentTypeLabel(artwork.contentType)}
+                </span>
+              )}
             </span>
 
             <button
