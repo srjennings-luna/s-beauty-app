@@ -104,6 +104,41 @@ const FALLBACK_ARTWORK: MediaImage[] = [
   { src: "/contueri-icon-1024.png", sizes: "1024x1024", type: "image/png" },
 ];
 
+// Synchronously set the MediaSession metadata + playbackState.
+//
+// Why this exists as a standalone function:
+//   iOS WKWebView captures the Now Playing metadata at the moment
+//   audio.play() fires. If MediaMetadata is set asynchronously
+//   afterwards (which is what useEffect does — it runs AFTER the
+//   commit phase, several frames after the play() call), iOS has
+//   already locked in "no metadata" and falls back to the document
+//   <title> + its generic play-triangle placeholder.
+//
+//   Call this synchronously immediately BEFORE audio.play() in any
+//   user-initiated play handler. The hook's useEffect then keeps
+//   the metadata in sync on subsequent state changes and registers
+//   the lockscreen action handlers — which can register a few
+//   milliseconds later without consequence.
+//
+//   AUDITIO-LS-03 / NARR-LS-03 fix shipped June 10, 2026 after the
+//   June 6 metadata-via-useEffect fix didn't win the race on device.
+export function primeMediaSession(track: MediaSessionTrack) {
+  if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
+  try {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: track.title,
+      artist: track.artist ?? "",
+      album: track.album ?? "Contueri",
+      artwork: track.artworkUrl
+        ? buildArtwork(track.artworkUrl)
+        : FALLBACK_ARTWORK,
+    });
+    navigator.mediaSession.playbackState = "playing";
+  } catch {
+    /* MediaMetadata constructor not available in this browser */
+  }
+}
+
 export default function useMediaSession({
   audioRef,
   active,
@@ -137,20 +172,11 @@ export default function useMediaSession({
       return;
     }
 
-    // Set metadata.
-    try {
-      ms.metadata = new MediaMetadata({
-        title: track.title,
-        artist: track.artist ?? "",
-        album: track.album ?? "Contueri",
-        artwork: track.artworkUrl
-          ? buildArtwork(track.artworkUrl)
-          : FALLBACK_ARTWORK,
-      });
-      ms.playbackState = "playing";
-    } catch {
-      /* MediaMetadata constructor not available in this browser */
-    }
+    // Set metadata via the shared primer so the effect and the
+    // play-handler path stay in sync. The play-handler call wins the
+    // iOS race; this one keeps the metadata fresh on subsequent
+    // track changes (e.g., user paused, swapped Auditio, resumed).
+    primeMediaSession(track);
 
     const audio = audioRef.current;
 

@@ -17,7 +17,7 @@ import {
 } from "@/lib/audioEvents";
 import PPGradientBackground from "@/components/PPGradientBackground";
 import useStreak from "@/hooks/useStreak";
-import useMediaSession from "@/hooks/useMediaSession";
+import useMediaSession, { primeMediaSession } from "@/hooks/useMediaSession";
 
 function formatTime(s: number): string {
   const m = Math.floor(s / 60);
@@ -232,6 +232,13 @@ function DailyPromptPageInner({
     };
     const endHandler = () => {
       if (wasAuditioPlayingRef.current && auditioRef.current) {
+        const a = prompt?.auditio;
+        primeMediaSession({
+          title: a?.workTitle?.trim() || a?.title?.trim() || "Auditio",
+          artist: a?.composerArtist?.trim() || undefined,
+          album: "Contueri · Pause and Ponder",
+          artworkUrl: prompt?.content?.imageUrl,
+        });
         auditioRef.current.play().catch(() => {});
         setMusicPlaying(true);
         wasAuditioPlayingRef.current = false;
@@ -702,6 +709,13 @@ function DailyPromptPageInner({
                             });
                             auditioRef.current = a;
                           }
+                          const a = prompt?.auditio;
+                          primeMediaSession({
+                            title: a?.workTitle?.trim() || a?.title?.trim() || "Auditio",
+                            artist: a?.composerArtist?.trim() || undefined,
+                            album: "Contueri · Pause and Ponder",
+                            artworkUrl: prompt?.content?.imageUrl,
+                          });
                           auditioRef.current.play().catch(() => {});
                           setMusicPlaying(true);
                         }

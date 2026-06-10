@@ -5,7 +5,7 @@ import {
   NARRATION_START_EVENT,
   NARRATION_END_EVENT,
 } from "@/lib/audioEvents";
-import useMediaSession from "@/hooks/useMediaSession";
+import useMediaSession, { primeMediaSession } from "@/hooks/useMediaSession";
 
 // Re-export the narration event names from this module for back-compat
 // with existing imports (`import { NARRATION_START_EVENT } from
@@ -107,6 +107,11 @@ export default function NarrationButton({ audioUrl, color = "#C19B5F" }: Narrati
         });
         audioRef.current = audio;
       }
+      // Prime the MediaSession metadata BEFORE play() so iOS captures
+      // it on the play event (otherwise it locks in document <title>
+      // + generic placeholder). See useMediaSession.ts header comment
+      // on primeMediaSession for the race detail.
+      primeMediaSession({ title: "Narration", album: "Contueri" });
       audioRef.current.play().catch(() => {});
       setPlaying(true);
     }
