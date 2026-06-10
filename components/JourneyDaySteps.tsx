@@ -14,6 +14,7 @@ import {
 import ScrollCue from "@/components/ScrollCue";
 import { WHISPER_GRADIENT } from "@/lib/design-tokens";
 import useMediaSession from "@/hooks/useMediaSession";
+import JourneyCompleteScreen from "@/components/JourneyCompleteScreen";
 
 // Encounter-panel palettes for the gradient-glow treatment on Context and
 // Look Closer. Toggle via URL param ?palette=fresco for comparison. Default
@@ -991,7 +992,7 @@ function StepReflect({
 }
 
 // ── Step 4: Connect — text above, constrained image window below ──────────────
-function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete, journeyTitle, journeySlug }: { day: JourneyDay; nextDayImageUrl?: string; onClose: () => void; onMarkComplete: () => void; journeyTitle?: string; journeySlug?: string; }) {
+function StepConnect({ day, nextDayImageUrl, journeyImageUrl, onClose, onMarkComplete, journeyTitle, journeySlug }: { day: JourneyDay; nextDayImageUrl?: string; journeyImageUrl?: string; onClose: () => void; onMarkComplete: () => void; journeyTitle?: string; journeySlug?: string; }) {
   const handleShare = () => {
     const url = journeySlug
       ? `${window.location.origin}/journeys/${journeySlug}`
@@ -1004,6 +1005,23 @@ function StepConnect({ day, nextDayImageUrl, onClose, onMarkComplete, journeyTit
       navigator.clipboard.writeText(url).catch(() => {});
     }
   };
+
+  // Last day of the journey with no bridge thread — render the dedicated
+  // Journey Complete screen with the brand mark animation.
+  if (!nextDayImageUrl && !day.connectThread) {
+    return (
+      <JourneyCompleteScreen
+        journeyTitle={journeyTitle}
+        journeyImageUrl={journeyImageUrl}
+        onShare={handleShare}
+        onStartNewJourney={() => {
+          onMarkComplete();
+          window.location.href = "/journeys";
+        }}
+        onClose={onClose}
+      />
+    );
+  }
 
   return (
     <div className="h-full flex flex-col">
@@ -1217,6 +1235,7 @@ export default function JourneyDaySteps({
   isComplete,
   journeyTitle,
   journeySlug,
+  journeyImageUrl,
 }: {
   day: JourneyDay;
   nextDay?: JourneyDay;
@@ -1225,6 +1244,7 @@ export default function JourneyDaySteps({
   isComplete: boolean;
   journeyTitle?: string;
   journeySlug?: string;
+  journeyImageUrl?: string;
 }) {
   const [step, setStep] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -1293,7 +1313,7 @@ export default function JourneyDaySteps({
     <StepBreathe key="breathe" day={day} />,
     <StepReflect key="reflect" day={day} questionIndex={questionIndex} onNextQuestion={handleNextQuestion} />,
     ...(hasGoDeeper ? [<StepGoDeeper key="deeper" day={day} />] : []),
-    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} onMarkComplete={onMarkComplete} onClose={() => { if (!isComplete) onMarkComplete(); onClose(); }} journeyTitle={journeyTitle} journeySlug={journeySlug} />,
+    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} journeyImageUrl={journeyImageUrl} onMarkComplete={onMarkComplete} onClose={() => { if (!isComplete) onMarkComplete(); onClose(); }} journeyTitle={journeyTitle} journeySlug={journeySlug} />,
   ];
 
   return (

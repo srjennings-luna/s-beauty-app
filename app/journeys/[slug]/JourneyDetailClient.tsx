@@ -204,6 +204,7 @@ export default function JourneyDetailClient({
         onMarkComplete={() => toggleDayComplete(activeDay.dayNumber)}
         journeyTitle={journey.title}
         journeySlug={slug}
+        journeyImageUrl={journey.heroImageUrl}
       />
     );
   }

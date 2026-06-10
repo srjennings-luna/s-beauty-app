@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Montserrat, Open_Sans, Cormorant_Garamond } from "next/font/google";
+import { Montserrat, Open_Sans, Cormorant_Garamond, Kalam } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/ui/Navigation";
 import VisualEditingClient from "@/components/VisualEditingClient";
@@ -29,6 +29,15 @@ const cormorantGaramond = Cormorant_Garamond({
   weight: ["400", "500", "600"],
   style: ["normal", "italic"],
   variable: "--font-cormorant",
+  display: "swap",
+});
+
+// Kalam — used for the lowercase "l" mark in the Contueri brand lockup
+// rendered on the Journey Complete screen.
+const kalam = Kalam({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-kalam",
   display: "swap",
 });
 
@@ -62,7 +71,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${montserrat.variable} ${openSans.variable} ${cormorantGaramond.variable}`}>
+    <html lang="en" className={`${montserrat.variable} ${openSans.variable} ${cormorantGaramond.variable} ${kalam.variable}`}>
       <body className="antialiased min-h-screen pb-20">
         {/*
           AmbientSoundProvider wraps everything that needs cross-route
