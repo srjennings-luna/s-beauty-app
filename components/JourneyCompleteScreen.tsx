@@ -35,35 +35,21 @@ export default function JourneyCompleteScreen({
 }: Props) {
   return (
     <div className="h-full flex flex-col" style={{ position: "relative" }}>
-      <style jsx>{`
-        @keyframes jc-c-fade {
-          to { opacity: 1; }
-        }
-        @keyframes jc-l-fade {
-          to { opacity: 1; }
-        }
-        @keyframes jc-bg-drift {
-          from { transform: scale(1) translate(0, 0); }
-          to { transform: scale(1.06) translate(-1%, -1.5%); }
-        }
-        .jc-c-fill {
-          fill: rgba(253,246,232,0.85);
-          opacity: 0;
-          animation: jc-c-fade 2.3s cubic-bezier(0.4, 0, 0.6, 1) 0.3s forwards;
-        }
-        .jc-l-mark {
-          font-family: var(--font-kalam), 'Kalam', cursive;
-          font-weight: 400;
-          font-size: 7px;
-          fill: rgba(253,246,232,0.85);
-          opacity: 0;
-          animation: jc-l-fade 0.5s cubic-bezier(0.4, 0, 0.6, 1) 1.7s forwards;
-        }
-        .jc-label {
-          opacity: 0;
-          animation: jc-l-fade 0.5s cubic-bezier(0.4, 0, 0.6, 1) 1.5s forwards;
-        }
-      `}</style>
+      {/* Keyframes need to live in a real <style> tag (not styled-jsx,
+          which doesn't reliably scope-name SVG <path>/<text> elements).
+          Element-level animation declarations go via inline style props. */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes jc-c-fade { to { opacity: 1; } }
+            @keyframes jc-l-fade { to { opacity: 1; } }
+            @keyframes jc-bg-drift {
+              from { transform: scale(1) translate(0, 0); }
+              to { transform: scale(1.06) translate(-1%, -1.5%); }
+            }
+          `,
+        }}
+      />
 
       {/* Spacer for overlaid chrome (back arrow, progress bar, X close) */}
       <div
@@ -138,13 +124,34 @@ export default function JourneyCompleteScreen({
                 style={{ width: "100%", height: "100%", display: "block" }}
                 aria-label="Contueri"
               >
-                <path className="jc-c-fill" d={BALLET_C_PATH} />
-                <text className="jc-l-mark" x="14.3" y="9">l</text>
+                <path
+                  d={BALLET_C_PATH}
+                  style={{
+                    fill: "rgba(253,246,232,0.85)",
+                    opacity: 0,
+                    animation:
+                      "jc-c-fade 2.3s cubic-bezier(0.4, 0, 0.6, 1) 0.3s forwards",
+                  }}
+                />
+                <text
+                  x="14.3"
+                  y="9"
+                  style={{
+                    fontFamily: "var(--font-kalam), 'Kalam', cursive",
+                    fontWeight: 400,
+                    fontSize: "7px",
+                    fill: "rgba(253,246,232,0.85)",
+                    opacity: 0,
+                    animation:
+                      "jc-l-fade 0.5s cubic-bezier(0.4, 0, 0.6, 1) 1.7s forwards",
+                  }}
+                >
+                  l
+                </text>
               </svg>
             </div>
             {/* JOURNEY COMPLETE label, appears with the l */}
             <div
-              className="jc-label"
               style={{
                 marginTop: "24px",
                 fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
@@ -154,6 +161,9 @@ export default function JourneyCompleteScreen({
                 textTransform: "uppercase",
                 color: "rgba(253,246,232,0.78)",
                 textAlign: "center",
+                opacity: 0,
+                animation:
+                  "jc-l-fade 0.5s cubic-bezier(0.4, 0, 0.6, 1) 1.5s forwards",
               }}
             >
               Journey Complete
