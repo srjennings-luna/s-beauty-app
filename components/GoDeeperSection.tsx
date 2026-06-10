@@ -219,8 +219,11 @@ export default function GoDeeperSection({ reflections: propReflections, inline =
                   // Previously text-white/80 which sat brighter than
                   // both the body and the section titles.
                   <p
-                    className="font-serif-elegant italic text-sm border-l-2 border-[#C19B5F] pl-3 mb-2"
-                    style={{ color: "rgba(253,246,232,0.88)" }}
+                    className="font-serif-elegant italic text-sm pl-3 mb-2"
+                    style={{
+                      color: "rgba(253,246,232,0.88)",
+                      borderLeft: "1px solid #C19B5F",
+                    }}
                   >
                     &ldquo;{currentReflection.shortQuote}&rdquo;
                   </p>
