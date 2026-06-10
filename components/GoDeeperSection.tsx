@@ -111,7 +111,7 @@ export default function GoDeeperSection({ reflections: propReflections, inline =
             `text-white/50` to the matching warm-cream at lower alpha
             so the whole row reads as a single parchment register. */}
         <span
-          className="font-medium tracking-wide"
+          className="font-normal tracking-wide"
           style={{ color: "rgba(232,217,184,0.85)" }}
         >
           Go deeper
@@ -207,7 +207,7 @@ export default function GoDeeperSection({ reflections: propReflections, inline =
                   the missed subheading style after the first cream pass).
                 */}
                 <h3
-                  className="font-medium text-base mb-2 pr-10"
+                  className="font-normal text-base mb-2 pr-10"
                   style={{ color: "rgba(232,217,184,0.92)" }}
                 >
                   {currentReflection.title}

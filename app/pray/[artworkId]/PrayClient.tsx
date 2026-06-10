@@ -469,7 +469,7 @@ export default function PrayClient({
                   </TransformWrapper>
                 </div>
                 <div className="px-4 pb-4">
-                <h2 className="font-normal text-lg mb-2" style={{ color: C.creamWarm }}>Reflect</h2>
+                <h2 className="font-light text-lg mb-2" style={{ color: C.creamWarm }}>Reflect</h2>
                 <p className="text-sm mb-4" style={{ color: C.creamDim }}>
                   Look deeper. What movement or relationships do you see? Where are you in this image?
                 </p>
