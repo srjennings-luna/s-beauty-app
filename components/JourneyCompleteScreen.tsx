@@ -2,8 +2,11 @@
 
 // Inline colors so this component is self-contained; matches the values
 // of the local C const in JourneyDaySteps.tsx and the rest of the brand.
+// Gold is reserved for the single primary CTA (Start a New Journey).
+// Share This Journey reads in cream tones so the gold stays precious.
 const GOLD = "#C19B5F";
-const GOLD_MID = "rgba(193,155,95,0.5)";
+const CREAM_MID = "rgba(253,246,232,0.55)";
+const CREAM_FAINT = "rgba(253,246,232,0.3)";
 
 /**
  * Journey Complete screen — shown when a user finishes the last day of a
@@ -202,14 +205,14 @@ export default function JourneyCompleteScreen({
             cursor: "pointer",
             padding: "4px 12px",
             gap: "7px",
-            color: GOLD,
+            color: CREAM_MID,
           }}
         >
           <span
             style={{
               width: 30,
               height: 30,
-              border: `1px solid ${GOLD_MID}`,
+              border: `1px solid ${CREAM_FAINT}`,
               borderRadius: "50%",
               display: "flex",
               alignItems: "center",
@@ -221,7 +224,7 @@ export default function JourneyCompleteScreen({
               height="13"
               viewBox="0 0 24 24"
               fill="none"
-              stroke={GOLD}
+              stroke={CREAM_MID}
               strokeWidth="1.6"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -236,7 +239,7 @@ export default function JourneyCompleteScreen({
               fontWeight: 500,
               letterSpacing: "0.24em",
               textTransform: "uppercase",
-              color: GOLD,
+              color: CREAM_MID,
             }}
           >
             Share this journey
