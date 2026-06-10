@@ -30,9 +30,11 @@ import { AMBIENT_SOUNDS, type AmbientSoundId } from "@/lib/userData";
 //   button. Width 200 fits the longest label ("Gregorian Chant") with
 //   breathing room at 14px and leaves the corner anchor untouched.
 //
-// z-index parity with the button (z-40). Both sit above page content
-// but below the bottom Navigation (z-50). They don't visually overlap
-// the nav so the lower z-index is fine.
+// z-index parity with the button (z-[70]). Both sit above the bottom
+// Navigation (z-50) and the JourneyDaySteps stepper overlay (z-[60])
+// so the ambient control stays reachable on every contemplative surface.
+// The button is small and bottom-right anchored, so it doesn't visually
+// fight the journey content even though it stacks above it.
 
 type Props = {
   open: boolean;
@@ -101,7 +103,7 @@ export default function AmbientQuickPicker({ open, onClose }: Props) {
       ref={rootRef}
       role="menu"
       aria-label="Choose ambient sound"
-      className="fixed z-40 flex flex-col"
+      className="fixed z-[70] flex flex-col"
       style={{
         // bottom anchor = same as button + button height (52) + 12 gap.
         bottom: "calc(env(safe-area-inset-bottom, 0px) + 64px + 64px)",

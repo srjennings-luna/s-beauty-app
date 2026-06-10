@@ -150,7 +150,7 @@ export default function AmbientFloatingButton() {
         href="/settings#sound"
         onClick={() => markDiscoverySeen()}
         aria-label="Choose an ambient sound"
-        className="fixed z-40 flex items-center justify-center text-cream/85"
+        className="fixed z-[70] flex items-center justify-center text-cream/85"
         style={{
           bottom: "calc(env(safe-area-inset-bottom, 0px) + 64px)",
           right: 16,
@@ -198,7 +198,7 @@ export default function AmbientFloatingButton() {
         aria-pressed={isPlaying}
         aria-haspopup="menu"
         aria-expanded={pickerOpen}
-        className="fixed z-40 flex items-center justify-center transition-colors select-none"
+        className="fixed z-[70] flex items-center justify-center transition-colors select-none"
         style={{
           bottom: "calc(env(safe-area-inset-bottom, 0px) + 64px)",
           right: 16,
