@@ -111,7 +111,7 @@ export default function GoDeeperSection({ reflections: propReflections, inline =
             `text-white/50` to the matching warm-cream at lower alpha
             so the whole row reads as a single parchment register. */}
         <span
-          className="font-semibold tracking-wide"
+          className="font-medium tracking-wide"
           style={{ color: "rgba(232,217,184,0.85)" }}
         >
           Go deeper
@@ -207,7 +207,7 @@ export default function GoDeeperSection({ reflections: propReflections, inline =
                   the missed subheading style after the first cream pass).
                 */}
                 <h3
-                  className="font-semibold text-base mb-2 pr-10"
+                  className="font-medium text-base mb-2 pr-10"
                   style={{ color: "rgba(232,217,184,0.92)" }}
                 >
                   {currentReflection.title}
@@ -218,11 +218,16 @@ export default function GoDeeperSection({ reflections: propReflections, inline =
                   // the summary text below and the rest of the page.
                   // Previously text-white/80 which sat brighter than
                   // both the body and the section titles.
+                  // Size bumped to 1.3rem June 9, 2026 — meets the brief's
+                  // "Cormorant Garamond minimum 1.3rem" rule and gives the
+                  // quote presence above the body paragraph below.
                   <p
-                    className="font-serif-elegant italic text-sm pl-3 mb-2"
+                    className="font-serif-elegant italic pl-3 mb-2"
                     style={{
                       color: "rgba(253,246,232,0.88)",
                       borderLeft: "1px solid #C19B5F",
+                      fontSize: "1.3rem",
+                      lineHeight: 1.4,
                     }}
                   >
                     &ldquo;{currentReflection.shortQuote}&rdquo;
