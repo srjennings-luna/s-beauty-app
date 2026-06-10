@@ -992,7 +992,7 @@ function StepReflect({
 }
 
 // ── Step 4: Connect — text above, constrained image window below ──────────────
-function StepConnect({ day, nextDayImageUrl, journeyImageUrl, onClose, onMarkComplete, journeyTitle, journeySlug }: { day: JourneyDay; nextDayImageUrl?: string; journeyImageUrl?: string; onClose: () => void; onMarkComplete: () => void; journeyTitle?: string; journeySlug?: string; }) {
+function StepConnect({ day, nextDayImageUrl, journeyImageUrl, onClose, onMarkComplete, journeyTitle, journeySlug, isActive }: { day: JourneyDay; nextDayImageUrl?: string; journeyImageUrl?: string; onClose: () => void; onMarkComplete: () => void; journeyTitle?: string; journeySlug?: string; isActive?: boolean; }) {
   const handleShare = () => {
     const url = journeySlug
       ? `${window.location.origin}/journeys/${journeySlug}`
@@ -1011,6 +1011,12 @@ function StepConnect({ day, nextDayImageUrl, journeyImageUrl, onClose, onMarkCom
   if (!nextDayImageUrl && !day.connectThread) {
     return (
       <JourneyCompleteScreen
+        // `key` flips when the user swipes onto this step, forcing a fresh
+        // mount so the entry animations (C fade-in, l + label) play from
+        // their start instead of having already completed silently while
+        // the user was on earlier steps.
+        key={isActive ? "active" : "inactive"}
+        isActive={!!isActive}
         journeyTitle={journeyTitle}
         journeyImageUrl={journeyImageUrl}
         onShare={handleShare}
@@ -1307,13 +1313,22 @@ export default function JourneyDaySteps({
 
   const nextDayImageUrl = nextDay?.openImageUrl;
 
+  // Connect is always the last step. Its index depends on whether GoDeeper
+  // is included. We pass `isActiveConnectStep` to StepConnect so the
+  // JourneyCompleteScreen can defer its entry animation until the user
+  // actually swipes to this step (rather than running silently while the
+  // user is on Open/Encounter/etc — every step is mounted at once and
+  // moved via translateX).
+  const connectStepIndex = hasGoDeeper ? 5 : 4;
+  const isActiveConnectStep = step === connectStepIndex;
+
   const stepComponents = [
     <StepOpen key="open" day={day} />,
     <StepEncounter key="encounter" day={day} />,
     <StepBreathe key="breathe" day={day} />,
     <StepReflect key="reflect" day={day} questionIndex={questionIndex} onNextQuestion={handleNextQuestion} />,
     ...(hasGoDeeper ? [<StepGoDeeper key="deeper" day={day} />] : []),
-    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} journeyImageUrl={journeyImageUrl} onMarkComplete={onMarkComplete} onClose={() => { if (!isComplete) onMarkComplete(); onClose(); }} journeyTitle={journeyTitle} journeySlug={journeySlug} />,
+    <StepConnect key="connect" day={day} nextDayImageUrl={nextDayImageUrl} journeyImageUrl={journeyImageUrl} onMarkComplete={onMarkComplete} onClose={() => { if (!isComplete) onMarkComplete(); onClose(); }} journeyTitle={journeyTitle} journeySlug={journeySlug} isActive={isActiveConnectStep} />,
   ];
 
   return (
