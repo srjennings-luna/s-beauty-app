@@ -1318,7 +1318,7 @@ export default function JourneyDaySteps({
 
   return (
     <>
-      <div className="fixed inset-0 z-[60]" style={{ height: "100dvh", background: C.bgGradient }}>
+      <div className="fixed inset-0 z-[60]" style={{ height: "100dvh", background: C.bg }}>
         {/* Slide container — swipe left/right to navigate */}
         {/* touch-action: pan-y tells the browser to handle vertical scroll natively
             and pass horizontal gestures to JS — prevents off-center artifacts on iOS.
