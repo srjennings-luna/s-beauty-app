@@ -231,11 +231,17 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
               style={{ background: C.divider }}
               aria-hidden="true"
             />
+            {/* ENTER VISIO DIVINA — type color (single-accent rule per the
+                brief's "only colored text" instruction) at font-medium so
+                the CTA reads as a refined draw rather than a hard sell.
+                June 9, 2026 — Sheri's call: gold violated the single-
+                accent rule; lighter weight + type color is the
+                contemplative-app pattern (Calm / Headspace / Endel). */}
             <Link
               href={`/pray/${item._id}`}
-              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em]"
+              className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em]"
               style={{
-                color: C.gold,
+                color: typeColor,
                 fontFamily: "var(--font-montserrat), Montserrat, sans-serif",
               }}
             >
