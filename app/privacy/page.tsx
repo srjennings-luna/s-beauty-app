@@ -9,13 +9,8 @@ import PageTransition from "@/components/ui/PageTransition";
 // Required for App Store submission. App Store Connect won't accept
 // submission without a working Privacy URL.
 //
-// LEGAL PLACEHOLDERS still in this file (marked .legal-placeholder
-// in the CSS). These MUST be filled before App Store submission:
-//   - [LEGAL ENTITY NAME]: e.g. "Sheri Jennings" if Individual
-//     enrollment on Apple Dev; or "Sheri Jennings dba Contueri" once
-//     the DBA is filed
-//   - [STATE/JURISDICTION]: the US state Sheri files her business in
-//   - [LAUNCH DATE]: the effective date when this policy goes live
+// Legal placeholders filled June 11, 2026 for App Store submission:
+// Sheri Jennings (Individual), Texas, effective June 12, 2026.
 //
 // Drafted by counsel-adjacent voice. Review with qualified counsel
 // before publishing (per Sheri's standing rule on legal docs).
@@ -148,9 +143,9 @@ export default function PrivacyPage() {
                 marginTop: 18,
               }}
             >
-              Effective <Placeholder>[LAUNCH DATE]</Placeholder>
+              Effective June 12, 2026
               {"  "}&middot;{"  "}
-              Last updated <Placeholder>[LAUNCH DATE]</Placeholder>
+              Last updated June 12, 2026
             </p>
           </div>
         </div>
@@ -178,8 +173,8 @@ export default function PrivacyPage() {
 
           <Eyebrow>Who we are</Eyebrow>
           <p>
-            Contueri is operated by <Placeholder>[LEGAL ENTITY NAME]</Placeholder>,
-            located in <Placeholder>[STATE/JURISDICTION]</Placeholder>,
+            Contueri is operated by Sheri Jennings,
+            located in Texas,
             United States. For privacy questions, contact{" "}
             <a href="mailto:privacy@contueri.com" style={{ color: "#8a6a3a" }}>
               privacy@contueri.com

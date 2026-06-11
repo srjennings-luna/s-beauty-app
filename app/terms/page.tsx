@@ -9,12 +9,8 @@ import PageTransition from "@/components/ui/PageTransition";
 // Required for App Store submission. App Store Connect won't accept
 // submission without a working Terms URL.
 //
-// LEGAL PLACEHOLDERS still in this file (shown in pink boxes). These
-// MUST be filled before App Store submission:
-//   - [LEGAL ENTITY NAME]
-//   - [STATE]
-//   - [COUNTY, STATE]
-//   - [LAUNCH DATE]
+// Legal placeholders filled June 11, 2026 for App Store submission:
+// Sheri Jennings (Individual), Texas, Harris County, effective June 12, 2026.
 //
 // Drafted by counsel-adjacent voice. Review with qualified counsel
 // before publishing.
@@ -147,9 +143,9 @@ export default function TermsPage() {
                 marginTop: 18,
               }}
             >
-              Effective <Placeholder>[LAUNCH DATE]</Placeholder>
+              Effective June 12, 2026
               {"  "}&middot;{"  "}
-              Last updated <Placeholder>[LAUNCH DATE]</Placeholder>
+              Last updated June 12, 2026
             </p>
           </div>
         </div>
@@ -179,7 +175,7 @@ export default function TermsPage() {
           <Eyebrow>1. The service</Eyebrow>
           <p>
             Contueri is a contemplative discovery app, free to use, offered by{" "}
-            <Placeholder>[LEGAL ENTITY NAME]</Placeholder>{" "}
+            Sheri Jennings{" "}
             (&ldquo;Contueri,&rdquo; &ldquo;we,&rdquo; &ldquo;us&rdquo;). It
             includes daily Pause &amp; Ponder prompts, multi-day Journeys,
             Visio Divina sessions, a Library of saved content, and related
@@ -299,10 +295,10 @@ export default function TermsPage() {
           <Eyebrow>11. Governing law</Eyebrow>
           <p>
             These terms are governed by the laws of{" "}
-            <Placeholder>[STATE]</Placeholder>, United States, without regard
+            Texas, United States, without regard
             to conflict-of-law principles. Any dispute must be brought in the
             state or federal courts located in{" "}
-            <Placeholder>[COUNTY, STATE]</Placeholder>.
+            Harris County, Texas.
           </p>
 
           <Eyebrow>12. Changes</Eyebrow>
