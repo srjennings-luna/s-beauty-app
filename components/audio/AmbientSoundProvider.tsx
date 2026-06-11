@@ -627,6 +627,21 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
       if (document.hidden) {
         // Going to background or lock. Skip if already ducked for
         // higher-priority audio — duck logic owns the pause/resume.
+        //
+        // We pause the audio (so iOS shows correct paused state on
+        // the lockscreen widget instead of lying about playback) but
+        // KEEP the MediaSession metadata + audio src intact. That
+        // preserves the brand mark + sound label on the lockscreen
+        // Now Playing widget; iOS will draw it as paused. Tapping
+        // play from lockscreen resumes audio — acceptable iOS
+        // behavior, user has to actively engage.
+        //
+        // We attempted to fully hide the widget by clearing metadata
+        // + tearing down audio src on visibility hide; on both iOS
+        // Safari (Vercel) and Capacitor WKWebView (TestFlight) the
+        // widget remained on lockscreen but lost its brand artwork
+        // and fell back to iOS defaults (triangle + page title).
+        // Net worse UX. Reverted to metadata-preserving pause.
         if (
           higherPriorityCountRef.current === 0 &&
           !audioRef.current.paused
@@ -634,29 +649,6 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
           wasPlayingBeforeBgRef.current = true;
           audioRef.current.pause();
           setIsPlaying(false);
-          // Clearing metadata + playbackState is not enough on iOS;
-          // the lockscreen widget stays visible as long as the <audio>
-          // element has a src loaded. Tear down the audio session
-          // entirely by clearing src + calling load(). iOS removes
-          // the Now Playing widget because there's no active session.
-          // src is restored on visibility return below.
-          if (
-            typeof navigator !== "undefined" &&
-            "mediaSession" in navigator
-          ) {
-            try {
-              navigator.mediaSession.metadata = null;
-              navigator.mediaSession.playbackState = "none";
-            } catch {
-              /* ignore */
-            }
-          }
-          try {
-            audioRef.current.removeAttribute("src");
-            audioRef.current.load();
-          } catch {
-            /* ignore */
-          }
         }
       } else {
         // Returning to foreground.
@@ -666,15 +658,8 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
           audioRef.current
         ) {
           wasPlayingBeforeBgRef.current = false;
-          // Restore src from the current selected sound + reload + play.
-          const url = fileFor(prefs.sound);
-          if (url) {
-            audioRef.current.src = url;
-            audioRef.current.load();
-            primeAmbientMetadata();
-            audioRef.current.play().catch(() => {});
-            setIsPlaying(true);
-          }
+          audioRef.current.play().catch(() => {});
+          setIsPlaying(true);
         }
       }
     };
@@ -687,6 +672,53 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
       window.removeEventListener(AUDITIO_END_EVENT, onAnyEnd);
       document.removeEventListener("visibilitychange", onVisibilityChange);
     };
+  }, []);
+
+  // Lockscreen Play-tap guard.
+  //
+  // iOS holds a Now Playing widget on the lockscreen for any audio
+  // element that has played in the current session; we cannot
+  // programmatically dismiss it (verified June 11, 2026 across iOS
+  // Safari + Capacitor WKWebView). When the user taps Play on that
+  // widget while the app is backgrounded, iOS triggers audio.play()
+  // on our element. The Web Audio context is suspended in background,
+  // so playback would be silent and the progress bar would advance —
+  // the "lying widget" bug returns.
+  //
+  // Guard: register a play listener ONCE at mount. When play fires,
+  // attempt audioContext.resume(); if the context isn't running
+  // afterward (we're still backgrounded / locked), re-pause and
+  // signal paused state to iOS so the widget reverts.
+  //
+  // Mount-once registration is safe — the historical ticking bug
+  // (commits e4dee973 + e10af45b + 421abe38) came from
+  // setActionHandler() churn on every consumer render. Adding a
+  // play-event listener to the audio element at mount has no churn.
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const onPlay = async () => {
+      const ctx = audioCtxRef.current;
+      if (!ctx) return;
+      try {
+        await ctx.resume();
+      } catch {
+        /* iOS may reject resume while backgrounded — fall through */
+      }
+      if (ctx.state !== "running") {
+        audio.pause();
+        setIsPlaying(false);
+        if (typeof navigator !== "undefined" && "mediaSession" in navigator) {
+          try {
+            navigator.mediaSession.playbackState = "paused";
+          } catch {
+            /* ignore */
+          }
+        }
+      }
+    };
+    audio.addEventListener("play", onPlay);
+    return () => audio.removeEventListener("play", onPlay);
   }, []);
 
   // MediaSession for ambient is set synchronously inside primeAmbientMetadata
