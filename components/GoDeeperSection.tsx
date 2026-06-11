@@ -63,11 +63,18 @@ export default function GoDeeperSection({ reflections: propReflections, inline =
   const SWIPE_THRESHOLD = 50;
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    // Stop the touch from reaching parent (PrayClient's step-stepper
+    // swipe handler). Any touch that starts inside the TR carousel
+    // is owned by the carousel; if we let it bubble, a horizontal
+    // swipe to advance reflections also triggers a step advance to
+    // Pray. Bug caught June 11, 2026.
+    e.stopPropagation();
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
+    e.stopPropagation();
     const endX = e.changedTouches[0].clientX;
     const endY = e.changedTouches[0].clientY;
     const dx = endX - touchStartX.current;
