@@ -533,6 +533,11 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
   // pausing) is v1.1 — confirmed June 5 with Sheri.
   const higherPriorityCountRef = useRef(0);
   const wasPlayingBeforeDuckRef = useRef(false);
+  // Tracks whether ambient was playing when the app/screen went to
+  // background. Separate from wasPlayingBeforeDuckRef because the two
+  // pause causes (higher-priority audio vs. visibility hide) need
+  // independent resume signals. See visibility-change handler below.
+  const wasPlayingBeforeBackgroundRef = useRef(false);
   useEffect(() => {
     if (typeof window === "undefined") return;
     const onAnyStart = () => {
@@ -598,11 +603,71 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
     window.addEventListener(AUDITIO_START_EVENT, onAnyStart);
     window.addEventListener(NARRATION_END_EVENT, onAnyEnd);
     window.addEventListener(AUDITIO_END_EVENT, onAnyEnd);
+
+    // ─── Visibility-based pause/resume ────────────────────────────────
+    //
+    // iOS suspends Web Audio API contexts when the screen locks or the
+    // app is backgrounded. Ambient routes through GainNode for volume
+    // control, so the suspended context goes silent on lock. Without
+    // intervention the lockscreen Now Playing widget continues to show
+    // ambient as "playing" with the progress bar advancing — a lying
+    // widget. We explicitly pause ambient on visibility hide and clear
+    // the MediaSession session so the widget either disappears or shows
+    // an honest paused state. On visibility return (only when no
+    // higher-priority stream is running) we re-prime the metadata and
+    // resume playback. Auditio + Narration still play on lock because
+    // they use bare <audio>, no Web Audio routing.
+    //
+    // This is a design choice locked June 11, 2026 (AMBIENT-LS): ambient
+    // is in-app atmosphere for focused contemplative time, not background
+    // music. Phone down = session over.
+    const wasPlayingBeforeBgRef = wasPlayingBeforeBackgroundRef;
+    const onVisibilityChange = () => {
+      if (!audioRef.current) return;
+      if (document.hidden) {
+        // Going to background or lock. Skip if already ducked for
+        // higher-priority audio — duck logic owns the pause/resume.
+        if (
+          higherPriorityCountRef.current === 0 &&
+          !audioRef.current.paused
+        ) {
+          wasPlayingBeforeBgRef.current = true;
+          audioRef.current.pause();
+          setIsPlaying(false);
+          if (
+            typeof navigator !== "undefined" &&
+            "mediaSession" in navigator
+          ) {
+            try {
+              navigator.mediaSession.metadata = null;
+              navigator.mediaSession.playbackState = "none";
+            } catch {
+              /* ignore */
+            }
+          }
+        }
+      } else {
+        // Returning to foreground.
+        if (
+          wasPlayingBeforeBgRef.current &&
+          higherPriorityCountRef.current === 0 &&
+          audioRef.current
+        ) {
+          wasPlayingBeforeBgRef.current = false;
+          primeAmbientMetadata();
+          audioRef.current.play().catch(() => {});
+          setIsPlaying(true);
+        }
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
     return () => {
       window.removeEventListener(NARRATION_START_EVENT, onAnyStart);
       window.removeEventListener(AUDITIO_START_EVENT, onAnyStart);
       window.removeEventListener(NARRATION_END_EVENT, onAnyEnd);
       window.removeEventListener(AUDITIO_END_EVENT, onAnyEnd);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
   }, []);
 
