@@ -119,7 +119,7 @@ export default function PrayClient({
   const prayPrompt =
     initialArtwork?.customPrayerPrompt?.trim() ||
     visioDefaults?.defaultPrayerPrompt ||
-    "Respond to God in prayer—thanksgiving, intercession, or simply conversation about what you notice.";
+    "Respond to God in prayer: thanksgiving, intercession, or simply conversation about what you notice.";
   const actioHeadline =
     initialArtwork?.customActioHeadline?.trim() ||
     visioDefaults?.defaultActioHeadline ||
@@ -228,7 +228,7 @@ export default function PrayClient({
     return (
       <div className="min-h-screen flex items-center justify-center p-6" style={{ background: C.bg }}>
         <div className="text-center">
-          <h1 className="text-xl font-semibold mb-2" style={{ color: C.cream }}>Artwork not found</h1>
+          <h1 className="text-xl font-light mb-2" style={{ color: C.cream }}>Artwork not found</h1>
           <Link href="/" style={{ color: C.creamDim }}>Back to home</Link>
         </div>
       </div>
