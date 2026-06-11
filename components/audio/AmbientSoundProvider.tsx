@@ -634,6 +634,12 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
           wasPlayingBeforeBgRef.current = true;
           audioRef.current.pause();
           setIsPlaying(false);
+          // Clearing metadata + playbackState is not enough on iOS;
+          // the lockscreen widget stays visible as long as the <audio>
+          // element has a src loaded. Tear down the audio session
+          // entirely by clearing src + calling load(). iOS removes
+          // the Now Playing widget because there's no active session.
+          // src is restored on visibility return below.
           if (
             typeof navigator !== "undefined" &&
             "mediaSession" in navigator
@@ -645,6 +651,12 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
               /* ignore */
             }
           }
+          try {
+            audioRef.current.removeAttribute("src");
+            audioRef.current.load();
+          } catch {
+            /* ignore */
+          }
         }
       } else {
         // Returning to foreground.
@@ -654,9 +666,15 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
           audioRef.current
         ) {
           wasPlayingBeforeBgRef.current = false;
-          primeAmbientMetadata();
-          audioRef.current.play().catch(() => {});
-          setIsPlaying(true);
+          // Restore src from the current selected sound + reload + play.
+          const url = fileFor(prefs.sound);
+          if (url) {
+            audioRef.current.src = url;
+            audioRef.current.load();
+            primeAmbientMetadata();
+            audioRef.current.play().catch(() => {});
+            setIsPlaying(true);
+          }
         }
       }
     };
