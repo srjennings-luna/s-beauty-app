@@ -12,6 +12,7 @@ import {
 } from "react";
 import useAmbientPreferences from "@/hooks/useAmbientPreferences";
 import { AMBIENT_SOUNDS, type AmbientSoundId } from "@/lib/userData";
+import { primeMediaSession } from "@/hooks/useMediaSession";
 import {
   NARRATION_START_EVENT,
   NARRATION_END_EVENT,
@@ -173,6 +174,38 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
   useEffect(() => {
     volumeRef.current = prefs.volume;
   }, [prefs.volume]);
+
+  // Always-current selected sound for the resume-after-duck path. The
+  // resume callback lives inside a useEffect with [] deps (intentional —
+  // re-registering window event handlers on every prefs change is what
+  // caused the v1.0 ambient ticking bug). Read the latest sound here
+  // instead of pulling it through the closure.
+  const soundRef = useRef(prefs.sound);
+  useEffect(() => {
+    soundRef.current = prefs.sound;
+  }, [prefs.sound]);
+
+  // Synchronously set the lockscreen Now Playing metadata for the
+  // current ambient sound. Call this BEFORE audio.play() so iOS
+  // captures it on the play event (otherwise it falls back to the
+  // page <title>). Metadata-only — we deliberately don't register
+  // play/pause action handlers here because handler churn on every
+  // provider render is what caused the earlier ambient lockscreen
+  // attempts to produce audio ticking. iOS's default Now Playing
+  // controls still drive the <audio> element directly without our
+  // custom handlers; ambient pause/resume from the lockscreen will
+  // work, just without React state sync (worst case: a brief mismatch
+  // between the floating-button icon and actual playback until next
+  // render). AMBIENT-LS-02 metadata-only fix shipped June 11, 2026.
+  const primeAmbientMetadata = useCallback(() => {
+    const id = soundRef.current;
+    if (!id) return;
+    const label = AMBIENT_SOUNDS.find((s) => s.id === id)?.label ?? "Ambient";
+    primeMediaSession({
+      title: label,
+      album: "Contueri · Ambient",
+    });
+  }, []);
 
   // Detect iframe (Sanity Presentation) on mount. If we're embedded,
   // the audio element never mounts — preserves the editor tab's
@@ -397,6 +430,7 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
         fadeStart + SOFT_FADE_SECONDS,
       );
     }
+    primeAmbientMetadata();
     try {
       await audioRef.current.play();
       setIsPlaying(true);
@@ -405,7 +439,7 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
       // Autoplay blocked or other failure. Stay paused.
       setIsPlaying(false);
     }
-  }, [prefs.sound, persistWasPlaying, ensureWebAudio]);
+  }, [prefs.sound, persistWasPlaying, ensureWebAudio, primeAmbientMetadata]);
 
   const pause = useCallback(() => {
     if (!audioRef.current) return;
@@ -553,6 +587,7 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
           gain.gain.setValueAtTime(0, now);
           gain.gain.linearRampToValueAtTime(volumeRef.current, now + SOFT_FADE_SECONDS);
         }
+        primeAmbientMetadata();
         audioRef.current.play().catch(() => {});
         setIsPlaying(true);
         wasPlayingBeforeDuckRef.current = false;
@@ -571,24 +606,16 @@ export default function AmbientSoundProvider({ children }: { children: ReactNode
     };
   }, []);
 
-  // MediaSession integration for ambient is INTENTIONALLY OMITTED for
-  // v1.0. The previous attempts (commits e4dee973 + e10af45b) caused
-  // intermittent audio "ticking" / playback loops on iOS Safari —
-  // the provider's high render frequency (re-renders on every consumer
-  // state change) made useMediaSession's effect cycle handler register
-  // → clear → register rapidly, and iOS Safari responded to the
-  // playbackState churn with stream restarts.
-  //
-  // Trade-off accepted for v1.0: ambient on lockscreen shows iOS's
-  // default placeholder (black square + play-triangle icon) + page
-  // <title> as the now-playing text, rather than the sound label +
-  // Contueri brand artwork. Functional, not pretty.
-  //
-  // For v1.1: re-attempt with (a) memoised `track` + onPlay/onPause
-  // callbacks, (b) the integration moved INTO a child component that
-  // re-renders less than the provider, OR (c) a global ref-based
-  // mediaSession setter outside React's render lifecycle.
-  // Backlog: AMBIENT-LS-02.
+  // MediaSession for ambient is set synchronously inside primeAmbientMetadata
+  // (above), called from play() and the duck-resume path. Metadata only —
+  // no setActionHandler() calls. The earlier attempts that registered action
+  // handlers via useMediaSession's effect cycle churned on every consumer
+  // render and caused intermittent audio ticking on iOS Safari (reverted in
+  // commits e4dee973 + e10af45b + 421abe38). iOS's default Now Playing
+  // controls still drive the <audio> element for lockscreen play/pause; we
+  // accept that the floating-button React state may briefly lag a lockscreen
+  // gesture in exchange for a stable audio path. AMBIENT-LS-02 closed
+  // June 11, 2026.
 
   // Context value is memoized so consumers don't re-render on every
   // parent render. Identity changes only when actual state changes.
