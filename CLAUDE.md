@@ -112,6 +112,9 @@ Three calibration notes for any future session estimating effort or scheduling w
 | `CONTUERI-CC-DataGaps-Brief.html` | **Cowork doc (Documents folder)** — post-seed action brief for CC. After the 30-day P&P seed landed, Sheri reviewed in Studio and identified missing or empty fields. Brief documents: fields to verify (potential silent drops), missing required fields (description, mediaType/mediaUrl, workTitle), missing optional fields, location data table for all 30 days, themes-as-refs pattern, audio deferred question, 7 actionable questions for CC. Created June 7-8, 2026. |
 | `CONTUERI-Explore-Cards-Build-Brief.html` | **Cowork doc (kallos-app/content-docs/)** — build brief for CC: Explore content item list card and detail card redesign. Covers data source rules (contentItem only, no dailyPrompt fields), list card layout, detail card layout, action zone by type (Enter Visio Divina for sacred-art/landscape; REFLECT text+chevron for all others), contextual journey/P&P links via reverse reference, GROQ queries, and full removal list. Created June 9, 2026. |
 | `KALLOS-Session-Benchmark.html` | **Cowork doc (Documents folder)** — content quality KPI tracker. Records per-session error counts by severity (Major / Minor / Micro) and who caught each issue (Claude vs. Sheri). Goal: Sheri's catch rate trends down as editorial rules improve. Baseline: Apr 14-15 BTG session (Claude 21%, Sheri 79%). First scored session: Jun 7-8, 30-day P&P + TRs (Claude 48%, Sheri 52%), +27pp improvement. Created June 8, 2026. |
+| `CONTUERI-logo.svg` | **Cowork doc (Documents folder)** — locked brand mark SVG. Ballet C glyph (Google Font, weight 1) + Kalam Regular lowercase "l" on upper arc, cream on espresso. Self-contained; app icon variant available by uncommenting weight-1 center stroke. Created June 9-10, 2026. |
+| `CONTUERI-Ballet-C-Animation-v2.html` | **Cowork doc (Documents folder)** — animation iteration file for the Ballet C logo. Iteration 10 is the locked version (C fills 2.3s starting at 0.3s, then at 1.7s Kalam "l" + JOURNEY COMPLETE text appear with 0.5s fade). Created June 9-10, 2026. |
+| `CONTUERI-JourneyComplete-Page.html` | **Cowork doc (Documents folder)** — full-page mockup for the Journey Complete screen. Brand mark animation + JOURNEY COMPLETE + SHARE THIS JOURNEY + START A NEW JOURNEY. CC is building this into kallos-app (Manual Task #115). Background in production pulls from Sanity journey artwork. Created June 9-10, 2026. |
 
 **Launch docs (in `~/Documents/KALLOS Launch/`):**
 
@@ -184,7 +187,7 @@ Content planning and seeding prep session. Core output: complete 30-day P&P cont
 - ✅ **Tradition Reflections confirmed as separate documents.** Separate Sanity docs (not inline fields on content items). Content items link them via reference array; if empty, carousel auto-matches by theme. Full document type name: **"Tradition Reflection (Church Fathers, Saints & Popes)"**. Author Type options: Church Father · Saint · Pope · Doctor of the Church · Theologian · Mystic · Philosopher. Papal encyclicals confirmed in scope — use "Pope" author type. JPII and Benedict XVI entries already exist.
 - ✅ **Savinien Petit, *The Sacred Heart*, 1874** reserved. French academic, public domain. Held for future P&P: Sacred Heart devotion origin / St. Margaret Mary Alacoque. Not for Day 1.
 - ✅ **PP-DAYTITLE-01 + PP-DEFAULTS-01 shipped** (commits `16f1eea5`, `ed3cbda7`).
-  - **`dailyPrompt.dayTitle`** — new optional `string` field on the `dailyPrompt` schema for a poetic editorial title per day (e.g. "God Does Not Die" for Day 1 Sacred Heart). Max 80 chars. Distinct from the work title that lives on the linked `contentItem` (which names the painting/piece). Rendered prominently above the artwork on `/prompt`; falls back to the contentItem title when blank.
+  - **`dailyPrompt.dayTitle`** — new optional `string` field on the `dailyPrompt` schema for a poetic editorial title per day (e.g. "God Does Not Die" for Day 1 Sacred Heart). Max 80 chars. Distinct from `contentItem.title` (which names the painting/piece/thinker and renders as the large 50px Cormorant italic title at the top of `/prompt`). dayTitle renders as the SUBTITLE below the curatorNote dark box, Cormorant italic at clamp(1.55rem, 5.5vw, 2rem). Falls back to `promptQuestion` when blank, NOT to `contentItem.title`. Layout order on `/prompt` is: date → contentItem.title (huge) → curatorNote dark box → dayTitle OR promptQuestion (subtitle) → context.
   - **`ppDefaults` singleton schema** (`sanity/schemaTypes/ppDefaults.ts`). Mirrors the `visioDefaults` pattern from VD-ACTION-01. Holds one field: `defaultActio` (required, max 280). Seeded by `scripts/seed-pp-defaults.ts` with Sheri's text: *"Look for beauty today, in a person, in the ordinary, in what would have passed unnoticed."* Editable in Studio after seed.
   - **Actio cascade in `PromptClient.tsx`** — `prompt.actio` → `ppDefaults.defaultActio` → hardcoded last-resort fallback. Per-day Actio in Sanity wins; otherwise the singleton fills the gap; the hardcoded string protects against an empty singleton (defense-in-depth only). Mirrors the VD-ACTION-01 cascade pattern.
   - **`getPpDefaults()` + `getPpDefaultsPreview()`** added to `lib/sanity.ts`. New `PpDefaults` type in `lib/types.ts`. New `DailyPrompt.dayTitle?: string` field on the type.
@@ -192,7 +195,7 @@ Content planning and seeding prep session. Core output: complete 30-day P&P cont
 **Editorial rules added this session**
 - **Saints and Church Fathers content type:** No new type needed. → **Thinkers & Quotes** if primary identity is theology/philosophy (Augustine, Aquinas, Hildegard, John of the Cross, Simone Weil). → **Literature & Poetry** if primary identity is literary/written (Francis of Assisi's *Canticle*, Dante). Test: what would you hand someone at dinner — their ideas, or the text itself?
 - **Auditio ≠ ambient sound:** Auditio document type = future standalone Explore bubble music content. The ambient sound system is separate. Never conflate.
-- **P&P audio is optional:** Audio suggestions in the content plan and seeding template are optional. Sheri decides per-day on entry. Blank does not block publishing.
+- **P&P audio: recommendation is mandatory in seeding docs, sourcing is optional.** ✗ SUPERSEDED June 13, 2026 by the updated rule below. Original (kept for history): "Audio suggestions in the content plan and seeding template are optional. Sheri decides per-day on entry. Blank does not block publishing." → New rule effective June 13: Every P&P seeding doc must include an audio recommendation per day with a verified link to where it can be sourced (Pixabay, Musopen, archive.org, gregorian-chant-hymns.com, etc., per the Auditio Selection Criteria). Sheri decides at seeding time whether to source the file; the recommendation itself is not optional. Reason: Cowork drifted toward skipping audio recommendations entirely; this rule prevents that drift in every future model session.
 
 ### Phase 2 Work Done (June 7, 2026 afternoon · ambient track swaps + 30-day PP seed run + gap-fill patch)
 
@@ -294,7 +297,16 @@ Full implementation of the June 9 Explore Cards Build Brief (`content-docs/CONTU
 
 Hierarchy lives in size + color (`creamWarm` vs `cream` vs `creamDim`) + font family (italic serif vs sans), NOT weight. Weight equalizes; size + color separate. font-light is the floor on dark espresso — font-thin (200) starts to vibrate. This rule applies to VD screens AND any future contemplative surface; the existing Journey step typography should be audited against it (some heading weights may still be at font-semibold per the older pattern).
 
-**Sanity data issue surfaced (predates this build, June 9 catch).** "The Art of Being Moved" (C.S. Lewis, _id `0ee22746-ffc0-40c5-8bfe-edd6ed2b88eb`) has Fra Angelico's Annunciation as its image — an upload error from March 27. Editorial fix needed in Studio (replace with correct image, or delete if not shipping in v1.0).
+**Sanity data issue surfaced (predates this build, June 9 catch).** "The Art of Being Moved" (C.S. Lewis, _id `0ee22746-ffc0-40c5-8bfe-edd6ed2b88eb`) has Fra Angelico's Annunciation as its image — an upload error from March 27. Editorial fix needed in Studio (replace with correct image, or delete if not shipping in v1.0). → Manual Task #116.
+
+### Phase 2 Work Done (June 9-10, 2026 · Brand mark locked + Journey Complete design + session decisions)
+
+- ✅ **Brand mark locked.** Ballet C glyph (Google Font) + Kalam Regular lowercase "l" on upper arc, cream on espresso. SVG at `~/Documents/CONTUERI-logo.svg`. App icon variant available by uncommenting weight-1 center stroke. Animation spec locked (Iteration 10 in `CONTUERI-Ballet-C-Animation-v2.html`): C fills 2.3s starting at 0.3s; at 1.7s Kalam "l" + JOURNEY COMPLETE text appear with 0.5s fade.
+- ✅ **"Go deeper" (Tradition Reflections) removed from VD Meditate step.** The Meditate step no longer shows TR cards. This is a significant UX decision — artwork is the focal point; TR content was creating visual noise at the wrong moment. Typography pass notes for "Go deeper" label weight are superseded by this removal.
+- ✅ **Phase D reverted: type label stays on Explore detail only, NOT in VD.** Content type label was added to VD chrome per brief, then reverted after testing on El Greco Gethsemane: persistent label competed with progress-bar segments and violated editorial intent (once user crosses into VD, artwork is the focal point). Single-accent rule in VD = zero, not one.
+- ✅ **Journey Complete page designed.** Full-page mockup at `~/Documents/CONTUERI-JourneyComplete-Page.html`. Brand mark animation + JOURNEY COMPLETE + SHARE THIS JOURNEY + START A NEW JOURNEY. CC building this into kallos-app (Task #115 — in progress). Ballet + Kalam Regular fonts not yet in `layout.tsx` — CC adding as part of this build.
+- ✅ **Content guide corrected: thinker image rule fixed.** `KALLOS-Content-Guide-Pause-Ponder.html` line 226 previously said "a portrait for a thinker." Corrected: do not use a portrait for a thinker unless there is no other option or the portrait is intrinsic to the content (e.g., a Holbein painting of Thomas More is itself a historical artwork).
+- ✅ **Contemplative typography pattern locked.** See Design Consistency Rules above for full rule. `font-semibold`/`font-bold` banned on espresso surfaces. Hierarchy in size + color + font family, not weight. Applied to VD — Journey day screens need audit (Task #118).
 
 ### Phase 2 Work Done (June 5, 2026 afternoon/evening · Ambient Sound System + Visio Divina restructure + audit dashboard)
 
@@ -802,8 +814,12 @@ These are content/editorial tasks that predate the launch focus. They will resum
 - **Studio spot-check Days 7/12/26 TRs for em-dash comma substitution polish** (Manual Task #109 — Sheri manual). The seed script may have substituted commas for em dashes in those Tradition Reflection fields. Quick visual check in Studio.
 - **Source/write 10 replacement content items for skipped days** (Manual Task #111 — Cowork). Days 6, 12, 15, 16, 19, 22, 24, 26, 27, 29 are marked Skipped in v3 plan. All 10 need a real contentItem before those P&P days can be seeded. Reference `CONTUERI-PP-30Day-Content-Plan-v3.html` for each day's theme and type slot.
 - **Create auditio docs in Sanity for Days 3, 15, 22** (Manual Task #112 — Sheri manual). These days have audio fields that need to be filled in Studio directly.
-- **Fix `getDailyPrompt()` fallback** (Manual Task #113 — CC — **MUST FIX BEFORE JUNE 12**). App currently shows July 11 (last seeded P&P date) when today has no matching prompt, because the fallback uses `order(date desc)[0]` with no ceiling. Fix: add `date <= $today` filter so fallback returns the most recent past prompt, not a future one. One-line GROQ change.
-- **Build Explore card redesign** (Manual Task #114 — CC). Per `content-docs/CONTUERI-Explore-Cards-Build-Brief.html`. List card and detail card using `contentItem` fields only (no `dailyPrompt` fields). Action zone by type (Enter Visio Divina for sacred-art/landscape; REFLECT text+chevron for all others). Contextual journey/P&P links via reverse reference. Remove border box from REFLECT.
+- ✅ **Fix `getDailyPrompt()` fallback** (Manual Task #113 — CC — **SHIPPED June 9**). Added `date <= $today` clamp + `{today: targetDate}` param. Preview path keeps unbounded fallback. Commit `fc44d8ea`.
+- ✅ **Build Explore card redesign** (Manual Task #114 — CC — **SHIPPED June 9**). All phases A → B → C → C.1 → D complete. See Phase 2 Work Done (June 9) for full detail. Commits `e344e576` through `e3494e61`.
+- **Build Journey Complete page** (Manual Task #115 — CC — in progress). Per `CONTUERI-JourneyComplete-Page.html` mockup (~/Documents/). Brand mark: Ballet C + Kalam Regular "l". Add both fonts to `layout.tsx`. Wire animation (C fills 2.3s starting 0.3s; at 1.7s Kalam "l" + JOURNEY COMPLETE appear with 0.5s fade). Replace existing Journey Complete UI.
+- **Fix or delete "The Art of Being Moved" image** (Manual Task #116 — Sheri — Sanity Studio — BEFORE v1.0). contentItem _id: `0ee22746-ffc0-40c5-8bfe-edd6ed2b88eb`. Current image (Fra Angelico's Annunciation) is a seed artifact from March 27 — wrong image. No document specifies the correct image. Either replace with a contextually appropriate image (Lewis's era/world/subject) or delete the content item if it is not shipping in v1.0.
+- **Em dash audit on Cowork-authored description fields** (Manual Task #117 — Sheri — Sanity Studio). CC flagged during June 9 build: some `contentItem.description` fields authored by Cowork contain em dashes. Run a spot-check in Studio before launch.
+- **Audit Journey day screens for font-semibold/bold violations** (Manual Task #118 — Sheri — ongoing). Contemplative typography rule: font-semibold and font-bold are banned on espresso surfaces. Journey step headings may still carry old semibold from the pre-June-9 pattern. Audit `JourneyDaySteps` and related components.
 - Scripture audit (NIV → RSV-2CE): Holy Week + Days 9–18 drafted before translation standard was set. Verify before or during Sanity entry.
 - Background music player: restore for Journey steps (removed when Stories nav replaced footer). Discuss placement with Sheri before building.
 - Seed content into Sanity: Intro journey, Themes 2–5
@@ -1026,7 +1042,7 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 | `theme` | ✅ New — 5 founding themes |
 | `contentItem` | ✅ New — `curatorNote` renamed to `artworkHook` (April 24, 2026 — R1). 41 KEEP migrated; 6 REVIEW pending rewrite. April 24 (Dashboard Enhancement): added `photography` as a 9th content type (closes Manual Task 36). Auditio fields shared with dailyPrompt / journeyDay. |
 | `journey` | ✅ New — 7-day structure. Added `totalDays` number field (April 13, 2026). April 24, 2026: `days` field converted from inline object array to references to `journeyDay` documents. |
-| `dailyPrompt` | ✅ New — "Pause & Ponder" daily feature on Today tab. Auditio object includes `verbaOriginal` (lyrics/VERBA panel) plus `composerArtist`, `workTitle`, `genre` (April 24, 2026 — content-repeat intelligence). June 7, 2026: added optional `dayTitle` (string, max 80) for a poetic editorial title per day (e.g. "God Does Not Die"); rendered above the artwork on `/prompt`; falls back to the linked `contentItem.title` when blank. |
+| `dailyPrompt` | ✅ New — "Pause & Ponder" daily feature on Today tab. Auditio object includes `verbaOriginal` (lyrics/VERBA panel) plus `composerArtist`, `workTitle`, `genre` (April 24, 2026 — content-repeat intelligence). June 7, 2026: added optional `dayTitle` (string, max 80) for a poetic editorial title per day (e.g. "God Does Not Die"); rendered as subtitle below curatorNote dark box on `/prompt`, falls back to `promptQuestion` when blank. Render order: contentItem.title (huge, top) → curatorNote (dark box) → dayTitle OR promptQuestion (subtitle). |
 | `ppDefaults` | ✅ New June 7, 2026 (PP-DEFAULTS-01). Singleton, one document per dataset. Holds `defaultActio` (required, max 280) — the global default Actio shown on any P&P day where `dailyPrompt.actio` is blank. Mirrors `visioDefaults`. Seeded by `scripts/seed-pp-defaults.ts` with Sheri's text. Edit in Studio after seed; the cascade in `PromptClient.tsx` reads it via `getPpDefaults()`. |
 | `journeyDay` | ✅ Standalone document (April 24, 2026 — R5 migration complete). 25 docs live. Each has a required `journey` back-reference. Fields: dayNumber, dayTitle, openImage, openText(+audio), encounterContent (ref → contentItem), encounterGuidance, encounterNote(+audio), auditio (composerArtist/workTitle/genre), lectio, reflectionQuestions (+audio, new April 24 Dashboard Enhancement), connectThread, goDeeper. |
 | `splashPage` | ✅ Updated June 3, 2026 (night) — `tagline.text` now optional (`Rule.required()` removed). Enables the placeholder pattern: editors can clear text in Studio without re-creating the block, and the SplashClient renderer skips empty taglines so no visual gap appears. Tagline blocks render in verdigris `#5F7A6B`. Block types unchanged: `wordmark`, `pronunciation`, `goldRule`, `quote`, `heading`, `body`, `tagline`, `featureCard`, `primaryCta`, `secondaryCta`. |
@@ -1055,6 +1071,7 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 - **Audio player:** The custom circular play button (64px cream circle, play/pause SVG) is the chosen design. Pause & Ponder has it. Journey Encounter step still uses the native `<audio>` element — **must be replaced** with the circular player to match.
 - **Navigation patterns:** Stories-style thin progress bar + swipe is on Journey. Ensure other multi-step flows (Visio Divina, onboarding) follow the same pattern when built.
 - **Typography & spacing:** Espresso mode screens should all use the same heading sizes, label styles, and padding.
+- **Contemplative typography weight rule (locked June 9, 2026):** `font-semibold` and `font-bold` are BANNED on espresso surfaces. "Artwork shouts, words breathe." Locked weight range: single short section heading (e.g., "Reflect" h2) = `font-light` (300); section grouping label or card title = `font-normal` (400); body/instructional prompts = `font-normal` (400); quoted material (Cormorant Garamond italic) = minimum `1.3rem` per brief; weight inherits. `font-thin` (200) is the floor — vibrates on dark espresso. Hierarchy lives in size + color (`creamWarm` / `cream` / `creamDim`) + font family (italic serif vs. sans), NOT weight. Applies to VD screens AND all future contemplative surfaces. Journey day screen headings may still violate this (Manual Task #118 — audit pending).
 - **Completion states (no strike-through rule):** When a user marks something complete (actio checkbox, journey day, etc.), dim the text to a faded color as the "done" cue. Do NOT strike through. Strikethrough reads productivity-app; dim alone says "honored." Established May 28, 2026 during P&P gradient QA — applied to actio checkbox items, applies anywhere completion states surface.
 
 **Checklist before every push:** Does this design change appear on more than one screen? If yes, update all of them.
@@ -1098,6 +1115,99 @@ Every P&P day must open with one **surprising, specific, shareable fact** — so
 
 **Test:** Would someone say "wait, I didn't know that" and repeat it at dinner? If yes: hook. If not: keep looking.
 
+**Hook strength scales with subject familiarity.** A "surprising fact" is not an absolute category. It is measured against what the reader probably already knows. The more famous the subject, the higher the bar a hook has to clear. Three rough tiers:
+
+- **Tier 1 — universal knowledge** (Mona Lisa, Last Supper, Christmas, Easter, St. Francis of Assisi, Thomas Aquinas, Dante, Michelangelo, the Pope, the Sistine Chapel). These appear in every survey course. The standard biographical fact will not surprise the reader. The hook MUST land something the survey-course textbook does not carry: a specific historical moment, an ironic reversal, a contradiction, an obscure detail with theological or biographical weight. For Dante: "Florence sentenced him to death; the city that expelled him made him its greatest export" qualifies. The bare "exiled from Florence" fact does not.
+
+- **Tier 2 — cultured general knowledge** (Augustine, Teresa of Avila, John of the Cross, Bernard of Clairvaux, the Council of Trent, Pentecost, the Reformation, Caravaggio). A serious reader has heard of them. The hook can use the second-tier biographical fact, the one not in the survey but in any decent monograph. "Aquinas stopped writing on December 6, 1273 after a mystical experience and called everything he had written 'straw'" is Tier 2 territory: informed readers know it; the curious seeker is meeting it for the first time.
+
+- **Tier 3 — specialist or niche knowledge** (Hildegard von Bingen, Rabanus Maurus, the Alhambra Nasrid craftsmen, the Westvleteren monks, Carlo Crivelli, Pontormo, Mode VIII, Jacopo Tintoretto, Andrei Rublev the film). Most readers have never heard of them. The subject itself IS the surprise. Standard biographical fact lands because the reader has no prior frame. The hook still needs specificity (names, dates, places) but does not need to be obscure-within-the-subject. "Hildegard started her first preaching tour at 63" works; the reader's prior frame is empty.
+
+**The operational test, regardless of tier:** would a 25-year-old who took AP European History or AP US History react with "wait, I didn't know that" rather than "yeah, I learned that in high school"? If the latter, dig deeper. The hook that lands is almost always one layer below the textbook summary.
+
+**Practical consequence for content selection:** when a slot lands on a famous subject (Tier 1), the editorial work is harder, not easier. The famous subject is not the gift; it is the obligation. You have to earn the slot with a fact that survives the curious seeker's prior knowledge. If you can't find that fact, the slot belongs to a lesser-known subject where the basic identity already carries the surprise.
+
+**The Inklings test (companion to the dinner-table test).** This is Sheri's mental frame for evaluating any hook. Imagine walking into an Inklings gathering — Lewis, Tolkien, Charles Williams, Warnie Lewis, scotch on the table, pipes lit — and announcing your hook as the opening line of "something fascinating I came across." Three possible reactions:
+
+- Eye rolls, glances elsewhere, polite change of subject → KILL the hook
+- Civil nods, no follow-up question → KILL the hook
+- Eyes widen, conversation pauses, someone says "wait, what?" and leans forward → THAT is the hook
+
+The dinner-table test asks whether the hook is shareable at a friendly gathering. The Inklings test raises the bar: would the hook survive a room of literary minds who already know a lot, want depth, and have no patience for the obvious? Use it on Tier 1 famous subjects in particular. If the hook would not get the Inklings to lean in, it is not a hook.
+
+**The hook is the lead. The context is the conversation that follows AFTER they lean in.** Once the Inklings lean forward, you have their attention — and you must justify the lean with substance. The context is not a recap, summary, or biographical introduction. The context is the further depth a curious literary mind would ask for after hearing the hook. It is equally important as the hook itself. Treat it that way.
+
+**Hook and context NEVER repeat the same information. Ever.** Not the same fact in different words. Not the same beat reframed. Not "as we said in the hook." If the hook covers Aquinas's December 6, 1273 "straw" moment, the context goes elsewhere — family conflict, Albert the Great, the centuries of reception. If the hook covers Veni Creator at every conclave for a thousand years, the context covers Trent, Luther, Charles III — different ground entirely. This is a hard rule with zero exceptions. Every paragraph of context after the hook must deliver something the reader does not already have.
+
+**Context length follows content quality, not a target paragraph count.** Four to five paragraphs is fine when the writing earns it. Six paragraphs is fine when each carries a specific moment, fact, or thread the reader cannot get elsewhere. A two-paragraph context can be too long if every sentence is generic; a seven-paragraph context can be exactly right if every paragraph delivers. The question is never "is this short enough" but "is every paragraph earning its place." User testing of Days 1–3 confirmed: readers did not push back on 5–6 paragraph contexts when the writing was strong.
+
+**Context voice: C.S. Lewis register.** Test for every paragraph: would Lewis have written this in *Surprised by Joy*, *The Discarded Image*, *The Allegory of Love*, or one of his Atlantic / Reflections on the Psalms essays? Specific images, concrete moments, restrained and earned metaphor, conversational rhythm, comfort with both the everyday detail and the metaphysical claim in the same paragraph. NOT academic ("the painting demonstrates the artist's mastery of chiaroscuro"). NOT devotional ("we are invited to behold this great mystery"). Lewis: factual, specific, intelligent, warm, willing to be surprised. He doesn't summarize what you can already see; he tells you what you would have missed.
+
+**Period context research is mandatory BEFORE any draft.** This is the rule that separates Contueri's voice from a coffee-table art book or a Wikipedia summary. Before drafting any hook, context, or stature paragraph, research what an informed contemporary of the subject would have understood — and what a modern eye would miss without that context.
+
+- **For artwork:** What symbolism would a viewer of the period recognize that a modern viewer would not? Examples that earned their place in Contueri content: Bosch's owl in the conjurer's basket = those who prefer darkness over truth in 15th-century Flemish iconography; the thistle thorns on a Magus's collar = a crown of thorns worn to a Nativity; the fish hidden in the wicker of Caravaggio's Emmaus bread basket = Christ as ichthys; gold leaf in a Crivelli icon = participation in divine light, not representation of it. The contemporary viewer decoded these. The modern viewer sees decoration. **Surface them.**
+
+  - **Color iconography in particular** carries specific theological and social meaning the modern eye misses (Elizabeth Lev's *How Catholic Art Saved the Faith* documents this systematically). **CRITICAL caveat: color symbolism is highly contextual. The SAME color carries DIFFERENT meaning depending on the figure, the painter, the era, and the surrounding visual vocabulary.** What follows are research-prompting patterns, NOT a lookup table to apply mechanically:
+
+    - **Yellow** is the cleanest example of why this matters. In some contexts it is the traitor's color (Judas often wears yellow). In others it is the courtesan's color — medieval sumptuary laws required prostitutes to wear yellow markers, and Caravaggio drapes the Magdalene in a yellow robe at the moment of her conversion to mark her pre-conversion worldly identity. In still others it is the Jewish-identity color used WITHOUT stigma: Mantegna paints the Virgin Mary in a prominent yellow turban precisely to signal her Jewish heritage with respect. Same color, three completely different meanings. Researching "what does yellow mean" gives you the wrong answer. Researching "what does yellow mean on THIS figure, painted by THIS painter, in THIS period" gives you the right one.
+    - **Blue** on Mary often signals heaven + divinity, and ultramarine pigment from lapis lazuli was more expensive than gold — so the blue robe is theological AND economic. But blue on other figures means other things.
+    - **Red** is similarly slippery: passion and blood on Christ, penitent love on Magdalene, martyrdom-or-authority on the Pope, worldly luxury on secular subjects.
+    - **Black** can mean mourning OR wealth (Spanish black was the most expensive dye in the 16th-century European market).
+    - **White** under colored robes can signal purity; on its own it signals other things.
+
+  - **The operative rule:** when colors are doing work in an artwork, research the specific figure, the specific painter, and the specific period BEFORE writing what the color means. Do not import a color-meaning rule from one painting into another. The contemporary viewer decoded each color in the specific context the painter built; replicate that research, do not shortcut it.
+
+  - **This caveat applies to ALL iconographic examples in this section, not just color.** Bosch's owl symbolism is documented for 15th-century Flemish iconography; an owl in a 19th-century Pre-Raphaelite painting may carry different weight. The fish symbol is well-attested for early Christian and Caravaggesque contexts; in a later or different tradition it can mean other things. Use these examples to know what to research, not to skip the research.
+
+- **For texts:** What political, theological, cultural debates was the author engaging? Dante's Inferno is not a generic medieval poem; it is an exile's specific response to a Florentine political crisis. The Veni Creator at the Council of Trent's opening was not a generic invocation; it was an act of continuity with Catholic tradition at the defining moment of defense against the Reformation. Luther's German translation of the same hymn 21 years earlier was a deliberate retention while everything else Catholic was being stripped. The historical situation IS the meaning.
+
+- **For lives and actions:** What constraints, customs, dangers, or social rules were operating? Hildegard "preaching publicly" is a fact; the rule that women were not permitted to preach is what makes the fact remarkable. García Moreno's last words "Dios no muere" land differently when you know the Masonic political assassination context. Thomas More's silence under questioning was a calculated legal defense based on his knowledge that the law of the time could not treat silence as treason — until Henry changed the law.
+
+- **For music:** What did this sound like in its original context? Who was the intended audience? What was the liturgical or social function? Gregorian chant in a 9th-century monastery before electric light, sung by candle and torchlight in a stone church with reverb of several seconds, is not the same listening experience as the same chant on Spotify through earbuds. Surface the original context when it changes what the music does.
+
+**The research test, applied to every piece before drafting:** "What would someone living in the year this was made understand that the modern user does not?" That gap is often the content's deepest power. The hook or the context should land it explicitly.
+
+**Authority register: facts must be specific.** Contueri's voice depends on concrete particularity. Sheri reinforced these patterns repeatedly during June 12–14:
+
+- **Specific dates beat vague periods.** "December 6, 1273" beats "late 1273." "May 6, 2023" beats "May 2023." "September 12, 1910" beats "in 1910." When the date is documented, name it.
+- **Named characters beat generic roles.** "Gabriel García Moreno" not "the president of Ecuador." "Pope Pius XII" not "the Pope of the era." "Rabanus Maurus" not "a Frankish monk."
+- **Anchor numbers make claims real.** "266 popes have been elected under these words" beats "many popes." "Six gunshots and fourteen machete strikes" beats "multiple wounds." "1,030 performers" beats "an enormous orchestra." When a fact has a number, use the number.
+
+**Verified quotes only — flag hedged attributions.** When a quote is tagged "commonly attributed," "from the novel's notebooks," "tradition holds," or any other hedge that signals the model couldn't pin it down, it is APOCRYPHAL until proven otherwise. Examples Sheri caught in this session: the Tolstoy "Music is the shorthand of emotion" line (doesn't appear in Anna Karenina), the Dom Perignon "Come quickly, I am tasting the stars" (19th-century advertising). Either verify against a primary source or replace with something verifiable. Never bury a hedged quote in confident prose; flag it explicitly.
+
+**Open the context with a SCENE, not a summary.** A specific moment in a specific place with specific stakes is the door into depth. Examples from this session that worked: the Mahler premiere September 12, 1910 in Munich with 1,030 performers; the Council of Trent opening December 13, 1545; "Sistine Chapel. The doors close behind them." Analysis as the opener does not land — the user has nothing to anchor the analysis to yet. Open with the scene; let the depth follow.
+
+**For unfamiliar (Tier 3) figures, deliver a STATURE paragraph before the analytical content.** A user meeting Hildegard cold needs to know she was the most famous woman of her century before they can absorb the viriditas analysis. A user meeting Aquinas (Tier 2 borderline) needs the "his Summa became the foundation of Catholic theology for seven centuries, Pope Leo XIII made his philosophy the official framework of Catholic education in 1879" beat before the three-criteria-for-beauty argument. The stature paragraph is the bridge from "who is this?" to "tell me more." Sheri flagged this specifically June 13: "it's also important for users who have never heard of Aquinas to know how he is thought of historically."
+
+**Day title format.** Short, intriguing, notification-worthy. Target band: 2–5 words. Two registers, both work:
+- **Question form** when the day works as a setup or disarming joke: "What do a priest, a scientist, and a telescope have in common?" (Webb Deep Field / Lemaître), "Did you know it was true?" (Easter Sunday).
+- **Statement form** when the day is a thesis, provocation, or final words: "God Does Not Die" (Sacred Heart, García Moreno's last words), "Beauty Is a Fact" (Aquinas), "Come, Creator" (Veni Creator), "Halfway Through" (Dante Inferno), "Everything Green Is Alive" (Hildegard viriditas).
+- Avoid: descriptive titles ("The Beauty of Aquinas's Theory"), academic titles ("Aquinas on the Transcendentals"), generic titles ("A Moment of Beauty"). The title is a notification you want the user to open; the cost of opening must feel rewarded by curiosity, not by description.
+
+**The summary-closer AI tell.** This is one of the strongest AI signatures and one Sheri caught repeatedly during the June 12–14 rewrites. Closing sentences that summarize what the paragraph already said are a model trying to add gravitas where none is needed:
+
+- ❌ "The request has not changed."
+- ❌ "The story continues."
+- ❌ "The same prayer endures."
+- ❌ "And so, the meaning carries on."
+- ❌ "The argument is not over."
+
+These earn their place ONLY when they add something the paragraph has not already given the reader. If the closing sentence just zooms out and restates what the prior sentences proved, CUT IT. Trust the reader to draw the synthesis themselves. The paragraph ends where the last delivering sentence ends, not where the model wants to land a finale.
+
+**Hook = fact, not theological framing of the fact.** "The medieval architects called this divine proportion" is framing. "Chartres was rebuilt in 26 years after the 1194 fire by nobles, merchants, and peasants all pulling carts of stone" is the fact. Lead with the fact. Theological framing belongs in context.
+
+**Reversal / ironic-origin stories rank high.** "He tried to STOP champagne from fizzing." "Kepler's wrong idea produced the right one." "Soviet censors banned the film that won at Cannes." Any time the surprising twist IS the engine of the story, the hook lands hard. Watch for these and prefer them.
+
+**Underrepresented voices/figures are particularly strong choices.** Hildegard, the Alhambra craftsmen, Westvleteren monks, Rabanus Maurus — figures who don't get canonical attention in popular knowledge are a high-value angle. Contueri's role is partly tradition recovery; surfacing the overlooked is part of the brand.
+
+**No meta-instructions in user-facing fields.** Phrases like "Day 30 is meant to feel like arriving somewhere" or "The Verba text is worth displaying alongside the audio" are editorial direction to the system/editor, not user content. They MUST stay out of user-facing fields (curatorNote, promptQuestion, dailyPrompt.actio, contentItem.context, contentItem.artworkHook, contentItem.description). Strip them before publishing.
+
+**Liturgical / seasonal timing weighting.** When a calendar date lands on a major feast (John the Baptist June 24, Peter & Paul June 29, Benedict of Nursia July 11, Sacred Heart Friday after Corpus Christi, etc.), the slot benefits from feast-aware content. Not absolute — but a strong tiebreaker when content strength is close. Conversely, do NOT place feast-specific imagery (e.g., Pentecost) weeks out of liturgical season; it breaks Contueri's implicit calendar-awareness.
+
+**Cross-surface content overlap.** Check intended P&P content against active Journey content before publishing. If a journey day (especially the onboarding-linked BTG II) features a specific artwork, do not use the same artwork or a near-duplicate (e.g., Caravaggio's Emmaus on Day 3 of BTG II + Pontormo's Emmaus on a nearby P&P) in P&P within the same launch window.
+
+**Thinker artwork rule (reaffirmed June 13, 2026).** For `thinker` content type, do NOT use a portrait of the thinker as the image unless there is no alternative or the portrait is itself a historically significant artwork (e.g., Holbein's Thomas More). Prefer artwork that embodies the thinker's idea — Hildegard's viriditas concept rendered in a botanical/landscape image; Aquinas's "integrity, consonance, radiance" carried by Crivelli's Saint Thomas Aquinas which IS itself an artwork that embodies the criteria. (Cowork-documented "thinker should always have a picture of the thinker" is incorrect; that direction was the OPPOSITE of what Sheri trained Cowork on.)
+
 ### Scripture Translation Standard
 **All scripture quotes in KALLOS use the RSV-2CE (Revised Standard Version, Second Catholic Edition).** This is the Ignatius Press translation — literary, faithful to original languages, used by Catholic scholars and serious readers. Do not quote from NIV, ESV, NABRE, or other translations.
 
@@ -1128,7 +1238,28 @@ The Lectio is a philosophy + scripture pairing — two voices arriving at the sa
 - **CS Lewis is an internal editorial register test, not an audience-facing name.** The test "would CS Lewis say this?" governs voice across all KALLOS content. His name should not appear in user-facing copy unless the content item is specifically about him (e.g., a Thinker content item where Lewis IS the subject). Do not name him in Journey Description Cards, Opening Texts, or any copy the user reads before or during an experience.
 - **Opening text length follows content, not a target length.** There is no rule that opening texts should be short. When Myth Became Fact Day 1 opens with a full myth story, that length is correct because the content earns it. The only question is: does this opening do its job efficiently? Cut what does not earn its place. Keep what does.
 - **Actio specificity rule (June 7-8, 2026):** Every actio must name something specific — a place, a person, a physical object, or a time of day. Not a disposition or attitude. Bad: "Let beauty find you today." Good: "Sit in front of a window before 9am. Stay for one minute before you open your phone." The actio tells the user exactly what to do; the user should not have to decide what the action actually is.
+- **No AI rhetorical patterns (June 11, 2026).** These patterns are AI signatures — they make content feel assembled rather than written. Flag and rewrite any of the following before presenting content:
+  - **Punchy parallel restatement:** "He did not mean it as X. He meant it as Y." One sentence restates the other for dramatic effect. Rewrite as a single direct statement.
+  - **Rhetorical tripling:** "without a wallet, without an address, identified only by..." Three-part list built for rhythm, not information. Cut to the actual fact.
+  - **Declarative fragment stacks:** "No computer. No software. Gravity calculated the building." Acceptable once per piece at most. Flag if it appears more than once.
+  - **The zoom-out closer:** Ending a paragraph with a single sweeping sentence meant to feel momentous ("The man who built the world's tallest church may one day be its patron saint."). The test: would a journalist cut this as self-conscious? If yes, rewrite it.
+  - Test: "Would a person actually say this in conversation?" If not, rewrite it.
 - **Artwork for the BTG intro journey (Day 1 especially): do not front-load the Christian resolution.** Day 1 introduces Beauty as a transcendental through the universal human experience of longing. Art for Day 1 should carry the quality of Sehnsucht (longing for something beautiful and unreachable) without pointing at the theological answer. The answer arrives at Day 3 (Emmaus) and more fully in Myth Became Fact. Caspar David Friedrich, Wanderer Above the Sea of Fog (1818) is the recommended image for Day 1 — visual Sehnsucht, no theological pre-loading, creates discovery. Fra Angelico full Annunciation scene is too early theologically. Degas, The Star has a historically documented dark figure (wealthy patron) that creates wrong complexity for a Day 1 entry point.
+
+### Sanity Entry Guide Rules
+
+**Always use the exact Sanity Studio UI field labels** — not invented dot-notation (e.g., `lectio.lectioText`). If the Studio shows "Philosophy Quote," the guide says "Philosophy Quote."
+
+**Lectio field structure — four separate fields, always listed in this order:**
+1. **Philosophy Quote** — human wisdom (Gaudí, Plato, Marcus Aurelius, etc.). Optional. Goes in the TOP field.
+2. **Philosophy Attribution** — e.g., "Antoni Gaudí" or "Marcus Aurelius, Meditations IV.3"
+3. **Scripture / Primary Text** — the Bible verse. Required. Goes in the BOTTOM field. **Never put the philosophy quote here.**
+4. **Scripture Attribution** — e.g., "John 8:12" or "Romans 8:26 RSV-2CE"
+
+Add a red warning callout before the Philosophy Quote field in every entry guide that includes a philosophy+scripture pairing:
+> LECTIO HAS TWO SEPARATE FIELDS. Philosophy Quote = human wisdom (top field). Scripture / Primary Text = Bible verse (bottom field). Do NOT put the philosophy quote in the Scripture field.
+
+**The root cause of the recurring mistake:** CC sees two text fields and puts the same quote in both. The warning box prevents this. Add it every time.
 
 ### Content Revision Rule (Non-Negotiable)
 
@@ -1275,6 +1406,8 @@ The art and music for each journey day are not selected separately — they are 
 ### Auditio (Audio) Selection Criteria
 The Auditio is a music pairing for P&P and Journey days. Apply these rules when selecting or suggesting audio:
 
+**Mandatory recommendation rule (June 13, 2026).** Every P&P seeding doc, content plan, and entry guide MUST include an audio recommendation for each day. The recommendation must name a specific piece, suggest a primary sacred/classical option AND at least one alternative register (per rule #3 below), and include a verified link to where the file can be sourced (Pixabay, Musopen, archive.org, gregorian-chant-hymns.com, etc.). Sheri decides at seeding time whether to actually source the file based on available time; the recommendation itself is never skipped. This applies to every model and every session. Reason: Cowork sessions drifted toward skipping audio recommendations entirely as if Auditio were optional content — it is not. The Auditio is core to the contemplative pause; absence of a recommendation in a seeding doc is a content-pipeline failure, not an editorial choice.
+
 **Context:** Sheri is also learning the sacred traditions — KALLOS is part of her own discovery alongside the user's. The music selections are not just functional; they are part of an ongoing conversation with the tradition. This means audio suggestions should be genuinely illuminating, not just safe or genre-matched.
 
 **1. Licensing first — free, downloadable, no copyright**
@@ -1288,12 +1421,16 @@ The Auditio is a music pairing for P&P and Journey days. Apply these rules when 
   - Bandcamp free downloads, artist sites offering direct downloads with explicit free-use license
 - Format: MP3 preferred. If only MP4/AAC is available, convert to MP3 before uploading to Sanity. gregorian-chant-hymns.com in particular delivers MP4 files — always convert. Claude can do this with ffmpeg in the Cowork VM.
 
-**2. Connection can be thematic, mood-based, or emotional**
-- Doesn't have to match the subject literally. A piece can match the feeling of a day, the emotional arc, or the theological undercurrent.
-- Example: Victoria "O Vos Omnes" for Bosch's Adoration — matches the grief-to-joy arc of the triptych.
-- Example: The Porter's Gate "Breastplate of Saint Patrick" for Day 1 — matches theme, mood, and subject directly.
-- Example: Taizé "Stay With Me" for Agony in the Garden (Holy Wednesday) — not a traditional hymn, but holds the emotional weight of that night (the disciples falling asleep, the loneliness) better than almost anything from the classical canon.
-- Example: A piece like "The Sound of Silence" — secular, well-known — can work for meditation on something profound if the meditative quality is strong and the context earns it.
+**2. MOOD IS PRIMARY (June 13, 2026 — promoted from one option to the lead criterion).**
+- The music is the BACKDROP to meditation. It is not a lecture, a translation exercise, or a theological proof. Most users will not understand the Latin in a Gregorian chant. They will understand the emotion it carries, the beauty in the sound, the register of feeling. Mood is what reaches them.
+- The prior rule listed thematic, mood-based, and emotional as parallel options. They are not parallel. Mood/emotion is the primary selection criterion. Theme and subject are tiebreakers when the mood is right.
+- The selection question is: "What does the meditation FEEL like, and does this music create or hold that feeling?" Not: "Does this music describe this subject?"
+- Example: Victoria "O Vos Omnes" for Bosch's Adoration — works because it matches the grief-to-joy arc of the triptych, NOT because the Latin text describes the subject.
+- Example: The Porter's Gate "Breastplate of Saint Patrick" for Day 1 — works because the mood (rooted, granted, anchored) matches; the Patrick subject is bonus.
+- Example: Taizé "Stay With Me" for Agony in the Garden — works because the mood (vigil, weariness, presence) carries the night; lyrics are simple enough that users grasp them. Not classical canon, but right.
+- Example: "The Sound of Silence" — secular, well-known — works for a meditation on something profound when the contemplative quality is strong. The lyrics and origin are secondary to the held silence the song creates.
+
+**The principle Contueri is enacting:** the goal is either to keep the user in their meditation through a beauty they may have forgotten existed, or to introduce them to a beauty in music they have likely never heard before. Both are mood-led. Translation is not required for either.
 
 **3. Sacred/classical is the safe anchor — always offer an alternative**
 - Sacred/classical (Gregorian chant, polyphony, Bach, Pärt, Taizé, etc.) is the trusted starting point. It grounds content in the tradition and is always appropriate.
@@ -1302,8 +1439,37 @@ The Auditio is a music pairing for P&P and Journey days. Apply these rules when 
 - The alternative must still meet the emotional and licensing tests. It doesn't need to be obscure — it needs to be right for that day.
 - Well-known secular music is acceptable if it creates genuine contemplative space rather than distraction or irony. The test: does hearing this song here open something, or does it close it?
 
-**4. Attribution**
-- Note the source/performer in the Sanity `artist` field.
+**4. No-repeat rule — repetition is the EXCEPTION, not the default (June 13, 2026).**
+- **Hard rule:** No piece may be used more than once across the 30-day P&P launch window. Same applies across any continuous P&P sequence. Cowork drifted toward repeating safe defaults; this rule prevents that drift.
+- **Banned over-defaults (the safe-fallback trap that any model falls into):**
+  - **Arvo Pärt's *Spiegel im Spiegel*** — contemplative-app cliché, used by every meditation app on the market. Do not recommend it as a primary or alternative for v1.0 launch. If Pärt is right for a day, choose *Für Alina*, *Cantus in Memoriam Benjamin Britten*, *Da pacem Domine*, or one of the more obscure choral works.
+  - **Generic "Gregorian chant"** as a category — a recommendation must name a specific piece (a specific antiphon, mode, or recording from a specific schola), not the genre. "Gregorian chant" without specificity is a non-recommendation.
+- **Diversify across at least 5 dimensions over any 7-day stretch:**
+  1. Era (medieval, Renaissance polyphony, Baroque, Classical, Romantic, 20th-century, contemporary)
+  2. Genre (chant, polyphony, instrumental, choral, ambient, folk, jazz, world, contemporary acoustic)
+  3. Language / source culture (Latin, English, Greek, Spanish, German, French, non-Western traditions)
+  4. Composer (no composer used more than once across 30 days; Pärt + Bach + Tallis ≠ rotation if each appears multiple times)
+  5. Mood register (lament, joy, longing, stillness, awe, repentance, celebration)
+- **Source-of-truth check before any recommendation:** read `content-docs/KALLOS-Content-Usage-Log.html` (or its successor) to confirm what has been used. If the log is out of date, update it BEFORE proposing audio. Flag exact repeats; flag same-composer-different-piece as a yellow flag requiring justification.
+- **Justified-exception examples:** a Holy Week sequence may intentionally use Allegri's *Miserere* on Holy Wednesday and Tallis's *Lamentations* on Good Friday — same liturgical season, distinct pieces, repetition of register justified by the arc. A composer used twice in 30 days needs that level of editorial reason or it should not happen.
+
+**5. AI-generated music as a fallback or original creation path (June 13, 2026).**
+- When licensable public-domain or Creative Commons audio cannot be found that matches the mood for a given day, AI generation is acceptable. Tools Sheri uses: Suno, Udio (free tiers exist; both produce useable contemplative tracks at the free level).
+- **Sheri is not a prompt engineer.** Every Auditio recommendation should include a ready-to-paste AI music generation prompt as a third option alongside the primary sourceable link and the alternative-register suggestion. The prompt must be straightforward and copy-pasteable into Suno or Udio with no editing required.
+- **Prompt format (use this exact structure):**
+  - `[Mood] [genre/style] [instrument or vocal palette] [dynamics/tempo] [optional: era / cultural texture] [optional: acoustic environment]`
+- **Worked examples (these are ready to paste into Suno or Udio):**
+  - `Contemplative ambient piano, slow, sparse, melancholic, intimate, soft reverb`
+  - `Sacred choral, female voices, Latin chant style, sustained, ethereal, cathedral reverb`
+  - `Folk acoustic guitar fingerpicking, warm, simple melody, hopeful, sunrise`
+  - `Minimalist classical strings, slow, somber, low register, mourning, dry acoustic`
+  - `Byzantine choir, male voices, deep low drone, sustained, Orthodox cathedral, candlelit`
+  - `Solo cello, warm, slow phrases, restrained, contemplative, intimate close-mic`
+- **Avoid in prompts:** specific famous-composer imitations ("in the style of Pärt", "like Bach"), specific song references, lyrics in non-English languages unless the language is essential to the mood. AI tools handle these inconsistently and often produce uncanny imitations.
+- **Each prompt should produce a 1–2 minute generation that loops well.** If the result needs editing, that is Sheri's call; the recommendation just provides the prompt.
+
+**6. Attribution**
+- Note the source/performer in the Sanity `artist` field. For AI-generated audio, attribute as "Generated via [Suno/Udio], prompted by Contueri editorial."
 - For gregorian-chant-hymns.com material: add source abbey/schola to the artist field (e.g., "St. Cecilia's Abbey, UK").
 
 ---
