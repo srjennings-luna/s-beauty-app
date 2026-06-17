@@ -697,6 +697,48 @@
         "title": "Traditional Prayer — Source"
       },
       {
+        "rows": 3,
+        "description": "Optional. Overrides the default Pray-step instruction sentence for this artwork. Leave blank to use the global Visio Divina default.",
+        "name": "customPrayerPrompt",
+        "type": "text",
+        "title": "Custom Pray prompt (override)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 140
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Optional. Overrides the default Actio italic headline (\"How will you live this out?\") for this artwork. Leave blank to use the global Visio Divina default.",
+        "name": "customActioHeadline",
+        "type": "string",
+        "title": "Custom Actio headline (override)"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 280
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Optional. Overrides the default Actio supporting instruction for this artwork. Leave blank to use the global Visio Divina default.",
+        "name": "customActioInstruction",
+        "type": "text",
+        "title": "Custom Actio instruction (override)"
+      },
+      {
         "description": "Link specific tradition reflections to this content item for the Visio Divina \"Go Deeper\" carousel. Order here = carousel order. If empty, the carousel shows reflections matching this item's themes.",
         "of": [
           {
@@ -1685,6 +1727,23 @@
         "title": "Featured Content"
       },
       {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 80
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Optional: a poetic editorial title for this day (e.g. \"God Does Not Die\" for the Sacred Heart day). Shown prominently above the artwork. Different from the work title, which lives on the linked content item. Added June 7, 2026 (PP-DAYTITLE-01).",
+        "name": "dayTitle",
+        "type": "string",
+        "title": "Editorial Day Title"
+      },
+      {
         "rows": 2,
         "description": "Optional: shown on the Today page card as the teaser. Not shown inside the prompt practice.",
         "name": "promptQuestion",
@@ -2111,6 +2170,129 @@
     "name": "splashPage",
     "type": "document",
     "title": "Splash Screen"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 140
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The italic Cormorant prompt shown centered on the Visio Divina Action step. The current hardcoded value is \"How will you live this out?\" — used as the default for all artworks unless overridden per-content-item.",
+        "name": "defaultActioHeadline",
+        "type": "string",
+        "title": "Default Actio headline"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 280
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The supporting prompt shown below the headline on the Action step. Current hardcoded value: \"Ask yourself and God: How will you apply what you've received in prayer to your life?\"",
+        "name": "defaultActioInstruction",
+        "type": "text",
+        "title": "Default Actio instruction"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 280
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The instruction sentence above the Traditional Prayer drawer on the Pray step. Current hardcoded value: \"Respond to God in prayer—thanksgiving, intercession, or simply conversation about what you notice.\"",
+        "name": "defaultPrayerPrompt",
+        "type": "text",
+        "title": "Default Pray prompt"
+      },
+      {
+        "rows": 8,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The traditional prayer shown in the expandable drawer when the artwork does not have its own `traditionalPrayer` value. Replaces the previously hardcoded FALLBACK_PRAYER in PrayClient.tsx.",
+        "name": "defaultTraditionalPrayer",
+        "type": "text"
+      },
+      {
+        "description": "Attribution for the default prayer above. Hidden in app when blank.",
+        "name": "defaultTraditionalPrayerSource",
+        "type": "string",
+        "title": "Default Traditional Prayer — Source"
+      }
+    ],
+    "name": "visioDefaults",
+    "type": "document",
+    "title": "Visio Divina Defaults"
+  },
+  {
+    "fields": [
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "max",
+                "constraint": 280
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The fallback Actio shown on any P&P day where the dailyPrompt's own actio field is blank. Edit here to change the voice across every default-actio day at once. Replaces the previously hardcoded \"Carry one image of beauty with you today. Let it be a question, not an answer.\"",
+        "name": "defaultActio",
+        "type": "text"
+      }
+    ],
+    "name": "ppDefaults",
+    "type": "document",
+    "title": "Pause & Ponder Defaults"
   },
   {
     "fields": [
