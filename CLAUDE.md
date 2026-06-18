@@ -4,14 +4,15 @@ Read this at the start of every session. It contains all key product decisions, 
 
 **Rebrand note (May 2026):** The app is being renamed from KALLOS to **Contueri**. The codebase, onboarding screens, GitHub repo, Vercel project, and all docs still reference KALLOS — a full find/replace CC task is pending (see Manual Task 70). When reading existing code or docs, KALLOS = Contueri. When writing new code or docs, use Contueri.
 
-**Read these four foundational editorial docs before any content, editorial, or product work** (in this order):
+**Read these foundational editorial docs before any content, editorial, or product work** (in this order):
 
-1. `content-docs/CONTUERI-Journey-Arc-Frameworks.html` — the six named arc shapes (Ascent, Argument, Quest, Season, Single Mind, Discovery), the Aristotelian foundation (ethos/pathos/logos/enthymeme), how to pick a framework. Conceptual reference.
-2. `content-docs/CONTUERI-Journey-Writing-Practical-Guide.html` — companion to the Frameworks doc. Step-by-step procedure for producing a Contueri piece: prerequisites, research per framework, drafting Day 1 and Day N, diagnostic checklist, one full worked example, onramps for first-time writers.
-3. `content-docs/CONTUERI-Cowork-Brief-Editorial-Rules-2026-06-17.html` — concentrated recap of the editorial rules sharpened across the June 12-17 sweep, with the failures that drove each rule. Read this if you have not been in a Contueri session since June 12.
-4. `content-docs/CONTUERI-Cowork-Brief-Planning-Surface-2026-06-17.html` — how the Sanity planningItem schema works and the concept-to-publish workflow.
+1. `content-docs/CONTUERI-PM-Brief.html`, the canonical product brief (June 18, 2026, replaces the March 25 KALLOS version). Product purpose, the seven users, the content rule, the Aristotelian frame, the six arc frameworks, the voice rules in practice, settled decisions, working with Sheri, the founding statement. **READ THIS FIRST.** A session that skips it will produce generic output.
+2. `content-docs/CONTUERI-Journey-Arc-Frameworks.html`, the six named arc shapes (Ascent, Argument, Quest, Season, Single Mind, Discovery) plus the Aristotelian foundation (ethos/pathos/logos/enthymeme). Conceptual reference; deepens what the PM Brief introduces.
+3. `content-docs/CONTUERI-Journey-Writing-Practical-Guide.html`, companion to the Frameworks doc. Step-by-step procedure for producing a Contueri piece: prerequisites, research per framework, drafting Day 1 and Day N, diagnostic checklist, one full worked example, onramps for first-time writers.
+4. `content-docs/CONTUERI-Cowork-Brief-Editorial-Rules-2026-06-17.html`, concentrated recap of the editorial rules sharpened across the June 12-17 sweep, with the failures that drove each rule.
+5. `content-docs/CONTUERI-Cowork-Brief-Planning-Surface-2026-06-17.html`, how the Sanity planningItem schema works and the concept-to-publish workflow.
 
-After those four, the older `content-docs/KALLOS-Cowork-Briefing.html` is still useful for product purpose, the seven real users, what "earns its place" means, and how Sheri works as a PM. The Lectio standard and voice rules in that briefing are now SUPERSEDED by the four docs above; treat the older briefing as product context, not editorial doctrine. A session that skips the four foundational docs will produce generic or off-doctrine output.
+The older `content-docs/KALLOS-Cowork-Briefing.html` is SUPERSEDED by the new PM Brief above. Treat it as historical context only. A session that skips the foundational docs will produce generic or off-doctrine output.
 
 ---
 
@@ -71,11 +72,12 @@ Three calibration notes for any future session estimating effort or scheduling w
 
 | File | What it is |
 |------|-----------|
-| `content-docs/CONTUERI-Journey-Arc-Frameworks.html` | **In repo, FOUNDATIONAL (June 18, 2026)** — the six named arc shapes for Contueri content (Ascent, Argument, Quest, Season, Single Mind, Discovery) plus the Aristotelian foundation (ethos/pathos/logos/enthymeme). This is the conceptual editorial reference; the Practical Guide is its companion. Pairs with CLAUDE.md Editorial Principles. Holds itself to the same voice rules it teaches (no em dashes, no fragment stacks, no summary-closers). |
-| `content-docs/CONTUERI-Journey-Writing-Practical-Guide.html` | **In repo, FOUNDATIONAL (June 18, 2026)** — practical companion to the Frameworks doc. Step-by-step procedure: prerequisites, picking a framework, research checklist per framework, drafting Day 1 and Day N, the diagnostic checklist, one full worked example (Bosch's owl P&P), and three onramp exercises for first-time writers. Use this when you sit down to write. |
-| `content-docs/CONTUERI-Cowork-Brief-Editorial-Rules-2026-06-17.html` | **In repo, FOUNDATIONAL (June 17, 2026)** — concentrated recap of editorial rules sharpened across the June 12-17 sweep, with the failures that drove each rule. Cold sessions should read this for the why behind the rules. Sections: meta-rules, Aristotelian frame, hook, context, day title, AI rhetorical patterns to avoid, authority, research, Auditio, cross-surface checks, what changed in Sanity, thinker artwork, no modern politicians, metaphor restraint, planningItem surface. |
-| `content-docs/CONTUERI-Cowork-Brief-Planning-Surface-2026-06-17.html` | **In repo, FOUNDATIONAL (June 17, 2026)** — how the Sanity planningItem schema works and the concept-to-publish workflow. Field-by-field reference plus the per-stream workflow. Read this before adding planning items in Studio. |
-| `content-docs/KALLOS-Cowork-Briefing.html` | **In repo** — master context brief (product purpose, seven users, Sheri's working style). **Editorial doctrine in this brief is SUPERSEDED by the four foundational CONTUERI docs above.** Still useful for product context. |
+| `content-docs/CONTUERI-PM-Brief.html` | **In repo, FOUNDATIONAL (June 18, 2026). READ FIRST.** The canonical product brief, refreshed June 18 (replaces March 25 KALLOS-PM-Brief.html). Product purpose, the seven users (depersonalized labels: Gen Z searcher, Gen X widow, classical-education student, convert seeking roots, working man with vague faith, politically opposed friend, confident Protestant), the content rule, the Aristotelian frame, the six arc frameworks, the voice rules in practice, working with Sheri (13 rules including commit approval, walkthrough pacing, schema verification, natural-language naming), settled decisions, what Contueri is not, the founding statement, the reading list. |
+| `content-docs/CONTUERI-Journey-Arc-Frameworks.html` | **In repo, FOUNDATIONAL (June 18, 2026)**, the six named arc shapes for Contueri content (Ascent, Argument, Quest, Season, Single Mind, Discovery) plus the Aristotelian foundation (ethos/pathos/logos/enthymeme). This is the conceptual editorial reference; the Practical Guide is its companion. Pairs with CLAUDE.md Editorial Principles. Holds itself to the same voice rules it teaches (no em dashes, no fragment stacks, no summary-closers). |
+| `content-docs/CONTUERI-Journey-Writing-Practical-Guide.html` | **In repo, FOUNDATIONAL (June 18, 2026)**, practical companion to the Frameworks doc. Step-by-step procedure: prerequisites, picking a framework, research checklist per framework, drafting Day 1 and Day N, the diagnostic checklist, one full worked example (Bosch's owl P&P), and three onramp exercises for first-time writers. Use this when you sit down to write. |
+| `content-docs/CONTUERI-Cowork-Brief-Editorial-Rules-2026-06-17.html` | **In repo, FOUNDATIONAL (June 17, 2026)**, concentrated recap of editorial rules sharpened across the June 12-17 sweep, with the failures that drove each rule. Cold sessions should read this for the why behind the rules. Sections: meta-rules, Aristotelian frame, hook, context, day title, AI rhetorical patterns to avoid, authority, research, Auditio, cross-surface checks, what changed in Sanity, thinker artwork, no modern politicians, metaphor restraint, planningItem surface. |
+| `content-docs/CONTUERI-Cowork-Brief-Planning-Surface-2026-06-17.html` | **In repo, FOUNDATIONAL (June 17, 2026)**, how the Sanity planningItem schema works and the concept-to-publish workflow. Field-by-field reference plus the per-stream workflow. Read this before adding planning items in Studio. |
+| `content-docs/KALLOS-Cowork-Briefing.html` | **In repo**, master context brief (product purpose, seven users, Sheri's working style). **Editorial doctrine in this brief is SUPERSEDED by the four foundational CONTUERI docs above.** Still useful for product context. |
 | `content-docs/KALLOS-Content-Guide-7Day-Journey.html` | **In repo, SUPERSEDED June 18, 2026** by `CONTUERI-Journey-Arc-Frameworks.html` + `CONTUERI-Journey-Writing-Practical-Guide.html`. Kept as historical reference; do not write Journey content from this guide. |
 | `content-docs/KALLOS-Content-Guide-Pause-Ponder.html` | **In repo, PARTIALLY SUPERSEDED June 18, 2026.** P&P field workflow (Sanity entry layout, field-by-field instructions) is still current. Voice and structure rules are SUPERSEDED by CLAUDE.md Editorial Principles + the four CONTUERI foundational docs. When in conflict, the newer docs win. |
 | `content-docs/KALLOS-MythJourney-v3.html` | **In repo** — active Myth Journey (7 days, all fields). Days 1-4 complete in Sanity (Day 4 entered April 22, 2026). Days 5-7 pending. |
@@ -105,7 +107,7 @@ Three calibration notes for any future session estimating effort or scheduling w
 | `KALLOS-HolyWeek-2026-Pipeline.html` | Holy Week P&P pipeline — 8 days (Palm Sunday–Easter), hooks, Surprising History notes, audio table. Needs Lectio + Actio before Sanity entry. |
 | `KALLOS-Content-Guide-HolyWeek.html` | Agent content instructions for Holy Week P&P — arc table, hook guidance, Surprising History layer, Lectio territory by day, Actio rules, audio table, voice rules, pre-publish checklist. |
 | `KALLOS-HolyWeek-Sanity-Entry-Guide.html` | Holy Week P&P Sanity entry guide — all 8 days (Palm Sunday–Easter), all fields pre-filled except Lectio + Actio (placeholders with territory guidance). Deadline March 28. |
-| `KALLOS-PM-Brief.html` | Product brief for cold sessions — product purpose, the seven real users, what "earns its place," Lectio quality standard, Sheri's working style, settled decisions. Read this before any content or editorial work. |
+| `KALLOS-PM-Brief.html` | **SUPERSEDED June 18, 2026** by `content-docs/CONTUERI-PM-Brief.html` (synced into repo). Kept in Sheri's Documents folder for historical reference. |
 | `KALLOS-Onboarding-Copy.html` | Onboarding screen copy — 4 screens, voice-reviewed March 2026. Reference doc for onboarding build. |
 | `CONTUERI-PP-30Day-Content-Plan-v3.html` | **Cowork doc (Documents folder)** — 30-day P&P content plan (v3, June 7, 2026). **System of record for all 30 P&P days.** Content type rotation (not theme). Three Ways arc. 7 feast day anchors. CS Lewis Context narratives for all 30 days. Day 1 = Sacred Heart of Jesus (Rafael Salas, 1874), built around the García Moreno/Ecuador consecration story and US Bishops June 11, 2026 consecration. Replaces v1 and v2. 10 skipped days (6, 12, 15, 16, 19, 22, 24, 26, 27, 29) marked with Skipped badge — TR created, content item pending Cowork replacement. |
 | `CONTUERI-PP-Field-Reference.html` | **Cowork doc (Documents folder)** — field-by-field reference for P&P and Visio Divina Sanity entry. Includes VD Defaults singleton, per-artwork override fields, Tradition Reflection fields, Traditional Prayer field. Updated June 6–7, 2026. |
@@ -825,6 +827,7 @@ These are content/editorial tasks that predate the launch focus. They will resum
 - **Fix or delete "The Art of Being Moved" image** (Manual Task #116 — Sheri — Sanity Studio — BEFORE v1.0). contentItem _id: `0ee22746-ffc0-40c5-8bfe-edd6ed2b88eb`. Current image (Fra Angelico's Annunciation) is a seed artifact from March 27 — wrong image. No document specifies the correct image. Either replace with a contextually appropriate image (Lewis's era/world/subject) or delete the content item if it is not shipping in v1.0.
 - **Em dash audit on Cowork-authored description fields** (Manual Task #117 — Sheri — Sanity Studio). CC flagged during June 9 build: some `contentItem.description` fields authored by Cowork contain em dashes. Run a spot-check in Studio before launch.
 - **Audit Journey day screens for font-semibold/bold violations** (Manual Task #118 — Sheri — ongoing). Contemplative typography rule: font-semibold and font-bold are banned on espresso surfaces. Journey step headings may still carry old semibold from the pre-June-9 pattern. Audit `JourneyDaySteps` and related components.
+- **Migrate GlobalMap.tsx to contentItem + 9-color content-type palette** (Manual Task #119 — CC — flagged June 18, 2026). Currently `components/GlobalMap.tsx` reads from the deprecated `artwork.locationType` field and uses a hardcoded 5-color legacy palette (maroon `#66293C`, plum `#4C3759`, gold `#C19B5F`, rust `#93583E`, green `#2D5A27`). Practical consequence: most current `contentItem` records do NOT appear on the map; the map renders the 11 orphan artwork records instead. Fix: update GlobalMap to query `contentItem` with `defined(location.coordinates)`, and replace the hardcoded color map with `getContentTypeColor()` from `lib/contentTypeColors.ts` so markers use the canonical 9-color content-type palette (Mineral Blue for sacred-art, Old Ochre for literature, etc.). After migration, the visual signature is consistent across the P&P gradient, Explore type labels, and the map. PM Brief (`content-docs/CONTUERI-PM-Brief.html`) carries a warning callout noting this gap; remove the callout once the migration ships.
 - Scripture audit (NIV → RSV-2CE): Holy Week + Days 9–18 drafted before translation standard was set. Verify before or during Sanity entry.
 - Background music player: restore for Journey steps (removed when Stories nav replaced footer). Discuss placement with Sheri before building.
 - Seed content into Sanity: Intro journey, Themes 2–5
@@ -1111,35 +1114,35 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 
 These govern all content written for Contueri (daily prompts, journey days, curator notes, questions). The four CONTUERI foundational docs in `content-docs/` (Journey Arc Frameworks, Journey Writing Practical Guide, Cowork Brief on Editorial Rules, Cowork Brief on Planning Surface) are the canonical reference. The older `KALLOS-Content-Guide-Pause-Ponder.html` is still useful for P&P field workflow but its voice and structure rules are superseded by the four foundational docs and this section.
 
-### META-RULE 1: When the rules are not working — flag and escalate
+### META-RULE 1: When the rules are not working: flag and escalate
 
 The rules in this section are guardrails, not guarantees. Some content will fight them. Sheri's time is the bottleneck, not the agent's compute. Two situations require explicit escalation:
 
 **1. A draft breaks a rule you are aware of.** Surface it. Do not bury it in a polished draft. Do not soften the failure. Format:
-> "Here is the draft. Flagging that the title names the subject ('Aquinas') — I could not find an angle that survived the four tests. Three options: (a) you write it, (b) give me a sharper steer on which angle you want, (c) skip this slot and come back."
+> "Here is the draft. Flagging that the title names the subject ('Aquinas'), I could not find an angle that survived the four tests. Three options: (a) you write it, (b) give me a sharper steer on which angle you want, (c) skip this slot and come back."
 
 **2. You have iterated 3 times on the same piece and none have cleared.** STOP. Do not present a fourth. Format:
-> "I've tried three angles on this hook (X, Y, Z). All three failed [specific rule]. I am not landing this — the angle for this day may be hidden somewhere I am not seeing. Three options: (a) you take the pen, (b) tell me what the angle should be and I'll execute, (c) skip this slot."
+> "I've tried three angles on this hook (X, Y, Z). All three failed [specific rule]. I am not landing this, the angle for this day may be hidden somewhere I am not seeing. Three options: (a) you take the pen, (b) tell me what the angle should be and I'll execute, (c) skip this slot."
 
 **What this is NOT.** Permission to give up early. One failed attempt followed by "I cannot do this" is laziness, not escalation. Three genuine attempts that each failed for the same reason is the trigger.
 
 ### META-RULE 2: Form-templating across days = failure
 
-Any rule below that produces the same FORM across multiple days has become a template, not a principle. If you catch yourself or a model producing parallel openers, parallel closers, parallel sentence shapes, or parallel title structures day-over-day, the rule is being misapplied — the rule is the principle, not the form. Throw out the templated piece and find the angle from the specific content.
+Any rule below that produces the same FORM across multiple days has become a template, not a principle. If you catch yourself or a model producing parallel openers, parallel closers, parallel sentence shapes, or parallel title structures day-over-day, the rule is being misapplied, the rule is the principle, not the form. Throw out the templated piece and find the angle from the specific content.
 
-This is the lesson of the scene-opener catch (June 17): "Open with a scene" produced 30 days of "Location. Year." fragment openers — the same AI tell the rule was supposed to prevent. The rule was right in spirit; the form-templating broke it.
+This is the lesson of the scene-opener catch (June 17): "Open with a scene" produced 30 days of "Location. Year." fragment openers, the same AI tell the rule was supposed to prevent. The rule was right in spirit; the form-templating broke it.
 
 ### The frame beneath the rules: Aristotle's Rhetoric
 
-The voice rules in this section are an operational version of Aristotle's three modes of persuasion (ethos, pathos, logos) and the structural device that holds them together (the enthymeme). Not every rule fits neatly into one mode — most serve two or three simultaneously, as Aristotle himself argued they would. The frame is a navigation aid, not a partition.
+The voice rules in this section are an operational version of Aristotle's three modes of persuasion (ethos, pathos, logos) and the structural device that holds them together (the enthymeme). Not every rule fits neatly into one mode, most serve two or three simultaneously, as Aristotle himself argued they would. The frame is a navigation aid, not a partition.
 
-**Ethos rules — the author's credibility.** Verified quotes only and flag hedged attributions. Facts must be specific (named dates, named characters, anchor numbers). Period context research is mandatory before drafting. RSV-2CE scripture standard. Color iconography is contextual, not formulaic. The Lewis register test ("would Lewis have written this?") is the explicit ethos benchmark. The stature paragraph for unfamiliar figures transfers credibility from subject to argument. The thinker artwork rule (do not show subject portraits when artwork can carry the idea) protects the credibility of the visual claim.
+**Ethos rules: the author's credibility.** Verified quotes only and flag hedged attributions. Facts must be specific (named dates, named characters, anchor numbers). Period context research is mandatory before drafting. RSV-2CE scripture standard. Color iconography is contextual, not formulaic. The Lewis register test ("would Lewis have written this?") is the explicit ethos benchmark. The stature paragraph for unfamiliar figures transfers credibility from subject to argument. The thinker artwork rule (do not show subject portraits when artwork can carry the idea) protects the credibility of the visual claim.
 
-**Pathos rules — the audience's emotional response.** The dinner-table test. The Inklings test ("eyes widen, lean in"). Open with the concrete, not the abstract. Reversal and ironic-origin stories rank high (surprise is an emotional event). Underrepresented voices and figures are particularly strong (discovery is affect). Auditio mood is PRIMARY. Sehnsucht / longing as the BTG Day 1 target mood. Liturgical and seasonal timing weighting. No modern politicians (avoid the negative trigger). The em-dash ban (the audience's perception of AI authorship is emotional, even if the rationale reads as ethos).
+**Pathos rules: the audience's emotional response.** The dinner-table test. The Inklings test ("eyes widen, lean in"). Open with the concrete, not the abstract. Reversal and ironic-origin stories rank high (surprise is an emotional event). Underrepresented voices and figures are particularly strong (discovery is affect). Auditio mood is PRIMARY. Sehnsucht / longing as the BTG Day 1 target mood. Liturgical and seasonal timing weighting. No modern politicians (avoid the negative trigger). The em-dash ban (the audience's perception of AI authorship is emotional, even if the rationale reads as ethos).
 
-**Logos rules — the logical structure of the argument.** Hook and context never repeat. Context length follows quality, not paragraph count. The four title tests. Cross-journey and cross-surface content check. The Auditio 5-dimension diversification and no-repeat-across-30-days rule. The actio specificity rule (named place, person, object, time — not disposition). The reversal-as-FACT-not-as-PROSE caveat (logical claim, not rhetorical staging). The stature paragraph delivered through specifics, not through abstract importance claims.
+**Logos rules: the logical structure of the argument.** Hook and context never repeat. Context length follows quality, not paragraph count. The four title tests. Cross-journey and cross-surface content check. The Auditio 5-dimension diversification and no-repeat-across-30-days rule. The actio specificity rule (named place, person, object, time, not disposition). The reversal-as-FACT-not-as-PROSE caveat (logical claim, not rhetorical staging). The stature paragraph delivered through specifics, not through abstract importance claims.
 
-**The enthymeme — the structural device that makes all three work.** Aristotle's name for the rhetorical syllogism with one premise deliberately left unstated, for the audience to supply themselves. The audience completes the argument in their own mind, which is exactly why the conclusion lands as THEIR insight rather than the writer's claim. Aristotle thought this was the most powerful form because of that transfer: persuasion that the audience does to itself.
+**The enthymeme: the structural device that makes all three work.** Aristotle's name for the rhetorical syllogism with one premise deliberately left unstated, for the audience to supply themselves. The audience completes the argument in their own mind, which is exactly why the conclusion lands as THEIR insight rather than the writer's claim. Aristotle thought this was the most powerful form because of that transfer: persuasion that the audience does to itself.
 
 Every voice rule about leaving the conclusion unstated is an enthymeme rule:
 
@@ -1167,15 +1170,21 @@ AI models default to closing the syllogism: stating every conclusion, summarizin
 If you fail #4 even when #1-3 are clean, you have written a polished AI completion, not a piece of contemplative writing. Throw it out and find the gap.
 
 ### The Hook Rule
-Every P&P day must open with one **surprising, specific, shareable fact** — something the user genuinely didn't know and would repeat at dinner. The hook lives in the **Curator Note** and must come first.
 
-- ✅ Hook: "When this triptych is closed, Bosch painted seven scenes of Christ's suffering on the outside panels in grisaille. You move through darkness to reach the Adoration."
-- ❌ Not a hook: "This painting rewards slowness." (atmosphere, not information)
-- ❌ Not a hook: "This is one of the most influential works of the Renaissance." (significance claim, not a fact)
+**Hook = surprising fact, not framing.** Lead with a specific fact the reader does not already have. Do not state significance, do not editorialize, do not perform surprise. The fact does the work; the reader assembles what it means.
 
-**Test:** Would someone say "wait, I didn't know that" and repeat it at dinner? If yes: hook. If not: keep looking.
+Three forms of framing to rule out:
+- ❌ Significance claims. "This is one of the most influential works of the Renaissance."
+- ❌ Atmospheric poetry. "In the candlelit chapel, something stirred."
+- ❌ Abstract praise. "There is something profoundly moving about this."
 
-**Hook strength scales with subject familiarity.** A "surprising fact" is not an absolute category. It is measured against what the reader probably already knows. The more famous the subject, the higher the bar a hook has to clear. Three rough tiers:
+✅ Hook (fact): "When this triptych is closed, Bosch painted seven scenes of Christ's suffering on the outside panels in grisaille. You move through darkness to reach the Adoration."
+
+The hook lives in the **Curator Note** (P&P) or as the opener of the content's first delivery (Journey). It must come first.
+
+**P&P test: would the average reader be surprised by this fact?** That is the operative question for daily Pause & Ponder content. P&P is broad reading across many subjects and content types; the audience has not opted into a specific subject. If a normal person reading the curator note would react with "wait, I didn't know that," you have a P&P hook. If they would shrug, you do not.
+
+**Journey test: tiered by subject familiarity.** Journey content is narrower. The user has selected into a specific subject (a thinker, an arc, a season) and has signaled willingness to go deeper. The hook bar scales accordingly. Three rough tiers:
 
 - **Tier 1 — universal knowledge** (Mona Lisa, Last Supper, Christmas, Easter, St. Francis of Assisi, Thomas Aquinas, Dante, Michelangelo, the Pope, the Sistine Chapel). These appear in every survey course. The standard biographical fact will not surprise the reader. The hook MUST land something the survey-course textbook does not carry: a specific historical moment, an ironic reversal, a contradiction, an obscure detail with theological or biographical weight. For Dante: "Florence sentenced him to death; the city that expelled him made him its greatest export" qualifies. The bare "exiled from Florence" fact does not.
 
@@ -1281,7 +1290,7 @@ The stakes paragraph does not have to be a standalone paragraph. It can be one s
 
 1. **Subject test.** Does the title name the subject? If yes, throw out.
 2. **Assumption test.** After reading the title, can the user finish "I know what this is going to be about"? If yes, throw out.
-3. **Specificity test.** Does the title carry a fact, a quote, a moment, a claim — or is it abstract intrigue ("The Question," "The Truth," "Everything Changed")? If abstract, throw out.
+3. **Specificity test.** Does the title carry a fact, a quote, a moment, a claim, or is it abstract intrigue ("The Question," "The Truth," "Everything Changed")? If abstract, throw out.
 4. **Shape test.** Compare this title to the other titles in the launch window. Do three of them share a sentence structure or rhythm? If yes, you have templated; throw out the newer ones. See Meta-Rule 2.
 
 **The process (this is the part that prevents templating).** The title lives INSIDE the draft. Do not generate the title separately from the content; you will template if you do.
@@ -1294,10 +1303,10 @@ The stakes paragraph does not have to be a standalone paragraph. It can be one s
 
 **Examples (the bar, NOT shapes to imitate).**
 
-- "They Were Early" — Justin Martyr. Justin recognized that the pre-Christian philosophers were tracking the same truth Christ would later reveal; they were ahead of their time AND ahead of the revelation that would name what they saw. The title is a thesis, not a description. Came from painful Cowork iteration; it was not generated by template.
-- "God Does Not Die" — Sacred Heart. García Moreno's last words. The title is a quote.
-- "Halfway Through" — Dante Inferno. Compresses the opening line "midway upon the journey of our life." The title is a literary moment.
-- "What do a priest, a scientist, and a telescope have in common?" — Webb Deep Field / Lemaître. The title is a setup line.
+- "They Were Early", Justin Martyr. Justin recognized that the pre-Christian philosophers were tracking the same truth Christ would later reveal; they were ahead of their time AND ahead of the revelation that would name what they saw. The title is a thesis, not a description. Came from painful Cowork iteration; it was not generated by template.
+- "God Does Not Die", Sacred Heart. García Moreno's last words. The title is a quote.
+- "Halfway Through", Dante Inferno. Compresses the opening line "midway upon the journey of our life." The title is a literary moment.
+- "What do a priest, a scientist, and a telescope have in common?", Webb Deep Field / Lemaître. The title is a setup line.
 
 Each of these came from PAINFUL ITERATION on that day's specific content. None was generated by template. If your title has the same SHAPE as any of these (3-word fragment with loaded pronoun, quote-as-title, literary moment, setup question), you may have imitated the form rather than found the angle. Read the draft again.
 
@@ -1315,9 +1324,9 @@ These earn their place ONLY when they add something the paragraph has not alread
 
 **Hook = fact, not theological framing of the fact.** "The medieval architects called this divine proportion" is framing. "Chartres was rebuilt in 26 years after the 1194 fire by nobles, merchants, and peasants all pulling carts of stone" is the fact. Lead with the fact. Theological framing belongs in context.
 
-**Reversal / ironic-origin stories rank high — as FACTS, not as PROSE.** When the surprising twist IS the engine of the story, the hook lands hard. Watch for these and prefer them. Examples of strong reversal facts: "He tried to STOP champagne from fizzing." "Kepler's wrong idea produced the right one." "Soviet censors banned the film that won at Cannes."
+**Reversal / ironic-origin stories rank high: as FACTS, not as PROSE.** When the surprising twist IS the engine of the story, the hook lands hard. Watch for these and prefer them. Examples of strong reversal facts: "He tried to STOP champagne from fizzing." "Kepler's wrong idea produced the right one." "Soviet censors banned the film that won at Cannes."
 
-**Critical caveat.** The reversal lives in the FACT (an actual historical contradiction or ironic origin). It must NOT live in the PROSE STRUCTURE. Do not stage the reversal with the punchy-parallel template "He did not mean it as X. He meant it as Y." — that is the banned AI tell from the rule below. Deliver the reversal in normal sentences. The fact does the work; the rhetorical structure does not need to mirror it.
+**Critical caveat.** The reversal lives in the FACT (an actual historical contradiction or ironic origin). It must NOT live in the PROSE STRUCTURE. Do not stage the reversal with the punchy-parallel template "He did not mean it as X. He meant it as Y.", that is the banned AI tell from the rule below. Deliver the reversal in normal sentences. The fact does the work; the rhetorical structure does not need to mirror it.
 
 ✓ Strong: "Dom Perignon was a Benedictine monk hired in 1668 to stop a problem in the cellar. The wine kept fermenting in the bottle and exploding. He spent his life trying to keep the bubbles out."
 
