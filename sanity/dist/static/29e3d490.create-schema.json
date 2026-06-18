@@ -1868,13 +1868,45 @@
             "level": "error"
           }
         ],
-        "description": "Short label for this idea — e.g. \"Josemaría Escrivá — Spanish embassy 9 months\" or \"Hildegard Day 2 (deeper)\". Refine later.",
+        "description": "Short label for this idea. Example: \"Josemaría Escrivá, Spanish embassy 9 months\" or \"Hildegard Day 2 (deeper)\". Refine later.",
         "name": "workingTitle",
         "type": "string"
       },
       {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 300
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The conviction the user will assemble for themselves by the end. ONE sentence. NOT the topic or subject, the thesis. Example for When Myth Became Fact: \"The pre-Christian myths were grasping at something real that Christianity completed.\" See CONTUERI-Journey-Arc-Frameworks.html for examples. If you cannot compress this to one sentence, the idea is not sharp enough yet.",
+        "name": "centralIdea",
+        "type": "text"
+      },
+      {
+        "description": "If this idea grew out of researching another planning item, link the parent here. Captures lineage. Example: the Avengers/hero-myth idea grew out of When Myth Became Fact, so it would link to that planning item.",
+        "to": [
+          {
+            "type": "planningItem"
+          }
+        ],
+        "name": "parentIdea",
+        "type": "reference",
+        "title": "Parent Idea (where this came from)"
+      },
+      {
         "options": {
           "list": [
+            {
+              "title": "Exploring (surface TBD)",
+              "value": "exploring"
+            },
             {
               "title": "Pause & Ponder (P&P)",
               "value": "pp"
@@ -1894,13 +1926,14 @@
           ],
           "layout": "radio"
         },
-        "initialValue": "pp",
+        "initialValue": "exploring",
         "validation": [
           {
             "rules": [
               {
                 "flag": "valid",
                 "constraint": [
+                  "exploring",
                   "pp",
                   "journey",
                   "companion",
@@ -1915,7 +1948,7 @@
             "level": "error"
           }
         ],
-        "description": "Which content surface this planning item is for.",
+        "description": "Which content surface this planning item is for. Use Exploring when the surface is not yet decided.",
         "name": "stream",
         "type": "string"
       },
@@ -1997,9 +2030,43 @@
             }
           ]
         },
-        "description": "Which journey arc this planning item belongs to. Used by the Content Planning sidebar to group journey-stream items. Examples: \"Three Ways\", \"OOTSP\", \"Perelandra\", \"THS\". Only set when Stream = Journey.",
+        "description": "Which journey this planning item belongs to. Used by the Content Planning sidebar to group journey items. Only visible when Stream is Journey or Exploring. Set during Exploring if you already know the candidate arc.",
         "hidden": "conditional",
-        "name": "journeyArcKey",
+        "name": "journeyName",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "The Ascent (purgative → illuminative → unitive)",
+              "value": "ascent"
+            },
+            {
+              "title": "The Argument (evidence accumulates to an unstated thesis)",
+              "value": "argument"
+            },
+            {
+              "title": "The Quest (character transformation)",
+              "value": "quest"
+            },
+            {
+              "title": "The Season (church calendar shape)",
+              "value": "season"
+            },
+            {
+              "title": "The Single Mind (one thinker, deeply)",
+              "value": "single-mind"
+            },
+            {
+              "title": "The Discovery (overturn a common assumption)",
+              "value": "discovery"
+            }
+          ]
+        },
+        "description": "The arc shape this content uses. See CONTUERI-Journey-Arc-Frameworks.html for descriptions of each. Visible for Journey, P&P, and Exploring items. Leave blank if the framework is not yet decided.",
+        "hidden": "conditional",
+        "name": "framework",
         "type": "string"
       },
       {
