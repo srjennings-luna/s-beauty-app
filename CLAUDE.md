@@ -1106,6 +1106,24 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 
 These govern all content written for KALLOS — daily prompts, journey days, curator notes, questions. Read `KALLOS-Content-Guide-Pause-Ponder.html` for full detail.
 
+### META-RULE 1: When the rules are not working — flag and escalate
+
+The rules in this section are guardrails, not guarantees. Some content will fight them. Sheri's time is the bottleneck, not the agent's compute. Two situations require explicit escalation:
+
+**1. A draft breaks a rule you are aware of.** Surface it. Do not bury it in a polished draft. Do not soften the failure. Format:
+> "Here is the draft. Flagging that the title names the subject ('Aquinas') — I could not find an angle that survived the four tests. Three options: (a) you write it, (b) give me a sharper steer on which angle you want, (c) skip this slot and come back."
+
+**2. You have iterated 3 times on the same piece and none have cleared.** STOP. Do not present a fourth. Format:
+> "I've tried three angles on this hook (X, Y, Z). All three failed [specific rule]. I am not landing this — the angle for this day may be hidden somewhere I am not seeing. Three options: (a) you take the pen, (b) tell me what the angle should be and I'll execute, (c) skip this slot."
+
+**What this is NOT.** Permission to give up early. One failed attempt followed by "I cannot do this" is laziness, not escalation. Three genuine attempts that each failed for the same reason is the trigger.
+
+### META-RULE 2: Form-templating across days = failure
+
+Any rule below that produces the same FORM across multiple days has become a template, not a principle. If you catch yourself or a model producing parallel openers, parallel closers, parallel sentence shapes, or parallel title structures day-over-day, the rule is being misapplied — the rule is the principle, not the form. Throw out the templated piece and find the angle from the specific content.
+
+This is the lesson of the scene-opener catch (June 17): "Open with a scene" produced 30 days of "Location. Year." fragment openers — the same AI tell the rule was supposed to prevent. The rule was right in spirit; the form-templating broke it.
+
 ### The Hook Rule
 Every P&P day must open with one **surprising, specific, shareable fact** — something the user genuinely didn't know and would repeat at dinner. The hook lives in the **Curator Note** and must come first.
 
@@ -1175,14 +1193,73 @@ The dinner-table test asks whether the hook is shareable at a friendly gathering
 
 **Verified quotes only — flag hedged attributions.** When a quote is tagged "commonly attributed," "from the novel's notebooks," "tradition holds," or any other hedge that signals the model couldn't pin it down, it is APOCRYPHAL until proven otherwise. Examples Sheri caught in this session: the Tolstoy "Music is the shorthand of emotion" line (doesn't appear in Anna Karenina), the Dom Perignon "Come quickly, I am tasting the stars" (19th-century advertising). Either verify against a primary source or replace with something verifiable. Never bury a hedged quote in confident prose; flag it explicitly.
 
-**Open the context with a SCENE, not a summary.** A specific moment in a specific place with specific stakes is the door into depth. Examples from this session that worked: the Mahler premiere September 12, 1910 in Munich with 1,030 performers; the Council of Trent opening December 13, 1545; "Sistine Chapel. The doors close behind them." Analysis as the opener does not land — the user has nothing to anchor the analysis to yet. Open with the scene; let the depth follow.
+**Open with the concrete, not the abstract.** Lead with something the reader can feel: a person, an action, a paradox, a specific moment, a surprising claim, a fact whose stakes are immediately visible. Analysis as the opener does not land because the reader has nothing to anchor it to yet.
 
-**For unfamiliar (Tier 3) figures, deliver a STATURE paragraph before the analytical content.** A user meeting Hildegard cold needs to know she was the most famous woman of her century before they can absorb the viriditas analysis. A user meeting Aquinas (Tier 2 borderline) needs the "his Summa became the foundation of Catholic theology for seven centuries, Pope Leo XIII made his philosophy the official framework of Catholic education in 1879" beat before the three-criteria-for-beauty argument. The stature paragraph is the bridge from "who is this?" to "tell me more." Sheri flagged this specifically June 13: "it's also important for users who have never heard of Aquinas to know how he is thought of historically."
+A date-stamped scene is ONE way to do this. It is not the only way, and overusing it produces the AI-tell "Location. Year. Subject does X." fragment template. The Lewis register test still governs: would Lewis have opened a paragraph this way? Lewis often opens with a question, a paradox, an observation about ordinary experience, or a reflection on a word, not with a cinematic stage-set.
 
-**Day title format.** Short, intriguing, notification-worthy. Target band: 2–5 words. Two registers, both work:
-- **Question form** when the day works as a setup or disarming joke: "What do a priest, a scientist, and a telescope have in common?" (Webb Deep Field / Lemaître), "Did you know it was true?" (Easter Sunday).
-- **Statement form** when the day is a thesis, provocation, or final words: "God Does Not Die" (Sacred Heart, García Moreno's last words), "Beauty Is a Fact" (Aquinas), "Come, Creator" (Veni Creator), "Halfway Through" (Dante Inferno), "Everything Green Is Alive" (Hildegard viriditas).
-- Avoid: descriptive titles ("The Beauty of Aquinas's Theory"), academic titles ("Aquinas on the Transcendentals"), generic titles ("A Moment of Beauty"). The title is a notification you want the user to open; the cost of opening must feel rewarded by curiosity, not by description.
+Openers that work include all of:
+- A specific moment in a specific place with specific stakes (the scene form, used sparingly)
+- A surprising claim that destabilizes ("Most people think of the heavens as black space full of distant fires. The medieval imagination saw something different.")
+- A paradox or reversal ("Aquinas spent his life writing one of the longest works of philosophy in the Western tradition. Then he stopped on December 6, 1273, and called it all straw.")
+- A question the user has not asked but recognizes
+- A fact whose implications land before they are explained
+
+If your opener uses the `Location. Year. Subject does X.` template AND a previous day this launch window used it too, you have created a new AI tell. See Meta-Rule 2 above.
+
+**For unfamiliar figures, deliver the historical stakes EARLY in the context.** A user meeting Hildegard cold cannot absorb the viriditas analysis without knowing why Hildegard matters. A user meeting Aquinas needs to know how he is thought of historically before the three-criteria-for-beauty argument lands.
+
+**Stakes must come through SPECIFIC facts, never through abstract claims of importance.** This is the critical caveat. Without it the rule produces a template: every Tier 3 day opens with "[Subject] was the most [superlative] [role] of [her/his] [century]." That is a new AI tell, not a good rule. See Meta-Rule 2.
+
+What works (specifics):
+- "Hildegard started her first preaching tour at 63, while the rule against women preaching was still in force."
+- "Pope Leo XIII made Aquinas's philosophy the official framework of Catholic education in 1879. Seven centuries of Catholic seminaries trained on the Summa before any reform touched it."
+- "García Moreno consecrated Ecuador to the Sacred Heart on March 25, 1874. He was assassinated August 6, 1875. Last words: Dios no muere."
+
+What fails (abstract):
+- "Hildegard was the most famous woman of her century."
+- "Aquinas is one of the most important theologians in Western thought."
+- "García Moreno was a significant historical figure."
+
+The stakes paragraph does not have to be a standalone paragraph. It can be one sentence. It can be folded into the opening scene. The rule is that the stakes ARRIVE early, not that they arrive in a particular shape. Sheri flagged this specifically June 13.
+
+**Day title carries the angle, not the subject.** The title is a notification. The cost of opening must feel rewarded by curiosity. If the title names the subject (a person, place, or artwork title), the user assumes they already know what is coming and there is no reason to click. There is no word-count target; length is not the rule.
+
+**What the title must do:**
+- Be a true statement about the content, framed at an angle
+- Land with specificity (a quote, a moment, a claim, a setup line, a paraphrased concept)
+- Earn the click by promising something the title alone does not deliver
+
+**What the title must NOT do:**
+- Name the subject ("Justin Martyr", "Hildegard", "The Sistine Chapel", "Sacred Heart of Jesus")
+- Describe what the article covers ("Aquinas on the Transcendentals", "The Beauty of Aquinas's Theory")
+- Generate intrigue without specificity ("The Question That Changed Everything", "The Truth They Did Not Want You to Know")
+- Repeat the same shape as another day's title in the launch window
+
+**Four tests. Run every title through every one. Fail any, throw the title out.**
+
+1. **Subject test.** Does the title name the subject? If yes, throw out.
+2. **Assumption test.** After reading the title, can the user finish "I know what this is going to be about"? If yes, throw out.
+3. **Specificity test.** Does the title carry a fact, a quote, a moment, a claim — or is it abstract intrigue ("The Question," "The Truth," "Everything Changed")? If abstract, throw out.
+4. **Shape test.** Compare this title to the other titles in the launch window. Do three of them share a sentence structure or rhythm? If yes, you have templated; throw out the newer ones. See Meta-Rule 2.
+
+**The process (this is the part that prevents templating).** The title lives INSIDE the draft. Do not generate the title separately from the content; you will template if you do.
+
+- Step 1: Write the full piece first.
+- Step 2: Read it back. What is the line YOU paused on as you wrote it? The moment of recognition, the punchline, the unexpected fact, the quote that does the most work?
+- Step 3: That line is your title candidate. Compress only as far as it survives without losing the angle.
+- Step 4: Run all four tests above.
+- Step 5: If the title fails any test, do NOT edit it. Throw it out. Go back to the draft. Find a different line.
+
+**Examples (the bar, NOT shapes to imitate).**
+
+- "They Were Early" — Justin Martyr. Justin recognized that the pre-Christian philosophers were tracking the same truth Christ would later reveal; they were ahead of their time AND ahead of the revelation that would name what they saw. The title is a thesis, not a description. Came from painful Cowork iteration; it was not generated by template.
+- "God Does Not Die" — Sacred Heart. García Moreno's last words. The title is a quote.
+- "Halfway Through" — Dante Inferno. Compresses the opening line "midway upon the journey of our life." The title is a literary moment.
+- "What do a priest, a scientist, and a telescope have in common?" — Webb Deep Field / Lemaître. The title is a setup line.
+
+Each of these came from PAINFUL ITERATION on that day's specific content. None was generated by template. If your title has the same SHAPE as any of these (3-word fragment with loaded pronoun, quote-as-title, literary moment, setup question), you may have imitated the form rather than found the angle. Read the draft again.
+
+**Critical:** examples teach pattern; tests and process teach judgment. The rule above is the tests and process. The examples bracket the bar but are NOT shapes to imitate. Your title will look NOTHING like these because your content is different.
 
 **The summary-closer AI tell.** This is one of the strongest AI signatures and one Sheri caught repeatedly during the June 12–14 rewrites. Closing sentences that summarize what the paragraph already said are a model trying to add gravitas where none is needed:
 
@@ -1196,7 +1273,13 @@ These earn their place ONLY when they add something the paragraph has not alread
 
 **Hook = fact, not theological framing of the fact.** "The medieval architects called this divine proportion" is framing. "Chartres was rebuilt in 26 years after the 1194 fire by nobles, merchants, and peasants all pulling carts of stone" is the fact. Lead with the fact. Theological framing belongs in context.
 
-**Reversal / ironic-origin stories rank high.** "He tried to STOP champagne from fizzing." "Kepler's wrong idea produced the right one." "Soviet censors banned the film that won at Cannes." Any time the surprising twist IS the engine of the story, the hook lands hard. Watch for these and prefer them.
+**Reversal / ironic-origin stories rank high — as FACTS, not as PROSE.** When the surprising twist IS the engine of the story, the hook lands hard. Watch for these and prefer them. Examples of strong reversal facts: "He tried to STOP champagne from fizzing." "Kepler's wrong idea produced the right one." "Soviet censors banned the film that won at Cannes."
+
+**Critical caveat.** The reversal lives in the FACT (an actual historical contradiction or ironic origin). It must NOT live in the PROSE STRUCTURE. Do not stage the reversal with the punchy-parallel template "He did not mean it as X. He meant it as Y." — that is the banned AI tell from the rule below. Deliver the reversal in normal sentences. The fact does the work; the rhetorical structure does not need to mirror it.
+
+✓ Strong: "Dom Perignon was a Benedictine monk hired in 1668 to stop a problem in the cellar. The wine kept fermenting in the bottle and exploding. He spent his life trying to keep the bubbles out."
+
+✗ Punchy-parallel template (banned): "He did not mean it as champagne. He meant it as wine. He did not mean the bubbles. He meant the clarity."
 
 **Underrepresented voices/figures are particularly strong choices.** Hildegard, the Alhambra craftsmen, Westvleteren monks, Rabanus Maurus — figures who don't get canonical attention in popular knowledge are a high-value angle. Contueri's role is partly tradition recovery; surfacing the overlooked is part of the brand.
 
