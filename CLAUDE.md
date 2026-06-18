@@ -1124,6 +1124,43 @@ Any rule below that produces the same FORM across multiple days has become a tem
 
 This is the lesson of the scene-opener catch (June 17): "Open with a scene" produced 30 days of "Location. Year." fragment openers — the same AI tell the rule was supposed to prevent. The rule was right in spirit; the form-templating broke it.
 
+### The frame beneath the rules: Aristotle's Rhetoric
+
+The voice rules in this section are an operational version of Aristotle's three modes of persuasion (ethos, pathos, logos) and the structural device that holds them together (the enthymeme). Not every rule fits neatly into one mode — most serve two or three simultaneously, as Aristotle himself argued they would. The frame is a navigation aid, not a partition.
+
+**Ethos rules — the author's credibility.** Verified quotes only and flag hedged attributions. Facts must be specific (named dates, named characters, anchor numbers). Period context research is mandatory before drafting. RSV-2CE scripture standard. Color iconography is contextual, not formulaic. The Lewis register test ("would Lewis have written this?") is the explicit ethos benchmark. The stature paragraph for unfamiliar figures transfers credibility from subject to argument. The thinker artwork rule (do not show subject portraits when artwork can carry the idea) protects the credibility of the visual claim.
+
+**Pathos rules — the audience's emotional response.** The dinner-table test. The Inklings test ("eyes widen, lean in"). Open with the concrete, not the abstract. Reversal and ironic-origin stories rank high (surprise is an emotional event). Underrepresented voices and figures are particularly strong (discovery is affect). Auditio mood is PRIMARY. Sehnsucht / longing as the BTG Day 1 target mood. Liturgical and seasonal timing weighting. No modern politicians (avoid the negative trigger). The em-dash ban (the audience's perception of AI authorship is emotional, even if the rationale reads as ethos).
+
+**Logos rules — the logical structure of the argument.** Hook and context never repeat. Context length follows quality, not paragraph count. The four title tests. Cross-journey and cross-surface content check. The Auditio 5-dimension diversification and no-repeat-across-30-days rule. The actio specificity rule (named place, person, object, time — not disposition). The reversal-as-FACT-not-as-PROSE caveat (logical claim, not rhetorical staging). The stature paragraph delivered through specifics, not through abstract importance claims.
+
+**The enthymeme — the structural device that makes all three work.** Aristotle's name for the rhetorical syllogism with one premise deliberately left unstated, for the audience to supply themselves. The audience completes the argument in their own mind, which is exactly why the conclusion lands as THEIR insight rather than the writer's claim. Aristotle thought this was the most powerful form because of that transfer: persuasion that the audience does to itself.
+
+Every voice rule about leaving the conclusion unstated is an enthymeme rule:
+
+- Hook = fact, not theological framing (reader supplies the framing)
+- Title = angle, not subject (reader supplies the subject context)
+- "Trust the reader to draw the synthesis themselves"
+- Ban the summary-closer
+- Ban the punchy parallel restatement
+- Ban the zoom-out closer
+- Ban the rhetorical tripling
+- Ban the declarative fragment stacks
+
+These are all the same instruction restated for different failure modes: leave the conclusion for the reader. The reader's mind is more powerful than your prose.
+
+**Why this matters specifically for Contueri.** The audience is the curious seeker, already half-disposed to believe that beauty points to something true. That half-belief is the unstated premise the user brings. Every piece of content can leave THAT premise unstated and let the user assemble it. "Beauty is the splendor of truth" is the brand's founding statement; it is never spoken to the user. Each day shows beauty. The user assembles splendor. The user assembles truth. The conviction is theirs. Across a 30-day arc, the brand IS a sustained enthymeme.
+
+AI models default to closing the syllogism: stating every conclusion, summarizing every paragraph, explaining every implication. That is the OPPOSITE of the enthymeme. Models do it because they are trained to be helpful by being complete. Complete is the opposite of persuasive.
+
+**Self-check on any draft, in this order:**
+1. Is the credibility there? Facts verified, period-context research done, register correct.
+2. Is the reader's emotional response triggered? Concrete not abstract, mood right, lean-in earned.
+3. Is the argument logically structured? Hook does not repeat context, title does not name subject, audio does not repeat across days.
+4. Have I left the right gap for the reader to close, or have I closed every loop?
+
+If you fail #4 even when #1-3 are clean, you have written a polished AI completion, not a piece of contemplative writing. Throw it out and find the gap.
+
 ### The Hook Rule
 Every P&P day must open with one **surprising, specific, shareable fact** — something the user genuinely didn't know and would repeat at dinner. The hook lives in the **Curator Note** and must come first.
 
