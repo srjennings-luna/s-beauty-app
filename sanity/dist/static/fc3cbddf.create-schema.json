@@ -1861,6 +1861,548 @@
                 "constraint": "required"
               },
               {
+                "flag": "max",
+                "constraint": 120
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Short label for this idea — e.g. \"Josemaría Escrivá — Spanish embassy 9 months\" or \"Hildegard Day 2 (deeper)\". Refine later.",
+        "name": "workingTitle",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Pause & Ponder (P&P)",
+              "value": "pp"
+            },
+            {
+              "title": "Journey",
+              "value": "journey"
+            },
+            {
+              "title": "Companion Journey",
+              "value": "companion"
+            },
+            {
+              "title": "Tradition Reflection",
+              "value": "tr"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "pp",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "pp",
+                  "journey",
+                  "companion",
+                  "tr"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Which content surface this planning item is for.",
+        "name": "stream",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "1 · Idea",
+              "value": "idea"
+            },
+            {
+              "title": "2 · Researching",
+              "value": "researching"
+            },
+            {
+              "title": "3 · Drafted",
+              "value": "drafted"
+            },
+            {
+              "title": "4 · Reviewed",
+              "value": "reviewed"
+            },
+            {
+              "title": "5 · Seeded (live in Sanity)",
+              "value": "seeded"
+            },
+            {
+              "title": "6 · Archived",
+              "value": "archived"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "idea",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "idea",
+                  "researching",
+                  "drafted",
+                  "reviewed",
+                  "seeded",
+                  "archived"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Move items left-to-right as they progress. Archived items are kept for history but hidden from the active plan view.",
+        "name": "status",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Three Ways",
+              "value": "three-ways"
+            },
+            {
+              "title": "Out of the Silent Planet",
+              "value": "ootsp"
+            },
+            {
+              "title": "Perelandra",
+              "value": "perelandra"
+            },
+            {
+              "title": "That Hideous Strength",
+              "value": "ths"
+            }
+          ]
+        },
+        "description": "Which journey arc this planning item belongs to. Used by the Content Planning sidebar to group journey-stream items. Examples: \"Three Ways\", \"OOTSP\", \"Perelandra\", \"THS\". Only set when Stream = Journey.",
+        "hidden": "conditional",
+        "name": "journeyArcKey",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Sacred Art",
+              "value": "sacred-art"
+            },
+            {
+              "title": "Photography",
+              "value": "photography"
+            },
+            {
+              "title": "Thinker",
+              "value": "thinker"
+            },
+            {
+              "title": "Literature",
+              "value": "literature"
+            },
+            {
+              "title": "Music",
+              "value": "music"
+            },
+            {
+              "title": "Food & Wine",
+              "value": "food-wine"
+            },
+            {
+              "title": "Landscape",
+              "value": "landscape"
+            },
+            {
+              "title": "Watch & Listen",
+              "value": "watch-listen"
+            },
+            {
+              "title": "Math & Science",
+              "value": "math-science"
+            }
+          ]
+        },
+        "description": "What kind of content this will be. Matches the 9 contentItem.contentType values for compatibility with the eventual seed.",
+        "name": "contentType",
+        "type": "string"
+      },
+      {
+        "options": {
+          "dateFormat": "YYYY-MM-DD"
+        },
+        "description": "The intended launch date for this content (the date the P&P appears, or the journey starts, etc.). Leave blank if not yet scheduled.",
+        "name": "targetDate",
+        "type": "date"
+      },
+      {
+        "description": "Use when a specific date is not yet decided but the month is known. e.g. \"July 2026\". Ignored if Target Date is set.",
+        "name": "targetMonth",
+        "type": "string",
+        "title": "Target Month (fallback)"
+      },
+      {
+        "description": "Optional theme tags (Light, Silence, Suffering & Beauty, etc.). Helps with calendar grouping.",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "theme"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to theme"
+          }
+        ],
+        "name": "themes",
+        "type": "array"
+      },
+      {
+        "description": "If this P&P is meant to warm users up for a specific Journey (or this Journey idea relates to existing material), link it here.",
+        "to": [
+          {
+            "type": "journey"
+          }
+        ],
+        "name": "relatedJourney",
+        "type": "reference"
+      },
+      {
+        "description": "Existing P&P days that this planning item relates to (e.g., a Journey idea whose P&P teasers are already published).",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "dailyPrompt"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to pause & ponder"
+          }
+        ],
+        "name": "relatedPPs",
+        "type": "array",
+        "title": "Related Pause & Ponder days"
+      },
+      {
+        "description": "If this content is tied to a specific feast day, name it here. e.g. \"John the Baptist — June 24\", \"Peter & Paul — June 29\", \"Benedict of Nursia — July 11\". Used by the calendar view to mark feast-day-anchored slots.",
+        "name": "feastDayAnchor",
+        "type": "string"
+      },
+      {
+        "rows": 6,
+        "description": "What is the content about? What is the surprising fact, the dinner-table-test moment, the angle that earns the slot? Capture the editorial idea here before any drafting.",
+        "name": "subjectNotes",
+        "type": "text",
+        "title": "Subject Notes (the lesser-known angle)"
+      },
+      {
+        "rows": 4,
+        "description": "Citations for verification: book editions, page numbers, Lectio quote provenance. For clickable research leads (podcasts, articles, Pinterest, source artwork), use Inspiration Links below.",
+        "name": "sourceMaterial",
+        "type": "text",
+        "title": "Source Material (citations)"
+      },
+      {
+        "description": "Research leads and source material that lives on the web: podcast episodes, articles, YouTube/video, Pinterest pins, candidate artwork pages. Each link has a kind, optional label, and a note for why it matters or where in the source to look.",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "The full URL. Required.",
+                "name": "url",
+                "type": "url",
+                "title": "URL"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Artwork",
+                      "value": "artwork"
+                    },
+                    {
+                      "title": "Music",
+                      "value": "music"
+                    },
+                    {
+                      "title": "Podcast",
+                      "value": "podcast"
+                    },
+                    {
+                      "title": "Video",
+                      "value": "video"
+                    },
+                    {
+                      "title": "Article",
+                      "value": "article"
+                    },
+                    {
+                      "title": "Book",
+                      "value": "book"
+                    },
+                    {
+                      "title": "Pinterest",
+                      "value": "pinterest"
+                    },
+                    {
+                      "title": "Other",
+                      "value": "other"
+                    }
+                  ],
+                  "layout": "radio"
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "valid",
+                        "constraint": [
+                          "artwork",
+                          "music",
+                          "podcast",
+                          "video",
+                          "article",
+                          "book",
+                          "pinterest",
+                          "other"
+                        ]
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "kind",
+                "type": "string"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "max",
+                        "constraint": 100
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Short display name. e.g. \"Pints With Aquinas Ep 412 — John vs the Gnostics\".",
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "rows": 3,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "max",
+                        "constraint": 500
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Why this matters, timestamp (\"23:00 onward\"), the snippet that caught you, what to come back to.",
+                "name": "note",
+                "type": "text"
+              }
+            ],
+            "type": "object",
+            "name": "inspirationLink"
+          }
+        ],
+        "name": "inspirationLinks",
+        "type": "array"
+      },
+      {
+        "rows": 6,
+        "description": "Your running editorial notes. Reactions to drafts, questions for me, decisions, redirects. Date your entries (e.g. \"Jun 17 — pivot to John of Damascus angle\").",
+        "name": "sheriComments",
+        "type": "text",
+        "title": "Sheri Comments (running notes)"
+      },
+      {
+        "rows": 8,
+        "description": "My research findings, draft hooks, draft contexts, fact-check notes. I write here when working on the item; you review and respond in Sheri Comments.",
+        "name": "claudeNotes",
+        "type": "text",
+        "title": "Claude Notes (research + draft material)"
+      },
+      {
+        "description": "Concrete next steps. Each item names an action, an owner (Sheri or Claude), a status, and an optional due date.",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 200
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "What needs to happen. Be specific.",
+                "name": "item",
+                "type": "string",
+                "title": "Action"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Sheri",
+                      "value": "sheri"
+                    },
+                    {
+                      "title": "Claude",
+                      "value": "claude"
+                    },
+                    {
+                      "title": "Cowork",
+                      "value": "cowork"
+                    }
+                  ],
+                  "layout": "radio"
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "valid",
+                        "constraint": [
+                          "sheri",
+                          "claude",
+                          "cowork"
+                        ]
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "owner",
+                "type": "string"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Pending",
+                      "value": "pending"
+                    },
+                    {
+                      "title": "In Progress",
+                      "value": "in_progress"
+                    },
+                    {
+                      "title": "Done",
+                      "value": "done"
+                    },
+                    {
+                      "title": "Blocked",
+                      "value": "blocked"
+                    }
+                  ],
+                  "layout": "radio"
+                },
+                "initialValue": "pending",
+                "name": "status",
+                "type": "string"
+              },
+              {
+                "options": {
+                  "dateFormat": "YYYY-MM-DD"
+                },
+                "name": "dueDate",
+                "type": "date",
+                "title": "Due Date (optional)"
+              }
+            ],
+            "type": "object",
+            "name": "actionItem"
+          }
+        ],
+        "name": "actionItems",
+        "type": "array"
+      }
+    ],
+    "name": "planningItem",
+    "type": "document",
+    "title": "Content Planning"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
                 "flag": "min",
                 "constraint": 1
               }
