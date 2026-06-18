@@ -77,13 +77,124 @@ export default defineConfig({
         S.list()
           .title('Content')
           .items([
-            // ── Standard document types (auto-generated, minus internal types) ──
-            ...S.documentTypeListItems().filter(
-              (listItem) => !['episode'].includes(listItem.getId() ?? ''),
-            ),
+            // ── Custom: Content Planning (planningItem) grouped by stream + journey arc ──
+            S.listItem()
+              .title('Content Planning')
+              .id('contentPlanning')
+              .child(
+                S.list()
+                  .title('Content Planning')
+                  .items([
+                    S.listItem()
+                      .title('Pause & Ponder')
+                      .id('planning-pp')
+                      .child(
+                        S.documentList()
+                          .title('Pause & Ponder')
+                          .filter('_type == "planningItem" && stream == "pp"')
+                          .defaultOrdering([{field: 'targetDate', direction: 'asc'}]),
+                      ),
+                    S.listItem()
+                      .title('Journeys')
+                      .id('planning-journeys')
+                      .child(
+                        S.list()
+                          .title('Journeys')
+                          .items([
+                            S.listItem()
+                              .title('Three Ways')
+                              .id('planning-journey-three-ways')
+                              .child(
+                                S.documentList()
+                                  .title('Three Ways')
+                                  .filter(
+                                    '_type == "planningItem" && stream == "journey" && journeyArcKey == "three-ways"',
+                                  )
+                                  .defaultOrdering([{field: 'workingTitle', direction: 'asc'}]),
+                              ),
+                            S.listItem()
+                              .title('Out of the Silent Planet')
+                              .id('planning-journey-ootsp')
+                              .child(
+                                S.documentList()
+                                  .title('Out of the Silent Planet')
+                                  .filter(
+                                    '_type == "planningItem" && stream == "journey" && journeyArcKey == "ootsp"',
+                                  )
+                                  .defaultOrdering([{field: 'workingTitle', direction: 'asc'}]),
+                              ),
+                            S.listItem()
+                              .title('Perelandra')
+                              .id('planning-journey-perelandra')
+                              .child(
+                                S.documentList()
+                                  .title('Perelandra')
+                                  .filter(
+                                    '_type == "planningItem" && stream == "journey" && journeyArcKey == "perelandra"',
+                                  )
+                                  .defaultOrdering([{field: 'workingTitle', direction: 'asc'}]),
+                              ),
+                            S.listItem()
+                              .title('That Hideous Strength')
+                              .id('planning-journey-ths')
+                              .child(
+                                S.documentList()
+                                  .title('That Hideous Strength')
+                                  .filter(
+                                    '_type == "planningItem" && stream == "journey" && journeyArcKey == "ths"',
+                                  )
+                                  .defaultOrdering([{field: 'workingTitle', direction: 'asc'}]),
+                              ),
+                            S.divider(),
+                            S.listItem()
+                              .title('Unassigned (no arc key)')
+                              .id('planning-journey-unassigned')
+                              .child(
+                                S.documentList()
+                                  .title('Unassigned journey items')
+                                  .filter(
+                                    '_type == "planningItem" && stream == "journey" && !defined(journeyArcKey)',
+                                  ),
+                              ),
+                          ]),
+                      ),
+                    S.listItem()
+                      .title('Companion Journeys')
+                      .id('planning-companion')
+                      .child(
+                        S.documentList()
+                          .title('Companion Journeys')
+                          .filter('_type == "planningItem" && stream == "companion"')
+                          .defaultOrdering([{field: 'targetDate', direction: 'asc'}]),
+                      ),
+                    S.listItem()
+                      .title('Tradition Reflections')
+                      .id('planning-tr')
+                      .child(
+                        S.documentList()
+                          .title('Tradition Reflections')
+                          .filter('_type == "planningItem" && stream == "tr"')
+                          .defaultOrdering([{field: 'targetDate', direction: 'asc'}]),
+                      ),
+                    S.divider(),
+                    S.listItem()
+                      .title('All planning items')
+                      .id('planning-all')
+                      .child(
+                        S.documentList()
+                          .title('All planning items')
+                          .filter('_type == "planningItem"')
+                          .defaultOrdering([{field: 'targetDate', direction: 'asc'}]),
+                      ),
+                  ]),
+              ),
 
-            // Auditio is now a first-class document type — appears automatically
-            // in the list above. The old filtered quick-nav items are removed.
+            S.divider(),
+
+            // ── Standard document types (auto-generated, minus internal + customized types) ──
+            ...S.documentTypeListItems().filter(
+              (listItem) => !['episode', 'planningItem'].includes(listItem.getId() ?? ''),
+            ),
           ]),
     }),
     // Presentation tool: side-by-side live preview of the app while editing.

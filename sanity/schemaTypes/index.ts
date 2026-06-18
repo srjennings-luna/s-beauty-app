@@ -9,6 +9,7 @@ import journeyDay from './journeyDay'
 import dailyPrompt from './dailyPrompt'
 import visioDefaults from './visioDefaults'
 import ppDefaults from './ppDefaults'
+import planningItem from './planningItem'
 
 export const schemaTypes = [
   // Foundational — create these BEFORE journey days or P&P records
@@ -20,6 +21,8 @@ export const schemaTypes = [
   journey,
   journeyDay,
   dailyPrompt,
+  // Editorial planning surface — pre-production, not user-facing
+  planningItem,
   // Singletons (one document each)
   splashPage,
   visioDefaults,
