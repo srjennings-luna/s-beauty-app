@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cowork Brief, Editorial Rules Updated (June 17, 2026)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@400;500;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #fdf6e8;
+    --parchment-dark: #ede0c4;
+    --ink: #1a1410;
+    --ink-soft: #3d2f1f;
+    --ink-faint: #8a7560;
+    --gold: #C19B5F;
+    --sage: #4a7a62;
+    --espresso: #16110d;
+    --wine: #8b4557;
+  }
+
+  body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.75;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  .eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-faint);
+    margin-bottom: 28px;
+  }
+
+  .gold-rule {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 32px 0;
+  }
+
+  h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 48px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--parchment-dark);
+  }
+
+  h3 {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 19px;
+    font-weight: 600;
+    margin-top: 26px;
+    margin-bottom: 8px;
+    color: var(--ink-soft);
+  }
+
+  h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-top: 18px;
+    margin-bottom: 6px;
+  }
+
+  p { margin-bottom: 14px; color: var(--ink-soft); }
+  strong { color: var(--ink); font-weight: 600; }
+
+  code {
+    font-family: 'SF Mono', Consolas, monospace;
+    font-size: 13px;
+    background: var(--parchment-dark);
+    color: var(--ink);
+    padding: 1px 6px;
+    border-radius: 2px;
+  }
+
+  ul, ol { margin: 6px 0 18px 22px; }
+  li { margin-bottom: 8px; color: var(--ink-soft); }
+
+  .tldr {
+    background: var(--espresso);
+    color: var(--parchment);
+    padding: 24px 28px;
+    border-left: 4px solid var(--gold);
+    margin: 28px 0;
+  }
+  .tldr p { color: var(--parchment); margin-bottom: 8px; }
+  .tldr p:last-child { margin-bottom: 0; }
+  .tldr strong { color: var(--gold); }
+
+  .rule {
+    background: white;
+    border: 1px solid var(--parchment-dark);
+    border-left: 3px solid var(--sage);
+    padding: 16px 20px;
+    margin: 12px 0;
+  }
+  .rule .rule-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 6px;
+  }
+
+  .bad, .good {
+    padding: 10px 14px;
+    margin: 6px 0;
+    font-style: italic;
+    font-size: 14px;
+  }
+  .bad {
+    background: #fbe9ec;
+    border-left: 3px solid var(--wine);
+    color: #5a2530;
+  }
+  .good {
+    background: #e8f0ea;
+    border-left: 3px solid var(--sage);
+    color: #1f3a2a;
+  }
+  .bad::before { content: '✗ '; font-style: normal; color: var(--wine); font-weight: 700; }
+  .good::before { content: '✓ '; font-style: normal; color: var(--sage); font-weight: 700; }
+
+  .panel-warn {
+    background: #fef9ef;
+    border-left: 4px solid var(--gold);
+    padding: 16px 22px;
+    margin: 16px 0;
+  }
+
+  .scene-test {
+    background: var(--espresso);
+    color: var(--parchment);
+    padding: 14px 18px;
+    font-style: italic;
+    font-size: 14px;
+    margin: 10px 0;
+    border-left: 3px solid var(--gold);
+  }
+
+  .footer-meta {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--parchment-dark);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .toc {
+    background: var(--parchment-dark);
+    padding: 18px 22px;
+    margin: 24px 0 40px;
+  }
+  .toc h4 { margin-top: 0; margin-bottom: 10px; color: var(--ink); }
+  .toc ol { margin: 0 0 0 22px; }
+  .toc li { margin-bottom: 4px; font-size: 14px; }
+  .toc a { color: var(--ink-soft); text-decoration: none; }
+  .toc a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Contueri, Cowork Brief</div>
+<h1>Editorial Rules Sharpened</h1>
+<div class="subtitle">What changed in the editorial doctrine across the June 12 to June 17 content sweep, with the concrete examples that drove each rule. Read before the next content session.</div>
+<div class="gold-rule"></div>
+
+<div class="tldr">
+  <p><strong>TL;DR.</strong> Sheri ran a multi-day content cleanup and editorial-rule sharpening sweep. The rules in CLAUDE.md (Editorial Principles, Voice Rules, Auditio Selection Criteria) were materially expanded. Cowork sessions running content work need to read CLAUDE.md fresh; this brief is the concentrated recap of what is new so you do not have to scan the whole file to find it.</p>
+  <p>Every rule below was added because something Cowork or Claude Code produced violated it and Sheri caught it. The examples in red are the actual failures. The rules exist to prevent the same drift next session.</p>
+</div>
+
+<div class="toc">
+  <h4>Sections</h4>
+  <ol>
+    <li><a href="#meta">Meta-rules (read first)</a></li>
+    <li><a href="#frame">The frame: Aristotle's Rhetoric</a></li>
+    <li><a href="#hook">Hook rule, expansions</a></li>
+    <li><a href="#context">Context rule, expansions</a></li>
+    <li><a href="#title">Day title rule (sharpened)</a></li>
+    <li><a href="#ai-tells">AI rhetorical patterns to avoid</a></li>
+    <li><a href="#authority">Authority register and verified quotes</a></li>
+    <li><a href="#research">Period context research, mandatory</a></li>
+    <li><a href="#auditio">Auditio rules overhauled</a></li>
+    <li><a href="#cross">Cross-surface and cross-journey checks</a></li>
+    <li><a href="#sanity">What changed in Sanity content</a></li>
+    <li><a href="#thinker">Thinker artwork rule reaffirmed</a></li>
+    <li><a href="#politicians">No modern politicians (post-1990)</a></li>
+    <li><a href="#metaphors">Metaphor restraint</a></li>
+    <li><a href="#planning">New: planningItem surface</a></li>
+  </ol>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="meta">0. Meta-Rules (Read First)</h2>
+
+<p>These two rules sit above every other rule in this brief. They govern how the agent uses every specific rule below.</p>
+
+<div class="rule">
+  <div class="rule-name">Meta-Rule 1: When the rules are not working, flag and escalate</div>
+  <p>The rules in this brief are guardrails, not guarantees. Some content will fight them. Sheri's time is the bottleneck, not the agent's compute.</p>
+  <h4>Two situations require explicit escalation:</h4>
+  <p><strong>1. A draft breaks a rule you are aware of.</strong> Surface it. Do not bury it in a polished draft. Do not soften the failure. Format:</p>
+  <p class="bad">"Here is the draft. Flagging that the title names the subject ('Aquinas'), I could not find an angle that survived the four tests. Three options: (a) you write it, (b) give me a sharper steer on which angle you want, (c) skip this slot and come back."</p>
+  <p><strong>2. You have iterated 3 times on the same piece and none have cleared.</strong> STOP. Do not present a fourth. Format:</p>
+  <p class="bad">"I've tried three angles on this hook (X, Y, Z). All three failed [specific rule]. I am not landing this, the angle for this day may be hidden somewhere I am not seeing. Three options: (a) you take the pen, (b) tell me what the angle should be and I'll execute, (c) skip this slot."</p>
+  <p><strong>What this is NOT.</strong> Permission to give up early. One failed attempt followed by "I cannot do this" is laziness, not escalation. Three genuine attempts that each failed for the same reason is the trigger.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Meta-Rule 2: Form-templating across days = failure</div>
+  <p>Any rule below that produces the same FORM across multiple days has become a template, not a principle. If you catch yourself or a model producing parallel openers, parallel closers, parallel sentence shapes, or parallel title structures day-over-day, the rule is being misapplied. The rule is the principle, not the form. Throw out the templated piece and find the angle from the specific content.</p>
+  <p>This is the lesson of the scene-opener catch on June 17. "Open with a scene" produced an opener template Sheri caught immediately: "Sistine Chapel. The doors close behind them." then "Munich, 1910. The hall is silent." then "Florence, 1302. Dante walks out of the city." The rule was right in spirit; the form-templating broke it.</p>
+  <p><strong>Test for templating:</strong> if you wrote this same shape on 5 other days in the launch window, the form has become the pattern. The form is then the AI tell, regardless of how good the rule was.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="frame">1. The Frame Beneath the Rules: Aristotle's Rhetoric</h2>
+
+<p>The voice rules in this brief are an operational version of Aristotle's three modes of persuasion (ethos, pathos, logos) and the structural device that holds them together (the enthymeme). Not every rule fits neatly into one mode, most serve two or three simultaneously, as Aristotle himself argued they would. The frame is a navigation aid, not a partition.</p>
+
+<div class="rule">
+  <div class="rule-name">Ethos — the author's credibility</div>
+  <p>Verified quotes only and flag hedged attributions. Facts must be specific (named dates, named characters, anchor numbers). Period context research is mandatory before drafting. RSV-2CE scripture standard. Color iconography is contextual, not formulaic. The Lewis register test ("would Lewis have written this?") is the explicit ethos benchmark. The stature paragraph for unfamiliar figures transfers credibility from subject to argument. The thinker artwork rule (do not show subject portraits where artwork can carry the idea) protects the credibility of the visual claim.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Pathos — the audience's emotional response</div>
+  <p>The dinner-table test. The Inklings test ("eyes widen, lean in"). Open with the concrete, not the abstract. Reversal and ironic-origin stories rank high (surprise is an emotional event). Underrepresented voices and figures are particularly strong (discovery is affect). Auditio mood is PRIMARY. Sehnsucht / longing as the BTG Day 1 target mood. Liturgical and seasonal timing weighting. No modern politicians (avoid the negative trigger). The em-dash ban (the audience's perception of AI authorship is emotional, even if the rationale reads as ethos).</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Logos — the logical structure of the argument</div>
+  <p>Hook and context never repeat. Context length follows quality, not paragraph count. The four title tests. Cross-journey and cross-surface content check. The Auditio 5-dimension diversification and no-repeat-across-30-days rule. The actio specificity rule (named place, person, object, time, not disposition). The reversal-as-FACT-not-as-PROSE caveat (logical claim, not rhetorical staging). The stature paragraph delivered through specifics, not through abstract importance claims.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">The enthymeme — the structural device that makes all three work</div>
+  <p>Aristotle's name for the rhetorical syllogism with one premise deliberately left unstated, for the audience to supply themselves. The audience completes the argument in their own mind, which is exactly why the conclusion lands as THEIR insight rather than the writer's claim. Aristotle thought this was the most powerful form because of that transfer: persuasion that the audience does to itself.</p>
+  <p><strong>Every voice rule about leaving the conclusion unstated is an enthymeme rule:</strong></p>
+  <ul>
+    <li>Hook = fact, not theological framing (reader supplies the framing)</li>
+    <li>Title = angle, not subject (reader supplies the subject context)</li>
+    <li>"Trust the reader to draw the synthesis themselves"</li>
+    <li>Ban the summary-closer</li>
+    <li>Ban the punchy parallel restatement</li>
+    <li>Ban the zoom-out closer</li>
+    <li>Ban the rhetorical tripling</li>
+    <li>Ban the declarative fragment stacks</li>
+  </ul>
+  <p>These are all the same instruction restated for different failure modes: leave the conclusion for the reader. The reader's mind is more powerful than your prose.</p>
+</div>
+
+<div class="panel-warn">
+  <h4>Why this matters specifically for Contueri</h4>
+  <p>The audience is the curious seeker, already half-disposed to believe that beauty points to something true. That half-belief is the unstated premise the user brings. Every piece of content can leave THAT premise unstated and let the user assemble it. <strong>"Beauty is the splendor of truth"</strong> is the brand's founding statement; it is never spoken to the user. Each day shows beauty. The user assembles splendor. The user assembles truth. The conviction is theirs.</p>
+  <p>Across a 30-day arc, the brand IS a sustained enthymeme.</p>
+  <p>AI models default to closing the syllogism: stating every conclusion, summarizing every paragraph, explaining every implication. That is the OPPOSITE of the enthymeme. Models do it because they are trained to be helpful by being complete. Complete is the opposite of persuasive.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Self-check on any draft, in this order</div>
+  <ol>
+    <li><strong>Is the credibility there?</strong> Facts verified, period-context research done, register correct.</li>
+    <li><strong>Is the reader's emotional response triggered?</strong> Concrete not abstract, mood right, lean-in earned.</li>
+    <li><strong>Is the argument logically structured?</strong> Hook does not repeat context, title does not name subject, audio does not repeat across days.</li>
+    <li><strong>Have I left the right gap for the reader to close, or have I closed every loop?</strong></li>
+  </ol>
+  <p>If you fail #4 even when #1-3 are clean, you have written a polished AI completion, not a piece of contemplative writing. Throw it out and find the gap.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="hook">2. Hook Rule, Expansions</h2>
+
+<p>The Hook Rule has always been: every P&amp;P opens with a surprising, specific, shareable fact. The sweep added precision around what "surprising" actually means.</p>
+
+<div class="rule">
+  <div class="rule-name">Tiered familiarity, hooks scale with the reader's prior knowledge</div>
+  <p>A surprising fact is not absolute. It is measured against what the reader probably already knows. Three rough tiers:</p>
+  <ul>
+    <li><strong>Tier 1, universal knowledge</strong> (Mona Lisa, Last Supper, Dante, Aquinas, Michelangelo). Survey-course textbook facts will not surprise. Hook must land something the textbook does not carry, a specific moment, an ironic reversal, an obscure detail with weight.</li>
+    <li><strong>Tier 2, cultured general knowledge</strong> (Augustine, Teresa of Avila, Bernard of Clairvaux, Caravaggio). The hook can use the second-tier biographical fact, the one not in the survey but in any decent monograph.</li>
+    <li><strong>Tier 3, specialist knowledge</strong> (Hildegard, Rabanus Maurus, the Alhambra craftsmen, Carlo Crivelli). The subject itself IS the surprise. Standard biographical fact lands because the reader has no prior frame.</li>
+  </ul>
+  <p><strong>Practical consequence.</strong> When a slot lands on a famous subject (Tier 1), the work is harder, not easier. The famous subject is the obligation, not the gift. If you cannot find a Tier-1-worthy fact, the slot belongs to a lesser-known subject where basic identity already carries surprise.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">The Inklings test (companion to the dinner-table test)</div>
+  <p>Imagine walking into an Inklings gathering, Lewis, Tolkien, Charles Williams, Warnie Lewis, scotch on the table, pipes lit, and announcing your hook as the opening line of "something fascinating I came across." Three reactions:</p>
+  <ul>
+    <li>Eye rolls, polite change of subject → <strong>kill the hook</strong></li>
+    <li>Civil nods, no follow-up → <strong>kill the hook</strong></li>
+    <li>Eyes widen, conversation pauses, someone leans in, "wait, what?" → <strong>that is the hook</strong></li>
+  </ul>
+  <p>The dinner-table test is the baseline. The Inklings test is the bar for Tier 1 famous subjects. If the hook would not get the Inklings to lean in, it is not a hook.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Hook = fact, not theological framing of the fact</div>
+  <p class="bad">The medieval architects called this divine proportion. (Framing.)</p>
+  <p class="good">Chartres was rebuilt in 26 years after the 1194 fire by nobles, merchants, and peasants all pulling carts of stone. (Fact.)</p>
+  <p>Lead with the fact. Theological framing belongs in context.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Reversal and ironic-origin stories rank high, as FACTS not as PROSE</div>
+  <p>When the surprising twist IS the engine of the story, the hook lands hard. Watch for these and prefer them. Examples of strong reversal facts: "He tried to STOP champagne from fizzing." "Kepler's wrong idea produced the right one." "Soviet censors banned the film that won at Cannes."</p>
+  <p><strong>Critical caveat.</strong> The reversal lives in the FACT (an actual historical contradiction or ironic origin). It must NOT live in the PROSE STRUCTURE. Do not stage the reversal with the punchy-parallel template "He did not mean it as X. He meant it as Y." That is the banned AI tell from Section 3. Deliver the reversal in normal sentences. The fact does the work; the rhetorical structure does not need to mirror it.</p>
+  <p class="good">"Dom Perignon was a Benedictine monk hired in 1668 to stop a problem in the cellar. The wine kept fermenting in the bottle and exploding. He spent his life trying to keep the bubbles out."</p>
+  <p class="bad">"He did not mean it as champagne. He meant it as wine. He did not mean the bubbles. He meant the clarity." (Punchy-parallel template, banned.)</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Underrepresented voices and figures are particularly strong</div>
+  <p>Hildegard, the Alhambra craftsmen, the Westvleteren monks, Rabanus Maurus, figures who do not get canonical attention in popular knowledge are a high-value angle. Contueri's role is partly tradition recovery; surfacing the overlooked is part of the brand.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="context">3. Context Rule, Expansions</h2>
+
+<div class="rule">
+  <div class="rule-name">Hook and context NEVER repeat the same information</div>
+  <p>Not the same fact in different words. Not the same beat reframed. Not "as we said in the hook." If the hook covers Aquinas's December 6, 1273 "straw" moment, the context goes elsewhere, family conflict, Albert the Great, centuries of reception. <strong>Hard rule with zero exceptions.</strong> Every paragraph of context after the hook must deliver something the reader does not already have.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Context length follows content quality, not paragraph count</div>
+  <p>Four to five paragraphs is fine when the writing earns it. Six paragraphs is fine when each carries a specific moment, fact, or thread. A two-paragraph context can be too long if every sentence is generic; a seven-paragraph context can be exactly right if every paragraph delivers. The question is never "is this short enough" but "is every paragraph earning its place." User testing of Days 1-3 confirmed readers did not push back on 5-6 paragraph contexts when the writing was strong.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Context voice, C.S. Lewis register</div>
+  <p>Test for every paragraph: would Lewis have written this in <em>Surprised by Joy</em>, <em>The Discarded Image</em>, <em>The Allegory of Love</em>, or one of his Atlantic essays? Specific images, concrete moments, restrained metaphor, conversational rhythm, comfort with both the everyday detail and the metaphysical claim in the same paragraph.</p>
+  <p class="bad">The painting demonstrates the artist's mastery of chiaroscuro. (Academic.)</p>
+  <p class="bad">We are invited to behold this great mystery. (Devotional.)</p>
+  <p class="good">Lewis: factual, specific, intelligent, warm, willing to be surprised. He does not summarize what you can already see; he tells you what you would have missed.</p>
+  <p><strong>Lewis is the internal register test, NOT a user-facing name.</strong> Do not name Lewis in Journey Description Cards, Opening Texts, or any copy the user reads before or during an experience, unless the content item is specifically about him.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Open with the concrete, not the abstract</div>
+  <p>Lead with something the reader can feel: a person, an action, a paradox, a specific moment, a surprising claim, a fact whose stakes are immediately visible. Analysis as the opener does not land because the reader has nothing to anchor it to yet.</p>
+  <p><strong>A date-stamped scene is ONE way to do this. It is not the only way.</strong> Overusing it produces the AI-tell "Location. Year. Subject does X." fragment template, the exact pattern Sheri caught on June 17 that prompted this rewrite. The Lewis register test still governs: Lewis often opens with a question, a paradox, an observation about ordinary experience, or a reflection on a word, NOT with a cinematic stage-set.</p>
+  <h4>Openers that work include all of:</h4>
+  <ul>
+    <li>A specific moment in a specific place with specific stakes (the scene form, used sparingly)</li>
+    <li>A surprising claim that destabilizes ("Most people think of the heavens as black space full of distant fires. The medieval imagination saw something different.")</li>
+    <li>A paradox or reversal ("Aquinas spent his life writing one of the longest works of philosophy in the Western tradition. Then he stopped on December 6, 1273, and called it all straw.")</li>
+    <li>A question the user has not asked but recognizes</li>
+    <li>A fact whose implications land before they are explained</li>
+  </ul>
+  <p class="bad">"The painting demonstrates the artist's mastery of chiaroscuro." (Academic, abstract.)</p>
+  <p class="bad">"Sistine Chapel. The doors close behind them." (Fragment template if used more than once in the launch window. Becomes a tell.)</p>
+  <p>If your opener uses the <code>Location. Year. Subject does X.</code> template AND a previous day this launch window used it too, you have created a new AI tell. See Meta-Rule 2.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">For unfamiliar figures, deliver historical stakes EARLY in the context</div>
+  <p>A user meeting Hildegard cold cannot absorb the viriditas analysis without knowing why Hildegard matters. A user meeting Aquinas needs to know how he is thought of historically before the three-criteria-for-beauty argument lands.</p>
+  <p><strong>Stakes must come through SPECIFIC facts, never through abstract claims of importance.</strong> Without this caveat the rule produces a template, every Tier 3 day opens with "[Subject] was the most [superlative] [role] of [her/his] [century]." That is a new AI tell, not a good rule. See Meta-Rule 2.</p>
+  <h4>What works (specifics):</h4>
+  <p class="good">"Hildegard started her first preaching tour at 63, while the rule against women preaching was still in force."</p>
+  <p class="good">"Pope Leo XIII made Aquinas's philosophy the official framework of Catholic education in 1879. Seven centuries of Catholic seminaries trained on the Summa before any reform touched it."</p>
+  <p class="good">"García Moreno consecrated Ecuador to the Sacred Heart on March 25, 1874. He was assassinated August 6, 1875. Last words: Dios no muere."</p>
+  <h4>What fails (abstract):</h4>
+  <p class="bad">"Hildegard was the most famous woman of her century."</p>
+  <p class="bad">"Aquinas is one of the most important theologians in Western thought."</p>
+  <p class="bad">"García Moreno was a significant historical figure."</p>
+  <p>The stakes paragraph does not have to be a standalone paragraph. It can be one sentence. It can be folded into the opening scene. The rule is that the stakes ARRIVE early, not that they arrive in a particular shape.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="title">4. Day Title Rule (Sharpened)</h2>
+
+<p>This rule was substantially rewritten on June 17 after Sheri caught the previous version (which gave a "2-5 words, question or statement form" target band) as setting up a templating risk. The new rule centers on JUDGMENT and PROCESS, not on FORM.</p>
+
+<div class="rule">
+  <div class="rule-name">Day title carries the angle, not the subject</div>
+  <p>The title is a notification. The cost of opening must feel rewarded by curiosity. If the title names the subject (a person, place, or artwork title), the user assumes they already know what is coming and there is no reason to click.</p>
+  <p><strong>There is no word-count target. Length is not the rule.</strong> "Come, Creator" (2 words) and "What do a priest, a scientist, and a telescope have in common?" (11 words) both work because the angle is right.</p>
+
+  <h4>What the title must do:</h4>
+  <ul>
+    <li>Be a true statement about the content, framed at an angle</li>
+    <li>Land with specificity (a quote, a moment, a claim, a setup line, a paraphrased concept)</li>
+    <li>Earn the click by promising something the title alone does not deliver</li>
+  </ul>
+
+  <h4>What the title must NOT do:</h4>
+  <p class="bad">Name the subject ("Justin Martyr", "Hildegard", "The Sistine Chapel", "Sacred Heart of Jesus")</p>
+  <p class="bad">Describe what the article covers ("Aquinas on the Transcendentals", "The Beauty of Aquinas's Theory")</p>
+  <p class="bad">Generate intrigue without specificity ("The Question That Changed Everything", "The Truth They Did Not Want You to Know")</p>
+  <p class="bad">Repeat the same shape as another day's title in the launch window</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">The four tests. Run every title through every one. Fail any, throw the title out.</div>
+  <ol>
+    <li><strong>Subject test.</strong> Does the title name the subject? If yes, throw out.</li>
+    <li><strong>Assumption test.</strong> After reading the title, can the user finish "I know what this is going to be about"? If yes, throw out.</li>
+    <li><strong>Specificity test.</strong> Does the title carry a fact, a quote, a moment, a claim, or is it abstract intrigue ("The Question," "The Truth," "Everything Changed")? If abstract, throw out.</li>
+    <li><strong>Shape test.</strong> Compare this title to the other titles in the launch window. Do three of them share a sentence structure or rhythm? If yes, you have templated; throw out the newer ones. See Meta-Rule 2.</li>
+  </ol>
+</div>
+
+<div class="rule">
+  <div class="rule-name">The process (this is what prevents templating)</div>
+  <p><strong>The title lives INSIDE the draft.</strong> Do not generate the title separately from the content; you will template if you do.</p>
+  <ol>
+    <li>Write the full piece first.</li>
+    <li>Read it back. What is the line YOU paused on as you wrote it? The moment of recognition, the punchline, the unexpected fact, the quote that does the most work?</li>
+    <li>That line is your title candidate. Compress only as far as it survives without losing the angle.</li>
+    <li>Run all four tests above.</li>
+    <li>If the title fails any test, do NOT edit it. Throw it out. Go back to the draft. Find a different line.</li>
+  </ol>
+</div>
+
+<div class="panel-warn">
+  <h4>Examples, the bar NOT shapes to imitate</h4>
+  <p>Each of these came from PAINFUL ITERATION on that day's specific content. None was generated by template. If your title has the same SHAPE as any of these, you may have imitated the form rather than found the angle.</p>
+  <ul>
+    <li><strong>"They Were Early"</strong>, Justin Martyr. Justin recognized that the pre-Christian philosophers were tracking the same truth Christ would later reveal; they were ahead of their time AND ahead of the revelation that would name what they saw. The title is a thesis, not a description.</li>
+    <li><strong>"God Does Not Die"</strong>, Sacred Heart. García Moreno's last words. The title is a quote.</li>
+    <li><strong>"Halfway Through"</strong>, Dante Inferno. Compresses the opening line "midway upon the journey of our life." The title is a literary moment.</li>
+    <li><strong>"What do a priest, a scientist, and a telescope have in common?"</strong>, Webb Deep Field / Lemaître. The title is a setup line.</li>
+  </ul>
+  <p><strong>Critical:</strong> examples teach pattern; tests and process teach judgment. The rule above is the tests and process. The examples bracket the bar but are NOT shapes to imitate. Your title will look NOTHING like these because your content is different.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="ai-tells">5. AI Rhetorical Patterns to Avoid</h2>
+
+<p>These patterns are signatures of AI generation. They make content feel assembled rather than written. Flag and rewrite before presenting.</p>
+
+<div class="rule">
+  <div class="rule-name">The summary-closer (strongest AI tell)</div>
+  <p>Closing sentences that summarize what the paragraph already said are a model trying to add gravitas where none is needed.</p>
+  <p class="bad">"The request has not changed."</p>
+  <p class="bad">"The story continues."</p>
+  <p class="bad">"The same prayer endures."</p>
+  <p class="bad">"And so, the meaning carries on."</p>
+  <p class="bad">"The argument is not over."</p>
+  <p>These earn their place ONLY when they add something the paragraph has not already given the reader. If the closing sentence just zooms out and restates what the prior sentences proved, CUT IT. Trust the reader to draw the synthesis themselves.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Punchy parallel restatement</div>
+  <p class="bad">"He did not mean it as X. He meant it as Y."</p>
+  <p>One sentence restates the other for dramatic effect. Rewrite as a single direct statement.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Rhetorical tripling</div>
+  <p class="bad">"without a wallet, without an address, identified only by..."</p>
+  <p>Three-part list built for rhythm, not information. Cut to the actual fact.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Declarative fragment stacks</div>
+  <p class="bad">"No computer. No software. Gravity calculated the building."</p>
+  <p>Acceptable once per piece at most. Flag if it appears more than once.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">The zoom-out closer</div>
+  <p>Ending a paragraph with a single sweeping sentence meant to feel momentous.</p>
+  <p class="bad">"The man who built the world's tallest church may one day be its patron saint."</p>
+  <p>Test: would a journalist cut this as self-conscious? If yes, rewrite it.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Master test for all of the above</div>
+  <p><strong>"Would a person actually say this in conversation?"</strong> If not, rewrite it.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="authority">6. Authority Register and Verified Quotes</h2>
+
+<div class="rule">
+  <div class="rule-name">Facts must be specific</div>
+  <p>Contueri's voice depends on concrete particularity.</p>
+  <ul>
+    <li><strong>Specific dates beat vague periods.</strong> "December 6, 1273" beats "late 1273." "May 6, 2023" beats "May 2023."</li>
+    <li><strong>Named characters beat generic roles.</strong> "Gabriel García Moreno" not "the president of Ecuador." "Pope Pius XII" not "the Pope of the era."</li>
+    <li><strong>Anchor numbers make claims real.</strong> "266 popes have been elected under these words" beats "many popes." "Six gunshots and fourteen machete strikes" beats "multiple wounds." "1,030 performers" beats "an enormous orchestra."</li>
+  </ul>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Verified quotes only, flag hedged attributions</div>
+  <p>When a quote is tagged "commonly attributed," "from the novel's notebooks," "tradition holds," or any other hedge that signals the model could not pin it down, it is APOCRYPHAL until proven otherwise.</p>
+  <p>Examples Sheri caught this session:</p>
+  <ul>
+    <li>Tolstoy's "Music is the shorthand of emotion" (does not appear in Anna Karenina)</li>
+    <li>Dom Perignon's "Come quickly, I am tasting the stars" (almost certainly 19th-century advertising copy)</li>
+  </ul>
+  <p>Either verify against a primary source or replace with something verifiable. Never bury a hedged quote in confident prose; flag it explicitly.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">All scripture quotes use RSV-2CE</div>
+  <p>Revised Standard Version, Second Catholic Edition (Ignatius Press). Not NIV, not ESV, not NABRE. The Holy Week + Days 9-18 P&amp;P content was drafted before this standard was set; every scripture quote in those docs should be verified against RSV-2CE before Sanity entry.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="research">7. Period Context Research, Mandatory</h2>
+
+<p>This is the rule that separates Contueri's voice from a coffee-table art book. Before drafting any hook, context, or stature paragraph, research what an informed contemporary of the subject would have understood that a modern eye would miss without that context.</p>
+
+<div class="rule">
+  <div class="rule-name">For artwork, surface what the period viewer decoded</div>
+  <p>Bosch's owl in the conjurer's basket = those who prefer darkness over truth, 15th-century Flemish iconography. The thistle thorns on a Magus's collar = a crown of thorns worn to a Nativity. The fish hidden in the wicker of Caravaggio's Emmaus bread basket = Christ as ichthys. Gold leaf in a Crivelli icon = participation in divine light, not representation of it.</p>
+  <p>The contemporary viewer decoded these. The modern viewer sees decoration. <strong>Surface them.</strong></p>
+</div>
+
+<div class="panel-warn">
+  <h4>Color iconography, critical caveat</h4>
+  <p>Color symbolism is highly contextual. The SAME color carries DIFFERENT meaning depending on the figure, the painter, the era, and the surrounding visual vocabulary. The examples below are research-prompting patterns, NOT a lookup table.</p>
+
+  <p><strong>Yellow</strong> is the cleanest example of why this matters:</p>
+  <ul>
+    <li>On Judas, yellow is the traitor's color.</li>
+    <li>On the Magdalene in Caravaggio, yellow is the courtesan's color (medieval sumptuary laws required prostitutes to wear yellow markers, used to signal pre-conversion worldly identity).</li>
+    <li>On Mary in Mantegna, yellow is the Jewish-identity color used without stigma (Mantegna paints Mary in a yellow turban to signal her Jewish heritage with respect).</li>
+  </ul>
+  <p><strong>Same color, three completely different meanings.</strong> Researching "what does yellow mean" gives you the wrong answer. Researching "what does yellow mean on THIS figure, painted by THIS painter, in THIS period" gives you the right one.</p>
+
+  <p><strong>Blue, red, black, white</strong> are all similarly slippery. Blue on Mary often signals heaven plus divinity AND was the most expensive pigment in Europe (lapis lazuli). Blue on other figures means other things. Red is passion-and-blood on Christ, penitent love on Magdalene, martyrdom-or-authority on the Pope, worldly luxury on secular subjects. Black is mourning OR wealth (Spanish black was the most expensive dye in the 16th century). White under colored robes can signal purity, on its own it signals other things.</p>
+
+  <p><strong>Operative rule:</strong> when colors are doing work in an artwork, research the specific figure, the specific painter, and the specific period BEFORE writing what the color means. Do not import a color-meaning rule from one painting into another.</p>
+
+  <p><strong>This caveat applies to ALL iconographic examples, not just color.</strong> Use the examples to know what to research, not to skip the research.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">For texts, surface the debates the author was engaging</div>
+  <p>Dante's Inferno is not a generic medieval poem; it is an exile's specific response to a Florentine political crisis. The Veni Creator at the opening of Trent was not a generic invocation; it was an act of continuity with Catholic tradition at the defining moment of defense against the Reformation. Luther's German translation of the same hymn 21 years earlier was a deliberate retention while everything else Catholic was being stripped. <strong>The historical situation IS the meaning.</strong></p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">For lives and actions, surface what was at stake</div>
+  <p>Hildegard "preaching publicly" is a fact; the rule that women were not permitted to preach is what makes the fact remarkable. García Moreno's last words "Dios no muere" land differently when you know the Masonic political assassination context. Thomas More's silence under questioning was a calculated legal defense based on his knowledge that the law of the time could not treat silence as treason, until Henry changed the law.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">For music, surface the original sound experience</div>
+  <p>Gregorian chant in a 9th-century monastery before electric light, sung by candle and torchlight in a stone church with reverb of several seconds, is not the same listening experience as the same chant on Spotify through earbuds. Surface the original context when it changes what the music does.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Research test for every piece</div>
+  <p><strong>"What would someone living in the year this was made understand that the modern user does not?"</strong> That gap is often the content's deepest power. The hook or the context should land it explicitly.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="auditio">8. Auditio Rules Overhauled</h2>
+
+<p>The Auditio (audio pairing) section in CLAUDE.md was substantially rewritten this session. Cowork had been drifting toward skipping audio recommendations entirely or recommending the same Pärt and Gregorian default for every day. The new rules close those drifts hard.</p>
+
+<div class="rule">
+  <div class="rule-name">MOOD IS PRIMARY (promoted to lead criterion)</div>
+  <p>The prior rule listed thematic, mood-based, and emotional as parallel options. They are not parallel. <strong>Mood and emotion is the primary selection criterion.</strong> Theme and subject are tiebreakers when the mood is right.</p>
+  <p>The selection question is: "What does the meditation FEEL like, and does this music create or hold that feeling?" NOT: "Does this music describe this subject?"</p>
+  <p>Most users will not understand the Latin in a Gregorian chant. They will understand the emotion it carries. Mood is what reaches them.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Recommendation is mandatory in every seeding doc</div>
+  <p>Every P&amp;P seeding doc, content plan, and entry guide MUST include an audio recommendation for each day. The recommendation must name a specific piece, suggest a primary sacred or classical option AND at least one alternative register, AND include a verified link to where the file can be sourced (Pixabay, Musopen, archive.org, gregorian-chant-hymns.com).</p>
+  <p>Sheri decides at seeding time whether to source it; the recommendation itself is never optional. <strong>Absence of an audio recommendation in a seeding doc is a content-pipeline failure, not an editorial choice.</strong></p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Sacred or classical is the safe anchor, always offer alternative</div>
+  <p>Too much of anything beautiful loses its light. Do not default to 15th-16th century sacred music for every day, that register becomes invisible through repetition.</p>
+  <p>Rule: for every Auditio suggestion, provide a primary sacred or classical option AND at least one alternative from a different register (folk, ambient, meditation, contemporary, world music, even a well-chosen secular track).</p>
+  <p>Example that worked: "The Sound of Silence" for a meditation on something profound where the contemplative quality is strong. The test: does hearing this song here open something, or does it close it?</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">No-repeat rule, hard across 30-day windows</div>
+  <p>No piece may be used more than once across the 30-day P&amp;P launch window.</p>
+  <p><strong>Banned over-defaults:</strong></p>
+  <ul>
+    <li><strong>Arvo Pärt's <em>Spiegel im Spiegel</em></strong>, contemplative-app cliché, used by every meditation app on the market. Do not recommend it as primary or alternative for v1.0 launch. If Pärt is right for a day, choose <em>Für Alina</em>, <em>Cantus in Memoriam Benjamin Britten</em>, <em>Da pacem Domine</em>, or one of the more obscure choral works.</li>
+    <li><strong>Generic "Gregorian chant"</strong> as a category. A recommendation must name a specific piece (a specific antiphon, mode, or recording from a specific schola). "Gregorian chant" without specificity is a non-recommendation.</li>
+  </ul>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Diversify across at least 5 dimensions over any 7-day stretch</div>
+  <ol>
+    <li><strong>Era</strong> (medieval, Renaissance polyphony, Baroque, Classical, Romantic, 20th-century, contemporary)</li>
+    <li><strong>Genre</strong> (chant, polyphony, instrumental, choral, ambient, folk, jazz, world, contemporary acoustic)</li>
+    <li><strong>Language or source culture</strong> (Latin, English, Greek, Spanish, German, French, non-Western traditions)</li>
+    <li><strong>Composer</strong> (no composer used more than once across 30 days)</li>
+    <li><strong>Mood register</strong> (lament, joy, longing, stillness, awe, repentance, celebration)</li>
+  </ol>
+</div>
+
+<div class="rule">
+  <div class="rule-name">AI-generated music as fallback (Suno, Udio)</div>
+  <p>When licensable public-domain or Creative Commons audio cannot be found that matches the mood, AI generation is acceptable. Tools: Suno, Udio (free tiers exist).</p>
+  <p><strong>Sheri is not a prompt engineer.</strong> Every Auditio recommendation should include a ready-to-paste AI prompt as a third option alongside the sourceable link and the alternative-register suggestion.</p>
+  <p><strong>Prompt format (use this exact structure):</strong></p>
+  <p><code>[Mood] [genre/style] [instrument or vocal palette] [dynamics/tempo] [optional: era / cultural texture] [optional: acoustic environment]</code></p>
+  <h4>Worked examples (ready to paste into Suno or Udio):</h4>
+  <ul>
+    <li><code>Contemplative ambient piano, slow, sparse, melancholic, intimate, soft reverb</code></li>
+    <li><code>Sacred choral, female voices, Latin chant style, sustained, ethereal, cathedral reverb</code></li>
+    <li><code>Folk acoustic guitar fingerpicking, warm, simple melody, hopeful, sunrise</code></li>
+    <li><code>Minimalist classical strings, slow, somber, low register, mourning, dry acoustic</code></li>
+    <li><code>Byzantine choir, male voices, deep low drone, sustained, Orthodox cathedral, candlelit</code></li>
+    <li><code>Solo cello, warm, slow phrases, restrained, contemplative, intimate close-mic</code></li>
+  </ul>
+  <p><strong>Avoid in prompts:</strong> specific famous-composer imitations ("in the style of Pärt", "like Bach"), specific song references, lyrics in non-English languages unless essential. AI tools handle these inconsistently and produce uncanny imitations.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="cross">9. Cross-Surface and Cross-Journey Checks</h2>
+
+<div class="rule">
+  <div class="rule-name">Cross-journey content check, mandatory before proposing content</div>
+  <p>Before proposing or accepting any content item, read <code>content-docs/KALLOS-Content-Usage-Log.html</code>. Flag exact duplicates. Flag same-artist, same-tradition, same-period as potential duplicates even if the specific work differs. <strong>Do not proceed with content selection without this check.</strong> If the log is out of date, update it before making decisions.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Cross-surface content overlap</div>
+  <p>Check intended P&amp;P content against active Journey content before publishing. If a journey day (especially the onboarding-linked BTG II) features a specific artwork, do not use the same artwork or a near-duplicate (e.g., Caravaggio's Emmaus on Day 3 of BTG II + Pontormo's Emmaus on a nearby P&amp;P) in P&amp;P within the same launch window.</p>
+</div>
+
+<div class="rule">
+  <div class="rule-name">Liturgical and seasonal timing weighting</div>
+  <p>When a calendar date lands on a major feast (John the Baptist June 24, Peter &amp; Paul June 29, Benedict of Nursia July 11, Sacred Heart Friday after Corpus Christi, etc.), the slot benefits from feast-aware content. Not absolute, but a strong tiebreaker when content strength is close. Conversely, do NOT place feast-specific imagery (e.g., Pentecost) weeks out of liturgical season; it breaks Contueri's implicit calendar-awareness.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="sanity">10. What Changed in Sanity Content (so you do not reference retired pieces)</h2>
+
+<div class="panel-warn">
+<ul>
+  <li><strong>BTG (original 7-day) RETIRED.</strong> The original Beauty, Truth &amp; Goodness journey was archived. <strong>BTG II</strong> (the 3-day intro voice rewrite from <code>BTG-3Day-Voice-Rewrite.html</code>) is now the canonical Beauty Truth &amp; Goodness journey. Onboarding now links to BTG II. Do not reference the original BTG days.</li>
+  <li><strong>Light journey UNPUBLISHED.</strong> Needs Lectio and encounterNote rewrites before re-publishing. Content items still in Sanity; the journey doc is set to <code>isPublished: false</code>.</li>
+  <li><strong>Pre-Holy Week P&amp;P UNPUBLISHED.</strong> Days before Holy Week from the original launch arc are unpublished so testers are not bogged down by stale content. Holy Week onward stays published.</li>
+  <li><strong>9 P&amp;P deletions in the June 16 to July 11 window.</strong> Days that did not meet the editorial bar were removed. The contentItems were deleted along with the dailyPrompts where no other inbound refs remained. Reference content via the audit doc at <code>~/Documents/CONTUERI-PP-Audit-June16-July11.html</code> for the full list of what was kept vs cut.</li>
+  <li><strong>RSV-2CE scripture audit.</strong> 18+ P&amp;P scripture references were verified or corrected against RSV-2CE. 4 mis-filed philosophy quotes were moved out of the Scripture / Primary Text field into the Philosophy Quote field. Going forward, every Lectio entry must respect the four-field structure (Philosophy Quote + Philosophy Attribution + Scripture / Primary Text + Scripture Attribution).</li>
+  <li><strong>Sacred Heart Day 1 (June 12) rebuilt.</strong> Rafael Salas <em>Sacred Heart of Jesus</em> (1874). Hook: García Moreno consecrated Ecuador to the Sacred Heart on March 25, 1874, was assassinated August 6, 1875, last words "Dios no muere." US Bishops consecrated America June 11, 2026, first in 250 years. See content plan for full detail.</li>
+  <li><strong>Webb Deep Field / Lemaître story.</strong> The Belgian priest who introduced the Big Bang theory and was uncredited at the time. Replaced an earlier framing that used the wrong angle.</li>
+</ul>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="thinker">11. Thinker Artwork Rule Reaffirmed</h2>
+
+<div class="rule">
+  <div class="rule-name">Do not use a portrait of the thinker as the artwork</div>
+  <p>For <code>thinker</code> content type, do NOT use a portrait of the thinker as the image unless (a) there is no alternative or (b) the portrait is itself a historically significant artwork (e.g., Holbein's Thomas More).</p>
+  <p>Prefer artwork that embodies the thinker's idea:</p>
+  <ul>
+    <li>Hildegard's viriditas concept rendered in a botanical or landscape image</li>
+    <li>Aquinas's "integrity, consonance, radiance" carried by Crivelli's Saint Thomas Aquinas (which IS itself an artwork that embodies the criteria)</li>
+  </ul>
+  <p>The Cowork-documented "thinker should always have a picture of the thinker" is incorrect; that direction is the OPPOSITE of what Sheri trained Cowork on.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="politicians">12. No Modern Politicians in User-Facing Content</h2>
+
+<div class="rule">
+  <div class="rule-name">Post-1990 politicians are too polarizing</div>
+  <p>Biden, Trump, Obama, etc. are too polarizing for Contueri's all-Christians-and-Christian-curious audience. Naming any of them in P&amp;P, Journey, or splash content closes more doors than it opens.</p>
+  <p><strong>Use neutral attribution instead:</strong></p>
+  <ul>
+    <li>"scientists" rather than naming a specific political figure</li>
+    <li>"institutions" rather than naming a contemporary administration</li>
+    <li>Drop the framing entirely if it requires a political reference to land</li>
+  </ul>
+  <p>This rule applies to user-facing content only. Internal session notes and editorial planning can reference whomever is relevant.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="metaphors">13. Metaphor Restraint</h2>
+
+<div class="rule">
+  <div class="rule-name">Do not over-use metaphors for dramatic effect</div>
+  <p>Empty "window into the soul," "doorway into..." patterns are AI tells. They sound poetic but say nothing.</p>
+  <p><strong>Metaphor must do work prose cannot.</strong> If the metaphor is decoration rather than load-bearing, cut it.</p>
+  <p>Test: would removing the metaphor lose anything the reader needs? If no, the metaphor was decoration.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="planning">14. New: planningItem Surface</h2>
+
+<p>A new Sanity document type called <code>planningItem</code> was built and seeded with the 16 journey planning items (Three Ways, OOTSP, Perelandra, THS). It is the pre-production layer for content research: ideas, inspiration links, action items, claudeNotes for Claude, sheriComments for Sheri.</p>
+
+<p><strong>Full details and workflow:</strong> see the companion brief <code>~/Documents/CONTUERI-Cowork-Brief-Planning-Surface-2026-06-17.html</code>.</p>
+
+<p>Short version for the Cowork session: when researching new content, drop the angle into <code>subjectNotes</code>, drop links to podcasts / articles / Pinterest / candidate artwork into <code>inspirationLinks</code> (each link gets a kind tag + note), drop citations into <code>sourceMaterial</code>. Use the action items array to flag what Sheri or Claude needs to do next.</p>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="pointers">Pointers</h2>
+
+<ul>
+  <li>Canonical source of truth: <code>kallos-app/CLAUDE.md</code>, Editorial Principles + Voice Rules + Auditio Selection Criteria + Content Selection Rules sections.</li>
+  <li>Master Cowork briefing (do not skip on cold sessions): <code>kallos-app/content-docs/KALLOS-Cowork-Briefing.html</code>.</li>
+  <li>P&amp;P content guide: <code>kallos-app/content-docs/KALLOS-Content-Guide-Pause-Ponder.html</code>.</li>
+  <li>7-Day Journey content guide: <code>kallos-app/content-docs/KALLOS-Content-Guide-7Day-Journey.html</code>.</li>
+  <li>Content usage log (mandatory pre-check): <code>kallos-app/content-docs/KALLOS-Content-Usage-Log.html</code>.</li>
+  <li>30-day P&amp;P plan, system of record: <code>~/Documents/CONTUERI-PP-30Day-Content-Plan-v3.html</code>.</li>
+  <li>P&amp;P audit, June 16 to July 11: <code>~/Documents/CONTUERI-PP-Audit-June16-July11.html</code>.</li>
+  <li>Journey audit: <code>~/Documents/CONTUERI-Journey-Audit-2026-06-11.html</code>.</li>
+  <li>Companion brief, planningItem surface: <code>~/Documents/CONTUERI-Cowork-Brief-Planning-Surface-2026-06-17.html</code>.</li>
+</ul>
+
+<div class="footer-meta">
+  Contueri, Cowork Brief, Editorial Rules Sharpened, June 17, 2026, claude code
+</div>
+
+</body>
+</html>

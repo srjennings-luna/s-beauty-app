@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contueri Journey Writing, Practical Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@400;500;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #fdf6e8;
+    --parchment-dark: #ede0c4;
+    --ink: #1a1410;
+    --ink-soft: #3d2f1f;
+    --ink-faint: #8a7560;
+    --gold: #C19B5F;
+    --sage: #4a7a62;
+    --espresso: #16110d;
+    --wine: #8b4557;
+  }
+
+  body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.75;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  .eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-faint);
+    margin-bottom: 28px;
+  }
+
+  .gold-rule {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 32px 0;
+  }
+
+  h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 52px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--parchment-dark);
+  }
+
+  h3 {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: 22px;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+
+  h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+
+  p { margin-bottom: 14px; color: var(--ink-soft); }
+  strong { color: var(--ink); font-weight: 600; }
+
+  ul, ol { margin: 6px 0 18px 22px; }
+  li { margin-bottom: 8px; color: var(--ink-soft); }
+
+  code {
+    font-family: 'SF Mono', Consolas, monospace;
+    font-size: 13px;
+    background: var(--parchment-dark);
+    color: var(--ink);
+    padding: 1px 6px;
+    border-radius: 2px;
+  }
+
+  .tldr {
+    background: var(--espresso);
+    color: var(--parchment);
+    padding: 24px 28px;
+    border-left: 4px solid var(--gold);
+    margin: 28px 0;
+  }
+  .tldr p { color: var(--parchment); margin-bottom: 8px; }
+  .tldr p:last-child { margin-bottom: 0; }
+  .tldr strong { color: var(--gold); }
+
+  .step-box {
+    background: white;
+    border: 1px solid var(--parchment-dark);
+    border-left: 3px solid var(--sage);
+    padding: 18px 22px;
+    margin: 14px 0;
+  }
+  .step-box .step-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 4px;
+  }
+
+  .checklist {
+    background: var(--parchment-dark);
+    padding: 16px 22px;
+    margin: 14px 0;
+  }
+  .checklist h4 { margin-top: 0; color: var(--ink); }
+  .checklist ul {
+    margin: 0 0 0 4px;
+    list-style: none;
+  }
+  .checklist li {
+    padding: 6px 0 6px 28px;
+    position: relative;
+    margin-bottom: 0;
+    font-size: 14px;
+  }
+  .checklist li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid var(--ink);
+    background: white;
+  }
+
+  .draft {
+    background: white;
+    border: 1px solid var(--parchment-dark);
+    padding: 22px 26px;
+    margin: 16px 0;
+    font-style: italic;
+  }
+  .draft .draft-label {
+    font-style: normal;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+
+  .annotation {
+    background: #fef9ef;
+    border-left: 3px solid var(--gold);
+    padding: 10px 18px;
+    margin: 8px 0 8px 24px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+  .annotation .ann-label {
+    font-style: normal;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .bad-draft {
+    background: #fbe9ec;
+    border-left: 3px solid var(--wine);
+    padding: 14px 18px;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #5a2530;
+    font-style: italic;
+  }
+  .bad-draft .bad-label {
+    font-style: normal;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--wine);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .good-draft {
+    background: #e8f0ea;
+    border-left: 3px solid var(--sage);
+    padding: 14px 18px;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #1f3a2a;
+    font-style: italic;
+  }
+  .good-draft .good-label {
+    font-style: normal;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sage);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .toc {
+    background: var(--parchment-dark);
+    padding: 18px 22px;
+    margin: 24px 0 40px;
+  }
+  .toc h4 { margin-top: 0; margin-bottom: 10px; color: var(--ink); }
+  .toc ol { margin: 0 0 0 22px; }
+  .toc li { margin-bottom: 4px; font-size: 14px; }
+  .toc a { color: var(--ink-soft); text-decoration: none; }
+  .toc a:hover { color: var(--gold); }
+
+  .footer-meta {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--parchment-dark);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Contueri, Practical Companion to the Frameworks Doc</div>
+<h1>Journey Writing Practical Guide</h1>
+<div class="subtitle">A working document for any writer (human or AI) producing their first Contueri piece. Pairs with the Journey Arc Frameworks doc, which holds the conceptual reference.</div>
+<div class="gold-rule"></div>
+
+<div class="tldr">
+  <p><strong>What this guide is for.</strong> The Journey Arc Frameworks doc tells you WHAT the frameworks are and WHY they work. This guide tells you HOW to use them: how to research, how to draft Day 1, how to draft Day N, how to diagnose what is going wrong, and how to onboard if you have never written Contueri content before.</p>
+  <p>Read this guide alongside the Frameworks doc. Keep CLAUDE.md open in a third tab for the voice rules. The three documents are designed to work together.</p>
+  <p style="font-style: italic; color: rgba(253,246,232,0.7); font-size: 13px; border-top: 1px solid rgba(193,155,95,0.4); padding-top: 14px; margin-top: 16px;">A note on the prose in this guide. The voice rules that govern Contueri content also govern this document, because a writer reading it will model on what they see. No em dashes, no punchy parallel restatement, no fragment stacks, no zoom-out closers, no summary-closer AI tells. If you spot a violation, flag it.</p>
+</div>
+
+<div class="toc">
+  <h4>Contents</h4>
+  <ol>
+    <li><a href="#prereqs">Before You Start: the three things to have in hand</a></li>
+    <li><a href="#picking">Picking Your Framework</a></li>
+    <li><a href="#research">Researching for Your Framework</a></li>
+    <li><a href="#day1">Drafting Day 1</a></li>
+    <li><a href="#dayN">Drafting Day N</a></li>
+    <li><a href="#diagnostic">The Diagnostic Checklist</a></li>
+    <li><a href="#worked">Worked Example, One P&P from Scratch</a></li>
+    <li><a href="#onramps">Onramps for First-Time Writers</a></li>
+  </ol>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="prereqs">1. Before You Start: the three things to have in hand</h2>
+
+<p>Do not open a draft until you have these three things written down. Most failed Contueri drafts fail because the writer skipped one of them and started writing anyway.</p>
+
+<div class="step-box">
+  <div class="step-num">Prerequisite 1</div>
+  <h3>The central idea, in one sentence</h3>
+  <p>The central idea is the conviction the reader will assemble for themselves by the end of the piece. It is not the topic ("Justin Martyr") and not the subject ("the apostle John"). It is the thesis the journey is built to convey, stated as a declarative sentence the reader will arrive at without your help.</p>
+  <p>If you cannot compress the central idea to a single sentence, it is not sharp enough yet. Go research more, talk to Sheri, sit with it. Do not start drafting.</p>
+  <div class="checklist">
+    <h4>Examples of central ideas that work:</h4>
+    <ul>
+      <li>The pre-Christian myths were grasping at something real that Christianity completed.</li>
+      <li>Beauty, truth, and goodness are three faces of one reality.</li>
+      <li>15th-century viewers had visual literacy modern viewers have lost.</li>
+      <li>The medieval cosmos was a richer picture than the textbook caricature.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step-box">
+  <div class="step-num">Prerequisite 2</div>
+  <h3>The framework, picked</h3>
+  <p>Six frameworks exist (see the Journey Arc Frameworks doc). Run the central idea through the six decision questions. Pick the one that fits. If two fit, pick the dominant frame and note the second as a layer underneath.</p>
+  <p>The framework determines the shape of your draft. A central idea forced into the wrong framework will fight you the whole way.</p>
+</div>
+
+<div class="step-box">
+  <div class="step-num">Prerequisite 3</div>
+  <h3>Research notes in hand, not in tabs</h3>
+  <p>A Contueri piece typically needs three layers of research: the surface story (what most readers already know), the period context (what an informed contemporary would have understood), and the verified primary sources (quotes, dates, named figures). All three need to be in your notes before you start drafting, not still in browser tabs you mean to come back to.</p>
+  <p>How much time this takes varies by content type. A Tier 1 famous subject (Aquinas, Caravaggio, Easter) may take 2-4 hours of research because the bar for surprise is high. A Tier 3 unfamiliar subject (Hildegard's antiphons, Rabanus Maurus, the Alhambra craftsmen) may take 1-2 hours because basic identity already carries surprise. Plan for the upper end.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="picking">2. Picking Your Framework</h2>
+
+<p>The Journey Arc Frameworks doc has the full decision tree. Here is the same tree compressed to a single page with worked examples of how the choice plays out.</p>
+
+<div class="step-box">
+  <div class="step-num">The six questions, in order</div>
+  <ol>
+    <li>Is the central idea about spiritual development? → <strong>The Ascent</strong></li>
+    <li>Is the central idea a conviction that needs evidence? → <strong>The Argument</strong></li>
+    <li>Is the central idea carried by a character's transformation? → <strong>The Quest</strong></li>
+    <li>Is the central idea anchored to the church calendar? → <strong>The Season</strong></li>
+    <li>Is the central idea immersion in one thinker? → <strong>The Single Mind</strong></li>
+    <li>Does the central idea overturn a common assumption? → <strong>The Discovery</strong></li>
+  </ol>
+  <p>First yes wins. If you answered yes to more than one, pick the dominant frame.</p>
+</div>
+
+<h3>Worked decision 1: "Augustine's restless heart finds rest in God."</h3>
+<p>Question 1: spiritual development? Yes. The restless heart finding rest is the classic purgative/illuminative/unitive arc. <strong>The Ascent</strong>.</p>
+
+<h3>Worked decision 2: "The 15th-century owl in Bosch's conjurer's basket was visible moral commentary modern viewers cannot read."</h3>
+<p>Question 1: spiritual development? No. Question 2: conviction needing evidence? Partly, but the evidence is one specific decoded image, not a thesis built across multiple witnesses. Question 6: overturns a common assumption? Yes, because the modern viewer assumes the owl is decoration. <strong>The Discovery</strong>.</p>
+
+<h3>Worked decision 3: "Justin Martyr recognized that the pre-Christian philosophers were tracking what Christ would later reveal."</h3>
+<p>Question 1: spiritual development? Not really. Question 2: conviction needing evidence? Yes, because multiple pre-Christian thinkers (Plato, Heraclitus, the Stoics, Cicero) need to be assembled as witnesses. Question 3: character's transformation? Justin himself was transformed, but the engine of the piece is the philosophers, not Justin's biography. <strong>The Argument</strong> wins, with a touch of The Single Mind underneath (Justin as the framing voice).</p>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="research">3. Researching for Your Framework</h2>
+
+<p>Different frameworks demand different research. Spending an hour researching the wrong layer is the most common failure mode for Contueri content.</p>
+
+<h3>If you picked The Ascent</h3>
+<ul>
+  <li><strong>Primary:</strong> the stages of the contemplative tradition (Augustine, John of the Cross, Teresa of Avila, The Cloud of Unknowing).</li>
+  <li><strong>Period:</strong> what each stage felt like inside its century. Augustine in late Roman Africa is a different felt experience from Teresa in Counter-Reformation Spain. Surface the difference.</li>
+  <li><strong>Verification:</strong> exact quotes from primary texts, named editions, named translators. No "commonly attributed" sources.</li>
+</ul>
+
+<h3>If you picked The Argument</h3>
+<ul>
+  <li><strong>Primary:</strong> the witnesses who each give evidence for your thesis from a different angle. Aim for variety in tradition, period, and content type.</li>
+  <li><strong>Period:</strong> what each witness was responding to in their own moment. The Council of Trent's Veni Creator did different work than the same hymn at a contemporary papal conclave.</li>
+  <li><strong>Verification:</strong> the strongest piece of evidence the case rests on. Verify it first. If it cannot be verified, the argument has no foundation.</li>
+</ul>
+
+<h3>If you picked The Quest</h3>
+<ul>
+  <li><strong>Primary:</strong> the character's own writings if any (Augustine's Confessions, Lewis's Surprised by Joy), the contemporary accounts written by people who knew them, the biographies that have stood the test of time.</li>
+  <li><strong>Period:</strong> what the character's world looked like, what assumptions they shared with their contemporaries, what made their transformation surprising in their own context.</li>
+  <li><strong>Verification:</strong> dates, places, named conversations. Generic biographical paragraphs will not carry the arc.</li>
+</ul>
+
+<h3>If you picked The Season</h3>
+<ul>
+  <li><strong>Primary:</strong> the liturgical texts of the season. Advent's O Antiphons. Lent's prefaces. Pentecost's sequence.</li>
+  <li><strong>Period:</strong> how the season was kept across history. Advent in the 4th century was a very different experience from Advent in the 21st.</li>
+  <li><strong>Verification:</strong> the dates, the readings, the prayers. RSV-2CE for scripture. Verified liturgical sources.</li>
+</ul>
+
+<h3>If you picked The Single Mind</h3>
+<ul>
+  <li><strong>Primary:</strong> the thinker's own works (in order: their best-known book, then a secondary work, then a passage that surprises). Read them, do not read summaries.</li>
+  <li><strong>Period:</strong> the questions of their century. Hildegard's visions need the medieval rule against women preaching to land. Aquinas's claritas needs the medieval debate about Aristotelian reception to land.</li>
+  <li><strong>Verification:</strong> direct quotations with edition and page numbers in your notes. Reception history (who picked them up, who pushed back, what Pope cited them when).</li>
+</ul>
+
+<h3>If you picked The Discovery</h3>
+<ul>
+  <li><strong>Primary:</strong> the modern assumption you are overturning. Surface it gently and accurately so the reader recognizes the picture they were holding.</li>
+  <li><strong>Period:</strong> the era in which the truer picture was visible. What did a 15th-century viewer of Bosch see that we do not? What did a 4th-century reader of Augustine understand that we miss?</li>
+  <li><strong>Verification:</strong> the iconographic, historical, or scientific source that authorizes the reframe. If the reframe is based on a contested art-historical claim, hedge appropriately.</li>
+</ul>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="day1">4. Drafting Day 1</h2>
+
+<p>The most common drafting mistake is starting at the beginning. The hook is not "the first thing you write." The hook is "the most important thing you write." Find it first.</p>
+
+<div class="step-box">
+  <div class="step-num">Step 1</div>
+  <h3>Find the hook first, before any other writing</h3>
+  <p>Read your research notes. Look for the one fact that made YOU pause: the surprising date, the named moment, the ironic reversal, the buried detail. That fact is your hook candidate.</p>
+  <p>Run the hook candidate through the Inklings test (see CLAUDE.md). Imagine reading it aloud to a literary gathering. Do they lean in and ask "wait, what?" If yes, you have a hook. If they nod politely and look away, the hook is not yet a hook. Go back to research.</p>
+  <p>Common failures at this step: leading with significance ("This is one of the most influential works of the Renaissance") instead of fact; using a generality ("the painting rewards slow looking") instead of a specific moment; choosing a hook that requires the reader to take your authority instead of recognizing the truth.</p>
+</div>
+
+<div class="step-box">
+  <div class="step-num">Step 2</div>
+  <h3>Write the curator note (3 to 5 sentences)</h3>
+  <p>The curator note is where the hook lives. Lead with the surprising fact. Write 3 to 5 sentences. Do not theologize the fact (theology is for the context). Do not summarize the artwork (the image speaks for itself).</p>
+  <p>The curator note has to survive being read alone, on the P&P card, with no surrounding context. If a reader saw only the curator note, would they want to click in? If no, you are not done.</p>
+</div>
+
+<div class="step-box">
+  <div class="step-num">Step 3</div>
+  <h3>Write the context (the depth the curious reader asks for after they lean in)</h3>
+  <p>The context delivers what the curator note opened. It is NOT a recap of the hook. It is the further depth a curious literary mind would ask for after hearing the hook.</p>
+  <p>Open with the concrete. A specific moment, a paradox, a question that destabilizes, a fact whose stakes are immediately visible. The Lewis register test governs: would Lewis have opened this paragraph in <em>Surprised by Joy</em> or <em>The Discarded Image</em>? If your opener reads as academic or devotional, rewrite.</p>
+  <p>Length follows quality, not paragraph count. Four to seven paragraphs is fine when each carries a specific moment, fact, or thread the reader cannot get elsewhere. Cut any paragraph that does not earn its place by delivering new information.</p>
+  <p>For Tier 3 unfamiliar figures, place the historical stakes early. Hildegard's century-long influence comes BEFORE the viriditas analysis. Aquinas's place in Catholic education comes BEFORE the three-criteria-for-beauty argument. The stakes can be a single sentence; what matters is arrival.</p>
+</div>
+
+<div class="step-box">
+  <div class="step-num">Step 4</div>
+  <h3>Pair the Lectio</h3>
+  <p>Lectio is two voices arriving at the same truth from different directions. Philosophy goes first (familiar entry), scripture second (the discovery).</p>
+  <ul>
+    <li>Philosophy: one line, modern accessible translation, by Plato, Aristotle, Marcus Aurelius, Seneca, Cicero, Heraclitus, or another verified ancient.</li>
+    <li>Scripture: passage in RSV-2CE, not NIV or ESV.</li>
+  </ul>
+  <p>The pair must connect specifically to what the user just encountered, not to the general theme. The test: does this pairing make THIS specific content unlock in a new way? A pairing that could appear in any Contueri day is the wrong pairing for THIS day.</p>
+</div>
+
+<div class="step-box">
+  <div class="step-num">Step 5</div>
+  <h3>Pick the Auditio (mood-primary)</h3>
+  <p>The question is "what does the meditation FEEL like, and does this music create or hold that feeling?" The question is NOT "does this music describe this subject?"</p>
+  <p>Recommend a primary sacred or classical option, an alternative from a different register (folk, ambient, contemporary, world), and a Suno or Udio prompt as fallback. Three options total.</p>
+  <p>Banned defaults: Pärt's <em>Spiegel im Spiegel</em>, generic "Gregorian chant" without a specific named piece. Diversify across era, genre, language, composer, and mood register over any 7-day stretch.</p>
+</div>
+
+<div class="step-box">
+  <div class="step-num">Step 6</div>
+  <h3>Write the Actio (specific action, not disposition)</h3>
+  <p>The actio names a specific action: a place, a person, a physical object, a time of day. Not a feeling, not a disposition, not an attitude.</p>
+  <p>Bad: "Let beauty find you today." Good: "Sit in front of a window before 9am. Stay for one minute before you open your phone."</p>
+</div>
+
+<div class="step-box">
+  <div class="step-num">Step 7</div>
+  <h3>Let the title emerge from the draft</h3>
+  <p>Read your draft. What is the line YOU paused on as you wrote it? The line that made the piece feel like it had arrived?</p>
+  <p>That line, compressed, is your title candidate. Run it through the four title tests (subject test, assumption test, specificity test, shape test). Fail any, throw it out, find a different line. Do not generate a title separately from the draft. The title lives inside the draft.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="dayN">5. Drafting Day N (Days 2 through 7)</h2>
+
+<p>Days 2 onward follow the same procedure as Day 1, but with the arc as the new constraint. Each day has to stand on its own AND advance the framework AND not repeat the prior days.</p>
+
+<div class="step-box">
+  <div class="step-num">Step A</div>
+  <h3>Check the framework stage</h3>
+  <p>If you picked The Ascent, where are you in the arc? Day 2 is still purgative (most likely), Day 4 is the illuminative shift, Day 7 is unitive. The day's content needs to do the work of its stage, not float free of the framework.</p>
+  <p>If the day does not match its stage, decide: is the day in the wrong slot, or is the central idea breaking out of the framework? Re-pick the framework if needed. Do not force the day to perform a stage it cannot perform.</p>
+</div>
+
+<div class="step-box">
+  <div class="step-num">Step B</div>
+  <h3>Check non-repeat against the prior day</h3>
+  <p>Read yesterday's draft. Then read today's draft. Do they share:</p>
+  <ul>
+    <li>The same content type? (Two days of Sacred Art in a row is a flag.)</li>
+    <li>The same opener shape? (Two "Location. Year." scenes in a row is the AI tell.)</li>
+    <li>The same composer or work in Auditio? (Even different Pärt pieces back-to-back is a flag.)</li>
+    <li>The same closer pattern? (Two summary-closers is a stack.)</li>
+  </ul>
+  <p>If any of these are true, change today's draft. The cumulative shape of the launch window matters more than any single day's elegance.</p>
+</div>
+
+<div class="step-box">
+  <div class="step-num">Step C</div>
+  <h3>Check that the arc is moving</h3>
+  <p>By the end of Day N, is the reader closer to the unstated conclusion than they were at the start of Day N? If yes, the day is doing its work. If the reader is in the same place, the day is filler.</p>
+  <p>Filler is the deepest journey failure. A 7-day arc with one filler day reads worse than a 5-day arc with no filler.</p>
+</div>
+
+<div class="step-box">
+  <div class="step-num">Step D</div>
+  <h3>Run the same Day 1 procedure for the rest of the day</h3>
+  <p>Steps 1 through 7 from the Day 1 procedure apply to every day. The arc context just sets the boundaries.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="diagnostic">6. The Diagnostic Checklist</h2>
+
+<p>When the draft feels off but you cannot name why, run through this list. Each item names a specific failure mode and how to diagnose it.</p>
+
+<div class="checklist">
+  <h4>Hook diagnostic</h4>
+  <ul>
+    <li>The hook names the subject ("Justin Martyr") instead of the angle ("They Were Early"). Rewrite the title and the curator note's lead.</li>
+    <li>The hook is a significance claim ("one of the most influential...") instead of a specific fact. Find a specific fact in your notes.</li>
+    <li>The hook is a generality the reader could supply themselves ("the painting rewards slowness"). Replace with information the reader does not have.</li>
+    <li>The hook would not survive the Inklings test. Go back to research.</li>
+  </ul>
+</div>
+
+<div class="checklist">
+  <h4>Context diagnostic</h4>
+  <ul>
+    <li>Hook and context repeat the same fact in different words. The context must deliver new information that the hook did not.</li>
+    <li>Context opens with analysis ("This painting demonstrates the artist's mastery of chiaroscuro"). Replace with a concrete moment, a paradox, or a destabilizing claim.</li>
+    <li>Context opens with the "Location. Year. Subject does X." fragment template. Vary the opener form.</li>
+    <li>Context names a Tier 3 unfamiliar figure without giving the stakes first. Add a sentence of historical context near the top.</li>
+  </ul>
+</div>
+
+<div class="checklist">
+  <h4>Closing diagnostic</h4>
+  <ul>
+    <li>The closing sentence summarizes what the prior sentences already proved. Cut it. The paragraph ends where the last delivering sentence ends.</li>
+    <li>The closing uses the punchy parallel restatement pattern ("He did not mean X. He meant Y."). Rewrite as a single statement.</li>
+    <li>The closing zooms out to make a sweeping pronouncement. Test: would a journalist cut this as self-conscious? Probably yes.</li>
+    <li>The closing states the conclusion the user was supposed to assemble. Cut the statement; trust the reader.</li>
+  </ul>
+</div>
+
+<div class="checklist">
+  <h4>Title diagnostic</h4>
+  <ul>
+    <li>The title names the subject. Throw out, find an angle.</li>
+    <li>The title is abstract intrigue without specificity. Throw out, ground it in a fact, quote, moment, or claim.</li>
+    <li>The title shares its sentence structure with another title in the launch window. Throw out, vary the form.</li>
+    <li>The title was generated separately from the draft. Throw out, find a line inside your own writing.</li>
+  </ul>
+</div>
+
+<div class="checklist">
+  <h4>Auditio diagnostic</h4>
+  <ul>
+    <li>The recommendation is generic "Gregorian chant" without a specific piece. Name a specific piece, schola, and recording.</li>
+    <li>The recommendation is Pärt's <em>Spiegel im Spiegel</em>. Replace with a different Pärt piece or a different composer entirely.</li>
+    <li>Only one option is offered. Add the alternative register and the Suno or Udio prompt.</li>
+    <li>The piece is the same as a piece already used in the launch window. Replace.</li>
+  </ul>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="worked">7. Worked Example: One P&P from Scratch</h2>
+
+<p>This section walks through producing a complete Pause &amp; Ponder piece from scratch using The Discovery framework. The piece is hypothetical, written here to demonstrate process, not for publication.</p>
+
+<h3>Topic</h3>
+<p>Hieronymus Bosch's painting <em>The Conjurer</em> (c. 1502) shows a street magician performing for a crowd. In the conjurer's basket on the table, a small owl is peeking out. 15th-century Flemish viewers would have decoded the owl as a symbol of those who prefer darkness over truth. Modern viewers see decoration.</p>
+
+<h3>Central idea (one sentence)</h3>
+<p class="draft">15th-century viewers had visual literacy modern viewers have lost; what we see as decoration was speaking to them.</p>
+
+<h3>Framework choice</h3>
+<p>Question 1 (spiritual development): no. Question 2 (conviction needing evidence): partly, but the case is built around a single artwork, not a multi-witness argument. Question 6 (overturns a common assumption): yes. The modern viewer assumes the owl is decoration. The reframe is that the owl was moral commentary. <strong>The Discovery</strong>.</p>
+
+<h3>Research notes gathered</h3>
+<ul>
+  <li>Bosch, <em>The Conjurer</em>, oil on panel, c. 1502, Musée Municipal, Saint-Germain-en-Laye.</li>
+  <li>Composition: a street conjurer plays a shell game while an accomplice picks the pocket of the entranced mark.</li>
+  <li>Owl in the basket: small, nearly hidden, watching from beside the conjurer.</li>
+  <li>Owl iconography in 15th-century Flemish painting: a creature of the night, associated with those who prefer darkness over truth. Drawn from medieval bestiary tradition. The owl was also a witch's familiar in popular imagination.</li>
+  <li>Bosch's broader work: filled with similar embedded moral commentary. The conjurer here represents the deceiver; the entranced mark represents the willing fool; the owl is the editorial signature.</li>
+  <li>The Latin tag often associated with this iconography: <em>amat tenebras</em> (he loves the darkness), echoing John 3:19.</li>
+</ul>
+
+<h3>The draft, step by step</h3>
+
+<h4>Step 1 and 2: Find the hook, write the curator note</h4>
+<p>The line in the notes that made me pause: "Owl in the basket... a creature of the night, associated with those who prefer darkness over truth." That is the hook.</p>
+
+<div class="draft">
+  <div class="draft-label">Curator Note (3 to 5 sentences)</div>
+  <p>The man in the basket beside Bosch's conjurer is a small owl, peering out from between the props. In 15th-century Flemish painting, an owl was the editorial signature for someone who prefers darkness over truth. The street magician is the deceiver, the entranced mark is the willing fool, and the owl is the painter's comment on the whole scene. Modern viewers walk past the owl; the contemporary viewer saw it first.</p>
+</div>
+
+<div class="annotation">
+  <span class="ann-label">Why this works</span>
+  Leads with the surprising fact (owl as moral signature). No theologizing ("Bosch is teaching us..."). No significance claim ("one of Bosch's most layered paintings..."). The Inklings test: a literary gathering would lean in at "the owl is the editorial signature." The curator note can be read standalone and still trigger curiosity.
+</div>
+
+<h4>Step 3: Write the context</h4>
+
+<div class="draft">
+  <div class="draft-label">Context (open with the concrete)</div>
+  <p>Hieronymus Bosch painted <em>The Conjurer</em> around 1502 in 's-Hertogenbosch. The composition is straightforward at first glance: a street magician at a table, a few cups, a shell game, a crowd watching. The conjurer holds a small ball between thumb and finger and offers it to the mark. The mark leans in, mouth slightly open, eyes fixed on the ball. Behind the mark, an accomplice has already taken the purse from his belt.</p>
+  <p>A 15th-century viewer in Flanders did not see a genre scene. They saw a moral diagram, every figure placed for a reason. The conjurer was the type of the deceiver, drawn from a long tradition of moralizing imagery about street performers and their assistants. The mark was the willing fool, drawn from another tradition about credulity. The accomplice was the world's actual operator, the one doing the real work while the eyes were elsewhere.</p>
+  <p>The owl in the basket would have been the sharpest detail. Owls in Flemish iconography of the period carried specific meaning that any literate viewer could decode without instruction. The owl was the creature of the night, the bird that lived where Christ-as-light could not reach. In medieval bestiary tradition the owl loved darkness and fled the dawn. The Latin tag often associated with this symbolism, <em>amat tenebras</em>, comes straight from John's gospel: "the light hath come into the world, and men loved darkness rather than light, because their deeds were evil."</p>
+  <p>The owl was not a decoration. It was a footnote, written in a visual language modern viewers do not read. Bosch placed it where he placed it because his audience would catch the citation. The conjurer is deceiving the crowd; the crowd loves the darkness; the owl is the painter's verdict.</p>
+  <p>Elizabeth Lev's <em>How Catholic Art Saved the Faith</em> argues that recovering this kind of visual literacy is one of the deepest tasks for the modern viewer of medieval and Renaissance art. Most of what we walk past in galleries was speaking. We have stopped listening.</p>
+</div>
+
+<div class="annotation">
+  <span class="ann-label">Why this works</span>
+  Opens with the concrete (composition, the moment of the ball). The stakes paragraph (15th-century viewers saw a moral diagram) arrives in paragraph 2, early enough to ground the analysis that follows. The Latin tag and the John citation deliver the verifiable specificity. The closing paragraph names the broader stakes (visual literacy recovery) without stating the conclusion the reader is supposed to assemble (which is that the gallery is still speaking and we should learn to listen).
+</div>
+
+<h4>Step 4: Pair the Lectio</h4>
+
+<div class="draft">
+  <div class="draft-label">Lectio Pairing</div>
+  <p><strong>Philosophy:</strong> "All men by nature desire to know." (Aristotle, <em>Metaphysics</em> Book I)</p>
+  <p><strong>Scripture (RSV-2CE):</strong> "And this is the condemnation, that the light is come into the world, and men loved darkness rather than light, because their deeds were evil." (John 3:19)</p>
+</div>
+
+<div class="annotation">
+  <span class="ann-label">Why this works</span>
+  Aristotle names the natural desire for knowledge. John names the specific human refusal that turns away from light. The pair lands the framework of the piece (the owl loves the darkness) without restating it. The reader makes the connection.
+</div>
+
+<h4>Step 5: Pick the Auditio</h4>
+
+<div class="draft">
+  <div class="draft-label">Auditio (three options)</div>
+  <p><strong>Primary:</strong> "Lux Aeterna" from the Requiem mass, plainchant setting from the Solesmes Abbey. Sourceable from gregorian-chant-hymns.com. The mood is light asserting itself against darkness, a verbal-and-musical answer to the painting's question.</p>
+  <p><strong>Alternative register:</strong> "Suzanne" by Leonard Cohen, the acoustic version. A meditation on a different kind of attention to ordinary detail, by a Jewish writer who knew his New Testament. Public Spotify but also available on Cohen's official YouTube channel.</p>
+  <p><strong>AI prompt (Suno or Udio):</strong> <code>Slow choral, female voices, Latin chant style, light against darkness, cathedral reverb, contemplative</code></p>
+</div>
+
+<h4>Step 6: Write the Actio</h4>
+
+<div class="draft">
+  <div class="draft-label">Actio (specific action)</div>
+  <p>Pick one painting hanging in a room you walk through this week, at work, at home, in a friend's hallway. Stand in front of it for one minute before you walk past. Ask what the painter put in the corner that you have never noticed.</p>
+</div>
+
+<div class="annotation">
+  <span class="ann-label">Why this works</span>
+  Names a specific action (stand in front of a painting), a time (this week), a place (a room you walk through), a duration (one minute), and a question. Not "let beauty find you today." Not "practice attentive seeing." Concrete.
+</div>
+
+<h4>Step 7: Title (let it emerge from the draft)</h4>
+
+<p>Reading back the draft, the line I paused on was "the owl is the painter's verdict." That has the angle, not the subject. Test against the four checks:</p>
+<ul>
+  <li><strong>Subject test:</strong> does it name the subject (Bosch, the owl, the painting)? It names the owl, but as the actor in a verdict rather than as the topic. Passes.</li>
+  <li><strong>Assumption test:</strong> can the user finish "I know what this is going to be about"? No. They have to ask what the verdict is and why an owl is rendering it. Passes.</li>
+  <li><strong>Specificity test:</strong> is it specific or abstract? "Verdict" is specific to the legal/moral act of judgment. Passes.</li>
+  <li><strong>Shape test:</strong> does it share form with another title in the window? Let me check the prior 30 days of P&P titles. No "X is Y's verdict" shape elsewhere. Passes.</li>
+</ul>
+
+<div class="draft">
+  <div class="draft-label">Final title</div>
+  <p style="font-size: 22px; font-family: 'EB Garamond', serif; font-style: italic; color: var(--ink);">"The Painter's Verdict"</p>
+</div>
+
+<div class="annotation">
+  <span class="ann-label">Why this works</span>
+  Three words. Carries the angle without naming subject. Triggers "wait, whose verdict on what?" which is the click signal. Survived the four tests on its first attempt because it came from inside the draft, not from a separate title-brainstorming session.
+</div>
+
+<h3>What this example demonstrates</h3>
+<p>The whole P&P took about three hours of focused work after the research was in hand. Most of that was in writing the context (the deepest layer of the piece) and verifying the Latin tag against the John citation. The hook, the actio, and the title were each found inside the existing material rather than generated separately, which is the move that prevents the AI tells from creeping in.</p>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="onramps">8. Onramps for First-Time Writers</h2>
+
+<p>If you have never written Contueri content before, do these three short exercises before drafting your first real piece. Each takes about thirty minutes.</p>
+
+<div class="step-box">
+  <div class="step-num">Exercise 1</div>
+  <h3>Read three published P&P pieces and identify their parts</h3>
+  <p>Open any three days from the existing 30-day P&P launch window in Sanity Studio. For each, write down on paper:</p>
+  <ul>
+    <li>The central idea (the unstated conclusion the user is supposed to assemble).</li>
+    <li>The framework you think it uses.</li>
+    <li>The hook (the surprising fact in the curator note).</li>
+    <li>The enthymeme (the conclusion the writer left unstated).</li>
+  </ul>
+  <p>If you cannot name any of these four for a published piece, the published piece probably has a structural problem. Flag it to Sheri.</p>
+</div>
+
+<div class="step-box">
+  <div class="step-num">Exercise 2</div>
+  <h3>Rewrite a title using the four tests</h3>
+  <p>Pick one P&P from the existing content. Write five new title candidates for it using the four tests (subject, assumption, specificity, shape). Each candidate should come from inside the draft, not generated separately.</p>
+  <p>Compare your candidates to the published title. Which is stronger? Why? If yours is stronger, send it to Sheri and explain your reasoning. If theirs is stronger, name what makes theirs work.</p>
+</div>
+
+<div class="step-box">
+  <div class="step-num">Exercise 3</div>
+  <h3>Rewrite a weak hook</h3>
+  <p>Pick a hook that does not pass the Inklings test (look for hooks that read as significance claims or atmosphere rather than specific facts). Rewrite it using a specific surprising fact from the existing research. Show your work: the original, your rewrite, and one sentence on what changed and why.</p>
+</div>
+
+<p>After these three exercises, draft your first piece using the Day 1 procedure above. Send the draft to Sheri before you go further. The first piece is always the one with the most editorial back-and-forth; that is the apprenticeship.</p>
+
+<!-- ────────────────────────────────────────────── -->
+<h2>Pointer</h2>
+
+<ul>
+  <li><strong>This guide:</strong> <code>~/Documents/CONTUERI-Journey-Writing-Practical-Guide.html</code></li>
+  <li><strong>Conceptual reference:</strong> <code>~/Documents/CONTUERI-Journey-Arc-Frameworks.html</code></li>
+  <li><strong>Voice rules and editorial doctrine:</strong> <code>kallos-app/CLAUDE.md</code> (Editorial Principles section)</li>
+  <li><strong>Cowork brief on editorial rules:</strong> <code>~/Documents/CONTUERI-Cowork-Brief-Editorial-Rules-2026-06-17.html</code></li>
+  <li><strong>P&amp;P content guide:</strong> <code>kallos-app/content-docs/KALLOS-Content-Guide-Pause-Ponder.html</code></li>
+  <li><strong>Master Cowork briefing:</strong> <code>kallos-app/content-docs/KALLOS-Cowork-Briefing.html</code></li>
+</ul>
+
+<div class="footer-meta">
+  Contueri, Journey Writing Practical Guide, draft 1, June 18, 2026
+</div>
+
+</body>
+</html>

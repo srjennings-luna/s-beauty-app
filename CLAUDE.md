@@ -4,7 +4,14 @@ Read this at the start of every session. It contains all key product decisions, 
 
 **Rebrand note (May 2026):** The app is being renamed from KALLOS to **Contueri**. The codebase, onboarding screens, GitHub repo, Vercel project, and all docs still reference KALLOS — a full find/replace CC task is pending (see Manual Task 70). When reading existing code or docs, KALLOS = Contueri. When writing new code or docs, use Contueri.
 
-**Also read before any content, editorial, or product work:** `content-docs/KALLOS-Cowork-Briefing.html` (in this repo). It contains the product's purpose, the seven real people this is built for, what "earns its place" means, the Lectio quality standard, settled decisions not to relitigate, and how Sheri works as a PM. A session that skips this brief will produce generic output.
+**Read these four foundational editorial docs before any content, editorial, or product work** (in this order):
+
+1. `content-docs/CONTUERI-Journey-Arc-Frameworks.html` — the six named arc shapes (Ascent, Argument, Quest, Season, Single Mind, Discovery), the Aristotelian foundation (ethos/pathos/logos/enthymeme), how to pick a framework. Conceptual reference.
+2. `content-docs/CONTUERI-Journey-Writing-Practical-Guide.html` — companion to the Frameworks doc. Step-by-step procedure for producing a Contueri piece: prerequisites, research per framework, drafting Day 1 and Day N, diagnostic checklist, one full worked example, onramps for first-time writers.
+3. `content-docs/CONTUERI-Cowork-Brief-Editorial-Rules-2026-06-17.html` — concentrated recap of the editorial rules sharpened across the June 12-17 sweep, with the failures that drove each rule. Read this if you have not been in a Contueri session since June 12.
+4. `content-docs/CONTUERI-Cowork-Brief-Planning-Surface-2026-06-17.html` — how the Sanity planningItem schema works and the concept-to-publish workflow.
+
+After those four, the older `content-docs/KALLOS-Cowork-Briefing.html` is still useful for product purpose, the seven real users, what "earns its place" means, and how Sheri works as a PM. The Lectio standard and voice rules in that briefing are now SUPERSEDED by the four docs above; treat the older briefing as product context, not editorial doctrine. A session that skips the four foundational docs will produce generic or off-doctrine output.
 
 ---
 
@@ -37,6 +44,7 @@ Pinterest and Facebook still to claim (see Manual Tasks 71-72).
 - Prefer the Claude Code app tab over the terminal.
 - All future documents: HTML, not Word/docx. Sheri is not a Microsoft user.
 - Design direction reference: **Variant.com** — use for layout, spacing, and typography inspiration.
+- **Natural-language field names.** Schema field names, dropdown values, dashboard column labels, brief section names, status values, and anything Sheri will see in Studio or hear in conversation must match her natural language for the concept, not technical or AI-adjacent vocabulary. When proposing a new field, default to her wording. Example caught June 18: I named a field `journeyArcKey` (technical jargon I imported from how I was thinking about the sidebar config). Sheri would call it the journey name. The mismatch would have led to her referring to it one way, agents another way, and drift over time. Renamed to `journeyName`. Apply this filter to every new field proposal, dropdown enum, status label, or doc heading from now on.
 
 ### Estimating timelines for Sheri
 
@@ -63,9 +71,13 @@ Three calibration notes for any future session estimating effort or scheduling w
 
 | File | What it is |
 |------|-----------|
-| `content-docs/KALLOS-Cowork-Briefing.html` | **In repo** — master context brief (product purpose, seven users, Lectio standard, Sheri's working style) |
-| `content-docs/KALLOS-Content-Guide-7Day-Journey.html` | **In repo** — agent content instructions for 7-day Journey content |
-| `content-docs/KALLOS-Content-Guide-Pause-Ponder.html` | **In repo** — agent content instructions for Pause and Ponder daily prompts |
+| `content-docs/CONTUERI-Journey-Arc-Frameworks.html` | **In repo, FOUNDATIONAL (June 18, 2026)** — the six named arc shapes for Contueri content (Ascent, Argument, Quest, Season, Single Mind, Discovery) plus the Aristotelian foundation (ethos/pathos/logos/enthymeme). This is the conceptual editorial reference; the Practical Guide is its companion. Pairs with CLAUDE.md Editorial Principles. Holds itself to the same voice rules it teaches (no em dashes, no fragment stacks, no summary-closers). |
+| `content-docs/CONTUERI-Journey-Writing-Practical-Guide.html` | **In repo, FOUNDATIONAL (June 18, 2026)** — practical companion to the Frameworks doc. Step-by-step procedure: prerequisites, picking a framework, research checklist per framework, drafting Day 1 and Day N, the diagnostic checklist, one full worked example (Bosch's owl P&P), and three onramp exercises for first-time writers. Use this when you sit down to write. |
+| `content-docs/CONTUERI-Cowork-Brief-Editorial-Rules-2026-06-17.html` | **In repo, FOUNDATIONAL (June 17, 2026)** — concentrated recap of editorial rules sharpened across the June 12-17 sweep, with the failures that drove each rule. Cold sessions should read this for the why behind the rules. Sections: meta-rules, Aristotelian frame, hook, context, day title, AI rhetorical patterns to avoid, authority, research, Auditio, cross-surface checks, what changed in Sanity, thinker artwork, no modern politicians, metaphor restraint, planningItem surface. |
+| `content-docs/CONTUERI-Cowork-Brief-Planning-Surface-2026-06-17.html` | **In repo, FOUNDATIONAL (June 17, 2026)** — how the Sanity planningItem schema works and the concept-to-publish workflow. Field-by-field reference plus the per-stream workflow. Read this before adding planning items in Studio. |
+| `content-docs/KALLOS-Cowork-Briefing.html` | **In repo** — master context brief (product purpose, seven users, Sheri's working style). **Editorial doctrine in this brief is SUPERSEDED by the four foundational CONTUERI docs above.** Still useful for product context. |
+| `content-docs/KALLOS-Content-Guide-7Day-Journey.html` | **In repo, SUPERSEDED June 18, 2026** by `CONTUERI-Journey-Arc-Frameworks.html` + `CONTUERI-Journey-Writing-Practical-Guide.html`. Kept as historical reference; do not write Journey content from this guide. |
+| `content-docs/KALLOS-Content-Guide-Pause-Ponder.html` | **In repo, PARTIALLY SUPERSEDED June 18, 2026.** P&P field workflow (Sanity entry layout, field-by-field instructions) is still current. Voice and structure rules are SUPERSEDED by CLAUDE.md Editorial Principles + the four CONTUERI foundational docs. When in conflict, the newer docs win. |
 | `content-docs/KALLOS-MythJourney-v3.html` | **In repo** — active Myth Journey (7 days, all fields). Days 1-4 complete in Sanity (Day 4 entered April 22, 2026). Days 5-7 pending. |
 | `content-docs/KALLOS-JustinMartyr-PP-SanityEntry.html` | **In repo** — "They Were Early" Justin Martyr Pause and Ponder Sanity entry guide. April 12, 2026. All fields complete. Includes CTA linking to When Myth Became Fact journey. |
 | `content-docs/BTG-3Day-Voice-Rewrite.html` | **In repo** — Complete voice rewrite of the 3-day BTG journey. April 13, 2026. Treats BTG as a standalone playlist for users who have never heard the term "Transcendentals." Includes Journey Description Card, Lewis-register titles, all 3 days (Day 3 = Emmaus), Day 3 Journey Close (bridge to Myth Became Fact), quote flags (Newman/Dorothy Day), and priority Sanity entry order. Supersedes `BTG-3Day-Field-Revisions.html`. |
@@ -73,26 +85,19 @@ Three calibration notes for any future session estimating effort or scheduling w
 | `content-docs/KALLOS-Myth-Journey-Arc.html` | **In repo** — Myth Journey arc planning doc |
 | `content-docs/KALLOS-Content-Usage-Log.html` | **In repo** — content usage log (tracks audio, quotes, scripture used across all content) |
 | `content-docs/CONTENT-RULES.md` | **In repo** — condensed content rules reference |
-| `content-docs/KALLOS-CC-Audit-Brief.html` | **In repo** — Claude Code audit brief. READ THIS before any architecture or schema work. |
+| `content-docs/archive/KALLOS-CC-Audit-Brief.html` | **ARCHIVED June 18, 2026**. Claude Code audit brief from April 23. Completed. |
 | `content-docs/CONTUERI-CC-Explore-Library-Brief.html` | **In repo** — Claude Code build brief for Explore bubbles + Option E detail + Library subtitle polish. Shipped May 29, 2026. Includes Music bubble exclusion note. |
 | `content-docs/CONTUERI-CC-Polish-Brief.html` | **In repo** — Claude Code build brief for Explore + Library polish pass: physics tuning, toggle placement, safe-area, reduced-motion, list card borders. Shipped May 29, 2026. |
 | `content-docs/CONTUERI-CC-Rebrand-Brief.html` | **In repo** — Claude Code brief for full KALLOS → CONTUERI codebase rebrand: 10 tasks covering user-facing text, metadata, share text, and localStorage onboarding key rename. Pending CC execution (see Manual Task 82). |
 | `content-docs/CONTUERI-Theme-Research.html` | **In repo** — Research doc for expanding the Sanity theme library. Intellectual tradition context (Augustinian/Neoplatonic), search strategies, key figures table, 15 candidate themes. |
-| `content-docs/KALLOS-CC-Schema-Design-Brief.html` | **In repo** — Claude Code schema design and migration brief. ✅ Complete April 23, 2026. |
-| `content-docs/KALLOS-CC-Dashboard-Enhancement-Brief.html` | **In repo** — Claude Code dashboard enhancements brief. ✅ Complete April 24, 2026.
-| `content-docs/KALLOS-CC-Content-Review-Dashboard-Brief.html` | **In repo** — Content Review Dashboard design brief. Architecture input requested from Opus before any build begins. Five open questions: where to build (Next.js vs App SDK), cross-type row model, detail panel strategy, preset view persistence, data fetching approach.
-| `content-docs/KALLOS-CC-Content-Review-Dashboard-ADR.html` | **In repo** — Architecture Decision Record from Opus. Answers all five Q1-Q5 questions. Sheri amended: slide modal becomes inline cell expansion; field prefixing keeps journey days grouped in sort order.
-| `content-docs/KALLOS-CC-Content-Review-Dashboard-Build.html` | **In repo** — Build brief. Five tasks: data layer, grid foundation, presets + URL state, cell expansion + record view, CSV export + voice scanner. Reference all three docs (Brief + ADR + Build) when starting the CC session. Answers all five Q1-Q5 questions from the brief. Sheri amended: slide modal (not slide-over) for detail panel; field prefixing to keep journey days grouped in sort order. ADR phase-1 scope bullets map directly to build-brief tasks. Reference both this and the brief when writing the build brief. Tasks 1–5 all shipped: photography content type, ancient era, reflectionQuestionsAudio, dashboard TTS columns, filter/sort client components, work-level repeat detection + source concentration, Sanity Presentation plugin. |
-| `content-docs/KALLOS-Schema-Audit.html` | **In repo** — Task 1 output from audit (April 23, 2026). Full schema field inventory, cross-schema duplicate detection, GROQ trace, dead-field analysis, 15 prioritized recommendations (R1–R15). Read before any schema or data migration work. |
-| `content-docs/KALLOS-artworkHook-Audit.html` | **In repo** — April 24, 2026 audit of all 47 populated contentItem.curatorNote records. KEEP/REVIEW decision per item. 41 KEEP (migrated to artworkHook), 6 REVIEW (still under legacy curatorNote, pending rewrite). Rewrite the REVIEW items first; the dashboard shows a live count in Section 2. |
-| `content-docs/KALLOS-Content-Inventory.html` | **In repo** — Task 2 output from audit (April 23, 2026). Full Sanity content inventory snapshot: 53 content items, 27 P&P prompts, 28 tradition reflections, 5 journeys. Field-by-field completeness, TTS coverage (70,017 char gap), consolidated red list. GROQ queries embedded at bottom for reuse. |
+| `content-docs/archive/` | **ARCHIVED June 18, 2026**. Eleven historical April CC briefs and audits (Schema-Design-Brief, Dashboard-Enhancement-Brief, the three Content-Review-Dashboard docs, Schema-Audit, artworkHook-Audit, Content-Inventory, three BTG audit/revision docs). All work completed. See `content-docs/archive/README.md` for the per-file rationale. Do not use any document in archive/ as editorial doctrine or active build reference. |
 | `KALLOS-Intro-Journey-Beauty-Truth-Goodness.html` | Intro journey — 7 days, all fields, ready for Sanity |
 | `KALLOS-StPatrick-Day1-Draft.html` | St. Patrick feast day content — Day 1 standalone draft for review |
 | `KALLOS-Sanity-Entry-Guide-Themes-2-5.docx` | Entry guide for seeding Themes 2–5 into Sanity |
 | `KALLOS-Light-Journey-GoDeeper.html` | 16 tradition reflections for Light journey Step 6 |
 | `KALLOS-Feast-Day-Content-Guide.html` | Editorial guide for feast day content — what it is, what it isn't, pre-publish checklist |
-| `KALLOS-Content-Guide-Pause-Ponder.html` | Agent content instructions for Pause & Ponder daily prompts (updated March 2026 — hook + Lectio pairing revision) |
-| `KALLOS-Content-Guide-7Day-Journey.html` | Agent content instructions for 7-day Journey content |
+| `KALLOS-Content-Guide-Pause-Ponder.html` | **PARTIALLY SUPERSEDED June 18, 2026** by the CONTUERI foundational docs above. Field workflow still current; voice and structure rules superseded. |
+| `KALLOS-Content-Guide-7Day-Journey.html` | **SUPERSEDED June 18, 2026** by `CONTUERI-Journey-Arc-Frameworks.html` + `CONTUERI-Journey-Writing-Practical-Guide.html`. |
 | `KALLOS-Pause-Ponder-18-Day-Checklist.html` | 18-day content checklist (March 17 – April 3) with per-day needs |
 | `KALLOS-PP-Audit-Days4-8.html` | **NEW** — Content audit of Days 4–8 with specific rewrites + Lectio pairings. Use this for Sanity manual updates. |
 | `KALLOS-Bosch-7Day-Journey.html` | Full 7-day Bosch journey content (narrative/editorial doc) |
@@ -1104,7 +1109,7 @@ The Sanity Studio is a **separate project** inside the `sanity/` subfolder. It h
 
 ## Editorial Principles (P&P and Journey Content)
 
-These govern all content written for KALLOS — daily prompts, journey days, curator notes, questions. Read `KALLOS-Content-Guide-Pause-Ponder.html` for full detail.
+These govern all content written for Contueri (daily prompts, journey days, curator notes, questions). The four CONTUERI foundational docs in `content-docs/` (Journey Arc Frameworks, Journey Writing Practical Guide, Cowork Brief on Editorial Rules, Cowork Brief on Planning Surface) are the canonical reference. The older `KALLOS-Content-Guide-Pause-Ponder.html` is still useful for P&P field workflow but its voice and structure rules are superseded by the four foundational docs and this section.
 
 ### META-RULE 1: When the rules are not working — flag and escalate
 

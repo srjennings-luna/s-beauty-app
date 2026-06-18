@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contueri Journey Arc Frameworks</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@400;500;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #fdf6e8;
+    --parchment-dark: #ede0c4;
+    --ink: #1a1410;
+    --ink-soft: #3d2f1f;
+    --ink-faint: #8a7560;
+    --gold: #C19B5F;
+    --sage: #4a7a62;
+    --espresso: #16110d;
+    --wine: #8b4557;
+    --plum: #7a5470;
+    --mineral: #7ba2b8;
+  }
+
+  body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.75;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  .eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-faint);
+    margin-bottom: 28px;
+  }
+
+  .gold-rule {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 32px 0;
+  }
+
+  h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 56px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--parchment-dark);
+  }
+
+  h3 {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+
+  h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-top: 18px;
+    margin-bottom: 6px;
+  }
+
+  p { margin-bottom: 14px; color: var(--ink-soft); }
+  strong { color: var(--ink); font-weight: 600; }
+
+  ul, ol { margin: 6px 0 18px 22px; }
+  li { margin-bottom: 8px; color: var(--ink-soft); }
+
+  code {
+    font-family: 'SF Mono', Consolas, monospace;
+    font-size: 13px;
+    background: var(--parchment-dark);
+    color: var(--ink);
+    padding: 1px 6px;
+    border-radius: 2px;
+  }
+
+  .tldr {
+    background: var(--espresso);
+    color: var(--parchment);
+    padding: 24px 28px;
+    border-left: 4px solid var(--gold);
+    margin: 28px 0;
+  }
+  .tldr p { color: var(--parchment); margin-bottom: 8px; }
+  .tldr p:last-child { margin-bottom: 0; }
+  .tldr strong { color: var(--gold); }
+
+  .framework-card {
+    background: white;
+    border: 1px solid var(--parchment-dark);
+    padding: 28px 32px 32px;
+    margin: 24px 0;
+    page-break-inside: avoid;
+  }
+
+  .framework-card .framework-eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .one-line {
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-faint);
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+
+  .arc-diagram {
+    background: var(--parchment);
+    border: 1px solid var(--parchment-dark);
+    padding: 18px;
+    margin: 16px 0 22px;
+    text-align: center;
+  }
+  .arc-diagram svg {
+    width: 100%;
+    height: auto;
+    max-width: 640px;
+  }
+
+  .stages-list {
+    margin: 12px 0 16px 0;
+  }
+  .stages-list li {
+    margin-bottom: 12px;
+    list-style: none;
+    padding-left: 0;
+  }
+  .stages-list .stage-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--sage);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .enthymeme {
+    background: var(--espresso);
+    color: var(--parchment);
+    padding: 14px 18px;
+    font-style: italic;
+    margin: 14px 0;
+    border-left: 3px solid var(--gold);
+  }
+  .enthymeme strong {
+    color: var(--gold);
+    font-style: normal;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .example {
+    background: #fef9ef;
+    border-left: 3px solid var(--gold);
+    padding: 12px 18px;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+
+  .failure {
+    background: #fbe9ec;
+    border-left: 3px solid var(--wine);
+    padding: 12px 18px;
+    margin: 14px 0;
+    font-size: 14px;
+    color: #5a2530;
+  }
+
+  .decision-box {
+    background: var(--parchment-dark);
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+  .decision-box h4 { margin-top: 0; }
+
+  .toc {
+    background: var(--parchment-dark);
+    padding: 18px 22px;
+    margin: 24px 0 40px;
+  }
+  .toc h4 { margin-top: 0; margin-bottom: 10px; color: var(--ink); }
+  .toc ol { margin: 0 0 0 22px; }
+  .toc li { margin-bottom: 4px; font-size: 14px; }
+  .toc a { color: var(--ink-soft); text-decoration: none; }
+  .toc a:hover { color: var(--gold); }
+
+  .footer-meta {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--parchment-dark);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Contueri, Editorial Foundation Document</div>
+<h1>Journey Arc Frameworks</h1>
+<div class="subtitle">Six named structural models for building Contueri journeys. Pick the right framework first; the days, the order, and the research direction follow from it.</div>
+<div class="gold-rule"></div>
+
+<div class="tldr">
+  <p><strong>What this doc is for.</strong> Every journey has an underlying shape: a literary arc that makes the days hang together as one experience instead of seven separate pieces. Without the shape, a journey is a list of days; the shape is what makes it a single experience the user moves through.</p>
+  <p>This doc names six arc shapes that fit different kinds of Contueri content. Use it before drafting days, as a Cowork brief when researching a new idea, or to diagnose why a journey feels off when you read it back.</p>
+  <p><strong>Frameworks are scaffolding, not formulas.</strong> They tell the writer what kind of story is being built; they do not write the days. Applying a framework rigidly produces template rather than journey. See the closing rule.</p>
+  <p style="font-style: italic; color: #8a7560; font-size: 13px; border-top: 1px solid #ede0c4; padding-top: 14px; margin-top: 16px;">A note on the prose in this doc itself. The voice rules in CLAUDE.md (no em dashes, no punchy parallel restatement, no fragment stacks, no zoom-out closers, no summary-closer AI tells) apply to this document too, because future Claude and Cowork sessions will read it as a template for the writing it teaches. If you spot a violation here, flag it.</p>
+</div>
+
+<div class="toc">
+  <h4>Contents</h4>
+  <ol>
+    <li><a href="#foundation">The Aristotelian Foundation</a></li>
+    <li><a href="#how-to-pick">How to Pick a Framework</a></li>
+    <li><a href="#ascent">The Ascent</a></li>
+    <li><a href="#argument">The Argument</a></li>
+    <li><a href="#quest">The Quest</a></li>
+    <li><a href="#season">The Season</a></li>
+    <li><a href="#single-mind">The Single Mind</a></li>
+    <li><a href="#discovery">The Discovery</a></li>
+    <li><a href="#meta-rule">The Closing Rule</a></li>
+  </ol>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="foundation">1. The Aristotelian Foundation</h2>
+
+<p>The frameworks in this doc are built on Aristotle's <em>Rhetoric</em>, written around 350 BC. Aristotle's apparatus still describes how persuasive and contemplative writing works today because he was solving the right problem: <strong>how does a reader assemble conviction from arranged material?</strong> The vocabulary below is what the rest of this doc depends on. Five concepts, plain language.</p>
+
+<div class="framework-card">
+  <div class="framework-eyebrow">Concept 1</div>
+  <h3>The Three Modes: Ethos, Pathos, Logos</h3>
+  <p class="one-line">The three ways persuasion happens. Every piece of writing leans on all three, but the balance shifts by purpose.</p>
+
+  <h4>Ethos: the writer's credibility</h4>
+  <p>The reader trusts what the writer says because the writer has earned the right to say it. In Contueri terms: verified quotes (not hedged "commonly attributed" sources), specific dates and named figures, period research done before drafting, scripture in RSV-2CE, no glib lookup-table use of color symbolism. The writer has done the work.</p>
+
+  <h4>Pathos: the reader's emotional response</h4>
+  <p>The reader is MOVED. In Contueri terms: the hook lands as "wait, what?" (the Inklings test); the opener is concrete and felt, not abstract and analytical; the music selection is mood-primary, not theme-primary; Sehnsucht as the emotional target for Day 1 of BTG II.</p>
+
+  <h4>Logos: the logical structure of the argument</h4>
+  <p>The pieces fit together. In Contueri terms: hook and context never repeat; the day title carries the angle not the subject; audio doesn't repeat across the 30-day window; the actio names a specific action not a disposition.</p>
+
+  <p style="margin-top: 18px;"><strong>The three modes are not separate boxes.</strong> Most rules in CLAUDE.md and the Cowork brief serve two or three modes simultaneously. "Facts must be specific" is ethos AND logos at the same time. The three-mode frame is a navigation aid, not a partition.</p>
+</div>
+
+<div class="framework-card">
+  <div class="framework-eyebrow">Concept 2</div>
+  <h3>Deductive vs Inductive Arguments</h3>
+  <p class="one-line">The two basic shapes an argument can take. Most Contueri journeys are inductive. Most P&amp;P pieces can be either.</p>
+
+  <div class="arc-diagram">
+    <svg viewBox="0 0 620 240" xmlns="http://www.w3.org/2000/svg">
+      <!-- DEDUCTIVE on left -->
+      <text x="80" y="30" font-family="Montserrat" font-size="12" font-weight="700" fill="#7a5470" text-anchor="middle">DEDUCTIVE</text>
+      <text x="80" y="50" font-family="EB Garamond" font-size="11" font-style="italic" fill="#8a7560" text-anchor="middle">general → specific</text>
+      <!-- Inverted triangle (wide top, narrow bottom) -->
+      <polygon points="20,70 140,70 110,200 50,200" fill="none" stroke="#7a5470" stroke-width="2"/>
+      <text x="80" y="95" font-family="Montserrat" font-size="9" font-weight="600" fill="#7a5470" text-anchor="middle">GENERAL PRINCIPLE</text>
+      <text x="80" y="135" font-family="Montserrat" font-size="9" font-weight="600" fill="#7a5470" text-anchor="middle">SPECIFIC CASE</text>
+      <text x="80" y="175" font-family="Montserrat" font-size="9" font-weight="600" fill="#7a5470" text-anchor="middle">FORCED</text>
+      <text x="80" y="187" font-family="Montserrat" font-size="9" font-weight="600" fill="#7a5470" text-anchor="middle">CONCLUSION</text>
+      <line x1="80" y1="206" x2="80" y2="222" stroke="#7a5470" stroke-width="2" marker-end="url(#arrow-d)"/>
+      <!-- INDUCTIVE on right -->
+      <text x="540" y="30" font-family="Montserrat" font-size="12" font-weight="700" fill="#4a7a62" text-anchor="middle">INDUCTIVE</text>
+      <text x="540" y="50" font-family="EB Garamond" font-size="11" font-style="italic" fill="#8a7560" text-anchor="middle">specific → general</text>
+      <!-- Regular triangle (narrow top, wide bottom) -->
+      <polygon points="510,70 570,70 600,200 480,200" fill="none" stroke="#4a7a62" stroke-width="2"/>
+      <text x="540" y="95" font-family="Montserrat" font-size="9" font-weight="600" fill="#4a7a62" text-anchor="middle">SPECIFIC CASES</text>
+      <text x="540" y="140" font-family="Montserrat" font-size="9" font-weight="600" fill="#4a7a62" text-anchor="middle">PATTERN EMERGES</text>
+      <text x="540" y="175" font-family="Montserrat" font-size="9" font-weight="600" fill="#4a7a62" text-anchor="middle">PROBABLE</text>
+      <text x="540" y="187" font-family="Montserrat" font-size="9" font-weight="600" fill="#4a7a62" text-anchor="middle">CONCLUSION</text>
+      <line x1="540" y1="206" x2="540" y2="222" stroke="#4a7a62" stroke-width="2" marker-end="url(#arrow-i)"/>
+      <!-- Center text comparing -->
+      <text x="310" y="100" font-family="EB Garamond" font-size="12" fill="#1a1410" text-anchor="middle" font-style="italic">"All men are mortal.</text>
+      <text x="310" y="118" font-family="EB Garamond" font-size="12" fill="#1a1410" text-anchor="middle" font-style="italic">Socrates is a man.</text>
+      <text x="310" y="136" font-family="EB Garamond" font-size="12" fill="#1a1410" text-anchor="middle" font-style="italic">Therefore Socrates is mortal."</text>
+      <text x="310" y="165" font-family="EB Garamond" font-size="11" fill="#8a7560" text-anchor="middle">vs.</text>
+      <text x="310" y="185" font-family="EB Garamond" font-size="12" fill="#1a1410" text-anchor="middle" font-style="italic">Plato, Heraclitus, and Cicero each named a principle they could not</text>
+      <text x="310" y="203" font-family="EB Garamond" font-size="12" fill="#1a1410" text-anchor="middle" font-style="italic">fully see. Justin Martyr recognized what they were tracking.</text>
+      <defs>
+        <marker id="arrow-d" markerWidth="8" markerHeight="8" refX="3" refY="4" orient="auto">
+          <path d="M0,0 L6,4 L0,8 z" fill="#7a5470"/>
+        </marker>
+        <marker id="arrow-i" markerWidth="8" markerHeight="8" refX="3" refY="4" orient="auto">
+          <path d="M0,0 L6,4 L0,8 z" fill="#4a7a62"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <h4>Deductive, general principle to specific case</h4>
+  <p>You start with a general truth the reader accepts, apply it to a specific case, and arrive at a conclusion that follows BY NECESSITY. If the premises are true, the conclusion is forced.</p>
+  <p>Example: "All men are mortal (general). Socrates is a man (specific case). Therefore Socrates is mortal (forced conclusion)."</p>
+  <p>In Contueri, deductive structure works for individual P&amp;P pieces when the general principle is one the reader already half-believes. The piece delivers the specific case that forces the conclusion. It can feel lawyerly if overused.</p>
+
+  <h4>Inductive, specific cases to general pattern</h4>
+  <p>You assemble specific cases (examples, witnesses, moments, evidence) and let the reader see the pattern they share. The conclusion is PROBABLE rather than forced, but when the cases are well chosen, the pattern becomes inescapable.</p>
+  <p>Example: "Plato wrote about the Form of the Good without being able to name what it was. Heraclitus called the ordering principle of the cosmos the Logos. Cicero argued for a natural law accessible to any honest mind. Justin Martyr, reading all three as a Christian in the second century, recognized what none of them had been able to see clearly."</p>
+  <p>In Contueri, this is the dominant journey structure. Each day is one piece of evidence. By the final day, the reader has assembled the pattern. The thesis is never stated; the cases assemble it.</p>
+  <div class="failure" style="margin-top: 16px;">
+    <strong>Caution.</strong> Induction LISTS specific cases. Do not let the listing slide into the punchy-parallel-restatement AI tell. Each case must be a full sentence carrying genuinely different information, and the cases must not share grammatical structure beyond what is necessary. "Plato grasped at it. Heraclitus grasped at it. Justin saw what they were grasping at." is the trap; proper prose with varied sentences delivering distinct facts is the way.
+  </div>
+</div>
+
+<div class="framework-card">
+  <div class="framework-eyebrow">Concept 3</div>
+  <h3>The Syllogism: Major Premise, Minor Premise, Conclusion</h3>
+  <p class="one-line">The three-part logical structure that powers every argument. Naming the parts lets you see what is doing the work.</p>
+
+  <div class="arc-diagram">
+    <svg viewBox="0 0 620 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- Three stacked boxes with the Socrates example -->
+      <rect x="80" y="20" width="460" height="40" fill="white" stroke="#7a5470" stroke-width="2"/>
+      <text x="100" y="40" font-family="Montserrat" font-size="10" font-weight="700" fill="#7a5470">MAJOR PREMISE</text>
+      <text x="100" y="55" font-family="EB Garamond" font-size="11" fill="#1a1410">"All men are mortal."</text>
+      <text x="530" y="50" font-family="EB Garamond" font-size="10" font-style="italic" fill="#8a7560" text-anchor="end">(general truth)</text>
+
+      <rect x="80" y="75" width="460" height="40" fill="white" stroke="#7a5470" stroke-width="2"/>
+      <text x="100" y="95" font-family="Montserrat" font-size="10" font-weight="700" fill="#7a5470">MINOR PREMISE</text>
+      <text x="100" y="110" font-family="EB Garamond" font-size="11" fill="#1a1410">"Socrates is a man."</text>
+      <text x="530" y="105" font-family="EB Garamond" font-size="10" font-style="italic" fill="#8a7560" text-anchor="end">(specific case)</text>
+
+      <line x1="310" y1="120" x2="310" y2="135" stroke="#1a1410" stroke-width="1.5" marker-end="url(#arrow-syl)"/>
+
+      <rect x="80" y="140" width="460" height="40" fill="#fef9ef" stroke="#C19B5F" stroke-width="2"/>
+      <text x="100" y="160" font-family="Montserrat" font-size="10" font-weight="700" fill="#C19B5F">CONCLUSION</text>
+      <text x="100" y="175" font-family="EB Garamond" font-size="11" fill="#1a1410">"Therefore Socrates is mortal."</text>
+      <text x="530" y="170" font-family="EB Garamond" font-size="10" font-style="italic" fill="#C19B5F" text-anchor="end">(necessary result)</text>
+
+      <defs>
+        <marker id="arrow-syl" markerWidth="8" markerHeight="8" refX="3" refY="4" orient="auto">
+          <path d="M0,0 L6,4 L0,8 z" fill="#1a1410"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <h4>Major premise: the general truth</h4>
+  <p>The wide claim the argument depends on. Often a principle the reader already half-believes, which is what makes the argument feel natural rather than imposed. "All men are mortal." "Beauty points to something real." "What grasps at truth is grasping at Christ."</p>
+
+  <h4>Minor premise: the specific case</h4>
+  <p>The particular instance that the argument applies to. "Socrates is a man." "This painting is beautiful." "Heraclitus was a philosopher grasping at truth."</p>
+
+  <h4>Conclusion: the result</h4>
+  <p>What follows when major and minor premise are combined. "Socrates is mortal." "This painting points to something real." "Heraclitus was grasping at Christ."</p>
+
+  <p style="margin-top: 18px;"><strong>Why this matters for content writing.</strong> When you can name which premise your writing is supplying and which the reader must supply for themselves, you can be deliberate about what to STATE and what to LEAVE OUT. That deliberateness is what makes the next concept, the enthymeme, possible.</p>
+</div>
+
+<div class="framework-card">
+  <div class="framework-eyebrow">Concept 4 (the most important)</div>
+  <h3>The Enthymeme: The Rhetorical Syllogism</h3>
+  <p class="one-line">A syllogism with one premise deliberately left unstated, for the audience to supply themselves. Aristotle's most powerful form, and the deepest structural rule beneath all Contueri voice.</p>
+
+  <div class="arc-diagram">
+    <svg viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg">
+      <!-- Major premise, dashed (the unstated piece) -->
+      <rect x="80" y="20" width="460" height="40" fill="none" stroke="#8a7560" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <text x="100" y="40" font-family="Montserrat" font-size="10" font-weight="700" fill="#8a7560">MAJOR PREMISE</text>
+      <text x="100" y="55" font-family="EB Garamond" font-size="11" font-style="italic" fill="#8a7560">"What grasps at truth is grasping at Christ."</text>
+      <text x="530" y="50" font-family="EB Garamond" font-size="10" font-style="italic" fill="#8a7560" text-anchor="end">(unstated, reader supplies)</text>
+
+      <!-- Minor premise, solid (what the writer states) -->
+      <rect x="80" y="75" width="460" height="40" fill="white" stroke="#7ba2b8" stroke-width="2"/>
+      <text x="100" y="95" font-family="Montserrat" font-size="10" font-weight="700" fill="#7ba2b8">MINOR PREMISE</text>
+      <text x="100" y="110" font-family="EB Garamond" font-size="11" fill="#1a1410">Plato, Heraclitus, the Stoics groped toward what they could not name.</text>
+      <text x="530" y="105" font-family="EB Garamond" font-size="10" font-style="italic" fill="#7ba2b8" text-anchor="end">(what the writer states)</text>
+
+      <line x1="310" y1="120" x2="310" y2="135" stroke="#1a1410" stroke-width="1.5" marker-end="url(#arrow-enth)"/>
+
+      <!-- Conclusion, dashed gold (what reader assembles) -->
+      <rect x="80" y="140" width="460" height="40" fill="#fef9ef" stroke="#C19B5F" stroke-width="2" stroke-dasharray="5,4"/>
+      <text x="100" y="160" font-family="Montserrat" font-size="10" font-weight="700" fill="#C19B5F">CONCLUSION</text>
+      <text x="100" y="175" font-family="EB Garamond" font-size="11" font-style="italic" fill="#1a1410">"They were grasping at Christ."</text>
+      <text x="530" y="170" font-family="EB Garamond" font-size="10" font-style="italic" fill="#C19B5F" text-anchor="end">(reader assembles)</text>
+
+      <defs>
+        <marker id="arrow-enth" markerWidth="8" markerHeight="8" refX="3" refY="4" orient="auto">
+          <path d="M0,0 L6,4 L0,8 z" fill="#1a1410"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <p>Aristotle saw that the most persuasive form is NOT the complete syllogism (state major, state minor, state conclusion). It is the SYLLOGISM WITH A GAP, where the writer states one or two parts and leaves the rest for the audience to complete.</p>
+
+  <h4>Why the gap matters</h4>
+  <p>When the reader supplies the missing piece themselves, the conclusion arrives as THEIR insight, not the writer's claim. Aristotle's exact insight: <em>"persuasion that the audience does to itself."</em> The conviction that arises in the reader's own mind is unshakeable in a way no stated thesis can be.</p>
+
+  <h4>What gets omitted</h4>
+  <p>Usually one of these:</p>
+  <ul>
+    <li><strong>Omit the major premise:</strong> "Socrates is mortal, he is a man." The unstated piece is "all men are mortal." The reader supplies it because they already believe it.</li>
+    <li><strong>Omit the conclusion:</strong> The writer arranges the major and minor premises (or several minor premises in an inductive chain) and stops. The reader draws the conclusion themselves. Most Contueri journeys work this way.</li>
+  </ul>
+
+  <h4>The Contueri example</h4>
+  <p>The "They Were Early" P&amp;P (Justin Martyr) is an enthymeme. The writer states:</p>
+  <ul>
+    <li>Justin Martyr lived in the 2nd century, a philosopher who became a Christian.</li>
+    <li>He saw that the Greek philosophers had been groping toward something real.</li>
+    <li>The title carries the angle: <em>They Were Early</em>.</li>
+  </ul>
+  <p>The writer does NOT state: "The pre-Christian philosophers were tracking what Christ would later reveal." The reader assembles that. The conviction lands as theirs.</p>
+
+  <div class="enthymeme">
+    <strong>Why this matters for AI-assisted writing</strong>
+    AI models default to closing the syllogism, stating every conclusion, summarizing every paragraph, explaining every implication, because they are trained to be helpful by being COMPLETE. In the enthymeme sense, complete is the OPPOSITE of persuasive. Every Contueri voice rule about leaving the conclusion unstated (ban the summary-closer, hook is a fact rather than framing, title carries the angle rather than the subject) is a rule asking the writer to override the model's default and leave the gap intact for the reader.
+  </div>
+</div>
+
+<div class="framework-card">
+  <div class="framework-eyebrow">Concept 5</div>
+  <h3>How This Maps to a Contueri Journey</h3>
+  <p class="one-line">A journey is an inductive enthymeme stretched across multiple days. Each day is one premise. The thesis is the conclusion the user assembles by the end.</p>
+
+  <p>Put the concepts together:</p>
+  <ul>
+    <li><strong>The central idea</strong> is the unstated conclusion the user will assemble.</li>
+    <li><strong>The arc framework</strong> (Ascent, Argument, Quest, Season, Single Mind, Discovery) is the shape that arranges the premises.</li>
+    <li><strong>Each day</strong> is a specific case, a premise the user encounters.</li>
+    <li><strong>The journey works inductively:</strong> the user sees enough specific cases that the pattern (the unstated conclusion) becomes inescapable.</li>
+    <li><strong>The voice rules</strong> (ethos, pathos, logos) determine how each day delivers its premise: credibly, with emotional traction, and in a logical structure that fits the framework.</li>
+    <li><strong>The enthymeme</strong> is enforced at every level: the writer never states the conclusion the user is meant to draw, whether in titles, hooks, closing paragraphs, or the final day's summary. The whole journey trusts the reader.</li>
+  </ul>
+
+  <p>When the framework works, the user finishes the journey holding a conviction they assembled themselves rather than a summary of what they were told. The conviction stays with them because the assembly is their own work, and they go back to ordinary life with a sight that was given to them by their own reasoning over what was placed in front of them.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="how-to-pick">2. How to Pick a Framework</h2>
+
+<p>Before you can pick the framework, you have to know the central idea. The central idea is the thesis the journey is built to convey, not the topic, not the subject, but <strong>the conviction the user should assemble for themselves by the end</strong>.</p>
+
+<p>Once you have the central idea, ask these four questions in order:</p>
+
+<div class="decision-box">
+  <h4>Question 1: Is the idea about spiritual development?</h4>
+  <p>If the user is being shown stages of inner growth (purgation, illumination, union; restless → seeking → home; broken → healing → integrated), you want <strong>The Ascent</strong>.</p>
+</div>
+
+<div class="decision-box">
+  <h4>Question 2: Is the idea a conviction that needs evidence?</h4>
+  <p>If the central idea is a specific claim ("beauty, truth, and goodness are three faces of one reality"; "the myths were grasping at something real"), and the days will be the evidence that assembles to support it, you want <strong>The Argument</strong>.</p>
+</div>
+
+<div class="decision-box">
+  <h4>Question 3: Is the idea carried by a character's transformation?</h4>
+  <p>If there is a person (real or fictional) whose change is the engine of the journey (Ransom in OOTSP, Augustine in the Confessions, Edith Stein from philosopher to martyr), and the user is meant to recognize their own arc in that change, you want <strong>The Quest</strong>.</p>
+</div>
+
+<div class="decision-box">
+  <h4>Question 4: Is the idea anchored to the church calendar?</h4>
+  <p>If the journey is shaped by Advent, Lent, Easter, Pentecost, or a feast-day cluster, you want <strong>The Season</strong>.</p>
+</div>
+
+<div class="decision-box">
+  <h4>Question 5: Is the idea immersion in one thinker?</h4>
+  <p>If the journey is a deep dive on a single mind (Hildegard, Aquinas, Augustine, Lewis), and the user is meant to follow that person's seeing across days, you want <strong>The Single Mind</strong>.</p>
+</div>
+
+<div class="decision-box">
+  <h4>Question 6: Does the idea overturn a common assumption?</h4>
+  <p>If the journey starts with what the user thinks they know, then breaks that picture, then replaces it with a richer reality, you want <strong>The Discovery</strong>. Most "did you know" content fits here.</p>
+</div>
+
+<p><strong>If you answered yes to more than one,</strong> the journey may be a hybrid (Quest + Argument is common, a character's transformation that simultaneously argues for a conviction; OOTSP and Myth Became Fact are both this). Pick the dominant frame and let the second be a layer underneath.</p>
+
+<p><strong>If you answered no to all six,</strong> the central idea may not be strong enough yet. The framework should snap into focus once the idea is clear. If nothing fits, the idea probably still needs research.</p>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="ascent">3. The Ascent</h2>
+
+<div class="framework-card">
+  <div class="framework-eyebrow">Framework 1 of 6</div>
+  <h3>The Ascent</h3>
+  <p class="one-line">A journey that maps the soul's movement upward through stages of contemplative growth. The user is being shown the shape of inner change.</p>
+
+  <div class="arc-diagram">
+    <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+      <!-- Baseline -->
+      <line x1="40" y1="180" x2="560" y2="180" stroke="#ede0c4" stroke-width="1"/>
+      <!-- Three rising steps -->
+      <line x1="60" y1="160" x2="200" y2="160" stroke="#7a5470" stroke-width="3"/>
+      <line x1="200" y1="110" x2="380" y2="110" stroke="#C19B5F" stroke-width="3"/>
+      <line x1="380" y1="60" x2="540" y2="60" stroke="#4a7a62" stroke-width="3"/>
+      <!-- Riser lines -->
+      <line x1="200" y1="160" x2="200" y2="110" stroke="#1a1410" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="380" y1="110" x2="380" y2="60" stroke="#1a1410" stroke-width="1" stroke-dasharray="3,3"/>
+      <!-- Stage labels -->
+      <text x="130" y="148" font-family="Montserrat" font-size="11" font-weight="700" fill="#7a5470" text-anchor="middle">PURGATIVE</text>
+      <text x="130" y="200" font-family="EB Garamond" font-size="11" font-style="italic" fill="#8a7560" text-anchor="middle">stripping, dark night</text>
+      <text x="290" y="98" font-family="Montserrat" font-size="11" font-weight="700" fill="#C19B5F" text-anchor="middle">ILLUMINATIVE</text>
+      <text x="290" y="200" font-family="EB Garamond" font-size="11" font-style="italic" fill="#8a7560" text-anchor="middle">light, recognition</text>
+      <text x="460" y="48" font-family="Montserrat" font-size="11" font-weight="700" fill="#4a7a62" text-anchor="middle">UNITIVE</text>
+      <text x="460" y="200" font-family="EB Garamond" font-size="11" font-style="italic" fill="#8a7560" text-anchor="middle">rest, home</text>
+    </svg>
+  </div>
+
+  <h4>When to use it</h4>
+  <p>The central idea is about INNER MOVEMENT through stages. Spiritual formation, the dark night, conversion as a developmental arc, the soul finding rest. The reader is on the same arc the journey describes, knowingly or not.</p>
+
+  <h4>The stages</h4>
+  <ul class="stages-list">
+    <li><span class="stage-name">Purgative</span>Diagnosis. The honest naming of what is wrong, missing, or hidden. The stripping of what was never working. Augustine's restlessness; the dark night; John of the Cross. Often uncomfortable.</li>
+    <li><span class="stage-name">Illuminative</span>Light. Recognition of what was already there. Something shifts in how the user sees. Aquinas's claritas; Caravaggio's shaft of light; Hopkins's inscape.</li>
+    <li><span class="stage-name">Unitive</span>Home. Not arrival as conquest but recognition. The Prodigal Son's father is already running. Lewis's Sehnsucht satisfied. Augustine at Ostia.</li>
+  </ul>
+
+  <div class="enthymeme">
+    <strong>What the user assembles</strong>
+    The conviction the user arrives at is that the soul moves through stages of contemplative growth, and that the stages described in the journey are stages they are already on, knowingly or not.
+  </div>
+
+  <div class="example">
+    <strong>Contueri examples:</strong> The Three Ways journey (explicitly named this), Out of the Silent Planet (Lewis's purgative displacement of Ransom), eventually Perelandra (the illuminative continuation) and That Hideous Strength (the unitive stakes).
+  </div>
+
+  <div class="failure">
+    <strong>Common failure:</strong> Forcing every journey into this shape because the framework feels universal. It isn't. A journey about color iconography is not an Ascent, and neither is a single-thinker journey on Hildegard. Use this only when the central idea is genuinely about inner stages of growth.
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="argument">4. The Argument</h2>
+
+<div class="framework-card">
+  <div class="framework-eyebrow">Framework 2 of 6</div>
+  <h3>The Argument</h3>
+  <p class="one-line">A journey where evidence accumulates across days toward a thesis the user assembles for themselves. The thesis is never stated. The premises do the work.</p>
+
+  <div class="arc-diagram">
+    <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+      <!-- Hidden apex (unstated conclusion) -->
+      <text x="300" y="32" font-family="Montserrat" font-size="11" font-weight="700" fill="#C19B5F" text-anchor="middle" letter-spacing="1">CONCLUSION</text>
+      <text x="300" y="50" font-family="EB Garamond" font-size="11" font-style="italic" fill="#C19B5F" text-anchor="middle">(unstated, user assembles)</text>
+      <ellipse cx="300" cy="65" rx="80" ry="10" fill="none" stroke="#C19B5F" stroke-width="1.5" stroke-dasharray="4,4"/>
+      <!-- Premises -->
+      <rect x="60" y="130" width="100" height="40" fill="white" stroke="#7ba2b8" stroke-width="1.5"/>
+      <text x="110" y="155" font-family="Montserrat" font-size="10" font-weight="600" fill="#7ba2b8" text-anchor="middle">PREMISE 1</text>
+      <rect x="190" y="130" width="100" height="40" fill="white" stroke="#7ba2b8" stroke-width="1.5"/>
+      <text x="240" y="155" font-family="Montserrat" font-size="10" font-weight="600" fill="#7ba2b8" text-anchor="middle">PREMISE 2</text>
+      <rect x="320" y="130" width="100" height="40" fill="white" stroke="#7ba2b8" stroke-width="1.5"/>
+      <text x="370" y="155" font-family="Montserrat" font-size="10" font-weight="600" fill="#7ba2b8" text-anchor="middle">PREMISE 3</text>
+      <rect x="450" y="130" width="100" height="40" fill="white" stroke="#7ba2b8" stroke-width="1.5"/>
+      <text x="500" y="155" font-family="Montserrat" font-size="10" font-weight="600" fill="#7ba2b8" text-anchor="middle">PREMISE N</text>
+      <!-- Arrows pointing up to conclusion -->
+      <line x1="110" y1="130" x2="240" y2="80" stroke="#8a7560" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="240" y1="130" x2="285" y2="80" stroke="#8a7560" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="370" y1="130" x2="320" y2="80" stroke="#8a7560" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="500" y1="130" x2="365" y2="80" stroke="#8a7560" stroke-width="1" stroke-dasharray="3,3"/>
+      <!-- Baseline label -->
+      <text x="300" y="200" font-family="EB Garamond" font-size="11" font-style="italic" fill="#8a7560" text-anchor="middle">each day = one premise the user encounters</text>
+    </svg>
+  </div>
+
+  <h4>When to use it</h4>
+  <p>The central idea is a CONVICTION worth defending or recovering. The journey assembles evidence from a range of angles, witnesses, and traditions that all converge on the same unstated claim. The user reaches the conclusion themselves at the end (or sometimes earlier, which is fine).</p>
+
+  <h4>The stages</h4>
+  <ul class="stages-list">
+    <li><span class="stage-name">Setup (Day 1)</span>The question or hint of the thesis without stating it. Often opens with something surprising that destabilizes the user's assumption. The "wait, what?" moment.</li>
+    <li><span class="stage-name">Premises (middle days)</span>Each day delivers one strong piece of evidence, varying across content type, witness, and historical moment. Each premise stands on its own while contributing to the unstated whole.</li>
+    <li><span class="stage-name">Convergence (final day)</span>The premise that snaps everything into place. Not a summary of the prior days. The piece of evidence that lets the user see the pattern that was already there.</li>
+  </ul>
+
+  <div class="enthymeme">
+    <strong>What the user assembles</strong>
+    The conviction is the thesis the writer never stated: the pieces of evidence have converged on a claim the user would now defend as their own.
+  </div>
+
+  <div class="example">
+    <strong>Contueri examples:</strong> BTG II is an argument for the thesis that beauty, truth, and goodness are three faces of one reality. Three days, varying in angle, assembling to a conviction the user holds by Day 3. When Myth Became Fact is an argument that the pre-Christian myths were grasping at something real that Christianity completed.
+  </div>
+
+  <div class="failure">
+    <strong>Common failures:</strong> (1) Stating the conclusion at the end, which kills the enthymeme. (2) Using "evidence" that requires the user to TAKE the writer's authority rather than recognize the truth independently. (3) Premises that all argue the same thing instead of bringing varied angles.
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="quest">5. The Quest</h2>
+
+<div class="framework-card">
+  <div class="framework-eyebrow">Framework 3 of 6</div>
+  <h3>The Quest</h3>
+  <p class="one-line">A journey that follows a character through transformation, inviting the user to recognize their own arc in the character's. The hero's journey, classical and Christian.</p>
+
+  <div class="arc-diagram">
+    <svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg">
+      <!-- Baseline -->
+      <line x1="40" y1="120" x2="560" y2="120" stroke="#ede0c4" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="40" y="138" font-family="EB Garamond" font-size="10" font-style="italic" fill="#8a7560">ordinary life</text>
+      <!-- The arc curve -->
+      <path d="M 80 120 Q 130 120, 170 130 Q 220 200, 300 210 Q 380 200, 430 130 Q 470 120, 520 120" fill="none" stroke="#7a5470" stroke-width="2.5"/>
+      <!-- Stage markers -->
+      <circle cx="80" cy="120" r="6" fill="#7a5470"/>
+      <text x="80" y="100" font-family="Montserrat" font-size="10" font-weight="700" fill="#7a5470" text-anchor="middle">CALL</text>
+      <circle cx="170" cy="130" r="6" fill="#7a5470"/>
+      <text x="170" y="155" font-family="Montserrat" font-size="10" font-weight="700" fill="#7a5470" text-anchor="middle">DEPARTURE</text>
+      <circle cx="300" cy="210" r="6" fill="#7a5470"/>
+      <text x="300" y="232" font-family="Montserrat" font-size="10" font-weight="700" fill="#7a5470" text-anchor="middle">TRIALS</text>
+      <circle cx="300" cy="210" r="13" fill="none" stroke="#C19B5F" stroke-width="1.5"/>
+      <text x="300" y="195" font-family="EB Garamond" font-size="10" font-style="italic" fill="#C19B5F" text-anchor="middle">REVELATION</text>
+      <circle cx="430" cy="130" r="6" fill="#7a5470"/>
+      <text x="430" y="155" font-family="Montserrat" font-size="10" font-weight="700" fill="#7a5470" text-anchor="middle">RETURN</text>
+      <circle cx="520" cy="120" r="6" fill="#7a5470"/>
+      <text x="520" y="100" font-family="Montserrat" font-size="10" font-weight="700" fill="#7a5470" text-anchor="middle">CHANGED</text>
+    </svg>
+  </div>
+
+  <h4>When to use it</h4>
+  <p>There is a CHARACTER (real or fictional) whose change is the engine of the journey. The user is meant to recognize their own potential arc in the character's transformation. Biographical, conversion, fiction-based journeys.</p>
+
+  <h4>The stages</h4>
+  <ul class="stages-list">
+    <li><span class="stage-name">The Call</span>The initial state. The character in ordinary life with some hint of disturbance. Lewis as atheist; Ransom on a walking holiday; Augustine in Carthage.</li>
+    <li><span class="stage-name">Departure</span>The leaving of the known. Crossing a threshold. Often involuntary at first.</li>
+    <li><span class="stage-name">Trials</span>The middle days, the displacement. The character is tested, confused, stripped. They learn the new world's language.</li>
+    <li><span class="stage-name">The Revelation</span>The deepest point. The character sees what was always there. The Inklings conversation; the conversion in the garden; Ransom before the Oyarsa.</li>
+    <li><span class="stage-name">The Return</span>Coming back, but to a different baseline. The character cannot un-see what they saw. Ransom looking at Earth as the silent planet.</li>
+  </ul>
+
+  <div class="enthymeme">
+    <strong>What the user assembles</strong>
+    By the end the user can see the shape of the character's transformation clearly enough to recognize the same shape becoming available in their own life.
+  </div>
+
+  <div class="example">
+    <strong>Contueri examples:</strong> Out of the Silent Planet is literally Ransom's quest mapped onto the purgative way. A future Augustine journey would use this. Edith Stein from phenomenologist to Carmelite to martyr would use this.
+  </div>
+
+  <div class="failure">
+    <strong>Common failures:</strong> (1) Making the character too foreign for the user to identify with, whether through holiness, historical distance, or perfection. (2) Making them too contemporary so the strangeness of the arc is lost. (3) Resolving the Return too cleanly. Real transformations leave scars; honor them.
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="season">6. The Season</h2>
+
+<div class="framework-card">
+  <div class="framework-eyebrow">Framework 4 of 6</div>
+  <h3>The Season</h3>
+  <p class="one-line">A journey shaped by the church calendar. The user walks through the structure of a liturgical season with the Church, not through it.</p>
+
+  <div class="arc-diagram">
+    <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+      <!-- Wave shape -->
+      <path d="M 40 160 Q 130 160, 200 80 Q 270 30, 340 100 Q 410 160, 560 160" fill="none" stroke="#7ba2b8" stroke-width="2.5"/>
+      <!-- Stage markers -->
+      <circle cx="80" cy="160" r="6" fill="#7ba2b8"/>
+      <text x="80" y="180" font-family="Montserrat" font-size="10" font-weight="700" fill="#7ba2b8" text-anchor="middle">ANTICIPATION</text>
+      <text x="80" y="200" font-family="EB Garamond" font-size="10" font-style="italic" fill="#8a7560" text-anchor="middle">the time before</text>
+      <circle cx="270" cy="40" r="8" fill="#C19B5F"/>
+      <text x="270" y="25" font-family="Montserrat" font-size="11" font-weight="700" fill="#C19B5F" text-anchor="middle">ARRIVAL</text>
+      <text x="270" y="60" font-family="EB Garamond" font-size="10" font-style="italic" fill="#C19B5F" text-anchor="middle">the central event</text>
+      <circle cx="380" cy="120" r="6" fill="#7ba2b8"/>
+      <text x="380" y="105" font-family="Montserrat" font-size="10" font-weight="700" fill="#7ba2b8" text-anchor="middle">MEDITATION</text>
+      <text x="380" y="142" font-family="EB Garamond" font-size="10" font-style="italic" fill="#8a7560" text-anchor="middle">dwelling</text>
+      <circle cx="520" cy="160" r="6" fill="#7ba2b8"/>
+      <text x="520" y="180" font-family="Montserrat" font-size="10" font-weight="700" fill="#7ba2b8" text-anchor="middle">INTEGRATION</text>
+      <text x="520" y="200" font-family="EB Garamond" font-size="10" font-style="italic" fill="#8a7560" text-anchor="middle">carrying it forward</text>
+    </svg>
+  </div>
+
+  <h4>When to use it</h4>
+  <p>The journey is anchored to Advent, Lent, Holy Week, Easter Octave, Pentecost, or a feast-day cluster. The structure of the season IS the structure of the journey. The user is keeping time with the Church.</p>
+
+  <h4>The stages</h4>
+  <ul class="stages-list">
+    <li><span class="stage-name">Anticipation</span>The time before. The waiting. Advent before Christmas, Lent before Easter, Pentecost preparation. The user is being formed by what they cannot yet see.</li>
+    <li><span class="stage-name">Arrival</span>The central event. Christmas day, the Triduum, the descent of the Spirit. The reason the season exists.</li>
+    <li><span class="stage-name">Meditation</span>The dwelling. Christmas Octave, the Easter season, the days that let the central event settle.</li>
+    <li><span class="stage-name">Integration</span>Carrying forward. How the season changes ordinary time. What the user takes with them when the season ends.</li>
+  </ul>
+
+  <div class="enthymeme">
+    <strong>What the user assembles</strong>
+    The user finishes with the sense that the liturgical season has a real structure they can walk through rather than a theme they observe from outside, and that ordinary time has rhythm available to them they had not been keeping.
+  </div>
+
+  <div class="example">
+    <strong>Contueri examples:</strong> Holy Week 2026 was structured this way (Palm Sunday anticipation → Triduum trials → Easter arrival → Octave meditation). Future Advent, future Pentecost, future Easter Octave.
+  </div>
+
+  <div class="failure">
+    <strong>Common failures:</strong> (1) Treating the season as a content THEME rather than a structural shape. (2) Missing the EXPERIENTIAL timing: Advent content has to land BEFORE Christmas to do its work. (3) Skipping Integration: the journey ends at Arrival or Meditation and never tells the user what to carry forward.
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="single-mind">7. The Single Mind</h2>
+
+<div class="framework-card">
+  <div class="framework-eyebrow">Framework 5 of 6</div>
+  <h3>The Single Mind</h3>
+  <p class="one-line">A journey that immerses the user in one thinker's seeing. Encounter, wrestle with their core question, arrive at their core insight, then see the fruit of what they left behind.</p>
+
+  <div class="arc-diagram">
+    <svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg">
+      <!-- Concentric circles, smallest at center -->
+      <circle cx="300" cy="120" r="105" fill="none" stroke="#4a7a62" stroke-width="1.5"/>
+      <circle cx="300" cy="120" r="75" fill="none" stroke="#4a7a62" stroke-width="1.5"/>
+      <circle cx="300" cy="120" r="45" fill="none" stroke="#C19B5F" stroke-width="2"/>
+      <circle cx="300" cy="120" r="8" fill="#C19B5F"/>
+      <!-- Labels for rings -->
+      <text x="300" y="20" font-family="Montserrat" font-size="10" font-weight="700" fill="#4a7a62" text-anchor="middle">ENCOUNTER</text>
+      <text x="300" y="35" font-family="EB Garamond" font-size="10" font-style="italic" fill="#8a7560" text-anchor="middle">who they were</text>
+      <text x="300" y="55" font-family="Montserrat" font-size="10" font-weight="700" fill="#4a7a62" text-anchor="middle">WRESTLE</text>
+      <text x="300" y="70" font-family="EB Garamond" font-size="10" font-style="italic" fill="#8a7560" text-anchor="middle">their core question</text>
+      <text x="300" y="88" font-family="Montserrat" font-size="11" font-weight="700" fill="#C19B5F" text-anchor="middle">CORE INSIGHT</text>
+      <text x="300" y="115" font-family="EB Garamond" font-size="11" font-style="italic" fill="#C19B5F" text-anchor="middle">what they saw</text>
+      <!-- Arrows radiating outward = fruit -->
+      <line x1="380" y1="80" x2="430" y2="50" stroke="#C19B5F" stroke-width="1.5"/>
+      <polygon points="425,50 432,49 430,56" fill="#C19B5F"/>
+      <line x1="395" y1="135" x2="450" y2="155" stroke="#C19B5F" stroke-width="1.5"/>
+      <polygon points="446,150 452,155 446,159" fill="#C19B5F"/>
+      <line x1="305" y1="225" x2="305" y2="195" stroke="#C19B5F" stroke-width="1.5"/>
+      <polygon points="302,195 305,189 308,195" fill="#C19B5F"/>
+      <line x1="220" y1="135" x2="160" y2="155" stroke="#C19B5F" stroke-width="1.5"/>
+      <polygon points="164,150 158,155 164,159" fill="#C19B5F"/>
+      <line x1="200" y1="80" x2="155" y2="55" stroke="#C19B5F" stroke-width="1.5"/>
+      <polygon points="155,55 162,52 161,59" fill="#C19B5F"/>
+      <text x="300" y="200" font-family="Montserrat" font-size="10" font-weight="700" fill="#C19B5F" text-anchor="middle">FRUIT</text>
+      <text x="300" y="216" font-family="EB Garamond" font-size="10" font-style="italic" fill="#8a7560" text-anchor="middle">what we inherit</text>
+    </svg>
+  </div>
+
+  <h4>When to use it</h4>
+  <p>The journey is a DEEP DIVE on a single thinker, mystic, or artist across multiple days. The user is meant to follow that person's specific way of seeing the world.</p>
+
+  <h4>The stages</h4>
+  <ul class="stages-list">
+    <li><span class="stage-name">Encounter</span>The first meeting. Who this person was, when they lived, why they matter. The stature paragraph done as a full day. By the end of this day the user should think "I want to know more."</li>
+    <li><span class="stage-name">Wrestle</span>Their core question. The tension they lived inside. What kept them up at night. Hildegard's visions and the rule against women preaching; Aquinas balancing Aristotle with Christ; Augustine wrestling with the will.</li>
+    <li><span class="stage-name">Core Insight</span>What they saw that we don't. Their viriditas, their claritas, their restless heart. The single phrase or idea they gave to the tradition that we still use.</li>
+    <li><span class="stage-name">Fruit</span>What the tradition inherited. How their seeing changed the church, philosophy, art. What we still receive from them, knowingly or not.</li>
+  </ul>
+
+  <div class="enthymeme">
+    <strong>What the user assembles</strong>
+    The user comes away willing to follow this person's seeing further, having understood that the tradition has been formed by minds whose specific vision the user has now glimpsed.
+  </div>
+
+  <div class="example">
+    <strong>Contueri examples:</strong> A future Hildegard arc would use this. A future Aquinas-as-mind arc (rather than transcendentals-arc) would use this. Augustine, Edith Stein, Julian of Norwich all fit.
+  </div>
+
+  <div class="failure">
+    <strong>Common failures:</strong> (1) Biography-first ("born in X, did Y, died in Z") instead of insight-first. (2) Using too many primary texts before the user has reason to care. (3) Skipping the Fruit, leaving the user with admiration but no sense of inheritance.
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="discovery">8. The Discovery</h2>
+
+<div class="framework-card">
+  <div class="framework-eyebrow">Framework 6 of 6</div>
+  <h3>The Discovery</h3>
+  <p class="one-line">A journey that overturns a common assumption. The user starts with a picture they didn't know they were holding, the journey breaks it, then a richer reality replaces it, and they return to the original thing seeing it differently.</p>
+
+  <div class="arc-diagram">
+    <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+      <!-- Path: horizontal line, drop, rise above original level -->
+      <path d="M 40 130 L 180 130 L 280 200 L 380 60 L 560 60" fill="none" stroke="#8b4557" stroke-width="2.5"/>
+      <!-- Original baseline -->
+      <line x1="40" y1="130" x2="560" y2="130" stroke="#ede0c4" stroke-width="1" stroke-dasharray="3,3"/>
+      <!-- Markers -->
+      <circle cx="100" cy="130" r="6" fill="#8b4557"/>
+      <text x="100" y="115" font-family="Montserrat" font-size="10" font-weight="700" fill="#8b4557" text-anchor="middle">ASSUMED</text>
+      <text x="100" y="153" font-family="EB Garamond" font-size="10" font-style="italic" fill="#8a7560" text-anchor="middle">what you think you know</text>
+      <circle cx="280" cy="200" r="7" fill="#8b4557"/>
+      <text x="280" y="222" font-family="Montserrat" font-size="11" font-weight="700" fill="#8b4557" text-anchor="middle">DISRUPTION</text>
+      <text x="280" y="187" font-family="EB Garamond" font-size="10" font-style="italic" fill="#8a7560" text-anchor="middle">the surprising fact</text>
+      <circle cx="380" cy="60" r="8" fill="#C19B5F"/>
+      <text x="380" y="46" font-family="Montserrat" font-size="11" font-weight="700" fill="#C19B5F" text-anchor="middle">REFRAME</text>
+      <text x="380" y="82" font-family="EB Garamond" font-size="10" font-style="italic" fill="#C19B5F" text-anchor="middle">what was really there</text>
+      <circle cx="500" cy="60" r="6" fill="#8b4557"/>
+      <text x="500" y="46" font-family="Montserrat" font-size="10" font-weight="700" fill="#8b4557" text-anchor="middle">RETURN</text>
+      <text x="500" y="82" font-family="EB Garamond" font-size="10" font-style="italic" fill="#8a7560" text-anchor="middle">see with new eyes</text>
+    </svg>
+  </div>
+
+  <h4>When to use it</h4>
+  <p>The central idea is about something the modern reader is WRONG about. Color in medieval art carries meaning we miss. The hero stories we love follow an ancient myth shape. The science the medievals had was richer than the textbook caricature. "Did you know" content lives here.</p>
+
+  <h4>The stages</h4>
+  <ul class="stages-list">
+    <li><span class="stage-name">The Assumed Picture</span>What the user thinks they know, surfaced and named. They probably didn't realize they were holding it. Day 1 lays it out, gently, without mocking.</li>
+    <li><span class="stage-name">The Disruption</span>The surprising fact that breaks the picture. This is the Inklings moment, the lean-in. One or two days carry the disruption hard.</li>
+    <li><span class="stage-name">The Reframe</span>What was really there. The richer reality the assumption was hiding. Days assemble the new picture, often with multiple examples from different periods or traditions.</li>
+    <li><span class="stage-name">The Return</span>Looking at the original thing again, but with the new sight. The user goes back to ordinary modern life (the art they pass, the films they watch, the hero stories they grew up on) and sees what they previously walked past. This stage is critical; without it the user gets a fascinating fact but no integration.</li>
+  </ul>
+
+  <div class="enthymeme">
+    <strong>What the user assembles</strong>
+    The user leaves seeing the original thing differently, with the picture they came in holding now visible to them as a picture rather than as transparent truth.
+  </div>
+
+  <div class="example">
+    <strong>Contueri examples:</strong> The "Avengers and the dying-and-rising god" idea Sheri surfaced (assumed: hero stories are modern entertainment; disruption: they follow an ancient myth shape; reframe: humans instinctively reach for the same structure the ancients did; return: now you see Marvel differently). A future color-iconography arc. A future sacred-geometry arc. A future "What the medievals actually knew about astronomy" arc.
+  </div>
+
+  <div class="failure">
+    <strong>Common failures:</strong> (1) Leading with the disruption before establishing the assumed picture, so the user has nothing to be disrupted from. (2) Mocking the assumption. The user IS the person who held it; respect that. (3) Skipping the Return: without it, the journey is interesting trivia that never lands in the user's actual life.
+  </div>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="meta-rule">9. The Closing Rule</h2>
+
+<div class="tldr">
+  <p><strong>Frameworks are scaffolding, not formulas.</strong></p>
+  <p>The six frameworks above name shapes that have worked across centuries of contemplative and rhetorical writing. They give you a starting structure when an idea is still forming. They diagnose why a journey feels off when you read it back.</p>
+  <p>They do NOT write the days. They do not tell the writer what the central idea should be. They do not guarantee that following the shape will produce a good journey; the shape is necessary but not sufficient. A journey can hit every stage of The Quest perfectly and still feel dead if the character is generic, the trials are unspecific, or the revelation is stated rather than shown.</p>
+  <p><strong>The framework is the bones. The voice rules (hook, context, title, enthymeme, the four self-checks) are the flesh.</strong> A skeleton with no flesh is not a body; flesh with no skeleton is not a body either. You need both.</p>
+  <p>If a journey doesn't fit any of the six frameworks, it might be a hybrid (Quest + Argument is common, see Out of the Silent Planet). If it still doesn't fit, the central idea may not be clear enough yet. Go back to the central idea. The right framework will usually snap into focus once the idea is sharp.</p>
+</div>
+
+<!-- ────────────────────────────────────────────── -->
+<h2 id="how-to-use">How to Use This Doc in a Cowork Session</h2>
+
+<ol>
+  <li><strong>State the central idea.</strong> One sentence. Frame it as the conviction the user will assemble for themselves by the end. If you can't compress it to one sentence, the idea isn't sharp enough yet.</li>
+  <li><strong>Run the six questions in Section 1.</strong> Pick the framework that fits. If two fit, name the dominant one and the secondary.</li>
+  <li><strong>Use the framework's stages as the structure for your day plan.</strong> Match number of days to depth of evidence the central idea requires. There is no fixed day count.</li>
+  <li><strong>Draft each day according to the voice rules in CLAUDE.md / the editorial brief.</strong> The stage of the framework tells you what the day is for; the voice rules tell you how to write it.</li>
+  <li><strong>Read the journey back as a whole.</strong> Does the user assemble the central idea (the enthymeme) by the end? If yes, the framework worked. If no, the stages were filled but the bones weren't load-bearing.</li>
+</ol>
+
+<div class="footer-meta">
+  Contueri, Journey Arc Frameworks, draft 1, June 18, 2026, foundational editorial doc
+</div>
+
+</body>
+</html>
