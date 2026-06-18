@@ -25,16 +25,34 @@ export default defineType({
       title: 'Working Title',
       type: 'string',
       description:
-        'Short label for this idea — e.g. "Josemaría Escrivá — Spanish embassy 9 months" or "Hildegard Day 2 (deeper)". Refine later.',
+        'Short label for this idea. Example: "Josemaría Escrivá, Spanish embassy 9 months" or "Hildegard Day 2 (deeper)". Refine later.',
       validation: (Rule) => Rule.required().max(120),
+    }),
+    defineField({
+      name: 'centralIdea',
+      title: 'Central Idea',
+      type: 'text',
+      rows: 3,
+      description:
+        'The conviction the user will assemble for themselves by the end. ONE sentence. NOT the topic or subject, the thesis. Example for When Myth Became Fact: "The pre-Christian myths were grasping at something real that Christianity completed." See CONTUERI-Journey-Arc-Frameworks.html for examples. If you cannot compress this to one sentence, the idea is not sharp enough yet.',
+      validation: (Rule) => Rule.max(300),
+    }),
+    defineField({
+      name: 'parentIdea',
+      title: 'Parent Idea (where this came from)',
+      type: 'reference',
+      to: [{type: 'planningItem'}],
+      description:
+        'If this idea grew out of researching another planning item, link the parent here. Captures lineage. Example: the Avengers/hero-myth idea grew out of When Myth Became Fact, so it would link to that planning item.',
     }),
     defineField({
       name: 'stream',
       title: 'Stream',
       type: 'string',
-      description: 'Which content surface this planning item is for.',
+      description: 'Which content surface this planning item is for. Use Exploring when the surface is not yet decided.',
       options: {
         list: [
+          {title: 'Exploring (surface TBD)', value: 'exploring'},
           {title: 'Pause & Ponder (P&P)', value: 'pp'},
           {title: 'Journey', value: 'journey'},
           {title: 'Companion Journey', value: 'companion'},
@@ -43,7 +61,7 @@ export default defineType({
         layout: 'radio',
       },
       validation: (Rule) => Rule.required(),
-      initialValue: 'pp',
+      initialValue: 'exploring',
     }),
     defineField({
       name: 'status',
@@ -66,11 +84,11 @@ export default defineType({
       initialValue: 'idea',
     }),
     defineField({
-      name: 'journeyArcKey',
-      title: 'Journey Arc Key',
+      name: 'journeyName',
+      title: 'Journey Name',
       type: 'string',
       description:
-        'Which journey arc this planning item belongs to. Used by the Content Planning sidebar to group journey-stream items. Examples: "Three Ways", "OOTSP", "Perelandra", "THS". Only set when Stream = Journey.',
+        'Which journey this planning item belongs to. Used by the Content Planning sidebar to group journey items. Only visible when Stream is Journey or Exploring. Set during Exploring if you already know the candidate arc.',
       options: {
         list: [
           {title: 'Three Ways', value: 'three-ways'},
@@ -79,7 +97,28 @@ export default defineType({
           {title: 'That Hideous Strength', value: 'ths'},
         ],
       },
-      hidden: ({parent}) => parent?.stream !== 'journey',
+      hidden: ({parent}) => parent?.stream !== 'journey' && parent?.stream !== 'exploring',
+    }),
+    defineField({
+      name: 'framework',
+      title: 'Framework',
+      type: 'string',
+      description:
+        'The arc shape this content uses. See CONTUERI-Journey-Arc-Frameworks.html for descriptions of each. Visible for Journey, P&P, and Exploring items. Leave blank if the framework is not yet decided.',
+      options: {
+        list: [
+          {title: 'The Ascent (purgative → illuminative → unitive)', value: 'ascent'},
+          {title: 'The Argument (evidence accumulates to an unstated thesis)', value: 'argument'},
+          {title: 'The Quest (character transformation)', value: 'quest'},
+          {title: 'The Season (church calendar shape)', value: 'season'},
+          {title: 'The Single Mind (one thinker, deeply)', value: 'single-mind'},
+          {title: 'The Discovery (overturn a common assumption)', value: 'discovery'},
+        ],
+      },
+      hidden: ({parent}) =>
+        parent?.stream !== 'journey' &&
+        parent?.stream !== 'pp' &&
+        parent?.stream !== 'exploring',
     }),
     defineField({
       name: 'contentType',

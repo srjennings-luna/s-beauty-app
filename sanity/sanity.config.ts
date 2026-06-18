@@ -77,7 +77,9 @@ export default defineConfig({
         S.list()
           .title('Content')
           .items([
-            // ── Custom: Content Planning (planningItem) grouped by stream + journey arc ──
+            // ── Custom: Content Planning (planningItem) grouped by stream + journey name ──
+            // Each documentList uses initialValueTemplates so the + button pre-populates
+            // the stream / journeyName fields based on which folder the user is in.
             S.listItem()
               .title('Content Planning')
               .id('contentPlanning')
@@ -86,13 +88,28 @@ export default defineConfig({
                   .title('Content Planning')
                   .items([
                     S.listItem()
+                      .title('Exploring (surface TBD)')
+                      .id('planning-exploring')
+                      .child(
+                        S.documentList()
+                          .title('Exploring')
+                          .filter('_type == "planningItem" && stream == "exploring"')
+                          .defaultOrdering([{field: '_updatedAt', direction: 'desc'}])
+                          .initialValueTemplates([
+                            S.initialValueTemplateItem('planningItem-exploring'),
+                          ]),
+                      ),
+                    S.listItem()
                       .title('Pause & Ponder')
                       .id('planning-pp')
                       .child(
                         S.documentList()
                           .title('Pause & Ponder')
                           .filter('_type == "planningItem" && stream == "pp"')
-                          .defaultOrdering([{field: 'targetDate', direction: 'asc'}]),
+                          .defaultOrdering([{field: 'targetDate', direction: 'asc'}])
+                          .initialValueTemplates([
+                            S.initialValueTemplateItem('planningItem-pp'),
+                          ]),
                       ),
                     S.listItem()
                       .title('Journeys')
@@ -108,9 +125,12 @@ export default defineConfig({
                                 S.documentList()
                                   .title('Three Ways')
                                   .filter(
-                                    '_type == "planningItem" && stream == "journey" && journeyArcKey == "three-ways"',
+                                    '_type == "planningItem" && stream == "journey" && journeyName == "three-ways"',
                                   )
-                                  .defaultOrdering([{field: 'workingTitle', direction: 'asc'}]),
+                                  .defaultOrdering([{field: 'workingTitle', direction: 'asc'}])
+                                  .initialValueTemplates([
+                                    S.initialValueTemplateItem('planningItem-journey-three-ways'),
+                                  ]),
                               ),
                             S.listItem()
                               .title('Out of the Silent Planet')
@@ -119,9 +139,12 @@ export default defineConfig({
                                 S.documentList()
                                   .title('Out of the Silent Planet')
                                   .filter(
-                                    '_type == "planningItem" && stream == "journey" && journeyArcKey == "ootsp"',
+                                    '_type == "planningItem" && stream == "journey" && journeyName == "ootsp"',
                                   )
-                                  .defaultOrdering([{field: 'workingTitle', direction: 'asc'}]),
+                                  .defaultOrdering([{field: 'workingTitle', direction: 'asc'}])
+                                  .initialValueTemplates([
+                                    S.initialValueTemplateItem('planningItem-journey-ootsp'),
+                                  ]),
                               ),
                             S.listItem()
                               .title('Perelandra')
@@ -130,9 +153,12 @@ export default defineConfig({
                                 S.documentList()
                                   .title('Perelandra')
                                   .filter(
-                                    '_type == "planningItem" && stream == "journey" && journeyArcKey == "perelandra"',
+                                    '_type == "planningItem" && stream == "journey" && journeyName == "perelandra"',
                                   )
-                                  .defaultOrdering([{field: 'workingTitle', direction: 'asc'}]),
+                                  .defaultOrdering([{field: 'workingTitle', direction: 'asc'}])
+                                  .initialValueTemplates([
+                                    S.initialValueTemplateItem('planningItem-journey-perelandra'),
+                                  ]),
                               ),
                             S.listItem()
                               .title('That Hideous Strength')
@@ -141,19 +167,26 @@ export default defineConfig({
                                 S.documentList()
                                   .title('That Hideous Strength')
                                   .filter(
-                                    '_type == "planningItem" && stream == "journey" && journeyArcKey == "ths"',
+                                    '_type == "planningItem" && stream == "journey" && journeyName == "ths"',
                                   )
-                                  .defaultOrdering([{field: 'workingTitle', direction: 'asc'}]),
+                                  .defaultOrdering([{field: 'workingTitle', direction: 'asc'}])
+                                  .initialValueTemplates([
+                                    S.initialValueTemplateItem('planningItem-journey-ths'),
+                                  ]),
                               ),
                             S.divider(),
+                            // TODO (next Sanity change): remove this Unassigned bucket.
+                            // It existed during the June 17-18 journeyArcKey → journeyName
+                            // migration to catch drift. Verified empty June 18; can be deleted
+                            // when this file is next touched. Sheri's call June 18.
                             S.listItem()
-                              .title('Unassigned (no arc key)')
+                              .title('Unassigned (no journey name)')
                               .id('planning-journey-unassigned')
                               .child(
                                 S.documentList()
                                   .title('Unassigned journey items')
                                   .filter(
-                                    '_type == "planningItem" && stream == "journey" && !defined(journeyArcKey)',
+                                    '_type == "planningItem" && stream == "journey" && !defined(journeyName)',
                                   ),
                               ),
                           ]),
@@ -165,7 +198,10 @@ export default defineConfig({
                         S.documentList()
                           .title('Companion Journeys')
                           .filter('_type == "planningItem" && stream == "companion"')
-                          .defaultOrdering([{field: 'targetDate', direction: 'asc'}]),
+                          .defaultOrdering([{field: 'targetDate', direction: 'asc'}])
+                          .initialValueTemplates([
+                            S.initialValueTemplateItem('planningItem-companion'),
+                          ]),
                       ),
                     S.listItem()
                       .title('Tradition Reflections')
@@ -174,7 +210,10 @@ export default defineConfig({
                         S.documentList()
                           .title('Tradition Reflections')
                           .filter('_type == "planningItem" && stream == "tr"')
-                          .defaultOrdering([{field: 'targetDate', direction: 'asc'}]),
+                          .defaultOrdering([{field: 'targetDate', direction: 'asc'}])
+                          .initialValueTemplates([
+                            S.initialValueTemplateItem('planningItem-tr'),
+                          ]),
                       ),
                     S.divider(),
                     S.listItem()
@@ -327,6 +366,63 @@ export default defineConfig({
 
   schema: {
     types: schemaTypes,
+    // Document templates pre-populate fields when the + button is clicked
+    // from a specific Content Planning sidebar folder. Without these, clicking
+    // + in the Three Ways folder would create a planningItem with stream blank
+    // and journeyName blank, landing it in the Unassigned bucket. With these,
+    // the new item arrives with the right fields pre-set and shows up in the
+    // intended folder immediately.
+    templates: (prev) => [
+      ...prev,
+      {
+        id: 'planningItem-exploring',
+        title: 'Exploring (surface TBD)',
+        schemaType: 'planningItem',
+        value: {stream: 'exploring', status: 'idea'},
+      },
+      {
+        id: 'planningItem-pp',
+        title: 'Pause & Ponder planning item',
+        schemaType: 'planningItem',
+        value: {stream: 'pp', status: 'idea'},
+      },
+      {
+        id: 'planningItem-journey-three-ways',
+        title: 'Three Ways planning item',
+        schemaType: 'planningItem',
+        value: {stream: 'journey', journeyName: 'three-ways', status: 'idea'},
+      },
+      {
+        id: 'planningItem-journey-ootsp',
+        title: 'Out of the Silent Planet planning item',
+        schemaType: 'planningItem',
+        value: {stream: 'journey', journeyName: 'ootsp', status: 'idea'},
+      },
+      {
+        id: 'planningItem-journey-perelandra',
+        title: 'Perelandra planning item',
+        schemaType: 'planningItem',
+        value: {stream: 'journey', journeyName: 'perelandra', status: 'idea'},
+      },
+      {
+        id: 'planningItem-journey-ths',
+        title: 'That Hideous Strength planning item',
+        schemaType: 'planningItem',
+        value: {stream: 'journey', journeyName: 'ths', status: 'idea'},
+      },
+      {
+        id: 'planningItem-companion',
+        title: 'Companion Journey planning item',
+        schemaType: 'planningItem',
+        value: {stream: 'companion', status: 'idea'},
+      },
+      {
+        id: 'planningItem-tr',
+        title: 'Tradition Reflection planning item',
+        schemaType: 'planningItem',
+        value: {stream: 'tr', status: 'idea'},
+      },
+    ],
   },
 
   document: {
