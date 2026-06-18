@@ -5,21 +5,16 @@ import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { Artwork, LocationType } from "@/lib/types";
+import { Artwork } from "@/lib/types";
+import { getContentTypeColor } from "@/lib/contentTypeColors";
 
-// Color mapping for location types
-const locationTypeColors: Record<LocationType, string> = {
-  'sacred-art': '#66293C',    // Maroon (Sacred Art palette)
-  'architecture': '#4C3759',  // Plum
-  'workshop': '#C19B5F',      // Gold
-  'cultural': '#93583E',      // Rust
-  'landscape': '#2D5A27',     // Green
-};
-
-// Custom marker icon with location type coloring
-const createMarkerIcon = (isSelected: boolean, locationType?: LocationType) => {
-  // Get color based on location type, default to sacred-art blue
-  const baseColor = locationType ? locationTypeColors[locationType] : locationTypeColors['sacred-art'];
+// Custom marker icon, color-coded by contentItem.contentType using the
+// canonical 9-color palette (Mineral Blue for sacred-art, Old Ochre for
+// literature, etc.). Same palette as the P&P gradient and Explore type
+// labels, so the visual signature of each content type carries across the
+// app. Falls back to the gold accent for items missing a contentType.
+const createMarkerIcon = (isSelected: boolean, contentType?: string) => {
+  const baseColor = getContentTypeColor(contentType);
   const color = isSelected ? "#EA002A" : baseColor;
 
   return L.divIcon({
@@ -148,7 +143,7 @@ export default function GlobalMap({
           <Marker
             key={artwork.id}
             position={[artwork.coordinates.lat, artwork.coordinates.lng]}
-            icon={createMarkerIcon(selectedArtwork?.id === artwork.id, artwork.locationType)}
+            icon={createMarkerIcon(selectedArtwork?.id === artwork.id, artwork.contentType)}
             eventHandlers={{
               click: () => onMarkerClick(artwork),
             }}

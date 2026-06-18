@@ -52,6 +52,7 @@ function toArtwork(item: ContentItem): Artwork {
       ? { text: item.quote.text ?? "", attribution: item.quote.source ?? item.quote.attribution ?? "" }
       : undefined,
     locationType: CONTENT_TYPE_TO_LOCATION[item.contentType] ?? "sacred-art",
+    contentType: item.contentType,
     reflectionQuestions: item.reflectionQuestions ?? [],
     locationName: item.locationName ?? "",
     city: item.city ?? "",

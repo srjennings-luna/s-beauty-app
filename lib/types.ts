@@ -307,6 +307,13 @@ export type Artwork = {
   scripturePairing?: { verse: string; reference: string };
   quote?: { text: string; attribution: string };
   locationType?: LocationType;
+  /**
+   * Canonical content type, passed through from ContentItem.contentType.
+   * Use this for color-coding (via getContentTypeColor from lib/contentTypeColors)
+   * and any new code. The legacy locationType field above remains for
+   * backwards compatibility with PrayClient / ArtworkViewer sacred-art-routing.
+   */
+  contentType?: ContentType;
   episodeId?: string;
   city: string;
   country: string;
