@@ -1132,6 +1132,30 @@ Any rule below that produces the same FORM across multiple days has become a tem
 
 This is the lesson of the scene-opener catch (June 17): "Open with a scene" produced 30 days of "Location. Year." fragment openers, the same AI tell the rule was supposed to prevent. The rule was right in spirit; the form-templating broke it.
 
+### META-RULE 3: An example becomes the subject whether wanted or not
+
+When you give one instance of a class (one color, one painter, one period, one figure, one angle), the writer treats the instance AS the class. The thesis collapses to the example. Models are pattern-matchers; the example IS the pattern they match against, and they cannot easily abstract back from instance to underlying principle.
+
+**For context-writing.** If your thesis is broad ("color has communicated something to people throughout history"), either give MULTIPLE varied examples that span the breadth (yellow on Mary, lapis lazuli economics, Tyrian purple bans, gold leaf theology) or narrow the thesis to match the example you actually have ("yellow has communicated"). A broad thesis with single-narrow examples collapses to the narrow. Caught June 18, 2026: Cowork's Mantegna context held thesis "color has been used to communicate something to people throughout history" but every paragraph was a yellow story; the thesis silently collapsed to "yellow has been used to communicate."
+
+**For editorial direction (briefs, prompts, project setup).** If you want the writer to find the angle, do NOT name an example angle. State the constraint and the topic; let the writer assemble. Caught the same day at the brief-writing scale: a follow-on brief that named lapis lazuli, Tyrian purple, and cochineal as candidate angles would have produced a pigment-economics piece because pigment economics was named.
+
+**The corollary that drives the Standing Research Prompt.** The standing opening prompt for new P&P or Journey content names a TOPIC ("color iconography in painting") and a CONSTRAINT (season-agnostic, or a specific period) but NEVER an example angle, thesis, or subject. The model derives those through research and surfaces them for approval. See the prompt below.
+
+### Standing Research Prompt (the formula that replaces per-piece briefs)
+
+Open every new P&P or Journey content research session with a prompt of this shape:
+
+> I need you to research [TOPIC + optional period scope].
+> What did contemporaries of [period] understand about [TOPIC] that the modern eye often misses.
+> Find me some lesser-known facts, stories we can use for a hook and context to write a [P&P or Journey day].
+
+Three sentences. Notice what is NOT in it: thesis, subject, content type slot, date, color name, painter name, constraint list. The model derives every one of those from the research, surfaces three to five candidate facts or stories, and waits for Sheri to pick the angle. Then a second turn researches the chosen angle in depth and proposes a thesis with evidence points. Then a third turn drafts the JSON, only after Sheri locks the thesis.
+
+The middle sentence is the Period Context Research rule from this file restated as an instruction. The third sentence names the deliverable container without naming the angle. By following this shape, the prompt enforces Meta-Rule 3 automatically.
+
+**When the per-piece brief still has a role:** feast-day-anchored content with specific liturgical constraints, multi-day arcs that thread back to an existing journey, recovery work on already-published pieces, or any case where Sheri has a specific subject she wants written. For ordinary slot fills, the Standing Research Prompt replaces the brief.
+
 ### The frame beneath the rules: Aristotle's Rhetoric
 
 The voice rules in this section are an operational version of Aristotle's three modes of persuasion (ethos, pathos, logos) and the structural device that holds them together (the enthymeme). Not every rule fits neatly into one mode, most serve two or three simultaneously, as Aristotle himself argued they would. The frame is a navigation aid, not a partition.
@@ -1205,6 +1229,12 @@ The hook lives in the **Curator Note** (P&P) or as the opener of the content's f
 The dinner-table test asks whether the hook is shareable at a friendly gathering. The Inklings test raises the bar: would the hook survive a room of literary minds who already know a lot, want depth, and have no patience for the obvious? Use it on Tier 1 famous subjects in particular. If the hook would not get the Inklings to lean in, it is not a hook.
 
 **The hook is the lead. The context is the conversation that follows AFTER they lean in.** Once the Inklings lean forward, you have their attention — and you must justify the lean with substance. The context is not a recap, summary, or biographical introduction. The context is the further depth a curious literary mind would ask for after hearing the hook. It is equally important as the hook itself. Treat it that way.
+
+**Context is storytelling that converges on the thesis. NOT description of the artwork, NOT biographical summary, NOT general theme exploration.** Each paragraph of context tells a story, sometimes obviously related to the subject and sometimes surprising, whose payload advances the same unstated conclusion the user is meant to assemble. The thesis is the enthymeme; the stories are the assembled premises.
+
+Identify your thesis BEFORE drafting paragraph 1. Example for a P&P on color iconography in medieval painting: thesis is "color has been used to communicate something to people throughout history." Then every context paragraph tells a story that lands on that point: the 1496 Mantua edict forcing yellow on Jews, the Yarmo reading of Mary's yellow turban as heritage marked with respect, Mantegna's other deliberate yellow choices, the wedding-ring analogy for how period viewers read color signals instantly. NOT a description of the porcelain cup in the painting; the image is on the screen.
+
+**Common failure mode caught June 18, 2026:** Cowork opened a context paragraph with "The picture is crowded and close. Mantegna pushed the figures right up to the surface, so the three kings seem to lean into the same small space as the Holy Family. The oldest king kneels at the front and holds up a blue and white Chinese porcelain cup..." This is art appreciation. The image already shows the user this. The paragraph contributes nothing to the thesis. The Chinese porcelain fact CAN be in the context as a surprising fact about period trade routes, but it must arrive as a fact in service of the thesis, not as visual narration.
 
 **Hook and context NEVER repeat the same information. Ever.** Not the same fact in different words. Not the same beat reframed. Not "as we said in the hook." If the hook covers Aquinas's December 6, 1273 "straw" moment, the context goes elsewhere — family conflict, Albert the Great, the centuries of reception. If the hook covers Veni Creator at every conclave for a thousand years, the context covers Trent, Luther, Charles III — different ground entirely. This is a hard rule with zero exceptions. Every paragraph of context after the hook must deliver something the reader does not already have.
 
@@ -1336,7 +1366,9 @@ These earn their place ONLY when they add something the paragraph has not alread
 
 **No meta-instructions in user-facing fields.** Phrases like "Day 30 is meant to feel like arriving somewhere" or "The Verba text is worth displaying alongside the audio" are editorial direction to the system/editor, not user content. They MUST stay out of user-facing fields (curatorNote, promptQuestion, dailyPrompt.actio, contentItem.context, contentItem.artworkHook, contentItem.description). Strip them before publishing.
 
-**Liturgical / seasonal timing weighting.** When a calendar date lands on a major feast (John the Baptist June 24, Peter & Paul June 29, Benedict of Nursia July 11, Sacred Heart Friday after Corpus Christi, etc.), the slot benefits from feast-aware content. Not absolute — but a strong tiebreaker when content strength is close. Conversely, do NOT place feast-specific imagery (e.g., Pentecost) weeks out of liturgical season; it breaks Contueri's implicit calendar-awareness.
+**Liturgical / seasonal timing pre-flight check (mandatory before locking any Sacred Art subject).** Before committing to a Sacred Art subject for a P&P or Journey day, declare its liturgical season. If the subject depicts an event with a fixed feast (Nativity, Epiphany, Annunciation, Pentecost, the Passion, the Resurrection, a specific saint's feast day, the Sacred Heart on the Friday after Corpus Christi, etc.), the slot date must align with that season. An Adoration of the Magi scene is Epiphany content (early January window); placing it in June breaks Contueri's implicit calendar-awareness. The Mantegna Adoration of the Magi P&P drafted June 18, 2026 was strong on every other axis but was a seasonal mismatch for a June slot; it was parked for Advent 2026.
+
+The check is binary: either the subject is season-bound (in which case it must go in the right window), or it is season-agnostic (a thinker's life work, a landscape, a piece of math, a piece of music without liturgical bond), in which case any date works. When a calendar date lands on a major feast (John the Baptist June 24, Peter & Paul June 29, Benedict of Nursia July 11, Sacred Heart Friday after Corpus Christi, etc.), the slot also benefits from feast-aware content as a strong tiebreaker when content strength is close.
 
 **Cross-surface content overlap.** Check intended P&P content against active Journey content before publishing. If a journey day (especially the onboarding-linked BTG II) features a specific artwork, do not use the same artwork or a near-duplicate (e.g., Caravaggio's Emmaus on Day 3 of BTG II + Pontormo's Emmaus on a nearby P&P) in P&P within the same launch window.
 
@@ -1377,6 +1409,7 @@ The Lectio is a philosophy + scripture pairing — two voices arriving at the sa
   - **Rhetorical tripling:** "without a wallet, without an address, identified only by..." Three-part list built for rhythm, not information. Cut to the actual fact.
   - **Declarative fragment stacks:** "No computer. No software. Gravity calculated the building." Acceptable once per piece at most. Flag if it appears more than once.
   - **The zoom-out closer:** Ending a paragraph with a single sweeping sentence meant to feel momentous ("The man who built the world's tallest church may one day be its patron saint."). The test: would a journalist cut this as self-conscious? If yes, rewrite it.
+  - **The AI-poetic reach in clauses (caught June 18, 2026).** Watch for clauses or second halves of compound sentences that "land" with rhetorical bend rather than information. Example caught: a draft promptQuestion "What did you put on this morning, and what did it say before you spoke?" The first clause is plain; the second clause ("before you spoke") is the AI reach. It is a clever turn that no thoughtful friend would actually use. The rule: ask the question, do not reach for it. Plain conversational construction, no clever twists, no "land" beat. The fix in that case was the simpler form: "What do the colors you see or choose communicate?" Same applies to context paragraph closers, hooks, and any prose where the writer might bend a clause for resonance.
   - Test: "Would a person actually say this in conversation?" If not, rewrite it.
 - **Artwork for the BTG intro journey (Day 1 especially): do not front-load the Christian resolution.** Day 1 introduces Beauty as a transcendental through the universal human experience of longing. Art for Day 1 should carry the quality of Sehnsucht (longing for something beautiful and unreachable) without pointing at the theological answer. The answer arrives at Day 3 (Emmaus) and more fully in Myth Became Fact. Caspar David Friedrich, Wanderer Above the Sea of Fog (1818) is the recommended image for Day 1 — visual Sehnsucht, no theological pre-loading, creates discovery. Fra Angelico full Annunciation scene is too early theologically. Degas, The Star has a historically documented dark figure (wealthy patron) that creates wrong complexity for a Day 1 entry point.
 
