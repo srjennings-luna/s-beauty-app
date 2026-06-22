@@ -377,17 +377,17 @@ export default defineType({
     }),
     defineField({
       name: 'artworkHook',
-      title: 'Artwork Hook (Encounter - 1st text)',
+      title: 'Hook (Encounter - 1st text)',
       type: 'text',
       rows: 3,
       description:
-        'The surprising fact about this specific piece. Safe to show anywhere this piece appears (Journey, Explore, Library, P&P). Must be about the artwork itself, not a journey or day context. Journey-specific hooks live on dailyPrompt.curatorNote or journeyDay.encounterNote.',
+        'The story hook, the surprising fact that opens the encounter. About the work or its subject. Safe to show anywhere this piece appears (Journey Day Encounter step, Explore detail card, Library). For sacred-art the hook can be artwork-specific or subject-story; for thinker / literature / music it is the surprising fact about the work or its subject. Journey-day-specific hooks (text that only makes sense within that journey arc) live on journeyDay.encounterNote. P&P-specific hooks live on dailyPrompt.curatorNote.',
     }),
     defineField({
       name: 'artworkHookAudio',
-      title: 'Artwork Hook — Narration Audio',
+      title: 'Hook, Narration Audio',
       type: 'file',
-      description: 'Optional MP3 narration of the artwork hook. Adds a small listen button.',
+      description: 'Optional MP3 narration of the hook. Adds a small listen button.',
       options: {accept: 'audio/*'},
     }),
 

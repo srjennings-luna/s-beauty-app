@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contueri, Voice Calibration Snapshot</title>
+<style>
+  body { font-family: Georgia, "Iowan Old Style", serif; line-height: 1.55; max-width: 900px; margin: 0 auto; padding: 32px; color: #2a201a; background: #fdf6e9; }
+  h1 { font-size: 1.7rem; border-bottom: 2px solid #c19b5f; padding-bottom: 8px; }
+  h2 { font-size: 1.3rem; color: #5a4636; margin-top: 36px; border-bottom: 1px solid #d9cbb3; padding-bottom: 4px; }
+  h3 { font-size: 1.05rem; margin-top: 22px; color: #6b4d2c; }
+  details.day { border-left: 3px solid #c19b5f; padding-left: 16px; margin: 20px 0; background: #fbf7ef; padding: 12px 16px; border-radius: 0; }
+  details.day summary { font-weight: 600; cursor: pointer; padding: 4px 0; font-size: 1.05rem; }
+  .dayBody { padding-top: 12px; }
+  .block { margin: 14px 0; }
+  .label { font-variant: small-caps; letter-spacing: 0.04em; color: #c19b5f; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .src { color: #6b4d2c; font-size: 0.85rem; margin-top: -8px; font-style: italic; }
+  .empty { color: #9a8b78; font-style: italic; }
+  .quote { font-style: italic; color: #4a3a2a; padding-left: 16px; border-left: 1px solid #c19b5f; margin: 8px 0; }
+  .gd { background: #f5edd9; padding: 10px 14px; margin: 8px 0; border-radius: 0; }
+  .meta { color: #6b4d2c; font-size: 0.85rem; font-style: italic; }
+  .header-meta { color: #6b4d2c; font-size: 0.9rem; margin-top: -8px; }
+  .intro { background: #f0e4cb; padding: 14px 18px; margin: 18px 0; border-left: 3px solid #c19b5f; }
+  pre { background: #f5edd9; padding: 10px; white-space: pre-wrap; word-wrap: break-word; font-family: Georgia, serif; }
+</style>
+</head>
+<body>
+
+<h1>Contueri, Voice Calibration Snapshot</h1>
+<p class="header-meta"><strong>Snapshot date:</strong> 2026-06-22 &middot; <strong>Source:</strong> Sanity project <code>em44j9m8</code>, dataset <code>production</code>, perspective <code>published</code> &middot; <strong>Script:</strong> <code>scripts/snapshot-voice-calibration.ts</code></p>
+
+<div class="intro">
+<p><strong>What this is.</strong> The two canonical voice exemplars for Contueri content, pulled from live published Sanity at the snapshot date above. CLAUDE.md and the four foundational editorial docs ABSTRACT the voice in rules. This document CARRIES the voice itself. Any session drafting Contueri content reads this file before writing.</p>
+
+<p><strong>Why a snapshot, not a live query.</strong> The calibration material is meant to be stable. Pulling it live on every session start costs tokens, has network risk, and (for Cowork) requires writing a query script each session. Snapshot once, point every session at the snapshot. Re-run the script when the underlying pieces change.</p>
+
+<p><strong>Refresh triggers.</strong> Re-run <code>npx tsx scripts/snapshot-voice-calibration.ts --write</code> when any of the following happens:</p>
+<ul>
+  <li>When Myth Became Fact gets new days seeded (Days 5-7 currently pending), or existing days edited</li>
+  <li>"They Were Early" gets edited</li>
+  <li>Either piece is superseded by a stronger voice exemplar</li>
+</ul>
+
+<p><strong>Source of truth.</strong> The published content in Sanity. This file is a point-in-time copy for fast agent reading; if it conflicts with what is currently in Sanity, Sanity wins and this file is stale.</p>
+</div>
+
+<h2>Part A. When Myth Became Fact (the journey-form voice exemplar)</h2>
+<p><strong>Title:</strong> When Myth Became Fact</p>
+<p><strong>Description:</strong> Every culture in human history has told a story about a god who dies and returns. C.S. Lewis spent 33 years dismissing this as coincidence. Then he followed the argument to its conclusion. Seven days through the art, philosophy, and landscapes that led him there.
+</p>
+<p><strong>Total days planned:</strong> 7 &middot; <strong>Days seeded:</strong> 4</p>
+
+
+  <details open class="day">
+    <summary>Day 1, The story that won't stop</summary>
+    <div class="dayBody">
+      <div class="block"><p class="label">Open Text:</p><p>Persephone was in a meadow picking flowers when the earth opened beneath her.</p><p>The gods had planted the trap themselves. In the middle of the field, they had grown a narcissus of a hundred blossoms, so beautiful it stopped her mid-step. When she reached down and plucked it, the ground split apart. Hades, lord of the dead, rose up in his golden chariot from the darkness below. He seized her. He dragged her down into his sunless world before she could cry out.</p><p>Demeter, her mother, was goddess of the earth and grain. She had dominion over the growing season, the harvest, everything that came up from the ground and fed the living. When Persephone disappeared, Demeter tore her robes and wandered the earth weeping and distraught for nine days without eating or resting. Her grief turned to rage. She caused the crops to wither. Animals starved. The land went cold and dead.</p><p>The other gods watched and finally sent word to Hades: return the girl before everything dies. Hades agreed. But before he let Persephone go, he had her eat pomegranate seeds, the food of the dead, which bound her to him and to his kingdom. She could not leave entirely. Each year, when spring comes, she rises to the world of the living for nine months. Each autumn, she descends again for three. Each year, Demeter grieves again. Each year, the earth follows her.</p><p>For over a thousand years, the Greeks built a religious rite around this story. Known as the cult of Demeter and Persephone, the Eleusinian Mysteries were the most important religious rites in the ancient world.</p><p>Every autumn, thousands of initiates walked the Sacred Way, a fourteen-mile procession from Athens to the town of Eleusis. They began by purifying themselves in the sea. They fasted. They processed through the night by torchlight, singing and calling the name of Persephone. At the end of the road stood the Telesterion, the great sanctuary dedicated to Demeter and Persephone, a hall large enough to hold thousands. Inside, the final revelation took place.</p><p>Those who survived described what happened in the Telesterion in only three phrases: something done, something said, something shown. No one said what. Not Plato, who was initiated. Not Cicero, who noted the Mysteries gave &quot;a reason not only to live with joy, but also to die with better hope.&quot; Not Marcus Aurelius, who underwent them as emperor. For fifteen centuries, the secret held. When the emperor Theodosius shut the rites down in 392 AD, it died with the last initiates.</p><p>But we know the central symbol. What was shown, in silence, at the end of it all.</p><p>A single ear of wheat. Something that falls into the ground, dies, and comes back.</p></div>
+      <div class="block">
+        <p class="label">Encounter Content (contentItem):</p>
+        
+    <p><span class="label">Title:</span> The Great Eleusinian Relief</p>
+    <p><span class="label">Artist:</span> Unknown</p>
+    <p><span class="label">Year:</span> 440 BC</p>
+    <p><span class="label">Medium:</span> Marble relief</p>
+    
+    <div class="block"><p class="label">Hook (Encounter, 1st text):</p><p>The Eleusinian Mysteries were the most important religious rites in the ancient world. For over 1,500 years, every philosopher, general, and emperor of note underwent initiation. Plato did. Cicero did. Marcus Aurelius did. The central secret was never written down. Initiates were forbidden to reveal what they saw in the final moment of revelation, and none of them did. When the Christian emperor Theodosius shut the rites down in 392 AD, the secret died with the last living initiates. We will never know exactly what was shown. But we know the central symbol: a single ear of wheat, held up in silence. A grain that falls into the ground, dies, and comes back as bread.</p></div>
+    <div class="block"><p class="label">Context:</p><p>The Eleusinian Mysteries were conducted at the sanctuary of Eleusis, about 20 kilometers from Athens, from roughly 1500 BC to 392 AD. Initiation was open to anyone who spoke Greek and had not committed murder. The rites took place over nine days each autumn. Initiates fasted, processed from Athens to Eleusis on foot, and entered the Telesterion, a great hall that could hold thousands. What happened inside was the best-kept secret in the ancient world. Cicero wrote that the Mysteries gave initiates &quot;a reason not only to live with joy, but also to die with better hope.&quot; The early Church Fathers were aware of the parallels between the Eleusinian story and the Christian one. Clement of Alexandria, who had been initiated before his conversion, wrote about the Mysteries at length, arguing that the pagans had glimpsed something real but incomplete. The grain that dies and returns was, for him, a shadow cast by the thing that actually happened. In the relief itself, the young man Triptolemus stands between the two goddesses receiving a sheaf of grain. In the Eleusinian tradition, this was not agricultural instruction. The grain was the entire argument: something must die underground before it can return as food that sustains the living. Demeter lost her daughter Persephone to the underworld. Persephone returned each spring. The cycle of descent, death, and return was the oldest story the Greek world knew, and they considered it the most important truth they possessed. They built the Mysteries around it and guarded the secret for a millennium and a half. When John's Gospel records Jesus saying &quot;unless a grain of wheat falls into the earth and dies, it remains alone; but if it dies, it bears much fruit,&quot; the Greek-speaking audience of the 1st century would have heard the Eleusinian echo immediately.</p></div>
+    <div class="block"><p class="label">Description:</p><p>A marble relief from the 5th century BC. Two goddesses flank a young man. One reaches toward him. The gesture is unmistakable: something is being given. Something is being entrusted. We do not know exactly what.</p></div>
+  
+      </div>
+      <div class="block"><p class="label">Encounter Guidance:</p><p>Look at Demeter's hand reaching toward the young man. Something is being given. You cannot see what it is.</p></div>
+      <div class="block"><p class="label">Encounter Note ("Look Closer"):</p><p>The relief was carved at the height of Athenian civilization, around the same time Sophocles was writing tragedies and Socrates was asking questions in the marketplace. These were not primitive people grasping at superstition. They were the most intellectually rigorous culture the Western world had produced, and they considered the dying-and-rising grain the deepest truth they knew. They wrapped it in secrecy and kept it for 1,500 years. And then it ended, and the secret passed out of the world. Except that it didn't. The same pattern kept appearing: in Osiris, in Balder, in Orpheus, in Adonis, in every culture that told stories. Something about the shape of &quot;descent, death, return&quot; would not let the human imagination go.</p></div>
+      <div class="block">
+        <p class="label">Auditio:</p>
+        
+    
+    
+    
+    
+  
+      </div>
+      <div class="block">
+        <p class="label">Lectio:</p>
+        
+      <p><span class="label">Philosophy:</span> "Blessed is he among men on earth who has seen these Mysteries; but he who is uninitiated and has no part in them never has the same lot once he is dead, down in the darkness and gloom."</p>
+      <p class="src">, Pindar, fragment from Dirges (c. 470 BC), on the Eleusinian Mysteries</p>
+      <p><span class="label">Scripture:</span> "Truly, truly, I say to you, unless a grain of wheat falls into the earth and dies, it remains alone; but if it dies, it bears much fruit."</p>
+      <p class="src">, John 12:24, RSV-2CE</p>
+      <div class="block"><p class="label">Connection note:</p><p>Pindar calls the initiate blessed for having seen the Mysteries, whose guarded secret was a single grain that falls, dies, and returns. John 12:24 names what that grain was always reaching toward: unless it falls into the earth and dies it stays alone, but in dying it bears much fruit. The Greeks kept the image for a thousand years. The Gospel tells them what it meant.</p></div>
+    
+      </div>
+      <div class="block"><p class="label">Reflection Questions:</p><ul><li>What story do you keep coming back to, a book, a film, a myth, that moves you in ways you can't quite explain? </li></ul></div>
+      <div class="block"><p class="label">Connect Thread:</p><p>The grain that dies and returns was the Eleusinian secret. But the dying pattern didn't belong to one story. It kept appearing in other myths, other names, other forms, and not every one of them stayed in the past.</p></div>
+      <div class="block">
+        <p class="label">Go Deeper (Tradition Reflections):</p>
+        
+    <div class="gd">
+      <p><span class="label">Clement of Alexandria on the Mysteries </span> <span class="meta">(church-father, fathers)</span></p>
+      <p class="quote">"I will show you the Word, and the Word's Mysteries, describing them according to the image familiar to you."</p>
+      <p>Clement was a 2nd-century Christian theologian who had been initiated into the Eleusinian Mysteries before his conversion. He did not dismiss what he had experienced. He argued that the Mysteries contained real, if incomplete, glimpses of truth, planted by the same God who would later speak directly through Christ. He was one of the first Christian thinkers to take pagan religious experience seriously rather than simply condemning it.</p>
+      <p class="src">Source: Clement of Alexandria, Exhortation to the Greeks (Protrepticus), ch. 12</p>
+    </div>
+  
+      </div>
+    </div>
+  </details>
+  
+
+  <details open class="day">
+    <summary>Day 2, The tears she cried</summary>
+    <div class="dayBody">
+      <div class="block"><p class="label">Open Text:</p><p>Myrrha, the princess of Cyprus, was known for her beauty. Her mother, the queen, foolishly bragged that Myrrha was more beautiful than Venus herself. Angered, Venus cursed innocent Myrrha with an unspeakable passion as punishment for the queen's arrogance. Pregnant and distraught, Myrrha fled the castle weeping. The gods saw Myrrha inconsolable and took pity on her, transforming her into a tree. Her tears thickened into sap. When the time came, the gods split open the tree, and Adonis entered the world.</p><p>He grew into someone so beautiful, more than Venus herself. The goddess who had sent the curse,  fell in love with him. She left Olympus and followed him through the fields like a mortal girl. She warned him away from dangerous animals. He went after a wild boar.</p><p>The boar caught him in the thigh. Venus heard him cry out and came running, barefoot over rocks and thorns. She found him in the grass. She lifted his body, still bleeding, and held him in her lap. She was a goddess, but she could not bring him back. But she vowed he would not be forgotten.</p><p>From the drops of his blood she fashioned a flower, crimson and fragile, that blooms briefly and blows away at the first breeze. The Greeks called it the anemone, from their word for wind.</p><p>A beautiful thing that does not last.</p></div>
+      <div class="block">
+        <p class="label">Encounter Content (contentItem):</p>
+        
+    <p><span class="label">Title:</span> Venus Mourning the Death of Adonis</p>
+    <p><span class="label">Artist:</span> Francesco Furini</p>
+    <p><span class="label">Year:</span> c. 1509</p>
+    <p><span class="label">Medium:</span> Oil on canvas</p>
+    
+    <div class="block"><p class="label">Hook (Encounter, 1st text):</p><p>Francesco Furini painted this in Florence in 1626. He was 23 years old and already on his way to becoming a Catholic priest. Art historians trace the composition to two sources: Raphael's Entombment of Christ and Caravaggio's Entombment. In both, a grieving woman bears the weight of a dead man's body. But there is a third work pointing to a bigger story: Michelangelo's Pietà.</p></div>
+    <div class="block"><p class="label">Context:</p><p>The myth of Adonis is older than Greece. Versions appear in Sumerian and Phoenician tradition under different names: the dying god, the inconsolable goddess, the annual return. By the time the Greeks inherited it, the story had been running for centuries. The festival of the Adonia was observed across the ancient Mediterranean for hundreds of years. Women planted fast-sprouting seeds in shallow terracotta pots, watched them grow and wilt within eight days, then carried the pots through the streets in procession, weeping. The rite is documented in Athens, Alexandria, Byblos, and Rome. It was not a fringe cult. Plato mentions women observing it in passing in the Republic. Furini was not the first painter to be drawn to this story. Titian painted Venus and Adonis at least six times. Rubens painted it. Poussin painted it. It appears on Roman sarcophagi, on Pompeian walls, on Greek vases. The beauty, the warning, the refusal to listen, the grief. Painters kept returning to it.</p></div>
+    <div class="block"><p class="label">Description:</p><p>A woman reaches toward a body that has just gone still. Around her, figures hold what she cannot hold herself. At her feet, a small figure looks up at her face.</p></div>
+  
+      </div>
+      <div class="block"><p class="label">Encounter Guidance:</p><p>Find the small figure at her feet. He's known as the god of love.</p></div>
+      <div class="block"><p class="label">Encounter Note ("Look Closer"):</p><p>Venus sent the curse. What came from it was the one thing she could not have planned: the boy she fell in love with, and the sap of his mother's grief. Myrrha's tears hardened into myrrh, one of the most precious substances in the ancient world. Used in temples. Used to anoint the dead. A curse that produced an offering.</p></div>
+      <div class="block">
+        <p class="label">Auditio:</p>
+        
+    
+    
+    
+    
+  
+      </div>
+      <div class="block">
+        <p class="label">Lectio:</p>
+        
+      <p><span class="label">Philosophy:</span> "When he sees beauty here, he is reminded of true beauty."</p>
+      <p class="src">, Plato, Phaedrus</p>
+      <p><span class="label">Scripture:</span> "And going into the house they saw the child with Mary his mother, and they fell down and worshiped him. Then, opening their treasures, they offered him gifts, gold and frankincense and myrrh."</p>
+      <p class="src">, Matthew 2:11, RSV-2CE</p>
+      <div class="block"><p class="label">Connection note:</p><p>Myrrha's sap carries her name. Matthew places it, the resin of grief used for centuries to anoint the dead, into the hands of men kneeling before a child. The gift was for burial. They brought it to a birth.</p></div>
+    
+      </div>
+      <div class="block"><p class="label">Reflection Questions:</p><ul><li>What is the most beautiful thing you have lost?</li></ul></div>
+      <div class="block"><p class="label">Connect Thread:</p><p>The Greeks wept for Adonis every year. They planted gardens they knew would die. They could feel the longing of what they were mourning for. Plato believed it pointed somewhere, toward a world where beautiful things do not fall apart. He spent forty years trying to describe it. He never arrived.</p></div>
+      <div class="block">
+        <p class="label">Go Deeper (Tradition Reflections):</p>
+        
+    <div class="gd">
+      <p><span class="label">Origen on the Magi's gifts</span> <span class="meta">(church-father, fathers)</span></p>
+      <p class="quote">"Gold, as to a king; frankincense, as to God; myrrh, as to one who is to die"</p>
+      <p>Origen, writing in Alexandria around 240 AD, read the three gifts as a compressed statement about who the child was. Gold for kingship. Frankincense for divinity. Myrrh for burial. The Magi were not bringing luxury items. They were announcing, at a birth, the kind of death that was coming. Origen saw in the myrrh the visitors' unwitting prophecy: they had carried the resin of grief to a cradle, not yet knowing why it was exactly right.</p>
+      <p class="src">Source: Origen, Contra Celsum, Book I, ch. 60</p>
+    </div>
+  
+      </div>
+    </div>
+  </details>
+  
+
+  <details open class="day">
+    <summary>Day 3, The longing no one could name</summary>
+    <div class="dayBody">
+      <div class="block"><p class="label">Open Text:</p><p>In 1508, Pope Julius II gave two commissions at the same time.</p><p>He hired Raphael, 25 years old, to paint the walls and ceiling of his private library in the Vatican palace. In the room next door, Michelangelo, 33, was beginning to paint the ceiling of the Sistine Chapel. Same building. Same patron. Same years. Neither man saw what the other was doing. The Sistine Chapel was sealed under scaffolding. The library was Raphael's alone.</p><p>In 1511, Julius partially unveiled the Sistine ceiling before it was complete. Raphael slipped in.</p><p>He stood beneath Michelangelo's figures and looked. What stopped him was not the grandeur. It was one figure set apart from the crowd: Heraclitus, the Greek philosopher, sitting alone, head down over a notebook, brooding. His face was heavy with the effort of a mind circling something it cannot reach.</p><p>Raphael went back to his own fresco. He had not included Heraclitus. Now he painted him in the foreground, alone. He gave him Michelangelo's face.</p><p>He did the same for Plato. No one alive in 1509 knew what Plato looked like. Raphael needed a face for the philosopher at the center of his composition, the one pointing upward toward the invisible world he had spent his life trying to describe. He chose the face of Leonardo da Vinci.</p><p>Two men, two thousand years apart. Both pointing in the same direction. Both unable to name what they were pointing towards.</p><p>Plato called it the Form of the Good. He said everything visible in our world is only its shadow, the way shapes on a cave wall are cast by a fire burning outside the cave. He knew the fire was real. He spent forty years trying to describe it. He died still reaching.</p><p>Raphael saw that same quality in Leonardo's face. He saw it in Michelangelo's brooding Heraclitus. He put all three of them in the same room: the philosopher, the artist, the man who recognized in both of them, the same condition.</p><p>The longing no one could name.</p><p></p></div>
+      <div class="block">
+        <p class="label">Encounter Content (contentItem):</p>
+        
+    <p><span class="label">Title:</span> The School of Athens</p>
+    <p><span class="label">Artist:</span> Raphael  - (Raffaello Sanzio da Urbino)</p>
+    <p><span class="label">Year:</span> 1509-1511</p>
+    <p><span class="label">Medium:</span> Fresco</p>
+    
+    <div class="block"><p class="label">Hook (Encounter, 1st text):</p><p>Raphael painted The School of Athens to face the wall directly across from it, which he also painted: the Disputation of the Holy Sacrament. On one wall, every great mind of the pagan world argues about reason and reality. On the wall opposite: the Church Triumphant in heaven, the Church Militant on earth, the four Latin Doctors of the Church, and at the center of it all, the Eucharist. Not faith as a vague idea. The full weight of Catholic doctrine, made visible and awe-inspiring. Julius II sat at his desk between them every day. The Renaissance had a word for what he commissioned: concordia. The conviction that human reason and divine revelation are not opponents. They are two angles on the same truth.</p></div>
+    <div class="block"><p class="label">Context:</p><p>The figures filling Raphael's hall are almost all pagan. Raphael's Pope commissioned a painting celebrating them. The implicit argument is the one Justin Martyr made fourteen centuries earlier: the philosophers were asking real questions. The fresco is not paganism tolerated by the Church. It is the Church's confidence that truth seekers were seeking something real, even when they did not yet have the name for it. Every figure's pose and attribute is deliberate. Plato holds the Timaeus, his dialogue about the creation of the world, and points upward, toward the transcendent Forms he believed were the source of all reality. Aristotle holds the Ethics and points outward, toward the observable, earthly world he believed was where truth lived. The arch above them frames the sky, visible through the open wall behind them: the debate about whether ultimate reality is up there or down here has been going on for 2,500 years. To the lower right, Euclid bends over a compass drawing geometric forms, a man who believed truth could be proved. To the left, Pythagoras writes in a notebook while a student holds up a tablet showing harmonic ratios, the conviction that the structure of reality is musical. The entire fresco is a map of human reason trying every door.</p></div>
+    <div class="block"><p class="label">Description:</p><p>Fifty-eight philosophers, mathematicians, and scientists fill a vast Roman hall that never existed. At the center, two figures walk and argue. One points up. The other points forward. They have been doing this for 2,500 years and they are still doing it now.</p></div>
+  
+      </div>
+      <div class="block"><p class="label">Encounter Guidance:</p><p>Find Plato and Aristotle. Look at the hands first. Then look at their eyes: they are looking at each other, not at us.</p></div>
+      <div class="block"><p class="label">Encounter Note ("Look Closer"):</p><p>Plato's most famous argument is the Allegory of the Cave. Imagine prisoners chained underground since birth, facing a wall. Behind them, a fire casts shadows of objects on the wall. The prisoners mistake the shadows for reality. One prisoner is freed, walks out into the sunlight, and is nearly blinded. He returns to tell the others. They think he has gone mad. What Plato could not say, the thing the allegory reaches for but never names, is what the sun actually is. He only knew it was the source of everything he could see. Four centuries later, Paul would write: &quot;For now we see in a mirror dimly, but then face to face.&quot; The Greek word Paul used for &quot;dimly&quot; shares a root with the shadow-vision Plato described in the cave. Paul was finishing a sentence Plato had started.</p></div>
+      <div class="block">
+        <p class="label">Auditio:</p>
+        
+    
+    
+    
+    
+  
+      </div>
+      <div class="block">
+        <p class="label">Lectio:</p>
+        
+      <p><span class="label">Philosophy:</span> "Beauty itself is the clearest, most lovable, and most divine of all things."</p>
+      <p class="src">, Plato, Phaedrus 250d</p>
+      <p><span class="label">Scripture:</span> "For now we see in a mirror dimly, but then face to face. Now I know in part; then I shall know fully, even as I have been fully known."</p>
+      <p class="src">, 1 Corinthians 13:12, RSV-2CE</p>
+      <div class="block"><p class="label">Connection note:</p><p>Plato described beauty as the most visible of the transcendent Forms, the one human beings can actually perceive even while trapped in the cave. It is the crack in the wall that lets the light in. Paul adds something Plato could never have written: &quot;even as I have been fully known.&quot; Not just clarity arriving but relationship. Not just understanding, but being understood. Plato's beauty pointed toward something real. Paul names the one who sees clearly and reaches back. This pairing returns on Day 7. Hold it.</p></div>
+    
+      </div>
+      <div class="block"><p class="label">Reflection Questions:</p><ul><li>What do you find yourself reaching for that you cannot quite name, a feeling, a quality in certain places or music or people that seems to point beyond itself?</li></ul></div>
+      <div class="block"><p class="label">Connect Thread:</p><p>Plato was the most rigorous mind of the ancient world, and he could not close the argument. Two thousand years later, an Oxford professor walked into the same question on a rainy autumn night and followed it somewhere Plato never went.</p></div>
+      <div class="block">
+        <p class="label">Go Deeper (Tradition Reflections):</p>
+        
+    <div class="gd">
+      <p><span class="label">Augustine on restlessness</span> <span class="meta">(church-father, fathers)</span></p>
+      <p class="quote">"You have made us for yourself, O Lord, and our heart is restless until it rests in you."</p>
+      <p>Augustine wrote this line at the opening of his Confessions in 400 AD. He had spent years as a pagan philosopher and a follower of various religious movements before his conversion. He recognized Plato's longing from the inside: it was his own. What Plato had named as a philosophical condition, Augustine identified as a theological one. Augustine said, the heart keeps reaching because it was made for Him. That is what Plato could not name.</p>
+      <p class="src">Source: Augustine, Confessions, Book I, Chapter 1</p>
+    </div>
+  
+      </div>
+    </div>
+  </details>
+  
+
+  <details open class="day">
+    <summary>Day 4, A walk in the rain</summary>
+    <div class="dayBody">
+      <div class="block"><p class="label">Open Text:</p><p>C.S. Lewis knew the story better than almost anyone alive.</p><p>He had spent years in the library reading Frazer's Golden Bough, the great catalogue of world mythology. He knew the pattern by heart: a god who descends, dies, and rises again. The Greeks had Adonis. The Egyptians had Osiris. The Babylonians had Tammuz. The Norse had Balder. The same story told in a dozen languages across cultures that had never met. Lewis found it beautiful. He also found it decisive. If the dying-and-rising god appeared everywhere, then Christianity was simply the Hebrew version: one more entry in a catalogue that stretched back to the beginning of human imagination. The pattern proved the story was invented. Invented, and invented again and again, because this was what human beings did when they reached for something they could not have.</p><p>By the autumn of 1931, Lewis had reluctantly come to believe in God. He could not take the next step. He had too much Frazer in his head.</p><p>On the night of September 19th, he walked along a path beside the River Cherwell with J.R.R. Tolkien and a friend named Hugo Dyson. It was after midnight. It was raining. They had been talking since dinner.</p><p>Tolkien did not argue with Lewis's evidence. He took it and turned it around.</p><p>The dying-and-rising god appears in every culture in human history, Tolkien said. Lewis had been reading this as proof that the story was invented. But what if it meant the opposite? What if every culture reached for this story because God had placed the longing for it in human nature itself.</p><p>The myths weren't lies. They were the human imagination correctly sensing the shape of something real. Reaching in the right direction without the full picture. Every culture that told the dying-and-rising story was seeing dimly. Pointing accurately. Just not yet seeing what they were pointing at.</p><p>And then, once, in a specific place, in a specific year, it happened. Not as myth. As fact.</p><p>Lewis resisted. They walked in the rain until nearly three in the morning.</p><p>Nine days later he wrote to his closest friend: &quot;I have just passed on from believing in God to definitely believing in Christ.&quot;</p><p>Thirteen years after that walk, Lewis published an essay. He called it &quot;Myth Became Fact.&quot;</p></div>
+      <div class="block">
+        <p class="label">Encounter Content (contentItem):</p>
+        
+    <p><span class="label">Title:</span> Addison's Walk</p>
+    <p><span class="label">Artist:</span> </p>
+    
+    
+    
+    
+    <div class="block"><p class="label">Context:</p><p>The walk is named for Joseph Addison, the 18th-century essayist who paced this path composing essays while he was a Fellow at Magdalen College, the same post Lewis held from 1925. Lewis and Tolkien met through the Inklings, a literary circle that gathered weekly at a pub on St Giles' Street called the Eagle and Child, still nicknamed the Bird and Baby by Oxford locals. Hugo Dyson, the third man on the walk, was a lecturer at Reading University and a longtime Inklings companion. Lewis would later write that he came to faith as &quot;the most reluctant convert in all England.&quot; The conversion itself did not happen on Addison's Walk. It happened nine days later, riding in his brother's motorcycle sidecar to Whipsnade Zoo. He wrote afterward: &quot;When we set out I did not believe that Jesus Christ is the Son of God, and when we reached the zoo I did.&quot;</p></div>
+    <div class="block"><p class="label">Description:</p><p>A narrow path curves beside a river through old college grounds. Willows overhang the water. The banks are wild and unmown. In autumn, the path is leaf-strewn and half-dark even in daylight.</p></div>
+  
+      </div>
+      <div class="block"><p class="label">Encounter Guidance:</p><p>Imagine walking this path after midnight, in the rain, with two friends, having good conversation.</p></div>
+      <div class="block"><p class="label">Encounter Note ("Look Closer"):</p><p>Tolkien's phrase &quot;splintered fragments of the true light&quot; is not saying all religions are equally true. He was saying that the human imagination, made in the image of a storytelling God, kept reaching toward the same story in different languages, in different cultures, across thousands of years. The fragments fit because they are fragments of the same thing. Lewis later put it in his own words: the pagan stories are &quot;God expressing Himself through the minds of poets, using such images as He found there, while Christianity is God expressing Himself through what we call 'real things.'&quot;</p></div>
+      <div class="block">
+        <p class="label">Auditio:</p>
+        
+    
+    
+    
+    
+  
+      </div>
+      <div class="block">
+        <p class="label">Lectio:</p>
+        
+      <p><span class="label">Philosophy:</span> "There are tears at the heart of things"</p>
+      <p class="src">, Virgil, Aeneid Book I (&quot;sunt lacrimae rerum&quot;), c. 19 BC</p>
+      <p><span class="label">Scripture:</span> "He has made everything beautiful in its time. He has also set eternity in the human heart; yet no one can fathom what God has done from beginning to end."</p>
+      <p class="src">, Ecclesiastes 3:11, RSV-2CE</p>
+      <div class="block"><p class="label">Connection note:</p><p>Virgil's &quot;sunt lacrimae rerum&quot; is the most compressed expression of human longing in Latin: the sadness embedded in beautiful things, the grief at the heart of mortal life. He sensed that something was wrong with the world and that beauty was both the evidence and the wound. Ecclesiastes names the source: God placed eternity in the human heart. That is why beautiful things make us sad and restless. We were made for more than what we can hold. Tolkien knew both texts. He made the same argument on the path beside the River Cherwell. Virgil will appear again on Day 5, in a role no one expected a pagan poet to play.</p></div>
+    
+      </div>
+      <div class="block"><p class="label">Reflection Questions:</p><ul><li>When did a conversation shift something you had long believed, and were you glad it happened?</li></ul></div>
+      <div class="block"><p class="label">Connect Thread:</p><p>The Church had been making Tolkien's argument for fifteen centuries before he walked this path. They painted their evidence on the ceiling of the Sistine Chapel.</p></div>
+      <div class="block">
+        <p class="label">Go Deeper (Tradition Reflections):</p>
+        
+    <div class="gd">
+      <p><span class="label">Tertullian on the soul's witness</span> <span class="meta">(church-father, fathers)</span></p>
+      <p class="quote">"O testimony of the soul, by nature Christian"</p>
+      <p>Writing around 197 AD, Tertullian argued that the human soul is naturaliter Christiana, naturally Christian. Even when a person has no name for God, the soul reaches toward him instinctively. When someone cries out in wonder or grief without thinking, Tertullian says that is the soul testifying to its maker. Every culture that told the dying-and-rising story was, in his framework, the soul doing exactly what it was made to do: reaching correctly, without yet knowing toward what.</p>
+      <p class="src">Source: Tertullian, Apology, ch. 17</p>
+    </div>
+  
+      </div>
+    </div>
+  </details>
+  
+
+<h2>Part B. "They Were Early" (the P&P-form voice exemplar)</h2>
+<p><strong>Date:</strong> 2026-06-01 &middot; <strong>Day Title:</strong> </p>
+
+<div class="block">
+  <p class="label">Content Item (the painting + hook):</p>
+  
+    <p><span class="label">Title:</span> They Were Early</p>
+    <p><span class="label">Artist:</span> </p>
+    
+    
+    
+    <div class="block"><p class="label">Hook (Encounter, 1st text):</p><p>In the 2nd century, most people assumed the new Christian faith and Greco-Roman philosophy were enemies. Justin Martyr wrote directly to Emperor Antoninus Pius and argued the opposite: the Greek philosophers had not been wrong. They were early.</p></div>
+    <div class="block"><p class="label">Context:</p><p>In Rome around 150 AD, you could be tried and executed for being a Christian. The rumors about what happened at their secret gatherings had been spreading for years: that they ate flesh and drank blood, and that they called strangers brother and sister and gave them a holy kiss on the mouth.</p><p>The gatherings were small. People met in private houses, sometimes before dawn. They passed a cup of wine and broke bread. They said these were the body and blood of a man Rome had crucified about 120 years earlier. They greeted one another the way family members did, with a kiss. People who had met only that evening called each other brother. Called each other sister. It was a gesture of belonging that Rome had no other category for.</p><p>What leaked outside the room was stripped of its meaning. It looked like a group meeting in secret, consuming blood and flesh. People calling strangers family and kissing. Romans had a ready-made vocabulary for the worst things a human being could do. Thyestes, who ate his own children. Oedipus, who married his mother. These were not random myths. They were the outer boundary of the unthinkable, the crimes so monstrous they had become shorthand for everything civilization existed to prevent. When the accusations against Christians hardened into formal charges, Rome reached for exactly this vocabulary. People were dying for it.</p><p>Christianity at this moment is not ancient. It has been roughly 120 years since the crucifixion. It has no buildings, no legal standing, no protection. It meets in houses. People who knew the apostles are only just dying. A philosopher born in Samaria decides to respond. His name was Justin. History would call him Justin Martyr.</p><p>Justin spent years moving through every major school of Greek philosophy: Stoicism, Aristotelianism, Pythagoreanism, Platonism. He studied all of them because he was searching for truth. On a beach outside Ephesus, he met an old man. The man asked him why he was looking for truth in philosophy when the prophets had already spoken it.</p><p>Justin went home and read the prophets. He wore a philosopher's cloak. He kept wearing it. He did not experience Christianity as the end of philosophy. He experienced it as the answer.  The one he had been searching for.</p></div>
+    <div class="block"><p class="label">Description:</p><p>A 2nd-century philosopher who trained in the schools of Socrates and Plato, converted to a religion the Roman Empire considered illegal, then walked into the Emperor's court with a written argument that philosophy and the gospel were not enemies. They were the same conversation, centuries apart.</p></div>
+  
+</div>
+
+<div class="block"><p class="label">Curator Note (P&P-specific hook):</p><p>In the 2nd century, most people assumed the new Christian faith and Greco-Roman philosophy were enemies. Justin Martyr wrote directly to Emperor Antoninus Pius and argued the opposite: the Greek philosophers had not been wrong. They were early.</p></div>
+<div class="block"><p class="label">Prompt Question:</p><p>What is the most surprising thing you have ever discovered was true?</p></div>
+<div class="block">
+  <p class="label">Lectio:</p>
+  
+    <p><span class="label">Philosophy:</span> "The Logos is common to all."</p>
+    <p class="src">, Heraclitus, Fragment 2 (c. 500 BC)</p>
+    <p><span class="label">Scripture:</span> "In the beginning was the Word, and the Word was with God, and the Word was God... And the Word became flesh and dwelt among us."</p>
+    <p class="src">, John 1:1, 14 (RSV-2CE)</p>
+  
+</div>
+<div class="block">
+  <p class="label">Auditio:</p>
+  
+    
+    
+    
+    
+  
+</div>
+<div class="block"><p class="label">Actio:</p><p>Read the Lectio pairing again slowly. Heraclitus wrote his fragment around 500 BC. John's Gospel was written around 90 AD. Six centuries apart, they used the same word for the deepest thing they could reach.</p></div>
+
+<h2>How to read this file as a model</h2>
+<p>Internalize the SHAPE of these pieces, not their specific facts:</p>
+<ul>
+  <li>The hook lands as one arresting fact, delivered flat, on a quiet turn. It does not announce itself.</li>
+  <li>Context is a single converging story with names, dates, and specific moments. Never a glossary or a tour. Meaning rises out of the narrative; it is not stated.</li>
+  <li>Reading a painting's hidden language is the CLIMAX of the story, not the setup.</li>
+  <li>Precious-material-as-meaning lives inside narrative (spikenard at 300 denarii ~ year's wages), never as a price lecture.</li>
+  <li>Closers do not summarize. The reader assembles the conclusion.</li>
+  <li>No modern-consumer winks. No "in our world today" framing. No survey-and-compare structures.</li>
+  <li>Open Sans for regular prose. Cormorant Garamond italic only for quoted material 1.3rem and above. (This affects how you imagine the rendering; the field text itself is plain.)</li>
+</ul>
+
+<p><em>If you read text saying "the artworkHook must be about the artwork itself" anywhere in the older content docs, that is superseded. The field carries the story hook, the surprising fact about the work or its subject. See the Hook Rule in CLAUDE.md for the current framing.</em></p>
+
+</body>
+</html>

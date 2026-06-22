@@ -12,7 +12,13 @@ Read this at the start of every session. It contains all key product decisions, 
 4. `content-docs/CONTUERI-Cowork-Brief-Editorial-Rules-2026-06-17.html`, concentrated recap of the editorial rules sharpened across the June 12-17 sweep, with the failures that drove each rule.
 5. `content-docs/CONTUERI-Cowork-Brief-Planning-Surface-2026-06-17.html`, how the Sanity planningItem schema works and the concept-to-publish workflow.
 
-The older `content-docs/KALLOS-Cowork-Briefing.html` is SUPERSEDED by the new PM Brief above. Treat it as historical context only. A session that skips the foundational docs will produce generic or off-doctrine output.
+**Then read the voice-calibration snapshot** before drafting any content or editorial work:
+
+6. `content-docs/CONTUERI-Voice-Calibration.html`, the snapshot of the two canonical voice exemplars (the When Myth Became Fact journey and the "They Were Early" Justin Martyr Pause & Ponder), pulled from live Sanity. The four foundational docs above abstract the voice in rules. This file carries the voice itself. A session that drafts content without reading it will produce doctrine-compliant prose in the wrong voice. This was tested June 18, 2026: a Cowork session writing a color iconography P&P drifted toward a glossary/decoder-tour shape until it was sent to read the live published pieces; reading them fixed more than any abstract description of the voice could.
+
+**Refresh trigger for the snapshot:** when When Myth Became Fact gets new days seeded (Days 5-7 currently pending) or existing days edited, or when "They Were Early" is edited, or when either piece is superseded by a stronger exemplar, re-run `npx tsx scripts/snapshot-voice-calibration.ts --write` to refresh. The script is idempotent.
+
+The older `content-docs/KALLOS-Cowork-Briefing.html` is SUPERSEDED by the new PM Brief above. Treat it as historical context only. A session that skips the foundational docs or the calibration read will produce generic or off-doctrine output.
 
 ---
 
@@ -1458,8 +1464,20 @@ This rule applies to all Journey content docs, P&P docs, entry guides, and conte
 ### Content Type Check Rule (April 23, 2026)
 Before writing, auditing, or suggesting content for any `contentItem` record, always check the `contentType` field first. Each type has different relevant fields — a landscape has no artist name; a thinker has no medium; a music item has no location. Do not default to sacred-art field conventions when working with other content types. This applies in all Cowork content sessions.
 
-### artworkHook Rule (April 23, 2026)
-`contentItem.artworkHook` (formerly `curatorNote`) must be about the specific artwork or piece itself — a surprising fact safe to display anywhere the content item appears (Journey, Explore, Library, P&P). It must never be written for a specific journey context or day. Journey-specific hooks belong on `dailyPrompt.curatorNote` (P&P hook) or `journeyDay.encounterNote` (journey layer). Three fields, three distinct jobs, no overlap. See Schema Design Brief for migration details.
+### Hook Rule (June 18, 2026; supersedes the April 23 "artworkHook Rule")
+
+The Sanity field is still named `contentItem.artworkHook` internally (no migration; renaming the field would touch every GROQ query, TypeScript type, and app component). The Studio LABEL was renamed June 18 to **"Hook (Encounter - 1st text)"** because the actual editorial usage is the story hook, not a description of the painting.
+
+**What the field carries.** The story hook, the surprising fact that opens the encounter, about the work or its subject. Safe to display anywhere the content item appears (Journey Day Encounter step, Explore detail card, Library). For sacred-art the hook can be artwork-specific (Bosch's hidden owl, Caravaggio's lantern self-portrait) OR subject-story (Justin Martyr's letter to Antoninus Pius, García Moreno's last words). For thinker / literature / music content types there is no image to describe, so the hook is necessarily the surprising fact about the work or its subject.
+
+**Why this evolved from the April 23 rule.** The original "must be about the specific artwork itself" framing was sacred-art-centric and tripped the natural-language-field-names rule. The published corpus showed the field used as a story hook across content types (the "They Were Early" hook is the Justin Martyr story, not the bread-and-rock texture image; the Gaudí hook is the blue-eyes commission, not the Sagrada Família's architecture). Sheri caught the drift June 18 while reviewing the "They Were Early" P&P on iPhone, after a Cowork session had been applying the stale field description.
+
+**Three fields, three distinct jobs, no overlap (unchanged):**
+- `contentItem.artworkHook` (Studio label: **Hook**), the story hook on the encounter, safe wherever the content item appears
+- `dailyPrompt.curatorNote`, the P&P-specific hook (one day's slot)
+- `journeyDay.encounterNote`, the journey-day-specific note ("Look Closer" text that only makes sense within that journey arc)
+
+If you read text saying "artworkHook must be about the artwork itself" anywhere in the older content-docs, treat it as superseded by this rule.
 
 ### Companion Journey Voice Framework (April 23, 2026)
 Four voice registers for companion journeys. User selects preference at onboarding (expressed as a natural question, not a settings toggle):
