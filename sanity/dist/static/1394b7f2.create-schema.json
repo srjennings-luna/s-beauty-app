@@ -284,6 +284,22 @@
         "title": "Brief Description"
       },
       {
+        "rows": 3,
+        "description": "The story hook, the surprising fact that opens the encounter. About the work or its subject. Safe to show anywhere this piece appears (Journey Day Encounter step, Explore detail card, Library). For sacred-art the hook can be artwork-specific or subject-story; for thinker / literature / music it is the surprising fact about the work or its subject. Journey-day-specific hooks (text that only makes sense within that journey arc) live on journeyDay.encounterNote. P&P-specific hooks live on dailyPrompt.curatorNote.",
+        "name": "artworkHook",
+        "type": "text",
+        "title": "Hook (Encounter - 1st text)"
+      },
+      {
+        "options": {
+          "accept": "audio/*"
+        },
+        "description": "Optional MP3 narration of the hook. Adds a small listen button.",
+        "name": "artworkHookAudio",
+        "type": "file",
+        "title": "Hook, Narration Audio"
+      },
+      {
         "rows": 6,
         "description": "Deeper context. Why this matters, what to notice, how it connects to the tradition.",
         "name": "context",
@@ -296,7 +312,7 @@
         "description": "Optional MP3 narration of the context field. Adds a small listen button.",
         "name": "contextAudio",
         "type": "file",
-        "title": "Context — Narration Audio"
+        "title": "Context, Narration Audio"
       },
       {
         "options": {
@@ -665,22 +681,6 @@
         ],
         "name": "reflectionQuestions",
         "type": "array"
-      },
-      {
-        "rows": 3,
-        "description": "The story hook, the surprising fact that opens the encounter. About the work or its subject. Safe to show anywhere this piece appears (Journey Day Encounter step, Explore detail card, Library). For sacred-art the hook can be artwork-specific or subject-story; for thinker / literature / music it is the surprising fact about the work or its subject. Journey-day-specific hooks (text that only makes sense within that journey arc) live on journeyDay.encounterNote. P&P-specific hooks live on dailyPrompt.curatorNote.",
-        "name": "artworkHook",
-        "type": "text",
-        "title": "Hook (Encounter - 1st text)"
-      },
-      {
-        "options": {
-          "accept": "audio/*"
-        },
-        "description": "Optional MP3 narration of the hook. Adds a small listen button.",
-        "name": "artworkHookAudio",
-        "type": "file",
-        "title": "Hook, Narration Audio"
       },
       {
         "rows": 6,

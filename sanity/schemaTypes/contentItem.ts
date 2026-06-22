@@ -104,6 +104,21 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'artworkHook',
+      title: 'Hook (Encounter - 1st text)',
+      type: 'text',
+      rows: 3,
+      description:
+        'The story hook, the surprising fact that opens the encounter. About the work or its subject. Safe to show anywhere this piece appears (Journey Day Encounter step, Explore detail card, Library). For sacred-art the hook can be artwork-specific or subject-story; for thinker / literature / music it is the surprising fact about the work or its subject. Journey-day-specific hooks (text that only makes sense within that journey arc) live on journeyDay.encounterNote. P&P-specific hooks live on dailyPrompt.curatorNote.',
+    }),
+    defineField({
+      name: 'artworkHookAudio',
+      title: 'Hook, Narration Audio',
+      type: 'file',
+      description: 'Optional MP3 narration of the hook. Adds a small listen button.',
+      options: {accept: 'audio/*'},
+    }),
+    defineField({
       name: 'context',
       title: 'Context',
       type: 'text',
@@ -112,7 +127,7 @@ export default defineType({
     }),
     defineField({
       name: 'contextAudio',
-      title: 'Context — Narration Audio',
+      title: 'Context, Narration Audio',
       type: 'file',
       description: 'Optional MP3 narration of the context field. Adds a small listen button.',
       options: {accept: 'audio/*'},
@@ -375,22 +390,6 @@ export default defineType({
       of: [{type: 'string'}],
       description: '1–3 questions for contemplation.',
     }),
-    defineField({
-      name: 'artworkHook',
-      title: 'Hook (Encounter - 1st text)',
-      type: 'text',
-      rows: 3,
-      description:
-        'The story hook, the surprising fact that opens the encounter. About the work or its subject. Safe to show anywhere this piece appears (Journey Day Encounter step, Explore detail card, Library). For sacred-art the hook can be artwork-specific or subject-story; for thinker / literature / music it is the surprising fact about the work or its subject. Journey-day-specific hooks (text that only makes sense within that journey arc) live on journeyDay.encounterNote. P&P-specific hooks live on dailyPrompt.curatorNote.',
-    }),
-    defineField({
-      name: 'artworkHookAudio',
-      title: 'Hook, Narration Audio',
-      type: 'file',
-      description: 'Optional MP3 narration of the hook. Adds a small listen button.',
-      options: {accept: 'audio/*'},
-    }),
-
     defineField({
       name: 'traditionalPrayer',
       title: 'Traditional Prayer (Pray step)',
