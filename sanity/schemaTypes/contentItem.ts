@@ -20,9 +20,10 @@ export default defineType({
   fields: [
     defineField({
       name: 'contentType',
-      title: 'Content Type',
+      title: 'Content Type (drives every other field + P&P gradient color + Explore type label)',
       type: 'string',
-      description: 'What kind of content is this?',
+      description:
+        'INTERNAL but high-impact. Drives which type-specific fields show in Studio (artist, thinkerName, author, composer, etc.), which P&P gradient color renders on the prompt page (Mineral Blue for sacred-art, Old Ochre for literature, etc., per the 9-color palette), and which type label shows on Explore + the museum-style caption pattern on P&P. Required.',
       options: {
         list: [
           {title: 'Sacred Art & Architecture', value: 'sacred-art'},
@@ -42,9 +43,10 @@ export default defineType({
     }),
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'Title (work\'s actual name, rendered everywhere)',
       type: 'string',
-      description: 'e.g., "Pietà" or "Into Great Silence"',
+      description:
+        'The work\'s actual name: artwork title, thinker name, piece title, etc. e.g. "Pietà", "St. Augustine", "Into Great Silence", "God\'s Grandeur". Renders on Explore detail card (top), Journey Day Encounter step (museum-style caption below image for sacred-art + photography), Library thumbnail. Distinct from dailyPrompt.dayTitle (which is the editorial framing for THAT day on P&P). Required.',
       validation: (Rule) => Rule.required(),
     }),
 
@@ -90,18 +92,20 @@ export default defineType({
     // ─── Shared Fields (continued) ──────────────────────────────────────────
     defineField({
       name: 'themes',
-      title: 'Themes',
+      title: 'Themes (Explore filter + tradition reflection auto-match)',
       type: 'array',
       of: [{type: 'reference', to: [{type: 'theme'}]}],
-      description: 'Which themes this content speaks to (min 1).',
+      description:
+        'INTERNAL filter. Which themes this content speaks to. Drives the Explore page theme filter and the Visio Divina Go Deeper auto-match logic when traditionReflections is empty (the carousel falls back to theme-matched reflections). Not rendered as visible tags. Min 1.',
       validation: (Rule) => Rule.required().min(1),
     }),
     defineField({
       name: 'description',
-      title: 'Brief Description',
+      title: 'Brief Description (Explore detail card)',
       type: 'text',
       rows: 3,
-      description: 'Short description for cards and previews. 1–2 sentences.',
+      description:
+        'Renders on the Explore detail card as the neutral 1 to 2 sentence summary below the title. Not the editorial hook (that lives on artworkHook); this is the calm summary version. NOT shown on P&P or Journey Day. Required.',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -121,23 +125,26 @@ export default defineType({
     }),
     defineField({
       name: 'context',
-      title: 'Context',
+      title: 'Context (P&P + Journey Day Encounter, body paragraphs below the hook)',
       type: 'text',
       rows: 6,
-      description: 'Deeper context. Why this matters, what to notice, how it connects to the tradition.',
+      description:
+        'Renders as the body paragraphs below the hook on Pattern & Proof and on the Journey Day Encounter step. The deeper layer: why this matters, what to notice, how it connects to the tradition. NOT shown on the Explore detail card (description handles that). Per the Hook Rule in CLAUDE.md, this must add information beyond what the hook already said.',
     }),
     defineField({
       name: 'contextAudio',
-      title: 'Context, Narration Audio',
+      title: 'Context, Narration Audio (P&P + Journey Day Encounter)',
       type: 'file',
-      description: 'Optional MP3 narration of the context field. Adds a small listen button.',
+      description:
+        'Optional MP3 narration of the Context paragraphs. Adds a small listen button next to the context body on P&P and Journey Day Encounter.',
       options: {accept: 'audio/*'},
     }),
     defineField({
       name: 'image',
-      title: 'Image',
+      title: 'Image (P&P, Journey Day Encounter, Explore detail, Library)',
       type: 'image',
-      description: 'High-res image. Min 1200px. Every content item must have an image.',
+      description:
+        'The primary visual for this piece, used everywhere it appears (Pattern & Proof full-bleed hero, Journey Day Encounter step, Explore detail card, Library thumbnail). High-res, min 1200px. Required.',
       options: {
         hotspot: true,
       },
@@ -165,29 +172,46 @@ export default defineType({
     }),
     defineField({
       name: 'scripturePairing',
-      title: 'Scripture Pairing (sacred-art + photography)',
+      title: 'Scripture Pairing (Explore detail REFLECT expand panel, sacred-art + photography)',
       type: 'object',
-      description: 'Optional scripture pairing tied to the work itself (not the same as dailyPrompt.lectio, which is per-day). Renders on the Explore detail card REFLECT expand panel.',
+      description:
+        'Optional scripture tied to the work itself (not the same as dailyPrompt.lectio, which is per-day). Renders on the Explore detail card inside the REFLECT expand panel. RSV-2CE per the project scripture standard.',
       hidden: ({document}) =>
         document?.contentType !== 'sacred-art' && document?.contentType !== 'photography',
       fields: [
-        {name: 'verse', title: 'Scripture Verse', type: 'text', rows: 3},
-        {name: 'reference', title: 'Scripture Reference', type: 'string', description: 'e.g., "Lamentations 1:12"'},
+        {
+          name: 'verse',
+          title: 'Scripture Verse (REFLECT panel body)',
+          type: 'text',
+          rows: 3,
+          description: 'RSV-2CE.',
+        },
+        {
+          name: 'reference',
+          title: 'Scripture Reference (REFLECT panel attribution)',
+          type: 'string',
+          description: 'e.g., "Lamentations 1:12 RSV-2CE"',
+        },
       ],
     }),
 
     // Thinkers & Quotes
     defineField({
       name: 'quote',
-      title: 'Primary Quote',
+      title: 'Primary Quote (Explore detail REFLECT panel, thinker only)',
       type: 'object',
-      description: 'The primary quote. Source = work title.',
+      description:
+        'The thinker\'s signature line. Renders on the Explore detail REFLECT expand panel for thinker content. Verified quote only, no apocryphal attributions per CLAUDE.md.',
       hidden: ({document}) => document?.contentType !== 'thinker',
       fields: [
-        {name: 'text', title: 'Quote Text', type: 'text', rows: 3},
-        {name: 'source', title: 'Source', type: 'string', description: 'e.g., "Confessions, Book X"'},
-        // backward compat alias kept for existing artwork data
-        {name: 'attribution', title: 'Attribution (legacy)', type: 'string'},
+        {name: 'text', title: 'Quote Text (REFLECT panel body)', type: 'text', rows: 3},
+        {
+          name: 'source',
+          title: 'Source (REFLECT panel attribution)',
+          type: 'string',
+          description: 'e.g., "Confessions, Book X" or "Pensées §423"',
+        },
+        {name: 'attribution', title: 'Attribution (legacy, use Source above)', type: 'string'},
       ],
     }),
     defineField({
@@ -247,10 +271,11 @@ export default defineType({
     }),
     defineField({
       name: 'excerpt',
-      title: 'Excerpt',
+      title: 'Excerpt (Explore detail REFLECT panel, literature only)',
       type: 'text',
       rows: 8,
-      description: 'A passage or stanza. Must be public domain or properly licensed.',
+      description:
+        'A passage or stanza from the work. Renders on the Explore detail REFLECT expand panel for literature content (clamped to 3 lines on the card with full text in the expand). Must be public domain or properly licensed.',
       hidden: ({document}) => document?.contentType !== 'literature',
     }),
 
@@ -271,22 +296,23 @@ export default defineType({
     }),
     defineField({
       name: 'audioSource',
-      title: 'Audio Source',
+      title: 'Audio Source (any content type, in-app playback)',
       type: 'object',
-      description: 'Optional audio pairing for any content type. Use the file upload for in-app playback (preferred). Use the URL for direct MP3 links. External link (YouTube, Spotify) opens outside the app.',
+      description:
+        'Optional audio pairing for any content type. Renders as the inline audio player wherever this piece appears. Use the file upload for in-app playback (preferred). Use the URL for direct MP3 links. External link (YouTube, Spotify) opens outside the app.',
       fields: [
         defineField({
           name: 'audioFile',
           title: 'Audio File Upload (in-app playback)',
           type: 'file',
-          description: 'Upload an MP3 — plays directly in KALLOS. Preferred over URL.',
+          description: 'Upload an MP3, plays directly in Contueri. Preferred over URL.',
           options: { accept: 'audio/*' },
         }),
         defineField({
           name: 'audioUrl',
           title: 'Audio URL (in-app playback)',
           type: 'string',
-          description: 'Direct MP3 link (e.g. archive.org) — plays in-app. Use if file upload is not possible.',
+          description: 'Direct MP3 link (e.g. archive.org), plays in-app. Use if file upload is not possible.',
         }),
         defineField({
           name: 'externalUrl',
@@ -390,23 +416,26 @@ export default defineType({
     // ─── Shared Fields (bottom) ─────────────────────────────────────────────
     defineField({
       name: 'reflectionQuestions',
-      title: 'Reflection Questions',
+      title: 'Reflection Questions (Visio Divina Reflect step + Explore detail REFLECT panel)',
       type: 'array',
       of: [{type: 'string'}],
-      description: '1–3 questions for contemplation.',
+      description:
+        'Renders on the Visio Divina Reflect step (one question per swipe) and on the Explore detail REFLECT expand panel for non-sacred-art content types. 1 to 3 questions. Distinct from journeyDay.reflectionQuestions (which is for Journey Day Step 4 Reflect, day-specific).',
     }),
     defineField({
       name: 'traditionalPrayer',
-      title: 'Traditional Prayer (Pray step)',
+      title: 'Traditional Prayer (Visio Divina Pray step, expandable drawer)',
       type: 'text',
       rows: 6,
-      description: 'Optional. A traditional Catholic prayer shown in the expandable "Traditional Prayer" drawer on the Pray step of Visio Divina. Leave blank to use the built-in fallback prayer.',
+      description:
+        'Optional. Renders inside the expandable "Traditional Prayer" drawer on the Visio Divina Pray step. Per-artwork override; leave blank to inherit the global visioDefaults fallback prayer.',
     }),
     defineField({
       name: 'traditionalPrayerSource',
-      title: 'Traditional Prayer — Source',
+      title: 'Traditional Prayer Source (Visio Divina Pray step, attribution below prayer)',
       type: 'string',
-      description: 'Attribution for the prayer above, e.g. "Act of Adoration, Traditional" or "St. Francis of Assisi". Shown below the prayer text.',
+      description:
+        'Renders below the Traditional Prayer text on the Visio Divina Pray step as the attribution line. e.g. "Act of Adoration, Traditional" or "St. Francis of Assisi".',
       hidden: ({ document }) => !document?.traditionalPrayer,
     }),
 
@@ -418,61 +447,66 @@ export default defineType({
     // 2026 as part of VD-ACTION-01.
     defineField({
       name: 'customPrayerPrompt',
-      title: 'Custom Pray prompt (override)',
+      title: 'Custom Pray prompt (Visio Divina Pray step, per-artwork override)',
       type: 'text',
       rows: 3,
-      description: 'Optional. Overrides the default Pray-step instruction sentence for this artwork. Leave blank to use the global Visio Divina default.',
+      description:
+        'Optional. Overrides the default Pray-step instruction sentence for this artwork only. Leave blank to inherit the visioDefaults singleton fallback.',
     }),
     defineField({
       name: 'customActioHeadline',
-      title: 'Custom Actio headline (override)',
+      title: 'Custom Actio headline (Visio Divina Action step, per-artwork override)',
       type: 'string',
-      description: 'Optional. Overrides the default Actio italic headline ("How will you live this out?") for this artwork. Leave blank to use the global Visio Divina default.',
+      description:
+        'Optional. Overrides the italic Actio headline (e.g. "How will you live this out?") for this artwork only on the Visio Divina Action step. Leave blank to inherit the visioDefaults singleton fallback.',
       validation: (Rule) => Rule.max(140),
     }),
     defineField({
       name: 'customActioInstruction',
-      title: 'Custom Actio instruction (override)',
+      title: 'Custom Actio instruction (Visio Divina Action step, per-artwork override)',
       type: 'text',
       rows: 3,
-      description: 'Optional. Overrides the default Actio supporting instruction for this artwork. Leave blank to use the global Visio Divina default.',
+      description:
+        'Optional. Overrides the supporting instruction below the Actio headline for this artwork only on the Visio Divina Action step. Leave blank to inherit the visioDefaults singleton fallback.',
       validation: (Rule) => Rule.max(280),
     }),
 
     defineField({
       name: 'traditionReflections',
-      title: 'Go Deeper: Tradition Reflections',
+      title: 'Go Deeper Tradition Reflections (Visio Divina Go Deeper carousel, REFERENCE PICKER)',
       type: 'array',
       of: [{ type: 'reference', to: [{ type: 'traditionReflection' }] }],
-      description: 'Link specific tradition reflections to this content item for the Visio Divina "Go Deeper" carousel. Order here = carousel order. If empty, the carousel shows reflections matching this item\'s themes.',
+      description:
+        'Reference picker, array. The traditionReflection cards shown in the Visio Divina Go Deeper carousel for this artwork. Order here = carousel order. If empty, the carousel auto-matches by theme. Per CLAUDE.md Go Deeper standard: each reflection must add NEW content not already in the artworkHook or context.',
     }),
     // ─── Location Fields (optional for non-place content) ─────────────────────
     defineField({
       name: 'locationName',
-      title: 'Location Name',
+      title: 'Location Name (Explore map marker popup)',
       type: 'string',
-      description: 'e.g., "St. Peter\'s Basilica", "Grande Chartreuse"',
+      description: 'Renders on the Explore map marker popup as the location heading. e.g. "St. Peter\'s Basilica", "Grande Chartreuse".',
       group: 'location',
     }),
     defineField({
       name: 'city',
-      title: 'City',
+      title: 'City (Explore map marker popup)',
       type: 'string',
-      description: 'e.g., "Rome", "Florence"',
+      description: 'Renders on the Explore map marker popup below the location name. e.g. "Rome", "Florence".',
       group: 'location',
     }),
     defineField({
       name: 'country',
-      title: 'Country',
+      title: 'Country (Explore map marker popup)',
       type: 'string',
-      description: 'KALLOS is global — no default country.',
+      description: 'Renders on the Explore map marker popup with the city. Contueri is global, no default country.',
       group: 'location',
     }),
     defineField({
       name: 'coordinates',
-      title: 'Map Coordinates',
+      title: 'Map Coordinates (drives whether marker appears on Explore map)',
       type: 'object',
-      description: 'For Explore map view. Only populate when content has a meaningful physical location.',
+      description:
+        'INTERNAL. Drives whether this content item appears as a marker on the Explore map view. Only populate when content has a meaningful physical location.',
       group: 'location',
       fields: [
         {name: 'lat', title: 'Latitude', type: 'number', description: 'e.g., 41.9022'},
@@ -483,13 +517,13 @@ export default defineType({
     // ─── Legacy / Migration Fields (hidden in Studio) ─────────────────────────
     defineField({
       name: 'locationType',
-      title: 'Location Type (legacy — use Content Type)',
+      title: 'Location Type (legacy, use Content Type)',
       type: 'string',
       hidden: true,
     }),
     defineField({
       name: 'historicalSummary',
-      title: 'Historical Summary (legacy — use Context)',
+      title: 'Historical Summary (legacy, use Context)',
       type: 'text',
       rows: 5,
       hidden: true,
