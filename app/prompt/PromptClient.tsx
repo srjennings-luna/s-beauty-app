@@ -507,14 +507,42 @@ function DailyPromptPageInner({
           </div>
         </div>
 
+        {/* ── Museum-style caption ───────────────────────────────────────────
+            Small italic attribution line below the image frame, outside the
+            pinch-zoom container so it never interferes with zoom or pan.
+            Only renders for sacred-art and photography content types AND
+            only when the linked piece has an artist populated. Format:
+            "Title, Artist, Year" (year drops out if not populated, medium
+            drops out always, kept available on contentItem for Explore).
+            June 22, 2026. */}
+        {(prompt.content.contentType === "sacred-art" ||
+          prompt.content.contentType === "photography") &&
+          prompt.content.artist && (
+            <div
+              className="px-6"
+              style={{
+                paddingTop: 10,
+                color: "rgba(253,246,232,0.55)",
+                fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                fontSize: 12,
+                fontStyle: "italic",
+                letterSpacing: "0.01em",
+                lineHeight: 1.5,
+              }}
+            >
+              {prompt.content.title}, {prompt.content.artist}
+              {prompt.content.year ? `, ${prompt.content.year}` : ""}
+            </div>
+          )}
+
         {/* ── Editorial title + date ────────────────────────────────────────
             Date on its own line in sage caps (color cascades from the
             type-accent so a Music day reads plum, a Sacred Art day
             reads mineral blue, etc.). Title sits below the date in
-            Cormorant Garamond italic at 50px — confidently editorial.
+            Cormorant Garamond italic at 50px, confidently editorial.
             Pinch hint that used to share the date's row has moved onto
             the image as an overlay (see hero block above). June 2, 2026.
-            No background — PPGradientBackground is the atmosphere now. */}
+            No background, PPGradientBackground is the atmosphere now. */}
         <div className="px-6" style={{ paddingTop: 32, paddingBottom: 4 }}>
           <p
             className="uppercase"
@@ -529,6 +557,10 @@ function DailyPromptPageInner({
           >
             {new Date(prompt.date + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
           </p>
+          {/* PP-DAYTITLE-BIG (June 22, 2026): dayTitle is the editorial framing
+             for THIS day ("God Does Not Die" for Sacred Heart). Falls back to
+             the linked contentItem.title when dayTitle is empty (defensive).
+             Pre-migration P&Ps all have dayTitle populated as of June 22. */}
           <p
             style={{
               color: C.cream,
@@ -540,7 +572,7 @@ function DailyPromptPageInner({
               letterSpacing: "0.003em",
             }}
           >
-            {prompt.content.title}
+            {prompt.dayTitle || prompt.content.title}
           </p>
         </div>
 
@@ -577,14 +609,14 @@ function DailyPromptPageInner({
             </div>
           )}
 
-          {/* ── Day Title / Prompt Question ───────────────────────────────
-              PP-DAYTITLE-01 (June 7, 2026): prefer the editorial dayTitle
-              (e.g. "God Does Not Die" for the Sacred Heart day) when it's
-              set on the dailyPrompt. Falls back to promptQuestion for
-              backwards-compat with older P&P docs that pre-date dayTitle.
-              Both occupy the same visual slot — Cormorant italic, large
-              type, sits beneath curator note and above artwork hook. */}
-          {(prompt.dayTitle || prompt.promptQuestion) && (
+          {/* ── Prompt Question (subtitle below hook box) ─────────────────
+              PP-DAYTITLE-BIG (June 22, 2026): dayTitle was promoted to the
+              big title slot at the top of the page (replacing
+              contentItem.title there). The slot below the curatorNote hook
+              box now renders ONLY promptQuestion, the reflective question
+              for THIS day. Same visual style as before: Cormorant italic,
+              large type. */}
+          {prompt.promptQuestion && (
             <div>
               <p
                 className="leading-snug"
@@ -596,7 +628,7 @@ function DailyPromptPageInner({
                   lineHeight: "1.35",
                 }}
               >
-                {prompt.dayTitle || prompt.promptQuestion}
+                {prompt.promptQuestion}
               </p>
             </div>
           )}

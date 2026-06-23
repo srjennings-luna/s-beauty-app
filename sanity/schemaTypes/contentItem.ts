@@ -51,10 +51,11 @@ export default defineType({
     // ─── Type-Specific Identity Fields (who created / who is this) ───────────
     defineField({
       name: 'artist',
-      title: 'Artist / Creator',
+      title: 'Artist / Creator (sacred-art + photography)',
       type: 'string',
-      description: 'e.g., "Michelangelo Buonarroti"',
-      hidden: ({document}) => document?.contentType !== 'sacred-art',
+      description: 'The work\'s creator. e.g. "Michelangelo Buonarroti" for sacred-art, "Julia Margaret Cameron" for photography. Shown on the P&P as part of the museum-style caption directly below the image (for sacred-art and photography only). Also used in Explore detail attribution string.',
+      hidden: ({document}) =>
+        document?.contentType !== 'sacred-art' && document?.contentType !== 'photography',
     }),
     defineField({
       name: 'thinkerName',
@@ -148,23 +149,27 @@ export default defineType({
     // Sacred Art & Architecture
     defineField({
       name: 'year',
-      title: 'Year / Date Range',
+      title: 'Year / Date Range (sacred-art + photography)',
       type: 'string',
-      description: 'e.g., "1498–1499" or "c. 1600"',
-      hidden: ({document}) => document?.contentType !== 'sacred-art',
+      description: 'When the work was created. e.g. "1498–1499", "c. 1600", "1873" (Cameron). Shown on the P&P as part of the museum-style caption below the image (for sacred-art and photography only).',
+      hidden: ({document}) =>
+        document?.contentType !== 'sacred-art' && document?.contentType !== 'photography',
     }),
     defineField({
       name: 'medium',
-      title: 'Medium',
+      title: 'Medium (sacred-art + photography)',
       type: 'string',
-      description: 'e.g., "Oil on canvas", "Marble", "Fresco"',
-      hidden: ({document}) => document?.contentType !== 'sacred-art',
+      description: 'The physical medium of the work. e.g. "Oil on canvas", "Marble", "Fresco" for sacred-art, "Albumen print", "Silver gelatin" for photography. Optional. Used in Explore detail attribution.',
+      hidden: ({document}) =>
+        document?.contentType !== 'sacred-art' && document?.contentType !== 'photography',
     }),
     defineField({
       name: 'scripturePairing',
-      title: 'Scripture Pairing',
+      title: 'Scripture Pairing (sacred-art + photography)',
       type: 'object',
-      hidden: ({document}) => document?.contentType !== 'sacred-art',
+      description: 'Optional scripture pairing tied to the work itself (not the same as dailyPrompt.lectio, which is per-day). Renders on the Explore detail card REFLECT expand panel.',
+      hidden: ({document}) =>
+        document?.contentType !== 'sacred-art' && document?.contentType !== 'photography',
       fields: [
         {name: 'verse', title: 'Scripture Verse', type: 'text', rows: 3},
         {name: 'reference', title: 'Scripture Reference', type: 'string', description: 'e.g., "Lamentations 1:12"'},

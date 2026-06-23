@@ -190,11 +190,11 @@
         "type": "string"
       },
       {
-        "description": "e.g., \"Michelangelo Buonarroti\"",
+        "description": "The work's creator. e.g. \"Michelangelo Buonarroti\" for sacred-art, \"Julia Margaret Cameron\" for photography. Shown on the P&P as part of the museum-style caption directly below the image (for sacred-art and photography only). Also used in Explore detail attribution string.",
         "hidden": "conditional",
         "name": "artist",
         "type": "string",
-        "title": "Artist / Creator"
+        "title": "Artist / Creator (sacred-art + photography)"
       },
       {
         "validation": [
@@ -334,19 +334,21 @@
         "type": "image"
       },
       {
-        "description": "e.g., \"1498–1499\" or \"c. 1600\"",
+        "description": "When the work was created. e.g. \"1498–1499\", \"c. 1600\", \"1873\" (Cameron). Shown on the P&P as part of the museum-style caption below the image (for sacred-art and photography only).",
         "hidden": "conditional",
         "name": "year",
         "type": "string",
-        "title": "Year / Date Range"
+        "title": "Year / Date Range (sacred-art + photography)"
       },
       {
-        "description": "e.g., \"Oil on canvas\", \"Marble\", \"Fresco\"",
+        "description": "The physical medium of the work. e.g. \"Oil on canvas\", \"Marble\", \"Fresco\" for sacred-art, \"Albumen print\", \"Silver gelatin\" for photography. Optional. Used in Explore detail attribution.",
         "hidden": "conditional",
         "name": "medium",
-        "type": "string"
+        "type": "string",
+        "title": "Medium (sacred-art + photography)"
       },
       {
+        "description": "Optional scripture pairing tied to the work itself (not the same as dailyPrompt.lectio, which is per-day). Renders on the Explore detail card REFLECT expand panel.",
         "fields": [
           {
             "rows": 3,
@@ -363,7 +365,8 @@
         ],
         "hidden": "conditional",
         "name": "scripturePairing",
-        "type": "object"
+        "type": "object",
+        "title": "Scripture Pairing (sacred-art + photography)"
       },
       {
         "description": "The primary quote. Source = work title.",
@@ -1700,7 +1703,7 @@
             "level": "error"
           }
         ],
-        "description": "The date this prompt appears. One per day. Format: YYYY-MM-DD.",
+        "description": "Renders on the P&P as the small sage-caps date above the artwork title. Required. One prompt per day. Format YYYY-MM-DD.",
         "name": "date",
         "type": "date"
       },
@@ -1716,7 +1719,7 @@
             "level": "error"
           }
         ],
-        "description": "The featured content for this day.",
+        "description": "The contentItem this prompt features. Drives the artwork image, title, context paragraphs, and (on the linked piece) the artworkHook (which is NOT shown on P&P, only on Journey Day Encounter). Required.",
         "to": [
           {
             "type": "contentItem"
@@ -1725,6 +1728,22 @@
         "name": "content",
         "type": "reference",
         "title": "Featured Content"
+      },
+      {
+        "rows": 3,
+        "description": "Renders on the P&P as the dark hook box just below the artwork title. The most prominent USER-FACING text on the prompt screen, not internal. The P&P-specific story hook for THIS day, the surprising fact or arc that opens this day's practice. Distinct from contentItem.artworkHook (which is the universal hook for the piece on Journey Day Encounter); curatorNote is THIS day's framing of the same piece. See CLAUDE.md \"Hook Rule\" for the three-fields-three-jobs rule.",
+        "name": "curatorNote",
+        "type": "text",
+        "title": "Curator Note (P&P, dark hook box)"
+      },
+      {
+        "options": {
+          "accept": "audio/*"
+        },
+        "description": "Renders on the P&P inside the dark hook box as a small listen button below the curatorNote text. Optional MP3 narration.",
+        "name": "curatorNoteAudio",
+        "type": "file",
+        "title": "Curator Note, Narration Audio (P&P, dark hook box)"
       },
       {
         "validation": [
@@ -1738,46 +1757,33 @@
             "level": "error"
           }
         ],
-        "description": "Optional: a poetic editorial title for this day (e.g. \"God Does Not Die\" for the Sacred Heart day). Shown prominently above the artwork. Different from the work title, which lives on the linked content item. Added June 7, 2026 (PP-DAYTITLE-01).",
+        "description": "Renders on the P&P as the italic Cormorant subtitle, sitting BETWEEN the curatorNote dark hook box (above) and the long-form context storytelling paragraphs (below). Optional poetic editorial title for THIS day, e.g. \"God Does Not Die\" for the Sacred Heart day. Falls back to promptQuestion in the same slot if blank. Distinct from contentItem.title (the work's actual name, renders as the large 50px Cormorant italic at the top of the page). Added June 7, 2026 (PP-DAYTITLE-01).",
         "name": "dayTitle",
         "type": "string",
-        "title": "Editorial Day Title"
+        "title": "Editorial Day Title (P&P, subtitle between hook box and long story)"
       },
       {
         "rows": 2,
-        "description": "Optional: shown on the Today page card as the teaser. Not shown inside the prompt practice.",
+        "description": "Renders on the P&P in the subtitle slot below the curatorNote dark box, BUT only when dayTitle is blank (dayTitle takes priority). Also used as the share-sheet text when a user shares the prompt. The reflective question for THIS day. User-facing.",
         "name": "promptQuestion",
-        "type": "text"
+        "type": "text",
+        "title": "Prompt Question (P&P, subtitle fallback + share text)"
       },
       {
-        "rows": 3,
-        "description": "Optional: why this was chosen for today. The human editorial voice.",
-        "name": "curatorNote",
-        "type": "text"
-      },
-      {
-        "options": {
-          "accept": "audio/*"
-        },
-        "description": "Optional MP3 narration of the curator note. Adds a small listen button.",
-        "name": "curatorNoteAudio",
-        "type": "file",
-        "title": "Curator Note — Narration Audio"
-      },
-      {
-        "description": "Optional: scripture, or a philosophy + scripture pairing. Philosophy first, scripture second. If philosophyText is provided, both are shown as a pairing.",
+        "description": "Renders on the P&P as TWO separate sections per the June 3, 2026 split (commit 5e25e8b2): a \"Voices\" section for the philosophy quote (sage left rule, gold/sage eyebrow), and a \"Lectio\" section for the scripture (Cormorant italic, no left rule). Philosophy first, scripture second. Optional philosophy + scripture pairing; scripture alone is fine if no matching philosophy quote exists.",
         "fields": [
           {
             "rows": 3,
-            "description": "A philosopher reaching toward a truth that scripture names. Plato, Aristotle, Marcus Aurelius, Seneca, Boethius, etc. Leave blank for scripture-only.",
+            "description": "Renders on the P&P inside the \"Voices\" section above the scripture. A philosopher reaching toward a truth that scripture names. Plato, Aristotle, Marcus Aurelius, Seneca, Boethius, Heraclitus, or another verified ancient. One-liner, modern accessible translation. Leave blank for scripture-only.",
             "name": "philosophyText",
             "type": "text",
-            "title": "Philosophy Quote (optional — shown first)"
+            "title": "Philosophy Quote (P&P, \"Voices\" section)"
           },
           {
-            "description": "e.g. \"Plato, Republic — Allegory of the Cave\" or \"Marcus Aurelius, Meditations IV.3\"",
+            "description": "Renders on the P&P below the philosophy quote in the \"Voices\" section. The author + work, e.g. \"Plato, Republic, Allegory of the Cave\" or \"Marcus Aurelius, Meditations IV.3\".",
             "name": "philosophyAttribution",
-            "type": "string"
+            "type": "string",
+            "title": "Philosophy Attribution (P&P, \"Voices\" section)"
           },
           {
             "rows": 4,
@@ -1792,23 +1798,24 @@
                 "level": "error"
               }
             ],
+            "description": "Renders on the P&P inside the \"Lectio\" section below the Voices section. The scripture passage (RSV-2CE per CLAUDE.md standard) or other primary text. Required.",
             "name": "text",
             "type": "text",
-            "title": "Scripture / Primary Text (shown second in a pairing, or alone)"
+            "title": "Scripture / Primary Text (P&P, \"Lectio\" section)"
           },
           {
-            "description": "e.g. \"1 Corinthians 13:12\" or \"Psalm 46:10\"",
+            "description": "Renders on the P&P below the scripture text in the \"Lectio\" section. The book / chapter / verse, e.g. \"1 Corinthians 13:12\" or \"Psalm 46:10\".",
             "name": "attribution",
             "type": "string",
-            "title": "Scripture Attribution"
+            "title": "Scripture Attribution (P&P, \"Lectio\" section)"
           }
         ],
         "name": "lectio",
         "type": "object",
-        "title": "Reading (Lectio)"
+        "title": "Voices & Lectio (P&P, two stacked sections)"
       },
       {
-        "description": "Optional audio pairing for this practice. Create the Auditio document first, then reference it here.",
+        "description": "Renders on the P&P as the music player below the Lectio. The audio pairing for this practice. Reference to a separate Auditio document, so create that doc first then reference it here. Optional but expected per CLAUDE.md Auditio rules.",
         "to": [
           {
             "type": "auditio"
@@ -1816,34 +1823,36 @@
         ],
         "name": "auditio",
         "type": "reference",
-        "title": "Music (Auditio)"
+        "title": "Music (P&P, Auditio player)"
       },
       {
         "rows": 3,
-        "description": "An invitation to carry something into the day. One concrete, gentle action.",
+        "description": "Renders on the P&P as the Actio checkbox(es) at the bottom of the page. One concrete gentle action to carry into the day. Must name a specific place, person, object, or time (not a disposition). If left blank, the global default from the ppDefaults singleton fills in. Per CLAUDE.md Actio specificity rule.",
         "name": "actio",
         "type": "text",
-        "title": "Action (Actio)"
+        "title": "Action (P&P, Actio checkbox at bottom)"
       },
       {
-        "description": "Optional: if a Journey deepens this prompt, link it here. Shown as a quiet CTA at the bottom of the prompt.",
+        "description": "Renders on the P&P as a quiet \"Related Journey\" CTA link near the bottom of the prompt, below the Actio. Optional. Use when a Journey deepens this prompt thematically.",
         "to": [
           {
             "type": "journey"
           }
         ],
         "name": "relatedJourney",
-        "type": "reference"
+        "type": "reference",
+        "title": "Related Journey (P&P, \"Related Journey\" CTA at bottom)"
       },
       {
-        "description": "Optional theme tag. Helps users on a Journey see the connection.",
+        "description": "INTERNAL field, not directly rendered as visible text on the P&P. Optional theme tag used by Explore filtering and dashboard analytics. Helps users on a Journey see thematic threads in P&P content.",
         "to": [
           {
             "type": "theme"
           }
         ],
         "name": "theme",
-        "type": "reference"
+        "type": "reference",
+        "title": "Theme (internal, filter only)"
       }
     ],
     "name": "dailyPrompt",

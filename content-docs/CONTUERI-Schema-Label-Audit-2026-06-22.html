@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contueri Schema Label and Description Audit, June 22, 2026</title>
+<style>
+  :root {
+    --espresso: #16110d;
+    --cream: #fdf6e9;
+    --line: #d9cbb3;
+    --gold: #C19B5F;
+    --sage: #4a7a62;
+    --red: #b8503f;
+    --amber: #c89a3a;
+    --green: #5a8a5a;
+  }
+  body {
+    margin: 0; padding: 32px; max-width: 1180px;
+    background: var(--cream); color: var(--espresso);
+    font-family: Georgia, "Iowan Old Style", serif; line-height: 1.55;
+  }
+  h1 { font-size: 1.8rem; font-weight: 600; margin: 0 0 6px; }
+  h2 { font-size: 1.25rem; margin: 32px 0 8px; border-bottom: 2px solid var(--line); padding-bottom: 4px; }
+  h3 { font-size: 1.05rem; margin: 22px 0 8px; color: #5a4636; }
+  h4 { font-size: 0.95rem; margin: 14px 0 4px; color: #5a4636; }
+  p.sub { color: #5a4636; font-style: italic; margin: 0 0 14px; font-size: 0.95rem; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 28px; table-layout: fixed; }
+  th, td { border: 1px solid var(--line); padding: 10px 12px; vertical-align: top; text-align: left; font-size: 0.88rem; }
+  th { background: var(--espresso); color: var(--cream); font-weight: 600; }
+  td.field { font-family: 'SF Mono', Menlo, monospace; font-size: 0.82rem; background: #f5edda; }
+  td.surface { color: #4a3a2a; font-size: 0.85rem; }
+  td.bad { background: #fbe9e0; }
+  td.good { background: #e8f0e2; }
+  td.fine { background: #fdf9ed; }
+  .badge {
+    display: inline-block; font-size: 0.7rem; padding: 1px 8px; border-radius: 0;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .badge.high { background: var(--red); color: #fff; }
+  .badge.med { background: var(--amber); color: #fff; }
+  .badge.low { background: var(--sage); color: #fff; }
+  .badge.unused { background: #888; color: #fff; }
+  .label-rule {
+    border-left: 3px solid var(--gold); padding: 10px 14px; margin: 14px 0;
+    background: rgba(193,155,95,0.08);
+  }
+  .meta { color: #5a4636; font-size: 0.85rem; margin-top: -4px; margin-bottom: 24px; }
+  code { font-family: 'SF Mono', Menlo, monospace; font-size: 0.88em; background: #f0e6cf; padding: 1px 5px; }
+  .col-field { width: 14%; }
+  .col-current-label { width: 16%; }
+  .col-current-desc { width: 24%; }
+  .col-surface { width: 22%; }
+  .col-action { width: 18%; }
+  .col-sev { width: 6%; }
+</style>
+</head>
+<body>
+
+<h1>Schema Label and Description Audit</h1>
+<p class="meta">Date, June 22, 2026 &middot; Scope, full audit across <code>dailyPrompt</code>, <code>journeyDay</code>, <code>contentItem</code>, <code>traditionReflection</code> &middot; Method, grep against <code>app/</code>, <code>components/</code>, <code>lib/sanity.ts</code> to verify where each field actually renders.</p>
+
+<div class="label-rule">
+<strong>Why this audit exists.</strong> Sheri noticed June 22 that the curatorNote field renders prominently on every P&amp;P screen, but the Sanity Studio description (<em>"Optional: why this was chosen for today. The human editorial voice."</em>) reads as internal editorial metadata. The same drift pattern likely affects multiple fields. Goal of this audit, surface every label/description that no longer matches the actual app rendering, and propose corrections. No schema edits made in this audit, all changes deferred for Sheri's approval.
+</div>
+
+<div class="label-rule">
+<strong>How to read the severity tags.</strong>
+<br><span class="badge high">HIGH</span> Label or description actively misleads about what the field is or where it renders. Affects editorial decisions.
+<br><span class="badge med">MED</span> Description is incomplete or slightly off, but not catastrophically wrong.
+<br><span class="badge low">LOW</span> Description is fine, may have a small phrasing polish.
+<br><span class="badge unused">UNUSED</span> Field has zero app render hits. Either legacy, candidate for removal, or rendering missed by grep.
+</div>
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<h2>1. HIGH-severity drift (5 fields)</h2>
+<p class="sub">These descriptions actively mislead. Fix first.</p>
+
+<table>
+<colgroup>
+  <col class="col-field"><col class="col-current-label"><col class="col-current-desc"><col class="col-surface"><col class="col-action"><col class="col-sev">
+</colgroup>
+<thead>
+<tr><th>Field</th><th>Current label</th><th>Current description</th><th>Where it actually renders</th><th>Proposed correction</th><th>Sev</th></tr>
+</thead>
+<tbody>
+
+<tr>
+<td class="field">dailyPrompt.curatorNote</td>
+<td>Curator Note</td>
+<td class="bad">Optional: why this was chosen for today. The human editorial voice.</td>
+<td class="surface">P&amp;P dark hook box, the most prominent text on the prompt screen, just below the title and image (PromptClient.tsx line 558-578). User-facing.</td>
+<td class="good"><strong>Label:</strong> Curator Note (P&amp;P Hook, dark box)<br><strong>Desc:</strong> The P&amp;P-specific hook, shown in the prominent dark text box just below the artwork on the Pause &amp; Ponder screen. This is the surprising fact or story that opens THIS day's prompt practice. User-facing, not internal. Distinct from contentItem.artworkHook (which is the universal hook for the piece, shown on Journey Day Encounter). For overlap rules see CLAUDE.md "Hook Rule."</td>
+<td><span class="badge high">HIGH</span></td>
+</tr>
+
+<tr>
+<td class="field">dailyPrompt.promptQuestion</td>
+<td>Prompt Question</td>
+<td class="bad">Optional: shown on the Today page card as the teaser. Not shown inside the prompt practice.</td>
+<td class="surface">Actually shown INSIDE the prompt practice as the subtitle below the curatorNote box, when dayTitle is empty (PromptClient.tsx line 587-599). Also used in share-sheet text (line 55).</td>
+<td class="good"><strong>Label:</strong> Prompt Question (subtitle, P&amp;P)<br><strong>Desc:</strong> The reflective question for THIS day. Renders on the P&amp;P as the subtitle below the curatorNote box, falling back to be shown when dayTitle is empty. Also used as the share text when a user shares the prompt. User-facing.</td>
+<td><span class="badge high">HIGH</span></td>
+</tr>
+
+<tr>
+<td class="field">contentItem.artworkHook</td>
+<td>Hook (Encounter - 1st text)</td>
+<td class="bad">The story hook, ... Safe to show anywhere this piece appears (Journey Day Encounter step, Explore detail card, Library). ...</td>
+<td class="surface">ONLY on Journey Day Encounter step (JourneyDaySteps.tsx via encounterContent->artworkHook projection in lib/sanity.ts line 865). NOT shown on Explore detail (EXPLORE_DETAIL_FIELDS projection excludes it, lib/sanity.ts line 190-210). NOT shown on Library (ArtworkCard renders title + image only). NOT shown on P&amp;P (intentional, see PromptClient comment block line 550-557).</td>
+<td class="good"><strong>Label:</strong> Hook (Journey Day Encounter)<br><strong>Desc:</strong> The story hook for the piece, the surprising fact about the work or its subject. Renders ONLY on the Journey Day Encounter step, in the dark box below the image. The P&amp;P uses dailyPrompt.curatorNote as its hook field instead. Explore detail and Library currently render only title, image, and short description. If you want this same hook to appear on Explore or Library, that is a code change, not just a description fix.</td>
+<td><span class="badge high">HIGH</span></td>
+</tr>
+
+<tr>
+<td class="field">dailyPrompt.dayTitle</td>
+<td>Editorial Day Title</td>
+<td class="bad">Optional: a poetic editorial title for this day (e.g. "God Does Not Die" for the Sacred Heart day). Shown prominently above the artwork. ...</td>
+<td class="surface">Actually shown BELOW the curatorNote dark box, NOT above the artwork. Renders as the italic Cormorant subtitle below the hook box (PromptClient.tsx line 587-599). Falls back to promptQuestion when blank.</td>
+<td class="good"><strong>Label:</strong> Editorial Day Title (P&amp;P subtitle)<br><strong>Desc:</strong> Optional poetic editorial title for THIS day on the P&amp;P (e.g. "God Does Not Die" for the Sacred Heart day). Renders as the italic Cormorant subtitle below the curatorNote dark box, above the context paragraphs. If left blank, the promptQuestion shows in this slot instead. Distinct from contentItem.title (which names the painting / piece / thinker and renders as the large 50px Cormorant italic at the top).</td>
+<td><span class="badge high">HIGH</span></td>
+</tr>
+
+<tr>
+<td class="field">contentItem.artworkHookAudio</td>
+<td>Hook, Narration Audio</td>
+<td class="bad">Optional MP3 narration of the hook. Adds a small listen button.</td>
+<td class="surface">Narration button on Journey Day Encounter step ONLY (JourneyDaySteps.tsx line 607). Has the same "ONLY Journey Day" scope as artworkHook itself, but the description doesn't say so.</td>
+<td class="good"><strong>Label:</strong> Hook Audio (Journey Day Encounter)<br><strong>Desc:</strong> Optional MP3 narration of the Hook field. Adds a small listen button on the Journey Day Encounter step where the hook is shown. Not used on Explore, Library, or P&amp;P.</td>
+<td><span class="badge high">HIGH</span></td>
+</tr>
+
+</tbody>
+</table>
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<h2>2. MEDIUM-severity drift (8 fields)</h2>
+<p class="sub">Descriptions are close but incomplete. Fix in second batch.</p>
+
+<table>
+<colgroup>
+  <col class="col-field"><col class="col-current-label"><col class="col-current-desc"><col class="col-surface"><col class="col-action"><col class="col-sev">
+</colgroup>
+<thead>
+<tr><th>Field</th><th>Current label</th><th>Current description</th><th>Where it actually renders</th><th>Proposed correction</th><th>Sev</th></tr>
+</thead>
+<tbody>
+
+<tr>
+<td class="field">journeyDay.encounterNote</td>
+<td>Encounter Note (Look Closer)</td>
+<td class="fine">Interpretive layer specific to this day's content type. Sacred art -> symbolism/iconography. Literature -> close reading. ...</td>
+<td class="surface">Renders on Journey Day Encounter step as the "Look Closer" expandable text below the hook (JourneyDaySteps.tsx line 726-749). Truncated to 200 chars with expand toggle.</td>
+<td class="good"><strong>Label:</strong> Look Closer (Encounter, expandable)<br><strong>Desc:</strong> Add to existing: "Renders below the artworkHook as the 'Look Closer' expandable text on the Encounter step. Truncated to ~200 chars with an expand toggle. Journey-day-specific, may reference other days in the arc; not displayed outside this journey context."</td>
+<td><span class="badge med">MED</span></td>
+</tr>
+
+<tr>
+<td class="field">dailyPrompt.lectio</td>
+<td>Reading (Lectio)</td>
+<td class="fine">Optional: scripture, or a philosophy + scripture pairing. Philosophy first, scripture second.</td>
+<td class="surface">Renders as two distinct sections on P&amp;P: Voices (philosophy quote) at line 870-919, Lectio (scripture) at line 931-959. Per June 3 split commit 5e25e8b2, these now render as SEPARATE sections, not one combined block. Label "Reading (Lectio)" no longer accurate as a wrapper.</td>
+<td class="good"><strong>Label:</strong> Voices &amp; Lectio (philosophy + scripture)<br><strong>Desc:</strong> Optional philosophy + scripture pairing. As of June 3, 2026, these render as TWO separate sections on the P&amp;P, not one combined block: a "Voices" section for the philosophy quote (sage left rule, gold/sage eyebrow), and a "Lectio" section for the scripture (Cormorant italic, no left rule). Philosophy first, scripture second. Per CLAUDE.md the philosophy should be one-liner, modern translation, secular ancient sources.</td>
+<td><span class="badge med">MED</span></td>
+</tr>
+
+<tr>
+<td class="field">contentItem.context</td>
+<td>Context</td>
+<td class="fine">Deeper context. Why this matters, what to notice, how it connects to the tradition.</td>
+<td class="surface">Renders in TWO places: P&amp;P (PromptClient.tsx line 605-660, with first 2 paragraphs always visible + expand toggle for remainder), and Journey Day Encounter step (JourneyDaySteps.tsx line 673). NOT shown on Explore detail card (explicit "NO context field on Explore" comment at ExploreDetailCard line 81-83).</td>
+<td class="good"><strong>Label:</strong> Context (P&amp;P + Journey storytelling)<br><strong>Desc:</strong> Storytelling that converges on the piece's thesis. Renders on both P&amp;P and Journey Day Encounter step, below the hook. NOT shown on Explore detail. Per the Editorial Principles Hook Rule, context is storytelling that advances the unstated thesis, not biographical summary or art appreciation. Each paragraph should deliver a fact or story the reader does not already have. On P&amp;P, first 2 paragraphs are always visible with an expand toggle for the remainder.</td>
+<td><span class="badge med">MED</span></td>
+</tr>
+
+<tr>
+<td class="field">contentItem.description</td>
+<td>Brief Description</td>
+<td class="fine">Short description for cards and previews. 1-2 sentences.</td>
+<td class="surface">Renders on Explore detail card (ExploreDetailCard.tsx line 211-219) as the neutral summary below the title. NOT shown on P&amp;P or Journey Day. Only on Explore.</td>
+<td class="good"><strong>Label:</strong> Brief Description (Explore detail card)<br><strong>Desc:</strong> 1-2 sentence neutral summary for the Explore detail card. Renders below the title on the Explore detail. Required field. NOT shown on P&amp;P, Journey Day, or Library card. Neutral tone, not the hook angle.</td>
+<td><span class="badge med">MED</span></td>
+</tr>
+
+<tr>
+<td class="field">contentItem.reflectionQuestions</td>
+<td>Reflection Questions</td>
+<td class="fine">1-3 questions for contemplation.</td>
+<td class="surface">Renders on Visio Divina Pray step (PrayClient.tsx line 238) AND on Explore detail card REFLECT expand panel (ExploreDetailCard.tsx line 379-391). Two different surfaces.</td>
+<td class="good"><strong>Label:</strong> Reflection Questions (Visio Divina + Explore REFLECT)<br><strong>Desc:</strong> 1-3 questions for contemplation. Renders in two places: the Visio Divina Pray step (when user enters Visio Divina from sacred-art or landscape items), and the Explore detail card's REFLECT expand panel (for all content types). The Journey Day uses journeyDay.reflectionQuestions instead, which is a separate per-day field.</td>
+<td><span class="badge med">MED</span></td>
+</tr>
+
+<tr>
+<td class="field">journeyDay.reflectionQuestions</td>
+<td>Reflection Questions</td>
+<td class="fine">Journey-specific questions for this day (1-2).</td>
+<td class="surface">Renders on Journey Day Reflect step (JourneyDaySteps.tsx line 936). Distinct from contentItem.reflectionQuestions (which is for Visio Divina + Explore).</td>
+<td class="good"><strong>Label:</strong> Reflection Questions (Journey Day Reflect step)<br><strong>Desc:</strong> Add to existing: "Renders on the Reflect step of the Journey Day stepper. Different from contentItem.reflectionQuestions which lives on the encounter content item and renders on Visio Divina + Explore. Three fields total carry 'reflection questions' across the app for three distinct surfaces."</td>
+<td><span class="badge med">MED</span></td>
+</tr>
+
+<tr>
+<td class="field">contentItem.traditionalPrayer + traditionalPrayerSource</td>
+<td>Traditional Prayer (Pray step) / Traditional Prayer, Source</td>
+<td class="fine">Optional. A traditional Catholic prayer shown in the expandable "Traditional Prayer" drawer on the Pray step of Visio Divina. Leave blank to use the built-in fallback prayer.</td>
+<td class="surface">Renders on Visio Divina Pray step (PrayClient.tsx line 627-635). The Source line shows below the prayer text.</td>
+<td class="good">Description is accurate. Minor polish only: confirm the "Pray step" label in the title still matches the actual app step name (Visio Divina's Pray step). Otherwise leave as is.</td>
+<td><span class="badge low">LOW</span></td>
+</tr>
+
+<tr>
+<td class="field">contentItem.themes</td>
+<td>Themes</td>
+<td class="fine">Which themes this content speaks to (min 1).</td>
+<td class="surface">Used by Explore filter logic and theme color cascading. NOT rendered as user-visible "themes:" text, but drives which theme bubbles a piece appears under on Explore. Required validation forces at least 1.</td>
+<td class="good"><strong>Label:</strong> Themes (Explore filter)<br><strong>Desc:</strong> Which themes this content belongs to. Drives Explore-tab filtering (the theme bubbles) and the per-theme content list. Not rendered as visible tags on the piece itself. Required (min 1).</td>
+<td><span class="badge med">MED</span></td>
+</tr>
+
+</tbody>
+</table>
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<h2>3. LOW-severity, accurate or minor polish (15 fields)</h2>
+<p class="sub">These read correctly today. Fix only if doing a sweep anyway.</p>
+
+<table>
+<colgroup>
+  <col class="col-field"><col class="col-current-label"><col class="col-surface"><col class="col-sev">
+</colgroup>
+<thead>
+<tr><th>Field</th><th>Current label</th><th>Where it renders</th><th>Sev</th></tr>
+</thead>
+<tbody>
+<tr><td class="field">dailyPrompt.date</td><td>Date</td><td class="surface">Required for query routing. Renders as sage-caps date above the artwork on P&amp;P.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">dailyPrompt.content</td><td>Featured Content</td><td class="surface">Reference to the contentItem. Drives all content rendering. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">dailyPrompt.auditio</td><td>Music (Auditio)</td><td class="surface">Music player on P&amp;P. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">dailyPrompt.actio</td><td>Action (Actio)</td><td class="surface">Renders on P&amp;P at the bottom (checkbox list). Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">dailyPrompt.relatedJourney</td><td>Related Journey</td><td class="surface">CTA link at bottom of P&amp;P. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">dailyPrompt.theme</td><td>Theme</td><td class="surface">Optional theme tag. Not directly rendered.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">dailyPrompt.curatorNoteAudio</td><td>Curator Note, Narration Audio</td><td class="surface">Narration button on P&amp;P. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">journeyDay.dayNumber</td><td>Day Number</td><td class="surface">Used in step nav + URLs. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">journeyDay.dayTitle</td><td>Day Title</td><td class="surface">Renders as day heading on Journey Day step. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">journeyDay.openImage</td><td>Opening Image</td><td class="surface">Step 1 visual anchor. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">journeyDay.openText</td><td>Opening Text</td><td class="surface">Step 1 text. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">journeyDay.openTextAudio</td><td>Opening Text, Narration Audio</td><td class="surface">Step 1 narration. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">journeyDay.encounterContent</td><td>Encounter Content</td><td class="surface">Reference to contentItem. Drives Encounter step. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">journeyDay.encounterGuidance</td><td>Encounter Guidance</td><td class="surface">Renders on Encounter step (line 889-898). Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">journeyDay.connectThread</td><td>Connect Thread</td><td class="surface">Step 5 (Connect) text. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">journeyDay.goDeeper</td><td>Go Deeper</td><td class="surface">Step 6 references to tradition reflections. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">contentItem.title</td><td>Title</td><td class="surface">Renders everywhere (P&amp;P 50px Cormorant, Journey Day, Explore detail, Library card). Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">contentItem.image</td><td>Image</td><td class="surface">Renders everywhere. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">traditionReflection.title</td><td>Title</td><td class="surface">Renders as Go Deeper card title. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">traditionReflection.summary</td><td>Summary</td><td class="surface">Main text body in Go Deeper card. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">traditionReflection.shortQuote</td><td>Short quote (optional)</td><td class="surface">Italic gold-bordered quote above summary. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">traditionReflection.source</td><td>Source</td><td class="surface">Attribution below summary. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">traditionReflection.reflectionAudio</td><td>Reflection, Narration Audio</td><td class="surface">Narration button on expanded Go Deeper card. Accurate.</td><td><span class="badge low">LOW</span></td></tr>
+
+</tbody>
+</table>
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<h2>4. UNUSED fields (zero or near-zero app render hits)</h2>
+<p class="sub">These fields exist on the schema but don't appear to render anywhere in the app. Either legacy (kept for migration), genuinely unused (candidates for hiding or removal), or rendered through a projection alias my grep missed. Worth a separate cleanup pass.</p>
+
+<table>
+<colgroup>
+  <col class="col-field"><col class="col-current-label"><col class="col-surface"><col class="col-sev">
+</colgroup>
+<thead>
+<tr><th>Field</th><th>Current label</th><th>Likely status</th><th>Sev</th></tr>
+</thead>
+<tbody>
+<tr><td class="field">contentItem.literaryForm</td><td>Literary Form</td><td class="surface">0 hits. Type-specific for literature. Possibly unused; verify before next literature P&amp;P.</td><td><span class="badge unused">UNUSED</span></td></tr>
+<tr><td class="field">contentItem.performer</td><td>Performer</td><td class="surface">0 hits. Type-specific for music. May render through audio attribution.</td><td><span class="badge unused">UNUSED</span></td></tr>
+<tr><td class="field">contentItem.craftTradition</td><td>Craft Tradition</td><td class="surface">0 hits. Type-specific for food-wine. Likely unused.</td><td><span class="badge unused">UNUSED</span></td></tr>
+<tr><td class="field">contentItem.pointsToward</td><td>Points Toward</td><td class="surface">0 hits. Type-specific for food-wine. Likely unused.</td><td><span class="badge unused">UNUSED</span></td></tr>
+<tr><td class="field">contentItem.creationTheology</td><td>Creation Theology</td><td class="surface">0 hits. Type-specific for landscape. Likely unused.</td><td><span class="badge unused">UNUSED</span></td></tr>
+<tr><td class="field">contentItem.discipline</td><td>Discipline</td><td class="surface">0 hits. Type-specific for math-science. Likely unused.</td><td><span class="badge unused">UNUSED</span></td></tr>
+<tr><td class="field">contentItem.principle</td><td>Principle or Discovery</td><td class="surface">0 hits. Type-specific for math-science. Likely unused.</td><td><span class="badge unused">UNUSED</span></td></tr>
+<tr><td class="field">contentItem.beautyConnection</td><td>Beauty Connection</td><td class="surface">0 hits. Type-specific for math-science. Likely unused.</td><td><span class="badge unused">UNUSED</span></td></tr>
+<tr><td class="field">contentItem.series</td><td>Series</td><td class="surface">0 hits. Type-specific for watch-listen. Likely unused.</td><td><span class="badge unused">UNUSED</span></td></tr>
+<tr><td class="field">contentItem.audioSource (object)</td><td>Audio Source</td><td class="surface">0 hits as 'audioSource' but the sub-fields (audioFile, audioUrl, externalUrl) ARE used via projection. The wrapper object is functional; the description is OK.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">contentItem.locationType (legacy hidden)</td><td>Location Type (legacy)</td><td class="surface">Hidden in Studio. Migration-only. Fine as is.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">contentItem.historicalSummary (legacy hidden)</td><td>Historical Summary (legacy)</td><td class="surface">Hidden in Studio. Migration-only. Fine as is.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">contentItem.order (legacy hidden)</td><td>Display Order</td><td class="surface">Hidden in Studio. Fine as is.</td><td><span class="badge low">LOW</span></td></tr>
+<tr><td class="field">traditionReflection.theme (legacy hidden)</td><td>Theme (legacy)</td><td class="surface">Hidden in Studio. Fine as is.</td><td><span class="badge low">LOW</span></td></tr>
+
+</tbody>
+</table>
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<h2>5. The deeper pattern</h2>
+<p class="sub">What this audit suggests beyond field-by-field fixes.</p>
+
+<div class="label-rule">
+<p><strong>Pattern A. The three "hook" fields confusion.</strong> Three fields all carry a story-hook role on different surfaces, but the Studio labels and descriptions don't make their distinct roles obvious:</p>
+<ul>
+  <li><code>contentItem.artworkHook</code>, current label "Hook (Encounter - 1st text)", renders ONLY on Journey Day Encounter</li>
+  <li><code>dailyPrompt.curatorNote</code>, current label "Curator Note", renders prominently on P&amp;P (the actual visible hook on every prompt)</li>
+  <li><code>journeyDay.encounterNote</code>, current label "Encounter Note (Look Closer)", renders as the expandable "Look Closer" below the hook on Journey Day</li>
+</ul>
+<p>The labels suggest one is THE hook and the others are something else. In practice all three carry hook-shaped content for different contexts. Better labels would name the surface explicitly: "Hook (Journey Encounter)" / "Hook (P&amp;P, dark box)" / "Look Closer (Journey Encounter, expandable)."</p>
+</div>
+
+<div class="label-rule">
+<p><strong>Pattern B. Three "reflection questions" fields on three surfaces.</strong> Same issue, different fields:</p>
+<ul>
+  <li><code>contentItem.reflectionQuestions</code>, renders on Visio Divina Pray step + Explore REFLECT expand</li>
+  <li><code>journeyDay.reflectionQuestions</code>, renders on Journey Day Reflect step</li>
+</ul>
+<p>Both have the same label "Reflection Questions" in Studio. An editor who sees both has no way to know which renders where without reading the description.</p>
+</div>
+
+<div class="label-rule">
+<p><strong>Pattern C. Two "audio" patterns for the same content.</strong> A piece can have audio in two distinct places:</p>
+<ul>
+  <li><code>contentItem.audioSource</code> object (audioFile / audioUrl / externalUrl) for the PIECE's primary audio (music tracks, podcast episodes, lecture media)</li>
+  <li><code>contentItem.*Audio</code> (artworkHookAudio, contextAudio, etc.) for narration of the WRITTEN text fields</li>
+</ul>
+<p>The schema makes this distinction but Studio editors may not. A narration audio file uploaded to <code>audioSource</code> instead of the matching <code>*Audio</code> field would silently fail to render where the editor expected.</p>
+</div>
+
+<div class="label-rule">
+<p><strong>Pattern D. Surface-naming convention is missing.</strong> The audit suggests that every editorial field's label should include its rendering surface in parentheses, the way <code>artworkHook</code> already does ("Hook (Encounter - 1st text)") and <code>curatorNote</code> currently does NOT. The convention would be:
+<br><br><code>[Editorial role] ([Surface], [Position])</code>
+<br><br>Examples: "Hook (Journey Day Encounter, dark box)" / "Curator Note (P&amp;P, dark box)" / "Look Closer (Journey Day, expandable below hook)" / "Reflection Questions (Visio Divina Pray + Explore REFLECT)".</p>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<h2>6. Recommended fix sequence</h2>
+
+<ol>
+<li><strong>HIGH-severity batch (5 fields, ~10 min):</strong> curatorNote, promptQuestion, artworkHook (description only; label was already renamed June 18), dayTitle, artworkHookAudio. Apply the surface-naming convention. Sanity Studio redeploy. <em>Do this first.</em></li>
+<li><strong>MEDIUM-severity batch (8 fields, ~15 min):</strong> encounterNote, lectio, context, description, reflectionQuestions (both), traditionalPrayer source, themes. Apply same convention.</li>
+<li><strong>UNUSED fields audit (separate session, ~30 min):</strong> verify each of the 0-hit fields. Either confirm unused and hide / remove, or find the missing projection and document it.</li>
+<li><strong>LOW-severity polish (optional):</strong> minor wording fixes only if doing a full sweep anyway.</li>
+<li><strong>CLAUDE.md follow-up:</strong> add a "Field-to-Surface Map" section that lists which field renders where, so future Cowork or Claude Code sessions don't have to re-derive this from the schema descriptions. Could embed the table from this audit.</li>
+</ol>
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<h2>7. Audit metadata</h2>
+<p class="meta">
+Schemas audited: <code>dailyPrompt.ts</code> (11 fields), <code>journeyDay.ts</code> (15 fields), <code>contentItem.ts</code> (40+ fields), <code>traditionReflection.ts</code> (10 fields). Total ~76 schema fields surveyed.
+<br>App source greped: <code>app/</code>, <code>components/</code>, <code>lib/sanity.ts</code>, <code>lib/types.ts</code>.
+<br>Key rendering components verified: <code>app/prompt/PromptClient.tsx</code>, <code>components/JourneyDaySteps.tsx</code>, <code>app/pray/[artworkId]/PrayClient.tsx</code>, <code>components/ExploreDetailCard.tsx</code>, <code>components/ArtworkCard.tsx</code>.
+<br>No schema files were edited during this audit. No commits. No Studio redeploy. All changes deferred for Sheri's review.
+</p>
+
+</body>
+</html>
