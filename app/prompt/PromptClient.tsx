@@ -525,7 +525,6 @@ function DailyPromptPageInner({
                 color: "rgba(253,246,232,0.55)",
                 fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
                 fontSize: 12,
-                fontStyle: "italic",
                 letterSpacing: "0.01em",
                 lineHeight: 1.5,
               }}
