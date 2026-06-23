@@ -94,10 +94,10 @@ export default defineType({
     }),
     defineField({
       name: 'verbaOriginal',
-      title: 'Verba — Text',
+      title: 'Verba, lyrics / text panel',
       type: 'text',
       rows: 10,
-      description: 'Optional. Paste lyrics or text here in any format — Latin only, English only, or both together (interleaved or stacked). Shown in a scrollable expandable panel below the audio player, labelled VERBA.',
+      description: 'Rule by language: if the audio is in LATIN (or any non-English language), include the original lines AND an English translation for the ENTIRE composition, interleaved line by line. The user needs the translation to follow what they are hearing. If the audio is in ENGLISH, lyrics are optional. Shown in a scrollable expandable panel below the audio player, labelled VERBA. Leave blank when not applicable (e.g. instrumental music).',
     }),
   ],
   orderings: [
