@@ -33,6 +33,11 @@ export type ContentItem = {
   contentType: ContentType;
   title: string;
   imageUrl: string;
+  /** Optional. Source/rights line for the image. Renders as a small grey caption
+   *  below the image on every surface (P&P, Journey Day Encounter, Explore
+   *  detail, Visio Divina Gaze). Distinct from artist (which names the WORK's
+   *  creator). Added June 23, 2026. */
+  imageCredit?: string;
   description: string;
   context?: string;
   themes: Theme[];
@@ -240,6 +245,10 @@ export type ExploreDetailItem = {
   title: string;
   description?: string;
   imageUrl?: string;
+  /** Optional image rights/source caption — renders below the image on the
+   *  Explore detail card. Distinct from attribution (which names the work's
+   *  creator). Added June 23, 2026. */
+  imageCredit?: string;
   /** Computed attribution per content type (e.g. "Rembrandt van Rijn, 1669"). */
   attribution?: string;
   /** Reflect-panel content for non-VD types (Phase C, June 9, 2026).
@@ -320,6 +329,7 @@ export type Artwork = {
   coordinates: { lat: number; lng: number };
   locationName: string;
   imageUrl: string;
+  imageCredit?: string;
   thumbnailUrl?: string;
   order: number;
   reflectionQuestions: string[];
