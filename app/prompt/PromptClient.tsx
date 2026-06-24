@@ -534,27 +534,6 @@ function DailyPromptPageInner({
             </div>
           )}
 
-        {/* ── Image credit ──────────────────────────────────────────────────
-            Optional source/rights line for the image, distinct from the museum
-            caption above. Renders for every content type when contentItem.
-            imageCredit is populated. Quieter than the museum caption: smaller,
-            more faded. June 23, 2026. */}
-        {prompt.content.imageCredit && (
-          <div
-            className="px-6"
-            style={{
-              paddingTop: 6,
-              color: "rgba(253,246,232,0.35)",
-              fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-              fontSize: 10.5,
-              letterSpacing: "0.02em",
-              lineHeight: 1.5,
-            }}
-          >
-            {prompt.content.imageCredit}
-          </div>
-        )}
-
         {/* ── Editorial title + date ────────────────────────────────────────
             Date on its own line in sage caps (color cascades from the
             type-accent so a Music day reads plum, a Sacred Art day
