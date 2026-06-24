@@ -207,6 +207,23 @@ export default function ExploreDetailCard({ item, onClose }: ExploreDetailCardPr
             </p>
           )}
 
+          {/* Image credit — source/rights for the image itself, distinct from
+              the attribution above (which names the WORK's creator). Lives on
+              contentItem.imageCredit; renders only when populated. Quieter than
+              attribution: smaller, more faded. June 23, 2026. */}
+          {item.imageCredit && (
+            <p
+              className="text-[11px] mt-1"
+              style={{
+                color: "rgba(253,246,232,0.35)",
+                fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                letterSpacing: "0.02em",
+              }}
+            >
+              {item.imageCredit}
+            </p>
+          )}
+
           {/* Description — body text, cream. Open Sans regular. */}
           {item.description && (
             <p
