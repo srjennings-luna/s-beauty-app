@@ -150,6 +150,14 @@ export default defineType({
       },
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'imageCredit',
+      title: 'Image Credit (small caption below image, every surface)',
+      type: 'string',
+      description:
+        'Optional. Renders as a small grey caption directly below the image on every surface where the image appears (P&P, Journey Day Encounter, Explore detail, Visio Divina Gaze step). Paste the credit line whatever shape the source asks for: "Wikimedia Commons, public domain", "Photo by Julia Margaret Cameron, public domain", "NASA / STScI / Webb", "Photo by Sheri Jennings", "Pixabay, free use", etc. Distinct from the Artist field (which names the WORK\'s creator, e.g. Caravaggio); this names whoever holds the IMAGE rights or supplied the file. Keep it short, ~140 char max.',
+      validation: (Rule) => Rule.max(140),
+    }),
 
     // ─── Type-Specific Detail / Metadata Fields ─────────────────────────────
 
