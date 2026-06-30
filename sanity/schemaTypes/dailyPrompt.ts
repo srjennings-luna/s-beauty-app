@@ -154,12 +154,13 @@ export default defineType({
   preview: {
     select: {
       date: 'date',
+      dayTitle: 'dayTitle',
       promptQuestion: 'promptQuestion',
     },
-    prepare({date, promptQuestion}: {date?: string; promptQuestion?: string}) {
+    prepare({date, dayTitle, promptQuestion}: {date?: string; dayTitle?: string; promptQuestion?: string}) {
       return {
         title: date || 'No date',
-        subtitle: promptQuestion,
+        subtitle: dayTitle || promptQuestion,
       }
     },
   },
