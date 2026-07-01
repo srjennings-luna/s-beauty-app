@@ -515,24 +515,22 @@ function DailyPromptPageInner({
             "Title, Artist, Year" (year drops out if not populated, medium
             drops out always, kept available on contentItem for Explore).
             June 22, 2026. */}
-        {(prompt.content.contentType === "sacred-art" ||
-          prompt.content.contentType === "photography") &&
-          prompt.content.artist && (
-            <div
-              className="px-6"
-              style={{
-                paddingTop: 10,
-                color: "rgba(253,246,232,0.55)",
-                fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-                fontSize: 12,
-                letterSpacing: "0.01em",
-                lineHeight: 1.5,
-              }}
-            >
-              {prompt.content.title}, {prompt.content.artist}
-              {prompt.content.year ? `, ${prompt.content.year}` : ""}
-            </div>
-          )}
+        {prompt.content.artist && (
+          <div
+            className="px-6"
+            style={{
+              paddingTop: 10,
+              color: "rgba(253,246,232,0.55)",
+              fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+              fontSize: 12,
+              letterSpacing: "0.01em",
+              lineHeight: 1.5,
+            }}
+          >
+            {prompt.content.title}, {prompt.content.artist}
+            {prompt.content.year ? `, ${prompt.content.year}` : ""}
+          </div>
+        )}
 
         {/* ── Editorial title + date ────────────────────────────────────────
             Date on its own line in sage caps (color cascades from the

@@ -53,10 +53,10 @@ export default defineType({
     // ─── Type-Specific Identity Fields (who created / who is this) ───────────
     defineField({
       name: 'artist',
-      title: 'Artist / Creator (fill whenever the image is an artwork)',
+      title: 'Artist / Creator (fills the museum caption below the image on P&P)',
       type: 'string',
       description:
-        'The artist or creator whose work is on screen. e.g. "Michelangelo Buonarroti", "Julia Margaret Cameron", "Carlo Crivelli". Universal across all content types: fill this whenever the IMAGE is a piece of sacred art or photography, even on a thinker/literature/music/food/landscape/watch-listen/math-science day. On sacred-art and photography content types the artist also renders in the museum-style caption below the image on P&P. On other content types the field captures credit for the image only; the museum caption does not render.',
+        'The artist or creator of the image on screen. e.g. "Michelangelo Buonarroti", "Julia Margaret Cameron", "Carlo Crivelli". Universal across all content types. FILLING THIS FIELD TRIGGERS THE MUSEUM-STYLE CAPTION on P&P (Title, Artist, Year rendered below the image). If you want to record the image source internally WITHOUT the formal caption showing (e.g. AI-generated bread photo), leave artist blank and use the Image Credit field instead, which renders as a small quiet grey line.',
     }),
     defineField({
       name: 'thinkerName',
@@ -163,17 +163,17 @@ export default defineType({
     // Sacred Art & Architecture
     defineField({
       name: 'year',
-      title: 'Year / Date Range (fill whenever the image is an artwork)',
+      title: 'Year / Date Range (appears in museum caption when Artist is filled)',
       type: 'string',
       description:
-        'When the image on screen was created. e.g. "1498-1499", "c. 1600", "1873", "1476" (Crivelli). Universal across all content types: fill this whenever the IMAGE has a known creation date, even on a thinker/literature/music/food/landscape/watch-listen/math-science day. On sacred-art and photography content types the year also renders in the museum-style caption below the image on P&P.',
+        'When the image on screen was created. e.g. "1498-1499", "c. 1600", "1873", "1476" (Crivelli). Universal across all content types. Appears in the museum-style caption on P&P (Title, Artist, Year) whenever the Artist field is populated. Leave blank when the year is unknown or not meaningful (e.g. AI-generated images).',
     }),
     defineField({
       name: 'medium',
-      title: 'Medium (fill whenever the image is an artwork)',
+      title: 'Medium (internal metadata + Explore detail attribution)',
       type: 'string',
       description:
-        'The physical medium of the image on screen. e.g. "Oil on canvas", "Fresco", "Marble", "Tempera and gold on panel", "Albumen print". Optional. Universal across all content types: fill this whenever the IMAGE is a piece of sacred art or photography, even on a thinker/literature/music/food/landscape/watch-listen/math-science day. Used in Explore detail attribution.',
+        'The physical medium of the image on screen. e.g. "Oil on canvas", "Fresco", "Marble", "Tempera and gold on panel", "Albumen print". Optional. Universal across all content types. Used in the Explore detail attribution string; does NOT appear in the P&P museum caption.',
     }),
     defineField({
       name: 'scripturePairing',
