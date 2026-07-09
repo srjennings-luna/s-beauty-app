@@ -52,13 +52,18 @@ async function sharePrompt(prompt: DailyPrompt) {
   // share rather than serving a stale cached card from a previous share of the same URL.
   // The app ignores the v param — only date is used for content lookup.
   const shareUrl = `${window.location.origin}/prompt?date=${prompt.date}&v=${Date.now()}`;
-  const text = `"${prompt.promptQuestion}"\n\n— CONTUERI`;
+  // Text ends in colon so iOS iMessage folds URL into the same bubble
+  // (no multi-line sign-off, no promptQuestion). dayTitle carries the piece;
+  // content.title is the fallback for older records where dayTitle was empty.
+  const pieceTitle = prompt.dayTitle || prompt.content.title;
+  const text = `Today's pause from Contueri, "${pieceTitle}":`;
   if (navigator.share) {
     try {
-      await navigator.share({ title: "Pause & Ponder — CONTUERI", text, url: shareUrl });
+      const shareTitle = `${pieceTitle} — Contueri`;
+      await navigator.share({ title: shareTitle, text, url: shareUrl });
     } catch (_) { /* dismissed */ }
   } else {
-    await navigator.clipboard.writeText(`${text}\n\n${shareUrl}`);
+    await navigator.clipboard.writeText(`${text} ${shareUrl}`);
     alert("Copied to clipboard");
   }
 }

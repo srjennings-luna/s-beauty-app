@@ -19,15 +19,20 @@ export async function generateMetadata({
     ? `${rawImageUrl}?w=1200&fit=crop&auto=format`
     : "";
 
+  // Title carries the specific piece via dayTitle, fallback to content.title.
+  // Empty-state fallback keeps the generic brand line so metadata is never blank.
+  const pieceTitle = prompt?.dayTitle || prompt?.content?.title || "Pause & Ponder";
+  const title = `${pieceTitle} — Contueri`;
+
   return {
-    title: "Pause & Ponder — CONTUERI",
+    title,
     openGraph: {
-      title: "Pause & Ponder — CONTUERI",
+      title,
       ...(imageUrl && { images: [{ url: imageUrl, width: 1200, height: 630 }] }),
     },
     twitter: {
       card: imageUrl ? "summary_large_image" : "summary",
-      title: "Pause & Ponder — CONTUERI",
+      title,
       ...(imageUrl && { images: [imageUrl] }),
     },
   };
