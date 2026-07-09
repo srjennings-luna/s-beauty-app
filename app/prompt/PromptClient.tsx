@@ -52,17 +52,16 @@ async function sharePrompt(prompt: DailyPrompt) {
   // share rather than serving a stale cached card from a previous share of the same URL.
   // The app ignores the v param — only date is used for content lookup.
   const shareUrl = `${window.location.origin}/prompt?date=${prompt.date}&v=${Date.now()}`;
-  // Text is a light intro; the link preview card carries the specific piece
-  // via the OG title (dayTitle).
-  const pieceTitle = prompt.dayTitle || prompt.content.title;
-  const text = `Today's pause from Contueri`;
+  // Inline URL into the text (drop `url` param) so iMessage renders one bubble:
+  // text above, link preview card below. Matches Hallow's pattern. Passing
+  // text + url as separate params causes iMessage to split into two bubbles.
+  const message = `Today's pause from Contueri ${shareUrl}`;
   if (navigator.share) {
     try {
-      const shareTitle = `${pieceTitle} — Contueri`;
-      await navigator.share({ title: shareTitle, text, url: shareUrl });
+      await navigator.share({ text: message });
     } catch (_) { /* dismissed */ }
   } else {
-    await navigator.clipboard.writeText(`${text} ${shareUrl}`);
+    await navigator.clipboard.writeText(message);
     alert("Copied to clipboard");
   }
 }
