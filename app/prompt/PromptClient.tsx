@@ -53,10 +53,9 @@ async function sharePrompt(prompt: DailyPrompt) {
   // The app ignores the v param — only date is used for content lookup.
   const shareUrl = `${window.location.origin}/prompt?date=${prompt.date}&v=${Date.now()}`;
   // Text is a light intro; the link preview card carries the specific piece
-  // via the OG title (dayTitle). Ends in colon so iOS iMessage folds URL
-  // into the same bubble.
+  // via the OG title (dayTitle).
   const pieceTitle = prompt.dayTitle || prompt.content.title;
-  const text = `Today's pause from Contueri:`;
+  const text = `Today's pause from Contueri`;
   if (navigator.share) {
     try {
       const shareTitle = `${pieceTitle} — Contueri`;
