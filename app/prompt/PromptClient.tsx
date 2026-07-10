@@ -109,8 +109,14 @@ function DailyPromptPageInner({
   // path-based iframe URLs cleanly — query strings get URL-encoded into the
   // pathname and 404.
   const dateParam = initialDate ?? searchParams.get("date") ?? undefined;
-  // Preview mode is always on for the path-based alias (only Presentation uses it).
-  const isPreview = !!initialDate || searchParams.get("preview") === "1";
+  // Preview mode: Sanity Presentation runs the app in an iframe. Detect that
+  // instead of treating every /prompt/[date] path visit as preview mode.
+  // Previous check (`!!initialDate`) triggered preview on all path-based URLs,
+  // which meant regular browser visits went through previewClient. In the
+  // client bundle there is no SANITY_TOKEN, so Sanity stripped reference
+  // dereferences (relatedJourney came back as null even when set in Sanity).
+  const inIframe = typeof window !== "undefined" && window.self !== window.top;
+  const isPreview = inIframe || searchParams.get("preview") === "1";
   const [prompt, setPrompt]               = useState<DailyPrompt | null>(null);
   const [ppDefaults, setPpDefaults]       = useState<PpDefaults | null>(null);
   const [loading, setLoading]             = useState(true);
